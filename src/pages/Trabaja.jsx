@@ -2,6 +2,8 @@
 import { useMemo, useState } from "react";
 import logo from "../assets/img/Logos/lael-inst-naranja.png";
 
+const WAPP = "56964626568"; // WhatsApp Instituto Lael
+
 export default function Trabaja() {
   return (
     <section className="work-page">
@@ -14,16 +16,28 @@ export default function Trabaja() {
           Trabaja con <span className="hl">Instituto Lael</span>
         </h1>
         <p className="lead">
-          Súmate a un proyecto educativo con propósito. Buscamos docentes, creadores
-          y perfiles de apoyo que quieran transformar la educación — desde cualquier
-          lugar de Chile, con acompañamiento real.
+          Súmate a un proyecto educativo con propósito. Buscamos docentes, creadores y
+          perfiles de apoyo que quieran transformar la educación — desde cualquier lugar de Chile,
+          con acompañamiento real.
         </p>
-        <a
-          className="btn-primary"
-          href="mailto:coordinacion@institutolael.cl?subject=Postulación Instituto Lael"
-        >
-          Enviar CV por correo
-        </a>
+        <div className="cta-hero">
+          <a
+            className="btn-primary"
+            href="mailto:coordinacion@institutolael.cl?subject=Postulación Instituto Lael"
+          >
+            Enviar CV por correo
+          </a>
+          <a
+            className="btn-ghost"
+            href={`https://wa.me/${WAPP}?text=${encodeURIComponent(
+              "Hola 👋, quiero postular a Instituto Lael. ¿Me indican los pasos?"
+            )}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Hablar por WhatsApp
+          </a>
+        </div>
       </header>
 
       {/* VALOR */}
@@ -66,12 +80,11 @@ export default function Trabaja() {
           <li><b>4. Onboarding</b> con materiales, cuentas y acompañamiento.</li>
         </ol>
         <div className="tips">
-          Consejo: comparte logros concretos (ej.: mejoras en aprobación, materiales creados,
-          feedback de estudiantes o líderes).
+          Consejo: comparte logros concretos (aprobación, materiales creados, feedback de estudiantes/líderes).
         </div>
       </section>
 
-      {/* FORM + BENEFICIOS */}
+      {/* FORM + BENEFICIOS (todo sale por correo o WhatsApp) */}
       <section className="grid-two">
         <FormPostulacion />
         <aside className="benefits card">
@@ -84,10 +97,11 @@ export default function Trabaja() {
             <li>💬 Comunidad: trabajo en equipo y respeto.</li>
           </ul>
           <div className="mini-cta">
-            ¿Listo/a? También puedes escribir directo a{" "}
+            ¿Listo/a? Escribe directo a{" "}
             <a href="mailto:coordinacion@institutolael.cl" className="link">
               coordinacion@institutolael.cl
-            </a>.
+            </a>{" "}
+            o a WhatsApp.
           </div>
         </aside>
       </section>
@@ -121,22 +135,31 @@ export default function Trabaja() {
           — revisamos todas las postulaciones.
         </p>
 
-        {/* ⬇️ NUEVO: bloque visión bajo el CTA */}
         <div className="vision-box">
           <p className="vision-text">
-            Instituto Lael fue fundado por <b>Diego Chaparro</b> bajo la visión que Dios puso:
-            <b> ayudar a quienes lo necesitan</b> y dar un acompañamiento real — el que a muchos nos
-            habría gustado tener en la enseñanza media. No buscamos hacernos millonarios; buscamos
-            <b> abrir oportunidades reales</b>, servir con excelencia y dignidad.
+            Instituto Lael fue fundado por <b>Diego Chaparro</b> con una visión simple:
+            <b> acompañar de verdad</b> y abrir oportunidades reales con excelencia y dignidad.
           </p>
         </div>
 
-        <a
-          className="btn-ghost"
-          href="mailto:coordinacion@institutolael.cl?subject=Postulación Instituto Lael"
-        >
-          Postular ahora
-        </a>
+        <div className="cta-hero">
+          <a
+            className="btn-ghost"
+            href="mailto:coordinacion@institutolael.cl?subject=Postulación Instituto Lael"
+          >
+            Postular por correo
+          </a>
+          <a
+            className="btn-primary"
+            href={`https://wa.me/${WAPP}?text=${encodeURIComponent(
+              "Hola 👋, quiero postular a Instituto Lael. ¿Me indican los pasos?"
+            )}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Postular por WhatsApp
+          </a>
+        </div>
       </footer>
     </section>
   );
@@ -166,12 +189,10 @@ function FormPostulacion() {
     return name.trim().length >= 2 && mailOk && legal;
   }, [name, mail, legal]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!valid) return;
-
-    const subject = `Postulación - ${role} - ${name}`;
-    const bodyLines = [
+  const buildSummary = () => {
+    const lines = [
+      "Postulación Instituto Lael",
+      "--------------------------------",
       `Nombre: ${name}`,
       `Correo: ${mail}`,
       `Teléfono: ${phone || "—"}`,
@@ -179,19 +200,41 @@ function FormPostulacion() {
       `Disponibilidad: ${availability}`,
       "",
       "Mensaje:",
-      message || "—",
+      (message || "—").trim(),
       "",
-      "⚠️ Recuerda adjuntar tu CV al enviar este correo.",
+      "⚠️ Recuerda adjuntar tu CV al enviar este mensaje.",
     ];
+    return lines.join("\n");
+  };
+
+  const handleEmail = (e) => {
+    e.preventDefault();
+    if (!valid) return;
+    const subject = `Postulación - ${role} - ${name}`;
     const href = `mailto:coordinacion@institutolael.cl?subject=${encodeURIComponent(
       subject
-    )}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
-
+    )}&body=${encodeURIComponent(buildSummary())}`;
     window.location.href = href;
   };
 
+  const handleWhatsapp = () => {
+    const msg = buildSummary();
+    const href = `https://wa.me/${WAPP}?text=${encodeURIComponent(msg)}`;
+    window.open(href, "_blank", "noopener,noreferrer");
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(buildSummary());
+      alert("Texto copiado. Pégalo en tu correo o WhatsApp ✅");
+    } catch {
+      // fallback simple
+      prompt("Copia manualmente el texto:", buildSummary());
+    }
+  };
+
   return (
-    <form className="form card" onSubmit={handleSubmit} noValidate>
+    <form className="form card" onSubmit={handleEmail} noValidate>
       <h3 className="ink">Postula aquí</h3>
 
       <div className="row">
@@ -266,8 +309,8 @@ function FormPostulacion() {
         <div className="col">
           <label className="label">CV (adjúntalo en el correo)</label>
           <div className="fake-file">
-            <span className="ink">Arrastra tu archivo al correo</span>
-            <small className="good">Se adjunta al abrir tu cliente de email</small>
+            <span className="ink">Se adjunta al abrir tu correo</span>
+            <small className="good">También puedes enviarlo por WhatsApp</small>
           </div>
         </div>
       </div>
@@ -294,14 +337,14 @@ function FormPostulacion() {
 
       <div className="actions">
         <button className="btn-primary" type="submit" disabled={!valid}>
-          Enviar postulación por correo
+          Enviar por correo
         </button>
-        <a
-          className="btn-ghost"
-          href="mailto:coordinacion@institutolael.cl?subject=Postulación Instituto Lael"
-        >
-          Enviar correo directo
-        </a>
+        <button className="btn-ghost" type="button" onClick={handleWhatsapp}>
+          Enviar por WhatsApp
+        </button>
+        <button className="btn-ghost" type="button" onClick={handleCopy}>
+          Copiar texto
+        </button>
       </div>
       {!valid && (
         <div className="helper">
@@ -315,8 +358,8 @@ function FormPostulacion() {
 /* ---------- CSS ---------- */
 const css = `
 :root{
-  --ink:#FFFFFF;          /* texto principal */
-  --ink2:#EAF2FF;         /* texto secundario (legible) */
+  --ink:#FFFFFF;
+  --ink2:#EAF2FF;
   --indigo:#5850EC;
   --green:#16A34A;
   --amber:#F59E0B;
@@ -344,8 +387,9 @@ a:hover{ text-decoration:underline; }
   -webkit-background-clip:text; background-clip:text; color:transparent;
 }
 .hero .lead{ max-width:70ch; margin:0 auto 16px; color:var(--ink2); font-size:1.04rem; }
+.cta-hero{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
 
-/* BOTONES (se mantienen tus estilos) */
+/* BOTONES */
 .btn-primary,.btn-ghost{
   display:inline-flex; align-items:center; justify-content:center;
   padding:.8rem 1.15rem; border-radius:12px; font-weight:1000;
@@ -388,9 +432,7 @@ a:hover{ text-decoration:underline; }
   color:var(--ink2);
 }
 .steps li{ margin:.25rem 0; }
-.tips{
-  margin-top:8px; font-weight:900; color:#A5B4FC;
-}
+.tips{ margin-top:8px; font-weight:900; color:#A5B4FC; }
 
 /* Grid formulario + beneficios */
 .grid-two{ display:grid; grid-template-columns: 1.2fr .8fr; gap:16px; padding:0 18px; margin-top:10px; }
@@ -447,16 +489,15 @@ a:hover{ text-decoration:underline; }
 }
 .q span{ display:block; margin-top:6px; color:#86EFAC; font-weight:900; }
 
-/* CTA Final — contraste asegurado (si el fondo del sitio es blanco, igual se ve) */
+/* CTA Final */
 .cta{
   text-align:center; margin-top:28px; padding:24px 18px;
-  background:#0B1220; /* fuerza fondo oscuro para que el texto no quede blanco sobre blanco */
+  background:#0B1220;
   border-top:1px solid var(--bd);
 }
 .cta h2{ font-size:1.6rem; margin:0 0 6px; color:#FDE047; }
 .cta p{ max-width:65ch; margin:0 auto 14px; color:#fff; font-weight:800; }
 
-/* NUEVO: bloque visión (texto siempre legible) */
 .vision-box{
   max-width:840px; margin:10px auto 16px; padding:12px 14px;
   border:1px solid #2f3b60; border-radius:14px;

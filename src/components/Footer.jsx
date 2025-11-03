@@ -1,5 +1,6 @@
 // src/components/Footer.jsx
 import { Link } from "react-router-dom";
+import { FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import logoReal from "../assets/img/Logos/lael-inst-naranja.png";
 
 export default function Footer() {
@@ -8,98 +9,125 @@ export default function Footer() {
     `https://wa.me/56964626568?text=${encodeURIComponent(msg)}`;
 
   return (
-    <footer className="lael-footer" role="contentinfo" aria-label="Pie de página Instituto Lael">
-      <style>{css}</style>
-
-      {/* CTA superior */}
-      <section className="f-cta" aria-label="Llamado a la acción final">
-        <div className="container f-cta__in">
-          <div className="f-cta__copy">
-            <span className="pill">¿Listo/a para empezar?</span>
-            <h4>Clases en vivo + cápsulas + acompañamiento real.</h4>
-            <p className="sub">Matrícula única. Precios claros. Sin letra chica.</p>
+    <footer className="bg-[#0b1220] text-slate-100 border-t border-slate-800" role="contentinfo">
+      {/* CTA */}
+      <section className="bg-[#0e1424] border-b border-slate-800 py-10">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <span className="inline-block px-3 py-1 text-xs font-semibold border border-slate-700 rounded-full">
+              ¿Listo/a para empezar?
+            </span>
+            <h4 className="text-xl font-semibold mt-3 leading-tight">
+              Clases en vivo + cápsulas + acompañamiento real.
+            </h4>
+            <p className="text-slate-300 text-sm">
+              Matrícula única. Precios claros. Sin letra chica.
+            </p>
           </div>
-          <div className="f-cta__act" role="group" aria-label="Acciones principales">
-            <Link className="fbtn fbtn--gold" to="/inscripcion">Inscribirme</Link>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to="/inscripcion"
+              className="bg-amber-400 hover:bg-amber-500 text-[#0b1220] font-semibold px-4 py-2 rounded-xl transition"
+            >
+              Inscribirme
+            </Link>
             <a
-              className="fbtn fbtn--line"
               href={wsp("Hola 👋 Me gustaría conversar mi caso.")}
               target="_blank"
-              rel="noreferrer noopener"
-              aria-label="Abrir WhatsApp de Instituto Lael"
+              rel="noreferrer"
+              className="border border-slate-600 hover:border-slate-400 px-4 py-2 rounded-xl transition"
             >
               WhatsApp
             </a>
-            <Link className="fbtn fbtn--line" to="/becas">Becas</Link>
+            <Link
+              to="/becas"
+              className="border border-slate-600 hover:border-slate-400 px-4 py-2 rounded-xl transition"
+            >
+              Becas
+            </Link>
           </div>
         </div>
       </section>
 
       {/* Cuerpo */}
-      <section className="f-main">
-        <div className="container f-grid">
-
-          {/* Marca */}
-          <div className="f-col f-brand">
+      <section className="py-12 bg-[#0b1220]">
+        <div className="max-w-6xl mx-auto px-4 grid sm:grid-cols-2 md:grid-cols-4 gap-10">
+          {/* Col 1 - Marca */}
+          <div>
             <Link to="/" aria-label="Inicio">
-              <img src={logoReal} alt="Instituto Lael" className="f-logo" loading="lazy" />
+              <img src={logoReal} alt="Instituto Lael" className="h-10 mb-3" loading="lazy" />
             </Link>
-            <p className="f-tag">Educación online, cercana y clara.</p>
-
-            <nav className="f-chips" aria-label="Atajos">
-              <Link to="/convenios" className="chip">Convenios</Link>
-              <Link to="/trabaja" className="chip">Trabaja con nosotros</Link>
-            </nav>
-
-            <div className="f-social" aria-label="Redes sociales">
-              <a className="soc" href="https://www.instagram.com/institutolael" target="_blank" rel="noreferrer noopener" aria-label="Instagram Instituto Lael">
-                <span aria-hidden>📸</span> Instagram
+            <p className="text-slate-300 text-sm mb-4 font-medium">
+              Educación online, cercana y clara.
+            </p>
+            <div className="flex gap-3">
+              <a
+                href="https://www.instagram.com/institutolael"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Instagram Instituto Lael"
+                className="text-slate-400 hover:text-white transition"
+              >
+                <FaInstagram size={20} />
               </a>
-              <a className="soc" href="https://www.youtube.com/@institutolael" target="_blank" rel="noreferrer noopener" aria-label="YouTube Instituto Lael">
-                <span aria-hidden>▶️</span> YouTube
+              <a
+                href="https://www.youtube.com/@institutolael"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="YouTube Instituto Lael"
+                className="text-slate-400 hover:text-white transition"
+              >
+                <FaYoutube size={22} />
+              </a>
+              <a
+                href={wsp("Hola 👋 Necesito información, por favor.")}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="WhatsApp Instituto Lael"
+                className="text-slate-400 hover:text-white transition"
+              >
+                <FaWhatsapp size={20} />
               </a>
             </div>
-
-            <p className="f-copy">© {year} Instituto Lael</p>
           </div>
 
-          {/* Programas */}
-          <nav className="f-col f-links" aria-label="Programas">
-            <h4>Programas</h4>
-            <ul>
-              <li><Link to="/paes">PAES</Link></li>
-              <li><Link to="/idiomas">Idiomas</Link></li>
-              <li><Link to="/lsch">Lengua de Señas (LSCh)</Link></li>
-              <li><Link to="/homeschool">Homeschool</Link></li>
-              <li><Link to="/empresas">Empresas</Link></li>
+          {/* Col 2 - Programas */}
+          <div>
+            <h4 className="font-semibold mb-3 text-white">Programas</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/paes" className="hover:underline">PAES</Link></li>
+              <li><Link to="/idiomas" className="hover:underline">Idiomas</Link></li>
+              <li><Link to="/lsch" className="hover:underline">Lengua de Señas</Link></li>
+              <li><Link to="/homeschool" className="hover:underline">Homeschool</Link></li>
+              <li><Link to="/empresas" className="hover:underline">Empresas</Link></li>
             </ul>
-          </nav>
+          </div>
 
-          {/* Comunidad */}
-          <nav className="f-col f-links" aria-label="Comunidad">
-            <h4>Comunidad</h4>
-            <ul>
-              <li><Link to="/docentes">Docentes</Link></li>
-              <li><Link to="/noticias">Noticias</Link></li>
-              <li><Link to="/simulador">Simulador</Link></li>
-              <li><Link to="/becas">Becas</Link></li>
-              <li><Link to="/convenios">Convenios</Link></li>
+          {/* Col 3 - Comunidad */}
+          <div>
+            <h4 className="font-semibold mb-3 text-white">Comunidad</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/docentes" className="hover:underline">Docentes</Link></li>
+              <li><Link to="/noticias" className="hover:underline">Noticias</Link></li>
+              <li><Link to="/simulador" className="hover:underline">Simulador</Link></li>
+              <li><Link to="/becas" className="hover:underline">Becas</Link></li>
+              <li><Link to="/convenios" className="hover:underline">Convenios</Link></li>
             </ul>
-          </nav>
+          </div>
 
-          {/* Soporte */}
-          <div className="f-col f-contact">
-            <h4>Soporte</h4>
-            <ul>
-              <li><Link to="/contacto">Contacto</Link></li>
-              <li><Link to="/inscripcion">Inscripción</Link></li>
-              <li><Link to="/pagos">Pagos</Link></li>
+          {/* Col 4 - Soporte */}
+          <div>
+            <h4 className="font-semibold mb-3 text-white">Soporte</h4>
+            <ul className="space-y-2 text-sm">
+              <li><Link to="/contacto" className="hover:underline">Contacto</Link></li>
+              <li><Link to="/inscripcion" className="hover:underline">Inscripción</Link></li>
+              <li><Link to="/pagos" className="hover:underline">Pagos</Link></li>
               <li>
                 <a
-                  className="strong"
                   href={wsp("Hola 👋 Necesito información, por favor.")}
                   target="_blank"
-                  rel="noreferrer noopener"
+                  rel="noreferrer"
+                  className="font-semibold hover:underline"
                 >
                   +56 9 6462 6568 (WhatsApp)
                 </a>
@@ -110,98 +138,16 @@ export default function Footer() {
       </section>
 
       {/* Legal */}
-      <section className="f-legal" aria-label="Enlaces legales">
-        <div className="container f-legal__in">
-          <nav className="f-legal__links">
-            <Link to="/terminos">Términos</Link>
-            <Link to="/privacidad">Privacidad</Link>
-            <Link to="/nosotros">Nosotros</Link>
+      <section className="border-t border-slate-800 py-5 text-center text-sm text-slate-400">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <nav className="flex flex-wrap justify-center gap-4">
+            <Link to="/terminos" className="hover:text-white">Términos</Link>
+            <Link to="/privacidad" className="hover:text-white">Privacidad</Link>
+            <Link to="/nosotros" className="hover:text-white">Nosotros</Link>
           </nav>
-          <div className="f-note">Hecho con 💙 desde Chile.</div>
+          <p className="opacity-90">© {year} Instituto Lael · Hecho con 💙 desde Chile.</p>
         </div>
       </section>
     </footer>
   );
 }
-
-const css = `
-.lael-footer{
-  --bg: var(--c-bg, #0b1220);
-  --panel: var(--c-card, #0e1424);
-  --soft: var(--c-soft, #0d1528);
-  --bd: var(--c-bd, #1f2a44);
-  --ink: #ffffff;
-  --ink-2: #eaf2ff;
-  --gold1:#fcd34d; --gold2:#f59e0b; --goldbd:#d97706;
-  color: var(--ink);
-  background: var(--bg);
-  border-top: 1px solid var(--bd);
-  font-weight: 800;
-  isolation: isolate;
-  margin-top: 40px;
-}
-.lael-footer .container{ max-width:1120px; margin:0 auto; padding:0 18px; }
-
-/* CTA */
-.f-cta{ border-bottom:1px solid var(--bd); background: linear-gradient(180deg, var(--panel), var(--bg)); }
-.f-cta__in{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 0; flex-wrap:wrap; }
-.pill{
-  display:inline-block; padding:.2rem .6rem; border-radius:999px;
-  border:1px solid #2b3a63; color:#fff; font-size:.78rem; font-weight:900;
-}
-.f-cta__copy h4{ margin:.25rem 0 .1rem; line-height:1.25; }
-.f-cta__copy .sub{ margin:0; color:var(--ink-2); opacity:.9; font-weight:700; }
-.f-cta__act{ display:flex; gap:10px; flex-wrap:wrap; }
-.fbtn{
-  display:inline-flex; align-items:center; gap:8px; padding:.72rem 1rem; border-radius:12px;
-  text-decoration:none; white-space:nowrap; transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
-  border:1px solid transparent;
-}
-.fbtn--gold{ color:#0b1220; background:linear-gradient(180deg,var(--gold1),var(--gold2)); border-color:var(--goldbd); box-shadow:0 10px 22px rgba(245,158,11,.18); }
-.fbtn--gold:hover{ filter:brightness(1.05); transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); }
-.fbtn--line{ color:#fff; background:transparent; border-color:#2b3a63; }
-.fbtn--line:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); }
-
-/* Cuerpo */
-.f-main{ background: linear-gradient(180deg, var(--panel), var(--bg)); }
-.f-grid{
-  display:grid; gap:26px; padding:22px 0 30px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  align-items:start;
-}
-.f-col{ min-width:0; }
-
-/* Marca */
-.f-brand{ display:flex; flex-direction:column; gap:8px; }
-.f-logo{ width:132px; display:block; }
-.f-tag{ color:var(--ink-2); margin:0; opacity:.95; font-weight:700; }
-.f-chips{ display:flex; gap:8px; flex-wrap:wrap; margin:4px 0 6px; }
-.chip{ padding:.22rem .6rem; border-radius:999px; border:1px solid #2b3a63; color:#fff; text-decoration:none; font-weight:900; }
-.chip:hover{ background:#101a2f; }
-.f-social{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
-.soc{ display:inline-flex; align-items:center; gap:6px; padding:.5rem .8rem; border-radius:999px; border:1.5px solid #334155; color:#fff; text-decoration:none; }
-.soc:hover{ background:#101a2f; }
-.f-copy{ margin-top:6px; font-size:.92rem; opacity:.75; }
-
-/* Listas */
-.f-links h4, .f-contact h4{ margin:0 0 8px; color:#fff; }
-.f-links ul, .f-contact ul{ list-style:none; padding:0; margin:0; }
-.f-links li, .f-contact li{ margin:6px 0; }
-.f-links a, .f-contact a{ color:#fff; text-decoration:none; font-weight:800; }
-.f-links a:hover, .f-contact a:hover{ text-decoration:underline; }
-.strong{ font-weight:1000; }
-
-/* Legal */
-.f-legal{ border-top:1px solid var(--bd); }
-.f-legal__in{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 0; flex-wrap:wrap; }
-.f-legal__links{ display:flex; gap:16px; flex-wrap:wrap; }
-.f-legal__links a{ color:#fff; opacity:.9; text-decoration:none; }
-.f-legal__links a:hover{ opacity:1; text-decoration:underline; }
-.f-note{ opacity:.8; }
-
-/* Responsive pequeños ajustes */
-@media (max-width:560px){
-  .f-cta__act{ width:100%; }
-  .f-cta__act .fbtn{ flex:1 1 auto; justify-content:center; }
-}
-`;

@@ -106,7 +106,6 @@ export default function Home() {
         <StatsBand
           items={[
             { kpi: "87%",   label: "Logra su meta académica" },
-            { kpi: "9.2/10", label: "Satisfacción promedio" },
             { kpi: "+11.000 h", label: "Clases en vivo realizadas" },
             { kpi: "500+", label: "Matriculados 2025"},
           ]}

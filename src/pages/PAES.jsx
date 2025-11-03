@@ -36,14 +36,19 @@ export default function PAES() {
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
 
-  // Elegir combo: solo setea selección (sin scroll)
-  const chooseCombo = (ids) => setSelectedSubjectIds([...ids]);
+  // Elegir combo: setea, hace scroll a "Arma tu plan"
+  const chooseCombo = (ids) => {
+    setSelectedSubjectIds([...ids]);
+    queueMicrotask(() => {
+      builderRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  };
 
   const waMsg = encodeURIComponent(
-    `Hola 👋, quiero info PAES.
-Ramos: ${selectedSubjects.map((s) => s.name).join(", ") || "—"}
-Mensual: ${clp(monthly)}
-Anual (${ACADEMIC_MONTHS} meses): ${clp(annual)}
+`Hola 👋, quisiera información sobre PAES.
+Ramos elegidos: ${selectedSubjects.map((s) => s.name).join(", ") || "—"}
+Mensual estimado: ${subjectCount ? clp(monthly) : "—"}
+Anual (${ACADEMIC_MONTHS} meses): ${subjectCount ? clp(annual) : "—"}
 Matrícula: ${clp(ENROLLMENT_FEE)}`
   );
 
@@ -67,22 +72,32 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
           <div className="hero__left">
             <span className="pill">PAES</span>
             <h1>
-              Combos claros + <span className="under">Arma tu plan</span>
+              Combos claros + <span className="under">arma tu plan</span>
             </h1>
             <p className="lead">
-              En vivo + grabadas, ensayos guiados y seguimiento. Matrícula única{" "}
+              Clases en vivo y grabadas, ensayos guiados y seguimiento real. Matrícula única{" "}
               <strong>{clp(ENROLLMENT_FEE)}</strong>. El precio baja al sumar ramos.
             </p>
             <div className="cta">
               <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-              <a className="btn btn-ghost" href={`https://wa.me/56964626568?text=${waMsg}`} target="_blank" rel="noreferrer">
+              <a
+                className="btn btn-ghost"
+                href={`https://wa.me/56964626568?text=${waMsg}`}
+                target="_blank" rel="noreferrer"
+              >
                 WhatsApp
               </a>
             </div>
           </div>
 
           <figure className="hero__img" aria-hidden>
-            <img src={studyOnline} alt="Estudiando online" loading="eager" />
+            <img
+              src={studyOnline}
+              alt="Estudio online con clases en vivo, cápsulas y seguimiento"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
           </figure>
         </div>
       </header>
@@ -92,7 +107,7 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
         <section className="value">
           <header className="sec-head value-head">
             <span className="chip-accent">Transparente</span>
-            <h2>Precios anuales claros · {ACADEMIC_MONTHS} meses ({ACADEMIC_PERIOD_LABEL})</h2>
+            <h2>Precios anuales · {ACADEMIC_MONTHS} meses ({ACADEMIC_PERIOD_LABEL})</h2>
             <p className="muted">
               Clases en vivo + cápsulas + material + <b>1 ensayo/mes</b> por ramo. Sin letra chica.
             </p>
@@ -154,7 +169,7 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
           </div>
 
           <ul className="value-why">
-            <li>Mostramos <b>precio anual</b>, no mensual: comparas fácil y sin sorpresas.</li>
+            <li>Mostramos <b>precio anual</b> para comparar fácil y sin sorpresas.</li>
             <li>Incluye <b>ensayos, cápsulas y soporte</b>; no son “clases sueltas”.</li>
             <li>Seguimos siendo de las opciones más accesibles del mercado.</li>
           </ul>
@@ -181,7 +196,15 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
             <small className="muted">Selecciona o deselecciona libremente</small>
           </header>
 
-          {/* sin atajos */}
+          <div className="builder-tools">
+            <button
+              type="button"
+              className="btn btn-ghost sm"
+              onClick={() => setSelectedSubjectIds([])}
+            >
+              Limpiar selección
+            </button>
+          </div>
 
           <div className="subjects">
             {PAES_SUBJECTS.map((s) => {
@@ -200,11 +223,13 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
             })}
           </div>
 
-          <div className="summary">
+          <div className="summary" aria-describedby="precios-live">
             <div className="sum-left">
               <div className="sum-title">
                 Selección: <span className="hi">{subjectCount}</span> ramo(s)
-                {!!subjectCount && <span className="muted"> · {selectedSubjects.map((s) => s.name).join(", ")}</span>}
+                {!!subjectCount && (
+                  <span className="muted"> · {selectedSubjects.map((s) => s.name).join(", ")}</span>
+                )}
               </div>
               <ul className="sum-feats">
                 <li>Clases en vivo + cápsulas</li>
@@ -216,14 +241,18 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
             <div className="sum-price">
               <div className="tiny muted">Mensual</div>
               <div className="numbers">
-                <span className="promo">{clp(monthly)}</span>
+                <span className="promo">{subjectCount ? clp(monthly) : "—"}</span>
               </div>
               <div className="tiny muted">
-                Anual ({ACADEMIC_MONTHS} meses): <b>{clp(annual)}</b> · + matrícula {clp(ENROLLMENT_FEE)}
+                Anual ({ACADEMIC_MONTHS} meses): <b>{subjectCount ? clp(annual) : "—"}</b> · + matrícula {clp(ENROLLMENT_FEE)}
               </div>
               <div className="actions">
                 <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
                 <a className="btn btn-outline" href={`https://wa.me/56964626568?text=${waMsg}`} target="_blank" rel="noreferrer">WhatsApp</a>
+              </div>
+              <div id="precios-live" className="sr-only" aria-live="polite">
+                Precio mensual {subjectCount ? clp(monthly) : "no disponible"}.
+                Precio anual {subjectCount ? clp(annual) : "no disponible"}.
               </div>
             </div>
           </div>
@@ -303,12 +332,14 @@ h1{ margin:.45rem 0 .35rem; font-size:clamp(1.7rem, 3vw + .6rem, 2.4rem); letter
 .btn-primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
 .btn-outline, .btn-ghost{ background:transparent; color:#eaf2ff; }
 .btn:hover{ transform: translateY(-1px); box-shadow:0 14px 28px rgba(2,6,23,.28); transition:.18s; }
+.btn.sm{ padding:.52rem .8rem; font-weight:900; }
 .w100{ width:100%; }
 
 .hero__img{
   border-radius:20px; overflow:hidden; border:1px solid var(--bd);
   background:#0f172a;
   box-shadow: 0 0 0 12px rgba(255,255,255,.06) inset, 0 24px 56px rgba(2,6,23,.36);
+  min-height: 220px;
 }
 .hero__img img{ display:block; width:100%; height:auto; object-fit:cover; }
 
@@ -382,7 +413,9 @@ h1{ margin:.45rem 0 .35rem; font-size:clamp(1.7rem, 3vw + .6rem, 2.4rem); letter
 .combo-strip{
   display:grid; grid-auto-flow: column; grid-auto-columns: minmax(280px, 1fr);
   gap:12px; overflow-x:auto; padding-bottom:6px; scrollbar-width:thin;
+  scroll-snap-type: x mandatory;
 }
+.combo-strip > *{ scroll-snap-align: start; }
 .combo-strip::-webkit-scrollbar{ height:8px; }
 .combo-strip::-webkit-scrollbar-thumb{ background:#1f2a44; border-radius:10px; }
 
@@ -415,6 +448,7 @@ h1{ margin:.45rem 0 .35rem; font-size:clamp(1.7rem, 3vw + .6rem, 2.4rem); letter
 
 /* BUILDER */
 .builder{ margin-top:18px; }
+.builder-tools{ display:flex; gap:8px; margin:4px 0 10px; }
 
 .subjects{ display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
 .subject{
@@ -451,6 +485,11 @@ h1{ margin:.45rem 0 .35rem; font-size:clamp(1.7rem, 3vw + .6rem, 2.4rem); letter
 .soon{
   display:inline-block; padding:.26rem .6rem; border-radius:999px;
   background:var(--accent); color:#fff; font-weight:1000; letter-spacing:.3px;
+}
+
+/* Accesibilidad */
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
 }
 
 /* focus */

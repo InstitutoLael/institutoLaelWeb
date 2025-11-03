@@ -1,432 +1,176 @@
 // src/pages/Inscripcion.jsx
-import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-/**
- * Cart opcional:
- * - Si tu app expone window.__LAEL_USE_CART__ (un hook), lo usamos.
- * - Si NO existe, seguimos con un carrito vacío sin romper nada.
- *   (Para habilitarlo desde tu app: window.__LAEL_USE_CART__ = useCart)
- */
-function useMaybeCart() {
-  const [cart, setCart] = useState({ items: [], total: 0 });
-
-  useEffect(() => {
-    try {
-      if (typeof window !== "undefined" && typeof window.__LAEL_USE_CART__ === "function") {
-        // usamos el hook real y nos suscribimos a sus cambios
-        const useCart = window.__LAEL_USE_CART__;
-        // Importante: no podemos "llamar" hooks condicionalmente aquí.
-        // Solución: escuchamos eventos de tu app o leemos snapshot si lo expone.
-        // Fallback: intentamos snapshot sincrónico si tu hook lo permite (no siempre posible).
-        const snap = useCart?.__snapshot?.(); // opcional si lo implementas
-        if (snap && typeof snap === "object") setCart(snap);
-
-        // Si tu app emite eventos cuando cambia el carrito:
-        const handler = (e) => setCart(e.detail);
-        window.addEventListener("lael:cart:update", handler);
-        return () => window.removeEventListener("lael:cart:update", handler);
-      } else {
-        // Fallback: intentamos cargar de localStorage si existe un guardado básico
-        const raw = localStorage.getItem("lael_cart");
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          if (parsed && typeof parsed === "object") setCart(parsed);
-        }
-      }
-    } catch {
-      // silencioso, seguimos con carrito vacío
-    }
-  }, []);
-
-  return cart;
-}
-
 const WAPP_INTL = "56964626568";
-
-// format CLP local sin chocar con otros clp()
-const money = (n) =>
-  Number(n || 0).toLocaleString("es-CL", {
-    style: "currency",
-    currency: "CLP",
-    maximumFractionDigits: 0,
-  });
+// Tu Google Form embebido
+const FORM_URL =
+  "https://docs.google.com/forms/d/e/1FAIpQLSfDVse7cbhnAOhA2OklnmBvaeKZY4ZDWOmrYFqSfAvV8joVOA/viewform?embedded=true";
 
 export default function Inscripcion() {
-  const cart = useMaybeCart();
-
-  const [form, setForm] = useState({
-    nombre: "",
-    correo: "",
-    telefono: "",
-    programa: "", // "PAES" | "Idiomas" | "LSCh" | "Empresas" | "Homeschool"
-    modalidad: "online", // "online" | "presencial" | "mixto"
-    horario: "tarde", // "manana" | "tarde" | "noche"
-    detalle: "", // ramos/idiomas/objetivo
-    acepta: false,
-  });
-
-  const setF = (k, v) => setForm((f) => ({ ...f, [k]: v }));
-
-  const resumenCarrito = useMemo(() => {
-    if (!cart?.items?.length) return "—";
-    return cart.items
-      .map((it) => {
-        const label = it?.title || it?.name || it?.id || "Item";
-        const price =
-          typeof it?.price === "number" ? ` (${money(it.price)})` : "";
-        return `• ${label}${price}`;
-      })
-      .join("\n");
-  }, [cart]);
-
-  const totalCarrito = typeof cart?.total === "number" ? cart.total : 0;
-
-  const isEmail = (v) => /\S+@\S+\.\S+/.test(v);
-  const isPhone = (v) => v.replace(/\D/g, "").length >= 9;
-
-  const isValid =
-    form.nombre.trim().length >= 3 &&
-    isEmail(form.correo) &&
-    isPhone(form.telefono) &&
-    form.programa &&
-    form.modalidad &&
-    form.acepta;
-
-  const waText = encodeURIComponent(
-    `Hola 👋, quiero inscribirme.\n` +
-      `Nombre: ${form.nombre}\n` +
-      `Correo: ${form.correo}\n` +
-      `Teléfono: ${form.telefono}\n` +
-      `Programa: ${form.programa}\n` +
-      `Modalidad: ${nice(form.modalidad)} · Horario: ${niceHor(form.horario)}\n` +
-      (form.detalle?.trim() ? `Detalle: ${form.detalle}\n` : "") +
-      (cart?.items?.length
-        ? `Carrito:\n${resumenCarrito}\nTotal estimado: ${money(
-            totalCarrito
-          )}\n`
-        : "") +
-      `Acepto términos: ${form.acepta ? "Sí" : "No"}`
-  );
-
-  const mailto = `mailto:inscripciones@institutolael.cl?subject=Inscripción%20${encodeURIComponent(
-    form.programa || ""
-  )}&body=${waText}`;
-
-  const preventIfDisabled = (e) => {
-    if (!isValid) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  };
-
   return (
     <section className="enroll">
       <style>{css}</style>
 
       {/* HERO */}
-      <header className="mb-4 hero">
+      <header className="hero">
         <span className="pill">Inscripción</span>
-        <h1 className="h3 mt-2 mb-1">Reserva tu cupo</h1>
-        <p className="subtle m-0">
-          Respondemos en <strong>menos de 24h hábiles</strong>. Si ya cargaste
-          items al carrito, se incluirán en el mensaje automáticamente.
+        <h1>Reserva tu cupo 2026</h1>
+        <p className="subtle">
+          Completa el formulario para recibir orientación y confirmar tu
+          matrícula. Respondemos en <b>24–48 h hábiles</b>. Todas las clases
+          quedan grabadas.
         </p>
+
+        <div className="cta">
+          <a
+            className="btn btn-primary"
+            href={`https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(
+              "Hola 👋, quiero inscribirme en Instituto Lael y tengo una consulta."
+            )}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            WhatsApp
+          </a>
+          <a
+            className="btn btn-outline"
+            href={FORM_URL.replace("?embedded=true", "")}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Abrir formulario en nueva pestaña
+          </a>
+          <Link className="btn btn-ghost" to="/pagos">
+            Ver formas de pago
+          </Link>
+        </div>
       </header>
 
-      <div className="row g-3">
-        {/* FORM */}
-        <div className="col-lg-7">
-          <article className="card-float p-3 p-md-4">
-            <h2 className="h6 mb-3">Datos del/la estudiante</h2>
+      <div className="container grid">
+        {/* FORM EMBED */}
+        <article className="card">
+          <h2 className="h6">Formulario de inscripción</h2>
+          <p className="tiny subtle">
+            Si no ves el formulario abajo, usa el botón{" "}
+            <i>“Abrir formulario en nueva pestaña”</i>.
+          </p>
 
-            <div className="row g-3">
-              <div className="col-md-6">
-                <label className="form-label">
-                  Nombre y apellidos <span className="req">*</span>
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={form.nombre}
-                  onChange={(e) => setF("nombre", e.target.value)}
-                  placeholder="Ej: Diego Riquelme"
-                  autoComplete="name"
-                />
-              </div>
+          <div className="iframe-wrap" role="region" aria-label="Formulario de Google">
+            <iframe
+              title="Inscripción Instituto Lael 2026"
+              src={FORM_URL}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </article>
 
-              <div className="col-md-6">
-                <label className="form-label">
-                  Correo <span className="req">*</span>
-                </label>
-                <input
-                  type="email"
-                  className={
-                    "form-control" +
-                    (form.correo && !isEmail(form.correo) ? " is-invalid" : "")
-                  }
-                  value={form.correo}
-                  onChange={(e) => setF("correo", e.target.value)}
-                  placeholder="Ej: nombre@correo.cl"
-                  autoComplete="email"
-                  inputMode="email"
-                />
-                {form.correo && !isEmail(form.correo) && (
-                  <div className="invalid">Ingresa un correo válido.</div>
-                )}
-              </div>
-
-              <div className="col-md-6">
-                <label className="form-label">
-                  Teléfono (WhatsApp) <span className="req">*</span>
-                </label>
-                <input
-                  type="tel"
-                  className={
-                    "form-control" +
-                    (form.telefono && !isPhone(form.telefono)
-                      ? " is-invalid"
-                      : "")
-                  }
-                  value={form.telefono}
-                  onChange={(e) => setF("telefono", e.target.value)}
-                  placeholder="+56 9 1234 5678"
-                  autoComplete="tel"
-                  inputMode="tel"
-                />
-                {form.telefono && !isPhone(form.telefono) && (
-                  <div className="invalid">
-                    Ingresa un número de WhatsApp válido.
-                  </div>
-                )}
-              </div>
-
-              <div className="col-md-6">
-                <label className="form-label">
-                  Programa <span className="req">*</span>
-                </label>
-                <select
-                  className="form-select"
-                  value={form.programa}
-                  onChange={(e) => setF("programa", e.target.value)}
-                >
-                  <option value="">Selecciona…</option>
-                  <option value="PAES">PAES</option>
-                  <option value="Idiomas">Idiomas</option>
-                  <option value="LSCh">LSCh</option>
-                  <option value="Empresas">Empresas</option>
-                  <option value="Homeschool">Homeschool (apoyo)</option>
-                </select>
-              </div>
-
-              <div className="col-md-6">
-                <label className="form-label">Modalidad</label>
-                <div className="chip-row" role="group" aria-label="Modalidad">
-                  {["online", "mixto", "presencial"].map((m) => (
-                    <button
-                      key={m}
-                      type="button"
-                      className={
-                        "chip " + (form.modalidad === m ? "is-active" : "")
-                      }
-                      aria-pressed={form.modalidad === m}
-                      onClick={() => setF("modalidad", m)}
-                    >
-                      {nice(m)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="col-md-6">
-                <label className="form-label">Horario preferente</label>
-                <div className="chip-row" role="group" aria-label="Horario">
-                  {[
-                    { id: "manana", label: "Mañana (8–12)" },
-                    { id: "tarde", label: "Tarde (13–18)" },
-                    { id: "noche", label: "Noche (19–22)" },
-                  ].map((h) => (
-                    <button
-                      key={h.id}
-                      type="button"
-                      className={"chip " + (form.horario === h.id ? "is-active" : "")}
-                      aria-pressed={form.horario === h.id}
-                      onClick={() => setF("horario", h.id)}
-                    >
-                      {h.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="col-12">
-                <label className="form-label">Detalle (ramos/idiomas/objetivo)</label>
-                <textarea
-                  className="form-control"
-                  rows={4}
-                  value={form.detalle}
-                  onChange={(e) => setF("detalle", e.target.value)}
-                  placeholder={
-                    form.programa === "PAES"
-                      ? "Ej: M1 + Lenguaje + Historia"
-                      : form.programa === "Idiomas"
-                      ? "Ej: Inglés B1 + club conversación"
-                      : form.programa === "LSCh"
-                      ? "Ej: Módulo 1 (Inicial)"
-                      : form.programa === "Empresas"
-                      ? "Ej: Inglés corporativo, 30 personas, modalidad mixta"
-                      : "Cuéntanos brevemente lo que necesitas"
-                  }
-                />
-              </div>
-
-              <div className="col-12">
-                <label className="form-check">
-                  <input
-                    type="checkbox"
-                    className="form-check-input me-2"
-                    checked={form.acepta}
-                    onChange={(e) => setF("acepta", e.target.checked)}
-                  />
-                  <span className="form-check-label">
-                    Acepto términos y políticas de Instituto Lael. <span className="req">*</span>
-                  </span>
-                </label>
-              </div>
+        {/* PAGO Y AYUDA */}
+        <aside className="card">
+          <h2 className="h6">Pago por transferencia</h2>
+          <div className="bank blk">
+            <div>
+              <strong>Nombre:</strong> Instituto Lael SpA
             </div>
-
-            <div className="d-flex flex-wrap gap-2 mt-3">
-              <a
-                className={"btn btn-primary" + (isValid ? "" : " disabled")}
-                href={isValid ? `https://wa.me/${WAPP_INTL}?text=${waText}` : "#"}
-                onClick={preventIfDisabled}
-                target="_blank"
-                rel="noreferrer"
-                aria-disabled={!isValid}
-                title={isValid ? "Enviar por WhatsApp" : "Completa los datos requeridos"}
-              >
-                Enviar por WhatsApp
-              </a>
-              <a
-                className={"btn btn-outline-secondary" + (isValid ? "" : " disabled")}
-                href={isValid ? mailto : "#"}
-                onClick={preventIfDisabled}
-                aria-disabled={!isValid}
-                title={isValid ? "Enviar por correo" : "Completa los datos requeridos"}
-              >
-                Enviar por correo
-              </a>
-              <Link className="btn btn-ghost" to="/pagos">Ver formas de pago</Link>
+            <div>
+              <strong>RUT:</strong> 78.084.019-6
             </div>
-          </article>
-        </div>
-
-        {/* RESUMEN + TRANSFERENCIA */}
-        <div className="col-lg-5">
-          <article className="card-float p-3 p-md-4 mb-3">
-            <h2 className="h6 mb-2">Resumen</h2>
-            <ul className="summary">
-              <li><strong>Programa:</strong> {form.programa || "—"}</li>
-              <li><strong>Modalidad:</strong> {nice(form.modalidad)}</li>
-              <li><strong>Horario:</strong> {niceHor(form.horario)}</li>
-              <li className="break"><strong>Detalle:</strong> {form.detalle || "—"}</li>
-            </ul>
-
-            {!!cart?.items?.length && (
-              <>
-                <h3 className="h6 mt-3 mb-2">Carrito</h3>
-                <pre className="cart-pre" aria-live="polite">{resumenCarrito}</pre>
-                <div className="tot">
-                  Total estimado: <strong>{money(totalCarrito)}</strong>
-                </div>
-              </>
-            )}
-          </article>
-
-          <article className="card-float p-3 p-md-4">
-            <h2 className="h6 mb-2">Pago por transferencia</h2>
-            <div className="bank blk">
-              <div><strong>Banco:</strong> Banco Estado</div>
-              <div><strong>Tipo:</strong> Cuenta Vista</div>
-              <div><strong>Titular:</strong> Instituto Lael SpA</div>
-              <div><strong>RUT:</strong> 76.123.456-7</div>
-              <div><strong>N° cuenta:</strong> 12345678901</div>
-              <div><strong>Correo:</strong> pagos@institutolael.cl</div>
-              <div><strong>Glosa:</strong> Nombre Alumno + Programa</div>
+            <div>
+              <strong>Tipo de cuenta:</strong> Cuenta Vista – Mercado Pago
             </div>
-            <p className="tiny subtle m-0">
-              Envía el comprobante por WhatsApp o correo y activamos tu matrícula.
-            </p>
-          </article>
-        </div>
+            <div>
+              <strong>N° de cuenta:</strong> 1088183168
+            </div>
+            <div>
+              <strong>Correo comprobantes:</strong> pagos@institutolael.cl
+            </div>
+            <div>
+              <strong>Glosa:</strong> Nombre del estudiante + Programa
+            </div>
+          </div>
+
+          <p className="tiny subtle">
+            Envía el comprobante por WhatsApp o correo y activamos tu matrícula.
+          </p>
+
+          <hr />
+          <h3 className="h6">¿Necesitas ayuda?</h3>
+          <p className="tiny subtle">
+            Escríbenos y te orientamos para elegir plan, ramos u horarios.
+          </p>
+          <a
+            className="btn btn-primary"
+            href={`https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(
+              "Hola 👋, necesito ayuda para completar mi inscripción."
+            )}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Hablar por WhatsApp
+          </a>
+        </aside>
       </div>
     </section>
   );
 }
 
-/* helpers */
-function nice(s) {
-  if (!s) return "—";
-  return s === "online"
-    ? "Online"
-    : s === "mixto"
-    ? "Mixto"
-    : s === "presencial"
-    ? "Presencial"
-    : s;
-}
-function niceHor(h) {
-  if (h === "manana") return "Mañana (8–12)";
-  if (h === "tarde") return "Tarde (13–18)";
-  if (h === "noche") return "Noche (19–22)";
-  return "—";
-}
-
-/* estilos locales (paleta Lael + accesibilidad) */
+/* estilos locales */
 const css = `
 :root{
-  --blue:#3b549d; --indigo:#5850EC; --ok:#16a34a;
-  --bd:#e5e7eb; --bd-dark:#1f2a44;
-  --ink:#0b1220; --ink-soft:#51607a;
+  --bg:#0b1220; --panel:#0e1424; --soft:#0d1528; --bd:#1f2a44;
+  --ink:#ffffff; --muted:#eaf2ff; --accent:#5850EC; --accent2:#22d3ee;
 }
-.enroll .hero .pill{
-  display:inline-block; padding:.28rem .6rem; border-radius:999px;
-  border:1px solid #dbeafe; background:#eef2ff; color:#0b1220; font-weight:800;
+.enroll{ color:var(--ink); }
+.container{ max-width:1120px; margin:0 auto; padding:0 18px; }
+.hero{
+  padding:34px 0 10px; border-bottom:1px solid var(--bd);
+  background:
+    radial-gradient(880px 320px at 10% -10%, rgba(88,80,236,.16), transparent 60%),
+    radial-gradient(820px 300px at 92% -12%, rgba(34,211,238,.10), transparent 60%);
 }
-.subtle{ color:var(--ink-soft); }
-.card-float{ border:1px solid var(--bd); border-radius:16px; background:#fff; box-shadow:0 10px 24px rgba(16,24,40,.06); color:var(--ink); }
-@media (prefers-color-scheme: dark){
-  .card-float{ background:#0f172a; border-color:#1f2a44; color:#eaf2ff; }
-  .subtle{ color:#cbd5e1; }
+.pill{
+  display:inline-block; padding:.28rem .62rem; border-radius:999px;
+  border:1px solid #334155; background:#101a2f; font-weight:900;
 }
-.req{ color:var(--ok); font-weight:800; margin-left:.15rem; }
+h1{ margin:.5rem 0 .35rem; font-size:clamp(1.8rem, 3.2vw + .6rem, 2.4rem); }
+.subtle{ color:var(--muted); opacity:.95; }
 
-.chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
-.chip{
-  border:1px solid #dbeafe; background:linear-gradient(180deg,#fff,#fafafa); color:#0f172a;
-  border-radius:999px; padding:.45rem .75rem; font-size:.9rem; box-shadow:0 2px 8px rgba(16,24,40,.06);
-  transition:.15s; font-weight:800;
+.cta{ display:flex; gap:10px; flex-wrap:wrap; margin:12px 0 4px; }
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:.7rem 1rem; border-radius:12px; border:1px solid #2f3341; text-decoration:none; font-weight:900;
+  transition:.16s transform ease, .16s box-shadow ease;
 }
-.chip.is-active{ border-color:var(--indigo); background:#eef2ff; }
-@media (prefers-color-scheme: dark){
-  .chip{ background:#0f172a; color:#e5e7eb; border-color:#1f2a44; }
-  .chip.is-active{ background:#101a2f; border-color:#28324a; }
+.btn:hover{ transform: translateY(-1px); box-shadow:0 14px 28px rgba(2,6,23,.28); }
+.btn-primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+.btn-outline{ background:transparent; color:#eaf2ff; }
+.btn-ghost{ background:transparent; color:#eaf2ff; border:1px solid #2f3341; }
+
+.grid{
+  display:grid; gap:14px; padding:16px 0 28px;
+  grid-template-columns: 1.1fr .9fr;
+}
+@media (max-width:980px){ .grid{ grid-template-columns:1fr; } }
+
+.card{
+  border:1px solid var(--bd); border-radius:18px; background:linear-gradient(180deg,#0f172a,#0b1220);
+  box-shadow:0 18px 36px rgba(2,6,23,.26); padding:16px;
+}
+.h6{ margin:0 0 6px; font-size:1rem; font-weight:900; color:#fff; }
+.tiny{ font-size:.92rem; }
+
+.iframe-wrap{
+  position:relative; width:100%;
+  /* Altura flexible: en móvil ocupa más alto */
+  height: min(1600px, 80vh);
+  border:1px solid var(--bd); border-radius:14px; overflow:hidden; background:#0f172a;
+}
+@media (max-width:640px){ .iframe-wrap{ height: 78vh; } }
+.iframe-wrap iframe{
+  position:absolute; inset:0; width:100%; height:100%; border:0;
+  background:#0f172a;
 }
 
-.form-control.is-invalid, .form-select.is-invalid{ border-color:#ef4444; }
-.invalid{ font-size:.85rem; color:#ef4444; margin-top:.25rem; }
-
-/* botones deshabilitados que NO navegan */
-.btn.disabled{ pointer-events:none; opacity:.6; }
-
-.summary{ list-style:none; padding:0; margin:0; display:grid; gap:6px; }
-.summary .break{ white-space:pre-wrap }
-.cart-pre{
-  background:#0b1220; color:#e5e7eb; border-radius:10px; padding:.6rem .8rem; white-space:pre-wrap; margin:0;
-  border:1px solid #1f2a44;
-}
-
-.bank.blk{ display:grid; gap:4px; margin-bottom:6px; }
-.btn-ghost{ border:1px solid #dbeafe; color:#3b549d; }
-@media (prefers-color-scheme: dark){ .btn-ghost{ color:#cbd5e1; border-color:#334155; } }
+.bank.blk{ display:grid; gap:4px; margin:8px 0 10px; }
+hr{ border:0; border-top:1px solid var(--bd); margin:12px 0; }
 `;

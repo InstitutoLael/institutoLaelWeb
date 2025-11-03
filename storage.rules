@@ -1,0 +1,10 @@
+// storage.rules
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      // Abierto en dev para subir vouchers sin auth
+      allow read, write: if request.time < timestamp.date(2030, 1, 1);
+    }
+  }
+}

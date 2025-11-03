@@ -4,47 +4,67 @@ import logoReal from "../assets/img/Logos/lael-inst-naranja.png";
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const wsp = (msg) => `https://wa.me/56964626568?text=${encodeURIComponent(msg)}`;
+  const wsp = (msg) =>
+    `https://wa.me/56964626568?text=${encodeURIComponent(msg)}`;
 
   return (
     <footer className="lael-footer" role="contentinfo" aria-label="Pie de página Instituto Lael">
       <style>{css}</style>
 
       {/* CTA superior */}
-      <section className="cta">
-        <div className="container cta__in">
-          <div className="cta__copy">
+      <section className="f-cta" aria-label="Llamado a la acción final">
+        <div className="container f-cta__in">
+          <div className="f-cta__copy">
             <span className="pill">¿Listo/a para empezar?</span>
-            <h4>Aprende con ritmo humano. Nosotros ponemos método y acompañamiento.</h4>
+            <h4>Clases en vivo + cápsulas + acompañamiento real.</h4>
+            <p className="sub">Matrícula única. Precios claros. Sin letra chica.</p>
           </div>
-          <div className="cta__act">
+          <div className="f-cta__act" role="group" aria-label="Acciones principales">
             <Link className="fbtn fbtn--gold" to="/inscripcion">Inscribirme</Link>
-            <Link className="fbtn fbtn--line" to="/becas">Becas</Link>
-            <a className="fbtn fbtn--line" href={wsp("Hola 👋 Me gustaría conversar mi caso.")} target="_blank" rel="noreferrer">
+            <a
+              className="fbtn fbtn--line"
+              href={wsp("Hola 👋 Me gustaría conversar mi caso.")}
+              target="_blank"
+              rel="noreferrer noopener"
+              aria-label="Abrir WhatsApp de Instituto Lael"
+            >
               WhatsApp
             </a>
+            <Link className="fbtn fbtn--line" to="/becas">Becas</Link>
           </div>
         </div>
       </section>
 
-      {/* CUERPO */}
-      <section className="main">
-        <div className="container fgrid">
-          {/* Marca (siempre empieza nueva columna y no se monta) */}
-          <div className="fcol brand">
-            <img src={logoReal} alt="Instituto Lael" className="logo" />
-            <p className="tag">Educación online, pero humana.</p>
+      {/* Cuerpo */}
+      <section className="f-main">
+        <div className="container f-grid">
 
-            <nav className="chips" aria-label="Atajos">
+          {/* Marca */}
+          <div className="f-col f-brand">
+            <Link to="/" aria-label="Inicio">
+              <img src={logoReal} alt="Instituto Lael" className="f-logo" loading="lazy" />
+            </Link>
+            <p className="f-tag">Educación online, cercana y clara.</p>
+
+            <nav className="f-chips" aria-label="Atajos">
               <Link to="/convenios" className="chip">Convenios</Link>
               <Link to="/trabaja" className="chip">Trabaja con nosotros</Link>
             </nav>
 
-            <p className="copy">© {year} Instituto Lael</p>
+            <div className="f-social" aria-label="Redes sociales">
+              <a className="soc" href="https://www.instagram.com/institutolael" target="_blank" rel="noreferrer noopener" aria-label="Instagram Instituto Lael">
+                <span aria-hidden>📸</span> Instagram
+              </a>
+              <a className="soc" href="https://www.youtube.com/@institutolael" target="_blank" rel="noreferrer noopener" aria-label="YouTube Instituto Lael">
+                <span aria-hidden>▶️</span> YouTube
+              </a>
+            </div>
+
+            <p className="f-copy">© {year} Instituto Lael</p>
           </div>
 
           {/* Programas */}
-          <nav className="fcol links" aria-label="Programas">
+          <nav className="f-col f-links" aria-label="Programas">
             <h4>Programas</h4>
             <ul>
               <li><Link to="/paes">PAES</Link></li>
@@ -56,7 +76,7 @@ export default function Footer() {
           </nav>
 
           {/* Comunidad */}
-          <nav className="fcol links" aria-label="Comunidad">
+          <nav className="f-col f-links" aria-label="Comunidad">
             <h4>Comunidad</h4>
             <ul>
               <li><Link to="/docentes">Docentes</Link></li>
@@ -68,40 +88,36 @@ export default function Footer() {
           </nav>
 
           {/* Soporte */}
-          <div className="fcol contact">
+          <div className="f-col f-contact">
             <h4>Soporte</h4>
             <ul>
               <li><Link to="/contacto">Contacto</Link></li>
               <li><Link to="/inscripcion">Inscripción</Link></li>
               <li><Link to="/pagos">Pagos</Link></li>
               <li>
-                <a className="strong" href={wsp("Hola 👋 Necesito información, por favor.")} target="_blank" rel="noreferrer">
+                <a
+                  className="strong"
+                  href={wsp("Hola 👋 Necesito información, por favor.")}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                >
                   +56 9 6462 6568 (WhatsApp)
                 </a>
               </li>
             </ul>
-
-            <div className="social" aria-label="Redes sociales">
-              <a className="soc" href="https://www.instagram.com/institutolael" target="_blank" rel="noreferrer">
-                <span aria-hidden>📸</span> Instagram
-              </a>
-              <a className="soc" href="https://www.youtube.com/@institutolael" target="_blank" rel="noreferrer">
-                <span aria-hidden>▶️</span> YouTube
-              </a>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* LEGAL */}
-      <section className="legal">
-        <div className="container legal__in">
-          <nav className="legal__links" aria-label="Legal">
-            <a href="/terminos">Términos</a>
-            <a href="/privacidad">Privacidad</a>
+      {/* Legal */}
+      <section className="f-legal" aria-label="Enlaces legales">
+        <div className="container f-legal__in">
+          <nav className="f-legal__links">
+            <Link to="/terminos">Términos</Link>
+            <Link to="/privacidad">Privacidad</Link>
             <Link to="/nosotros">Nosotros</Link>
           </nav>
-          <div className="note">Hecho con 💙 desde Chile.</div>
+          <div className="f-note">Hecho con 💙 desde Chile.</div>
         </div>
       </section>
     </footer>
@@ -112,79 +128,80 @@ const css = `
 .lael-footer{
   --bg: var(--c-bg, #0b1220);
   --panel: var(--c-card, #0e1424);
+  --soft: var(--c-soft, #0d1528);
   --bd: var(--c-bd, #1f2a44);
-  --ink: var(--ink, #ffffff);
-  --ink2: var(--ink2, #F5F7FF);
-  --pri: var(--pri, #5850EC);
+  --ink: #ffffff;
+  --ink-2: #eaf2ff;
   --gold1:#fcd34d; --gold2:#f59e0b; --goldbd:#d97706;
-  --yellow:#facc15;
-  color:var(--ink);
-  background:var(--bg);
-  border-top:1px solid var(--bd);
-  margin-top:40px;
-  font-weight:800;
-  isolation:isolate; /* evita que nada externo se mezcle */
+  color: var(--ink);
+  background: var(--bg);
+  border-top: 1px solid var(--bd);
+  font-weight: 800;
+  isolation: isolate;
+  margin-top: 40px;
 }
 .lael-footer .container{ max-width:1120px; margin:0 auto; padding:0 18px; }
 
-/* CTA superior */
-.lael-footer .cta{ border-bottom:1px solid var(--bd); }
-.lael-footer .cta__in{
-  display:flex; align-items:center; justify-content:space-between; gap:16px; padding:16px 0; flex-wrap:wrap;
+/* CTA */
+.f-cta{ border-bottom:1px solid var(--bd); background: linear-gradient(180deg, var(--panel), var(--bg)); }
+.f-cta__in{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 0; flex-wrap:wrap; }
+.pill{
+  display:inline-block; padding:.2rem .6rem; border-radius:999px;
+  border:1px solid #2b3a63; color:#fff; font-size:.78rem; font-weight:900;
 }
-.lael-footer .pill{
-  display:inline-block; padding:.18rem .55rem; border-radius:999px; border:1px solid rgba(255,255,255,.45); color:#fff; font-size:.8rem;
+.f-cta__copy h4{ margin:.25rem 0 .1rem; line-height:1.25; }
+.f-cta__copy .sub{ margin:0; color:var(--ink-2); opacity:.9; font-weight:700; }
+.f-cta__act{ display:flex; gap:10px; flex-wrap:wrap; }
+.fbtn{
+  display:inline-flex; align-items:center; gap:8px; padding:.72rem 1rem; border-radius:12px;
+  text-decoration:none; white-space:nowrap; transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  border:1px solid transparent;
 }
-.lael-footer .cta__copy h4{ margin:.2rem 0 0; color:#fff; line-height:1.25; }
-.lael-footer .cta__act{ display:flex; gap:10px; flex-wrap:wrap; }
-.lael-footer .fbtn{
-  display:inline-flex; align-items:center; gap:8px; padding:.7rem 1rem; border-radius:12px; text-decoration:none; white-space:nowrap;
-  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease, border-color .18s ease;
-}
-.lael-footer .fbtn--gold{ color:#0b1220; background:linear-gradient(180deg,var(--gold1),var(--gold2)); border:1px solid var(--goldbd); box-shadow:0 10px 22px rgba(245,158,11,.18); }
-.lael-footer .fbtn--gold:hover{ filter:brightness(1.05); transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); }
-.lael-footer .fbtn--line{ color:#fff; background:transparent; border:1.5px solid rgba(255,255,255,.55); }
-.lael-footer .fbtn--line:hover{ border-color:#fff; transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); }
+.fbtn--gold{ color:#0b1220; background:linear-gradient(180deg,var(--gold1),var(--gold2)); border-color:var(--goldbd); box-shadow:0 10px 22px rgba(245,158,11,.18); }
+.fbtn--gold:hover{ filter:brightness(1.05); transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); }
+.fbtn--line{ color:#fff; background:transparent; border-color:#2b3a63; }
+.fbtn--line:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); }
 
 /* Cuerpo */
-.lael-footer .main{ background:linear-gradient(180deg,var(--panel), var(--bg)); }
-
-/* GRID FLUIDO: evita superposiciones */
-.lael-footer .fgrid{
-  display:grid; gap:28px; padding:26px 0 32px;
+.f-main{ background: linear-gradient(180deg, var(--panel), var(--bg)); }
+.f-grid{
+  display:grid; gap:26px; padding:22px 0 30px;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  align-items:start; /* todas las columnas arrancan arriba */
+  align-items:start;
 }
-.lael-footer .fcol{ align-self:start; min-width:0; }
+.f-col{ min-width:0; }
 
 /* Marca */
-.lael-footer .brand{ display:flex; flex-direction:column; gap:8px; }
-.lael-footer .brand .logo{ width:132px; }
-.lael-footer .brand .tag{ color:var(--ink2); opacity:.98; margin:0; }
-.lael-footer .chips{ display:flex; gap:8px; flex-wrap:wrap; margin:2px 0 6px; }
-.lael-footer .chip{ padding:.18rem .55rem; border-radius:999px; border:1px solid #2b3a63; color:#fff; text-decoration:none; }
-.lael-footer .chip:hover{ background:#101a2f; }
-.lael-footer .brand .copy{ margin-top:4px; font-size:.92rem; opacity:.72; }
+.f-brand{ display:flex; flex-direction:column; gap:8px; }
+.f-logo{ width:132px; display:block; }
+.f-tag{ color:var(--ink-2); margin:0; opacity:.95; font-weight:700; }
+.f-chips{ display:flex; gap:8px; flex-wrap:wrap; margin:4px 0 6px; }
+.chip{ padding:.22rem .6rem; border-radius:999px; border:1px solid #2b3a63; color:#fff; text-decoration:none; font-weight:900; }
+.chip:hover{ background:#101a2f; }
+.f-social{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+.soc{ display:inline-flex; align-items:center; gap:6px; padding:.5rem .8rem; border-radius:999px; border:1.5px solid #334155; color:#fff; text-decoration:none; }
+.soc:hover{ background:#101a2f; }
+.f-copy{ margin-top:6px; font-size:.92rem; opacity:.75; }
 
-/* Listas de enlaces */
-.lael-footer .links h4{ margin:0 0 8px; color:#fff; }
-.lael-footer .links ul{ list-style:none; margin:0; padding:0; }
-.lael-footer .links li{ margin:6px 0; }
-.lael-footer .links a{ color:#fff; text-decoration:none; }
-.lael-footer .links a:hover{ text-decoration:underline; }
-
-/* Soporte / redes */
-.lael-footer .contact .strong{ color:#fff; text-decoration:none; }
-.lael-footer .contact .strong:hover{ text-decoration:underline; }
-.lael-footer .social{ display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
-.lael-footer .soc{ display:inline-flex; align-items:center; gap:6px; padding:.55rem .9rem; border-radius:999px; border:2px solid var(--yellow); color:#fff; text-decoration:none; background:transparent; }
-.lael-footer .soc:hover{ background:rgba(250,204,21,.08); }
+/* Listas */
+.f-links h4, .f-contact h4{ margin:0 0 8px; color:#fff; }
+.f-links ul, .f-contact ul{ list-style:none; padding:0; margin:0; }
+.f-links li, .f-contact li{ margin:6px 0; }
+.f-links a, .f-contact a{ color:#fff; text-decoration:none; font-weight:800; }
+.f-links a:hover, .f-contact a:hover{ text-decoration:underline; }
+.strong{ font-weight:1000; }
 
 /* Legal */
-.lael-footer .legal{ border-top:1px solid var(--bd); }
-.lael-footer .legal__in{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 0; flex-wrap:wrap; }
-.lael-footer .legal__links{ display:flex; gap:16px; flex-wrap:wrap; }
-.lael-footer .legal__links a{ color:#fff; opacity:.85; text-decoration:none; }
-.lael-footer .legal__links a:hover{ opacity:1; text-decoration:underline; }
-.lael-footer .note{ opacity:.78; }
+.f-legal{ border-top:1px solid var(--bd); }
+.f-legal__in{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px 0; flex-wrap:wrap; }
+.f-legal__links{ display:flex; gap:16px; flex-wrap:wrap; }
+.f-legal__links a{ color:#fff; opacity:.9; text-decoration:none; }
+.f-legal__links a:hover{ opacity:1; text-decoration:underline; }
+.f-note{ opacity:.8; }
+
+/* Responsive pequeños ajustes */
+@media (max-width:560px){
+  .f-cta__act{ width:100%; }
+  .f-cta__act .fbtn{ flex:1 1 auto; justify-content:center; }
+}
 `;

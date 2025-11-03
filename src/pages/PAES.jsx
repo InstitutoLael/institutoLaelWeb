@@ -72,11 +72,13 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
           <div className="hero__left">
             <span className="pill">PAES</span>
             <h1>
-              Combos claros + <span className="under">arma tu plan</span>
+              Tu camino a la universidad, <span className="under">guiado con propósito 🙌</span>
             </h1>
             <p className="lead">
-              Clases en vivo y grabadas, ensayos guiados y seguimiento real. Matrícula única{" "}
-              <strong>{clp(ENROLLMENT_FEE)}</strong>. El precio baja al sumar ramos.
+              En Lael creemos que cada estudiante tiene un propósito.
+              Prepárate para la PAES con clases en vivo, cápsulas grabadas, ensayos mensuales y acompañamiento real.
+              Matrícula única <strong>{clp(ENROLLMENT_FEE)}</strong>. Sin letra chica ni costos ocultos:
+              solo compromiso, fe y enseñanza de calidad.
             </p>
             <div className="cta">
               <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
@@ -109,7 +111,8 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
             <span className="chip-accent">Transparente</span>
             <h2>Precios anuales · {ACADEMIC_MONTHS} meses ({ACADEMIC_PERIOD_LABEL})</h2>
             <p className="muted">
-              Clases en vivo + cápsulas + material + <b>1 ensayo/mes</b> por ramo. Sin letra chica.
+              Educación accesible y clara: cada plan incluye clases en vivo, cápsulas grabadas y <b>1 ensayo/mes por ramo</b>,
+              guiado por docentes que creen en tu futuro.
             </p>
           </header>
 
@@ -165,21 +168,22 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
             <div className="cmp-copy">
               En un preuniversitario tradicional, 2–3 ramos cuestan entre <b>$500.000</b> y <b>$900.000</b>.
               En Lael, por <u>menos de la mitad</u> tienes clases en vivo, cápsulas y ensayos guiados, 100% online y cercano.
+              Creemos que la educación debe ser accesible, porque el conocimiento también es servicio.
             </div>
           </div>
 
           <ul className="value-why">
             <li>Mostramos <b>precio anual</b> para comparar fácil y sin sorpresas.</li>
             <li>Incluye <b>ensayos, cápsulas y soporte</b>; no son “clases sueltas”.</li>
-            <li>Seguimos siendo de las opciones más accesibles del mercado.</li>
+            <li>Seguimos siendo una de las opciones más accesibles del mercado.</li>
           </ul>
         </section>
 
         {/* COMBOS */}
         <section className="combos">
           <header className="sec-head">
-            <h2>Combos recomendados</h2>
-            <p>Empieza rápido. Puedes ajustar abajo en <b>Arma tu plan</b>.</p>
+            <h2>Planes pensados para ti</h2>
+            <p>Elige un punto de partida. Luego puedes ajustar abajo en <b>Arma tu plan</b>.</p>
           </header>
 
           <div className="combo-strip" role="list">
@@ -192,7 +196,7 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
         {/* BUILDER */}
         <section ref={builderRef} className="builder">
           <header className="sec-head row">
-            <h2>Arma tu plan por ramos</h2>
+            <h2>Diseña tu preparación a tu medida</h2>
             <small className="muted">Selecciona o deselecciona libremente</small>
           </header>
 
@@ -236,6 +240,9 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
                 <li>{subjectCount ? `${essaysForCount(subjectCount)} ensayo(s)/mes` : "Ensayos mensuales"}</li>
                 <li>{subjectCount >= 3 ? "Tutoría mensual" : "Soporte por WhatsApp"}</li>
               </ul>
+              <div className="tiny muted" style={{ marginTop: 6 }}>
+                “Todo lo que hagan, háganlo de corazón, como para el Señor.” — Colosenses 3:23
+              </div>
             </div>
 
             <div className="sum-price">
@@ -264,7 +271,9 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
             <h2>Horarios</h2>
             <span className="soon">PRÓXIMAMENTE</span>
           </header>
-          <p className="muted tiny">Publicaremos los horarios por ramo aquí. Mientras, todas las clases quedan grabadas.</p>
+          <p className="muted tiny">
+            Publicaremos los horarios por ramo aquí. Mientras tanto, todas las clases quedan grabadas para que estudies a tu ritmo.
+          </p>
         </section>
       </div>
     </section>

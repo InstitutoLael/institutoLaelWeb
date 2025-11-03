@@ -20,16 +20,14 @@ export default function Nosotros(){
             </h1>
 
             <p className="lead">
-              Partimos como <strong>Preu Lael</strong> para acompañar con cercanía a quienes
-              rendían la PAES. Hoy, como <strong>Instituto Lael</strong>, sumamos rutas en
-              <strong> Idiomas</strong> y <strong>LSCh</strong> con el mismo corazón:
-              <em> servir con excelencia y propósito</em>.
+              Nacimos como <strong>Preu Lael</strong> para ordenar el estudio PAES con acompañamiento real.
+              Hoy, como <strong>Instituto Lael</strong>, sumamos <strong>Idiomas</strong> y <strong>LSCh</strong>.
+              Mismo foco: claridad, seguimiento y respeto por las personas.
             </p>
 
             <p className="lead small-up">
-              Fundado por <strong>Diego Chaparro</strong>, con la convicción de que nadie debería
-              estudiar en soledad. Diseñamos procesos <strong>claros, humanos y medibles</strong> para abrir
-              oportunidades reales.
+              Fundado por <strong>Diego Chaparro</strong>. Diseñamos procesos <strong>simples y medibles</strong>:
+              clases en vivo, cápsulas, metas por semana y retroalimentación concreta.
             </p>
 
             <div className="cta">
@@ -47,28 +45,28 @@ export default function Nosotros(){
         <div className="hero__shine" aria-hidden />
       </header>
 
-      {/* PROPÓSITO */}
+      {/* PROPÓSITO (concreto y breve) */}
       <section className="section purpose-strip">
         <div className="container purpose">
           <h2 className="h center">Nuestro propósito</h2>
           <p className="sub center">
-            Acompañar de verdad. Enseñar con claridad. <strong>Abrir oportunidades</strong> con respeto y excelencia.
+            Acompañamos con método y respeto. Enseñamos claro. <strong>Medimos resultados</strong> para mejorar.
           </p>
           <div className="purpose-points">
-            <MiniCard title="Servicio por sobre todo" color="blue">
-              Precios claros y enfoque humano. Medimos lo que importa, no el relleno.
+            <MiniCard title="Servicio primero" color="blue">
+              Precios claros, trato digno y foco en lo importante.
             </MiniCard>
             <MiniCard title="Acompañamiento real" color="green">
-              Clases en vivo + cápsulas, seguimiento y ánimo cuando flaquea la motivación.
+              Clases en vivo + cápsulas, plan semanal y feedback útil.
             </MiniCard>
             <MiniCard title="Inclusión práctica" color="rose">
-              Programas LSCh y un trato digno para todas las personas.
+              Programas LSCh con cultura humana y respetuosa.
             </MiniCard>
           </div>
         </div>
       </section>
 
-      {/* FUNDADOR */}
+      {/* FUNDADOR (sin grandilocuencia) */}
       <section className="section">
         <div className="container founder card">
           <div className="pad founder__grid">
@@ -76,112 +74,111 @@ export default function Nosotros(){
               <span className="chip">Fundador</span>
               <h2 className="h">Diego Chaparro</h2>
               <p className="intro">
-                Director de Instituto Lael. Su experiencia escolar encendió esta convicción:
-                <strong> nadie debería transitar solo</strong>.
+                Director de Instituto Lael. Convirtió su experiencia escolar en un sistema simple:
+                <strong> nadie aprende solo</strong> y el método importa.
               </p>
               <blockquote className="q">
-                “Quise construir el acompañamiento que a mí me faltó: cercano, ordenado y con propósito.
-                Hacemos educación para <strong>servir</strong> y <strong>transformar</strong> vidas.”
+                “Propósito sin orden no alcanza. Orden y seguimiento, sin propósito, tampoco. En Lael unimos ambos
+                para que estudiar sea posible y medible.”
               </blockquote>
               <ul className="mini-list">
-                <li>Excelencia con sentido y trato humano.</li>
-                <li>Metas claras y seguimiento semanal.</li>
-                <li>Lenguaje respetuoso y accesibilidad real.</li>
+                <li>Clases claras, sin relleno.</li>
+                <li>Metas semanales y seguimiento.</li>
+                <li>Respeto por el tiempo y el proceso de cada persona.</li>
               </ul>
             </div>
 
             <div className="founder__media">
               <img className="avatar" src={diego} alt="Diego Chaparro" />
-              <div className="tagline">“Acompañar de verdad, con método y esperanza.”</div>
+              <div className="tagline">“Acompañamiento sencillo, consistente y humano.”</div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* IDENTIDAD */}
+      {/* IDENTIDAD (explicaciones cortas) */}
       <section className="section">
         <div className="container">
           <h2 className="h center">Nuestra identidad</h2>
-          <p className="sub center">Un símbolo, un sentido y una manera de enseñar.</p>
+          <p className="sub center">Símbolos que nos recuerdan el para qué.</p>
 
           <div className="id-grid">
             <IdCard
               img={id1}
-              t="Nuestro logo, cobertura y cuidado"
-              s="El isotipo abraza; nos recuerda que todo lo que hacemos se sostiene con propósito y servicio."
+              t="Cobertura y cuidado"
+              s="El isotipo abraza. Nuestro trabajo sostiene y ordena procesos que cuestan hacer solos."
               accent="blue"
             />
             <IdCard
               img={id2}
               t="¿Qué significa LAEL?"
-              s='Del hebreo “de Dios / perteneciente a Dios” (Nm 3:24). Inspiración para obrar con integridad y honrar a las personas.'
+              s='Del hebreo “de Dios / perteneciente a Dios”. Inspiración para servir con integridad y respeto.'
               accent="green"
             />
             <IdCard
               img={id3}
               t="La paloma"
-              s="Símbolo de nuevos comienzos. Diseñamos procesos que animan y ordenan, incluso en tiempos difíciles."
+              s="Inicio y esperanza. Acompañamos cambios reales, paso a paso."
               accent="yellow"
             />
           </div>
         </div>
       </section>
 
-      {/* HISTORIA */}
+      {/* HISTORIA (lineal y honesta) */}
       <section className="section soft">
         <div className="container">
           <h2 className="h center">De Preu Lael a Instituto Lael</h2>
-          <p className="sub center">Mismo corazón. Más rutas. Mejores herramientas.</p>
+          <p className="sub center">Más rutas, mismo corazón.</p>
 
           <div className="hl-flow" role="list" aria-label="Línea evolutiva">
             <FlowItem title="Preu Lael" color="blue">
-              Ordenamos el estudio PAES con planes simples y seguimiento cercano.
+              Orden para PAES con plan simple, ensayos y tutoreo.
             </FlowItem>
             <FlowArrow />
             <FlowItem title="Expansión" color="green">
-              Sumamos Idiomas y LSCh, comunidad y cápsulas on-demand.
+              Sumamos Idiomas y LSCh, grabaciones y cápsulas.
             </FlowItem>
             <FlowArrow />
             <FlowItem title="Instituto Lael" color="rose">
-              Rutas por competencias, certificaciones y programas para personas y empresas.
+              Trayectorias por competencias y programas para personas y empresas.
             </FlowItem>
           </div>
         </div>
       </section>
 
-      {/* PROPÓSITO & VISIÓN */}
+      {/* PROPÓSITO & VISIÓN (píldoras claras) */}
       <section className="section">
         <div className="container">
           <div className="vision">
             <div className="v-copy">
-              <h2 className="h center">Propósito & Visión</h2>
+              <h2 className="h center">Principios de trabajo</h2>
               <p className="intro center">
-                La educación transforma cuando forma <strong>carácter</strong> y <strong>competencias reales</strong>.
-                Queremos procesos que honren a las personas en lo cotidiano.
+                Claridad, seguimiento y resultados. Lo demás estorba.
               </p>
             </div>
             <div className="v-cards">
-              <Pill title="Acompañamiento real" text="Nadie aprende solo; caminamos contigo." accent="blue" />
-              <Pill title="Excelencia accesible" text="Calidad con precios justos." accent="green" />
-              <Pill title="Respeto y dignidad" text="Sin elitismos. Cada persona importa." accent="rose" />
-              <Pill title="Fe que sirve" text="Inspiración para amar y hacer bien las cosas." accent="yellow" />
-              <Pill title="Resultados medibles" text="Metas, KPIs y ajustes a tiempo." accent="orange" />
-              <Pill title="Comunidad" text="Celebramos avances y nos sostenemos." accent="purple" />
+              <Pill title="Acompañamiento" text="Estás acompañado/a en todo el proceso." accent="blue" />
+              <Pill title="Accesibilidad" text="Calidad con precios justos." accent="green" />
+              <Pill title="Respeto" text="Sin elitismos; cada persona importa." accent="rose" />
+              <Pill title="Propósito" text="Hacemos bien las cosas, de verdad." accent="yellow" />
+              <Pill title="Métricas" text="Metas y ajustes a tiempo." accent="orange" />
+              <Pill title="Comunidad" text="Celebramos avances y sostenemos el ritmo." accent="purple" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* SOMOS / NO SOMOS */}
+      {/* SOMOS / NO SOMOS (directo) */}
       <section className="section soft">
         <div className="container two">
           <article className="card tone-ok">
             <div className="pad">
               <h3>Lo que sí somos</h3>
               <ul>
-                <li>Un equipo que <strong>escucha</strong> y acompaña.</li>
-                <li>Docentes que <strong>explican simple</strong> y exigen con cariño.</li>
-                <li>Un espacio donde el propósito inspira a <strong>servir mejor</strong>.</li>
+                <li>Equipo que <strong>escucha</strong> y guía.</li>
+                <li>Docentes que <strong>explican simple</strong> y exigen con sentido.</li>
+                <li>Procesos con <strong>método</strong> y buen trato.</li>
               </ul>
             </div>
           </article>
@@ -190,44 +187,44 @@ export default function Nosotros(){
             <div className="pad">
               <h3>Lo que no somos</h3>
               <p className="strong">
-                No adoctrinamos. Respetamos tus creencias y convicciones: venimos a <strong>sumar</strong> herramientas reales.
+                No adoctrinamos ni imponemos creencias. Venimos a <strong>sumar</strong> herramientas.
               </p>
               <ul>
-                <li>No imponemos prácticas religiosas.</li>
-                <li>No condicionamos el aprendizaje a creencias.</li>
-                <li>No discriminamos a ninguna persona.</li>
+                <li>Sin imposiciones religiosas.</li>
+                <li>Sin condicionamientos por convicciones.</li>
+                <li>Sin discriminación.</li>
               </ul>
             </div>
           </article>
         </div>
       </section>
 
-      {/* CÓMO TRABAJAMOS */}
+      {/* CÓMO TRABAJAMOS (4 pasos que realmente usamos) */}
       <section className="section">
         <div className="container">
-          <h2 className="h center">Cómo trabajamos día a día</h2>
+          <h2 className="h center">Cómo trabajamos</h2>
           <div className="steps">
-            <Step n="1" t="Diagnóstico claro" c="blue">
-              Vemos tu punto de partida y definimos metas alcanzables.
+            <Step n="1" t="Diagnóstico" c="blue">
+              Punto de partida, brechas y meta realista.
             </Step>
-            <Step n="2" t="Plan con ritmo humano" c="green">
-              Clases en vivo + grabadas, cápsulas y checkpoints semanales.
+            <Step n="2" t="Plan semanal" c="green">
+              Clases en vivo + cápsulas y ritmo claro.
             </Step>
-            <Step n="3" t="Seguimiento real" c="yellow">
-              Tutoría, WhatsApp y reportes simples para mantener foco.
+            <Step n="3" t="Seguimiento" c="yellow">
+              Checkpoints, WhatsApp y feedback útil.
             </Step>
-            <Step n="4" t="Resultados medibles" c="rose">
-              Ensayos, rúbricas y ajustes a tiempo. Celebramos tus avances.
+            <Step n="4" t="Resultados" c="rose">
+              Ensayos y ajustes a tiempo. Nada al azar.
             </Step>
           </div>
         </div>
       </section>
 
-      {/* CTA FINAL — REHECHA */}
+      {/* CTA FINAL */}
       <section className="section last">
         <div className="container">
           <div className="cta-panel">
-            <h3 className="cta-title">¿Te gustaría ser parte?</h3>
+            <h3 className="cta-title">¿Te sumas?</h3>
             <p className="cta-sub">Postula hoy. Caminamos contigo el proceso completo.</p>
             <div className="cta-actions">
               <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
@@ -310,12 +307,10 @@ function Step({ n, t, c = "blue", children }) {
   );
 }
 
-/* ---------- CSS local (paleta Lael + jerarquía editorial) ---------- */
+/* ---------- CSS (sin cambios estructurales) ---------- */
 const css = `
 :root{
-  /* Paleta Lael */
   --blue:#3b549d; --green:#249554; --yellow:#f2ce3d; --rose:#d6a0c5; --orange:#cd5732;
-  /* Base oscuro */
   --bg:#0b1220; --panel:#0e1424; --soft:#0d1528; --bd:#1f2a44;
   --ink:#ffffff; --ink2:#eaf2ff; --muted:#cbd5e1;
   --rad-lg:20px; --rad-md:14px;
@@ -330,7 +325,7 @@ const css = `
     radial-gradient(900px 300px at 90% -8%, color-mix(in srgb, var(--green) 12%, transparent), transparent 60%);
   border-block:1px solid #1a2440;
 }
-.section.last{ padding:56px 0 96px } /* 👈 más aire para no chocar con el footer */
+.section.last{ padding:56px 0 96px }
 h1,h2,h3,h4{ color:var(--ink) }
 
 /* HERO */
@@ -497,7 +492,7 @@ h1,h2,h3,h4{ color:var(--ink) }
 .step h4{ margin:.15rem 0 .25rem; color:var(--ink) }
 .step p{ margin:0; color:var(--ink); font-size:1.02rem; }
 
-/* CTA final (rehecha) */
+/* CTA final */
 .cta-panel{
   text-align:center; border:1px solid #22314f; border-radius:22px; padding:28px; color:var(--ink);
   background:

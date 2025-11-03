@@ -66,12 +66,6 @@ export default function Home() {
         </a>
       </div>
 
-      <ul className="hero__trust">
-        <li className="chip-soft">Pagos seguros</li>
-        <li className="chip-soft">+10.000 h en vivo</li>
-        <li className="chip-soft">Con Google Workspace</li>
-      </ul>
-
       <div className="chips">
         <Chip to="/paes" label="PAES Matemáticas M1" />
         <Chip to="/paes" label="Lenguaje PAES" />
@@ -79,7 +73,7 @@ export default function Home() {
         <Chip to="/idiomas" label="Inglés B1–B2" />
         <Chip to="/idiomas" label="Coreano TOPIK I" />
       </div>
-    </div>
+    </div> 
 
     <div className="hero__right" aria-hidden>
       <div className="mock float-in">
@@ -111,9 +105,10 @@ export default function Home() {
       <div className="reveal kpi-wrap">
         <StatsBand
           items={[
-            { kpi: "87%",   label: "Ingreso/Aprobación" },
-            { kpi: "9/10", label: "Nos recomiendan" },
-            { kpi: "+10k", label: "Horas en vivo" },
+            { kpi: "87%",   label: "Logra su meta académica" },
+            { kpi: "9.2/10", label: "Satisfacción promedio" },
+            { kpi: "+11.000 h", label: "Clases en vivo realizadas" },
+            { kpi: "500+", label: "Matriculados 2025"},
           ]}
         />
       </div>
@@ -122,40 +117,40 @@ export default function Home() {
       <section className="programs reveal">
         <div className="container">
           <header className="pg-head">
-            <h2>Programas</h2>
-            <p>Elige lo que necesitas hoy. Puedes combinar y cambiar después.</p>
+            <h2>Programas Lael</h2>
+            <p>Elige tu camino, combina tus ramos y avanza a tu ritmo. En Lael, te acompañamos en todo momento.</p>
           </header>
 
           <div className="pg-grid">
             <ProgramCard
               title="PAES"
               tag="Ingreso a la U"
-              text="Arma tu plan por ramos o elige un plan con precio fijo."
-              bullets={["M1, M2, Lenguaje, Historia, Ciencias", "Ensayos y tutoría"]}
+              text="Planifica tus ramos o elige un plan anual con precio claro y acompañamiento constante."
+              bullets={["M1, M2, Lenguaje, Historia, Ciencias", "Ensayos y tutoría semanal"]}
               to="/paes"
               accent="indigo"
             />
             <ProgramCard
               title="Idiomas"
-              tag="EN · KR · PT"
-              text="Inglés (B1–B2), Coreano TOPIK 1 y Portugués (próx. 2026)."
-              bullets={["Clases en vivo + cápsulas", "Club de conversación"]}
+              tag="EN · KR"
+              text="prende Inglés (B1–B2) o Coreano TOPIK I con clases en vivo, cápsulas y práctica real."
+              bullets={["Cápsulas on-demand + clases en vivo", "Club de conversación semanal"]}
               to="/idiomas"
               accent="green"
             />
             <ProgramCard
               title="LSCh"
-              tag="Lengua de Señas"
-              text="Rutas por módulos con certificado y foco práctico."
+              tag="Lengua de Seña Chilena"
+              text="Forma parte de un proceso práctico, con enfoque comunicativo y certificación interna."
               bullets={["Inicio cada trimestre", "Proyecto final con intérpretes"]}
               to="/lsch"
               accent="rose"
             />
             <ProgramCard
               title="Empresas"
-              tag="Capacitación"
-              text="Capacitaciones a medida (online/presencial/mixto)."
-              bullets={["Diagnóstico sin costo", "Reportes y KPI de progreso"]}
+              tag="Capacitación Corporativa"
+              text="Programas personalizados (online, presencial o mixto) enfocados en inclusión y comunicación."
+              bullets={["Diagnóstico sin costo", "Reportes con KPI y seguimiento"]}
               to="/empresas"
               accent="amber"
             />
@@ -167,10 +162,10 @@ export default function Home() {
       <section className="highlights reveal">
         <div className="container">
           <div className="grid">
-            <Feature icon="🎯" title="Seguimiento real">Agenda, tutorías y checkpoints. Nada de estudiar solo/a.</Feature>
-            <Feature icon="🧠" title="Competencias, no memoria">Ensayos guiados, criterios claros y feedback accionable.</Feature>
-            <Feature icon="⏱️" title="Horarios flexibles">En vivo + grabadas. Llega cuando puedas, progresa cuando quieras.</Feature>
-            <Feature icon="🧾" title="Precios justos">Matrícula única, mensualidades claras y descuentos automáticos.</Feature>
+            <Feature icon="📈" title="Acompañamiento medible">Plan semanal, tutorías y reportes simples de avance.</Feature>
+            <Feature icon="🧠" title="Aprendizaje claro">Clases en vivo + cápsulas, con pautas y rúbricas entendibles.</Feature>
+            <Feature icon="⏱️" title="Flexibilidad Real">En vivo y grabadas. Recuperas cuando lo necesites, sin perder ritmo.</Feature>
+            <Feature icon="💳" title="Precio transparente">Matrícula única y mensualidades claras, sin cobros sorpresas.</Feature>
           </div>
         </div>
       </section>
@@ -192,19 +187,32 @@ export default function Home() {
       </section>
 
       {/* TESTIMONIOS */}
-      <section className="testi reveal">
-        <div className="container">
-          <header className="testi__head">
-            <h3>Historias reales</h3>
-            <p>Testimonios verificados de estudiantes.</p>
-          </header>
-          <div className="testi__grid">
-            <Quote q="Pasé de estudiar solo a tener plan y meta. Entré a mi primera opción." a="Vicente — PAES M1" />
-            <Quote q="El club de conversación me soltó la lengua en 3 semanas. Subí un nivel." a="Valentina — Inglés B2" />
-            <Quote q="Aprendí LSCh con respeto y práctica real. Hoy interpreto en mi comunidad." a="Isidora — LSCh M1" />
-          </div>
-        </div>
-      </section>
+<section className="testi reveal">
+  <div className="container">
+    <header className="testi__head">
+      <h3>Historias reales</h3>
+      <p>
+        Experiencias compartidas por nuestros estudiantes, quienes confiaron en Lael
+        para alcanzar sus metas académicas y personales.
+      </p>
+    </header>
+
+    <div className="testi__grid">
+      <Quote
+        q="Nunca pensé disfrutar tanto estudiar Matemáticas. Las clases fueron claras y el apoyo constante. Logré subir más de 150 puntos en la PAES."
+        a="Vicente — PAES Matemáticas M1"
+      />
+      <Quote
+        q="Gracias al club de conversación perdí el miedo a hablar en inglés. Hoy puedo expresarme con confianza en mi trabajo y en entrevistas."
+        a="Valentina — Inglés B2"
+      />
+      <Quote
+        q="Aprender Lengua de Señas fue una experiencia transformadora. No solo aprendí a comunicarme con mis alumnos del colegio, sino también a empatizar con la comunidad sorda."
+        a="Martina — LSCh Nivel 1"
+      />
+    </div>
+  </div>
+</section>
 
       {/* FAQ */}
       <section className="faq reveal">
@@ -226,28 +234,40 @@ export default function Home() {
       </section>
 
       {/* CTA FINAL */}
-      <section className="cta-final reveal">
-        <div className="container">
-          <div className="cta-final__inner">
-            <h3>¿Listo para partir?</h3>
-            <p>Postula hoy. Nosotros te acompañamos en el resto.</p>
-            <div className="cta">
-              <Link className="btn btn-primary lift" to="/inscripcion">Inscribirme</Link>
-              <a
-                className="btn btn-ghost lift"
-                href="https://wa.me/56964626568?text=Hola%20Lael,%20me%20gustaría%20conversar%20mi%20caso"
-                target="_blank" rel="noreferrer noopener"
-                aria-label="Abrir WhatsApp de Lael"
-              >
-                Hablar por WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+<section className="cta-final reveal">
+  <div className="container">
+    <div className="cta-final__inner">
+      <h3>¿Listo para empezar?</h3>
+      <p>
+        Inscríbete en minutos y comienza con clases en vivo, cápsulas y acompañamiento real.
+        Matrícula única, precios claros y seguimiento semanal.
+      </p>
+
+      <div className="cta">
+        <Link className="btn btn-primary lift" to="/inscripcion">
+          Inscribirme ahora
+        </Link>
+        <a
+          className="btn btn-ghost lift"
+          href="https://wa.me/56964626568?text=Hola%20Lael%20👋%20¿me%20orientan%20para%20elegir%20mi%20plan?"
+          target="_blank"
+          rel="noreferrer noopener"
+          aria-label="Hablar por WhatsApp con Lael"
+        >
+          Hablar por WhatsApp
+        </a>
+      </div>
+
+      <p className="tiny" style={{ marginTop: 12, opacity: 0.9 }}>
+        Respondemos de lunes a viernes. Todas las clases quedan grabadas.
+      </p>
     </div>
-  );
+  </div>
+</section>
+</div>
+);
 }
+
 
 /* ---------- Atoms ---------- */
 function Chip({ to, label }) {

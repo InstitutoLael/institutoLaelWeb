@@ -26,7 +26,7 @@ import {
   CHURCH_CONVENIO,
 } from "../data/lsch.js";
 
-// PAES (usa las funciones del modelo de precios)
+// PAES
 import {
   ENROLLMENT_FEE as PAES_ENR,
   priceForCount as paesPriceForCount,
@@ -40,16 +40,16 @@ const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-/* ==== Política de beca ==== */
+/* ==== Política de beca (simple y estándar) ==== */
 const MAX_SCHOLARSHIP = 0.9;
 
 // Tramos por ingreso per cápita (CLP/mes)
 const TIERS = [
-  { id: "A", cap: 120000, basePct: 0.8, matriculaWaiver: 1.0 },
-  { id: "B", cap: 180000, basePct: 0.6, matriculaWaiver: 0.5 },
-  { id: "C", cap: 260000, basePct: 0.4, matriculaWaiver: 0.0 },
-  { id: "D", cap: 350000, basePct: 0.2, matriculaWaiver: 0.0 },
-  { id: "E", cap: Infinity, basePct: 0.0, matriculaWaiver: 0.0 },
+  { id: "A", cap: 120000, basePct: 0.8, matriculaWaiver: 1.0, label: "Beca Base 80% + matrícula condonada" },
+  { id: "B", cap: 180000, basePct: 0.6, matriculaWaiver: 0.5, label: "Beca Base 60% + matrícula 50%" },
+  { id: "C", cap: 260000, basePct: 0.4, matriculaWaiver: 0.0, label: "Beca Base 40%" },
+  { id: "D", cap: 350000, basePct: 0.2, matriculaWaiver: 0.0, label: "Beca Base 20%" },
+  { id: "E", cap: Infinity, basePct: 0.0, matriculaWaiver: 0.0, label: "Sin beca base (puedes sumar mérito/convenio)" },
 ];
 
 function findTier(perCapita) {
@@ -67,6 +67,14 @@ function specialBoost(flags) {
   if (flags.monoparental) b += 0.03;
   return b;
 }
+function convenioBoost(code) {
+  // Códigos de convenio (amigables y auditables)
+  const c = (code || "").trim().toUpperCase();
+  if (!c) return { pct: 0, tag: "" };
+  if (c === "OLIVOS") return { pct: 0.05, tag: "Convenio Olivos (+5%)" };
+  return { pct: 0, tag: "Código no válido" };
+}
+
 const flagList = (f) =>
   [
     f.discapacidad && "Discapacidad",
@@ -94,7 +102,7 @@ export default function Becas() {
   const [progId, setProgId] = useState("paes");
 
   // ——— variables de ingreso/merito
-  const [income, setIncome] = useState("800000"); // ingreso hogar CLP/mes (string para máscara)
+  const [income, setIncome] = useState("800000"); // ingreso hogar CLP/mes
   const [members, setMembers] = useState(4); // personas en el hogar
   const [nota, setNota] = useState("6.2"); // 1.0–7.0
   const [flags, setFlags] = useState({
@@ -102,8 +110,9 @@ export default function Becas() {
     rural: false,
     monoparental: false,
   });
+  const [code, setCode] = useState(""); // código de convenio (OLIVOS, etc.)
 
-  // ——— parámetros por PROGRAMA (para sacar el precio real mensual y matrícula real)
+  // ——— parámetros por PROGRAMA (para precio base)
   // PAES
   const [paesRamos, setPaesRamos] = useState(2); // 1–7
   // IDIOMAS
@@ -117,7 +126,7 @@ export default function Becas() {
   const [hsHours, setHsHours] = useState(2); // 1–4
   const [hsSubjects, setHsSubjects] = useState(2); // 1–6
 
-  // ——— Cálculo del plan base (mensual y matrícula) según PROGRAMA
+  // ——— Cálculo del plan base (mensual y matrícula)
   const base = useMemo(() => {
     let monthly = 0;
     let enrollment = 0;
@@ -149,21 +158,17 @@ export default function Becas() {
     return { monthly, enrollment };
   }, [
     progId,
-    // PAES
     paesRamos,
-    // IDIOMAS
     idiomasCursos,
-    // LSCh
     lschMode,
     lschPlanId,
     lschConvenio,
-    // HS
     hsMode,
     hsHours,
     hsSubjects,
   ]);
 
-  // ——— Cálculo de beca
+  // ——— Cálculo de beca (amigable)
   const calc = useMemo(() => {
     const inc = Number(String(income).replace(/[^\d]/g, "")) || 0;
     const fam = Math.max(1, Number(members) || 1);
@@ -172,8 +177,9 @@ export default function Becas() {
     const baseTier = findTier(perCapita);
     const mBoost = meritBoost(Number(nota) || 0);
     const sBoost = specialBoost(flags);
+    const conv = convenioBoost(code);
 
-    const rawPct = baseTier.basePct + mBoost + sBoost;
+    const rawPct = baseTier.basePct + mBoost + sBoost + conv.pct;
     const pct = Math.min(MAX_SCHOLARSHIP, Math.max(0, rawPct));
 
     const monthlyFull = base.monthly;
@@ -186,9 +192,12 @@ export default function Becas() {
     return {
       perCapita,
       tier: baseTier.id,
+      tierLabel: baseTier.label,
       basePct: baseTier.basePct,
       boostMerit: mBoost,
       boostSpecial: sBoost,
+      boostConvenio: conv.pct,
+      convenioTag: conv.tag,
       pct,
       monthlyFull,
       monthlyDiscount,
@@ -196,7 +205,7 @@ export default function Becas() {
       enrollmentWaived,
       enrollmentToPay,
     };
-  }, [income, members, nota, flags, base]);
+  }, [income, members, nota, flags, code, base]);
 
   const waText = encodeURIComponent(
     `Hola 👋, quiero postular a Beca Lael.\n` +
@@ -213,6 +222,7 @@ export default function Becas() {
           : "Condonada 100%"
       }\n` +
       `Mérito: ${Number(nota).toFixed(1)} | Situación especial: ${flagList(flags) || "Ninguna"}\n` +
+      `Convenio: ${code ? code.toUpperCase() : "Ninguno"}\n` +
       `¿Me ayudan a completar la postulación?`
   );
 
@@ -228,12 +238,12 @@ export default function Becas() {
       <header className="hero">
         <div className="container hero__inner">
           <div>
-            <span className="pill">Becas Lael</span>
-            <h1 className="title">Postula y calcula al instante</h1>
+            <span className="pill">Becas Lael · 2026</span>
+            <h1 className="title">Calcula tu beca en 1 minuto</h1>
             <p className="lead">
-              Tramo por <strong>ingreso per cápita</strong> + <strong>mérito</strong> +{" "}
-              <strong>situación especial</strong>. Hasta <b>90% de beca</b> y condonación de matrícula
-              según tramo (política 2026).
+              Como cualquier sistema de descuento: <strong>ingreso per cápita</strong> define tu tramo,
+              y puedes sumar <strong>mérito</strong>, <strong>situación especial</strong> y{" "}
+              <strong>convenios</strong>. Tope máximo: <b>90%</b>.
             </p>
           </div>
           <div className="hero__right">
@@ -241,10 +251,13 @@ export default function Becas() {
               <div className="mini">Resumen inmediato</div>
               <div className="resume">
                 <Row k="Programa" v={PROGRAMS.find((p) => p.id === progId)?.label} />
-                <Row k="Tramo" v={`${calc.tier} (${(calc.basePct * 100).toFixed(0)}% base)`} />
-                <Row k="Beca total" v={<b className="ok">{(calc.pct * 100).toFixed(0)}%</b>} />
+                <Row k="Tramo" v={`${calc.tier} — ${calc.tierLabel}`} />
+                <Row
+                  k="Beca estimada"
+                  v={<b className="ok">{(calc.pct * 100).toFixed(0)}%</b>}
+                />
                 <Row k="Mensual sin beca" v={clp(calc.monthlyFull)} />
-                <Row k="Descuento" v={clp(calc.monthlyDiscount)} />
+                <Row k="Descuento aplicado" v={clp(calc.monthlyDiscount)} />
                 <Row k="Mensual con beca" v={<b>{clp(calc.monthlyFinal)}</b>} />
                 <div className="hr" />
                 <Row
@@ -255,6 +268,7 @@ export default function Becas() {
                       : "Condonada 100%"
                   }
                 />
+                {!!calc.convenioTag && <div className="tiny subtle mt6">💡 {calc.convenioTag}</div>}
               </div>
 
               <div className="cta-inline">
@@ -266,11 +280,10 @@ export default function Becas() {
                 </a>
               </div>
 
-              {/* Política 2026 — texto correcto */}
               <div className="tiny subtle mt6">
-                La beca final se otorga tras <strong>revisión documental</strong> del Comité de Becas Lael
-                y <strong>firma de contrato de participación</strong>. Debes acreditar los antecedentes
-                y la beca se mantiene durante el año si las condiciones se sostienen y cumples el plan académico.
+                La beca final se otorga tras <strong>revisión documental</strong> del Comité Lael
+                y <strong>firma de contrato</strong>. Se mantiene mientras las condiciones
+                persistan y cumplas el plan académico.
               </div>
             </div>
           </div>
@@ -281,12 +294,11 @@ export default function Becas() {
       <div className="container">
         <section className="block">
           <div className="card-float p-3 p-md-4">
-            <h2 className="h6 m-0">Tus datos</h2>
-            <p className="muted mt4">Ajusta los campos. El cálculo se actualiza al tiro.</p>
+            <h2 className="h6 m-0">1) Elige tu programa</h2>
+            <p className="muted mt4">El valor base cambia según el programa.</p>
 
             {/* Selección de programa */}
             <div className="card-soft">
-              <label className="form-label">Programa</label>
               <div className="chip-row">
                 {PROGRAMS.map((p) => (
                   <button
@@ -350,7 +362,6 @@ export default function Becas() {
                         className={"chip " + (lschMode === m ? "is-active" : "")}
                         onClick={() => {
                           setLschMode(m);
-                          // reset plan al cambiar modo
                           if (m === "group") setLschPlanId(LSCH_GROUP_PLANS[1]?.id || "g-quarter");
                           if (m === "one2one") setLschPlanId(LSCH_ONE2ONE_PLANS[0]?.id || "o-month");
                         }}
@@ -382,8 +393,7 @@ export default function Becas() {
                             onChange={(e) => setLschConvenio(e.target.checked)}
                           />
                           <span>
-                            Convenio Iglesias ({clp(CHURCH_CONVENIO.monthlyFlat)}/mes) — requiere
-                            acreditar iglesia.
+                            Convenio Iglesias ({clp(CHURCH_CONVENIO.monthlyFlat)}/mes) — requiere acreditar iglesia.
                           </span>
                         </label>
                       )}
@@ -462,8 +472,9 @@ export default function Becas() {
                 </article>
               )}
 
-              {/* Ingresos / Mérito */}
+              {/* 2) Ingresos / Mérito / Convenio */}
               <article className="card-soft">
+                <h3 className="mini-title">2) Ingresos del hogar</h3>
                 <label className="form-label">Ingreso del hogar (CLP/mes)</label>
                 <input
                   className="field"
@@ -491,9 +502,11 @@ export default function Becas() {
                 <div className="tiny subtle mt6">
                   Ingreso per cápita estimado: <b>{clp(Math.round(calc.perCapita) || 0)}</b>
                 </div>
+                <div className="tiny subtle mt4">Tu tramo define la <b>beca base</b>.</div>
               </article>
 
               <article className="card-soft">
+                <h3 className="mini-title">3) Mérito, situación y convenio</h3>
                 <label className="form-label">Promedio (1.0–7.0)</label>
                 <input
                   className="field"
@@ -503,7 +516,7 @@ export default function Becas() {
                   onChange={(e) => setNota(e.target.value)}
                 />
                 <div className="mini muted mt6">
-                  Mérito aporta hasta +10% adicional (≥6.5).
+                  Mérito aporta hasta <b>+10%</b> (≥6.5).
                 </div>
 
                 <div className="opt-grid mt8">
@@ -532,6 +545,15 @@ export default function Becas() {
                     <span>Hogar monoparental</span>
                   </label>
                 </div>
+
+                <label className="form-label mt8">Código de convenio (opcional)</label>
+                <input
+                  className="field"
+                  placeholder="Ej: OLIVOS"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+                {!!calc.convenioTag && <div className="tiny subtle mt6">💡 {calc.convenioTag}</div>}
               </article>
             </div>
 
@@ -546,6 +568,29 @@ export default function Becas() {
               <Link className="btn btn-ghost" to="/inscripcion">
                 Ir a Inscripción
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ breve y claro */}
+        <section className="block">
+          <div className="card-float p-3">
+            <h3 className="mini-title">Preguntas frecuentes</h3>
+            <ul className="faq">
+              <li>
+                <b>¿La beca es anual?</b> Sí. Se renueva automáticamente si las condiciones se mantienen
+                y cumples asistencia/actividades del plan.
+              </li>
+              <li>
+                <b>¿Qué documentos piden?</b> Comprobante de ingresos (o declaración simple), tamaño del hogar
+                y respaldo de situación especial o convenio (si aplica).
+              </li>
+              <li>
+                <b>¿Puedo combinar beca con convenios?</b> Sí, hasta el tope del 90%.
+              </li>
+            </ul>
+            <div className="tiny subtle mt6">
+              Privacidad: usamos tus datos solo para evaluar la beca y cumplir lo informado.
             </div>
           </div>
         </section>
@@ -617,6 +662,8 @@ const css = `
 .ok{ color:var(--ok) }
 .hr{ height:1px; background:#1e2a49; margin:8px 0 }
 
+.mini-title{ margin:0 0 6px; font-size:.96rem; color:#eaf2ff; font-weight:900 }
+
 .chip-row{ display:flex; flex-wrap:wrap; gap:8px; }
 .chip{
   border:1px solid #c8cfe0; border-radius:999px; padding:.42rem .75rem;
@@ -636,9 +683,8 @@ const css = `
 
 .grid{ display:grid; gap:12px; }
 .grid-2{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-.grid-3{ grid-template-columns: repeat(3, minmax(0,1fr)); }
 .grid-3-tight{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:8px; }
-@media (max-width:980px){ .grid-2,.grid-3, .grid-3-tight{ grid-template-columns:1fr; } }
+@media (max-width:980px){ .grid-2, .grid-3-tight{ grid-template-columns:1fr; } }
 
 .opt-grid{ display:grid; grid-template-columns:1fr; gap:8px; }
 .check{ display:flex; align-items:center; gap:8px; }
@@ -651,4 +697,7 @@ const css = `
 .btn-primary{ background:var(--blue); color:#fff; border-color:var(--blue); }
 .btn-outline{ background:transparent; color:#eaf2ff; border-color:#334155; }
 .btn-ghost{ background:transparent; color:#eaf2ff; border-color:#334155; }
+
+.faq{ margin:8px 0 0; padding-left:18px; color:#eaf2ff; }
+.faq li{ margin:.2rem 0; }
 `;

@@ -11,16 +11,11 @@ import {
   clp,
 } from "../data/lsch.js";
 import { Link } from "react-router-dom";
-
-// Imagen hero (mano haciendo seña)
 import senasImg from "../assets/img/lael/senas.jpg";
-// Logo blanco
 import laelLogoWhite from "../assets/img/Logos/lael-inst-blanco.png";
 
-/* ───────── Config add-on certificado ───────── */
-const CERTIFICATE_FEE = 19990; // pago único
+const CERTIFICATE_FEE = 19990;
 
-/* ───────── Carrusel horizontal reutilizable ───────── */
 function HScroll({ children, ariaLabel }) {
   const ref = useRef(null);
   const slide = (dir) => {
@@ -47,7 +42,7 @@ export default function LSCh() {
   const [selectedGroupId, setSelectedGroupId] = useState("g-quarter");
   const [selectedOneId, setSelectedOneId] = useState(null);
   const [selectedModules, setSelectedModules] = useState(["lsch-m1"]);
-  const [certSelected, setCertSelected] = useState(false); // chip certificado
+  const [certSelected, setCertSelected] = useState(false);
 
   const groupPlan = useMemo(
     () => LSCH_GROUP_PLANS.find((p) => p.id === selectedGroupId),
@@ -62,7 +57,6 @@ export default function LSCh() {
   const monthlyOne = onePlan?.monthly || 0;
   const totalMonthly = monthlyGroup + monthlyOne;
 
-  // Totales año académico
   const monthsMarOct = 8;
   const monthsMarNov = 9;
   const annualMarOct = totalMonthly * monthsMarOct;
@@ -103,16 +97,17 @@ export default function LSCh() {
           <div className="hero__left">
             <span className="pill">LSCh 100% online</span>
             <h1>
-              Lengua de Señas Chilena <span className="under">clara, práctica y humana</span>
+              Lengua de Señas Chilena <span className="under">para comunicar de verdad</span>
             </h1>
             <p className="lead">
-              Clases en vivo + cápsulas y seguimiento real. Matrícula única de{" "}
-              <b>{clp(LSCH_ENROLLMENT_FEE)}</b>. Elige módulos, plan grupal y, si quieres, suma 1:1.
+              Aprendizaje práctico, humano y con propósito. Clases en vivo, cápsulas y seguimiento cercano.
+              Matrícula única de <b>{clp(LSCH_ENROLLMENT_FEE)}</b>. Elige tus módulos, tu plan y —si quieres— suma 1:1.
+              En Lael ponemos a Dios al centro y servimos desde el respeto a la comunidad sorda.
             </p>
             <ul className="points">
-              <li>Diploma por cada módulo aprobado</li>
-              <li>Mejor precio por duración o con <b>convenio iglesias</b></li>
-              <li>Las clases quedan grabadas el mismo día</li>
+              <li><b>Resultados reales:</b> 15 personas certificadas en 2025 (~50 horas).</li>
+              <li><b>Todo queda grabado</b> el mismo día, sin perder continuidad.</li>
+              <li><b>Ruta clara por módulos</b> y acompañamiento docente constante.</li>
             </ul>
             <div className="cta">
               <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
@@ -129,7 +124,7 @@ export default function LSCh() {
 
           <figure className="hero__img">
             <img src={senasImg} alt="Seña en mano — aprendizaje de Lengua de Señas Chilena" />
-            <figcaption>Aprende con práctica guiada y ejemplos reales de comunicación.</figcaption>
+            <figcaption>Práctica guiada + situaciones reales de comunicación.</figcaption>
           </figure>
         </div>
       </header>
@@ -181,7 +176,7 @@ export default function LSCh() {
               </button>
             </div>
             <div className="mini-hint">
-              Certificación: avalada por Instituto Lael y por la docente <b>persona sorda</b>.
+              Certificación avalada por Instituto Lael y <b>docente sorda</b>. Enfoque de inclusión y servicio.
             </div>
           </div>
         </div>
@@ -190,7 +185,7 @@ export default function LSCh() {
       {/* MÓDULOS */}
       <section className="container block">
         <h2>
-          Módulos del año <span className="soft">— diploma por módulo</span>
+          Módulos del año <span className="soft">— diploma Lael por módulo</span>
         </h2>
         <div className="grid grid-2 tight">
           {LSCH_MODULES.map((m) => {
@@ -227,7 +222,7 @@ export default function LSCh() {
 
       {/* PLANES GRUPALES — carrusel */}
       <section className="container block">
-        <h2>Planes grupales <span className="soft">— 100% online</span></h2>
+        <h2>Planes grupales <span className="soft">— online en vivo</span></h2>
 
         <HScroll ariaLabel="Planes grupales">
           {LSCH_GROUP_PLANS.map((p) => {
@@ -271,7 +266,7 @@ export default function LSCh() {
 
       {/* CLASES 1:1 — carrusel */}
       <section className="container block">
-        <h2>Clases particulares 1:1 <span className="soft">— opcional</span></h2>
+        <h2>Clases particulares 1:1 <span className="soft">— refuerzo opcional</span></h2>
 
         <HScroll ariaLabel="Clases particulares uno a uno">
           {LSCH_ONE2ONE_PLANS.map((p) => {
@@ -294,7 +289,7 @@ export default function LSCh() {
                   <div><span>Mar–Nov</span> <b>{clp(annual9)}</b></div>
                 </div>
 
-                <div className="note">Agenda prioritaria con la profe</div>
+                <div className="note">Agenda prioritaria con la docente</div>
                 <div className="cta-row">
                   <button
                     className={"btn-outline " + (active ? "active" : "")}
@@ -381,27 +376,19 @@ export default function LSCh() {
 /* ===================== CSS (compacto + paleta LAEL) ===================== */
 const css = `
 :root{
-  /* PALETA LAEL */
-  --lael-blue:#3b549d;   /* primario */
-  --lael-green:#249554;  /* acento 1 */
-  --lael-yellow:#f2ce3d; /* acento 2 */
-  --lael-rose:#d6a0c5;   /* acento suave */
-  --lael-warn:#cd5732;   /* aviso */
+  --lael-blue:#3b549d;
+  --lael-green:#249554;
+  --lael-yellow:#f2ce3d;
+  --lael-rose:#d6a0c5;
+  --lael-warn:#cd5732;
   --ink:#ffffff; --ink2:#eaeef9;
-
-  /* Fondo oscuro con matiz azul de marca */
-  --bg:#0b1220;          /* puedes subir a #0d1426 si lo quieres más claro */
-  --panel:#0f172a;
-  --bd:#233052;
-
+  --bg:#0b1220; --panel:#0f172a; --bd:#233052;
   --rad:16px;
 }
-
-/* Reset mínimo */
 *{box-sizing:border-box}
 .container{ max-width:1120px; margin:0 auto; padding:0 18px; color:var(--ink); }
 
-/* ================= HERO ================= */
+/* HERO */
 .hero{
   color:var(--ink); border-bottom:1px solid var(--bd); padding:26px 0 12px;
   background:
@@ -431,7 +418,7 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 .hero__img img{ display:block; width:100%; height:auto; object-fit:cover; }
 .hero__img figcaption{ padding:8px 10px; font-size:.9rem; color:#eaf2ff; background:#0e162a; border-top:1px solid #1f2a44; }
 
-/* ================= CARDS GENERALES ================= */
+/* CARDS GENERALES */
 .card{
   border:1px solid var(--bd); border-radius:var(--rad); padding:12px;
   background:
@@ -444,7 +431,7 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 .rowy.wrap{ flex-wrap:wrap; }
 .spacer{ flex:1; }
 
-/* ================= SWITCH CONVENIO ================= */
+/* SWITCH CONVENIO */
 .switch{ display:flex; align-items:center; gap:10px; }
 .switch input{ display:none; }
 .switch .track{
@@ -458,7 +445,7 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 .switch input:checked + .track i{ transform: translateX(20px); }
 .switch .lbl .hint{ font-size:.9rem; color:var(--ink2); }
 
-/* ================= CHIPS ================= */
+/* CHIPS */
 .chips{ display:flex; flex-wrap:wrap; gap:8px; }
 .chip{
   border:1px solid rgba(59,84,157,.45);
@@ -470,19 +457,19 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
   background: radial-gradient(120px 60px at 30% 30%, rgba(36,149,84,.22), transparent 60%), #0D1E15;
   box-shadow: inset 0 0 0 1px rgba(134,239,172,.28);
 }
-.chip.ghost{ background:#0D1330; border-color: rgba(214,160,197,.45); } /* usa el rosado para ghost */
+.chip.ghost{ background:#0D1330; border-color: rgba(214,160,197,.45); }
 .chip.cert{ border-color: rgba(242,206,61,.6); background: radial-gradient(120px 60px at 30% 30%, rgba(242,206,61,.18), transparent 60%), #171405; }
 .chip.cert.on{ border-color:var(--lael-yellow); box-shadow: inset 0 0 0 1px rgba(242,206,61,.35); }
 
 .soft{ color:#cfe3ff; }
 
-/* ================= GRID ================= */
+/* GRID */
 .grid{ display:grid; gap:12px; }
 .grid.tight{ gap:10px; }
 .grid-2{ grid-template-columns: repeat(2, minmax(0,1fr)); }
 @media (max-width:640px){ .grid-2{ grid-template-columns: 1fr; } }
 
-/* ================= MÓDULOS ================= */
+/* MÓDULOS */
 .module{
   background:
     radial-gradient(400px 160px at -10% -20%, rgba(59,84,157,.18), transparent 60%),
@@ -506,12 +493,12 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 .bullets{ margin:.3rem 0 .1rem; padding-left:18px; }
 .bullets li{ margin:.08rem 0; }
 
-/* ================= CARRUSEL ================= */
+/* CARRUSEL */
 .hscroll-wrap{ position:relative; }
 .hscroll{
   display:flex; gap:10px; overflow:auto; scroll-snap-type:x mandatory; padding:2px 2px 12px;
 }
-.slide{ scroll-snap-align:start; min-width: 232px; } /* <— COMPACTO */
+.slide{ scroll-snap-align:start; min-width: 232px; }
 .hs-btn{
   position:absolute; top:50%; transform:translateY(-50%);
   width:34px; height:34px; border-radius:999px; border:1px solid #334155; background:#0f172a; color:#eaf2ff;
@@ -520,9 +507,9 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 .hs-btn.prev{ left:-6px; } .hs-btn.next{ right:-6px; }
 .hs-mask{ pointer-events:none; position:absolute; inset:0; box-shadow: inset 50px 0 36px -36px #0b1220, inset -50px 0 36px -36px #0b1220; }
 
-/* ================= PLANES (COMPACTO + PALETA) ================= */
+/* PLANES */
 .plan{
-  position:relative; display:flex; flex-direction:column; min-width: 232px; /* <— COMPACTO */
+  position:relative; display:flex; flex-direction:column; min-width: 232px;
   border:1px solid var(--bd); border-radius:14px; padding:12px;
   background:
     linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015)),
@@ -536,16 +523,16 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 .plan .badge.info{ background:var(--lael-rose); color:#0B1220; }
 .plan .save{ min-height:1rem; color:#ffffff; opacity:.85; font-size:.9rem; }
 .plan .price{ margin:.1rem 0 .18rem; display:flex; align-items:baseline; gap:6px; }
-.plan .big{ font-weight:1000; font-size:1.28rem; letter-spacing:.2px; }   /* ↓ tamaño */
+.plan .big{ font-weight:1000; font-size:1.28rem; letter-spacing:.2px; }
 .plan .per{ color:#cfe3ff; font-weight:800; font-size:.9rem; }
 .plan .note{ color:#cfe3ff; font-size:.92rem; min-height: 1.1rem; }
 .plan .note.ok{ color:#b7f5cd; }
 .plan .cta-row{ margin-top:auto; display:flex; }
 
-.plan.one .badge.info{ background:var(--lael-warn); color:#0B1220; } /* 1:1 usa naranja de tu paleta */
+.plan.one .badge.info{ background:var(--lael-warn); color:#0B1220; }
 .plan.on{ outline:2px solid rgba(59,84,157,.38); }
 
-/* ================= BOTÓN OUTLINE ================= */
+/* BOTÓN OUTLINE */
 .btn-outline{
   display:inline-flex; align-items:center; justify-content:center; width:100%;
   border:1.5px solid rgba(59,84,157,.55); color:#fff; background:transparent;
@@ -554,7 +541,7 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 .btn-outline:hover{ border-color: rgba(59,84,157,.85); }
 .btn-outline.active{ border-color:var(--lael-blue); box-shadow:0 0 0 3px rgba(59,84,157,.28); }
 
-/* ================= RESUMEN ================= */
+/* RESUMEN */
 .summary{
   display:grid; grid-template-columns: 1fr auto; gap:12px; align-items:center; margin:6px 0 16px;
 }
@@ -566,19 +553,19 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 
 .summary-right{ text-align:right; }
 .summary-right .hint{ color:#cfe3ff; font-weight:800; }
-.summary-right .total{ font-size:1.6rem; font-weight:1000; margin:.1rem 0 .2rem; color:var(--lael-yellow); }
+.summary-right .total{ font-size:1.6rem; font-weight:1000; margin:.1rem 0 .2rem; color:#var(--lael-yellow); }
 
 .annual.small{ margin:.1rem 0 .35rem; padding:.45rem .6rem; border:1px solid #3b4260; border-radius:10px; background:linear-gradient(180deg,#0f172a,#0b1220); }
 .annual.small .row{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; color:#ffffff; }
-.annual.small .row b{ font-weight:1000; color:#ffde59; } /* tu amarillo suave */
+.annual.small .row b{ font-weight:1000; color:#ffde59; }
 
 .first{ display:grid; gap:2px; margin:.1rem 0 .5rem; }
 .first span{ font-weight:800; color:#eaf2ff; }
 .first b{ font-size:1.08rem; }
 
-/* ================= RESPONSIVO ================= */
+/* RESPONSIVO */
 @media (max-width: 760px){
-  .slide, .plan{ min-width: 72vw; } /* tarjetas tipo “snap” en móvil */
+  .slide, .plan{ min-width: 72vw; }
   .summary{ grid-template-columns: 1fr; }
   .summary-right{ text-align:left; }
 }

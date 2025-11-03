@@ -37,7 +37,7 @@ const LINE_IMAGES = {
 
   bootcamp:     imgBootcamp,
   bootcamps:    imgBootcamp,
-  empleabilidad:imgBootcamp,   // por si tu data usa este id
+  empleabilidad:imgBootcamp,
 
   coaching:     imgCoaching,
 };
@@ -114,8 +114,8 @@ export default function Empresas() {
             <h1>Programas corporativos que mueven KPI</h1>
             <p className="hero-sub">
               Inglés, LSCh, Soft Skills, <b>Empleabilidad</b> y Coaching. Online, Presencial o Mixto
-              (hasta {PRICING.mixedMaxOnsiteSessions} presenciales). Cohortes inteligentes para
-              maximizar <b>calidad, cobertura y costo</b>.
+              (hasta {PRICING.mixedMaxOnsiteSessions} presenciales). Cohortes diseñadas para
+              equilibrar <b>calidad, cobertura y costo</b>.
             </p>
             <div className="cta-row">
               <a
@@ -159,7 +159,7 @@ export default function Empresas() {
         <section className="block">
           <header className="sec-head">
             <h2>Soluciones sugeridas</h2>
-            <p className="muted">Punto de partida: carga un pack y ajusta en el estimador.</p>
+            <p className="muted">Punto de partida — carga un pack y ajusta en el estimador.</p>
           </header>
 
           <div className="packs-grid">
@@ -225,7 +225,7 @@ export default function Empresas() {
             </div>
 
             <div className="grid grid-4">
-              {/* Área del programa (antes: Línea) */}
+              {/* Área del programa */}
               <div className="card">
                 <div className="label accent">Área del programa</div>
                 <div className="chip-row">
@@ -287,7 +287,7 @@ export default function Empresas() {
                   <option value="months">Meses</option>
                   <option value="weeks">Semanas</option>
                 </select>
-                <div className="hint">Piensa por meses o semanas.</div>
+                <div className="hint">Trabaja en meses o semanas.</div>
                 <div className="row2 mt6">
                   <div className="c">
                     <div className="label small">{
@@ -418,7 +418,7 @@ export default function Empresas() {
                     {form.addExecReport && <span className="check">✓</span>}
                   </label>
                 </div>
-                <div className="hint">Suma valor para gerencias y compliance.</div>
+                <div className="hint">Valor para gerencias, compliance y seguimiento.</div>
               </div>
             </div>
 
@@ -452,15 +452,28 @@ export default function Empresas() {
           </div>
         </section>
 
-        {/* Diferenciales */}
+        {/* Metodología & QA */}
         <section className="block">
           <div className="card why-card">
-            <div className="label accent">¿Por qué Lael?</div>
+            <div className="label accent">Metodología & QA</div>
             <ul className="why">
-              <li><b>Diseño por competencias</b>: foco en KPI y resultados, sin relleno.</li>
-              <li><b>Seguimiento ejecutivo</b>: reportes accionables y trazabilidad.</li>
-              <li><b>Inclusión real</b>: programas LSCh con cultura humana y respetuosa.</li>
-              <li><b>Escalabilidad</b>: cohortes para equilibrar aprendizaje, cobertura y costo.</li>
+              <li><b>Diseño por competencias</b>: contenidos precisos, sin relleno.</li>
+              <li><b>Delivery controlado</b>: rúbricas por objetivo y estándares de clase.</li>
+              <li><b>Seguimiento ejecutivo</b>: asistencia, hitos y recomendaciones accionables.</li>
+              <li><b>Inclusión real</b>: programas LSCh con enfoque humano y respetuoso.</li>
+            </ul>
+          </div>
+        </section>
+
+        {/* Compliance & Facturación */}
+        <section className="block">
+          <div className="card why-card">
+            <div className="label accent">Compliance & Facturación</div>
+            <ul className="why">
+              <li>Contrato y <b>términos de servicio</b> por programa.</li>
+              <li><b>Facturación electrónica</b> + reportes para auditoría.</li>
+              <li><b>Política de datos</b> y resguardo de grabaciones.</li>
+              <li>Certificados y <b>constancias</b> por participante (opcional).</li>
             </ul>
           </div>
         </section>
@@ -594,7 +607,7 @@ h1,h2,h3{ color:var(--ink); }
   padding:12px;
 }
 
-/* Etiquetas con acento (no grises) */
+/* Etiquetas con acento */
 .label{
   font-weight:900; margin-bottom:6px; color:var(--ink); position:relative; display:block;
 }

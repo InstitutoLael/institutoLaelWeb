@@ -71,7 +71,8 @@ export default function Homeschool() {
     setSubjectIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
   const wappMsgFamily = encodeURIComponent(
-    `Hola 👋, quiero acompañamiento Homeschool.
+    `Hola 👋, quiero apoyo para educación en casa.
+No somos HS formal: busco ensayos y/o clases 1:1 con profes Lael.
 Modalidad: ${mode === "oneToOne" ? "1:1" : "Micro-grupo"}
 Horas/sem: ${hoursPerWeek}
 Meses: ${months}
@@ -97,6 +98,13 @@ Impreso por Lael: ${sPrinted ? "Sí" : "No"}
 Valor estimado total: ${clp(school.total)}`
   );
 
+  // Mensaje alianza (Los Olivos)
+  const wappMsgOlivos = encodeURIComponent(
+    `Hola 👋, vengo por la alianza con "Los Olivos".
+Quiero apoyo de Lael (ensayos y/o clases con profes Lael).
+¿Me orientan con la ruta y el presupuesto?`
+  );
+
   return (
     <section className="hs-page">
       <style>{css}</style>
@@ -106,15 +114,16 @@ Valor estimado total: ${clp(school.total)}`
         <div className="container hero__grid">
           <div className="hero__left">
             <img className="brand" src={logoWhite} alt="Instituto Lael" />
-            <h1>Homeschool con <span className="under">orden y cariño</span></h1>
+            <h1>Apoyo Lael para <span className="under">educación en casa y colegios</span></h1>
             <p className="lead">
-              Acompañamos exámenes libres con <b>clases en vivo</b> + cápsulas, plan semanal claro y ensayos con feedback.
+              No somos homeschool. Te damos <b>ensayos con corrección</b>, <b>clases particulares 1:1</b> o en <b>micro-grupo</b>,
+              plan semanal claro y acompañamiento de nuestros profes Lael.
               <br />Matrícula única: <b>{clp(ENROLLMENT_FEE)}</b>.
             </p>
             <ul className="bullets">
-              <li><b>1:1</b> o micro-grupo (3–6 niños/as)</li>
-              <li>Horarios flexibles por <b>horas/semana</b></li>
-              <li>Ensayos opcionales con corrección</li>
+              <li><b>Clases con profes Lael</b> (en vivo) + cápsulas.</li>
+              <li><b>Ensayos</b> opcionales con reporte y sugerencias.</li>
+              <li><b>Apoyos a familias HS</b> y convenios con colegios.</li>
             </ul>
             <div className="cta">
               <Link to="/inscripcion" className="btn btn-primary">Inscribirme</Link>
@@ -130,18 +139,45 @@ Valor estimado total: ${clp(school.total)}`
           </div>
 
           <figure className="hero__img">
-            <img src={heroHS} alt="Aprendizaje en casa — mamá e hija estudiando" />
-            <figcaption>Metas pequeñas, progreso real, sin perder la alegría de aprender.</figcaption>
+            <img src={heroHS} alt="Acompañamiento en casa — estudiante con apoyo Lael" />
+            <figcaption>Metas pequeñas, progreso real y profes que acompañan.</figcaption>
           </figure>
         </div>
       </header>
 
       <div className="container">
+
+        {/* ALIANZA / PARTNER */}
+        <section className="block">
+          <div className="card partner">
+            <div className="partner-left">
+              <div className="pill">Alianza</div>
+              <h2 className="mt6">“Los Olivos” × Lael</h2>
+              <p className="muted">
+                Si vienes por <b>Los Olivos</b>, contamos con ruta sugerida,
+                ensayos alineados y clases con docentes Lael. Mantienes tu modelo
+                y agregas estructura y evaluación formativa.
+              </p>
+            </div>
+            <div className="partner-right">
+              <a
+                className="btn btn-primary"
+                href={`https://wa.me/56964626568?text=${wappMsgOlivos}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Hablar por la alianza
+              </a>
+              <Link className="btn btn-ghost" to="/inscripcion">Quiero contacto</Link>
+            </div>
+          </div>
+        </section>
+
         {/* PACKS LISTOS (carrusel) */}
         <section className="block">
           <header className="sec-head">
-            <h2>Packs listos</h2>
-            <p className="muted">Elige un punto de partida. Después puedes ajustar horas y materias.</p>
+            <h2>Puntos de partida</h2>
+            <p className="muted">Elige un pack de ejemplo y luego ajusta horas, meses y materias.</p>
           </header>
 
           <HScroll ariaLabel="Packs listos">
@@ -160,7 +196,7 @@ Valor estimado total: ${clp(school.total)}`
                   <div className="price">{clp(fakeMonthly)} <span>/mes</span></div>
                   <ul className="list">
                     <li>Clases en vivo + cápsulas</li>
-                    <li>Plan semanal simple</li>
+                    <li>Plan semanal y seguimiento</li>
                     <li>Soporte por mensajes</li>
                   </ul>
                   <button
@@ -182,7 +218,7 @@ Valor estimado total: ${clp(school.total)}`
         {/* CONFIGURADOR — ARMAR TU APOYO */}
         <section className="block">
           <header className="sec-head">
-            <h2>Arma tu apoyo</h2>
+            <h2>Arma tu plan</h2>
             <p className="muted">4 pasos simples. El precio se actualiza en tiempo real.</p>
           </header>
 
@@ -203,7 +239,7 @@ Valor estimado total: ${clp(school.total)}`
                 ))}
               </div>
               <p className="tiny muted mt6">
-                1:1 = atención total. Micro-grupo = 3 a 6 niños/as (accesible y entretenido).
+                1:1 = foco total. Micro-grupo = 3 a 6 estudiantes (accesible y motivante).
               </p>
             </article>
 
@@ -260,7 +296,7 @@ Valor estimado total: ${clp(school.total)}`
                 })}
               </div>
               <p className="tiny muted mt6">
-                Cobramos por <b>horas semanales</b>. Si son muchas materias, aplicamos recargo de planificación: <b>{Math.round(uplift*100)}%</b>.
+                Cobramos por <b>horas/semana</b>. Si son muchas materias, sumamos planificación (+<b>{Math.round(uplift*100)}%</b>).
               </p>
             </article>
           </div>
@@ -315,8 +351,11 @@ Valor estimado total: ${clp(school.total)}`
         {/* INSTITUCIONES — Ensayos */}
         <section className="block inst">
           <header className="sec-head">
-            <h2>Para colegios</h2>
-            <p className="muted">Licencia single-site. PDF con ID de licencia; opción de impresión por Lael.</p>
+            <h2>Ensayos para colegios</h2>
+            <p className="muted">
+              Paquetes con licencia single-site. Entrega en PDF con ID de licencia y marca de agua.
+              Opción de impresión por Lael.
+            </p>
           </header>
 
           <div className="grid grid-3">
@@ -352,7 +391,7 @@ Valor estimado total: ${clp(school.total)}`
                 </label>
                 <label className="check">
                   <input type="checkbox" checked={sPrinted} onChange={(e) => setSPrinted(e.target.checked)} />
-                  <span>Impreso por nosotros (+$1.000/est/ens)</span>
+                  <span>Impreso por Lael (+$1.000/est/ens)</span>
                 </label>
               </div>
               <div className="tiny muted mt6">
@@ -390,14 +429,12 @@ Valor estimado total: ${clp(school.total)}`
 /* ================= CSS local (oscuro + paleta LAEL) ================= */
 const css = `
 :root{
-  /* PALETA LAEL */
   --lael-blue:#3b549d;   /* primario */
   --lael-green:#249554;  /* acento */
   --lael-yellow:#f2ce3d; /* énfasis */
   --lael-rose:#d6a0c5;   /* suave */
   --lael-warn:#cd5732;   /* aviso */
 
-  /* Base dark */
   --bg:#0b1220;
   --panel:#0e1424;
   --bd:#233052;
@@ -472,7 +509,7 @@ const css = `
 /* Packs carrusel */
 .hs-wrap{ position:relative; }
 .hs{ display:flex; gap:10px; overflow:auto; scroll-snap-type:x mandatory; padding:2px 2px 12px; }
-.slide{ scroll-snap-align:start; min-width:232px; } /* compacto */
+.slide{ scroll-snap-align:start; min-width:232px; }
 .hs-btn{
   position:absolute; top:50%; transform:translateY(-50%); width:34px; height:34px; border-radius:999px;
   border:1px solid #344169; background:#0f172a; color:#eaf2ff; display:grid; place-items:center; z-index:2; cursor:pointer;
@@ -485,6 +522,11 @@ const css = `
 .pack .price{ font-weight:1000; font-size:1.36rem; margin:.28rem 0 .36rem; color:var(--lael-yellow); }
 .pack .price span{ font-size:.95rem; color:var(--ink-muted); }
 .pack .list{ margin:.08rem 0 .5rem; padding-left:18px; }
+
+/* Partner card */
+.partner{ display:grid; grid-template-columns: 1fr auto; gap:12px; align-items:center; }
+.partner .pill{ display:inline-block; padding:.18rem .52rem; border-radius:999px; border:1px solid #334155; font-weight:900; }
+.partner-right{ display:flex; gap:10px; flex-wrap:wrap; }
 
 /* Paso títulos */
 .step-title{ font-weight:1000; margin-bottom:8px; letter-spacing:.2px; }

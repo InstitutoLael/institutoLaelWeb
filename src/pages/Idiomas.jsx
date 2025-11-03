@@ -2,18 +2,13 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { LANGUAGES, ENROLLMENT_FEE, computeLangBundle, clp } from "../data/idiomas.js";
-
-// Imagen en la misma carpeta que PAES
 import flags from "../assets/img/lael/flags.png";
 
 export default function Idiomas() {
-  // Paleta sobria y consistente con el resto del sitio
-  const ACCENT = { base: "#5850EC", soft: "rgba(88,80,236,.16)" }; // índigo (marca académica / confianza)
-  const CHIP   = { base: "#14b8a6", soft: "rgba(20,184,166,.16)" }; // turquesa sutil (niveles)
+  const ACCENT = { base: "#5850EC", soft: "rgba(88,80,236,.16)" };
+  const CHIP   = { base: "#14b8a6", soft: "rgba(20,184,166,.16)" };
 
-  // Estado
   const [selectedIds, setSelectedIds] = useState([]);
-  // id -> "A1" | "A2" | "B1" | "B2" | etc.
   const [selectedLevels, setSelectedLevels] = useState({});
   const builderRef = useRef(null);
 
@@ -23,18 +18,15 @@ export default function Idiomas() {
   );
   const monthly = computeLangBundle(selected.length);
 
-  // Toggle que permite quitar aunque el curso esté "comingSoon" (si ya estaba dentro)
   const toggle = (id, comingSoon) => {
     setSelectedIds((prev) => {
       const active = prev.includes(id);
       if (active) {
-        // Permitir quitar SIEMPRE y limpiar nivel asociado
         const next = prev.filter((x) => x !== id);
         const { [id]: _, ...rest } = selectedLevels;
         setSelectedLevels(rest);
         return next;
       } else {
-        // Solo agregar si NO es "comingSoon"
         if (comingSoon) return prev;
         return [...prev, id];
       }
@@ -43,7 +35,6 @@ export default function Idiomas() {
 
   const replaceWith = (ids = []) => {
     setSelectedIds([...ids]);
-    // Resetea niveles de los que ya no están
     setSelectedLevels((prev) => {
       const next = {};
       ids.forEach((id) => { if (prev[id]) next[id] = prev[id]; });
@@ -70,7 +61,6 @@ Mensualidad estimada: ${clp(monthly)}
 Matrícula única: ${clp(ENROLLMENT_FEE)}`
   );
 
-  // Atajos curados (se omiten si el id no existe en data)
   const QUICK = [
     { id: "q-ingles-b1", label: "Inglés B1 (intermedio)", ids: ["ingles"], levels: { ingles: "B1" } },
     { id: "q-coreano-topik1", label: "Coreano · TOPIK 1", ids: ["coreano"], levels: { coreano: "A2" } },
@@ -95,17 +85,18 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
           <div className="hero__left">
             <span className="pill">Idiomas</span>
             <h1>
-              Aprende <span className="under">en serio</span>. Elige tu idioma y tu nivel.
+              Domina un idioma con <span className="under">propósito y excelencia</span>
             </h1>
             <p className="lead">
-              Clases en vivo + cápsulas, material descargable y seguimiento cercano.
-              Parte con <b>un curso</b> y suma otro cuando quieras: el precio del <b>bundle mejora automáticamente</b>.
-              Matrícula única: <strong>{clp(ENROLLMENT_FEE)}</strong>.
+              En Lael enseñamos idiomas para abrir puertas —académicas, laborales y de servicio—,
+              con el foco en la persona y en Dios como nuestro centro. Clases en vivo, cápsulas y
+              acompañamiento real. Parte con <b>un curso</b> y suma otro cuando quieras: el
+              <b> precio del bundle mejora automáticamente</b>. Matrícula única: <strong>{clp(ENROLLMENT_FEE)}</strong>.
             </p>
             <ul className="points" aria-label="Beneficios clave">
-              <li>Selecciona idioma(s) y nivel (A1–B2 o preparación específica)</li>
-              <li>Todas las clases quedan grabadas el mismo día</li>
-              <li>Plan de estudio claro, con metas y acompañamiento real</li>
+              <li>Elige idioma(s) y nivel A1–B2 (o preparación específica como TOPIK).</li>
+              <li>Grabaciones el mismo día + material descargable y metas claras.</li>
+              <li>Acompañamiento cercano: tu avance importa más que el número.</li>
             </ul>
             <div className="cta">
               <Link to="/inscripcion" className="btn btn-primary" aria-label="Ir a inscripción de Idiomas">Inscribirme</Link>
@@ -128,7 +119,7 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
               loading="eager"
               decoding="async"
             />
-            <figcaption>Elige tus cursos, marca tu nivel y te guiamos con un plan simple.</figcaption>
+            <figcaption>Aprende con un plan claro y acompañamiento que de verdad se nota.</figcaption>
           </figure>
         </div>
       </header>
@@ -137,7 +128,7 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
         {/* ATAJOS */}
         {QUICK.length > 0 && (
           <section className="quick" aria-label="Atajos de selección">
-            <div className="quick__title">Atajos</div>
+            <div className="quick__title">Empieza rápido</div>
             <div className="chips">
               {QUICK.map((q) => (
                 <button key={q.id} type="button" className="chip" onClick={() => applyQuick(q)} aria-label={`Aplicar atajo: ${q.label}`}>
@@ -158,7 +149,6 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
           <div className="grid">
             {LANGUAGES.map((l) => {
               const active = selectedIds.includes(l.id);
-              // niveles disponibles para el curso (si el data trae levels, se usan; si no, A1–B2 por defecto)
               const levels = (l.levels && l.levels.length ? l.levels : ["A1", "A2", "B1", "B2"]).slice(0, 4);
               const lvl = selectedLevels[l.id] || "";
 
@@ -172,7 +162,6 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
 
                   <p className="muted tiny">{l.summary}</p>
 
-                  {/* Selector de nivel: chips exclusivas (radio-ghost) */}
                   <div className="levels" role="group" aria-label={`Niveles disponibles para ${l.name}`}>
                     {levels.map((lv) => {
                       const on = lvl === lv;
@@ -183,7 +172,6 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
                           className={"lv " + (on ? "on" : "")}
                           aria-pressed={on}
                           onClick={() => {
-                            // Para marcar nivel, primero asegúrate que el curso esté en el plan
                             if (!active && !l.comingSoon) setSelectedIds((p) => [...p, l.id]);
                             if (!l.comingSoon || active) setLevel(l.id, lv);
                           }}
@@ -193,7 +181,6 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
                         </button>
                       );
                     })}
-                    {/* opción limpiar nivel si lo desea */}
                     {lvl && (
                       <button
                         type="button"
@@ -211,7 +198,6 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
                     <button
                       type="button"
                       className={"choose " + (active ? "on" : "")}
-                      // deshabilita sólo para AGREGAR cuando es comingSoon; permitir quitar si ya está
                       disabled={l.comingSoon && !active}
                       onClick={() => toggle(l.id, l.comingSoon)}
                       title={
@@ -272,24 +258,25 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
           </div>
         </section>
 
-        {/* HORARIOS (PRÓXIMAMENTE discreto) */}
+        {/* HORARIOS */}
         <section className="schedule">
           <header className="sec-head row">
             <h2>Horarios</h2>
             <span className="soon-badge">PRÓXIMAMENTE</span>
           </header>
           <p className="muted tiny">
-            Publicaremos los horarios por curso aquí. Las clases en vivo quedan grabadas el mismo día para que avances a tu ritmo.
+            Publicaremos los horarios por curso aquí. Las clases en vivo quedan grabadas el mismo día
+            para que avances a tu ritmo, sin perder continuidad.
           </p>
         </section>
 
-        {/* FAQ breve — reescrita (más directa) */}
+        {/* FAQ */}
         <section className="faq">
           <header className="sec-head"><h2>Preguntas frecuentes</h2></header>
 
           <details>
             <summary>Si falto, ¿pierdo la clase?</summary>
-            <p>Tranquilo/a: subimos la grabación el mismo día y te damos un mini–reto para ponerte al día sin perder el hilo.</p>
+            <p>No. Subimos la grabación el mismo día y te damos un mini–reto para retomar sin quedarte atrás.</p>
           </details>
 
           <details>
@@ -300,6 +287,11 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
           <details>
             <summary>¿Entregan certificado?</summary>
             <p>Sí, por cada ruta aprobada. Para TOPIK te acompañamos con inscripción y simulacros.</p>
+          </details>
+
+          <details>
+            <summary>¿Cuál es el enfoque de Lael?</summary>
+            <p>Excelencia académica con sentido: enseñamos para servir mejor, con Dios como centro y una comunidad que anima a perseverar.</p>
           </details>
 
           <div className="cta center">
@@ -405,17 +397,17 @@ h1{ margin:.45rem 0 .35rem; font-size:clamp(1.8rem, 3.2vw + .6rem, 2.6rem); lett
 .muted{ color:var(--muted); }
 .tiny{ font-size:.9rem; }
 
-/* chips de nivel (selector exclusivo) — sin color-mix */
+/* chips de nivel */
 .levels{ display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 0; }
 .lv{
-  border:1px solid #2a3550;            /* borde suave */
-  background: var(--chipSoft);          /* turquesa suave */
+  border:1px solid #2a3550;
+  background: var(--chipSoft);
   color:#eaf2ff; border-radius:999px; padding:.3rem .6rem; font-weight:900; letter-spacing:.2px;
 }
 .lv.on{
-  background: var(--chip);              /* turquesa fuerte */
+  background: var(--chip);
   color:#052e2b;
-  border-color:#0f7467;                 /* tono más oscuro del chip */
+  border-color:#0f7467;
 }
 .lv.ghost{
   background:#0f172a; border-color:#2a3550; color:#cbd5e1; font-weight:800;

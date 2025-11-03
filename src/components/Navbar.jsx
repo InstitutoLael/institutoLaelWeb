@@ -40,7 +40,15 @@ export default function Navbar({ onOpenSearch }) {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const closeMobile = () => setMobileOpen(false);
+  const closeMobile = () => {
+  setMobileOpen(false);
+  setProgOpen(false);
+};
+
+// Cierra dropdown si se abre el panel móvil
+useEffect(() => {
+  if (mobileOpen) setProgOpen(false);
+}, [mobileOpen]);
 
   return (
     <header className="lael-nav">
@@ -294,6 +302,17 @@ const css = `
 .burger.on span:nth-child(2){ transform: scaleX(.7); }
 
 /* Dropdown Programas */
+/* Z-INDEX CORRECTION */
+.lael-nav { z-index: 2000; }
+.dropdown { z-index: 2100; }
+.mp-overlay { z-index: 2200; }
+.mobile-panel { z-index: 2300; }
+
+/* Fondo del panel móvil */
+.mobile-panel {
+  background: linear-gradient(180deg, #0b1220, #0e1424 90%);
+  box-shadow: -6px 0 20px rgba(0,0,0,.45);
+}
 .has-drop{ position:relative; }
 .drop-btn{ display:inline-flex; align-items:center; gap:6px; }
 .dropdown{

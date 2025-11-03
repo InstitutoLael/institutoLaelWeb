@@ -37,60 +37,65 @@ export default function Home() {
       <style>{css}</style>
 
       {/* HERO */}
-      <section className="hero reveal">
-        <div className="container hero__inner">
-          <div className="hero__left">
-            <p className="hero__kicker">Educación online, pero humana</p>
-            <h1 className="hero__title">
-              Prepárate para <span className="grad g1">PAES</span>,{" "}
-              <span className="grad g2">Idiomas</span> y{" "}
-              <span className="grad g3">LSCh</span> con{" "}
-              <span className="underline">acompañamiento real</span>.
-            </h1>
-            <p className="hero__lead">
-              En vivo + grabadas, material descargable y seguimiento semanal.{" "}
-              <strong>87% logra su objetivo</strong> y <strong>9 de 10</strong> nos recomiendan.
-            </p>
-            <div className="hero__cta">
-              <Link className="btn btn-primary lift" to="/inscripcion">Inscribirme</Link>
-              <Link className="btn btn-outline lift" to="/paes">Ver planes PAES</Link>
-              <a
-                className="btn btn-ghost lift"
-                href="https://wa.me/56964626568?text=Hola%20Lael,%20quisiera%20info%20🙂"
-                target="_blank" rel="noreferrer noopener"
-                aria-label="Abrir WhatsApp de Lael"
-              >
-                WhatsApp
-              </a>
-            </div>
-            <ul className="hero__trust">
-              <li className="chip-soft">Pagos seguros 💳</li>
-              <li className="chip-soft">+10.000 h en vivo 🎥</li>
-              <li className="chip-soft">Con Google Workspace 🟦</li>
-            </ul>
-            <div className="chips">
-              <Chip to="/paes" label="PAES Matemáticas M1" />
-              <Chip to="/paes" label="Lenguaje PAES" />
-              <Chip to="/lsch" label="Lengua de Señas (LSCh)" />
-              <Chip to="/idiomas" label="Inglés B1–B2" />
-              <Chip to="/idiomas" label="Coreano TOPIK 1" />
-            </div>
-          </div>
-          <div className="hero__right" aria-hidden>
-            <div className="mock float-in">
-              <div className="bar" />
-              <div className="line w80" />
-              <div className="line w60" />
-              <div className="line w90" />
-              <div className="cards">
-                <MockCard color="indigo" t="Clases en vivo" s="Recordatorios + grabación" />
-                <MockCard color="green" t="Cápsulas on-demand" s="Repite cuando quieras" />
-                <MockCard color="amber" t="Soporte real" s="Tutoría + WhatsApp" />
-              </div>
-            </div>
-          </div>
+<section className="hero reveal">
+  <div className="container hero__inner">
+    <div className="hero__left">
+      <p className="hero__kicker">Educación online, cercana y clara</p>
+
+      <h1 className="hero__title">
+        PAES, <span className="grad g2">Idiomas</span> y{" "}
+        <span className="grad g3">LSCh</span> con{" "}
+        <span className="underline">acompañamiento de verdad</span>.
+      </h1>
+
+      <p className="hero__lead">
+        Clases en vivo + cápsulas, material descargable y seguimiento real.
+        <strong> 87% logra su objetivo</strong> y <strong>9 de 10</strong> nos recomiendan.
+      </p>
+
+      <div className="hero__cta">
+        <Link className="btn btn-primary lift" to="/inscripcion">Inscribirme</Link>
+        <Link className="btn btn-outline lift" to="/paes">Ver programas</Link>
+        <a
+          className="btn btn-ghost lift"
+          href="https://wa.me/56964626568?text=Hola%20Lael,%20quisiera%20informaci%C3%B3n"
+          target="_blank" rel="noreferrer noopener"
+          aria-label="Hablar por WhatsApp con Lael"
+        >
+          WhatsApp
+        </a>
+      </div>
+
+      <ul className="hero__trust">
+        <li className="chip-soft">Pagos seguros</li>
+        <li className="chip-soft">+10.000 h en vivo</li>
+        <li className="chip-soft">Con Google Workspace</li>
+      </ul>
+
+      <div className="chips">
+        <Chip to="/paes" label="PAES Matemáticas M1" />
+        <Chip to="/paes" label="Lenguaje PAES" />
+        <Chip to="/lsch" label="Lengua de Señas (LSCh)" />
+        <Chip to="/idiomas" label="Inglés B1–B2" />
+        <Chip to="/idiomas" label="Coreano TOPIK I" />
+      </div>
+    </div>
+
+    <div className="hero__right" aria-hidden>
+      <div className="mock float-in">
+        <div className="bar" />
+        <div className="line w80" />
+        <div className="line w60" />
+        <div className="line w90" />
+        <div className="cards">
+          <MockCard color="indigo" t="Clases en vivo" s="Recordatorios + grabación" />
+          <MockCard color="green" t="Cápsulas on-demand" s="Repite cuando quieras" />
+          <MockCard color="amber" t="Acompañamiento" s="Tutoría y WhatsApp" />
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* SEPARADOR */}
       <div className="sep"><div className="container"><div className="hr" /></div></div>

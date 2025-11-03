@@ -1,5 +1,5 @@
 // src/components/Navbar.jsx
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import logo from "../assets/img/Logos/lael-inst-naranja.png";
 
@@ -8,17 +8,37 @@ const link = ({ isActive }) => "nav-link" + (isActive ? " active" : "");
 export default function Navbar({ onOpenSearch }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [progOpen, setProgOpen] = useState(false);
+  const [kbdOpen, setKbdOpen] = useState(false); // abierto vía teclado
   const closeTimer = useRef(null);
   const dropRef = useRef(null);
+  const firstItemRef = useRef(null);
+  const location = useLocation();
 
-  // Lock scroll en móvil + cleanup
+  // Lock scroll mobile con clase (más confiable que mutar estilos inline)
   useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = mobileOpen ? "hidden" : prev || "";
-    return () => { document.body.style.overflow = prev || ""; };
+    const elHtml = document.documentElement;
+    const elBody = document.body;
+    const cls = "no-scroll";
+    if (mobileOpen) {
+      elHtml.classList.add(cls);
+      elBody.classList.add(cls);
+    } else {
+      elHtml.classList.remove(cls);
+      elBody.classList.remove(cls);
+    }
+    return () => {
+      elHtml.classList.remove(cls);
+      elBody.classList.remove(cls);
+    };
   }, [mobileOpen]);
 
-  // Dropdown hover con delay suave
+  // Cierra todo al cambiar de ruta
+  useEffect(() => {
+    setMobileOpen(false);
+    setProgOpen(false);
+  }, [location.pathname]);
+
+  // Dropdown hover con delay
   const openDrop = () => {
     clearTimeout(closeTimer.current);
     setProgOpen(true);
@@ -28,17 +48,41 @@ export default function Navbar({ onOpenSearch }) {
     closeTimer.current = setTimeout(() => setProgOpen(false), 120);
   };
 
-  // Cerrar con ESC
+  // Cerrar con ESC global + atajo de búsqueda
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
         setProgOpen(false);
         setMobileOpen(false);
       }
+      // Ctrl/⌘ + K para búsqueda
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        onOpenSearch?.();
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [onOpenSearch]);
+
+  // Clic afuera para cerrar dropdown
+  useEffect(() => {
+    if (!progOpen) return;
+    const onDocDown = (e) => {
+      if (!dropRef.current) return;
+      if (!dropRef.current.contains(e.target)) setProgOpen(false);
+    };
+    document.addEventListener("mousedown", onDocDown);
+    return () => document.removeEventListener("mousedown", onDocDown);
+  }, [progOpen]);
+
+  // Accesibilidad: foco al primer ítem si abrimos con teclado
+  useEffect(() => {
+    if (progOpen && kbdOpen) {
+      firstItemRef.current?.focus();
+      setKbdOpen(false);
+    }
+  }, [progOpen, kbdOpen]);
 
   const closeMobile = () => {
     setMobileOpen(false);
@@ -49,6 +93,30 @@ export default function Navbar({ onOpenSearch }) {
   useEffect(() => {
     if (mobileOpen) setProgOpen(false);
   }, [mobileOpen]);
+
+  // Manejo de teclado dentro del dropdown
+  const onDropKeyDown = (e) => {
+    const items = Array.from(dropRef.current?.querySelectorAll('[role="menuitem"]') || []);
+    const i = items.indexOf(document.activeElement);
+    if (!items.length) return;
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      items[Math.min(i + 1, items.length - 1) || 0].focus();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      items[Math.max(i - 1, 0)].focus();
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      items[0].focus();
+    } else if (e.key === "End") {
+      e.preventDefault();
+      items[items.length - 1].focus();
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      setProgOpen(false);
+    }
+  };
 
   return (
     <header className="lael-nav">
@@ -62,14 +130,15 @@ export default function Navbar({ onOpenSearch }) {
           onClick={() => setProgOpen(false)}
           aria-label="Inicio Instituto Lael"
         >
-          {/* altura controlada (no crece) */}
           <img src={logo} alt="Instituto Lael" className="brand-logo" />
         </Link>
 
         {/* NAV DESKTOP */}
         <nav className="navwrap" aria-label="Navegación principal">
           <ul className="nav">
-            <li><NavLink to="/" className={link}>Inicio</NavLink></li>
+            <li>
+              <NavLink to="/" className={link} aria-current={({ isActive }) => (isActive ? "page" : undefined)}>Inicio</NavLink>
+            </li>
 
             <li
               className={"has-drop " + (progOpen ? "open" : "")}
@@ -80,6 +149,12 @@ export default function Navbar({ onOpenSearch }) {
                 type="button"
                 className="nav-link drop-btn"
                 onClick={() => setProgOpen((v) => !v)}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowDown") {
+                    setProgOpen(true);
+                    setKbdOpen(true);
+                  }
+                }}
                 aria-expanded={progOpen}
                 aria-haspopup="true"
                 aria-controls="prog-menu"
@@ -95,6 +170,7 @@ export default function Navbar({ onOpenSearch }) {
                 onMouseLeave={closeDrop}
                 role="menu"
                 ref={dropRef}
+                onKeyDown={onDropKeyDown}
               >
                 <div className="drop-head">
                   <div className="drop-title">Programas</div>
@@ -102,7 +178,10 @@ export default function Navbar({ onOpenSearch }) {
                 </div>
 
                 <div className="drop-grid">
-                  <DropItem to="/paes" title="PAES" kicker="Ingreso a la U" badge="Top elección">
+                  <DropItem
+                    refEl={firstItemRef}
+                    to="/paes" title="PAES" kicker="Ingreso a la U" badge="Top elección"
+                  >
                     Matemáticas M1/M2, Lenguaje, Ciencias e Historia. Ensayos + tutoría.
                   </DropItem>
                   <DropItem to="/idiomas" title="Idiomas" kicker="EN · KR" accent="green">
@@ -118,15 +197,12 @@ export default function Navbar({ onOpenSearch }) {
               </div>
             </li>
 
-            <li><NavLink to="/empresas" className={link}>Empresas</NavLink></li>
-            <li><NavLink to="/nosotros" className={link}>Nosotros</NavLink></li>
+            <li><NavLink to="/empresas" className={link} aria-current={({ isActive }) => (isActive ? "page" : undefined)}>Empresas</NavLink></li>
+            <li><NavLink to="/nosotros" className={link} aria-current={({ isActive }) => (isActive ? "page" : undefined)}>Nosotros</NavLink></li>
+            <li><NavLink to="/becas" className={link} aria-current={({ isActive }) => (isActive ? "page" : undefined)}>Becas</NavLink></li>
+            <li><NavLink to="/convenios" className={link} aria-current={({ isActive }) => (isActive ? "page" : undefined)}>Convenios</NavLink></li>
+            <li><NavLink to="/trabaja" className={link} aria-current={({ isActive }) => (isActive ? "page" : undefined)}>Trabaja</NavLink></li>
 
-            {/* Accesos directos */}
-            <li><NavLink to="/becas" className={link}>Becas</NavLink></li>
-            <li><NavLink to="/convenios" className={link}>Convenios</NavLink></li>
-            <li><NavLink to="/trabaja" className={link}>Trabaja</NavLink></li>
-
-            {/* CTA */}
             <li><NavLink to="/inscripcion" className="nav-cta">Inscripción</NavLink></li>
           </ul>
         </nav>
@@ -204,14 +280,19 @@ export default function Navbar({ onOpenSearch }) {
   );
 }
 
-function DropItem({ to, title, kicker, children, badge, accent = "indigo" }) {
+function DropItem({ to, title, kicker, children, badge, accent = "indigo", refEl }) {
   const accentClass =
     accent === "green" ? "acc-green" :
     accent === "rose"  ? "acc-rose"  :
     accent === "amber" ? "acc-amber" : "acc-indigo";
 
   return (
-    <Link to={to} className={"drop-item " + accentClass} role="menuitem">
+    <Link
+      to={to}
+      className={"drop-item " + accentClass}
+      role="menuitem"
+      ref={refEl}
+    >
       <div className="di-head">
         <span className="kicker">{kicker}</span>
         {badge && <span className="mini-badge">{badge}</span>}
@@ -250,6 +331,9 @@ const css = `
   --amber: #f59e0b;
 }
 
+/* Evita scroll cuando el panel móvil está abierto */
+html.no-scroll, body.no-scroll { overflow: hidden; }
+
 /* Barra */
 .lael-nav{
   position: sticky; top: 0; z-index: 2000;
@@ -264,19 +348,20 @@ const css = `
 
 /* Logo */
 .brand{ display:inline-flex; align-items:center; gap:10px; padding:8px 0; }
-.brand-logo{ height:36px; width:auto; display:block; }        /* ← tamaño controlado */
-@media (min-width: 768px){ .brand-logo{ height:40px; } }      /* ← en desktop un poco más */
+.brand-logo{ height:36px; width:auto; display:block; }
+@media (min-width: 768px){ .brand-logo{ height:40px; } }
 
 /* Nav desktop */
 .navwrap{ margin-left:auto; }
 .nav{
-  display:flex; align-items:center; gap:8px; margin:0; padding:0; list-style:none; /* ← sin bullets */
+  display:flex; align-items:center; gap:8px; margin:0; padding:0; list-style:none;
 }
 .nav-link, .nav-cta, .drop-btn{
   appearance:none; border:0; background:transparent; cursor:pointer;
   color:var(--link); text-decoration:none; font-weight:900;
   padding:.55rem .75rem; border-radius:10px; line-height:1;
   white-space:nowrap;
+  transition: background .15s ease, transform .15s ease;
 }
 .nav-link:hover, .drop-btn:hover{ color:var(--link-act); background:#0f172a; }
 .nav-link.active{
@@ -305,7 +390,7 @@ const css = `
 .burger span{ width:18px; height:2px; background:#cfe0ff; display:block; border-radius:2px; transition: transform .18s ease; }
 .burger.on span:nth-child(2){ transform: scaleX(.7); }
 
-/* Dropdown Programas */
+/* Z-index */
 .lael-nav { z-index: 2000; }
 .dropdown { z-index: 2100; }
 .mp-overlay { z-index: 2200; }
@@ -315,13 +400,15 @@ const css = `
   background: linear-gradient(180deg, #0b1220, #0e1424 90%);
   box-shadow: -6px 0 20px rgba(0,0,0,.45);
 }
+
+/* Dropdown Programas */
 .has-drop{ position:relative; }
 .drop-btn{ display:inline-flex; align-items:center; gap:6px; }
 .dropdown{
   position:absolute; left:0; top: calc(100% + 10px);
   width: min(92vw, 920px); min-width: 560px;
   background: var(--drop-bg); border:1px solid var(--drop-bd); border-radius:14px;
-  box-shadow: 0 26px 60px rgba(2,6,23,.38); z-index: 2200;
+  box-shadow: 0 26px 60px rgba(2,6,23,.38);
   opacity:0; transform: translateY(6px); pointer-events:none; transition: all .16s ease;
   padding:12px;
   max-height: calc(100dvh - 120px);
@@ -340,7 +427,10 @@ const css = `
   transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
   word-break: break-word;
 }
-.drop-item:hover{ transform: translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); border-color:#2f3b60; }
+.drop-item:hover, .drop-item:focus{
+  transform: translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); border-color:#2f3b60;
+  outline: none;
+}
 .drop-item .di-head{ display:flex; align-items:center; gap:8px; }
 .drop-item .kicker{ font-size:.82rem; color:#cfe0ff; font-weight:900; letter-spacing:.2px; }
 .drop-item .mini-badge{ font-size:.7rem; padding:.15rem .45rem; border-radius:999px; font-weight:900; background:#f59e0b; color:#0b1220; }
@@ -353,7 +443,7 @@ const css = `
 .acc-rose  { outline:1px solid rgba(225,29,72,.35); }
 .acc-amber { outline:1px solid rgba(245,158,11,.35); }
 
-/* Responsive del dropdown (evita solaparse) */
+/* Responsive del dropdown */
 @media (max-width: 1200px){
   .dropdown{ width: min(94vw, 820px); min-width: 0; }
 }
@@ -411,5 +501,13 @@ const css = `
 .mp-close:focus-visible, .mp-link:focus-visible,
 .mp-cta:focus-visible, .mp-ghost:focus-visible {
   outline: 2px solid #22d3ee; outline-offset: 2px;
+}
+
+/* Respeta reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .nav-link, .nav-cta, .drop-btn, .tool-btn, .burger span,
+  .drop-item, .mp-overlay, .mobile-panel {
+    transition: none !important;
+  }
 }
 `;

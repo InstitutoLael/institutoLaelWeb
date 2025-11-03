@@ -1,188 +1,137 @@
 // src/components/PromoBanner.jsx
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
-export default function PromoBanner() {
-  const [visible, setVisible] = useState(true);
+/**
+ * PromoBanner (versión simple + pro)
+ * - 100% Tailwind (sin <style>)
+ * - Cierre persistente por N días (default: 7)
+ * - Opcional: ocultar en rutas (ej. /inscripcion)
+ * - Accesible: aria-live, foco visible, botón con label
+ */
+export default function PromoBanner({
+  enabled = true,
+  title = "Matrícula única $7.990",
+  subtitle = "Súmate hoy y activa descuentos por cantidad.",
+  ctaHref = "/inscripcion",
+  ctaLabel = "Inscribirme",
+  wspHref = "https://wa.me/56964626568?text=Hola%20Lael%20👋%2C%20quiero%20info%20de%20matr%C3%ADcula%20y%20descuentos",
+  hideOnRoutes = ["/inscripcion", "/pagos"],
+  storageKey = "lael_promo_closed_until",
+  persistDays = 7,
+}) {
+  const { pathname } = useLocation();
+  const shouldHideByRoute = useMemo(
+    () => hideOnRoutes.some((r) => pathname.startsWith(r)),
+    [pathname, hideOnRoutes]
+  );
 
-  // Evita “parpadeo” recordando si el usuario lo cerró
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
-    const closed = localStorage.getItem("lael_promo_closed");
-    if (closed === "1") setVisible(false);
-  }, []);
+    if (!enabled || shouldHideByRoute) {
+      setVisible(false);
+      return;
+    }
+    // SSR safe
+    if (typeof window === "undefined") return;
+    const until = localStorage.getItem(storageKey);
+    const now = Date.now();
+    const closedUntil = until ? Number(until) : 0;
+    setVisible(!(closedUntil && now < closedUntil));
+  }, [enabled, shouldHideByRoute, storageKey]);
+
   const close = () => {
     setVisible(false);
-    localStorage.setItem("lael_promo_closed", "1");
+    if (typeof window !== "undefined") {
+      const until = Date.now() + persistDays * 24 * 60 * 60 * 1000;
+      localStorage.setItem(storageKey, String(until));
+    }
   };
 
-  if (!visible) return null;
+  if (!enabled || shouldHideByRoute || !visible) return null;
 
   return (
-    <div className="lael-promo" role="region" aria-label="Promoción activa Instituto Lael">
-      <div className="container promo__inner" aria-live="polite">
-        {/* Izquierda: insignia + titular */}
-        <div className="promo__left">
-          <span className="promo__badge" aria-label="Inscripción abierta">🚀 Inscripción abierta</span>
-          <h2 className="promo__title">
-            Matrícula única <span className="price">$7.990</span>
-            <span className="sparkle" aria-hidden>✨</span>
-          </h2>
-          <p className="promo__subtitle">
-            Súmate hoy y activa <b>descuentos automáticos</b> por cantidad.
-          </p>
+    <div
+      role="region"
+      aria-label="Promoción Instituto Lael"
+      className="
+        sticky top-0 z-[1030]
+        border-b border-slate-800/70
+        bg-[#0b1220]/95 backdrop-blur
+        text-slate-100
+      "
+    >
+      <div
+        className="max-w-6xl mx-auto px-4 py-3
+                   flex flex-col gap-2 md:flex-row md:items-center md:justify-between"
+        aria-live="polite"
+      >
+        {/* Izquierda: texto */}
+        <div className="space-y-0.5">
+          <div className="inline-flex items-center gap-2">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold
+                             bg-emerald-500 text-[#0b1220]">
+              Inscripción abierta
+            </span>
+            <h2 className="font-extrabold text-sm sm:text-base">{title}</h2>
+          </div>
+          <p className="text-slate-300 text-xs sm:text-sm">{subtitle}</p>
         </div>
 
-        {/* Centro: beneficios cortitos */}
-        <ul className="promo__perks" aria-label="Beneficios principales">
-          <li><span className="dot dot–green" /> Clases en vivo + cápsulas</li>
-          <li><span className="dot dot–amber" /> Ensayos / feedback real</li>
-          <li><span className="dot dot–rose" /> WhatsApp de acompañamiento</li>
+        {/* Centro: perks cortos (opcionales) */}
+        <ul className="hidden lg:flex items-center gap-4 text-sm font-semibold">
+          <li className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400" aria-hidden />
+            Clases en vivo + cápsulas
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400" aria-hidden />
+            Ensayos / feedback real
+          </li>
+          <li className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-400" aria-hidden />
+            Acompañamiento por WhatsApp
+          </li>
         </ul>
 
         {/* Derecha: CTA */}
-        <div className="promo__cta">
-          <a className="btn btn-primary" href="/inscripcion" aria-label="Ir a inscripción ahora">
-            Inscribirme
-          </a>
+        <div className="flex items-center gap-2">
+          <Link
+            to={ctaHref}
+            className="inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-sm font-extrabold
+                       bg-indigo-500 hover:bg-indigo-400 text-white
+                       focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-500/30 transition"
+          >
+            {ctaLabel}
+          </Link>
           <a
-            className="btn btn-ghost"
-            href="https://wa.me/56964626568?text=Hola%20Lael%20👋%2C%20quiero%20info%20de%20matr%C3%ADcula%20y%20descuentos"
+            href={wspHref}
             target="_blank"
-            rel="noreferrer noopener"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-sm font-extrabold
+                       border border-slate-600 hover:border-slate-400
+                       focus:outline-none focus-visible:ring-4 focus-visible:ring-slate-400/30 transition"
             aria-label="Consultar por WhatsApp"
           >
             WhatsApp
           </a>
+
+          {/* Cerrar */}
+          <button
+            type="button"
+            onClick={close}
+            className="ml-1 inline-flex items-center justify-center w-8 h-8
+                       rounded-lg text-slate-300 hover:text-white
+                       hover:bg-white/5 border border-transparent
+                       focus:outline-none focus-visible:ring-4 focus-visible:ring-slate-300/20 transition"
+            aria-label="Ocultar promoción"
+            title="Ocultar"
+          >
+            ×
+          </button>
         </div>
-
-        {/* Cerrar */}
-        <button
-          type="button"
-          className="promo__close"
-          onClick={close}
-          aria-label="Ocultar promoción"
-          title="Ocultar"
-        >
-          ×
-        </button>
       </div>
-
-      <style>{css}</style>
     </div>
   );
 }
-
-/* ---------- CSS embebido ---------- */
-const css = `
-:root{
-  --pri:#5850EC;   /* índigo */
-  --acc:#16A34A;   /* verde */
-  --rose:#E11D48;  /* rosa */
-  --amber:#F59E0B; /* mostaza */
-  --ink:#ffffff;
-  --ink-soft:#F5F7FF;
-  --bd:rgba(255,255,255,.14);
-}
-
-.lael-promo{
-  position:sticky; top:0; z-index:1030;
-  color:var(--ink);
-  background:
-    linear-gradient(90deg, rgba(88,80,236,.18), transparent 40%),
-    radial-gradient(80% 120% at 0% 0%, rgba(22,163,74,.18), transparent 60%),
-    #0b1220;
-  border-bottom:1px solid var(--bd);
-  backdrop-filter: saturate(140%) blur(4px);
-}
-@media (prefers-color-scheme: light){
-  .lael-promo{
-    color:#0b1220;
-    background:
-      linear-gradient(90deg, rgba(88,80,236,.08), transparent 40%),
-      radial-gradient(80% 120% at 0% 0%, rgba(34,197,94,.10), transparent 60%),
-      #eef2ff;
-    border-bottom-color: rgba(17,24,39,.08);
-  }
-}
-
-.container{ max-width:1120px; margin:0 auto; padding:0 18px; }
-.promo__inner{
-  display:grid; align-items:center; gap:12px;
-  grid-template-columns: 1.1fr 1fr auto;
-  padding:10px 0;
-  position:relative;
-}
-
-/* izquierda */
-.promo__badge{
-  display:inline-block; font-weight:900; letter-spacing:.2px;
-  padding:.22rem .6rem; border-radius:999px;
-  background:linear-gradient(180deg,#22c55e,#16a34a); color:#0b1220;
-  box-shadow:0 3px 10px rgba(34,197,94,.25);
-}
-.promo__title{
-  margin:.25rem 0 0; font-size:clamp(1rem, 1.8vw, 1.15rem); font-weight:1000; letter-spacing:.2px;
-}
-.price{
-  margin-left:.35rem; padding:.18rem .5rem; border-radius:8px;
-  background:linear-gradient(180deg,#6B63F5,#4E46E5); color:#fff;
-  border:1px solid #4E46E5;
-}
-.promo__subtitle{ margin:0; font-size:.92rem; color:var(--ink-soft); }
-@media (prefers-color-scheme: light){ .promo__subtitle{ color:#1f2937; } }
-
-.sparkle{
-  margin-left:.25rem; filter: drop-shadow(0 0 10px rgba(99,102,241,.5));
-  animation: twinkle 1.5s ease-in-out infinite;
-}
-@keyframes twinkle{ 0%,100%{ opacity:1 } 50%{ opacity:.55 } }
-
-/* perks */
-.promo__perks{
-  display:flex; flex-wrap:wrap; gap:10px 14px; margin:0; padding:0; list-style:none;
-  font-weight:700;
-}
-.dot{ width:10px; height:10px; border-radius:50%; display:inline-block; margin-right:6px; transform:translateY(1px); }
-.dot–green{ background:#22c55e; }
-.dot–amber{ background:#f59e0b; }
-.dot–rose{ background:#e11d48; }
-
-/* CTA */
-.promo__cta{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
-.btn{
-  display:inline-flex; align-items:center; gap:8px; text-decoration:none; cursor:pointer;
-  padding:.55rem .9rem; border-radius:12px; font-weight:900; border:1px solid transparent;
-  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease, border-color .16s ease;
-}
-.btn-primary{
-  background:linear-gradient(180deg,#6B63F5,#4E46E5); color:#fff; border-color:#4E46E5;
-  box-shadow:0 8px 18px rgba(88,80,236,.35);
-}
-.btn-primary:hover{ transform:translateY(-1px); filter:brightness(1.06); }
-.btn-ghost{
-  background:transparent; color:var(--ink); border-color:rgba(165,180,252,.45);
-}
-.btn-ghost:hover{ transform:translateY(-1px); border-color:rgba(165,180,252,.75); }
-@media (prefers-color-scheme: light){
-  .btn-ghost{ color:#0b1220; border-color:rgba(17,24,39,.18); }
-  .btn-ghost:hover{ border-color:rgba(17,24,39,.35); }
-}
-
-/* Cerrar */
-.promo__close{
-  position:absolute; right:4px; top:2px;
-  appearance:none; background:transparent; color:var(--ink); border:0;
-  font-size:22px; line-height:1; padding:8px; cursor:pointer; border-radius:8px;
-  opacity:.8;
-}
-.promo__close:hover{ opacity:1; background:rgba(255,255,255,.06); }
-@media (prefers-color-scheme: light){
-  .promo__close{ color:#111827; }
-  .promo__close:hover{ background:rgba(17,24,39,.06); }
-}
-
-/* Responsive */
-@media (max-width: 860px){
-  .promo__inner{ grid-template-columns: 1fr; gap:8px; }
-  .promo__cta{ justify-content:flex-start; }
-}
-`;

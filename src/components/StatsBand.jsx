@@ -1,38 +1,42 @@
 // src/components/StatsBand.jsx
-export default function StatsBand({ items = [] }) {
+export default function StatsBand({
+  items = [
+    { kpi: "+1500", label: "Estudiantes activos" },
+    { kpi: "98%", label: "Satisfacción" },
+    { kpi: "8+", label: "Programas de estudio" },
+  ],
+}) {
   return (
-    <section className="statsband" aria-label="Indicadores de confianza">
-      <style>{css}</style>
-      <div className="container stats__row">
+    <section
+      className="relative py-8 bg-[#0b1220] border-y border-slate-800 overflow-hidden"
+      aria-label="Indicadores de confianza del Instituto Lael"
+    >
+      {/* Gradientes decorativos */}
+      <div className="absolute inset-0 bg-[radial-gradient(80%_40%_at_10%_-30%,rgba(88,80,236,0.18),transparent_60%),radial-gradient(80%_40%_at_90%_-30%,rgba(22,163,74,0.14),transparent_60%)] pointer-events-none" />
+
+      <div className="relative max-w-6xl mx-auto px-6 grid sm:grid-cols-2 md:grid-cols-3 gap-4">
         {items.map((it, i) => (
-          <article className="stat" key={i}>
-            <div className="kpi">{it.kpi}</div>
-            <div className="lbl">{it.label}</div>
-          </article>
+          <figure
+            key={i}
+            className="flex flex-col items-center justify-center text-center bg-[#0e1424] border border-slate-700 rounded-xl shadow-[0_8px_24px_rgba(2,6,23,0.35)] py-6 px-4 transition hover:scale-[1.02]"
+            role="group"
+            aria-labelledby={`stat-${i}-label`}
+          >
+            <p
+              className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-emerald-400 tracking-tight"
+              id={`stat-${i}-value`}
+            >
+              {it.kpi}
+            </p>
+            <figcaption
+              id={`stat-${i}-label`}
+              className="text-slate-300 text-sm mt-1 opacity-90"
+            >
+              {it.label}
+            </figcaption>
+          </figure>
         ))}
       </div>
     </section>
   );
 }
-
-const css = `
-.statsband{
-  padding:10px 0 2px;
-  background:
-    radial-gradient(700px 160px at 10% -40%, rgba(88,80,236,.18), transparent 60%),
-    radial-gradient(700px 160px at 90% -40%, rgba(22,163,74,.14), transparent 60%),
-    linear-gradient(180deg,#0b1220,#0e1424);
-  border-top:1px solid #1f2a44; border-bottom:1px solid #1f2a44;
-}
-.container{ max-width:1120px; margin:0 auto; padding:0 18px; }
-.stats__row{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; }
-@media (max-width:760px){ .stats__row{ grid-template-columns:1fr; } }
-.stat{
-  display:grid; place-items:center; text-align:center;
-  padding:10px 0; border-radius:14px; border:1px solid #22304d;
-  background: linear-gradient(180deg,#0f172a,#0b1220);
-  box-shadow:0 12px 22px rgba(2,6,23,.28);
-}
-.kpi{ font-size:1.5rem; font-weight:800; letter-spacing:.2px; color:#ffffff; }
-.lbl{ color:#dbeafe; opacity:.9 }
-`;

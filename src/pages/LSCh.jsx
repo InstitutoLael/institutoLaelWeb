@@ -16,7 +16,7 @@ import laelLogoWhite from "../assets/img/Logos/lael-inst-blanco.png";
 
 const CERTIFICATE_FEE = 19990;
 
-/* ---------- Util: carrusel horizontal ---------- */
+/* --------- util --------- */
 function HScroll({ children, ariaLabel }) {
   const ref = useRef(null);
   const slide = (dir) => {
@@ -28,57 +28,46 @@ function HScroll({ children, ariaLabel }) {
   return (
     <div className="hscroll-wrap">
       <button className="hs-btn prev" aria-label="Anterior" onClick={() => slide("prev")}>‹</button>
-      <div className="hscroll" ref={ref} aria-label={ariaLabel}>
-        {children}
-      </div>
+      <div className="hscroll" ref={ref} aria-label={ariaLabel}>{children}</div>
       <button className="hs-btn next" aria-label="Siguiente" onClick={() => slide("next")}>›</button>
       <div className="hs-mask" aria-hidden />
     </div>
   );
 }
 
-/* ===================== Página ===================== */
+/* ====================== PAGE ====================== */
 export default function LSCh() {
-  // Estado base (simple y único)
+  // Estado principal (simple)
   const [church, setChurch] = useState(false);
-  const [purpose, setPurpose] = useState("");
+  const [purpose, setPurpose] = useState(LSCH_PURPOSES?.[0] ?? "");
   const [selectedGroupId, setSelectedGroupId] = useState("g-quarter");
   const [selectedOneId, setSelectedOneId] = useState(null);
   const [selectedModules, setSelectedModules] = useState(["lsch-m1"]);
   const [certSelected, setCertSelected] = useState(false);
 
-  // Selecciones activas
-  const groupPlan = useMemo(
-    () => LSCH_GROUP_PLANS.find((p) => p.id === selectedGroupId),
-    [selectedGroupId]
-  );
-  const onePlan = useMemo(
-    () => LSCH_ONE2ONE_PLANS.find((p) => p.id === selectedOneId),
-    [selectedOneId]
-  );
+  // Derivados
+  const groupPlan = useMemo(() => LSCH_GROUP_PLANS.find(p => p.id === selectedGroupId), [selectedGroupId]);
+  const onePlan   = useMemo(() => LSCH_ONE2ONE_PLANS.find(p => p.id === selectedOneId), [selectedOneId]);
 
-  // Precios
   const monthlyGroup = priceForGroupPlan(groupPlan, { church });
-  const monthlyOne = onePlan?.monthly || 0;
+  const monthlyOne   = onePlan?.monthly || 0;
   const totalMonthly = monthlyGroup + monthlyOne;
 
-  // Referencias anuales (solo en resumen)
   const monthsMarOct = 8;
   const monthsMarNov = 9;
-  const annualMarOct = totalMonthly * monthsMarOct;
-  const annualMarNov = totalMonthly * monthsMarNov;
+  const annual8 = totalMonthly * monthsMarOct;
+  const annual9 = totalMonthly * monthsMarNov;
 
-  // Etiquetas de módulos
   const selectedModulesLabels = useMemo(
-    () => LSCH_MODULES.filter((m) => selectedModules.includes(m.id)).map((m) => m.name),
+    () => LSCH_MODULES.filter(m => selectedModules.includes(m.id)).map(m => m.name),
     [selectedModules]
   );
 
-  // Acciones
-  const toggleModule = (id) =>
-    setSelectedModules((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  const toggleModule = (id) => {
+    setSelectedModules(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
 
-  // WhatsApp
+  // WhatsApp resumen
   const whatsappText = [
     "Hola 👋, quiero info de LSCh.",
     `Convenio iglesias: ${church ? "Sí" : "No"}`,
@@ -86,86 +75,78 @@ export default function LSCh() {
     `Plan 1:1: ${onePlan ? `${onePlan.title} (${clp(monthlyOne)}/mes)` : "—"}`,
     `Módulos: ${selectedModulesLabels.join(", ") || "—"}`,
     `Propósito: ${purpose || "—"}`,
-    `Certificación oficial: ${certSelected ? `Sí (+${clp(CERTIFICATE_FEE)} único)` : "No"}`,
+    `Certificación oficial: ${certSelected ? `Sí (+${clp(CERTIFICATE_FEE)})` : "No"}`,
     `Matrícula: ${clp(LSCH_ENROLLMENT_FEE)}`,
     `Mensualidad estimada: ${clp(totalMonthly)}`,
-    `Total año Mar–Oct (8m): ${clp(annualMarOct)}`,
-    `Total año Mar–Nov (9m): ${clp(annualMarNov)}`,
   ].join("\n");
 
   return (
     <section className="lsch">
       <style>{css}</style>
 
-      {/* ---------- HERO ---------- */}
+      {/* HERO */}
       <header className="hero">
         <div className="container hero__grid">
           <div className="hero__left">
-            <span className="pill">LSCh 100% online</span>
-            <h1>
-              Lengua de Señas Chilena <span className="under">para comunicar de verdad</span>
+            <span className="pill">LSCh online</span>
+            <h1 className="mega">
+              Lengua de Señas Chilena <span className="under">sin enredos</span>
             </h1>
+
             <p className="lead">
-              Aprendizaje práctico, humano y con propósito. Clases en vivo, cápsulas y seguimiento cercano.
-              Matrícula única de <b>{clp(LSCH_ENROLLMENT_FEE)}</b>. Elige tus módulos, tu plan y —si quieres— suma 1:1.
-              En Lael ponemos a Dios al centro y servimos desde el respeto a la comunidad sorda.
+              Clases en vivo + cápsulas. Acompañamiento real y ruta por módulos.
+              Matrícula única <b>{clp(LSCH_ENROLLMENT_FEE)}</b>.
             </p>
-            <ul className="points">
-              <li><b>Resultados reales:</b> 15 personas certificadas en 2025 (~50 horas).</li>
-              <li><b>Todo queda grabado</b> el mismo día, sin perder continuidad.</li>
-              <li><b>Ruta por módulos</b> con acompañamiento docente constante.</li>
+
+            <ul className="badges">
+              <li className="tag green">Práctica guiada</li>
+              <li className="tag indigo">Todo queda grabado</li>
+              <li className="tag amber">Docente sorda</li>
             </ul>
+
             <div className="cta">
               <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-              <a
-                className="btn btn-ghost"
-                href={`https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, quisiera info de LSCh.")}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                WhatsApp
-              </a>
+              <a className="btn btn-ghost" href={`https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, quisiera info de LSCh.")}`} target="_blank" rel="noreferrer">WhatsApp</a>
             </div>
+
+            {/* 3 Pasos minimal */}
+            <ol className="steps-mini">
+              <li><b>1.</b> Elige módulos</li>
+              <li><b>2.</b> Elige plan (grupal o 1:1)</li>
+              <li><b>3.</b> Escribe por WhatsApp</li>
+            </ol>
           </div>
 
           <figure className="hero__img">
-            <img src={senasImg} alt="Seña en mano — aprendizaje de Lengua de Señas Chilena" />
-            <figcaption>Práctica guiada + situaciones reales de comunicación.</figcaption>
+            <img src={senasImg} alt="" loading="eager" decoding="async" />
+            <figcaption>Situaciones reales + feedback en vivo.</figcaption>
           </figure>
         </div>
       </header>
 
-      {/* ---------- CONVENIO + PROPÓSITO + CERTIFICACIÓN ---------- */}
+      {/* Chips de contexto brevísimo */}
       <div className="container">
-        <div className="card rowy wrap" role="region" aria-label="Preferencias y certificación">
-          {/* Convenio iglesias */}
-          <label className="switch" aria-label="Activar precio por convenio iglesias">
-            <input
-              type="checkbox"
-              checked={church}
-              onChange={(e) => setChurch(e.target.checked)}
-            />
+        <div className="card rowy wrap mini-card">
+          <label className="switch">
+            <input type="checkbox" checked={church} onChange={e => setChurch(e.target.checked)} />
             <span className="track"><i /></span>
             <div className="lbl">
-              <b className="ink">{CHURCH_CONVENIO.label}</b> ·{" "}
-              <b className="ink">{clp(CHURCH_CONVENIO.monthlyFlat)}/mes</b>
+              <b className="ink">{CHURCH_CONVENIO.label}</b> · <b className="ink">{clp(CHURCH_CONVENIO.monthlyFlat)}/mes</b>
               <div className="hint ink-2">{CHURCH_CONVENIO.note}</div>
             </div>
           </label>
 
           <div className="spacer" />
 
-          {/* Propósito + certificación */}
           <div className="purpose">
-            <div className="label">¿Para qué lo necesitas?</div>
+            <div className="label">¿Para qué lo quieres?</div>
             <div className="chips">
               {LSCH_PURPOSES.map((p, i) => (
                 <button
-                  type="button"
                   key={i}
+                  type="button"
                   className={"chip strong " + (purpose === p ? "on" : "")}
-                  onClick={() => setPurpose((prev) => (prev === p ? "" : p))}
-                  aria-pressed={purpose === p}
+                  onClick={() => setPurpose(prev => prev === p ? "" : p)}
                 >
                   {p}
                 </button>
@@ -173,383 +154,268 @@ export default function LSCh() {
               <button
                 type="button"
                 className={"chip cert " + (certSelected ? "on" : "")}
-                onClick={() => setCertSelected((v) => !v)}
-                aria-pressed={certSelected}
-                title="Certificación oficial (pago único)"
+                onClick={() => setCertSelected(v => !v)}
               >
-                Certificación oficial {certSelected ? "✓" : ""} · +{clp(CERTIFICATE_FEE)}
+                Certificación +{clp(CERTIFICATE_FEE)}
               </button>
-            </div>
-            <div className="mini-hint">
-              Certificación avalada por Instituto Lael y <b>docente sorda</b>. Enfoque de inclusión y servicio.
             </div>
           </div>
         </div>
       </div>
 
-      {/* ---------- MÓDULOS ---------- */}
+      {/* Módulos: menos texto; detalles dentro de <details> */}
       <section className="container block">
-        <h2>
-          Módulos del año <span className="soft">— diploma Lael por módulo</span>
-        </h2>
+        <h2>Módulos del año <span className="soft">— diploma por módulo</span></h2>
+
         <div className="grid grid-2 tight">
-          {LSCH_MODULES.map((m) => {
+          {LSCH_MODULES.map(m => {
             const active = selectedModules.includes(m.id);
             return (
-              <article
-                className={"card module " + (active ? "on" : "")}
-                key={m.id}
-                style={{ "--accent": m.accent }}
-              >
-                <header>
+              <article key={m.id} className={"card module " + (active ? "on" : "")} style={{ "--accent": m.accent }}>
+                <header className="module__head">
                   <span className="tag glow">{m.tag}</span>
                   <h3 className="ink">{m.name}</h3>
                   <div className="spacer" />
-                  <button
-                    className={"pill " + (active ? "on" : "")}
-                    onClick={() => toggleModule(m.id)}
-                    aria-pressed={active}
-                  >
+                  <button className={"pill " + (active ? "on" : "")} onClick={() => toggleModule(m.id)}>
                     {active ? "Quitar" : "Agregar"}
                   </button>
                 </header>
-                <ul className="bullets">
-                  {m.bullets.map((b, i) => <li key={i} className="ink-2">{b}</li>)}
+
+                <ul className="bullets compact">
+                  {m.bullets.slice(0, 3).map((b, i) => <li key={i} className="ink-2">{b}</li>)}
                 </ul>
-                <div className="chips">
-                  {m.servesFor.map((s, i) => <span key={i} className="chip ghost">{s}</span>)}
-                </div>
+
+                <details className="mini-faq">
+                  <summary>Ver contenidos</summary>
+                  <ul className="bullets">{m.bullets.map((b, i) => <li key={i} className="ink-2">{b}</li>)}</ul>
+                  <div className="chips">{m.servesFor.map((s, i) => <span key={i} className="chip ghost">{s}</span>)}</div>
+                </details>
               </article>
             );
           })}
         </div>
       </section>
 
-      {/* ---------- PLANES GRUPALES ---------- */}
+      {/* Planes grupales */}
       <section className="container block">
-        <h2>Planes grupales <span className="soft">— online en vivo</span></h2>
+        <h2>Planes grupales <span className="soft">— en vivo</span></h2>
+
         <HScroll ariaLabel="Planes grupales">
-          {LSCH_GROUP_PLANS.map((p) => {
+          {LSCH_GROUP_PLANS.map(p => {
             const active = selectedGroupId === p.id;
             const monthly = priceForGroupPlan(p, { church });
             return (
-              <article className={"card plan slide " + (active ? "on" : "")} key={p.id}>
+              <article key={p.id} className={"card plan slide " + (active ? "on" : "")}>
                 {p.badge && <div className="badge">{p.badge}</div>}
                 <h3 className="ink">{p.title}</h3>
-                <div className="save">{p.save ? p.save : " "}</div>
-                <div className="price">
-                  <span className="big ink">{clp(monthly)}</span>
-                  <span className="per">/mes</span>
-                </div>
-                <div className={"note " + (church ? "ok" : "")}>
-                  {church ? "Precio convenio aplicado" : "Mejor precio por duración"}
-                </div>
-                <div className="cta-row">
-                  <button
-                    className={"btn-outline " + (active ? "active" : "")}
-                    onClick={() => setSelectedGroupId(p.id)}
-                    aria-pressed={active}
-                  >
-                    {active ? "Seleccionado" : "Elegir plan"}
-                  </button>
-                </div>
+                <div className="save">{p.save || " "}</div>
+
+                <div className="price"><span className="big ink">{clp(monthly)}</span><span className="per">/mes</span></div>
+                <div className={"note " + (church ? "ok" : "")}>{church ? "Precio convenio aplicado" : "Mejor precio por duración"}</div>
+
+                <button className={"btn-outline " + (active ? "active" : "")} onClick={() => setSelectedGroupId(p.id)}>
+                  {active ? "Seleccionado" : "Elegir plan"}
+                </button>
               </article>
             );
           })}
         </HScroll>
       </section>
 
-      {/* ---------- CLASES 1:1 ---------- */}
+      {/* 1:1 opcional */}
       <section className="container block">
-        <h2>Clases particulares 1:1 <span className="soft">— refuerzo opcional</span></h2>
-        <HScroll ariaLabel="Clases particulares uno a uno">
-          {LSCH_ONE2ONE_PLANS.map((p) => {
+        <h2>Clases 1:1 <span className="soft">— refuerzo opcional</span></h2>
+
+        <HScroll ariaLabel="Clases uno a uno">
+          {LSCH_ONE2ONE_PLANS.map(p => {
             const active = selectedOneId === p.id;
             return (
-              <article className={"card plan one slide " + (active ? "on" : "")} key={p.id}>
+              <article key={p.id} className={"card plan one slide " + (active ? "on" : "")}>
                 {p.badge && <div className="badge info">{p.badge}</div>}
                 <h3 className="ink">{p.title}</h3>
-                <div className="save">{p.save ? p.save : " "}</div>
-                <div className="price">
-                  <span className="big ink">{clp(p.monthly)}</span>
-                  <span className="per">/mes</span>
-                </div>
+                <div className="price"><span className="big ink">{clp(p.monthly)}</span><span className="per">/mes</span></div>
                 <div className="note">Agenda prioritaria con la docente</div>
-                <div className="cta-row">
-                  <button
-                    className={"btn-outline " + (active ? "active" : "")}
-                    onClick={() => setSelectedOneId(active ? null : p.id)}
-                    aria-pressed={active}
-                  >
-                    {active ? "Quitar 1:1" : "Agregar 1:1"}
-                  </button>
-                </div>
+
+                <button className={"btn-outline " + (active ? "active" : "")} onClick={() => setSelectedOneId(active ? null : p.id)}>
+                  {active ? "Quitar 1:1" : "Agregar 1:1"}
+                </button>
               </article>
             );
           })}
         </HScroll>
       </section>
 
-      {/* ---------- RESUMEN + CTA ---------- */}
+      {/* Resumen pegado simple */}
       <section className="container">
-        <div className="card summary" aria-live="polite">
+        <div className="card summary">
           <div className="summary-left">
-            <img className="brand-logo" src={laelLogoWhite} alt="Instituto Lael" />
+            <img className="brand-logo" src={laelLogoWhite} alt="Lael" />
             <div className="info">
               <div className="title ink">Tu selección</div>
-              <div className="line">
-                <span className="k">Grupal:</span> {groupPlan?.title || "—"} · <b>{clp(monthlyGroup)}/mes</b>
-                {onePlan && (
-                  <>
-                    {"  "} <span className="sep">|</span>{" "}
-                    <span className="k">1:1:</span> {onePlan.title} · <b>{clp(monthlyOne)}/mes</b>
-                  </>
-                )}
-              </div>
-              <div className="line">
-                <span className="k">Módulos:</span> {selectedModulesLabels.join(", ") || "—"}
-              </div>
-              <div className="line soft">Matrícula única: {clp(LSCH_ENROLLMENT_FEE)}</div>
-              {certSelected && (
-                <div className="line soft">
-                  Certificación oficial (único): <b>{clp(CERTIFICATE_FEE)}</b>
-                </div>
-              )}
+              <div className="line"><span className="k">Grupal:</span> {groupPlan?.title || "—"} · <b>{clp(monthlyGroup)}/mes</b></div>
+              {onePlan && <div className="line"><span className="k">1:1:</span> {onePlan.title} · <b>{clp(onePlan.monthly)}/mes</b></div>}
+              <div className="line"><span className="k">Módulos:</span> {selectedModulesLabels.join(", ") || "—"}</div>
+              <div className="line soft">Matrícula: {clp(LSCH_ENROLLMENT_FEE)} {certSelected ? `· Certificación ${clp(CERTIFICATE_FEE)}` : ""}</div>
             </div>
           </div>
 
           <div className="summary-right">
-            <div className="hint">Mensualidad estimada</div>
+            <div className="hint">Mensual estimada</div>
             <div className="total">{clp(totalMonthly)}</div>
-
-            <div className="annual small" role="group" aria-label="Totales de referencia anual">
-              <div className="row"><span>Mar–Oct (8m):</span><b>{clp(annualMarOct)}</b></div>
-              <div className="row"><span>Mar–Nov (9m):</span><b>{clp(annualMarNov)}</b></div>
-            </div>
 
             <div className="first">
               <span>Primer pago aprox.</span>
-              <b>
-                {clp(
-                  totalMonthly +
-                  LSCH_ENROLLMENT_FEE +
-                  (certSelected ? CERTIFICATE_FEE : 0)
-                )}
-              </b>
-              <div className="tiny muted">
-                Incluye mensualidad + matrícula{certSelected ? " + certificación" : ""}.
-              </div>
+              <b>{clp(totalMonthly + LSCH_ENROLLMENT_FEE + (certSelected ? CERTIFICATE_FEE : 0))}</b>
             </div>
 
             <div className="cta">
               <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-              <a
-                className="btn btn-ghost"
-                href={`https://wa.me/56964626568?text=${encodeURIComponent(whatsappText)}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                WhatsApp
-              </a>
+              <a className="btn btn-ghost" href={`https://wa.me/56964626568?text=${encodeURIComponent(whatsappText)}`} target="_blank" rel="noreferrer">WhatsApp</a>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ cortita (opcional, pero útil) */}
+      <section className="container block">
+        <h2>Preguntas rápidas</h2>
+        <div className="faq-grid">
+          <details className="faq"><summary>¿Queda grabado?</summary><p>Sí, subimos la clase el mismo día.</p></details>
+          <details className="faq"><summary>¿Necesito experiencia?</summary><p>No. Partes desde A0–A1 si lo necesitas.</p></details>
+          <details className="faq"><summary>¿Hay certificado?</summary><p>Opcional con docente sorda: +{clp(CERTIFICATE_FEE)}.</p></details>
+          <details className="faq"><summary>¿Cómo pago?</summary><p>Mensual, trimestral, semestral o anual.</p></details>
+          <details className="faq"><summary>¿Convienen iglesias?</summary><p>Sí, precio preferente con convenio vigente.</p></details>
         </div>
       </section>
     </section>
   );
 }
 
-/* ===================== CSS (paleta LAEL, ordenado) ===================== */
+/* ===================== CSS (minimal + aire) ===================== */
 const css = `
 :root{
-  --lael-blue:#3b549d;
-  --lael-green:#249554;
-  --lael-yellow:#f2ce3d;
-  --lael-rose:#d6a0c5;
-  --lael-warn:#cd5732;
-  --ink:#ffffff; --ink2:#eaeef9;
-  --bg:#0b1220; --panel:#0f172a; --bd:#233052;
+  --ink:#fff; --ink2:#e8eefc;
+  --bg:#0b1220; --panel:#0f172a; --bd:#223052;
+  --accent:#3b549d; --accentSoft:rgba(59,84,157,.16);
   --rad:16px;
 }
 *{box-sizing:border-box}
-.container{ max-width:1120px; margin:0 auto; padding:0 18px; color:var(--ink); }
+.container{max-width:1120px;margin:0 auto;padding:0 18px;color:var(--ink)}
 
-/* HERO */
 .hero{
-  color:var(--ink); border-bottom:1px solid var(--bd); padding:26px 0 12px;
+  padding:28px 0 14px; color:var(--ink); border-bottom:1px solid var(--bd);
   background:
-    radial-gradient(700px 260px at 12% -10%, rgba(59,84,157,.25), transparent 60%),
-    radial-gradient(660px 240px at 88% -12%, rgba(36,149,84,.18), transparent 60%),
+    radial-gradient(720px 260px at 10% -10%, var(--accentSoft), transparent 60%),
     linear-gradient(180deg, var(--bg), var(--panel));
 }
-.hero__grid{ display:grid; grid-template-columns: 1.1fr .9fr; gap:22px; align-items:center; }
-@media (max-width:980px){ .hero__grid{ grid-template-columns:1fr; } }
-.pill{ display:inline-block; padding:.22rem .6rem; border-radius:999px; border:1px solid #334155; font-weight:900; }
-h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-height:1.15; }
-.under{ box-shadow: inset 0 -10px rgba(59,84,157,.32); border-radius:4px; }
-.lead{ color:var(--ink2); max-width:64ch; }
-.points{ margin:.5rem 0 0; padding-left:18px; color:var(--ink2); }
-.points li{ margin:.08rem 0; }
+.hero__grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:center}
+@media (max-width:980px){.hero__grid{grid-template-columns:1fr}}
+.pill{display:inline-block;padding:.22rem .6rem;border-radius:999px;border:1px solid #334155;font-weight:900}
+.mega{margin:.35rem 0 .3rem;font-size:clamp(1.8rem,3.1vw + .7rem,2.6rem);line-height:1.12}
+.under{box-shadow:inset 0 -10px rgba(59,84,157,.28);border-radius:4px}
+.lead{color:var(--ink2);max-width:58ch}
+.badges{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
 
-.cta{ display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 0; }
-.btn{ display:inline-flex; align-items:center; gap:8px; padding:.64rem .98rem; border-radius:12px; border:1px solid #2f3341; text-decoration:none; font-weight:900; transition:.18s; }
-.btn-primary{ background:var(--lael-blue); color:#fff; border-color:var(--lael-blue); }
-.btn-ghost{ background:transparent; color:#eaf2ff; border-color:#334155; }
-.btn:hover{ transform: translateY(-1px); box-shadow:0 14px 28px rgba(2,6,23,.28); }
+.tag{display:inline-flex;align-items:center;gap:6px;padding:.26rem .6rem;border-radius:999px;font-weight:900;border:1px solid transparent}
+.tag.indigo{background:#3536a833;border-color:#4f46e5}
+.tag.amber{background:#b4530933;border-color:#f59e0b}
+.tag.green{background:#16653433;border-color:#22c55e}
 
-.hero__img{
-  border-radius:18px; overflow:hidden; border:1px solid var(--bd); background:#0f172a;
-  box-shadow: 0 0 0 10px rgba(255,255,255,.05) inset, 0 22px 46px rgba(2,6,23,.36);
-}
-.hero__img img{ display:block; width:100%; height:auto; object-fit:cover; }
-.hero__img figcaption{ padding:8px 10px; font-size:.9rem; color:#eaf2ff; background:#0e162a; border-top:1px solid #1f2a44; }
+.hero__img{border-radius:18px;overflow:hidden;border:1px solid var(--bd);background:#0f172a;box-shadow:0 22px 46px rgba(2,6,23,.36)}
+.hero__img img{display:block;width:100%;height:auto}
+.hero__img figcaption{padding:8px 10px;font-size:.9rem;color:#eaf2ff;background:#0e162a;border-top:1px solid #1f2a44}
 
-/* CARDS GENERALES */
+.steps-mini{display:flex;gap:12px;margin:12px 0 0;padding:0;list-style:none;color:#cfe3ff}
+.steps-mini b{color:#fff}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:.64rem 1rem;border-radius:12px;border:1px solid #2f3341;text-decoration:none;font-weight:900}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-ghost{background:transparent;color:#eaf2ff}
+
 .card{
-  border:1px solid var(--bd); border-radius:var(--rad); padding:12px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.018)),
-    linear-gradient(180deg, #0f172a, #0b1220);
-  color:var(--ink); box-shadow:0 14px 28px rgba(2,6,23,.32);
+  border:1px solid var(--bd);border-radius:var(--rad);padding:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015)),linear-gradient(180deg,#0f172a,#0b1220);
+  box-shadow:0 16px 32px rgba(2,6,23,.28)
 }
-.block{ margin:18px 0; }
-.rowy{ display:flex; gap:14px; align-items:center; }
-.rowy.wrap{ flex-wrap:wrap; }
-.spacer{ flex:1; }
+.block{margin:16px 0}
+.rowy{display:flex;gap:14px;align-items:center}
+.rowy.wrap{flex-wrap:wrap}
+.spacer{flex:1}
+.mini-card{margin-top:10px}
 
-/* SWITCH CONVENIO */
-.switch{ display:flex; align-items:center; gap:10px; }
-.switch input{ display:none; }
-.switch .track{
-  width:46px; height:26px; border-radius:999px; background:#15203B; border:1px solid #2B3B66; position:relative;
-}
-.switch .track i{
-  position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%;
-  background:#fff; transition: transform .18s ease; box-shadow:0 3px 8px rgba(0,0,0,.45);
-}
-.switch input:checked + .track{ background: linear-gradient(90deg, var(--lael-green), #1f8a4c); border-color:#1f8a4c; }
-.switch input:checked + .track i{ transform: translateX(20px); }
-.switch .lbl .hint{ font-size:.9rem; color:var(--ink2); }
+/* switch */
+.switch{display:flex;align-items:center;gap:10px}
+.switch input{display:none}
+.switch .track{width:46px;height:26px;border-radius:999px;background:#15203B;border:1px solid #2B3B66;position:relative}
+.switch .track i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .18s}
+.switch input:checked + .track{background:linear-gradient(90deg,#249554,#1f8a4c);border-color:#1f8a4c}
+.switch input:checked + .track i{transform:translateX(20px)}
+.switch .lbl .hint{font-size:.9rem;color:var(--ink2)}
 
-/* CHIPS */
-.chips{ display:flex; flex-wrap:wrap; gap:8px; }
-.chip{
-  border:1px solid rgba(59,84,157,.45);
-  background: radial-gradient(120px 60px at 30% 30%, rgba(59,84,157,.16), transparent 60%), #0D1530;
-  color:var(--ink); border-radius:999px; padding:.42rem .78rem; font-size:.9rem; font-weight:900;
-}
-.chip.strong.on{
-  border-color:var(--lael-green);
-  background: radial-gradient(120px 60px at 30% 30%, rgba(36,149,84,.22), transparent 60%), #0D1E15;
-  box-shadow: inset 0 0 0 1px rgba(134,239,172,.28);
-}
-.chip.ghost{ background:#0D1330; border-color: rgba(214,160,197,.45); }
-.chip.cert{ border-color: rgba(242,206,61,.6); background: radial-gradient(120px 60px at 30% 30%, rgba(242,206,61,.18), transparent 60%), #171405; }
-.chip.cert.on{ border-color:var(--lael-yellow); box-shadow: inset 0 0 0 1px rgba(242,206,61,.35); }
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid rgba(59,84,157,.45);background:#0D1530;color:#fff;border-radius:999px;padding:.42rem .78rem;font-size:.9rem;font-weight:900}
+.chip.strong.on{border-color:#1f8a4c;background:#0D1E15;box-shadow:inset 0 0 0 1px rgba(134,239,172,.28)}
+.chip.ghost{background:#0D1330;border-color:rgba(214,160,197,.45)}
+.chip.cert{border-color:#f2ce3d;background:#171405}
 
-.soft{ color:#cfe3ff; }
+/* módulos */
+.grid{display:grid;gap:12px}
+.grid.tight{gap:10px}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:640px){.grid-2{grid-template-columns:1fr}}
+.module{border:1px solid #324071;background:linear-gradient(180deg,#0F1A33,#0B1220)}
+.module.on{outline:2px solid rgba(59,84,157,.3)}
+.module__head{display:flex;align-items:center;gap:10px}
+.module .tag.glow{font-weight:900;font-size:.8rem;padding:.14rem .48rem;border-radius:999px;background:#2b3568;border:1px solid #6a78c7}
+.pill{border:1px solid var(--accent);color:#fff;background:linear-gradient(180deg,#3b549d,#344a8d);border-radius:999px;padding:.32rem .75rem;font-weight:900}
+.pill.on{border-color:#249554;background:linear-gradient(180deg,#249554,#1e7f47)}
+.bullets{margin:.35rem 0 .1rem;padding-left:18px}
+.bullets.compact li{margin:.06rem 0}
+.mini-faq summary{cursor:pointer;font-weight:800}
+.mini-faq ul{margin:.3rem 0 0;padding-left:18px;color:#eaf2ff}
 
-/* GRID */
-.grid{ display:grid; gap:12px; }
-.grid.tight{ gap:10px; }
-.grid-2{ grid-template-columns: repeat(2, minmax(0,1fr)); }
-@media (max-width:640px){ .grid-2{ grid-template-columns: 1fr; } }
+/* carrusel */
+.hscroll-wrap{position:relative}
+.hscroll{display:flex;gap:10px;overflow:auto;scroll-snap-type:x mandatory;padding:2px 2px 12px}
+.slide{scroll-snap-align:start;min-width:232px}
+.hs-btn{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:999px;border:1px solid #334155;background:#0f172a;color:#eaf2ff;display:grid;place-items:center;z-index:2}
+.hs-btn.prev{left:-6px}.hs-btn.next{right:-6px}
+.hs-mask{pointer-events:none;position:absolute;inset:0;box-shadow:inset 50px 0 36px -36px #0b1220,inset -50px 0 36px -36px #0b1220}
 
-/* MÓDULOS */
-.module{
-  background:
-    radial-gradient(400px 160px at -10% -20%, rgba(59,84,157,.18), transparent 60%),
-    linear-gradient(180deg, #0F1A33, #0B1220);
-  border:1px solid #324071;
-}
-.module.on{ outline:2px solid rgba(59,84,157,.32); }
-.module header{ display:flex; align-items:center; gap:10px; }
-.module .tag{
-  font-weight:900; font-size:.82rem; padding:.18rem .52rem; border-radius:999px;
-  background:#2b3568; border:1px solid #6a78c7; color:#fff;
-}
-.module h3{ margin:.12rem 0 .25rem; font-size:1rem; }
-.module .pill{
-  border:1px solid var(--lael-blue); color:#fff; background: linear-gradient(180deg,#3b549d,#334a8d);
-  border-radius:999px; padding:.32rem .75rem; font-weight:900; font-size:.92rem;
-}
-.module .pill.on{
-  border-color:var(--lael-green); background: linear-gradient(180deg,#249554,#1e7f47);
-}
-.bullets{ margin:.3rem 0 .1rem; padding-left:18px; }
-.bullets li{ margin:.08rem 0; }
+/* planes */
+.plan{position:relative;display:flex;flex-direction:column;min-width:232px}
+.plan .badge{position:absolute;top:10px;right:10px;background:#f2ce3d;color:#0b1220;font-weight:900;border-radius:999px;padding:.16rem .5rem;font-size:.75rem}
+.plan .badge.info{background:#d6a0c5;color:#0b1220}
+.price{margin:.1rem 0 .18rem;display:flex;align-items:baseline;gap:6px}
+.big{font-weight:1000;font-size:1.28rem;letter-spacing:.2px}
+.per{color:#cfe3ff;font-weight:800;font-size:.9rem}
+.note{color:#cfe3ff;font-size:.92rem;min-height:1.1rem}
+.note.ok{color:#b7f5cd}
+.btn-outline{width:100%;border:1.5px solid rgba(59,84,157,.55);color:#fff;background:transparent;padding:.55rem .85rem;border-radius:10px;font-weight:1000}
+.btn-outline.active{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,84,157,.28)}
 
-/* CARRUSEL */
-.hscroll-wrap{ position:relative; }
-.hscroll{ display:flex; gap:10px; overflow:auto; scroll-snap-type:x mandatory; padding:2px 2px 12px; }
-.slide{ scroll-snap-align:start; min-width: 232px; }
-.hs-btn{
-  position:absolute; top:50%; transform:translateY(-50%);
-  width:34px; height:34px; border-radius:999px; border:1px solid #334155; background:#0f172a; color:#eaf2ff;
-  display:grid; place-items:center; cursor:pointer; z-index:2;
-}
-.hs-btn.prev{ left:-6px; } .hs-btn.next{ right:-6px; }
-.hs-mask{ pointer-events:none; position:absolute; inset:0; box-shadow: inset 50px 0 36px -36px #0b1220, inset -50px 0 36px -36px #0b1220; }
+/* summary */
+.summary{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin:10px 0 18px}
+.summary-left{display:flex;align-items:center;gap:12px}
+.brand-logo{width:66px;height:66px;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(214,160,197,.28))}
+.title{font-weight:1000}
+.line .k{color:#d6a0c5;font-weight:900}
+.summary-right{text-align:right}
+.hint{color:#cfe3ff;font-weight:800}
+.total{font-size:1.5rem;font-weight:1000;margin:.1rem 0 .2rem}
+.first span{font-weight:800;color:#eaf2ff}
 
-/* PLANES */
-.plan{
-  position:relative; display:flex; flex-direction:column; min-width: 232px;
-  border:1px solid var(--bd); border-radius:14px; padding:12px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015)),
-    linear-gradient(180deg, #0f172a, #0b1220);
-  box-shadow:0 12px 24px rgba(2,6,23,.3);
-}
-.plan .badge{
-  position:absolute; top:10px; right:10px; z-index:2;
-  background:var(--lael-yellow); color:#0B1220; font-weight:900; border-radius:999px; padding:.16rem .5rem; font-size:.75rem;
-}
-.plan .badge.info{ background:var(--lael-rose); color:#0B1220; }
-.plan .save{ min-height:1rem; color:#ffffff; opacity:.85; font-size:.9rem; }
-.plan .price{ margin:.1rem 0 .18rem; display:flex; align-items:baseline; gap:6px; }
-.plan .big{ font-weight:1000; font-size:1.28rem; letter-spacing:.2px; }
-.plan .per{ color:#cfe3ff; font-weight:800; font-size:.9rem; }
-.plan .note{ color:#cfe3ff; font-size:.92rem; min-height: 1.1rem; }
-.plan .note.ok{ color:#b7f5cd; }
-.plan .cta-row{ margin-top:auto; display:flex; }
-.plan.one .badge.info{ background:var(--lael-warn); color:#0B1220; }
-.plan.on{ outline:2px solid rgba(59,84,157,.38); }
+.faq-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:860px){.faq-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.faq-grid{grid-template-columns:1fr}}
+.faq{border:1px solid var(--bd);border-radius:12px;padding:10px;background:linear-gradient(180deg,#0f172a,#0b1220)}
+.faq summary{font-weight:900}
+.faq p{margin:.4rem 0 0;color:#eaf2ff}
 
-/* BOTÓN OUTLINE */
-.btn-outline{
-  display:inline-flex; align-items:center; justify-content:center; width:100%;
-  border:1.5px solid rgba(59,84,157,.55); color:#fff; background:transparent;
-  padding:.55rem .85rem; border-radius:10px; font-weight:1000; font-size:.95rem;
-}
-.btn-outline:hover{ border-color: rgba(59,84,157,.85); }
-.btn-outline.active{ border-color:var(--lael-blue); box-shadow:0 0 0 3px rgba(59,84,157,.28); }
-
-/* RESUMEN */
-.summary{
-  display:grid; grid-template-columns: 1fr auto; gap:12px; align-items:center; margin:6px 0 16px;
-}
-.summary-left{ display:flex; align-items:center; gap:12px; }
-.brand-logo{ width:72px; height:72px; object-fit:contain; display:block; filter: drop-shadow(0 6px 14px rgba(214,160,197,.32)); }
-.summary-left .title{ font-weight:1000; letter-spacing:.2px; }
-.summary-left .line{ color:var(--ink); font-size:.96rem; }
-.summary-left .line .k{ color:var(--lael-rose); font-weight:900; }
-
-.summary-right{ text-align:right; }
-.summary-right .hint{ color:#cfe3ff; font-weight:800; }
-.summary-right .total{ font-size:1.6rem; font-weight:1000; margin:.1rem 0 .2rem; color:var(--lael-yellow); }
-
-.annual.small{ margin:.1rem 0 .35rem; padding:.45rem .6rem; border:1px solid #3b4260; border-radius:10px; background:linear-gradient(180deg,#0f172a,#0b1220); }
-.annual.small .row{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; color:#ffffff; }
-.annual.small .row b{ font-weight:1000; color:#ffde59; }
-
-.first{ display:grid; gap:2px; margin:.1rem 0 .5rem; }
-.first span{ font-weight:800; color:#eaf2ff; }
-.first b{ font-size:1.08rem; }
-
-/* RESPONSIVO */
-@media (max-width: 760px){
-  .slide, .plan{ min-width: 72vw; }
-  .summary{ grid-template-columns: 1fr; }
-  .summary-right{ text-align:left; }
+/* responsive tweaks */
+@media (max-width:760px){
+  .slide,.plan{min-width:74vw}
+  .summary{grid-template-columns:1fr}
+  .summary-right{text-align:left}
 }
 `;

@@ -3,9 +3,44 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PartnersMarquee from "../components/PartnersMarquee.jsx";
 
-// Imágenes identidad (puedes cambiarlas por fotos reales de clases/equipo)
+// Imágenes identidad
 import id1 from "../assets/img/lael/1.png";
 import id3 from "../assets/img/lael/3.png";
+
+/* --- util: extraer ID de YouTube desde cualquier URL --- */
+function extractYouTubeId(url) {
+  try {
+    const u = new URL(url);
+    if (u.hostname === "youtu.be") return u.pathname.slice(1);
+    if (u.searchParams.get("v")) return u.searchParams.get("v");
+    // /embed/ID
+    const m = u.pathname.match(/\/embed\/([a-zA-Z0-9_-]{6,})/);
+    return m ? m[1] : "";
+  } catch {
+    return "";
+  }
+}
+
+/* --- componente de video responsivo --- */
+function YouTubeBox({
+  url = "https://youtu.be/THBr7MOVS0s?si=nODyq69xbCt1TqRr",
+  title = "Clase real: PAES M1 (ejercitación guiada)",
+}) {
+  const id = extractYouTubeId(url);
+  const src = `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
+  return (
+    <div className="video-wrapper" aria-label={title}>
+      <iframe
+        src={src}
+        title={title}
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+        referrerPolicy="strict-origin-when-cross-origin"
+      />
+    </div>
+  );
+}
 
 export default function Home() {
   // Entrada suave de secciones
@@ -67,20 +102,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* DERECHA: preview de clase + accesos rápidos */}
-          <div className="hero__media" aria-hidden="true">
-            <div className="video-wrapper">
-              <iframe
-                width="100%"
-                height="315"
-                src="https://youtu.be/THBr7MOVS0s?si=nODyq69xbCt1TqRr"
-                title="Clase Química Intensivo"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-
+          {/* DERECHA: video + accesos rápidos */}
+          <div className="hero__media">
+            <YouTubeBox url="https://youtu.be/THBr7MOVS0s?si=nODyq69xbCt1TqRr" />
             <ul className="hero__quicklinks" aria-label="Accesos directos">
               <li><Link to="/paes" className="qk">PAES</Link></li>
               <li><Link to="/idiomas" className="qk">Idiomas</Link></li>
@@ -90,14 +114,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* MARQUEE con máscara suave */}
+      {/* MARQUEE */}
       <section className="marquee reveal">
         <div className="container marquee__wrap">
           <PartnersMarquee speed={32} height={28} gap={48} />
         </div>
       </section>
 
-      {/* TRUST BAR (KPIs simplificados) */}
+      {/* TRUST BAR */}
       <section className="trust reveal">
         <div className="container trust__row">
           <TrustPill kpi="87%" label="alcanza su meta" />
@@ -106,7 +130,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PROGRAMAS — 3 cartas */}
+      {/* PROGRAMAS */}
       <section className="programs reveal">
         <div className="container">
           <header className="pg-head">
@@ -147,7 +171,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* HIGHLIGHTS — 4 bullets claros */}
+      {/* HIGHLIGHTS */}
       <section className="highlights reveal">
         <div className="container grid-4">
           <Feature icon="📈" title="Acompañamiento medible">Tutorías y reportes simples.</Feature>
@@ -157,7 +181,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* IDENTIDAD — 2 tarjetas */}
+      {/* IDENTIDAD */}
       <section className="identity reveal">
         <div className="container">
           <header className="id-head">
@@ -165,21 +189,13 @@ export default function Home() {
             <h2>La identidad detrás de nuestro nombre</h2>
           </header>
           <div className="id-grid">
-            <IdCard
-              img={id1}
-              title="Cobertura y propósito"
-              text="Estudiar sin estar solos, guiados y con propósito."
-            />
-            <IdCard
-              img={id3}
-              title="La paloma"
-              text="Símbolo de comienzos genuinos y esperanza."
-            />
+            <IdCard img={id1} title="Cobertura y propósito" text="Estudiar sin estar solos, guiados y con propósito." />
+            <IdCard img={id3} title="La paloma" text="Símbolo de comienzos genuinos y esperanza." />
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIOS — 2 (aire) */}
+      {/* TESTIMONIOS */}
       <section className="testi reveal">
         <div className="container testi__grid">
           <Quote q="Subí 150 puntos en la PAES. Clases claras y apoyo constante." a="Vicente — M1" />
@@ -187,7 +203,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FAQ — 3 cortas */}
+      {/* FAQ */}
       <section className="faq reveal">
         <div className="container">
           <h3 className="faq__title">Preguntas frecuentes</h3>
@@ -298,26 +314,8 @@ function TrustPill({ kpi, label }) {
     </div>
   );
 }
-function ClassPreview({ title, caption, badge }) {
-  return (
-    <article className="cprev">
-      <div className="cprev__media" role="img" aria-label={title}>
-        <button className="cprev__play" aria-label="Reproducir fragmento">▶</button>
-        <span className="cprev__badge">{badge}</span>
-      </div>
-      <div className="cprev__body">
-        <h3 className="cprev__title">{title}</h3>
-        <p className="cprev__cap">{caption}</p>
-        <div className="cprev__pills">
-          <span className="pill ok">Tutor acompañando</span>
-          <span className="pill ok">Pautas y checklists</span>
-        </div>
-      </div>
-    </article>
-  );
-}
 
-/* ---------- CSS (minimal pro) ---------- */
+/* ---------- CSS ---------- */
 const css = `
 :root{
   --bg:#0b1220;
@@ -357,34 +355,26 @@ section { scroll-margin-top: 84px; }
 .chip{display:inline-flex; align-items:center; gap:8px; padding:.48rem .76rem; border-radius:999px; border:1px solid var(--bd); background:#0d1528; color:#fff; text-decoration:none; font-weight:600}
 .chip .dot{width:8px; height:8px; border-radius:50%; background:var(--amber)}
 
-/* derecha del hero */
-.hero__quicklinks{list-style:none; margin:10px 0 0; padding:0; display:flex; gap:10px; flex-wrap:wrap;}
+.hero__media{display:flex; flex-direction:column; gap:10px}
+.hero__quicklinks{list-style:none; margin:0; padding:0; display:flex; gap:10px; flex-wrap:wrap;}
 .qk{display:inline-flex; align-items:center; padding:.44rem .7rem; border-radius:999px; border:1px solid var(--bd); background:#0f172a; color:#fff; text-decoration:none; font-weight:700;}
 .qk:hover{ border-color:#2c3b65 }
 
-.cprev{border:1px solid var(--bd); border-radius:18px; overflow:hidden; background:linear-gradient(180deg,#0f172a,rgba(11,18,32,.6)); box-shadow:0 18px 36px rgba(2,6,23,.26);}
-.cprev__media{
-  position:relative; height:min(46vh,360px);
-  background:
-    radial-gradient(1200px 420px at 10% -10%, rgba(88,80,236,.22), transparent 60%),
-    radial-gradient(1000px 340px at 92% -12%, rgba(34,211,238,.12), transparent 60%),
-    linear-gradient(135deg, #0e1424 0%, #101a2f 50%, #0b1220 100%);
-  border-bottom:1px solid var(--bd);
+/* Video responsivo */
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--bd);
+  box-shadow: 0 18px 36px rgba(2,6,23,.26);
+  background:#0f172a;
 }
-.cprev__play{
-  position:absolute; inset:auto 0 18px 18px;
-  border:0; border-radius:999px; width:56px; height:56px; font-size:20px;
-  display:grid; place-items:center; cursor:pointer;
-  background:linear-gradient(180deg,#6B63F5,#4E46E5); color:#fff;
-  box-shadow:0 14px 28px rgba(2,6,23,.35);
+.video-wrapper iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; border: 0; border-radius: 18px;
 }
-.cprev__play:hover{ filter:brightness(1.08); transform:translateY(-1px); transition:.18s ease }
-.cprev__badge{ position:absolute; top:12px; left:12px; display:inline-block; padding:.28rem .6rem; border-radius:999px; border:1px solid #334155; background:#101a2f; font-weight:900; font-size:.8rem; }
-.cprev__body{ padding:14px 16px 16px; }
-.cprev__title{ margin:.3rem 0 .2rem; font-size:1.04rem }
-.cprev__cap{ margin:0 0 10px; color:#cfe0ff }
-.cprev__pills{ display:flex; gap:8px; flex-wrap:wrap }
-.pill.ok{ display:inline-flex; align-items:center; gap:6px; padding:.28rem .52rem; border-radius:999px; border:1px solid #2f3341; background:#0d1528; font-size:.86rem; color:#eaf2ff; }
 
 /* Marquee */
 .marquee{padding:18px 0}
@@ -472,25 +462,6 @@ section { scroll-margin-top: 84px; }
 .cta-final{padding:24px 0 44px}
 .cta-final__box{border:1px solid var(--bd); border-radius:18px; padding:24px; text-align:center; background:linear-gradient(180deg,var(--bg),var(--card))}
 .tiny{font-size:.9rem; color:#eaf2ff}
-
-.video-wrapper {
-  position: relative;
-  padding-bottom: 56.25%; /* proporción 16:9 */
-  height: 0;
-  overflow: hidden;
-  border-radius: 18px;
-  border: 1px solid var(--bd);
-  box-shadow: 0 18px 36px rgba(2,6,23,.26);
-}
-
-.video-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 18px;
-}
 
 /* Reveal */
 .reveal{opacity:0; transform:translateY(12px); transition:opacity .5s ease, transform .5s ease}

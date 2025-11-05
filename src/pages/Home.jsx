@@ -69,11 +69,18 @@ export default function Home() {
 
           {/* DERECHA: preview de clase + accesos rápidos */}
           <div className="hero__media" aria-hidden="true">
-            <ClassPreview
-              title="Clase real: PAES M1 (ejercitación guiada)"
-              caption="Fragmento 3:15 · Grabado + pauta descargable"
-              badge="En vivo + grabada"
-            />
+            <div className="video-wrapper">
+              <iframe
+                width="100%"
+                height="315"
+                src="https://youtu.be/THBr7MOVS0s?si=nODyq69xbCt1TqRr"
+                title="Clase Química Intensivo"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+
             <ul className="hero__quicklinks" aria-label="Accesos directos">
               <li><Link to="/paes" className="qk">PAES</Link></li>
               <li><Link to="/idiomas" className="qk">Idiomas</Link></li>
@@ -465,6 +472,25 @@ section { scroll-margin-top: 84px; }
 .cta-final{padding:24px 0 44px}
 .cta-final__box{border:1px solid var(--bd); border-radius:18px; padding:24px; text-align:center; background:linear-gradient(180deg,var(--bg),var(--card))}
 .tiny{font-size:.9rem; color:#eaf2ff}
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* proporción 16:9 */
+  height: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--bd);
+  box-shadow: 0 18px 36px rgba(2,6,23,.26);
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+}
 
 /* Reveal */
 .reveal{opacity:0; transform:translateY(12px); transition:opacity .5s ease, transform .5s ease}

@@ -447,6 +447,46 @@ const css = `
 .total{font-size:1.6rem;font-weight:1000;color:var(--yellow)}
 .first span{font-weight:900;color:var(--ink2)}
 
+/* FLECHAS DE CARRUSEL */
+.hs-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: none;
+  background: var(--blue);
+  color: #fff;
+  font-size: 20px;
+  display: grid;
+  place-items: center;
+  z-index: 3;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(52,80,255,0.4);
+  transition: all 0.2s ease;
+}
+.hs-btn:hover {
+  background: var(--yellow);
+  color: #0A0E1A;
+  box-shadow: 0 0 12px rgba(255,204,51,0.6);
+}
+.hs-btn.prev { left: -18px; }
+.hs-btn.next { right: -18px; }
+
+.hscroll-wrap {
+  position: relative;
+}
+.hscroll {
+  display: flex;
+  gap: 12px;
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+  padding: 4px 4px 16px;
+  scrollbar-width: none;
+}
+.hscroll::-webkit-scrollbar { display: none; }
+
 /* FAQ */
 .faq-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media (max-width:860px){.faq-grid{grid-template-columns:1fr 1fr}}

@@ -16,6 +16,7 @@ import laelLogoWhite from "../assets/img/Logos/lael-inst-blanco.png";
 
 const CERTIFICATE_FEE = 19990;
 
+/* ---------- Util: carrusel horizontal ---------- */
 function HScroll({ children, ariaLabel }) {
   const ref = useRef(null);
   const slide = (dir) => {
@@ -36,7 +37,9 @@ function HScroll({ children, ariaLabel }) {
   );
 }
 
+/* ===================== Página ===================== */
 export default function LSCh() {
+  // Estado base (simple y único)
   const [church, setChurch] = useState(false);
   const [purpose, setPurpose] = useState("");
   const [selectedGroupId, setSelectedGroupId] = useState("g-quarter");
@@ -44,6 +47,7 @@ export default function LSCh() {
   const [selectedModules, setSelectedModules] = useState(["lsch-m1"]);
   const [certSelected, setCertSelected] = useState(false);
 
+  // Selecciones activas
   const groupPlan = useMemo(
     () => LSCH_GROUP_PLANS.find((p) => p.id === selectedGroupId),
     [selectedGroupId]
@@ -53,26 +57,28 @@ export default function LSCh() {
     [selectedOneId]
   );
 
+  // Precios
   const monthlyGroup = priceForGroupPlan(groupPlan, { church });
   const monthlyOne = onePlan?.monthly || 0;
   const totalMonthly = monthlyGroup + monthlyOne;
 
+  // Referencias anuales (solo en resumen)
   const monthsMarOct = 8;
   const monthsMarNov = 9;
   const annualMarOct = totalMonthly * monthsMarOct;
   const annualMarNov = totalMonthly * monthsMarNov;
 
+  // Etiquetas de módulos
   const selectedModulesLabels = useMemo(
     () => LSCH_MODULES.filter((m) => selectedModules.includes(m.id)).map((m) => m.name),
     [selectedModules]
   );
 
-  const toggleModule = (id) => {
-    setSelectedModules((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
-  };
+  // Acciones
+  const toggleModule = (id) =>
+    setSelectedModules((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
 
+  // WhatsApp
   const whatsappText = [
     "Hola 👋, quiero info de LSCh.",
     `Convenio iglesias: ${church ? "Sí" : "No"}`,
@@ -80,7 +86,7 @@ export default function LSCh() {
     `Plan 1:1: ${onePlan ? `${onePlan.title} (${clp(monthlyOne)}/mes)` : "—"}`,
     `Módulos: ${selectedModulesLabels.join(", ") || "—"}`,
     `Propósito: ${purpose || "—"}`,
-    `Certificado oficial: ${certSelected ? `Sí (+${clp(CERTIFICATE_FEE)} único)` : "No"}`,
+    `Certificación oficial: ${certSelected ? `Sí (+${clp(CERTIFICATE_FEE)} único)` : "No"}`,
     `Matrícula: ${clp(LSCH_ENROLLMENT_FEE)}`,
     `Mensualidad estimada: ${clp(totalMonthly)}`,
     `Total año Mar–Oct (8m): ${clp(annualMarOct)}`,
@@ -91,7 +97,7 @@ export default function LSCh() {
     <section className="lsch">
       <style>{css}</style>
 
-      {/* HERO */}
+      {/* ---------- HERO ---------- */}
       <header className="hero">
         <div className="container hero__grid">
           <div className="hero__left">
@@ -107,7 +113,7 @@ export default function LSCh() {
             <ul className="points">
               <li><b>Resultados reales:</b> 15 personas certificadas en 2025 (~50 horas).</li>
               <li><b>Todo queda grabado</b> el mismo día, sin perder continuidad.</li>
-              <li><b>Ruta clara por módulos</b> y acompañamiento docente constante.</li>
+              <li><b>Ruta por módulos</b> con acompañamiento docente constante.</li>
             </ul>
             <div className="cta">
               <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
@@ -129,11 +135,11 @@ export default function LSCh() {
         </div>
       </header>
 
-      {/* CONVENIO + PROPÓSITO + CERTIFICADO (chips) */}
+      {/* ---------- CONVENIO + PROPÓSITO + CERTIFICACIÓN ---------- */}
       <div className="container">
-        <div className="card rowy wrap">
+        <div className="card rowy wrap" role="region" aria-label="Preferencias y certificación">
           {/* Convenio iglesias */}
-          <label className="switch">
+          <label className="switch" aria-label="Activar precio por convenio iglesias">
             <input
               type="checkbox"
               checked={church}
@@ -149,7 +155,7 @@ export default function LSCh() {
 
           <div className="spacer" />
 
-          {/* Propósito */}
+          {/* Propósito + certificación */}
           <div className="purpose">
             <div className="label">¿Para qué lo necesitas?</div>
             <div className="chips">
@@ -164,11 +170,10 @@ export default function LSCh() {
                   {p}
                 </button>
               ))}
-              {/* Certificación oficial COMO CHIP */}
               <button
                 type="button"
                 className={"chip cert " + (certSelected ? "on" : "")}
-                onClick={() => setCertSelected(v => !v)}
+                onClick={() => setCertSelected((v) => !v)}
                 aria-pressed={certSelected}
                 title="Certificación oficial (pago único)"
               >
@@ -182,7 +187,7 @@ export default function LSCh() {
         </div>
       </div>
 
-      {/* MÓDULOS */}
+      {/* ---------- MÓDULOS ---------- */}
       <section className="container block">
         <h2>
           Módulos del año <span className="soft">— diploma Lael por módulo</span>
@@ -220,40 +225,30 @@ export default function LSCh() {
         </div>
       </section>
 
-      {/* PLANES GRUPALES — carrusel */}
+      {/* ---------- PLANES GRUPALES ---------- */}
       <section className="container block">
         <h2>Planes grupales <span className="soft">— online en vivo</span></h2>
-
         <HScroll ariaLabel="Planes grupales">
           {LSCH_GROUP_PLANS.map((p) => {
             const active = selectedGroupId === p.id;
             const monthly = priceForGroupPlan(p, { church });
-            const annual8 = monthly * monthsMarOct;
-            const annual9 = monthly * monthsMarNov;
             return (
               <article className={"card plan slide " + (active ? "on" : "")} key={p.id}>
                 {p.badge && <div className="badge">{p.badge}</div>}
                 <h3 className="ink">{p.title}</h3>
                 <div className="save">{p.save ? p.save : " "}</div>
-
                 <div className="price">
                   <span className="big ink">{clp(monthly)}</span>
                   <span className="per">/mes</span>
                 </div>
-
-                <div className="annual-mini">
-                  <div><span>Mar–Oct</span> <b>{clp(annual8)}</b></div>
-                  <div><span>Mar–Nov</span> <b>{clp(annual9)}</b></div>
-                </div>
-
                 <div className={"note " + (church ? "ok" : "")}>
                   {church ? "Precio convenio aplicado" : "Mejor precio por duración"}
                 </div>
-
                 <div className="cta-row">
                   <button
                     className={"btn-outline " + (active ? "active" : "")}
                     onClick={() => setSelectedGroupId(p.id)}
+                    aria-pressed={active}
                   >
                     {active ? "Seleccionado" : "Elegir plan"}
                   </button>
@@ -264,36 +259,27 @@ export default function LSCh() {
         </HScroll>
       </section>
 
-      {/* CLASES 1:1 — carrusel */}
+      {/* ---------- CLASES 1:1 ---------- */}
       <section className="container block">
         <h2>Clases particulares 1:1 <span className="soft">— refuerzo opcional</span></h2>
-
         <HScroll ariaLabel="Clases particulares uno a uno">
           {LSCH_ONE2ONE_PLANS.map((p) => {
             const active = selectedOneId === p.id;
-            const annual8 = p.monthly * monthsMarOct;
-            const annual9 = p.monthly * monthsMarNov;
             return (
               <article className={"card plan one slide " + (active ? "on" : "")} key={p.id}>
                 {p.badge && <div className="badge info">{p.badge}</div>}
                 <h3 className="ink">{p.title}</h3>
                 <div className="save">{p.save ? p.save : " "}</div>
-
                 <div className="price">
                   <span className="big ink">{clp(p.monthly)}</span>
                   <span className="per">/mes</span>
                 </div>
-
-                <div className="annual-mini">
-                  <div><span>Mar–Oct</span> <b>{clp(annual8)}</b></div>
-                  <div><span>Mar–Nov</span> <b>{clp(annual9)}</b></div>
-                </div>
-
                 <div className="note">Agenda prioritaria con la docente</div>
                 <div className="cta-row">
                   <button
                     className={"btn-outline " + (active ? "active" : "")}
                     onClick={() => setSelectedOneId(active ? null : p.id)}
+                    aria-pressed={active}
                   >
                     {active ? "Quitar 1:1" : "Agregar 1:1"}
                   </button>
@@ -304,9 +290,9 @@ export default function LSCh() {
         </HScroll>
       </section>
 
-      {/* RESUMEN + CTA */}
+      {/* ---------- RESUMEN + CTA ---------- */}
       <section className="container">
-        <div className="card summary">
+        <div className="card summary" aria-live="polite">
           <div className="summary-left">
             <img className="brand-logo" src={laelLogoWhite} alt="Instituto Lael" />
             <div className="info">
@@ -336,7 +322,7 @@ export default function LSCh() {
             <div className="hint">Mensualidad estimada</div>
             <div className="total">{clp(totalMonthly)}</div>
 
-            <div className="annual small">
+            <div className="annual small" role="group" aria-label="Totales de referencia anual">
               <div className="row"><span>Mar–Oct (8m):</span><b>{clp(annualMarOct)}</b></div>
               <div className="row"><span>Mar–Nov (9m):</span><b>{clp(annualMarNov)}</b></div>
             </div>
@@ -373,7 +359,7 @@ export default function LSCh() {
   );
 }
 
-/* ===================== CSS (compacto + paleta LAEL) ===================== */
+/* ===================== CSS (paleta LAEL, ordenado) ===================== */
 const css = `
 :root{
   --lael-blue:#3b549d;
@@ -495,9 +481,7 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 
 /* CARRUSEL */
 .hscroll-wrap{ position:relative; }
-.hscroll{
-  display:flex; gap:10px; overflow:auto; scroll-snap-type:x mandatory; padding:2px 2px 12px;
-}
+.hscroll{ display:flex; gap:10px; overflow:auto; scroll-snap-type:x mandatory; padding:2px 2px 12px; }
 .slide{ scroll-snap-align:start; min-width: 232px; }
 .hs-btn{
   position:absolute; top:50%; transform:translateY(-50%);
@@ -528,7 +512,6 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 .plan .note{ color:#cfe3ff; font-size:.92rem; min-height: 1.1rem; }
 .plan .note.ok{ color:#b7f5cd; }
 .plan .cta-row{ margin-top:auto; display:flex; }
-
 .plan.one .badge.info{ background:var(--lael-warn); color:#0B1220; }
 .plan.on{ outline:2px solid rgba(59,84,157,.38); }
 
@@ -553,7 +536,7 @@ h1{ margin:.4rem 0 .3rem; font-size:clamp(1.5rem, 2.8vw + .6rem, 2.2rem); line-h
 
 .summary-right{ text-align:right; }
 .summary-right .hint{ color:#cfe3ff; font-weight:800; }
-.summary-right .total{ font-size:1.6rem; font-weight:1000; margin:.1rem 0 .2rem; color:#var(--lael-yellow); }
+.summary-right .total{ font-size:1.6rem; font-weight:1000; margin:.1rem 0 .2rem; color:var(--lael-yellow); }
 
 .annual.small{ margin:.1rem 0 .35rem; padding:.45rem .6rem; border:1px solid #3b4260; border-radius:10px; background:linear-gradient(180deg,#0f172a,#0b1220); }
 .annual.small .row{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; color:#ffffff; }

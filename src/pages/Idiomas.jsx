@@ -5,101 +5,114 @@ import { LANGUAGES, ENROLLMENT_FEE, computeLangBundle, clp } from "../data/idiom
 import MultiHello from "../components/MultiHello.jsx";
 import flags from "../assets/img/lael/flags.png";
 
-/** 
- * Si no tienes testimonios reales aún, deja TESTIMONIOS como []
- * y la sección no se mostrará. Cuando tengas citas reales, súbelas acá.
+/**
+ * Cuando tengas testimonios reales, agrégalos aquí.
+ * Si queda [], la sección no se renderiza.
  */
 const TESTIMONIOS = [
-  // { name: "Nombre Apellido", note: "Ciudad/Programa", quote: "Cita textual corta de 1–2 líneas." },
+  // { name: "Nombre Apellido", note: "Programa/ciudad", quote: "Cita breve (1–2 líneas)." },
 ];
 
 export default function Idiomas() {
-  // Paleta
+  /* ── Paleta ────────────────────────────────────────────────────────────────── */
   const ACCENT = { base: "#5850EC", soft: "rgba(88,80,236,.16)" };
 
-  // Estado
+  /* ── Estado ─────────────────────────────────────────────────────────────────── */
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedLevels, setSelectedLevels] = useState({});
   const builderRef = useRef(null);
 
-  // Derivados
+  /* ── Derivados ──────────────────────────────────────────────────────────────── */
   const selected = useMemo(() => LANGUAGES.filter(l => selectedIds.includes(l.id)), [selectedIds]);
   const monthly = computeLangBundle(selected.length);
 
-  // Acciones
+  /* ── Acciones ───────────────────────────────────────────────────────────────── */
   const toggle = (id, comingSoon) => {
-    if (comingSoon) return; // no agregar si es pronto
+    if (comingSoon) return; // bloquea agregar si es "Próximamente"
     setSelectedIds(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
   };
-  const setLevel = (langId, level) => setSelectedLevels(prev => ({ ...prev, [langId]: level }));
+
+  const setLevel = (langId, level) =>
+    setSelectedLevels(prev => ({ ...prev, [langId]: level }));
 
   const replaceWith = (ids = [], levels = {}) => {
     setSelectedIds([...ids]);
     setSelectedLevels(prev => ({ ...prev, ...levels }));
-    requestAnimationFrame(() => builderRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    requestAnimationFrame(() =>
+      builderRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+    );
   };
 
-  // Atajos de inicio rápido
+  /* ── Atajos de inicio rápido ───────────────────────────────────────────────── */
   const QUICK = [
     { id: "q-ingles-b1", label: "Inglés B1 (intermedio)", ids: ["ingles"], levels: { ingles: "B1" } },
     { id: "q-coreano-topik1", label: "Coreano · TOPIK 1", ids: ["coreano"], levels: { coreano: "A2" } },
     { id: "q-portugues-a1", label: "Portugués A1 (inicial)", ids: ["portugues"], levels: { portugues: "A1" } },
   ].filter(q => q.ids.every(id => LANGUAGES.some(l => l.id === id)));
+
   const applyQuick = (q) => replaceWith(q.ids, q.levels || {});
 
-  // WhatsApp
+  /* ── WhatsApp ───────────────────────────────────────────────────────────────── */
   const waMsg = encodeURIComponent(
 `Hola 👋, quiero info de Idiomas.
-Cursos: ${selected.length ? selected.map(s => `${s.name}${selectedLevels[s.id] ? " ("+selectedLevels[s.id]+")" : ""}`).join(", ") : "—"}
+Cursos: ${
+  selected.length
+    ? selected.map(s => `${s.name}${selectedLevels[s.id] ? " (" + selectedLevels[s.id] + ")" : ""}`).join(", ")
+    : "—"
+}
 Mensual estimada: ${clp(monthly)}
 Matrícula única: ${clp(ENROLLMENT_FEE)}`
   );
 
-  // FAQs por curso (compactos)
+  /* ── Mini-FAQ por curso (compacto) ─────────────────────────────────────────── */
   const COURSE_FAQ = {
     ingles: [
-      ["¿Cuántas clases tengo?", "Dos en vivo por semana + cápsulas de apoyo."],
-      ["¿Cómo sé mi nivel?", "Hacemos un diagnóstico corto A1–B2 antes de empezar."],
+      ["¿Cuántas clases tengo?", "2 en vivo por semana + cápsulas de apoyo."],
+      ["¿Cómo sé mi nivel?", "Diagnóstico corto para ubicarte entre A1 y B2."],
       ["¿Queda grabado?", "Sí, subimos la clase el mismo día."],
       ["¿Preparan IELTS/TOEFL?", "Sí, con simulacros y feedback específico."],
-      ["¿Hay tareas?", "Pequeñas metas semanales, corregibles en plataforma."],
+      ["¿Hay tareas?", "Metas semanales autocorregibles."],
       ["¿Certificado?", "Sí, por nivel aprobado."],
     ],
     coreano: [
-      ["¿Qué ruta ven?", "TOPIK 1 (lectura, vocabulario y comprensión)."],
-      ["¿Cuántas clases?", "Dos en vivo por semana + cápsulas guiadas."],
-      ["¿Requisitos?", "Partimos con los básicos; no necesitas experiencia previa."],
-      ["¿Simulacros TOPIK?", "Sí, con pauta y retro para mejorar puntaje."],
-      ["¿Grabaciones?", "Todo queda disponible el mismo día."],
+      ["¿Qué ruta ven?", "TOPIK 1: lectura, vocabulario y comprensión."],
+      ["¿Clases?", "2 en vivo por semana + cápsulas guiadas."],
+      ["¿Requisitos?", "No necesitas experiencia previa."],
+      ["¿Simulacros TOPIK?", "Sí, con pauta y retro para subir puntaje."],
+      ["¿Grabaciones?", "Disponibles el mismo día."],
       ["¿Certificado?", "Sí, por ruta aprobada."],
     ],
     portugues: [
-      ["¿Cuándo abre?", "Programa en preparación (objetivo: A1→Funcional)."],
-      ["¿Puedo pre-inscribirme?", "Sí, te avisamos al abrir cupos."],
-      ["¿Enfoque?", "Vida real y trabajo en Chile y LatAm."],
+      ["¿Cuándo abre?", "Programa en preparación: A1 → Funcional."],
+      ["¿Pre-inscripción?", "Sí, te avisamos al abrir cupos."],
+      ["¿Enfoque?", "Vida real y trabajo en Chile/LatAm."],
     ],
   };
 
+  /* ── Render ────────────────────────────────────────────────────────────────── */
   return (
     <section className="idiomas" style={{ "--accent": ACCENT.base, "--accentSoft": ACCENT.soft }}>
       <style>{css}</style>
 
-      {/* HERO */}
+      {/* ── HERO ──────────────────────────────────────────────────────────────── */}
       <header className="hero">
         <div className="container hero__grid">
           <div className="hero__left">
             <span className="pill">Idiomas</span>
+
             <h1 className="mega">
-              <span className="hello"><MultiHello /></span> con <span className="under">propósito y excelencia</span>
+              <span className="hello"><MultiHello /></span>{" "}
+              con <span className="under">propósito y excelencia</span>
             </h1>
 
             <p className="lead">
-              Clases en vivo, cápsulas y acompañamiento real. Parte con <b>un curso</b>
-              y si más adelante sumas otro, <b>tu mensualidad baja</b>. Matrícula única <b>{clp(ENROLLMENT_FEE)}</b>.
+              Clases en vivo, cápsulas y acompañamiento real. Parte con <b>un curso</b> y,
+              si después sumas otro, <b>tu mensualidad baja</b>. Matrícula única{" "}
+              <b>{clp(ENROLLMENT_FEE)}</b>.
             </p>
 
             <ul className="badges" aria-label="Beneficios">
-              <li className="tag indigo">A1–B2 / TOPIK · IELTS</li>
+              <li className="tag indigo">A1–B2 / TOPIK / IELTS</li>
               <li className="tag teal">Grabaciones el mismo día</li>
               <li className="tag amber">Tutorías bajo demanda</li>
             </ul>
@@ -117,7 +130,7 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
         </div>
       </header>
 
-      {/* PARA QUIÉN / BENEFICIOS */}
+      {/* ── PARA QUIÉN / QUÉ OBTIENES ───────────────────────────────────────── */}
       <section className="who">
         <div className="container">
           <h2>¿Para quién es?</h2>
@@ -143,8 +156,8 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
         </div>
       </section>
 
+      {/* ── BUILDER ───────────────────────────────────────────────────────────── */}
       <div className="container">
-        {/* ATAJOS */}
         {!!QUICK.length && (
           <section className="quick" aria-label="Atajos">
             <div className="quick__title">Empieza rápido</div>
@@ -158,7 +171,6 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
           </section>
         )}
 
-        {/* BUILDER */}
         <section ref={builderRef} className="builder">
           <header className="sec-head row">
             <h2>Elige tus cursos</h2>
@@ -209,7 +221,9 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
                       );
                     })}
                     {lvl && (
-                      <button type="button" className="lv ghost" onClick={() => setLevel(l.id, "")}>Limpiar</button>
+                      <button type="button" className="lv ghost" onClick={() => setLevel(l.id, "")}>
+                        Limpiar
+                      </button>
                     )}
                   </div>
 
@@ -228,7 +242,9 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
                     <details className="mini-faq">
                       <summary>Preguntas frecuentes de {l.name}</summary>
                       <ul>
-                        {faq.map(([q, a], i) => <li key={i}><b>{q}</b><span> — {a}</span></li>)}
+                        {faq.map(([q, a], i) => (
+                          <li key={i}><b>{q}</b><span> — {a}</span></li>
+                        ))}
                       </ul>
                     </details>
                   )}
@@ -243,9 +259,11 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
               <div className="sum-title">
                 Selección: <span className="hi">{selected.length}</span> curso(s)
                 {!!selected.length && (
-                  <span className="muted"> · {selected
-                    .map(s => `${s.name}${selectedLevels[s.id] ? " ("+selectedLevels[s.id]+")" : ""}`)
-                    .join(", ")}
+                  <span className="muted">
+                    {" · "}
+                    {selected
+                      .map(s => `${s.name}${selectedLevels[s.id] ? " (" + selectedLevels[s.id] + ")" : ""}`)
+                      .join(", ")}
                   </span>
                 )}
               </div>
@@ -263,7 +281,7 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
           </div>
         </section>
 
-        {/* TESTIMONIOS reales (solo si hay datos) */}
+        {/* Testimonios reales (opcional) */}
         {!!TESTIMONIOS.length && (
           <section className="testi">
             <header className="sec-head"><h2>Historias reales</h2></header>
@@ -304,7 +322,7 @@ Matrícula única: ${clp(ENROLLMENT_FEE)}`
   );
 }
 
-/* ================= CSS ================= */
+/* ======================= CSS (limpio y responsive) ======================= */
 const css = `
 :root{
   --bg:#0b1220; --panel:#0e1424; --soft:#0d1528; --bd:#1f2a44;
@@ -329,7 +347,7 @@ const css = `
 .lead{ color:var(--muted); max-width:64ch; }
 .badges{ display:flex; gap:10px; flex-wrap:wrap; margin:10px 0 0; }
 
-/* TAGS de colores */
+/* TAGS */
 .tag{ display:inline-flex; align-items:center; gap:6px; padding:.26rem .6rem; border-radius:999px; font-weight:900; border:1px solid transparent; }
 .tag.indigo{ background:#3536a833; border-color:#4f46e5; }
 .tag.teal  { background:#0d948833; border-color:#14b8a6; }

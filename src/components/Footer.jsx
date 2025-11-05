@@ -33,7 +33,7 @@ export default function Footer() {
       <section className="cta">
         <div className="container cta__row">
           <div className="cta__text">
-            <span className="chip">¿Listo/a para empezar?</span>
+            <span className="chip">¿Listo para empezar?</span>
             <h4>Clases en vivo + cápsulas + acompañamiento real.</h4>
             <p className="muted">Matrícula única. Precios claros. Sin letra chica.</p>
           </div>

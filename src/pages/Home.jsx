@@ -2,11 +2,9 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PartnersMarquee from "../components/PartnersMarquee.jsx";
-import StatsBand from "../components/StatsBand.jsx";
 
 // Imágenes identidad (puedes cambiarlas por fotos reales de clases/equipo)
 import id1 from "../assets/img/lael/1.png";
-import id2 from "../assets/img/lael/2.png";
 import id3 from "../assets/img/lael/3.png";
 
 export default function Home() {
@@ -17,14 +15,17 @@ export default function Home() {
       els.forEach((el) => el.classList.add("in"));
       return;
     }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          e.target.classList.add("in");
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12 });
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
@@ -33,7 +34,7 @@ export default function Home() {
     <div className="home">
       <style>{css}</style>
 
-      {/* HERO — limpio, con imagen en línea */}
+      {/* HERO — limpio con preview a la derecha */}
       <section className="hero reveal">
         <div className="container hero__wrap">
           <div className="hero__col">
@@ -44,13 +45,18 @@ export default function Home() {
               <span className="underline">acompañamiento real</span>.
             </h1>
             <p className="lead">
-              Clases en vivo + cápsulas, material descargable y seguimiento.
-              <strong> 87% logra su objetivo</strong> y <strong>9 de 10</strong> nos recomiendan.
+              Clases en vivo + cápsulas, material descargable y seguimiento.{" "}
+              <strong>87%</strong> logra su objetivo y <strong>9 de 10</strong> nos recomiendan.
             </p>
             <div className="cta">
               <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
               <Link className="btn btn-ghost" to="/paes">Ver programas</Link>
-              <a className="btn btn-link" href="https://wa.me/56964626568?text=Hola%20Lael,%20quisiera%20informaci%C3%B3n" target="_blank" rel="noreferrer">
+              <a
+                className="btn btn-link"
+                href="https://wa.me/56964626568?text=Hola%20Lael,%20quisiera%20informaci%C3%B3n"
+                target="_blank"
+                rel="noreferrer"
+              >
                 WhatsApp
               </a>
             </div>
@@ -61,36 +67,39 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Imágenes en línea: simple tira 3:2 */}
-          <div className="hero__media" aria-hidden>
-            <div className="img-row">
-              <img src={id1} alt="" loading="lazy" decoding="async" />
-              <img src={id2} alt="" loading="lazy" decoding="async" />
-              <img src={id3} alt="" loading="lazy" decoding="async" />
-            </div>
+          {/* DERECHA: preview de clase + accesos rápidos */}
+          <div className="hero__media" aria-hidden="true">
+            <ClassPreview
+              title="Clase real: PAES M1 (ejercitación guiada)"
+              caption="Fragmento 3:15 · Grabado + pauta descargable"
+              badge="En vivo + grabada"
+            />
+            <ul className="hero__quicklinks" aria-label="Accesos directos">
+              <li><Link to="/paes" className="qk">PAES</Link></li>
+              <li><Link to="/idiomas" className="qk">Idiomas</Link></li>
+              <li><Link to="/lsch" className="qk">LSCh</Link></li>
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* PARTNERS */}
+      {/* MARQUEE con máscara suave */}
       <section className="marquee reveal">
-        <div className="container">
-          <PartnersMarquee speed={48} height={28} gap={44} />
+        <div className="container marquee__wrap">
+          <PartnersMarquee speed={32} height={28} gap={48} />
         </div>
       </section>
 
-      {/* KPIs */}
-      <section className="reveal">
-        <StatsBand
-          items={[
-            { kpi: "87%", label: "Logra su meta académica" },
-            { kpi: "+11.000 h", label: "Clases en vivo realizadas" },
-            { kpi: "500+", label: "Matriculados 2025" },
-          ]}
-        />
+      {/* TRUST BAR (KPIs simplificados) */}
+      <section className="trust reveal">
+        <div className="container trust__row">
+          <TrustPill kpi="87%" label="alcanza su meta" />
+          <TrustPill kpi="+11.000 h" label="clases en vivo" />
+          <TrustPill kpi="9/10" label="nos recomiendan" />
+        </div>
       </section>
 
-      {/* PROGRAMAS — 3 cartas + link Empresas aparte (minimal) */}
+      {/* PROGRAMAS — 3 cartas */}
       <section className="programs reveal">
         <div className="container">
           <header className="pg-head">
@@ -141,7 +150,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* IDENTIDAD — breve, 2 tarjetas en desktop */}
+      {/* IDENTIDAD — 2 tarjetas */}
       <section className="identity reveal">
         <div className="container">
           <header className="id-head">
@@ -149,23 +158,25 @@ export default function Home() {
             <h2>La identidad detrás de nuestro nombre</h2>
           </header>
           <div className="id-grid">
-            <IdCard img={id1} title="Cobertura y propósito" text="Estudiar sin estar solos, guiados y con propósito." />
-            <IdCard img={id3} title="La paloma" text="Símbolo de comienzos genuinos y esperanza." />
+            <IdCard
+              img={id1}
+              title="Cobertura y propósito"
+              text="Estudiar sin estar solos, guiados y con propósito."
+            />
+            <IdCard
+              img={id3}
+              title="La paloma"
+              text="Símbolo de comienzos genuinos y esperanza."
+            />
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIOS — 2 (más aire) */}
+      {/* TESTIMONIOS — 2 (aire) */}
       <section className="testi reveal">
         <div className="container testi__grid">
-          <Quote
-            q="Subí 150 puntos en la PAES. Clases claras y apoyo constante."
-            a="Vicente — M1"
-          />
-          <Quote
-            q="Perdí el miedo a hablar inglés. Hoy me expreso con confianza en el trabajo."
-            a="Valentina — Inglés B2"
-          />
+          <Quote q="Subí 150 puntos en la PAES. Clases claras y apoyo constante." a="Vicente — M1" />
+          <Quote q="Perdí el miedo a hablar inglés. Hoy me expreso con confianza en el trabajo." a="Valentina — Inglés B2" />
         </div>
       </section>
 
@@ -196,7 +207,12 @@ export default function Home() {
             <p>Inscríbete en minutos y comienza con clases en vivo, cápsulas y acompañamiento.</p>
             <div className="cta">
               <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-              <a className="btn btn-ghost" href="https://wa.me/56964626568?text=Hola%20Lael%20👋%20¿me%20orientan%20para%20elegir%20mi%20plan?" target="_blank" rel="noreferrer">
+              <a
+                className="btn btn-ghost"
+                href="https://wa.me/56964626568?text=Hola%20Lael%20👋%20¿me%20orientan%20para%20elegir%20mi%20plan?"
+                target="_blank"
+                rel="noreferrer"
+              >
                 WhatsApp
               </a>
             </div>
@@ -229,7 +245,7 @@ function ProgramCard({ title, tag, text, bullets = [], to, accent = "indigo" }) 
   const acc =
     accent === "green" ? "acc-green" :
     accent === "rose"  ? "acc-rose"  :
-    accent === "amber" ? "acc-amber" : "acc-indigo";
+    "acc-indigo";
 
   return (
     <article className={`p-card ${acc}`}>
@@ -267,6 +283,32 @@ function IdCard({ img, title, text }) {
     </article>
   );
 }
+function TrustPill({ kpi, label }) {
+  return (
+    <div className="tpill">
+      <div className="tpill__kpi">{kpi}</div>
+      <div className="tpill__label">{label}</div>
+    </div>
+  );
+}
+function ClassPreview({ title, caption, badge }) {
+  return (
+    <article className="cprev">
+      <div className="cprev__media" role="img" aria-label={title}>
+        <button className="cprev__play" aria-label="Reproducir fragmento">▶</button>
+        <span className="cprev__badge">{badge}</span>
+      </div>
+      <div className="cprev__body">
+        <h3 className="cprev__title">{title}</h3>
+        <p className="cprev__cap">{caption}</p>
+        <div className="cprev__pills">
+          <span className="pill ok">Tutor acompañando</span>
+          <span className="pill ok">Pautas y checklists</span>
+        </div>
+      </div>
+    </article>
+  );
+}
 
 /* ---------- CSS (minimal pro) ---------- */
 const css = `
@@ -276,7 +318,6 @@ const css = `
   --bd:#1f2a44;
   --text:#ffffff;
   --muted:#cfe0ff;
-
   --indigo:#3b549d;   /* lael primary */
   --green:#249554;    /* lael secondary */
   --rose:#d6a0c5;
@@ -286,20 +327,21 @@ const css = `
 *{box-sizing:border-box}
 body, .home{background:linear-gradient(180deg,var(--bg),var(--card)); color:var(--text);}
 .container{max-width:1120px; margin:0 auto; padding:0 22px}
+section { scroll-margin-top: 84px; }
 
 /* HERO */
-.hero{padding:56px 0 28px; border-bottom:1px solid var(--bd)}
-.hero__wrap{display:grid; grid-template-columns:1.1fr .9fr; gap:40px; align-items:center}
-@media (max-width:980px){.hero__wrap{grid-template-columns:1fr}}
-.kicker{color:#f1e9b3; font-weight:800; letter-spacing:.2px; margin:0 0 12px}
-.title{margin:.2rem 0 1rem; font-size:clamp(2rem,3.6vw,2.8rem); line-height:1.12}
+.hero{padding:72px 0 36px; border-bottom:1px solid var(--bd)}
+.hero__wrap{display:grid; grid-template-columns:1.1fr .9fr; gap:44px; align-items:center}
+@media (max-width:980px){.hero__wrap{grid-template-columns:1fr; gap:28px}}
+.kicker{color:#f1e9b3; font-weight:900; letter-spacing:.2px; margin:0 0 12px}
+.title{margin:.2rem 0 1rem; font-size:clamp(2.1rem,3.8vw,3rem); line-height:1.12}
 .underline{box-shadow:inset 0 -10px rgba(59,84,157,.28); border-radius:4px}
 .grad{background:linear-gradient(120deg,#A5B4FC,#22d3ee); -webkit-background-clip:text; background-clip:text; color:transparent}
 .g2{background:linear-gradient(120deg,var(--green),#a78bfa); -webkit-background-clip:text; background-clip:text; color:transparent}
 .g3{background:linear-gradient(120deg,var(--amber),#cd5732); -webkit-background-clip:text; background-clip:text; color:transparent}
 .lead{color:#eaf2ff; max-width:62ch}
 .cta{display:flex; flex-wrap:wrap; gap:12px; margin:18px 0 14px}
-.btn{display:inline-flex; align-items:center; gap:8px; padding:.7rem 1rem; border-radius:12px; border:1px solid transparent; text-decoration:none}
+.btn{display:inline-flex; align-items:center; gap:8px; padding:.7rem 1rem; border-radius:12px; border:1px solid transparent; text-decoration:none; font-weight:700}
 .btn-primary{background:var(--indigo); color:#fff; border-color:var(--indigo)}
 .btn-ghost{background:transparent; color:#eaf2ff; border-color:#2f3341}
 .btn-link{background:transparent; color:#eaf2ff; text-decoration:underline; text-underline-offset:3px}
@@ -307,14 +349,60 @@ body, .home{background:linear-gradient(180deg,var(--bg),var(--card)); color:var(
 .chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
 .chip{display:inline-flex; align-items:center; gap:8px; padding:.48rem .76rem; border-radius:999px; border:1px solid var(--bd); background:#0d1528; color:#fff; text-decoration:none; font-weight:600}
 .chip .dot{width:8px; height:8px; border-radius:50%; background:var(--amber)}
-.hero__media .img-row{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
-.hero__media img{width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:14px; border:1px solid var(--bd); background:#0b1220}
 
-/* Partners */
-.marquee{padding:10px 0}
+/* derecha del hero */
+.hero__quicklinks{list-style:none; margin:10px 0 0; padding:0; display:flex; gap:10px; flex-wrap:wrap;}
+.qk{display:inline-flex; align-items:center; padding:.44rem .7rem; border-radius:999px; border:1px solid var(--bd); background:#0f172a; color:#fff; text-decoration:none; font-weight:700;}
+.qk:hover{ border-color:#2c3b65 }
+
+.cprev{border:1px solid var(--bd); border-radius:18px; overflow:hidden; background:linear-gradient(180deg,#0f172a,rgba(11,18,32,.6)); box-shadow:0 18px 36px rgba(2,6,23,.26);}
+.cprev__media{
+  position:relative; height:min(46vh,360px);
+  background:
+    radial-gradient(1200px 420px at 10% -10%, rgba(88,80,236,.22), transparent 60%),
+    radial-gradient(1000px 340px at 92% -12%, rgba(34,211,238,.12), transparent 60%),
+    linear-gradient(135deg, #0e1424 0%, #101a2f 50%, #0b1220 100%);
+  border-bottom:1px solid var(--bd);
+}
+.cprev__play{
+  position:absolute; inset:auto 0 18px 18px;
+  border:0; border-radius:999px; width:56px; height:56px; font-size:20px;
+  display:grid; place-items:center; cursor:pointer;
+  background:linear-gradient(180deg,#6B63F5,#4E46E5); color:#fff;
+  box-shadow:0 14px 28px rgba(2,6,23,.35);
+}
+.cprev__play:hover{ filter:brightness(1.08); transform:translateY(-1px); transition:.18s ease }
+.cprev__badge{ position:absolute; top:12px; left:12px; display:inline-block; padding:.28rem .6rem; border-radius:999px; border:1px solid #334155; background:#101a2f; font-weight:900; font-size:.8rem; }
+.cprev__body{ padding:14px 16px 16px; }
+.cprev__title{ margin:.3rem 0 .2rem; font-size:1.04rem }
+.cprev__cap{ margin:0 0 10px; color:#cfe0ff }
+.cprev__pills{ display:flex; gap:8px; flex-wrap:wrap }
+.pill.ok{ display:inline-flex; align-items:center; gap:6px; padding:.28rem .52rem; border-radius:999px; border:1px solid #2f3341; background:#0d1528; font-size:.86rem; color:#eaf2ff; }
+
+/* Marquee */
+.marquee{padding:18px 0}
+.marquee__wrap{
+  position:relative; border-top:1px solid var(--bd); border-bottom:1px solid var(--bd);
+  padding:10px 0; overflow:hidden;
+  mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+.marquee__wrap img{ filter:grayscale(1) opacity(.72); transition:filter .2s ease, opacity .2s ease; }
+.marquee__wrap img:hover{ filter:none; opacity:1; }
+
+/* TRUST BAR */
+.trust{ padding:22px 0 8px; }
+.trust__row{ display:grid; gap:12px; grid-template-columns: repeat(3,1fr); }
+@media (max-width:780px){ .trust__row{ grid-template-columns:1fr; } }
+.tpill{
+  border:1px solid var(--bd); border-radius:14px;
+  background:linear-gradient(180deg,var(--card),#0d1528);
+  padding:12px 14px; display:flex; align-items:baseline; gap:10px;
+}
+.tpill__kpi{ font-weight:1000; font-size:1.2rem; letter-spacing:.3px }
+.tpill__label{ color:#eaf2ff }
 
 /* PROGRAMAS */
-.programs{padding:28px 0}
+.programs{padding:44px 0}
 .pg-head h2{margin:0 0 6px}
 .pg-head p{margin:0 0 16px; color:#eaf2ff}
 .pg-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
@@ -335,7 +423,7 @@ body, .home{background:linear-gradient(180deg,var(--bg),var(--card)); color:var(
 .link-inline{color:#eaf2ff; text-decoration:underline; text-underline-offset:3px}
 
 /* Highlights */
-.highlights{padding:26px 0}
+.highlights{padding:40px 0}
 .grid-4{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
 @media (max-width:980px){.grid-4{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.grid-4{grid-template-columns:1fr}}
@@ -345,7 +433,7 @@ body, .home{background:linear-gradient(180deg,var(--bg),var(--card)); color:var(
 .ico{font-size:1.1rem}
 
 /* Identidad */
-.identity{padding:28px 0}
+.identity{padding:44px 0}
 .id-head{text-align:center; margin-bottom:14px}
 .pill{display:inline-block; padding:.22rem .6rem; border:1px solid #334155; border-radius:999px; font-weight:700; font-size:.78rem}
 .id-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
@@ -356,7 +444,7 @@ body, .home{background:linear-gradient(180deg,var(--bg),var(--card)); color:var(
 .id-body{padding:12px 14px}
 
 /* Testimonios */
-.testi{padding:24px 0}
+.testi{padding:40px 0}
 .testi__grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
 @media (max-width:980px){.testi__grid{grid-template-columns:1fr}}
 .quote{margin:0; padding:16px; border-radius:16px; border:1px solid var(--bd); background:var(--card)}
@@ -364,7 +452,7 @@ body, .home{background:linear-gradient(180deg,var(--bg),var(--card)); color:var(
 .quote footer{color:#e5e7eb}
 
 /* FAQ */
-.faq{padding:24px 0}
+.faq{padding:40px 0}
 .faq__title{margin:0 0 10px}
 .faq details{border:1px solid var(--bd); border-radius:14px; background:var(--card); padding:12px 14px; margin-bottom:10px}
 .faq summary{cursor:pointer; font-weight:900; list-style:none; display:flex; align-items:center; gap:8px}
@@ -374,7 +462,7 @@ body, .home{background:linear-gradient(180deg,var(--bg),var(--card)); color:var(
 .faq p{margin:.5rem 0 0; color:#eaf2ff}
 
 /* CTA final */
-.cta-final{padding:24px 0 40px}
+.cta-final{padding:24px 0 44px}
 .cta-final__box{border:1px solid var(--bd); border-radius:18px; padding:24px; text-align:center; background:linear-gradient(180deg,var(--bg),var(--card))}
 .tiny{font-size:.9rem; color:#eaf2ff}
 

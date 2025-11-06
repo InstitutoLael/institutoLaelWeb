@@ -124,6 +124,10 @@ Total estimado: ${clp(school.total)}`
 Necesito orientación para clases/ensayos y presupuesto.`
   );
 
+  useEffect(() => {
+    document.title = "Homeschool · Instituto Lael";
+  }, []);
+
   return (
     <section className="apoyo">
       <style>{css}</style>
@@ -393,7 +397,7 @@ Necesito orientación para clases/ensayos y presupuesto.`
   );
 }
 
-/* ================= CSS (paleta sólida, sin grises lavados) ================= */
+/* ================= CSS (paleta sólida + contraste corregido) ================= */
 const css = `
 :root{
   --ink:#ffffff; --ink2:#E6EDFF;
@@ -410,10 +414,12 @@ const css = `
 }
 
 *{box-sizing:border-box}
+.apoyo{background:var(--bg);color:var(--ink)}
 .container{max-width:1120px;margin:0 auto;padding:0 18px;color:var(--ink)}
 .muted{color:var(--ink2)}
 .mt6{margin-top:6px}.mt12{margin-top:12px}
 .w100{width:100%}
+.ink{color:var(--ink)}
 
 /* HERO */
 .hero{
@@ -424,14 +430,15 @@ const css = `
 @media (max-width:980px){.hero__grid{grid-template-columns:1fr}}
 .brand{width:86px;filter:drop-shadow(0 6px 18px rgba(255,255,255,.2));opacity:.95}
 h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-height:1.12}
-.under{box-shadow:inset 0 -10px rgba(59,86,255,.5);border-radius:4px}
+.under{box-shadow:inset 0 -10px rgba(59,86,255,.55);border-radius:4px}
 .lead{max-width:62ch;color:var(--ink2)}
 .service-chips{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
 .chip{font-weight:900;border-radius:999px;padding:.44rem .8rem}
-.chip.solid{color:#0B1220;background:#fff}
-.chip.solid.blue{background:var(--blue)}
-.chip.solid.amber{background:var(--amber)}
-.chip.solid.green{background:var(--green)}
+.chip.solid{background:#fff;color:#0B1220}
+.chip.solid.blue{background:var(--blue);color:#fff}   /* ✅ contraste */
+.chip.solid.amber{background:var(--amber);color:#0B1220}
+.chip.solid.green{background:var(--green);color:#fff} /* ✅ contraste */
+.chip.solid.rose{background:var(--rose);color:#0B1220} /* rosa claro => negro va bien; si lo ves bajo, cambia a #fff */
 
 .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:.64rem 1rem;border-radius:12px;border:2px solid transparent;font-weight:1000;text-decoration:none}
@@ -488,17 +495,18 @@ h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-heigh
 .check{display:flex;align-items:center;gap:8px}
 .check input{transform:scale(1.15)}
 
-/* Stats */
+/* Stats (contraste corregido) */
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 @media (max-width:980px){.stats{grid-template-columns:1fr 1fr}}
 @media (max-width:600px){.stats{grid-template-columns:1fr}}
-.stat{border-radius:16px;padding:18px 14px;color:#0B1220}
-.stat.blue{background:var(--blue)}
-.stat.amber{background:var(--amber)}
-.stat.green{background:var(--green)}
-.stat.rose{background:var(--rose)}
+.stat{border-radius:16px;padding:18px 14px}
 .stat .n{font-size:2rem;font-weight:1000;line-height:1}
-.stat .t{opacity:.9;font-weight:800;margin-top:6px}
+.stat .t{opacity:.95;font-weight:800;margin-top:6px}
+
+.stat.blue{background:var(--blue);color:#fff}     /* ✅ texto blanco */
+.stat.amber{background:var(--amber);color:#0B1220}
+.stat.green{background:var(--green);color:#001b13}/* verde claro -> texto muy oscuro (#001b13) p/AA */
+.stat.rose{background:var(--rose);color:#2b0c2e}  /* rosa claro -> texto oscuro p/AA */
 
 /* Grid helpers */
 .grid{display:grid;gap:12px}

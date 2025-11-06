@@ -1,10 +1,13 @@
 // src/pages/EscuelaAdultos.jsx
-import Aula1 from "../assets/img/lael/bootcamp.jpg";
-import Aula2 from "../assets/img/lael/coaching.jpg";
-import Aula3 from "../assets/img/lael/inclusion.jpg";
-import Gal1 from "../assets/img//lael";
-import Gal2 from "../assets/img/lael/study-online.jpg";
-import Gal3 from "../assets/img/lael/soft.jpg";
+
+// ✅ Resolver assets con URL absoluto (Vite-friendly)
+const Aula1 = new URL("../assets/img/bootcamp.jpg", import.meta.url).href;
+const Aula2 = new URL("../assets/img/coaching.jpg", import.meta.url).href;
+const Aula3 = new URL("../assets/img/inclusion.jpg", import.meta.url).href;
+
+const Gal1 = new URL("../assets/img/hs.jpg", import.meta.url).href;
+const Gal2 = new URL("../assets/img/study-online.jpg", import.meta.url).href;
+const Gal3 = new URL("../assets/img/soft.jpg", import.meta.url).href;
 
 export default function EscuelaAdultos() {
   return (
@@ -148,15 +151,9 @@ export default function EscuelaAdultos() {
       {/* GALERÍA */}
       <section className="galeria reveal">
         <div className="container g">
-          <figure>
-            <img src={Gal1} alt="Clase en línea" />
-          </figure>
-          <figure>
-            <img src={Gal2} alt="Estudio con acompañamiento" />
-          </figure>
-          <figure>
-            <img src={Gal3} alt="Ambiente de apoyo" />
-          </figure>
+          <figure><img src={Gal1} alt="Clase en línea" /></figure>
+          <figure><img src={Gal2} alt="Estudio con acompañamiento" /></figure>
+          <figure><img src={Gal3} alt="Ambiente de apoyo" /></figure>
         </div>
       </section>
 
@@ -171,12 +168,7 @@ export default function EscuelaAdultos() {
             </p>
           </div>
           <div className="actions">
-            <a
-              className="btn btn-primary"
-              href="https://wa.me/56964626568"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a className="btn btn-primary" href="https://wa.me/56964626568" target="_blank" rel="noreferrer">
               Consultar por apoyo
             </a>
           </div>
@@ -187,15 +179,9 @@ export default function EscuelaAdultos() {
       <section id="formulario" className="formulario reveal">
         <div className="container form-box">
           <h2>Preinscripción rápida 📝</h2>
-          <p className="muted">
-            Completa tus datos y nos pondremos en contacto para orientarte.
-          </p>
+          <p className="muted">Completa tus datos y nos pondremos en contacto para orientarte.</p>
 
-          <form
-            action="mailto:contacto@institutolael.cl"
-            method="post"
-            encType="text/plain"
-          >
+          <form action="mailto:contacto@institutolael.cl" method="post" encType="text/plain">
             <div className="fields">
               <input type="text" name="Nombre" placeholder="Nombre completo" required />
               <input type="tel" name="WhatsApp" placeholder="WhatsApp (ej: +569...)" />
@@ -205,15 +191,9 @@ export default function EscuelaAdultos() {
                 <option>1° y 2° Medio</option>
                 <option>3° y 4° Medio</option>
               </select>
-              <textarea
-                name="Mensaje"
-                placeholder="Cuéntanos brevemente tu situación o consulta"
-                rows="3"
-              />
+              <textarea name="Mensaje" placeholder="Cuéntanos brevemente tu situación o consulta" rows="3" />
             </div>
-            <button type="submit" className="btn btn-primary">
-              Enviar preinscripción
-            </button>
+            <button type="submit" className="btn btn-primary">Enviar preinscripción</button>
           </form>
         </div>
       </section>
@@ -223,22 +203,11 @@ export default function EscuelaAdultos() {
         <div className="container inner">
           <div>
             <h3>Nunca es tarde para terminar el colegio.</h3>
-            <p className="muted">
-              Estudia con método, en la tarde y con acompañamiento real.
-            </p>
+            <p className="muted">Estudia con método, en la tarde y con acompañamiento real.</p>
           </div>
           <div className="actions">
-            <a
-              className="btn btn-primary"
-              href="https://wa.me/56964626568"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Hablar por WhatsApp
-            </a>
-            <a className="btn btn-outline" href="#formulario">
-              Preinscribirme
-            </a>
+            <a className="btn btn-primary" href="https://wa.me/56964626568" target="_blank" rel="noreferrer">Hablar por WhatsApp</a>
+            <a className="btn btn-outline" href="#formulario">Preinscribirme</a>
           </div>
         </div>
       </section>
@@ -246,7 +215,6 @@ export default function EscuelaAdultos() {
   );
 }
 
-/* ---------- Componente Tarjeta ---------- */
 function FeatureCard({ img, title, bullets = [] }) {
   return (
     <article className="fcard">
@@ -260,7 +228,6 @@ function FeatureCard({ img, title, bullets = [] }) {
   );
 }
 
-/* ---------- CSS ---------- */
 const css = `
 .adultos { background:#0b1220; color:#f1f5f9; font-family:system-ui, sans-serif; }
 .container{ width:min(1120px,92vw); margin:0 auto }
@@ -273,7 +240,6 @@ const css = `
     radial-gradient(1200px 400px at -10% -20%, rgba(88,80,236,.10), transparent 60%),
     radial-gradient(1000px 360px at 110% 0%, rgba(245,158,11,.10), transparent 60%),
     linear-gradient(180deg, rgba(11,18,32,.20), rgba(11,18,32,.85) 60%, rgba(11,18,32,.95));
-  background-size:cover; background-position:center;
   filter:saturate(105%);
 }
 .hero-grid{ position:relative; z-index:2; display:grid; grid-template-columns:1.2fr .8fr; gap:24px; padding:72px 0; }

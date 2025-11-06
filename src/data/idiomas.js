@@ -6,42 +6,63 @@ export const ENROLLMENT_FEE = 7990;
 // Catálogo de idiomas (puedes sumar más)
 export const LANGUAGES = [
   {
+    id: "espanol",
+    code: "ES",
+    name: "Español para Extranjeros (ELE)",
+    emoji: "🇨🇱",
+    color: "#f59e0b",
+    summary:
+      "Comunicación práctica para vivir, estudiar o trabajar en Chile. Enfoque en comprensión y situaciones reales.",
+    includes: [
+      "Clases en vivo (Zoom/Meet)",
+      "Cápsulas grabadas y quizzes",
+      "Vocabulario de trámites y vida diaria",
+      "Práctica de conversación guiada",
+    ],
+    levels: ["Inicial A1–A2", "Funcional B1"],
+    outcomes: [
+      "Integración y vida cotidiana en Chile",
+      "Trabajo y estudios con mejor comunicación",
+      "Bases para certificaciones internacionales",
+    ],
+  },
+  {
     id: "ingles",
     code: "EN",
     name: "Inglés",
     emoji: "🇬🇧",
     color: "#2563eb",
     summary:
-      "Para viajes, trabajo y estudios. Comunicación real, pronunciación y escucha.",
+      "Para viajes, trabajo y estudios: conversación real, listening y pronunciación con foco en fluidez.",
     includes: [
       "Clases en vivo (Zoom/Meet)",
       "Cápsulas grabadas",
       "Material descargable y quizzes",
       "Simulaciones de entrevista",
     ],
-    levels: ["Inicial A1-A2", "Funcional B1", "Avanzado B2+"],
+    levels: ["Inicial A1–A2", "Funcional B1", "Avanzado B2+"],
     outcomes: [
       "Viajes con confianza",
-      "Trabajo con clientes internacionales",
-      "Postulación a becas/Intercambio",
+      "Atención a clientes internacionales",
+      "Postulación a becas/intercambio",
     ],
   },
   {
     id: "coreano",
     code: "KR",
-    name: "Coreano (TOPIK 1)",
+    name: "Coreano (TOPIK I)",
     emoji: "🇰🇷",
     color: "#ef4444",
     summary:
-      "Base sólida para TOPIK 1: lectura, vocabulario esencial y cultura K.",
+      "Base sólida para TOPIK I: lectura, vocabulario esencial y cultura K como motivación.",
     includes: [
       "Hangul desde cero",
-      "Vocabulario + gramática TOPIK 1",
+      "Vocabulario + gramática TOPIK I",
       "Ejercicios tipo prueba",
-      "Cultura/K-life para motivación",
+      "Cultura / K-life para conversación",
     ],
-    levels: ["TOPIK 1 · Preparación"],
-    outcomes: ["Certificación TOPIK 1", "Bases para TOPIK 2", "Viajes/Estudios"],
+    levels: ["TOPIK I · Preparación"],
+    outcomes: ["Certificación TOPIK I", "Bases para TOPIK II", "Viajes/Estudios"],
   },
   {
     id: "portugues",
@@ -50,7 +71,7 @@ export const LANGUAGES = [
     emoji: "🇧🇷",
     color: "#16a34a",
     summary:
-      "Programa en preparación: enfoque en empleabilidad regional y turismo.",
+      "Programa en preparación con foco en empleabilidad regional, turismo y negocios MERCOSUR.",
     includes: [
       "Conversación guiada",
       "Vocabulario laboral",

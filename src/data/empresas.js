@@ -4,14 +4,12 @@ export const WAPP_INTL = "56964626568";
 
 /**
  * Líneas de servicio (valores públicos orientativos + costos base profesor).
- * - Online más económico.
- * - Presencial con recargo (logística/producción/tiempo).
- * - Coaching/Consultoría (Cami) con ticket más alto.
+ * Todos los nombres están ajustados a lenguaje corporativo y comercial.
  */
 export const SERVICE_LINES = [
   {
     id: "ingles",
-    label: "Inglés corporativo",
+    label: "Inglés Profesional y Empresarial",
     publicPphOnline: 12000,
     publicPphOnsite: 15500,
     instructorBasePphOnline: 26000,
@@ -23,7 +21,7 @@ export const SERVICE_LINES = [
   },
   {
     id: "lsch",
-    label: "LSCh (inclusión / atención a público sordo)",
+    label: "Lengua de Señas Chilena e Inclusión",
     publicPphOnline: 14500,
     publicPphOnsite: 18500,
     instructorBasePphOnline: 32000,
@@ -35,7 +33,7 @@ export const SERVICE_LINES = [
   },
   {
     id: "soft",
-    label: "Habilidades blandas & liderazgo",
+    label: "Liderazgo y Comunicación Efectiva",
     publicPphOnline: 13500,
     publicPphOnsite: 16800,
     instructorBasePphOnline: 30000,
@@ -47,10 +45,10 @@ export const SERVICE_LINES = [
   },
   {
     id: "empleo",
-    label: "Inserción laboral / Empleabilidad",
-    publicPphOnline: 15000,  // ticket competitivo (branding personal, CV, entrevistas, LinkedIn, ATS)
+    label: "Empleabilidad y Desarrollo Profesional",
+    publicPphOnline: 15000,
     publicPphOnsite: 19000,
-    instructorBasePphOnline: 33000,  // facilitador senior + role-play
+    instructorBasePphOnline: 33000,
     instructorBasePphOnsite: 39000,
     instructorVarPerStudentPphOnline: 240,
     instructorVarPerStudentPphOnsite: 320,
@@ -59,7 +57,7 @@ export const SERVICE_LINES = [
   },
   {
     id: "coaching",
-    label: "Coaching & Consultoría (Cami)",
+    label: "Coaching Ejecutivo y Consultoría Organizacional",
     publicPphOnline: 22000,
     publicPphOnsite: 26000,
     instructorBasePphOnline: 45000,
@@ -73,51 +71,70 @@ export const SERVICE_LINES = [
 
 /**
  * Paquetes sugeridos (para precargar el estimador).
- * Tip: “subtitle” y “bullets” son puro copy comercial; ajusta libremente.
  */
 export const EMP_PACKS = [
   {
     id: "pack-ingles-onboarding",
     line: "ingles",
-    title: "Onboarding en Inglés (Express)",
-    subtitle: "Survival English para nuevos ingresos",
-    bullets: ["Standups, email y reporting", "Glosario corporativo", "Diagnóstico + evaluación final"],
+    title: "Inglés para Nuevos Equipos (Onboarding Express)",
+    subtitle: "Dominio básico de inglés corporativo para primeros meses",
+    bullets: [
+      "Expresiones clave en reuniones y correos",
+      "Glosario interno personalizado",
+      "Diagnóstico inicial y evaluación final",
+    ],
     tag: "Inglés",
     baseAudience: 20,
   },
   {
     id: "pack-inclusion-lsch",
     line: "lsch",
-    title: "Inclusión & Atención a Público Sordo",
-    subtitle: "Vocabulario clave + protocolos de atención",
-    bullets: ["Role-play", "Checklist de buenas prácticas", "Derivación efectiva"],
-    tag: "LSCh",
+    title: "Atención Inclusiva en Lengua de Señas Chilena",
+    subtitle: "Protocolos y vocabulario esencial para trato accesible",
+    bullets: [
+      "Role-play y dinámicas de atención real",
+      "Checklist de buenas prácticas",
+      "Simulación de casos reales",
+    ],
+    tag: "Inclusión",
     baseAudience: 18,
   },
   {
     id: "pack-softskills",
     line: "soft",
-    title: "Soft Skills para Equipos",
-    subtitle: "Comunicación, feedback y liderazgo situacional",
-    bullets: ["Escucha activa", "Feedback sin fricción", "Dinámicas de equipo"],
-    tag: "Habilidades blandas",
+    title: "Liderazgo Colaborativo y Comunicación Interna",
+    subtitle: "Fortalece equipos y vínculos laborales",
+    bullets: [
+      "Escucha activa y comunicación asertiva",
+      "Gestión emocional y feedback constructivo",
+      "Dinámicas de confianza y colaboración",
+    ],
+    tag: "Liderazgo",
     baseAudience: 22,
   },
   {
     id: "pack-empleabilidad",
     line: "empleo",
-    title: "Bootcamp de Empleabilidad",
-    subtitle: "CV + LinkedIn + entrevista en 4 semanas",
-    bullets: ["CV ganador (ATS)", "Branding personal en LinkedIn", "Role-play de entrevistas"],
+    title: "Programa Intensivo de Empleabilidad y Marca Personal",
+    subtitle: "Potencia tu perfil profesional en 4 semanas",
+    bullets: [
+      "Optimización de CV y LinkedIn",
+      "Simulación de entrevistas reales",
+      "Estrategias de inserción laboral",
+    ],
     tag: "Empleabilidad",
     baseAudience: 20,
   },
   {
     id: "pack-coaching",
     line: "coaching",
-    title: "Coaching ejecutivo (Cami)",
-    subtitle: "1:1 u observación de equipo + plan de mejora",
-    bullets: ["Hitos mensuales", "Reporte ejecutivo", "Seguimiento"],
+    title: "Coaching Organizacional y Acompañamiento Directivo",
+    subtitle: "Sesiones personalizadas para potenciar liderazgo y gestión",
+    bullets: [
+      "Hitos mensuales y seguimiento",
+      "Retroalimentación 360°",
+      "Informe ejecutivo de resultados",
+    ],
     tag: "Consultoría",
     baseAudience: 8,
   },
@@ -155,7 +172,7 @@ export const PRICING = {
   executiveReportFlat: 60000,
 };
 
-// Util CLP
+// Helper para mostrar CLP
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -163,26 +180,32 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
+const ceilTo = (n, step = 100) => Math.ceil(Number(n || 0) / step) * step;
+const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+
 /**
- * Estimador
+ * Estimador (con margen objetivo, redondeos y extras)
  */
 export function calcQuote(opts) {
   const {
     lineId = "ingles",
-    headcount = 20,
-
+    headcount: _headcount = 20,
     durationUnit = "months",
-    durationValue = 1,
-    sessionsPerWeek = 2,
-    hoursPerSession = 1.5,
-
-    modality = "online", // "online" | "mixed" | "onsite"
-    mixedOnsiteSessions = 0,
-
+    durationValue: _durVal = 1,
+    sessionsPerWeek: _spw = 2,
+    hoursPerSession: _hps = 1.5,
+    modality = "online",
+    mixedOnsiteSessions: _mixed = 0,
     addCert = false,
     addMaterials = true,
     addExecReport = true,
+    minMargin = 0.35,
   } = opts || {};
+
+  const headcount = clamp(Math.floor(_headcount), 1, 200);
+  const durationValue = clamp(Number(_durVal), 1, 24);
+  const sessionsPerWeek = clamp(Number(_spw), 1, 6);
+  const hoursPerSession = clamp(Number(_hps), 0.5, 6);
 
   const line = SERVICE_LINES.find((l) => l.id === lineId) || SERVICE_LINES[0];
   const cohortMax = Math.max(8, line.cohortMax || 20);
@@ -190,50 +213,71 @@ export function calcQuote(opts) {
 
   const weeksTotal =
     durationUnit === "months"
-      ? Math.max(1, durationValue) * UI_OPTIONS.weeksPerMonth
-      : Math.max(1, durationValue);
+      ? durationValue * UI_OPTIONS.weeksPerMonth
+      : durationValue;
 
-  const hoursTotal =
-    weeksTotal * Math.max(1, sessionsPerWeek) * Math.max(0.5, hoursPerSession);
+  const hoursTotal = weeksTotal * sessionsPerWeek * hoursPerSession;
 
-  // Precio público base por modalidad
-  let publicPph = modality === "onsite" ? line.publicPphOnsite : line.publicPphOnline;
+  let publicPph =
+    modality === "onsite" ? line.publicPphOnsite : line.publicPphOnline;
 
-  // Descuento por volumen
   const volumeOff =
     [...PRICING.volumeDiscounts]
       .sort((a, b) => b.min - a.min)
       .find((x) => headcount >= x.min)?.off || 0;
 
-  // Tuition
   const tuitionBase = publicPph * hoursTotal * headcount;
-  const tuition = Math.round(tuitionBase * (1 - volumeOff));
+  let tuition = Math.round(tuitionBase * (1 - volumeOff));
 
-  // Mixto → flat por sesión presencial por cohorte
   const onsiteSessions =
     modality === "mixed"
-      ? Math.max(0, Math.min(PRICING.mixedMaxOnsiteSessions, Number(mixedOnsiteSessions || 0)))
+      ? clamp(Number(_mixed || 0), 0, PRICING.mixedMaxOnsiteSessions)
       : 0;
-  const mixedFlat = onsiteSessions * PRICING.mixedPerOnsiteSessionFlat * cohorts;
+  const mixedFlat =
+    onsiteSessions * PRICING.mixedPerOnsiteSessionFlat * cohorts;
 
-  // Extras
-  const extras =
-    (addCert ? PRICING.certificatePerPerson * headcount : 0) +
-    (addMaterials ? PRICING.materialsPerPerson * headcount : 0) +
-    (addExecReport ? PRICING.executiveReportFlat : 0) +
-    mixedFlat;
+  const certificates = addCert
+    ? PRICING.certificatePerPerson * headcount
+    : 0;
+  const materials = addMaterials
+    ? PRICING.materialsPerPerson * headcount
+    : 0;
+  const executiveReport = addExecReport
+    ? PRICING.executiveReportFlat
+    : 0;
 
-  const total = tuition + extras;
-
-  // Costos profesor
-  const basePph = modality === "onsite" ? line.instructorBasePphOnsite : line.instructorBasePphOnline;
-  const varPph = modality === "onsite" ? line.instructorVarPerStudentPphOnsite : line.instructorVarPerStudentPphOnline;
+  const basePph =
+    modality === "onsite"
+      ? line.instructorBasePphOnsite
+      : line.instructorBasePphOnline;
+  const varPph =
+    modality === "onsite"
+      ? line.instructorVarPerStudentPphOnsite
+      : line.instructorVarPerStudentPphOnline;
 
   const instructorBaseCost = basePph * hoursTotal * cohorts;
   const instructorVarCost = varPph * hoursTotal * headcount;
   const instructorCost = Math.round(instructorBaseCost + instructorVarCost);
 
-  const margin = total > 0 ? (1 - instructorCost / total) : 0;
+  const extras = certificates + materials + executiveReport + mixedFlat;
+  const initialTotal = tuition + extras;
+  const currentMargin =
+    initialTotal > 0 ? 1 - instructorCost / initialTotal : 0;
+
+  if (currentMargin < minMargin) {
+    const targetTotal = ceilTo(instructorCost / (1 - minMargin));
+    tuition = Math.max(tuition, targetTotal - extras);
+  }
+
+  const subtotal = ceilTo(tuition + extras);
+  const total = subtotal;
+  const margin = total > 0 ? 1 - instructorCost / total : 0;
+
+  const pricePerPerson = ceilTo(total / headcount);
+  const pricePerCohort = ceilTo(total / cohorts);
+  const pricePerPersonPerMonth = ceilTo(
+    (total / headcount) / (weeksTotal / UI_OPTIONS.weeksPerMonth)
+  );
 
   return {
     line,
@@ -251,19 +295,22 @@ export function calcQuote(opts) {
     volumeDiscount: volumeOff,
     publicPph,
     tuition,
-    mixedFlat,
     extrasBreakdown: {
-      certificates: addCert ? PRICING.certificatePerPerson * headcount : 0,
-      materials: addMaterials ? PRICING.materialsPerPerson * headcount : 0,
-      executiveReport: addExecReport ? PRICING.executiveReportFlat : 0,
+      certificates,
+      materials,
+      executiveReport,
       mixedOnsiteFlat: mixedFlat,
     },
+    subtotal,
     total,
+    perPerson: pricePerPerson,
+    perCohort: pricePerCohort,
+    perPersonPerMonth: pricePerPersonPerMonth,
     _internal: {
       instructorCost,
       instructorBaseCost,
       instructorVarCost,
-      margin, // 0..1
+      margin,
     },
   };
 }

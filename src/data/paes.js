@@ -1,9 +1,10 @@
+// src/data/paes.js
 /* ──────────────────────────────────────────────────────────────────────────
-   PAES — modelo de planes y reglas (única fuente de verdad)
-   - Ensayos: 1 por ramo inscrito / mes (regla única para todos)
-   - Descuentos automáticos por n° de ramos (ajustados para no “regalar”)
-   - Incluye: planes individuales (por asignatura) y combos estratégicos
-   - Comunicar también en ANUALIDAD (marzo–oct/nov): helper incluido
+   PAES — Única fuente de verdad (2026)
+   - Ensayos: 1 por ramo inscrito / mes (regla global)
+   - Descuentos automáticos por n° de ramos (sin “regalar” el full)
+   - Planes por asignatura + Combos estratégicos (copy claro)
+   - Helpers de ANUALIDAD (mar–oct: 8 meses) y tabla de referencia
    ────────────────────────────────────────────────────────────────────────── */
 
 // 🔢 CLP formatter (reutilizable en componentes)
@@ -15,22 +16,21 @@ export const clp = (n) =>
   });
 
 // 📅 Parámetros de anualidad académica (mar–oct: 8 meses)
-export const ACADEMIC_MONTHS = 8; // ajusta a 9 si cierras en noviembre
+export const ACADEMIC_MONTHS = 8; // cambia a 9 si cierras en noviembre
 export const ACADEMIC_PERIOD_LABEL = "marzo a octubre"; // para UI
 
 // 🧾 Matrícula obligatoria (pago único)
 export const ENROLLMENT_FEE = 7990;
 
 /**
- * 💵 Precio base por ramo/mes (ajustado para 2 h/semana sostenibles)
- * - 2026 propuesto: 8.990 (desde 7.990)
+ * 💵 Precio base por ramo/mes
+ * - 2026 propuesto: 8.990 (ajustado para 2 h/sem sostenibles)
  */
 export const PER_SUBJECT_MONTHLY = 8990;
 
 /**
- * 🔻 Descuentos por cantidad de ramos (más suaves)
- * - Mantener valor sin “regalar” el Full 7
- * - Top en 20% para 5+ ramos
+ * 🔻 Descuentos por cantidad de ramos (graduales)
+ * - Cap en 20% para 5+
  */
 export const DISCOUNTS_BY_COUNT = [
   { min: 5, rate: 0.20 }, // 20% (5+)
@@ -42,26 +42,31 @@ export const DISCOUNTS_BY_COUNT = [
 // 📝 Ensayos: 1 por ramo / mes (regla global)
 export const ESSAYS_PER_SUBJECT_PER_MONTH = 1;
 
-// 🎯 Redondeo “amigable” a decenas (queda más marketinero)
+// 🎯 Redondeos amigables a decenas (más “marketinero”)
 const friendlyRound10 = (n) => Math.round(n / 10) * 10;
 
-// 📉 Busca el mejor descuento aplicable según cantidad
+// 📉 Descuento aplicable según cantidad
 function discountFor(count) {
   return DISCOUNTS_BY_COUNT.find((x) => count >= x.min)?.rate ?? 0;
 }
 
+// ✅ Normaliza cantidad (1…7)
+function clampCount(n) {
+  const v = Math.max(1, Math.min(7, Number(n || 0)));
+  return v;
+}
+
 // 💰 Precio mensual para N ramos (con redondeo)
 export function priceForCount(count) {
-  if (!count) return 0;
-  const d = discountFor(count);
-  const base = PER_SUBJECT_MONTHLY * count;
+  const c = clampCount(count);
+  const d = discountFor(c);
+  const base = PER_SUBJECT_MONTHLY * c;
   return friendlyRound10(Math.round(base * (1 - d)));
 }
 
 // 🧪 Ensayos/mes para N ramos
 export function essaysForCount(count) {
-  if (!count) return 0;
-  return count; // 1 ensayo por ramo / mes
+  return clampCount(count) * ESSAYS_PER_SUBJECT_PER_MONTH;
 }
 
 // 🧮 Precio mensual según lista de asignaturas
@@ -82,7 +87,7 @@ export function priceAnnualForSubjects(subjectIds = [], months = ACADEMIC_MONTHS
 
 // Resumen útil para UI (mensual + anual + ensayos)
 export function planBreakdown(subjectIds = [], months = ACADEMIC_MONTHS) {
-  const count = (subjectIds || []).length;
+  const count = clampCount((subjectIds || []).length);
   const monthly = priceForCount(count);
   return {
     count,
@@ -90,7 +95,22 @@ export function planBreakdown(subjectIds = [], months = ACADEMIC_MONTHS) {
     annual: priceAnnual(count, months),
     essaysPerMonth: essaysForCount(count),
     months,
+    periodLabel: ACADEMIC_PERIOD_LABEL,
   };
+}
+
+/* 📊 Tabla rápida para UI (ej. “ver cómo baja el valor al sumar ramos”) */
+export function buildMonthlyTable(max = 7) {
+  const rows = [];
+  for (let i = 1; i <= Math.max(1, Math.min(7, max)); i++) {
+    rows.push({
+      subjects: i,
+      monthly: priceForCount(i),
+      essaysPerMonth: essaysForCount(i),
+      discountRate: discountFor(i), // 0..0.2
+    });
+  }
+  return rows;
 }
 
 /* ───────── Ramos disponibles ───────── */
@@ -104,11 +124,13 @@ export const PAES_SUBJECTS = [
   { id: "qui", name: "Química" },
 ];
 
-/* ───────── Planes por asignatura (1 ramo) ───────── */
+/* ───────── Planes por asignatura (1 ramo) ─────────
+   Copy breve y consistente para tarjetas individuales
+*/
 export const PAES_PLANS = PAES_SUBJECTS.map((s) => ({
   id: `plan-${s.id}`,
   title: s.name,
-  tagline: "Parte por 1 ramo, puedes sumar después",
+  tagline: "Comienza por 1 ramo (puedes sumar después)",
   subjectsIncluded: 1,
   subjects: [s.id],
   monthly: priceForCount(1),
@@ -120,11 +142,12 @@ export const PAES_PLANS = PAES_SUBJECTS.map((s) => ({
     "Material descargable",
     "Soporte por WhatsApp",
   ],
-  badge: s.id === "his" ? "¡Impulsa Historia!" : undefined,
+  // toques visuales suaves (opcionales en UI)
+  badge: s.id === "his" ? "Impulsa Historia" : undefined,
   color: s.id === "his" ? "amber" : undefined,
 }));
 
-/* ───────── Combos estratégicos ───────── */
+/* ───────── Combos estratégicos (copy claro) ───────── */
 export const PAES_COMBOS = [
   // HUMANIDADES
   {
@@ -273,7 +296,7 @@ export const PAES_COMBOS = [
   },
 ];
 
-/* ───────── Sugerencias rápidas ───────── */
+/* ───────── Sugerencias rápidas (para selector simple) ───────── */
 export const RECOMMENDED_BUNDLES = [
   { id: "his-len",  name: "Historia + Lenguaje", subjects: ["his", "len"] },
   { id: "his-m1",   name: "Historia + M1",       subjects: ["his", "m1"] },

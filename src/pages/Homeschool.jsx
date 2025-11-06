@@ -397,7 +397,7 @@ Necesito orientación para clases/ensayos y presupuesto.`
   );
 }
 
-/* ================= CSS (paleta sólida + contraste corregido) ================= */
+/* ================= CSS (paleta sólida + contraste reforzado) ================= */
 const css = `
 :root{
   --ink:#ffffff; --ink2:#E6EDFF;
@@ -435,16 +435,18 @@ h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-heigh
 .service-chips{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
 .chip{font-weight:900;border-radius:999px;padding:.44rem .8rem}
 .chip.solid{background:#fff;color:#0B1220}
-.chip.solid.blue{background:var(--blue);color:#fff}   /* ✅ contraste */
+.chip.solid.blue{background:var(--blue);color:#fff}
 .chip.solid.amber{background:var(--amber);color:#0B1220}
-.chip.solid.green{background:var(--green);color:#fff} /* ✅ contraste */
-.chip.solid.rose{background:var(--rose);color:#0B1220} /* rosa claro => negro va bien; si lo ves bajo, cambia a #fff */
+.chip.solid.green{background:var(--green);color:#fff}
+.chip.solid.rose{background:var(--rose);color:#0B1220}
 
+/* CTA */
 .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:.64rem 1rem;border-radius:12px;border:2px solid transparent;font-weight:1000;text-decoration:none}
 .btn-primary{background:var(--amber);color:#0B1220}
 .btn-ghost{background:#0B1220;border-color:#2A3B64;color:#EAF2FF}
 
+/* Hero image */
 .hero__img{border-radius:20px;overflow:hidden;border:2px solid #1F2B56;background:#0F172A;box-shadow:var(--shadow)}
 .hero__img img{display:block;width:100%;height:auto}
 .hero__img figcaption{padding:8px 10px;background:#101836;border-top:2px solid #22305A;color:var(--ink2)}
@@ -454,7 +456,7 @@ h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-heigh
 .sec-head h2{margin:0}
 .sec-head p{margin:4px 0 0}
 
-/* Card */
+/* Card base */
 .card{background:var(--card);border:2px solid #223052;border-radius:var(--rad);padding:14px;box-shadow:var(--shadow)}
 
 /* Partner */
@@ -462,18 +464,57 @@ h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-heigh
 .partner .pill{display:inline-block;padding:.2rem .6rem;border-radius:999px;background:#12204B;color:#E6EDFF;font-weight:900}
 .partner-right{display:flex;gap:10px;flex-wrap:wrap}
 
-/* Packs */
+/* Carrusel */
 .hs-wrap{position:relative}
 .hs{display:flex;gap:12px;overflow:auto;scroll-snap-type:x mandatory;padding:2px 2px 14px}
 .slide{scroll-snap-align:start;min-width:260px}
-.hs-btn{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:999px;border:none;background:#1A2757;color:#fff;font-size:20px;font-weight:900;cursor:pointer}
+
+/* Flechas con alto contraste */
+.hs-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  width:38px;height:38px;border-radius:999px;
+  border:2px solid #FFD266;
+  background:#0B1220;
+  color:#FFD266;
+  font-size:20px;font-weight:900;cursor:pointer;
+  box-shadow:0 6px 18px rgba(0,0,0,.4);
+}
+.hs-btn:hover{ filter:brightness(1.05) }
+.hs-btn:focus-visible{ outline:3px solid #22D3EE; outline-offset:2px }
 .hs-btn.prev{left:-6px}.hs-btn.next{right:-6px}
 
+/* PACKS – tarjeta con contraste reforzado */
+.pack{
+  background:#101830;
+  border:2px solid #2C3B6A;
+  border-radius:var(--rad);
+  padding:18px;
+  color:#F4F6FF;
+  box-shadow:0 8px 24px rgba(0,0,0,.4);
+  transition:transform .1s ease;
+}
+.pack:hover{ transform:translateY(-2px); }
+
 .pack .badge{display:inline-block;background:var(--amber);color:#0B1220;font-weight:900;border-radius:10px;padding:.18rem .52rem;margin-bottom:6px}
-.pack h3{margin:.08rem 0 0}
-.pack .price{font-weight:1000;font-size:1.42rem;margin:.28rem 0 .38rem;color:var(--amber)}
+.pack h3{ margin:.08rem 0 0; color:#FFFFFF; }
+.pack .mini{ color:#C3D0FF; }
+
+.pack .price{font-weight:1000;font-size:1.42rem;margin:.28rem 0 .38rem;color:#FFD266}
 .pack .price span{font-size:.95rem;color:#FFE9BE}
-.pack .list{margin:.08rem 0 .5rem;padding-left:18px}
+
+/* Lista interna con marcador visible */
+.pack .list{ margin:.08rem 0 .5rem; padding-left:20px; }
+.pack .list li{
+  color:#E8EEFF;
+  line-height:1.35;
+  margin:.28rem 0;
+  list-style:disc;
+}
+.pack .list li::marker{ color:#FFD266; }
+
+/* Botón del pack con relieve */
+.pack .btn.w100{ box-shadow:0 8px 18px rgba(245,158,11,.30); transition:all .15s ease; }
+.pack .btn.w100:hover{ box-shadow:0 10px 22px rgba(245,158,11,.45); filter:brightness(1.05); }
 
 /* Chips outline (selector) */
 .chips{display:flex;flex-wrap:wrap;gap:8px}
@@ -503,10 +544,10 @@ h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-heigh
 .stat .n{font-size:2rem;font-weight:1000;line-height:1}
 .stat .t{opacity:.95;font-weight:800;margin-top:6px}
 
-.stat.blue{background:var(--blue);color:#fff}     /* ✅ texto blanco */
+.stat.blue{background:var(--blue);color:#fff}
 .stat.amber{background:var(--amber);color:#0B1220}
-.stat.green{background:var(--green);color:#001b13}/* verde claro -> texto muy oscuro (#001b13) p/AA */
-.stat.rose{background:var(--rose);color:#2b0c2e}  /* rosa claro -> texto oscuro p/AA */
+.stat.green{background:var(--green);color:#001b13}
+.stat.rose{background:var(--rose);color:#2b0c2e}
 
 /* Grid helpers */
 .grid{display:grid;gap:12px}
@@ -514,6 +555,6 @@ h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-heigh
 .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:980px){.grid-2,.grid-3{grid-template-columns:1fr}}
 
-/* Focus */
+/* Focus global */
 button:focus-visible,.btn:focus-visible,input:focus-visible{outline:3px solid #22D3EE;outline-offset:2px}
 `;

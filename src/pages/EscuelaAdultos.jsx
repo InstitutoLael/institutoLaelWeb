@@ -1,10 +1,10 @@
 // src/pages/EscuelaAdultos.jsx
-import Aula1 from "../assets/img/bootcamp.jpg";
-import Aula2 from "../assets/img/coaching.jpg";
-import Aula3 from "../assets/img/inclusion.jpg";
-import Gal1 from "../assets/img/hs.jpg";
-import Gal2 from "../assets/img/study-online.jpg";
-import Gal3 from "../assets/img/soft.jpg";
+import Aula1 from "../assets/img/lael/bootcamp.jpg";
+import Aula2 from "../assets/img/lael/coaching.jpg";
+import Aula3 from "../assets/img/lael/inclusion.jpg";
+import Gal1 from "../assets/img//lael";
+import Gal2 from "../assets/img/lael/study-online.jpg";
+import Gal3 from "../assets/img/lael/soft.jpg";
 
 export default function EscuelaAdultos() {
   return (

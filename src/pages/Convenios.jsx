@@ -2,13 +2,11 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-/* ================== Datos (de tus módulos) ==================
-   Mantengo tus imports reales. Si alguno no existe en tu repo,
-   ajusta la ruta o reemplaza por números fijos donde corresponda. */
+// ===== Datos reales (tus módulos) =====
 import {
   LSCH_GROUP_PLANS,
-  CHURCH_CONVENIO,
   LSCH_ENROLLMENT_FEE,
+  CHURCH_CONVENIO,
   clp as clpLS,
 } from "../data/lsch.js";
 
@@ -17,7 +15,7 @@ import {
   clp as clpHS,
 } from "../data/homeschool.js";
 
-/* ================== Helpers ================== */
+// Utilitario CLP genérico
 const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -25,595 +23,589 @@ const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
+// WhatsApp (sin +)
 const WAPP = "56964626568";
 
-/* ================== Página ================== */
 export default function Convenios() {
-  const [tab, setTab] = useState("iglesias"); // iglesias | colegios | empresas | proponer
-
-  // -------- Iglesias (LSCh) --------
+  // ===== valores LSCh reales desde data =====
   const publicLSChMonthly =
     LSCH_GROUP_PLANS?.find((p) => p.id === "g-month")?.monthly ?? 17990;
   const churchMonthly = CHURCH_CONVENIO?.monthlyFlat ?? 11990;
 
-  const [ig, setIg] = useState({ red: "Nor", personas: 1, meses: 1, codigo: "" });
+  // ===== estados para estimadores (plegables) =====
+  const [showChurchCalc, setShowChurchCalc] = useState(false);
+  const [showSchoolCalc, setShowSchoolCalc] = useState(false);
+  const [showCompanyCalc, setShowCompanyCalc] = useState(false);
 
-  const igTotales = useMemo(() => {
+  // ——— Iglesias / Red
+  const [ig, setIg] = useState({ personas: 1, meses: 1, codigo: "" });
+  const igTotals = useMemo(() => {
     const p = Math.max(1, Number(ig.personas || 1));
     const m = Math.max(1, Number(ig.meses || 1));
-    const publico = publicLSChMonthly * p * m + (LSCH_ENROLLMENT_FEE || 10990) * p;
-    const convenio = churchMonthly * p * m + (LSCH_ENROLLMENT_FEE || 10990) * p;
-    const ahorro = Math.max(0, publico - convenio);
-    return { publico, convenio, ahorro };
+    const publico = publicLSChMonthly * p * m + LSCH_ENROLLMENT_FEE * p;
+    const convenio = churchMonthly * p * m + LSCH_ENROLLMENT_FEE * p;
+    return {
+      publico,
+      convenio,
+      ahorro: Math.max(0, publico - convenio),
+    };
   }, [ig.personas, ig.meses, publicLSChMonthly, churchMonthly]);
 
-  const waTextIglesias = encodeURIComponent(
-    [
-      "Hola 👋 Quiero activar convenio *Red de Iglesias* para LSCh.",
-      `Red: ${ig.red}`,
-      `Personas: ${ig.personas}`,
-      `Meses: ${ig.meses}`,
-      ig.codigo?.trim() ? `Código: ${ig.codigo}` : "",
-      `Total público aprox.: ${clp(igTotales.publico)}`,
-      `Total convenio aprox.: ${clp(igTotales.convenio)}`,
-      "¿Me ayudan con el contrato de participación?",
-    ]
-      .filter(Boolean)
-      .join("\n")
-  );
-
-  // -------- Colegios / Homeschool --------
-  const [hs, setHs] = useState({ mensualBase: "", personas: 1, meses: 1 });
-  const hsNums = useMemo(() => {
-    const p = Math.max(1, Number(hs.personas || 1));
-    const m = Math.max(1, Number(hs.meses || 1));
-    const base = Number(String(hs.mensualBase).replace(/[^\d]/g, "")) || 0;
-
-    const totalPublico = base * p * m + (HS_ENROLLMENT_FEE || 29990) * p;
+  // ——— Colegios / Homeschool
+  const [ol, setOl] = useState({ personas: 1, meses: 1, mensualBase: "" });
+  const olNums = useMemo(() => {
+    const p = Math.max(1, Number(ol.personas || 1));
+    const m = Math.max(1, Number(ol.meses || 1));
+    const base = Number(String(ol.mensualBase).replace(/[^\d]/g, "")) || 0;
+    const totalPublico = base * p * m + HS_ENROLLMENT_FEE * p;
     const totalConvenio =
-      Math.round(base * 0.9) * p * m + Math.round((HS_ENROLLMENT_FEE || 29990) * 0.5) * p;
-    const ahorro = Math.max(0, totalPublico - totalConvenio);
-    return { base, totalPublico, totalConvenio, ahorro };
-  }, [hs]);
+      Math.round(base * 0.9) * p * m + Math.round(HS_ENROLLMENT_FEE * 0.5) * p;
+    return {
+      base,
+      totalPublico,
+      totalConvenio,
+      ahorro: Math.max(0, totalPublico - totalConvenio),
+    };
+  }, [ol]);
 
-  const waTextHS = encodeURIComponent(
-    [
-      "Hola 👋 Soy de *colegio/homeschool* y quiero convenio.",
-      `Mensual sin convenio: ${clp(hsNums.base)}`,
-      `Personas: ${hs.personas}`,
-      `Meses: ${hs.meses}`,
-      `Total público aprox.: ${clp(hsNums.totalPublico)}`,
-      `Total convenio aprox.: ${clp(hsNums.totalConvenio)}`,
-      "¿Me envían el contrato para aplicar –10% mensual y –50% matrícula?",
-    ].join("\n")
-  );
-
-  // -------- Empresas --------
-  const [emp, setEmp] = useState({ totalSin: "" });
-  const empNums = useMemo(() => {
-    const bruto = Number(String(emp.totalSin).replace(/[^\d]/g, "")) || 0;
+  // ——— Empresas
+  const [ino, setIno] = useState({ totalSinConvenio: "" });
+  const inoNums = useMemo(() => {
+    const bruto =
+      Number(String(ino.totalSinConvenio).replace(/[^\d]/g, "")) || 0;
     const conConvenio = Math.round(bruto * 0.95);
-    return { bruto, conConvenio, ahorro: Math.max(0, bruto - conConvenio) };
-  }, [emp.totalSin]);
+    return {
+      bruto,
+      conConvenio,
+      ahorro: Math.max(0, bruto - conConvenio),
+    };
+  }, [ino.totalSinConvenio]);
 
-  const waTextEmp = encodeURIComponent(
-    [
-      "Hola 👋 Soy de *empresa* y quiero convenio.",
-      `Total sin convenio (post-tramos): ${clp(empNums.bruto)}`,
-      `Total con convenio –5%: ${clp(empNums.conConvenio)}`,
-      "¿Podemos formalizar con propuesta + contrato?",
-    ].join("\n")
+  // Mensajes WA
+  const waChurch = encodeURIComponent(
+    `Hola 👋, quiero activar convenio para Red de Iglesias (LSCh).\n` +
+      `Personas: ${ig.personas}\nMeses: ${ig.meses}\n` +
+      (ig.codigo?.trim() ? `Código: ${ig.codigo}\n` : "") +
+      `Total público aprox.: ${clp(igTotals.publico)}\n` +
+      `Total convenio aprox.: ${clp(igTotals.convenio)}\n` +
+      `¿Me ayudan con el contrato de participación?`
   );
-
-  const waTextProponer = encodeURIComponent(
-    [
-      "Hola 👋 Quiero proponer un convenio.",
-      "Organización: ______",
-      "Tamaño estimado: ______",
-      "Contacto: ______",
-      "¿Agendamos una llamada de 15 minutos?",
-    ].join("\n")
+  const waSchool = encodeURIComponent(
+    `Hola 👋, soy de colegio/homeschool.\n` +
+      `Mensual sin convenio (CLP): ${clp(olNums.base)}\n` +
+      `Personas: ${ol.personas} | Meses: ${ol.meses}\n` +
+      `Total público aprox.: ${clp(olNums.totalPublico)}\n` +
+      `Total convenio aprox.: ${clp(olNums.totalConvenio)}\n` +
+      `¿Formalizamos –10% mensual y –50% matrícula?`
+  );
+  const waIno = encodeURIComponent(
+    `Hola 👋, colaborador/a de empresa.\n` +
+      `Total sin convenio: ${clp(inoNums.bruto)}\n` +
+      `Total con –5%: ${clp(inoNums.conConvenio)}\n` +
+      `¿Podemos avanzar con propuesta + contrato?`
+  );
+  const waPropose = encodeURIComponent(
+    `Hola 👋, quiero proponer un convenio.\n` +
+      `Organización: ______\nTamaño estimado: ______\nContacto: ______\n` +
+      `¿Agendamos una llamada de 15 min?`
   );
 
   return (
-    <section className="cv-page">
-      <style>{css}</style>
+    <main className="cv-landing">
+      <style>{styles}</style>
 
-      {/* HERO */}
-      <header className="hero">
-        <div className="container hero__grid">
-          <div>
-            <span className="kicker">Convenios & Partners</span>
-            <h1>Beneficios preferentes por pertenencia</h1>
-            <p className="lead">
-              Precio preferente para <b>red de iglesias</b>, <b>colegios</b> y <b>empresas</b>.
-              Si perteneces a un partner, validas tu pertenencia y el descuento se aplica de forma
-              <b> automática</b>. Para nuevos acuerdos, lo dejamos listo en <b>15 minutos</b>.
-            </p>
+      {/* ===== HERO ===== */}
+      <section className="hero">
+        <div className="container hero__inner">
+          <div className="tag">Convenios & Partners</div>
+          <h1>Beneficios preferentes por pertenencia</h1>
+          <p className="lead">
+            Precio preferente para <b>red de iglesias</b>, <b>colegios</b> y{" "}
+            <b>empresas</b>. Si perteneces a un partner, validas tu pertenencia y
+            el descuento se aplica de forma <b>automática</b>. Para nuevos acuerdos,
+            lo dejamos listo en <b>15 minutos</b>.
+          </p>
 
-            <div className="cta-row">
-              <a
-                className="btn btn-primary"
-                href={`https://wa.me/${WAPP}?text=${waTextProponer}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Solicitar convenio
-              </a>
-              <Link className="btn btn-outline" to="/inscripcion">
-                Inscribirme
-              </Link>
-            </div>
+          <div className="cta">
+            <a
+              className="btn btn-primary"
+              href={`https://wa.me/${WAPP}?text=${waPropose}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Solicitar convenio
+            </a>
+            <Link className="btn btn-outline" to="/inscripcion">
+              Inscribirme
+            </Link>
           </div>
 
-          <div className="hero__marquee" aria-label="Partners">
-            <div className="mq-track">
-              {["Red de Iglesias", "Colegios", "Empresas", "Nuevo partner"].map((p, i) => (
-                <span key={i} className="pill">
+          {/* Marquee */}
+          <div className="marquee" aria-label="Partners">
+            <div className="marquee__track">
+              {[
+                "Red de Iglesias",
+                "Colegios",
+                "Empresas",
+                "Nuevo partner",
+                "Homeschool",
+                "Programas corporativos",
+              ].map((p, i) => (
+                <span key={i} className="chip">
                   {p}
                 </span>
               ))}
-              {["Red de Iglesias", "Colegios", "Empresas", "Nuevo partner"].map((p, i) => (
-                <span key={`dup-${i}`} className="pill">
+              {[
+                "Red de Iglesias",
+                "Colegios",
+                "Empresas",
+                "Nuevo partner",
+                "Homeschool",
+                "Programas corporativos",
+              ].map((p, i) => (
+                <span key={`dup-${i}`} className="chip">
                   {p}
                 </span>
               ))}
             </div>
           </div>
         </div>
-      </header>
+      </section>
 
-      {/* TABS */}
-      <div className="container">
-        <nav className="tabs" role="tablist" aria-label="Tipos de convenio">
-          <Tab id="ig" label="Red de Iglesias" on={tab === "iglesias"} onClick={() => setTab("iglesias")} />
-          <Tab id="co" label="Colegios / Homeschool" on={tab === "colegios"} onClick={() => setTab("colegios")} />
-          <Tab id="em" label="Empresas" on={tab === "empresas"} onClick={() => setTab("empresas")} />
-          <Tab id="pr" label="+ Proponer convenio" on={tab === "proponer"} onClick={() => setTab("proponer")} />
-        </nav>
-      </div>
+      {/* ===== FINALIDAD ===== */}
+      <section className="purpose">
+        <div className="container grid-3">
+          <article className="p-card">
+            <h3>¿Para qué existe?</h3>
+            <p>
+              Acercar formación de calidad con <b>precios justos</b> a comunidades
+              reales. Formalizamos la pertenencia y el beneficio queda aplicado
+              de forma simple y transparente.
+            </p>
+          </article>
+          <article className="p-card">
+            <h3>¿Cómo funciona?</h3>
+            <ul>
+              <li>Validación rápida (documento, correo o código).</li>
+              <li>Firma de <b>contrato de participación</b>.</li>
+              <li>Descuento automático mientras la afiliación esté vigente.</li>
+            </ul>
+          </article>
+          <article className="p-card">
+            <h3>¿Qué obtienes?</h3>
+            <ul>
+              <li>Precio preferente para tu organización.</li>
+              <li>Soporte dedicado y onboarding sin costo.</li>
+              <li>Reporte ejecutivo cuando aplica (empresas).</li>
+            </ul>
+          </article>
+        </div>
+      </section>
 
-      {/* CONTENIDO */}
-      <div className="container blocks">
-        {tab === "iglesias" && (
-          <section className="block">
-            <div className="grid g2">
-              <article className="card">
-                <header className="c-head">
-                  <h2 className="h6">Red de iglesias · LSCh</h2>
-                  <p className="mini">
-                    Precio preferente para <b>planes grupales online</b> de LSCh.
-                    Verificación simple (carta pastoral o <b>código</b>).
-                  </p>
-                </header>
-
-                <div className="grid g3">
-                  <Field label="Iglesia / Red">
-                    <select
-                      className="field"
-                      value={ig.red}
-                      onChange={(e) => setIg((s) => ({ ...s, red: e.target.value }))}
-                    >
-                      <option>Nor</option>
-                      <option>Sur</option>
-                      <option>Centro</option>
-                    </select>
-                  </Field>
-
-                  <Field label="Personas">
-                    <input
-                      className="field"
-                      type="number"
-                      min="1"
-                      value={ig.personas}
-                      onChange={(e) =>
-                        setIg((s) => ({ ...s, personas: Math.max(1, Number(e.target.value) || 1) }))
-                      }
-                    />
-                  </Field>
-
-                  <Field label="Meses">
-                    <input
-                      className="field"
-                      type="number"
-                      min="1"
-                      value={ig.meses}
-                      onChange={(e) =>
-                        setIg((s) => ({ ...s, meses: Math.max(1, Number(e.target.value) || 1) }))
-                      }
-                    />
-                  </Field>
-                </div>
-
-                <div className="grid g3">
-                  <Stat k="Mensual público" v={clpLS(publicLSChMonthly)} />
-                  <Stat k="Mensual convenio" v={clpLS(churchMonthly)} ok />
-                  <Stat k="Matrícula LSCh" v={clpLS(LSCH_ENROLLMENT_FEE)} />
-                </div>
-
-                <div className="grid g3">
-                  <Stat k="Total público" v={clp(igTotales.publico)} />
-                  <Stat k="Total convenio" v={clp(igTotales.convenio)} ok />
-                  <Stat k="Ahorro estimado" v={clp(igTotales.ahorro)} />
-                </div>
-
+      {/* ===== PLANES / TARJETAS ===== */}
+      <section className="plans">
+        <div className="container grid-3">
+          {/* Iglesias */}
+          <PlanCard
+            tone="blue"
+            title="Red de Iglesias · LSCh"
+            bullets={[
+              `Mensual público (ref.): ${clpLS(publicLSChMonthly)}`,
+              `Mensual convenio: ${clpLS(churchMonthly)}`,
+              `Matrícula: ${clpLS(LSCH_ENROLLMENT_FEE)}`,
+            ]}
+            note="Aplica a planes grupales online. Verificación simple: carta pastoral o código de convenio."
+            primary={{
+              label: "Activar por WhatsApp",
+              href: `https://wa.me/${WAPP}?text=${waChurch}`,
+            }}
+            secondary={{ label: "Inscribirme", to: "/inscripcion" }}
+          >
+            <Collapser
+              open={showChurchCalc}
+              onToggle={() => setShowChurchCalc((s) => !s)}
+              label="Ver estimador rápido"
+            >
+              <div className="grid-3 form">
+                <Field label="Personas">
+                  <input
+                    className="field"
+                    type="number"
+                    min="1"
+                    value={ig.personas}
+                    onChange={(e) =>
+                      setIg((s) => ({ ...s, personas: Number(e.target.value) || 1 }))
+                    }
+                  />
+                </Field>
+                <Field label="Meses">
+                  <input
+                    className="field"
+                    type="number"
+                    min="1"
+                    value={ig.meses}
+                    onChange={(e) =>
+                      setIg((s) => ({ ...s, meses: Number(e.target.value) || 1 }))
+                    }
+                  />
+                </Field>
                 <Field label="Código (opcional)">
                   <input
                     className="field"
                     value={ig.codigo}
-                    placeholder="Si te entregaron uno"
                     onChange={(e) => setIg((s) => ({ ...s, codigo: e.target.value }))}
                   />
                 </Field>
+              </div>
 
-                <div className="cta-row mt16">
-                  <a
-                    className="btn btn-primary"
-                    href={`https://wa.me/${WAPP}?text=${waTextIglesias}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Activar convenio por WhatsApp
-                  </a>
-                  <Link className="btn btn-outline" to="/inscripcion">
-                    Inscribirme
-                  </Link>
-                </div>
-              </article>
+              <div className="sum grid-3">
+                <Sum label="Total público" value={clp(igTotals.publico)} />
+                <Sum label="Total convenio" value={clp(igTotals.convenio)} ok />
+                <Sum label="Ahorro estimado" value={clp(igTotals.ahorro)} />
+              </div>
+            </Collapser>
+          </PlanCard>
 
-              <Aside
-                title="Verificación simple"
-                items={[
-                  "Carta pastoral o líder con nombre del participante.",
-                  "Correo institucional (si existe) o código de convenio.",
-                  "Beneficio vigente mientras exista pertenencia + contrato firmado.",
-                ]}
-              />
-            </div>
-          </section>
-        )}
+          {/* Colegios / Homeschool */}
+          <PlanCard
+            tone="green"
+            title="Colegios / Homeschool"
+            bullets={[
+              "Regla clara: –10% mensual sobre tu plan.",
+              `Matrícula Homeschool: –50% (de ${clpHS(
+                HS_ENROLLMENT_FEE
+              )} → ${clpHS(Math.round(HS_ENROLLMENT_FEE * 0.5))}).`,
+            ]}
+            note="Como el mensual varía por modo/horas, ingresa tu mensual sin convenio para estimar."
+            primary={{
+              label: "Activar por WhatsApp",
+              href: `https://wa.me/${WAPP}?text=${waSchool}`,
+            }}
+            secondary={{ label: "Inscribirme", to: "/inscripcion" }}
+          >
+            <Collapser
+              open={showSchoolCalc}
+              onToggle={() => setShowSchoolCalc((s) => !s)}
+              label="Ver estimador rápido"
+            >
+              <div className="grid-3 form">
+                <Field label="Mensual sin convenio (CLP)">
+                  <input
+                    className="field"
+                    inputMode="numeric"
+                    placeholder="$0"
+                    value={ol.mensualBase}
+                    onChange={(e) =>
+                      setOl((s) => ({ ...s, mensualBase: e.target.value }))
+                    }
+                    onBlur={(e) => {
+                      const v =
+                        Number(String(e.target.value).replace(/[^\d]/g, "")) || 0;
+                      setOl((s) => ({ ...s, mensualBase: v ? clp(v) : "" }));
+                    }}
+                  />
+                </Field>
+                <Field label="Personas">
+                  <input
+                    className="field"
+                    type="number"
+                    min="1"
+                    value={ol.personas}
+                    onChange={(e) =>
+                      setOl((s) => ({ ...s, personas: Number(e.target.value) || 1 }))
+                    }
+                  />
+                </Field>
+                <Field label="Meses">
+                  <input
+                    className="field"
+                    type="number"
+                    min="1"
+                    value={ol.meses}
+                    onChange={(e) =>
+                      setOl((s) => ({ ...s, meses: Number(e.target.value) || 1 }))
+                    }
+                  />
+                </Field>
+              </div>
 
-        {tab === "colegios" && (
-          <section className="block">
-            <div className="grid g2">
-              <article className="card">
-                <header className="c-head">
-                  <h2 className="h6">Colegios / Homeschool</h2>
-                  <p className="mini">
-                    Regla clara: <b>–10%</b> mensual sobre tu plan + <b>–50%</b> de matrícula.
-                    Ingresa tu mensual sin convenio para estimar.
-                  </p>
-                </header>
+              <div className="sum grid-3">
+                <Sum label="Total público" value={clp(olNums.totalPublico)} />
+                <Sum label="Total convenio" value={clp(olNums.totalConvenio)} ok />
+                <Sum label="Ahorro estimado" value={clp(olNums.ahorro)} />
+              </div>
+            </Collapser>
+          </PlanCard>
 
-                <div className="grid g3">
-                  <Field label="Mensual sin convenio (CLP)">
-                    <input
-                      className="field"
-                      inputMode="numeric"
-                      placeholder="$0"
-                      value={hs.mensualBase}
-                      onChange={(e) => setHs((s) => ({ ...s, mensualBase: e.target.value }))}
-                      onBlur={(e) => {
-                        const v = Number(String(e.target.value).replace(/[^\d]/g, "")) || 0;
-                        setHs((s) => ({ ...s, mensualBase: v ? clp(v) : "" }));
-                      }}
-                    />
-                  </Field>
-
-                  <Field label="Personas">
-                    <input
-                      className="field"
-                      type="number"
-                      min="1"
-                      value={hs.personas}
-                      onChange={(e) =>
-                        setHs((s) => ({ ...s, personas: Math.max(1, Number(e.target.value) || 1) }))
-                      }
-                    />
-                  </Field>
-
-                  <Field label="Meses">
-                    <input
-                      className="field"
-                      type="number"
-                      min="1"
-                      value={hs.meses}
-                      onChange={(e) =>
-                        setHs((s) => ({ ...s, meses: Math.max(1, Number(e.target.value) || 1) }))
-                      }
-                    />
-                  </Field>
-                </div>
-
-                <div className="grid g3">
-                  <Stat k="Total público" v={clp(hsNums.totalPublico)} />
-                  <Stat k="Total convenio" v={clp(hsNums.totalConvenio)} ok />
-                  <Stat k="Ahorro estimado" v={clp(hsNums.ahorro)} />
-                </div>
-
-                <div className="cta-row mt16">
-                  <a
-                    className="btn btn-primary"
-                    href={`https://wa.me/${WAPP}?text=${waTextHS}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Activar convenio por WhatsApp
-                  </a>
-                  <Link className="btn btn-outline" to="/inscripcion">
-                    Inscribirme
-                  </Link>
-                </div>
-              </article>
-
-              <Aside
-                title="Verificación simple"
-                items={[
-                  "Certificado de alumno/a regular del año en curso.",
-                  "Correo del colegio o comprobante de pago.",
-                  `Matrícula base: ${clpHS(HS_ENROLLMENT_FEE)} → convenio ${clpHS(
-                    Math.round((HS_ENROLLMENT_FEE || 0) * 0.5)
-                  )}.`,
-                ]}
-              />
-            </div>
-          </section>
-        )}
-
-        {tab === "empresas" && (
-          <section className="block">
-            <div className="grid g2">
-              <article className="card">
-                <header className="c-head">
-                  <h2 className="h6">Empresas</h2>
-                  <p className="mini">
-                    Tu tabla por volumen + <b>–5% extra</b> sobre el total post-tramos.
-                    Incluye <b>reporte ejecutivo</b> sin costo.
-                  </p>
-                </header>
-
+          {/* Empresas */}
+          <PlanCard
+            tone="rose"
+            title="Empresas"
+            bullets={[
+              "Tu tabla por volumen + –5% extra sobre el total post-tramos.",
+              "Incluye reporte ejecutivo sin costo.",
+            ]}
+            note="Ingresa el total sin convenio (después de tus tramos) para ver –5% aplicado."
+            primary={{
+              label: "Activar por WhatsApp",
+              href: `https://wa.me/${WAPP}?text=${waIno}`,
+            }}
+            secondary={{ label: "Ver programas corporativos", to: "/empresas" }}
+          >
+            <Collapser
+              open={showCompanyCalc}
+              onToggle={() => setShowCompanyCalc((s) => !s)}
+              label="Ver estimador rápido"
+            >
+              <div className="grid-3 form">
                 <Field label="Total sin convenio (CLP)">
                   <input
                     className="field"
                     inputMode="numeric"
                     placeholder="$0"
-                    value={emp.totalSin}
-                    onChange={(e) => setEmp((s) => ({ ...s, totalSin: e.target.value }))}
+                    value={ino.totalSinConvenio}
+                    onChange={(e) =>
+                      setIno((s) => ({ ...s, totalSinConvenio: e.target.value }))
+                    }
                     onBlur={(e) => {
-                      const v = Number(String(e.target.value).replace(/[^\d]/g, "")) || 0;
-                      setEmp((s) => ({ ...s, totalSin: v ? clp(v) : "" }));
+                      const v =
+                        Number(String(e.target.value).replace(/[^\d]/g, "")) || 0;
+                      setIno((s) => ({
+                        ...s,
+                        totalSinConvenio: v ? clp(v) : "",
+                      }));
                     }}
                   />
                 </Field>
+                <div />
+                <div />
+              </div>
 
-                <div className="grid g3">
-                  <Stat k="Total sin convenio" v={clp(empNums.bruto)} />
-                  <Stat k="Total con –5%" v={clp(empNums.conConvenio)} ok />
-                  <Stat k="Ahorro estimado" v={clp(empNums.ahorro)} />
-                </div>
+              <div className="sum grid-3">
+                <Sum label="Total sin convenio" value={clp(inoNums.bruto)} />
+                <Sum label="Total con –5%" value={clp(inoNums.conConvenio)} ok />
+                <Sum label="Ahorro estimado" value={clp(inoNums.ahorro)} />
+              </div>
+            </Collapser>
+          </PlanCard>
+        </div>
+      </section>
 
-                <div className="cta-row mt16">
-                  <a
-                    className="btn btn-primary"
-                    href={`https://wa.me/${WAPP}?text=${waTextEmp}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Activar convenio por WhatsApp
-                  </a>
-                  <Link className="btn btn-outline" to="/empresas">
-                    Ver programas corporativos
-                  </Link>
-                </div>
-              </article>
-
-              <Aside
-                title="Verificación simple"
-                items={[
-                  "Correo corporativo o credencial digital/física.",
-                  "Confirmación con propuesta + contrato.",
-                ]}
-              />
-            </div>
-          </section>
-        )}
-
-        {tab === "proponer" && (
-          <section className="block">
-            <div className="grid g2">
-              <article className="card">
-                <header className="c-head">
-                  <h2 className="h6">Proponer convenio</h2>
-                  <p className="mini">Cuéntanos tu organización y tamaño estimado.</p>
-                </header>
-
-                <form
-                  className="grid g2"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    window.open(`https://wa.me/${WAPP}?text=${waTextProponer}`, "_blank", "noreferrer");
-                  }}
-                >
-                  <Field label="Organización">
-                    <input className="field" placeholder="Nombre de la entidad" required />
-                  </Field>
-                  <Field label="Tamaño estimado (personas)">
-                    <input className="field" placeholder="Ej: 20–50" required />
-                  </Field>
-                  <Field label="Contacto (correo o WhatsApp)">
-                    <input className="field" placeholder="tu@correo.cl / +56 9 ..." required />
-                  </Field>
-
-                  <div className="cta-row mt8">
-                    <button className="btn btn-primary" type="submit">
-                      Agendar por WhatsApp
-                    </button>
-                    <Link className="btn btn-outline" to="/contacto">
-                      Escribir por correo
-                    </Link>
-                  </div>
-                </form>
-              </article>
-
-              <Aside
-                title="Cómo se activa"
-                items={[
-                  "Validación simple (documento/código).",
-                  "Firma de contrato de participación.",
-                  "Descuento aplicado de forma automática.",
-                ]}
-              />
-            </div>
-          </section>
-        )}
-      </div>
-    </section>
+      {/* ===== CONTACTO / CTA FINAL ===== */}
+      <section className="cta-final">
+        <div className="container cta-final__inner">
+          <div>
+            <h3>¿Listo para activar tu beneficio?</h3>
+            <p className="muted">
+              Podemos dejarlo operativo hoy. Conversa con nosotros por WhatsApp o envíanos
+              un correo con tus datos de verificación.
+            </p>
+          </div>
+          <div className="btns">
+            <a
+              className="btn btn-primary"
+              href={`https://wa.me/${WAPP}?text=${waPropose}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              WhatsApp
+            </a>
+            <a className="btn btn-outline" href="mailto:contacto@institutolael.cl">
+              Escribir por correo
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
 
-/* ================== Subcomponentes ================== */
-function Tab({ id, label, on, onClick }) {
+/* ---------- Subcomponentes de UI ---------- */
+function PlanCard({ tone = "blue", title, bullets = [], note, primary, secondary, children }) {
   return (
-    <button
-      type="button"
-      role="tab"
-      aria-selected={on}
-      id={`tab-${id}`}
-      className={"tab " + (on ? "on" : "")}
-      onClick={onClick}
-    >
-      {label}
-    </button>
+    <article className={`plan ${tone}`}>
+      <div className="plan__head">
+        <h3>{title}</h3>
+        <ul className="bullets">
+          {bullets.map((b, i) => (
+            <li key={i}>{b}</li>
+          ))}
+        </ul>
+        {note && <p className="note">{note}</p>}
+      </div>
+
+      {children}
+
+      <div className="plan__cta">
+        {primary?.href && (
+          <a className="btn btn-primary" href={primary.href} target="_blank" rel="noreferrer">
+            {primary.label}
+          </a>
+        )}
+        {secondary?.to && (
+          <Link className="btn btn-outline" to={secondary.to}>
+            {secondary.label}
+          </Link>
+        )}
+      </div>
+    </article>
+  );
+}
+
+function Collapser({ open, onToggle, label, children }) {
+  return (
+    <div className={`collapser ${open ? "open" : ""}`}>
+      <button type="button" className="collapser__btn" onClick={onToggle}>
+        {label}
+        <span aria-hidden>{open ? "▴" : "▾"}</span>
+      </button>
+      <div className="collapser__content">{open && children}</div>
+    </div>
   );
 }
 
 function Field({ label, children }) {
   return (
     <label className="field-wrap">
-      <div className="label">{label}</div>
+      <span className="label">{label}</span>
       {children}
     </label>
   );
 }
 
-function Stat({ k, v, ok }) {
+function Sum({ label, value, ok = false }) {
   return (
-    <div className={"stat " + (ok ? "ok" : "")}>
-      <div className="k">{k}</div>
-      <div className="v">{v}</div>
+    <div className={`sum__item ${ok ? "ok" : ""}`}>
+      <div className="k">{label}</div>
+      <div className="v">{value}</div>
     </div>
   );
 }
 
-function Aside({ title, items = [] }) {
-  return (
-    <aside className="aside">
-      <h3 className="h6">{title}</h3>
-      <ul className="mini">
-        {items.map((t, i) => (
-          <li key={i}>{t}</li>
-        ))}
-      </ul>
-      <p className="tiny m0">Aplica mientras la acreditación esté al día.</p>
-    </aside>
-  );
-}
-
-/* ================== CSS local ================== */
-const css = `
+/* ---------- CSS-in-Component ---------- */
+const styles = `
 :root{
-  --bg:#0b1220; --panel:#0f172a; --ink:#f8fafc; --ink2:#cbd5e1; --muted:#a8b3c7;
-  --bd:#1f2a44; --accent:#f59e0b; --accent2:#5850ec; --ok:#16a34a;
-  --rad:16px; --shadow:0 12px 32px rgba(2,6,23,.35);
+  --bg:#0b1220;
+  --panel:#0e1424;
+  --soft:#0f172a;
+  --bd:#1f2a44;
+  --ink:#ffffff;
+  --ink2:#e5eefc;
+  --muted:#cbd5e1;
+  --gold:#fbbf24;
+  --blue:#5b6ee7;
+  --green:#23a36b;
+  --rose:#d28ac3;
+  --ok:#16a34a;
+  --rad:18px;
+  --shadow:0 24px 60px rgba(2,6,23,.35);
 }
 *{box-sizing:border-box}
-.cv-page{background:var(--bg); color:var(--ink); font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif}
-.container{width:min(1120px,92vw); margin:0 auto; padding:0 4px}
-.m0{margin:0}
-.mt8{margin-top:8px}
-.mt16{margin-top:16px}
+.cv-landing{ background:var(--bg); color:var(--ink); font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+.container{ width:min(1120px, 92vw); margin-inline:auto; }
 
-/* HERO */
+/* ===== HERO ===== */
 .hero{
-  padding:32px 0 18px;
-  border-bottom:1px solid var(--bd);
+  padding:68px 0 36px;
   background:
-    radial-gradient(820px 300px at -6% -10%, rgba(88,80,236,.12), transparent 60%),
-    radial-gradient(760px 280px at 106% -10%, rgba(245,158,11,.12), transparent 60%);
+    radial-gradient(1000px 360px at 10% -10%, rgba(91,110,231,.18), transparent 60%),
+    radial-gradient(900px 320px at 90% -10%, rgba(251,191,36,.14), transparent 60%);
+  border-bottom:1px solid var(--bd);
 }
-.hero__grid{display:grid; grid-template-columns:1.1fr .9fr; gap:20px; align-items:center}
-@media (max-width:980px){ .hero__grid{grid-template-columns:1fr} }
-.kicker{display:inline-block; font-weight:900; letter-spacing:.2px; color:#c7d2fe}
-.hero h1{margin:.2rem 0 .5rem; font-size:clamp(1.8rem, 3vw + .6rem, 2.6rem)}
-.lead{color:var(--ink2); max-width:62ch}
-.cta-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+.hero__inner{ text-align:center; display:grid; gap:16px; justify-items:center; }
+.tag{
+  display:inline-block; padding:.42rem .7rem; border:1px solid #334155; border-radius:999px;
+  font-weight:900; color:#c7d2fe; background:rgba(15,23,42,.6);
+}
+.hero h1{ margin:.2rem 0 .35rem; font-size:clamp(1.9rem, 1.4rem + 2.4vw, 3rem); letter-spacing:.2px; }
+.lead{ color:var(--ink2); max-width:70ch; }
+.cta{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:6px; }
 
 /* Marquee */
-.hero__marquee{
-  overflow:hidden; border:1px solid var(--bd); border-radius:14px; padding:10px;
-  background:linear-gradient(180deg,#0f172a,#0b1220);
-  box-shadow:var(--shadow);
-}
-.mq-track{display:flex; gap:12px; white-space:nowrap; animation:slide 16s linear infinite}
-.pill{
-  display:inline-block; padding:.32rem .65rem; border-radius:999px;
-  background:#101a2f; border:1px solid #263257; color:#e5e7eb; font-weight:800
+.marquee{ width:100%; overflow:hidden; border:1px solid var(--bd); border-radius:999px; margin-top:14px; backdrop-filter:saturate(110%) blur(2px); }
+.marquee__track{ display:flex; gap:10px; padding:8px; white-space:nowrap; animation:slide 18s linear infinite; }
+.chip{
+  display:inline-block; padding:.34rem .7rem; border-radius:999px;
+  background:#0f1a30; border:1px solid #263257; color:#e5e7eb; font-weight:800;
 }
 @keyframes slide{ from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-/* Tabs */
-.tabs{display:flex; gap:10px; flex-wrap:wrap; margin:18px 0 10px}
-.tab{
-  padding:.55rem .9rem; border-radius:999px; border:1px solid #2b3656;
-  background:#0f172a; color:#eaf2ff; font-weight:900;
+/* ===== FINALIDAD ===== */
+.purpose{ padding:28px 0 6px; }
+.grid-3{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:16px; }
+@media (max-width:980px){ .grid-3{ grid-template-columns:1fr; } }
+.p-card{
+  background:linear-gradient(180deg, var(--soft), var(--panel));
+  border:1px solid var(--bd); border-radius:var(--rad); padding:18px; box-shadow:var(--shadow);
 }
-.tab.on{ border-color:#6b7cff; box-shadow:0 0 0 2px rgba(79,70,229,.18) inset }
+.p-card h3{ margin:0 0 6px; }
+.p-card ul{ margin:.4rem 0 0; padding-left:18px; }
 
-/* Blocks */
-.blocks{padding:6px 0 28px}
-.block{margin:16px 0 26px}
-
-/* Grid */
-.grid{display:grid; gap:14px}
-.g2{grid-template-columns:1fr 0.75fr}
-.g3{grid-template-columns:repeat(3, minmax(0,1fr))}
-@media (max-width:980px){ .g2,.g3{grid-template-columns:1fr} }
-
-/* Card & Aside */
-.card, .aside{
-  border:1px solid var(--bd); border-radius:var(--rad);
-  background:
-    radial-gradient(540px 180px at -10% -10%, rgba(255,255,255,.05), transparent 60%),
-    linear-gradient(180deg,#0f172a,#0b1220);
-  box-shadow:var(--shadow); padding:16px;
+/* ===== PLANES ===== */
+.plans{ padding:8px 0 24px; }
+.plan{
+  display:flex; flex-direction:column; gap:12px;
+  background:linear-gradient(180deg, var(--soft), var(--panel));
+  border:1px solid var(--bd); border-radius:var(--rad); padding:18px; box-shadow:var(--shadow);
 }
-.c-head{margin-bottom:6px}
-.h6{font-size:1.06rem; font-weight:900}
-.mini{margin:.4rem 0 0; padding-left:18px; color:var(--ink)}
-.mini li{margin:.2rem 0}
-.tiny{font-size:.88rem; color:var(--ink2)}
-
-/* Field */
-.field-wrap .label{font-weight:800; color:var(--muted); margin-bottom:6px}
-.field{
-  width:100%; border:1px solid #2a3557; border-radius:12px;
-  padding:.6rem .8rem; background:#0f172a; color:#eaf2ff
+.plan.blue{ outline:1px solid rgba(91,110,231,.25); }
+.plan.green{ outline:1px solid rgba(35,163,107,.25); }
+.plan.rose{ outline:1px solid rgba(210,138,195,.25); }
+.plan__head h3{ margin:0 0 8px; }
+.bullets{ margin:.2rem 0 .1rem; padding-left:18px; }
+.note{
+  margin:.35rem 0 0; color:var(--ink2); font-size:.95rem;
+  border-left:3px solid #334155; padding-left:.6rem;
 }
 
-/* Stats */
-.stat{border:1px solid #263257; border-radius:12px; padding:.7rem .8rem; background:#0f172a}
-.stat.ok{border-color:#1f8a4d}
-.stat .k{font-weight:800; color:var(--muted); margin-bottom:2px}
-.stat .v{font-size:1.1rem; font-weight:1000}
+/* Collapser */
+.collapser{ border:1px dashed #2d3b63; border-radius:14px; background:#0f172a; }
+.collapser__btn{
+  width:100%; text-align:center; background:transparent; border:0; color:var(--ink2);
+  padding:.7rem .9rem; font-weight:900; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.collapser__btn:hover{ background:rgba(255,255,255,.04); }
+.collapser__content{ padding:10px 12px 14px; }
+.form .field{ width:100%; border:1px solid #2a3557; border-radius:12px; padding:.6rem .75rem; background:#0e1424; color:var(--ink); }
+.field-wrap .label{ display:block; font-weight:800; color:#a9b6d9; margin:0 0 4px; }
 
-/* Buttons */
+/* Sumarios */
+.sum{ align-items:stretch; }
+.sum__item{
+  border:1px solid #2a3557; border-radius:14px; padding:12px; background:#0f172a;
+}
+.sum__item.ok{ outline:2px solid rgba(22,163,74,.35); }
+.k{ font-weight:800; color:#93a5c6; }
+.v{ font-weight:1000; font-size:1.18rem; margin-top:.1rem; }
+
+/* CTA del plan */
+.plan__cta{ display:flex; gap:8px; flex-wrap:wrap; }
+
+/* CTA FINAL */
+.cta-final{
+  border-top:1px solid var(--bd);
+  background:linear-gradient(135deg, rgba(251,191,36,.12), rgba(91,110,231,.12));
+  padding:28px 0;
+}
+.cta-final__inner{ display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.cta-final h3{ margin:0 0 4px; }
+.cta-final .muted{ color:var(--ink2); margin:0; }
+.cta-final .btns{ display:flex; gap:8px; flex-wrap:wrap; }
+@media (max-width:980px){
+  .cta-final__inner{ flex-direction:column; align-items:flex-start; }
+}
+
+/* Botones */
 .btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  padding:.78rem 1.05rem; border-radius:12px; border:1px solid transparent;
-  text-decoration:none; font-weight:900; cursor:pointer; transition:.18s ease;
+  display:inline-flex; align-items:center; justify-content:center;
+  padding:.78rem 1.05rem; border-radius:12px; border:1px solid #334155;
+  font-weight:900; text-decoration:none; cursor:pointer; transition:.18s ease;
+  color:var(--ink);
 }
-.btn-primary{background:linear-gradient(180deg,#fbbf24,#f59e0b); color:#0b1220; border-color:#d97706}
-.btn-primary:hover{transform:translateY(-2px); box-shadow:0 16px 32px rgba(245,158,11,.25)}
-.btn-outline{border-color:#475569; color:#f1f5f9; background:transparent}
-.btn-outline:hover{transform:translateY(-2px); box-shadow:0 16px 28px rgba(2,6,23,.28)}
+.btn-primary{
+  background:linear-gradient(180deg, var(--gold), #f59e0b); color:#0b1220; border-color:#d97706;
+}
+.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(245,158,11,.25); }
+.btn-outline{ background:transparent; }
+.btn-outline:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.28); }
 `;

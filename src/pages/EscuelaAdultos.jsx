@@ -1,13 +1,13 @@
 // src/pages/EscuelaAdultos.jsx
 
 // ✅ Resolver assets con URL absoluto (Vite-friendly)
-const Aula1 = new URL("../assets/img/bootcamp.jpg", import.meta.url).href;
-const Aula2 = new URL("../assets/img/coaching.jpg", import.meta.url).href;
-const Aula3 = new URL("../assets/img/inclusion.jpg", import.meta.url).href;
+const Aula1 = new URL("../assets/img/lael/bootcamp.jpg", import.meta.url).href;
+const Aula2 = new URL("../assets/img/lael/coaching.jpg", import.meta.url).href;
+const Aula3 = new URL("../assets/img/lael/inclusion.jpg", import.meta.url).href;
 
-const Gal1 = new URL("../assets/img/hs.jpg", import.meta.url).href;
-const Gal2 = new URL("../assets/img/study-online.jpg", import.meta.url).href;
-const Gal3 = new URL("../assets/img/soft.jpg", import.meta.url).href;
+const Gal1 = new URL("../assets/img/lael/hs.jpg", import.meta.url).href;
+const Gal2 = new URL("../assets/img/lael/study-online.jpg", import.meta.url).href;
+const Gal3 = new URL("../assets/img/lael/soft.jpg", import.meta.url).href;
 
 export default function EscuelaAdultos() {
   return (

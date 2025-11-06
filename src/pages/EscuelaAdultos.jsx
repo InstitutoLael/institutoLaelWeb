@@ -1,10 +1,10 @@
 // src/pages/EscuelaAdultos.jsx
 
-// ✅ Vite-friendly: resuelve rutas absolutas desde este archivo
-// Si tus fotos están en otra carpeta, cambia los paths de abajo.
-const LogoMark = new URL("../assets/img/lael/Logos/lael-inst-amarillo.png", import.meta.url).href;
+// ✅ Vite-friendly: usa rutas absolutas desde este archivo
+// OJO: en tu repo la carpeta es src/assets/img/lael/Logos (con L mayúscula)
+const LogoMark = new URL("../assets/img/Logos/lael-inst-amarillo.png", import.meta.url).href;
 
-// Tarjetas con foto (usa las que ya mostraste en /assets/img/lael/)
+// Tarjetas con foto
 const Aula1 = new URL("../assets/img/lael/bootcamp.jpg", import.meta.url).href;
 const Aula2 = new URL("../assets/img/lael/coaching.jpg", import.meta.url).href;
 const Aula3 = new URL("../assets/img/lael/inclusion.jpg", import.meta.url).href;
@@ -51,9 +51,9 @@ export default function EscuelaAdultos() {
             </ul>
           </div>
 
-          {/* Logo en lugar del ícono */}
+          {/* Logo en una tarjeta glass */}
           <div className="hero-logo" aria-hidden>
-            <img src={LogoMark} alt="" />
+            <img src={LogoMark} alt="" loading="eager" decoding="async" />
           </div>
         </div>
       </section>
@@ -137,9 +137,9 @@ export default function EscuelaAdultos() {
       {/* GALERÍA */}
       <section className="galeria reveal">
         <div className="container g">
-          <figure><img src={Gal1} alt="Clase en línea con acompañamiento" /></figure>
-          <figure><img src={Gal2} alt="Estudio en casa con guía" /></figure>
-          <figure><img src={Gal3} alt="Ambiente amable para aprender" /></figure>
+          <figure className="gx"><img src={Gal1} alt="Clase en línea con acompañamiento" /></figure>
+          <figure className="gx"><img src={Gal2} alt="Estudio en casa con guía" /></figure>
+          <figure className="gx"><img src={Gal3} alt="Ambiente amable para aprender" /></figure>
         </div>
       </section>
 
@@ -234,21 +234,30 @@ const css = `
 .kicker{ display:inline-block; background:#2563eb; padding:.38rem .62rem; border-radius:999px; font-weight:800; }
 .lead{ max-width:780px; opacity:.95; }
 .chips{ display:flex; flex-wrap:wrap; gap:8px; list-style:none; margin:12px 0 0; }
-.chips li{ background:rgba(255,255,255,.08); padding:.44rem .72rem; border-radius:999px; border:1px solid #253049; font-size:.92rem; }
+.chips li{ background:rgba(255,255,255,.10); padding:.44rem .72rem; border-radius:999px; border:1px solid #253049; font-size:.92rem; }
 
 /* Hero logo card */
 .hero-logo{ display:grid; place-items:center; padding:28px; border-radius:20px;
   background:linear-gradient(180deg,rgba(17,24,39,.35),rgba(17,24,39,.75));
   border:1px solid #1e293b; box-shadow:0 20px 48px rgba(2,6,23,.45);
+  backdrop-filter:saturate(110%) blur(2px);
 }
-.hero-logo img{ width:150px; height:auto; filter:drop-shadow(0 6px 22px rgba(251,191,36,.2)); }
+.hero-logo img{ width:160px; height:auto; filter:drop-shadow(0 8px 26px rgba(251,191,36,.24)); }
 
 /* CARDS */
 .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:8px 0 28px; }
 .fcard{ position:relative; border-radius:16px; overflow:hidden; min-height:260px; border:1px solid #1e293b; }
 .fcard img{ width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
-.overlay{ position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.86)); }
-.content{ position:relative; z-index:2; padding:16px; }
+.overlay{
+  position:absolute; inset:0;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.10), rgba(0,0,0,.86));
+}
+.content{
+  position:relative; z-index:2; padding:16px;
+  backdrop-filter: blur(1.5px) saturate(110%);
+  text-shadow: 0 1px 2px rgba(0,0,0,.45);
+}
 .content h3{ margin:0 0 8px; }
 .content li{ margin:.28rem 0; }
 
@@ -264,6 +273,12 @@ const css = `
 
 /* GALERÍA */
 .g{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.gx{ position:relative; }
+.gx::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.00), rgba(0,0,0,.28));
+  border-radius:12px; pointer-events:none;
+}
 .g img{ width:100%; height:210px; object-fit:cover; border-radius:12px; }
 
 /* APOYOS */
@@ -290,7 +305,7 @@ input:focus,select:focus,textarea:focus{ outline:2px solid #FBBF24; }
 
 /* RESPONSIVE */
 @media(max-width:980px){
-  .hero-grid{ grid-template-columns:1fr; text-align:left; }
+  .hero-grid{ grid-template-columns:1fr; }
   .hero-logo{ justify-self:start; }
   .cards{ grid-template-columns:1fr; }
   .flow{ grid-template-columns:1fr; }

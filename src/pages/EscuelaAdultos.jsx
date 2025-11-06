@@ -1,195 +1,222 @@
 // src/pages/EscuelaAdultos.jsx
+import HeroImg from "../assets/img/office-bg.jpg";
+import Aula1 from "../assets/img/bootcamp.jpg";
+import Aula2 from "../assets/img/coaching.jpg";
+import Aula3 from "../assets/img/inclusion.jpg";
+import Gal1 from "../assets/img/hs.jpg";
+import Gal2 from "../assets/img/study-online.jpg";
+import Gal3 from "../assets/img/soft.jpg";
+
 export default function EscuelaAdultos() {
   return (
     <div className="adultos">
       <style>{css}</style>
 
-      {/* HERO — sin fotos, alto contraste + ícono */}
+      {/* HERO */}
       <section className="hero">
-        <div className="hero-wrap container">
-          <div className="hero-text">
-            <span className="badge">Escuela para Adultos Lael</span>
-            <h1>Termina tus estudios <span>con apoyo real</span></h1>
+        <div className="hero-bg" aria-hidden />
+        <div className="container hero-grid">
+          <div className="hero-copy">
+            <span className="kicker">Escuela para Adultos Lael</span>
+            <h1>
+              Termina tus estudios <span>con apoyo real</span>
+            </h1>
             <p className="lead">
               Programa flexible para personas adultas (18+) que necesitan completar su
-              enseñanza Básica o Media, incluyendo quienes retoman tras años, migran desde
-              <strong> homeschool</strong> o buscan reinserción educativa.
+              enseñanza Básica o Media, incluyendo quienes retoman tras años, migran desde{" "}
+              <strong>homeschool</strong> o buscan reinserción educativa.
             </p>
 
             <div className="cta">
               <a
                 className="btn btn-primary"
                 href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20me%20interesa%20la%20Escuela%20para%20Adultos"
-                target="_blank" rel="noreferrer"
+                target="_blank"
+                rel="noreferrer"
               >
                 Hablar por WhatsApp
               </a>
-              <a className="btn btn-outline" href="/inscripcion">Preinscribirme</a>
+              <a className="btn btn-outline" href="#formulario">
+                Preinscribirme
+              </a>
             </div>
+
+            <ul className="chips">
+              <li>Horarios PM</li>
+              <li>Clases en vivo + grabaciones</li>
+              <li>Ajustado a Exámenes Libres</li>
+              <li>Plan personalizado</li>
+            </ul>
           </div>
 
           <div className="hero-icon" aria-hidden>
-            {/* Mortarboard */}
-            <svg width="180" height="180" viewBox="0 0 24 24" fill="none">
-              <path d="M3 7l9-4 9 4-9 4-9-4z" stroke="#FBBF24" strokeWidth="1.6" />
-              <path d="M5 10v4c0 1.1 3.6 3 7 3s7-1.9 7-3v-4" stroke="#FBBF24" strokeWidth="1.6" />
-              <path d="M21 7v8" stroke="#FBBF24" strokeWidth="1.6" />
-              <circle cx="21" cy="16" r="1" fill="#FBBF24" />
+            <svg viewBox="0 0 256 256">
+              <path
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="12"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16 120l112-48 112 48-112 48-112-48zM64 144v32c0 22 40 40 64 40s64-18 64-40v-32"
+              />
+              <circle cx="208" cy="184" r="10" />
             </svg>
           </div>
-        </div>
-
-        {/* chips */}
-        <div className="chips container">
-          <span>Horarios PM</span>
-          <span>Clases en vivo (con grabación)</span>
-          <span>Ajustado a Exámenes Libres</span>
-          <span>Plan personalizado</span>
         </div>
       </section>
 
-      {/* 3 PANELES — con íconos (sin imágenes de disco) */}
-      <section className="panels container reveal">
-        <article className="panel">
-          <div className="ico" aria-hidden>
-            {/* users */}
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <path d="M16 21v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1" stroke="currentColor" strokeWidth="1.6"/>
-              <circle cx="10" cy="7" r="4" stroke="currentColor" strokeWidth="1.6"/>
-            </svg>
-          </div>
-          <h3>¿A quién va dirigido?</h3>
-          <ul>
-            <li>Adultos que no completaron sus estudios.</li>
-            <li>Jóvenes 18+ que dejan homeschool.</li>
-            <li>Personas en procesos de reinserción educativa.</li>
-          </ul>
-        </article>
-
-        <article className="panel">
-          <div className="ico" aria-hidden>
-            {/* clock */}
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6"/>
-              <path d="M12 6v6l3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-            </svg>
-          </div>
-          <h3>Horarios y modalidad</h3>
-          <ul>
-            <li>Clases 100% online, <strong>en vivo</strong> y quedan grabadas.</li>
-            <li>Modalidad tarde/noche para compatibilizar.</li>
-            <li>Acompañamiento semanal y seguimiento.</li>
-          </ul>
-        </article>
-
-        <article className="panel">
-          <div className="ico" aria-hidden>
-            {/* shield-check */}
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-              <path d="M12 3l7 3v6c0 5-3.5 8-7 9-3.5-1-7-4-7-9V6l7-3z" stroke="currentColor" strokeWidth="1.6"/>
-              <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <h3>Certificación</h3>
-          <p>
-            Alineado a Exámenes Libres (Mineduc). Rúbricas claras, metas por tramo y planificación personalizada.
-          </p>
-        </article>
+      {/* SECCIONES PRINCIPALES */}
+      <section className="cards container reveal">
+        <FeatureCard
+          img={Aula1}
+          title="¿A quién va dirigido?"
+          bullets={[
+            "Adultos que no completaron Básica o Media.",
+            "Jóvenes 18+ que dejan homeschool.",
+            "Personas en procesos de reinserción educativa.",
+          ]}
+        />
+        <FeatureCard
+          img={Aula2}
+          title="Horarios y modalidad"
+          bullets={[
+            "Clases 100% online, en vivo y quedan grabadas.",
+            "Tarde/noche para compatibilizar con trabajo o familia.",
+            "Acompañamiento semanal y seguimiento personalizado.",
+          ]}
+        />
+        <FeatureCard
+          img={Aula3}
+          title="Certificación"
+          bullets={[
+            "Alineado a Exámenes Libres (Mineduc).",
+            "Rúbricas claras, metas por tramo.",
+            "Planificación personalizada.",
+          ]}
+        />
       </section>
 
       {/* RUTAS */}
       <section className="rutas reveal">
         <div className="container">
           <h2>Elige tu ruta</h2>
-          <p className="muted">Planificamos según tu tramo y fecha de rendición.</p>
+          <p className="muted">
+            Planificamos según tu tramo y fecha de rendición. Cada ruta tiene clases, guías
+            y acompañamiento.
+          </p>
 
-          <div className="route-grid">
-            <div className="route">
-              <span className="dot" aria-hidden />
+          <div className="flow">
+            <div className="pill">
               <h3>1° a 8° Básico</h3>
               <p>Alfabetización académica, cálculo base y comprensión lectora.</p>
             </div>
-            <div className="route">
-              <span className="dot" aria-hidden />
+            <div className="pill">
               <h3>1° y 2° Medio</h3>
               <p>Refuerzo de bases, lenguaje, matemáticas y ciencias.</p>
             </div>
-            <div className="route">
-              <span className="dot" aria-hidden />
+            <div className="pill">
               <h3>3° y 4° Medio</h3>
-              <p>Preparación intensiva y simulacros para Exámenes Libres.</p>
+              <p>Preparación intensiva y simulacros de Exámenes Libres.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CÓMO FUNCIONA */}
-      <section className="timeline container reveal">
-        <h2>Cómo funciona</h2>
-        <ol className="tl">
-          <li><span className="pill">1</span><div><h4>Diagnóstico</h4><p>Medimos punto de partida y definimos meta realista.</p></div></li>
-          <li><span className="pill">2</span><div><h4>Plan semanal</h4><p>Clases en vivo + actividades corregidas.</p></div></li>
-          <li><span className="pill">3</span><div><h4>Seguimiento</h4><p>Checkpoints, asistencia y feedback útil (con grabaciones).</p></div></li>
-          <li><span className="pill">4</span><div><h4>Rendición</h4><p>Ensayos, simulacros y checklist para Exámenes Libres.</p></div></li>
-        </ol>
-      </section>
-
-      {/* CALENDARIO PM + REQUISITOS */}
-      <section className="two-col container reveal">
-        <div className="col card">
+      {/* CALENDARIO + REQUISITOS */}
+      <section className="grid2 container reveal">
+        <div className="box">
           <h3>Calendario PM (referencial)</h3>
-          <ul className="bullets">
-            <li>Lun y Mié · 19:00–20:20 — Lenguaje / Comunicación.</li>
-            <li>Mar y Jue · 19:00–20:20 — Matemática por tramos.</li>
-            <li>Vie · 19:00–20:00 — Taller de estudio y repaso.</li>
+          <ul className="list">
+            <li>Lunes y Miércoles: 19:00–20:20 — Lenguaje / Comunicación</li>
+            <li>Martes y Jueves: 19:00–20:20 — Matemática</li>
+            <li>Viernes: 19:00–20:00 — Taller de repaso y apoyo</li>
           </ul>
-          <p className="muted">*Los horarios exactos se confirman al inscribirte según tu tramo y cupos.</p>
+          <small className="muted">
+            *Los horarios pueden ajustarse según tramo y disponibilidad.
+          </small>
         </div>
 
-        <div className="col card">
+        <div className="box">
           <h3>Requisitos y documentos</h3>
-          <ul className="checks">
+          <ul className="list">
             <li>Cédula de identidad vigente.</li>
             <li>Certificados previos (si los tienes) para ubicar tu tramo.</li>
-            <li>Compromiso de asistencia (mín. 75%).</li>
+            <li>Compromiso de asistencia mínima (75%).</li>
           </ul>
-          <div className="mini-actions">
-            <a className="btn btn-ghost" href="/inscripcion">Subir documentos (preinscripción)</a>
-          </div>
         </div>
       </section>
 
-      {/* APOYOS / PRECIOS SIMPLE */}
+      {/* GALERÍA */}
+      <section className="galeria reveal">
+        <div className="container g">
+          <figure>
+            <img src={Gal1} alt="Clase en línea" />
+          </figure>
+          <figure>
+            <img src={Gal2} alt="Estudio con acompañamiento" />
+          </figure>
+          <figure>
+            <img src={Gal3} alt="Ambiente de apoyo" />
+          </figure>
+        </div>
+      </section>
+
+      {/* APOYOS */}
       <section className="apoyos reveal">
-        <div className="container box">
+        <div className="container apoyo-box">
           <div>
             <h2>Apoyos y becas (caso a caso)</h2>
             <p className="muted">
-              Podemos evaluar <strong>apoyos económicos</strong> según tu situación (prioridad:
-              reinserción y jefas de hogar). No son becas masivas: revisamos cada caso con cuidado.
+              Evaluamos apoyos económicos según tu situación (prioridad: reinserción y jefas
+              de hogar). No son becas masivas: cada caso se revisa con cuidado.
             </p>
           </div>
           <div className="actions">
-            <a className="btn btn-primary" href="https://wa.me/56964626568" target="_blank" rel="noreferrer">Consultar por apoyo</a>
-            <a className="btn btn-outline" href="/inscripcion">Preinscribirme</a>
+            <a
+              className="btn btn-primary"
+              href="https://wa.me/56964626568"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Consultar por apoyo
+            </a>
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="faq container reveal">
-        <details>
-          <summary>¿Puedo trabajar y estudiar?</summary>
-          <p>Sí. Las clases son en la tarde/noche y quedan grabadas para repasar.</p>
-        </details>
-        <details>
-          <summary>¿Sirve para Exámenes Libres?</summary>
-          <p>Todo el plan está alineado al Mineduc por tramo (Básica / Media).</p>
-        </details>
-        <details>
-          <summary>¿Puedo combinar con Preu?</summary>
-          <p>Sí. Diseñamos trayectos combinados <strong>Adultos + Preu</strong> si lo necesitas.</p>
-        </details>
+      {/* FORMULARIO CORTO */}
+      <section id="formulario" className="formulario reveal">
+        <div className="container form-box">
+          <h2>Preinscripción rápida 📝</h2>
+          <p className="muted">
+            Completa tus datos y nos pondremos en contacto para orientarte.
+          </p>
+
+          <form
+            action="mailto:contacto@institutolael.cl"
+            method="post"
+            encType="text/plain"
+          >
+            <div className="fields">
+              <input type="text" name="Nombre" placeholder="Nombre completo" required />
+              <input type="tel" name="WhatsApp" placeholder="WhatsApp (ej: +569...)" />
+              <select name="Tramo" required>
+                <option value="">Tramo que deseas cursar</option>
+                <option>1° a 8° Básico</option>
+                <option>1° y 2° Medio</option>
+                <option>3° y 4° Medio</option>
+              </select>
+              <textarea
+                name="Mensaje"
+                placeholder="Cuéntanos brevemente tu situación o consulta"
+                rows="3"
+              />
+            </div>
+            <button type="submit" className="btn btn-primary">
+              Enviar preinscripción
+            </button>
+          </form>
+        </div>
       </section>
 
       {/* CTA FINAL */}
@@ -197,11 +224,22 @@ export default function EscuelaAdultos() {
         <div className="container inner">
           <div>
             <h3>Nunca es tarde para terminar el colegio.</h3>
-            <p className="muted">Estudia con método, en la tarde y con acompañamiento real.</p>
+            <p className="muted">
+              Estudia con método, en la tarde y con acompañamiento real.
+            </p>
           </div>
           <div className="actions">
-            <a className="btn btn-primary" href="https://wa.me/56964626568" target="_blank" rel="noreferrer">Hablar por WhatsApp</a>
-            <a className="btn btn-outline" href="/inscripcion">Preinscribirme</a>
+            <a
+              className="btn btn-primary"
+              href="https://wa.me/56964626568"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Hablar por WhatsApp
+            </a>
+            <a className="btn btn-outline" href="#formulario">
+              Preinscribirme
+            </a>
           </div>
         </div>
       </section>
@@ -209,160 +247,86 @@ export default function EscuelaAdultos() {
   );
 }
 
+/* ---------- Tarjeta de características ---------- */
+function FeatureCard({ img, title, bullets = [] }) {
+  return (
+    <article className="fcard">
+      <img src={img} alt="" />
+      <div className="overlay" />
+      <div className="content">
+        <h3>{title}</h3>
+        <ul>{bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>
+      </div>
+    </article>
+  );
+}
+
+/* ---------- Estilos ---------- */
 const css = `
-.adultos :where(h1,h2,h3,h4){ letter-spacing:.2px }
-.container{ width:min(1120px, 92vw); margin:0 auto }
+.adultos { background:#0b1220; color:#f1f5f9; font-family:system-ui, sans-serif; }
+.container{ width:min(1120px,92vw); margin:0 auto }
 
-/* ---------- HERO (sin imágenes, contraste alto) ---------- */
-.hero{
-  background:
-    radial-gradient(1200px 300px at 10% -20%, rgba(88,80,236,.14), transparent 60%),
-    radial-gradient(1200px 300px at 100% -10%, rgba(34,211,238,.12), transparent 60%),
-    #0b1220;
-  border-bottom:1px solid #1f2a44;
-}
-.hero-wrap{
-  display:flex; align-items:center; justify-content:space-between; gap:24px;
-  padding:60px 0 26px;
-}
-.hero-text .badge{
-  display:inline-block; font-weight:900; font-size:.9rem;
-  background:#0ea5e9; color:#07111f; padding:.35rem .6rem; border-radius:999px;
-  box-shadow:0 10px 24px rgba(14,165,233,.25)
-}
-.hero h1{ margin:.6rem 0; font-size: clamp(2rem, 3.6vw + 1rem, 3.2rem); }
-.hero h1 span{ color:#FBBF24 }
-.lead{ max-width: 860px; color:#eaf2ff; opacity:.95; font-size: clamp(1rem, .6vw + .9rem, 1.2rem) }
-.cta{ display:flex; gap:10px; margin:18px 0 0 }
+/* HERO */
+.hero{ position:relative; overflow:hidden; }
+.hero-bg{ position:absolute; inset:0; background:url(${HeroImg}); background-size:cover; background-position:center; filter:brightness(.5); }
+.hero-grid{ position:relative; z-index:2; display:grid; grid-template-columns:1.2fr .8fr; gap:24px; padding:72px 0; }
+.hero-copy h1 span{ color:#FBBF24; }
+.hero-icon{ display:grid; place-items:center; background:rgba(17,24,39,.6); border-radius:20px; color:#FBBF24; }
+.hero-icon svg{ width:120px; height:120px; }
+.kicker{ background:#2563eb; padding:.35rem .6rem; border-radius:999px; font-weight:700; }
+.chips{ display:flex; flex-wrap:wrap; gap:8px; list-style:none; margin-top:10px; }
+.chips li{ background:rgba(255,255,255,.1); padding:.4rem .7rem; border-radius:999px; font-size:.9rem; }
 
-.hero-icon{
-  flex-shrink:0; display:grid; place-items:center; width:200px; height:200px; border-radius:24px;
-  background: linear-gradient(180deg,#101a2f,#0f172a); border:1px solid #22304d;
-  box-shadow:0 26px 60px rgba(2,6,23,.38);
-  color:#FBBF24;
-}
+/* CARDS */
+.cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:24px 0; }
+.fcard{ position:relative; border-radius:14px; overflow:hidden; min-height:250px; }
+.fcard img{ width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+.overlay{ position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.85)); }
+.content{ position:relative; z-index:2; padding:16px; }
+.content h3{ margin-bottom:6px; }
+.content li{ margin:.2rem 0; }
 
-/* chips */
-.chips{ display:flex; flex-wrap:wrap; gap:10px; padding:10px 0 22px }
-.chips span{
-  padding:.45rem .7rem; border-radius:999px; border:1px solid #233154; background:rgba(2,6,23,.5);
-  backdrop-filter: blur(4px);
-}
+/* RUTAS */
+.rutas{ padding:40px 0; background:rgba(15,23,42,.4); }
+.flow{ display:grid; gap:14px; grid-template-columns:repeat(3,1fr); }
+.pill{ background:#111827; padding:16px; border-radius:12px; border:1px solid #1e293b; }
 
-/* botones */
-.btn{
-  display:inline-flex; align-items:center; gap:8px; padding:.78rem 1rem; border-radius:12px;
-  border:1px solid #2f3341; font-weight:900; text-decoration:none;
-  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
-}
-.btn-primary{ color:#0b1220; background:linear-gradient(180deg,#fbbf24,#f59e0b); border-color:#d97706; }
-.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(245,158,11,.25) }
-.btn-outline{ color:#eaf2ff; background:transparent; border-color:#2f3341 }
-.btn-outline:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.28); filter:brightness(1.06) }
-.btn-ghost{ color:#E11D48; border-color:#E11D48; }
-.btn-ghost:hover{ background:#E11D48; color:#fff; transform:translateY(-2px) }
+/* CALENDARIO + REQUISITOS */
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:30px 0; }
+.box{ background:#111827; border:1px solid #1e293b; border-radius:12px; padding:16px; }
 
-/* ---------- PANELS ---------- */
-.panels{
-  display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:16px; margin:22px auto 8px;
-}
-.panel{
-  border:1px solid #1f2a44; border-radius:18px; background:linear-gradient(180deg,#0e1424,#0b1220);
-  padding:16px; box-shadow:0 20px 40px rgba(2,6,23,.45);
-}
-.panel .ico{ width:44px; height:44px; border-radius:12px; display:grid; place-items:center;
-  background:#101a2f; border:1px solid #22304d; color:#9ddcff; margin-bottom:8px }
-.panel ul{ margin:.4rem 0 0 1rem }
-.panel li{ margin:.22rem 0 }
+/* GALERÍA */
+.g{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.g img{ width:100%; height:200px; object-fit:cover; border-radius:10px; }
 
-/* ---------- RUTAS ---------- */
-.rutas{
-  background:
-    radial-gradient(800px 240px at -10% 20%, rgba(88,80,236,.08), transparent 60%),
-    radial-gradient(800px 240px at 110% 60%, rgba(34,211,238,.08), transparent 60%),
-    #0c1323;
-  padding:36px 0; border-top:1px solid #1f2a44; border-bottom:1px solid #1f2a44;
-}
-.route-grid{ display:grid; gap:14px; grid-template-columns:repeat(3, minmax(0,1fr)); margin-top:10px }
-.route{
-  position:relative; border:1px solid #22304d; border-radius:16px; padding:14px;
-  background:linear-gradient(180deg,#0f172a,#0b1220);
-}
-.route .dot{
-  position:absolute; top:-10px; left:18px; width:16px; height:16px; border-radius:999px;
-  background:#22d3ee; box-shadow:0 0 0 4px rgba(34,211,238,.15)
-}
+/* APOYOS */
+.apoyo-box{ background:#111827; border:1px solid #1e293b; border-radius:14px; padding:20px; display:flex; justify-content:space-between; align-items:center; }
 
-/* ---------- TIMELINE ---------- */
-.timeline{ padding:26px 0 8px }
-.tl{ list-style:none; margin:8px 0 0; padding:0; display:grid; gap:14px; grid-template-columns:repeat(2, minmax(0,1fr)) }
-.tl li{
-  display:flex; gap:10px; align-items:flex-start; border:1px solid #22304d; border-radius:16px;
-  background:linear-gradient(180deg,#0f172a,#0b1220); padding:14px;
-}
-.pill{ display:inline-grid; place-items:center; width:34px; height:34px; border-radius:10px;
-  background:#111a2f; border:1px solid #2b3a60; font-weight:900 }
-.tl h4{ margin:0 0 4px }
+/* FORMULARIO */
+.form-box{ background:#111827; border:1px solid #1e293b; border-radius:14px; padding:24px; text-align:center; }
+.fields{ display:grid; gap:12px; margin:16px 0; }
+input,select,textarea{ width:100%; padding:.7rem .9rem; border-radius:8px; border:none; background:#1f2937; color:#f1f5f9; }
+input:focus,select:focus,textarea:focus{ outline:2px solid #FBBF24; }
 
-/* ---------- 2 COL: CALENDARIO + REQUISITOS ---------- */
-.two-col{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:16px auto }
-.card{
-  border:1px solid #22304d; border-radius:16px; padding:16px;
-  background:linear-gradient(180deg,#0f172a,#0b1220); box-shadow:0 20px 40px rgba(2,6,23,.45);
-}
-.bullets, .checks{ margin:.4rem 0 0 1rem }
-.bullets li, .checks li{ margin:.22rem 0 }
-.mini-actions{ margin-top:10px }
+/* CTA FINAL */
+.cta-final{ background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(88,80,236,.18)); padding:36px 0; margin-top:40px; border-top:1px solid #1f2a44; }
+.inner{ display:flex; justify-content:space-between; align-items:center; gap:12px; }
 
-/* ---------- APOYOS ---------- */
-.apoyos{ padding:18px 0 }
-.box{
-  display:flex; gap:16px; align-items:center; justify-content:space-between;
-  border:1px solid #22304d; border-radius:18px; padding:18px;
-  background: radial-gradient(600px 160px at 10% 140%, rgba(245,158,11,.18), transparent 60%),
-              linear-gradient(180deg,#0f172a,#0b1220);
-  box-shadow:0 20px 40px rgba(2,6,23,.45);
-}
-.box .actions{ display:flex; gap:10px; flex-shrink:0 }
+/* BOTONES */
+.btn{ display:inline-flex; align-items:center; justify-content:center; padding:.8rem 1rem; border-radius:10px; font-weight:700; text-decoration:none; cursor:pointer; border:1px solid transparent; transition:.2s; }
+.btn-primary{ background:linear-gradient(180deg,#fbbf24,#f59e0b); color:#0b1220; }
+.btn-outline{ border-color:#475569; color:#f1f5f9; background:transparent; }
 
-/* ---------- FAQ ---------- */
-.faq{ display:grid; gap:10px; margin:8px auto 14px }
-.faq details{
-  border:1px solid #22304d; border-radius:12px; background:linear-gradient(180deg,#0f172a,#0b1220); padding:10px 12px;
+/* RESPONSIVE */
+@media(max-width:960px){
+  .hero-grid{ grid-template-columns:1fr; text-align:center; }
+  .cards{ grid-template-columns:1fr; }
+  .flow{ grid-template-columns:1fr; }
+  .grid2{ grid-template-columns:1fr; }
+  .g{ grid-template-columns:1fr 1fr; }
+  .inner{ flex-direction:column; }
 }
-.faq summary{ cursor:pointer; font-weight:900 }
-.faq p{ margin:.6rem 0 0 }
-
-/* ---------- CTA final ---------- */
-.cta-final{
-  background:
-    linear-gradient(135deg, rgba(245,158,11,.18), rgba(88,80,236,.18)),
-    #0b1220;
-  border-top:1px solid #1f2a44;
-  padding:22px 0 36px;
-}
-.cta-final .inner{
-  display:flex; align-items:center; justify-content:space-between; gap:14px;
-  border:1px solid #22304d; border-radius:18px; padding:16px;
-  background:linear-gradient(180deg,#0f172a,#0b1220);
-  box-shadow:0 20px 40px rgba(2,6,23,.45);
-}
-.cta-final .actions{ display:flex; gap:10px }
-
-/* ---------- Reveal ---------- */
-.reveal{ opacity:0; transform: translateY(14px); transition: opacity .5s ease, transform .5s ease; }
-.reveal.in{ opacity:1; transform: translateY(0); }
-
-/* ---------- Responsive ---------- */
-@media (max-width: 1000px){
-  .hero-wrap{ flex-direction:column; align-items:flex-start }
-  .panels{ grid-template-columns:1fr 1fr }
-  .route-grid{ grid-template-columns:1fr }
-  .tl{ grid-template-columns:1fr }
-  .two-col{ grid-template-columns:1fr }
-  .cta-final .inner{ flex-direction:column; align-items:flex-start }
-}
-@media (max-width: 640px){
-  .panels{ grid-template-columns:1fr }
+@media(max-width:640px){
+  .g{ grid-template-columns:1fr; }
 }
 `;

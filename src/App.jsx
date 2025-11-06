@@ -13,7 +13,7 @@ import Homeschool from "./pages/Homeschool.jsx";
 import Idiomas from "./pages/Idiomas.jsx";
 import Nosotros from "./pages/Nosotros.jsx";
 import Simulador from "./pages/Simulador.jsx";
-import Becas from "./pages/Becas.jsx";
+import EscuelaAdultos from "./pages/EscuelaAdultos.jsx";
 import Convenios from "./pages/Convenios.jsx";
 import Trabaja from "./pages/Trabaja.jsx";
 import NotFound from "./pages/NotFound.jsx"; // ✅ usar la página 404 con humor
@@ -86,7 +86,7 @@ export default function App() {
             <Route path="/homeschool" element={<Homeschool />} />
             <Route path="/idiomas" element={<Idiomas />} />
             <Route path="/nosotros" element={<Nosotros />} />
-            <Route path="/becas" element={<Becas />} />
+            <Route path="/escuelaadultos" element={<EscuelaAdultos />} />
             <Route path="/convenios" element={<Convenios />} />
             <Route path="/trabaja" element={<Trabaja />} />
             {/* 404 SIEMPRE AL FINAL */}

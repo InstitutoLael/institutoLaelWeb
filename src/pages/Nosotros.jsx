@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import id1 from "../assets/img/lael/1.png";
 import id2 from "../assets/img/lael/2.png";
 import id3 from "../assets/img/lael/3.png";
-import diego from "../assets/img/lael/diego.jpg";
 
 export default function Nosotros(){
   return (
@@ -26,8 +25,8 @@ export default function Nosotros(){
             </p>
 
             <p className="lead small-up">
-              Fundado por <strong>Diego Chaparro</strong>. Diseñamos procesos <strong>simples y medibles</strong>:
-              clases en vivo, cápsulas, metas por semana y retroalimentación concreta.
+              Diseñamos procesos <strong>simples y medibles</strong>: clases en vivo, cápsulas,
+              metas por semana y retroalimentación concreta.
             </p>
 
             <div className="cta">
@@ -45,7 +44,7 @@ export default function Nosotros(){
         <div className="hero__shine" aria-hidden />
       </header>
 
-      {/* PROPÓSITO (concreto y breve) */}
+      {/* PROPÓSITO */}
       <section className="section purpose-strip">
         <div className="container purpose">
           <h2 className="h center">Nuestro propósito</h2>
@@ -66,20 +65,20 @@ export default function Nosotros(){
         </div>
       </section>
 
-      {/* FUNDADOR (sin grandilocuencia) */}
+      {/* FUNDADOR (institucional, sin foto) */}
       <section className="section">
         <div className="container founder card">
-          <div className="pad founder__grid">
+          <div className="pad founder__grid founder__grid--noimg">
             <div className="founder__copy">
-              <span className="chip">Fundador</span>
-              <h2 className="h">Diego Chaparro</h2>
+              <span className="chip">Fundación del proyecto</span>
+              <h2 className="h">Origen y criterio</h2>
               <p className="intro">
-                Director de Instituto Lael. Convirtió su experiencia escolar en un sistema simple:
+                Convertimos años de experiencia docente en un sistema simple:
                 <strong> nadie aprende solo</strong> y el método importa.
               </p>
               <blockquote className="q">
-                “Propósito sin orden no alcanza. Orden y seguimiento, sin propósito, tampoco. En Lael unimos ambos
-                para que estudiar sea posible y medible.”
+                “Propósito sin orden no alcanza. Orden y seguimiento, sin propósito, tampoco.
+                En Lael unimos ambos para que estudiar sea posible y medible.”
               </blockquote>
               <ul className="mini-list">
                 <li>Clases claras, sin relleno.</li>
@@ -87,16 +86,11 @@ export default function Nosotros(){
                 <li>Respeto por el tiempo y el proceso de cada persona.</li>
               </ul>
             </div>
-
-            <div className="founder__media">
-              <img className="avatar" src={diego} alt="Diego Chaparro" />
-              <div className="tagline">“Acompañamiento sencillo, consistente y humano.”</div>
-            </div>
           </div>
         </div>
       </section>
 
-      {/* IDENTIDAD (explicaciones cortas) */}
+      {/* IDENTIDAD */}
       <section className="section">
         <div className="container">
           <h2 className="h center">Nuestra identidad</h2>
@@ -125,7 +119,7 @@ export default function Nosotros(){
         </div>
       </section>
 
-      {/* HISTORIA (lineal y honesta) */}
+      {/* HISTORIA */}
       <section className="section soft">
         <div className="container">
           <h2 className="h center">De Preu Lael a Instituto Lael</h2>
@@ -147,7 +141,7 @@ export default function Nosotros(){
         </div>
       </section>
 
-      {/* PROPÓSITO & VISIÓN (píldoras claras) */}
+      {/* PRINCIPIOS */}
       <section className="section">
         <div className="container">
           <div className="vision">
@@ -169,7 +163,7 @@ export default function Nosotros(){
         </div>
       </section>
 
-      {/* SOMOS / NO SOMOS (directo) */}
+      {/* SOMOS / NO SOMOS */}
       <section className="section soft">
         <div className="container two">
           <article className="card tone-ok">
@@ -199,7 +193,7 @@ export default function Nosotros(){
         </div>
       </section>
 
-      {/* CÓMO TRABAJAMOS (4 pasos que realmente usamos) */}
+      {/* CÓMO TRABAJAMOS */}
       <section className="section">
         <div className="container">
           <h2 className="h center">Cómo trabajamos</h2>
@@ -307,18 +301,21 @@ function Step({ n, t, c = "blue", children }) {
   );
 }
 
-/* ---------- CSS (sin cambios estructurales) ---------- */
+/* ---------- CSS (alineado con Empresas) ---------- */
 const css = `
 :root{
+  /* Paleta y tokens compartidos */
+  --accent:#facc15; --accent-dark:#E0B90F; --accent-press:#C9A60E; --focus:#22d3ee;
   --blue:#3b549d; --green:#249554; --yellow:#f2ce3d; --rose:#d6a0c5; --orange:#cd5732;
   --bg:#0b1220; --panel:#0e1424; --soft:#0d1528; --bd:#1f2a44;
   --ink:#ffffff; --ink2:#eaf2ff; --muted:#cbd5e1;
   --rad-lg:20px; --rad-md:14px;
-  --shadow:0 24px 48px rgba(2,6,23,.35);
+  --shadow:0 24px 48px rgba(2,6,23,.32);
 }
 *{box-sizing:border-box}
-.container{ max-width:1160px; margin:0 auto; padding:0 20px; }
+.container{ max-width:1120px; margin:0 auto; padding:0 18px; }
 .section{ padding:56px 0; position:relative; }
+.section + .section{ padding-top:64px; } /* ritmo vertical consistente */
 .section.soft{
   background:
     radial-gradient(900px 300px at 10% -8%, color-mix(in srgb, var(--blue) 16%, transparent), transparent 60%),
@@ -342,24 +339,37 @@ h1,h2,h3,h4{ color:var(--ink) }
 .title{ margin:.2rem 0 .3rem; font-size:clamp(2.2rem, 4vw, 3rem); line-height:1.08; }
 .grad{ background: linear-gradient(120deg,var(--blue),var(--rose)); -webkit-background-clip:text; background-clip:text; color:transparent; }
 .lead{ color:var(--ink2); margin:12px 0 20px; line-height:1.6; }
-.lead.small-up{ margin-top:2px; opacity:1 }
+.lead.small-up{ margin-top:2px; }
 .cta{ display:flex; gap:12px; flex-wrap:wrap }
-.btn{ display:inline-flex; align-items:center; gap:8px; padding:.78rem 1.05rem; border-radius:12px; border:1px solid #2f3341; text-decoration:none; font-weight:900 }
-.btn-primary{ background:var(--blue); color:#fff; border-color:var(--blue) }
-.btn-ghost{ color:#ffffff; background:transparent }
 
+/* Botones (mismos que Empresas) */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; padding:.78rem 1.05rem; border-radius:12px; border:2px solid transparent;
+  text-decoration:none; font-weight:850; transition:.18s transform ease, .18s box-shadow ease, .18s background ease, .18s border-color ease;
+}
+.btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.btn-primary{ background:var(--accent); color:#111; border-color:var(--accent-dark); box-shadow:0 8px 22px rgba(250,204,21,.28); }
+.btn-primary:hover{ background:var(--accent-dark); }
+.btn-primary:active{ background:var(--accent-press); transform:translateY(1px); box-shadow:none; }
+.btn-ghost{ border:1px solid var(--ink2); color:var(--ink2); background:transparent; }
+.btn-ghost:hover{ background:rgba(255,255,255,.08); }
+
+/* Stats */
 .hero__stats{
   list-style:none; margin:0; padding:0;
   display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
 }
+@media (max-width:680px){ .hero__stats{ grid-template-columns:1fr 1fr; } }
 .stat{
   border:1px solid #2b3656; border-radius:16px; padding:16px;
   background:linear-gradient(180deg,#0f172a,#0b1220);
   text-align:center; color:var(--ink); box-shadow:var(--shadow);
 }
 .stat .v{ font-size:1.28rem; font-weight:900; display:block; }
-.stat .l{ font-size:1rem; opacity:1; color:var(--ink2); }
+.stat .l{ font-size:1rem; color:var(--ink2); }
 
+/* Shine */
 .hero__shine{
   position:absolute; inset:0; pointer-events:none;
   background: radial-gradient(1200px 260px at 50% 0%, rgba(255,255,255,.06), transparent 60%);
@@ -368,7 +378,7 @@ h1,h2,h3,h4{ color:var(--ink) }
 /* Textos base */
 .h{ margin:0 0 12px; font-size:1.7rem; line-height:1.2; color:var(--ink) }
 .center{ text-align:center }
-.sub{ color:var(--ink2); margin:0 0 22px; text-align:center; opacity:1 }
+.sub{ color:var(--ink2); margin:0 0 22px; text-align:center; }
 
 /* Card base */
 .card{
@@ -379,35 +389,28 @@ h1,h2,h3,h4{ color:var(--ink) }
   box-shadow:var(--shadow);
   color:var(--ink);
 }
-.card p,
-.card li,
-.card .intro,
-.card .flow-text{ color:var(--ink); font-size:1rem; line-height:1.55; }
-.card .strong{ color:var(--ink); }
+.pad{ padding:18px; }
 
-/* Acentos */
+/* Acentos / sombras */
 .accent-blue{ outline:1px solid color-mix(in srgb, var(--blue), #fff 20%); }
 .accent-green{ outline:1px solid color-mix(in srgb, var(--green), #fff 20%); }
 .accent-yellow{ outline:1px solid color-mix(in srgb, var(--yellow), #fff 12%); }
 .accent-rose{ outline:1px solid color-mix(in srgb, var(--rose), #fff 18%); }
 .accent-orange{ outline:1px solid color-mix(in srgb, var(--orange), #fff 18%); }
 .accent-purple{ outline:1px solid #6d28d955; }
-
-/* Sombras minicards */
 .shade-blue{ box-shadow:0 12px 26px color-mix(in srgb, var(--blue), transparent 78%); }
 .shade-green{ box-shadow:0 12px 26px color-mix(in srgb, var(--green), transparent 78%); }
 .shade-rose{ box-shadow:0 12px 26px color-mix(in srgb, var(--rose), transparent 78%); }
 
 /* Propósito */
 .purpose-strip{ padding-top:42px; padding-bottom:42px; }
-.purpose-points{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:12px; }
+.purpose-points{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:12px; }
 @media (max-width:980px){ .purpose-points{ grid-template-columns:1fr; } }
 .pp h4{ margin:.15rem 0 .35rem; color:var(--ink) }
 .pp p{ margin:0; color:var(--ink2) }
 
-/* Fundador */
-.founder__grid{ display:grid; grid-template-columns:1.3fr .7fr; gap:18px; align-items:center; }
-@media (max-width:980px){ .founder__grid{ grid-template-columns:1fr } }
+/* Fundador (sin imagen) */
+.founder__grid{ display:grid; grid-template-columns:1fr; }
 .founder .chip{
   display:inline-block; padding:.25rem .6rem; border-radius:999px; font-weight:700;
   background:#101a2f; border:1px solid #2a3b66; color:var(--ink2);
@@ -417,13 +420,6 @@ h1,h2,h3,h4{ color:var(--ink) }
   margin:.2rem 0 .6rem; padding:.6rem .8rem; border-left:3px solid var(--blue); background:#0c1630; border-radius:8px; color:var(--ink);
 }
 .founder .mini-list{ margin:.3rem 0 0; padding-left:18px; color:var(--ink); }
-.founder .mini-list li{ color:var(--ink); }
-.founder__media{ display:flex; flex-direction:column; align-items:center; gap:10px; }
-.avatar{
-  width:160px; height:160px; border-radius:50%; background:#0f172a; border:1px solid #2a3b66;
-  box-shadow:0 12px 24px rgba(2,6,23,.35);
-}
-.founder .tagline{ font-size:1rem; color:var(--ink2); text-align:center }
 
 /* Identidad */
 .id-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:22px }
@@ -432,7 +428,7 @@ h1,h2,h3,h4{ color:var(--ink) }
 .id.card img{ max-width:100%; max-height:100%; object-fit:contain; filter: drop-shadow(0 6px 14px rgba(16,24,40,.45)) }
 .id.card .body{ padding:18px; }
 .id.card .body h3{ margin:.2rem 0 .35rem; color:var(--ink) }
-.id.card .body p{ margin:0; color:var(--ink); font-size:1.02rem; }
+.id.card .body p{ margin:0; color:var(--ink2); font-size:1.02rem; }
 
 /* Historia */
 .hl-flow{ display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:12px; align-items:stretch; margin-top:16px; }
@@ -441,8 +437,8 @@ h1,h2,h3,h4{ color:var(--ink) }
   border:1px solid #22314f; border-radius:16px; background:linear-gradient(180deg,#0f172a,#0b1220);
   padding:16px; color:var(--ink);
 }
-.flow-title{ font-weight:800; margin:0 0 6px; color:var(--ink) }
-.flow-text{ margin:0; line-height:1.55; color:var(--ink); }
+.flow-title{ font-weight:800; margin:0 0 6px; }
+.flow-text{ margin:0; line-height:1.55; color:var(--ink2); }
 .flow-arrow{ display:grid; place-items:center; font-weight:900; font-size:1.6rem; color:var(--ink); padding:0 6px; }
 
 /* Visión */
@@ -455,42 +451,34 @@ h1,h2,h3,h4{ color:var(--ink) }
   color:var(--ink);
 }
 .vision .intro{ margin:.2rem 0 16px; color:var(--ink2); }
-.v-cards{
-  display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
-  align-items:stretch; justify-items:stretch;
-}
+.v-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
 @media (max-width:980px){ .v-cards{ grid-template-columns:1fr 1fr } }
 @media (max-width:640px){ .v-cards{ grid-template-columns:1fr } }
 
 /* Pill */
-.pill{
-  display:flex; align-items:center; justify-content:center; text-align:center;
-  min-height:140px;
-}
+.pill{ display:flex; align-items:center; justify-content:center; text-align:center; min-height:140px; }
 .pill .pad{ padding:14px 14px 16px; width:100%; max-width:520px; margin:0 auto; }
 .pill h4{ margin:.06rem 0 .25rem; color:var(--ink); font-size:1.04rem; line-height:1.25; font-weight:900; }
 .pill p{ margin:0; color:var(--ink2); font-size:.98rem; line-height:1.45; }
 
 /* Somos / No somos */
-.two{ display:grid; grid-template-columns:1fr 1fr; gap:16px }
+.two{ display:grid; grid-template-columns:1fr 1fr; gap:18px }
 @media (max-width:900px){ .two{ grid-template-columns:1fr } }
-.tone-ok{ border-color: color-mix(in srgb, var(--green), #fff 10%); background:linear-gradient(180deg,#0f172a,#0b1a16); color:var(--ink); }
-.tone-warn{ border-color: color-mix(in srgb, var(--orange), #fff 12%); background:linear-gradient(180deg,#0f172a,#1a0f14); color:var(--ink); }
-.two h3{ margin:.2rem 0 .5rem; color:var(--ink); text-align:center; }
-.two p,strong,li{ color:var(--ink); }
+.tone-ok{ border-color: color-mix(in srgb, var(--green), #fff 10%); background:linear-gradient(180deg,#0f172a,#0b1a16); }
+.tone-warn{ border-color: color-mix(in srgb, var(--orange), #fff 12%); background:linear-gradient(180deg,#0f172a,#1a0f14); }
+.two h3{ margin:.2rem 0 .5rem; text-align:center; }
 .two ul{ margin:.4rem 0 0; padding-left:18px; }
-.two li{ font-size:1.02rem; }
 
 /* Steps */
-.steps{ margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.steps{ margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:18px; }
 @media (max-width:980px){ .steps{ grid-template-columns:1fr } }
-.step{ display:grid; grid-template-columns:64px 1fr; gap:14px; align-items:flex-start; padding:16px; color:var(--ink); }
+.step{ display:grid; grid-template-columns:64px 1fr; gap:14px; align-items:flex-start; padding:16px; }
 .step .num{
   width:56px; height:56px; display:grid; place-items:center; border-radius:14px;
   background:#101a2f; border:1px solid #2a3b66; font-weight:900; font-size:1.1rem; color:var(--ink);
 }
-.step h4{ margin:.15rem 0 .25rem; color:var(--ink) }
-.step p{ margin:0; color:var(--ink); font-size:1.02rem; }
+.step h4{ margin:.15rem 0 .25rem; }
+.step p{ margin:0; color:var(--ink2); }
 
 /* CTA final */
 .cta-panel{
@@ -507,6 +495,6 @@ h1,h2,h3,h4{ color:var(--ink) }
 
 /* Accesibilidad foco */
 button:focus-visible, .btn:focus-visible, a:focus-visible, select:focus-visible{
-  outline:2px solid var(--yellow); outline-offset:2px;
+  outline:2px solid var(--focus); outline-offset:2px;
 }
 `;

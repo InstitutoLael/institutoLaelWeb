@@ -555,6 +555,41 @@ h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-heigh
 .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:980px){.grid-2,.grid-3{grid-template-columns:1fr}}
 
+/* ====== Parche contraste de TÍTULOS y rótulos ====== */
+:root{
+  --title:#DDE7FF;          /* blanco-azulado alto contraste */
+  --subtitle:#C7D6FF;       /* para subtítulos si lo necesitas */
+}
+
+/* Encabezado de sección ("Arma tu plan", "Ensayos...") */
+.sec-head h2{
+  color:#FFFFFF;            /* bien blanco */
+  letter-spacing:.2px;
+}
+
+/* Título dentro de cada card (1) Modalidad, 2) Horas..., etc.) */
+.card .step-title{
+  color:var(--title);
+  letter-spacing:.2px;
+  text-shadow:0 0 1px rgba(0,0,0,.25);  /* micro refuerzo en fondos oscuros */
+}
+
+/* Rótulos de campos (Estudiantes, Ensayos por estudiante, Opciones) */
+.card .label{
+  color:var(--title);
+  font-weight:900;
+}
+
+/* Título del bloque de ensayos */
+.block .mt12 .step-title{
+  color:var(--title);
+}
+
+/* Por si algún h3 queda dentro de cards (ej. packs) */
+.card h3{
+  color:#FFFFFF;
+}
+
 /* Focus global */
 button:focus-visible,.btn:focus-visible,input:focus-visible{outline:3px solid #22D3EE;outline-offset:2px}
 `;

@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
-// ===== Data (linkeada a tus fuentes reales) =====
+/* ================== DATA (tal como la tienes) ================== */
 import {
   LSCH_GROUP_PLANS,
   CHURCH_CONVENIO,
@@ -15,7 +15,7 @@ import {
   clp as clpHS,
 } from "../data/homeschool.js";
 
-// Helper CLP genérico (si prefieres uno único)
+/* ================== Helpers ================== */
 const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -23,21 +23,21 @@ const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// WhatsApp contacto (sin +)
 const WAPP = "56964626568";
 
+/* ================== Página ================== */
 export default function Convenios() {
-  // ===== Estimador rápido (los 3 escenarios) =====
-  const [tab, setTab] = useState("iglesias"); // "iglesias" | "olivos" | "ino" | "proponer"
+  const [tab, setTab] = useState("iglesias"); // "iglesias" | "colegios" | "empresas" | "proponer"
 
-  // Iglesias / CCINT (LSCh): usamos los valores reales de data/lsch.js
-  const publicLSChMonthly = LSCH_GROUP_PLANS?.find((p) => p.id === "g-month")?.monthly ?? 17990;
+  // ---------- Iglesias (LSCh) ----------
+  const publicLSChMonthly =
+    LSCH_GROUP_PLANS?.find((p) => p.id === "g-month")?.monthly ?? 17990;
   const churchMonthly = CHURCH_CONVENIO?.monthlyFlat ?? 11990;
 
   const [ig, setIg] = useState({
     personas: 1,
     meses: 1,
-    esCCINT: false,
+    iglesia: "",
     codigo: "",
   });
 
@@ -50,64 +50,63 @@ export default function Convenios() {
     return { publico, convenio, ahorro };
   }, [ig.personas, ig.meses, publicLSChMonthly, churchMonthly]);
 
-  // Los Olivos HomeSchool: –10% mensual + –50% matrícula (regla simple y clara)
-  // Pedimos el mensual sin convenio (porque Homeschool varía por modo/horas).
-  const [ol, setOl] = useState({
+  const waTextIglesias = encodeURIComponent(
+    `Hola 👋, quiero activar convenio de Red de Iglesias para LSCh.\n` +
+      `Iglesia/Red: ${ig.iglesia || "—"}\n` +
+      (ig.codigo?.trim() ? `Código: ${ig.codigo}\n` : "") +
+      `Personas: ${ig.personas}\nMeses: ${ig.meses}\n` +
+      `Total público aprox.: ${clp(igTotales.publico)}\n` +
+      `Total convenio aprox.: ${clp(igTotales.convenio)}\n` +
+      `¿Me ayudan con el contrato de participación?`
+  );
+
+  // ---------- Colegios / Homeschool ----------
+  const [col, setCol] = useState({
     personas: 1,
     meses: 1,
-    mensualBase: "", // CLP formateable
+    mensualBase: "", // CLP
+    colegio: "Los Olivos HomeSchool", // editable si quieres
   });
 
-  const olNums = useMemo(() => {
-    const p = Math.max(1, Number(ol.personas || 1));
-    const m = Math.max(1, Number(ol.meses || 1));
-    const base = Number(String(ol.mensualBase).replace(/[^\d]/g, "")) || 0;
+  const colNums = useMemo(() => {
+    const p = Math.max(1, Number(col.personas || 1));
+    const m = Math.max(1, Number(col.meses || 1));
+    const base = Number(String(col.mensualBase).replace(/[^\d]/g, "")) || 0;
 
     const totalPublico = base * p * m + HS_ENROLLMENT_FEE * p;
     const totalConvenio =
       Math.round(base * 0.9) * p * m + Math.round(HS_ENROLLMENT_FEE * 0.5) * p; // –10% mensual, –50% matrícula
     const ahorro = Math.max(0, totalPublico - totalConvenio);
     return { base, totalPublico, totalConvenio, ahorro };
-  }, [ol]);
+  }, [col]);
 
-  // Ino (Empresas): –5% extra sobre el total (después de tus tramos).
-  const [ino, setIno] = useState({
-    totalSinConvenio: "",
-  });
-  const inoNums = useMemo(() => {
-    const bruto = Number(String(ino.totalSinConvenio).replace(/[^\d]/g, "")) || 0;
-    const conConvenio = Math.round(bruto * 0.95);
-    const ahorro = Math.max(0, bruto - conConvenio);
-    return { bruto, conConvenio, ahorro };
-  }, [ino.totalSinConvenio]);
-
-  // Mensajes prellenados
-  const waTextIglesias = encodeURIComponent(
-    `Hola 👋, quiero activar convenio Iglesias para LSCh.\n` +
-      `Personas: ${ig.personas}\nMeses: ${ig.meses}\n` +
-      `Soy CCINT: ${ig.esCCINT ? "Sí" : "No"}\n` +
-      (ig.codigo?.trim() ? `Código: ${ig.codigo}\n` : "") +
-      `Total público aprox.: ${clp(igTotales.publico)}\n` +
-      `Total convenio aprox.: ${clp(igTotales.convenio)}\n` +
-      `¿Me ayudan con el contrato de participación?`
-  );
-
-  const waTextOlivos = encodeURIComponent(
-    `Hola 👋, soy de Los Olivos HomeSchool.\n` +
-      `Mensual sin convenio: ${clp(olNums.base)}\n` +
-      `Personas: ${ol.personas}\nMeses: ${ol.meses}\n` +
-      `Total público aprox.: ${clp(olNums.totalPublico)}\n` +
-      `Total convenio aprox.: ${clp(olNums.totalConvenio)}\n` +
+  const waTextColegios = encodeURIComponent(
+    `Hola 👋, soy de ${col.colegio}.\n` +
+      `Mensual sin convenio: ${clp(colNums.base)}\n` +
+      `Personas: ${col.personas}\nMeses: ${col.meses}\n` +
+      `Total público aprox.: ${clp(colNums.totalPublico)}\n` +
+      `Total convenio aprox.: ${clp(colNums.totalConvenio)}\n` +
       `¿Me envían el contrato para aplicar –10% mensual y –50% matrícula?`
   );
 
-  const waTextIno = encodeURIComponent(
-    `Hola 👋, colaborador/a de Ino.\n` +
-      `Total sin convenio (post-tramos): ${clp(inoNums.bruto)}\n` +
-      `Total con convenio –5%: ${clp(inoNums.conConvenio)}\n` +
+  // ---------- Empresas ----------
+  const [emp, setEmp] = useState({ totalSinConvenio: "" });
+  const empNums = useMemo(() => {
+    const bruto =
+      Number(String(emp.totalSinConvenio).replace(/[^\d]/g, "")) || 0;
+    const conConvenio = Math.round(bruto * 0.95);
+    const ahorro = Math.max(0, bruto - conConvenio);
+    return { bruto, conConvenio, ahorro };
+  }, [emp.totalSinConvenio]);
+
+  const waTextEmpresas = encodeURIComponent(
+    `Hola 👋, convenio empresas.\n` +
+      `Total sin convenio (post-tramos): ${clp(empNums.bruto)}\n` +
+      `Total con –5%: ${clp(empNums.conConvenio)}\n` +
       `¿Podemos formalizar el convenio y contrato?`
   );
 
+  // ---------- Proponer ----------
   const waTextProponer = encodeURIComponent(
     `Hola 👋, quiero proponer un convenio.\n` +
       `Organización: ______\nTamaño estimado: ______\nContacto: ______\n` +
@@ -125,26 +124,48 @@ export default function Convenios() {
             <span className="kicker">Convenios & Partners</span>
             <h1>Beneficios preferentes por pertenencia</h1>
             <p className="lead">
-              Precio preferente para <b>iglesias</b>, <b>colegios</b> y <b>empresas</b>.
-              Si ya perteneces a un partner, validas tu pertenencia y el descuento se aplica
-              <b> automático</b>. Para nuevos acuerdos, te lo dejamos listo en <b>15 minutos</b>.
+              Precio preferente para <b>red de iglesias</b>, <b>colegios</b> y{" "}
+              <b>empresas</b>. Si perteneces a un partner, validas tu pertenencia y
+              el descuento se aplica <b>automático</b>. Para nuevos acuerdos,
+              lo dejamos listo en <b>15 minutos</b>.
             </p>
             <div className="cta">
-              <a className="btn btn-primary" href={`https://wa.me/${WAPP}?text=${waTextProponer}`} target="_blank" rel="noreferrer">
+              <a
+                className="btn btn-primary"
+                href={`https://wa.me/${WAPP}?text=${waTextProponer}`}
+                target="_blank"
+                rel="noreferrer"
+              >
                 Solicitar convenio
               </a>
-              <Link className="btn btn-outline" to="/inscripcion">Inscribirme</Link>
+              <Link className="btn btn-outline" to="/inscripcion">
+                Inscribirme
+              </Link>
             </div>
           </div>
 
           {/* Marquee de partners */}
           <div className="hero__marquee" aria-label="Partners">
             <div className="mq-track">
-              {["Los Olivos HomeSchool", "CCINT", "Iglesias chicas", "Ino"].map((p, i) => (
-                <span key={i} className="pill">{p}</span>
+              {[
+                "Red de Iglesias",
+                "Colegios / Homeschool",
+                "Empresas",
+                "Nuevo partner",
+              ].map((p, i) => (
+                <span key={i} className="pill">
+                  {p}
+                </span>
               ))}
-              {["Los Olivos HomeSchool", "CCINT", "Iglesias chicas", "Ino"].map((p, i) => (
-                <span key={`dup-${i}`} className="pill">{p}</span>
+              {[
+                "Red de Iglesias",
+                "Colegios / Homeschool",
+                "Empresas",
+                "Nuevo partner",
+              ].map((p, i) => (
+                <span key={`dup-${i}`} className="pill">
+                  {p}
+                </span>
               ))}
             </div>
           </div>
@@ -154,10 +175,30 @@ export default function Convenios() {
       <div className="container">
         {/* Tabs */}
         <nav className="tabs" role="tablist" aria-label="Tipos de convenio">
-          <Tab id="ig" label="Iglesias / CCINT (LSCh)" on={tab === "iglesias"} onClick={() => setTab("iglesias")} />
-          <Tab id="ol" label="Los Olivos HomeSchool" on={tab === "olivos"} onClick={() => setTab("olivos")} />
-          <Tab id="in" label="Ino (Empresas)" on={tab === "ino"} onClick={() => setTab("ino")} />
-          <Tab id="pr" label="+ Proponer convenio" on={tab === "proponer"} onClick={() => setTab("proponer")} />
+          <Tab
+            id="ig"
+            label="Red de Iglesias (LSCh)"
+            on={tab === "iglesias"}
+            onClick={() => setTab("iglesias")}
+          />
+          <Tab
+            id="co"
+            label="Colegios / Homeschool"
+            on={tab === "colegios"}
+            onClick={() => setTab("colegios")}
+          />
+          <Tab
+            id="em"
+            label="Empresas"
+            on={tab === "empresas"}
+            onClick={() => setTab("empresas")}
+          />
+          <Tab
+            id="pr"
+            label="+ Proponer convenio"
+            on={tab === "proponer"}
+            onClick={() => setTab("proponer")}
+          />
         </nav>
 
         {/* IGLESIAS */}
@@ -165,37 +206,77 @@ export default function Convenios() {
           <section className="block">
             <div className="grid grid-2">
               <article className="card-soft">
-                <h2 className="h6 m0">Iglesias / CCINT · LSCh</h2>
+                <h2 className="h6 m0">Red de Iglesias · LSCh</h2>
                 <ul className="mini">
-                  <li>Mensual público (grupal online): <b>{clpLS(publicLSChMonthly)}</b></li>
-                  <li>Mensual convenio (Iglesias): <b className="ok">{clpLS(churchMonthly)}</b></li>
-                  <li>Matrícula (LSCh): <b>{clpLS(LSCH_ENROLLMENT_FEE)}</b></li>
+                  <li>
+                    Mensual público (grupal online):{" "}
+                    <b>{clpLS(publicLSChMonthly)}</b>
+                  </li>
+                  <li>
+                    Mensual convenio (Iglesias):{" "}
+                    <b className="ok">{clpLS(churchMonthly)}</b>
+                  </li>
+                  <li>
+                    Matrícula (LSCh): <b>{clpLS(LSCH_ENROLLMENT_FEE)}</b>
+                  </li>
                 </ul>
                 <div className="info-note">
-                  El precio preferente aplica a <b>planes grupales online</b>. Requiere verificación
-                  (carta pastoral/código/credencial). Para <b>CCINT</b>, marca la opción.
+                  Precio preferente para <b>planes grupales online</b>. Requiere
+                  verificación simple (carta pastoral/credencial o{" "}
+                  <b>código</b> de convenio).
                 </div>
 
                 <div className="grid grid-3 mt12">
+                  <Field label="Iglesia / Red">
+                    <input
+                      className="field"
+                      placeholder="Nombre de la iglesia o red"
+                      value={ig.iglesia}
+                      onChange={(e) =>
+                        setIg((s) => ({ ...s, iglesia: e.target.value }))
+                      }
+                    />
+                  </Field>
                   <Field label="Personas">
-                    <input type="number" min="1" className="field" value={ig.personas}
-                      onChange={(e) => setIg((s) => ({ ...s, personas: Number(e.target.value) || 1 }))}/>
+                    <input
+                      type="number"
+                      min="1"
+                      className="field"
+                      value={ig.personas}
+                      onChange={(e) =>
+                        setIg((s) => ({
+                          ...s,
+                          personas: Number(e.target.value) || 1,
+                        }))
+                      }
+                    />
                   </Field>
                   <Field label="Meses">
-                    <input type="number" min="1" className="field" value={ig.meses}
-                      onChange={(e) => setIg((s) => ({ ...s, meses: Number(e.target.value) || 1 }))}/>
-                  </Field>
-                  <Field label="Código (opcional)">
-                    <input type="text" className="field" value={ig.codigo}
-                      onChange={(e) => setIg((s) => ({ ...s, codigo: e.target.value }))}/>
+                    <input
+                      type="number"
+                      min="1"
+                      className="field"
+                      value={ig.meses}
+                      onChange={(e) =>
+                        setIg((s) => ({
+                          ...s,
+                          meses: Number(e.target.value) || 1,
+                        }))
+                      }
+                    />
                   </Field>
                 </div>
 
-                <label className="check mt12">
-                  <input type="checkbox" checked={ig.esCCINT}
-                    onChange={(e) => setIg((s) => ({ ...s, esCCINT: e.target.checked }))}/>
-                  <span>Soy miembro <b>CCINT</b> (tengo credencial/carta)</span>
-                </label>
+                <Field label="Código (opcional)">
+                  <input
+                    className="field"
+                    placeholder="Si te lo entregó tu iglesia, escríbelo aquí"
+                    value={ig.codigo}
+                    onChange={(e) =>
+                      setIg((s) => ({ ...s, codigo: e.target.value }))
+                    }
+                  />
+                </Field>
 
                 <div className="sum card-soft mt12">
                   <div>
@@ -213,87 +294,141 @@ export default function Convenios() {
                 </div>
 
                 <div className="cta mt12">
-                  <a className="btn btn-primary" href={`https://wa.me/${WAPP}?text=${waTextIglesias}`} target="_blank" rel="noreferrer">
+                  <a
+                    className="btn btn-primary"
+                    href={`https://wa.me/${WAPP}?text=${waTextIglesias}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     Activar convenio por WhatsApp
                   </a>
-                  <Link className="btn btn-outline" to="/inscripcion">Inscribirme</Link>
+                  <Link className="btn btn-outline" to="/inscripcion">
+                    Inscribirme
+                  </Link>
                 </div>
               </article>
 
               <article className="card-soft tone">
                 <h3 className="h6 m0">Verificación simple</h3>
                 <ul className="mini">
-                  <li>Carta pastoral o líder con nombre del participante.</li>
+                  <li>Carta pastoral o credencial con nombre del participante.</li>
                   <li>Correo institucional (si existe) o <b>código</b> de convenio.</li>
-                  <li>Para <b>CCINT</b>: credencial/carta o comunicación oficial.</li>
                 </ul>
                 <p className="tiny m0">
-                  El beneficio se mantiene durante el año mientras la pertenencia esté vigente y se firme
-                  el <b>contrato de participación</b>.
+                  El beneficio se mantiene durante el año mientras la pertenencia
+                  esté vigente y se firme el <b>contrato de participación</b>.
                 </p>
               </article>
             </div>
           </section>
         )}
 
-        {/* LOS OLIVOS HS */}
-        {tab === "olivos" && (
+        {/* COLEGIOS / HOMESCHOOL */}
+        {tab === "colegios" && (
           <section className="block">
             <div className="grid grid-2">
               <article className="card-soft">
-                <h2 className="h6 m0">Los Olivos HomeSchool · Homeschool</h2>
+                <h2 className="h6 m0">Colegios / Homeschool</h2>
                 <ul className="mini">
-                  <li>Regla: <b>–10%</b> mensual sobre tu plan</li>
-                  <li>Matrícula Homeschool: <b>–50%</b> (de {clpHS(HS_ENROLLMENT_FEE)} → {clpHS(Math.round(HS_ENROLLMENT_FEE * 0.5))})</li>
+                  <li>Regla: <b>–10%</b> mensual sobre tu plan.</li>
+                  <li>
+                    Matrícula Homeschool: <b>–50%</b> (de {clpHS(HS_ENROLLMENT_FEE)} →{" "}
+                    {clpHS(Math.round(HS_ENROLLMENT_FEE * 0.5))})
+                  </li>
                 </ul>
                 <div className="info-note">
-                  Como el mensual varía por <b>modo/horas</b>, ingresa tu mensual <b>sin convenio</b> para calcular.
+                  Como el mensual varía por <b>modo/horas</b>, ingresa tu mensual{" "}
+                  <b>sin convenio</b> para calcular.
                 </div>
 
                 <div className="grid grid-3 mt12">
+                  <Field label="Colegio / Organización">
+                    <input
+                      className="field"
+                      placeholder="Ej: Los Olivos HomeSchool"
+                      value={col.colegio}
+                      onChange={(e) =>
+                        setCol((s) => ({ ...s, colegio: e.target.value }))
+                      }
+                    />
+                  </Field>
                   <Field label="Mensual sin convenio (CLP)">
                     <input
                       className="field"
                       inputMode="numeric"
                       placeholder="$0"
-                      value={ol.mensualBase}
-                      onChange={(e) => setOl((s) => ({ ...s, mensualBase: e.target.value }))}
+                      value={col.mensualBase}
+                      onChange={(e) =>
+                        setCol((s) => ({ ...s, mensualBase: e.target.value }))
+                      }
                       onBlur={(e) => {
-                        const v = Number(String(e.target.value).replace(/[^\d]/g, "")) || 0;
-                        setOl((s) => ({ ...s, mensualBase: v ? clp(v) : "" }));
+                        const v =
+                          Number(String(e.target.value).replace(/[^\d]/g, "")) ||
+                          0;
+                        setCol((s) => ({ ...s, mensualBase: v ? clp(v) : "" }));
                       }}
                     />
                   </Field>
                   <Field label="Personas">
-                    <input type="number" min="1" className="field" value={ol.personas}
-                      onChange={(e) => setOl((s) => ({ ...s, personas: Number(e.target.value) || 1 }))}/>
+                    <input
+                      type="number"
+                      min="1"
+                      className="field"
+                      value={col.personas}
+                      onChange={(e) =>
+                        setCol((s) => ({
+                          ...s,
+                          personas: Number(e.target.value) || 1,
+                        }))
+                      }
+                    />
                   </Field>
+                </div>
+
+                <div className="grid grid-3 mt12">
                   <Field label="Meses">
-                    <input type="number" min="1" className="field" value={ol.meses}
-                      onChange={(e) => setOl((s) => ({ ...s, meses: Number(e.target.value) || 1 }))}/>
+                    <input
+                      type="number"
+                      min="1"
+                      className="field"
+                      value={col.meses}
+                      onChange={(e) =>
+                        setCol((s) => ({
+                          ...s,
+                          meses: Number(e.target.value) || 1,
+                        }))
+                      }
+                    />
                   </Field>
                 </div>
 
                 <div className="sum card-soft mt12">
                   <div>
                     <div className="k">Total público aprox.</div>
-                    <div className="big">{clp(olNums.totalPublico)}</div>
+                    <div className="big">{clp(colNums.totalPublico)}</div>
                   </div>
                   <div>
                     <div className="k">Total convenio aprox.</div>
-                    <div className="big ok">{clp(olNums.totalConvenio)}</div>
+                    <div className="big ok">{clp(colNums.totalConvenio)}</div>
                   </div>
                   <div>
                     <div className="k">Ahorro estimado</div>
-                    <div className="big">{clp(olNums.ahorro)}</div>
+                    <div className="big">{clp(colNums.ahorro)}</div>
                   </div>
                 </div>
 
                 <div className="cta mt12">
-                  <a className="btn btn-primary" href={`https://wa.me/${WAPP}?text=${waTextOlivos}`} target="_blank" rel="noreferrer">
+                  <a
+                    className="btn btn-primary"
+                    href={`https://wa.me/${WAPP}?text=${waTextColegios}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     Activar convenio por WhatsApp
                   </a>
-                  <Link className="btn btn-outline" to="/inscripcion">Inscribirme</Link>
+                  <Link className="btn btn-outline" to="/inscripcion">
+                    Inscribirme
+                  </Link>
                 </div>
               </article>
 
@@ -304,25 +439,31 @@ export default function Convenios() {
                   <li>Correo desde dominio del colegio o comprobante de pago.</li>
                 </ul>
                 <p className="tiny m0">
-                  Beneficio vigente mientras se mantenga la matrícula y el <b>contrato de participación</b>.
+                  Beneficio vigente mientras se mantenga la matrícula y el{" "}
+                  <b>contrato de participación</b>.
                 </p>
               </article>
             </div>
           </section>
         )}
 
-        {/* INO (Empresas) */}
-        {tab === "ino" && (
+        {/* EMPRESAS */}
+        {tab === "empresas" && (
           <section className="block">
             <div className="grid grid-2">
               <article className="card-soft">
-                <h2 className="h6 m0">Ino · Empresas</h2>
+                <h2 className="h6 m0">Empresas</h2>
                 <ul className="mini">
-                  <li>Tu tabla por volumen + <b>–5% extra</b> sobre el total.</li>
-                  <li>Incluye <b>reporte ejecutivo</b> sin costo.</li>
+                  <li>
+                    Tu tabla por volumen + <b>–5% extra</b> sobre el total.
+                  </li>
+                  <li>
+                    Incluye <b>reporte ejecutivo</b> sin costo.
+                  </li>
                 </ul>
                 <div className="info-note">
-                  Ingresa el <b>total sin convenio</b> (después de tus tramos) para ver el –5% aplicado.
+                  Ingresa el <b>total sin convenio</b> (después de tus tramos) para
+                  ver el –5% aplicado.
                 </div>
 
                 <div className="grid grid-3 mt12">
@@ -331,11 +472,21 @@ export default function Convenios() {
                       className="field"
                       inputMode="numeric"
                       placeholder="$0"
-                      value={ino.totalSinConvenio}
-                      onChange={(e) => setIno((s) => ({ ...s, totalSinConvenio: e.target.value }))}
+                      value={emp.totalSinConvenio}
+                      onChange={(e) =>
+                        setEmp((s) => ({
+                          ...s,
+                          totalSinConvenio: e.target.value,
+                        }))
+                      }
                       onBlur={(e) => {
-                        const v = Number(String(e.target.value).replace(/[^\d]/g, "")) || 0;
-                        setIno((s) => ({ ...s, totalSinConvenio: v ? clp(v) : "" }));
+                        const v =
+                          Number(String(e.target.value).replace(/[^\d]/g, "")) ||
+                          0;
+                        setEmp((s) => ({
+                          ...s,
+                          totalSinConvenio: v ? clp(v) : "",
+                        }));
                       }}
                     />
                   </Field>
@@ -344,33 +495,41 @@ export default function Convenios() {
                 <div className="sum card-soft mt12">
                   <div>
                     <div className="k">Total sin convenio</div>
-                    <div className="big">{clp(inoNums.bruto)}</div>
+                    <div className="big">{clp(empNums.bruto)}</div>
                   </div>
                   <div>
-                    <div className="k">Total con Ino (–5%)</div>
-                    <div className="big ok">{clp(inoNums.conConvenio)}</div>
+                    <div className="k">Total con –5%</div>
+                    <div className="big ok">{clp(empNums.conConvenio)}</div>
                   </div>
                   <div>
                     <div className="k">Ahorro estimado</div>
-                    <div className="big">{clp(inoNums.ahorro)}</div>
+                    <div className="big">{clp(empNums.ahorro)}</div>
                   </div>
                 </div>
 
                 <div className="cta mt12">
-                  <a className="btn btn-primary" href={`https://wa.me/${WAPP}?text=${waTextIno}`} target="_blank" rel="noreferrer">
+                  <a
+                    className="btn btn-primary"
+                    href={`https://wa.me/${WAPP}?text=${waTextEmpresas}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     Activar convenio por WhatsApp
                   </a>
-                  <Link className="btn btn-outline" to="/empresas">Ver programas corporativos</Link>
+                  <Link className="btn btn-outline" to="/empresas">
+                    Ver programas corporativos
+                  </Link>
                 </div>
               </article>
 
               <article className="card-soft tone">
                 <h3 className="h6 m0">Verificación simple</h3>
                 <ul className="mini">
-                  <li>Correo corporativo <b>@ino…</b> o credencial digital/física.</li>
+                  <li>Correo corporativo o credencial digital/física.</li>
                 </ul>
                 <p className="tiny m0">
-                  El –5% se aplica sobre el total post-tramos. Confirmación con <b>propuesta + contrato</b>.
+                  El –5% se aplica sobre el total post-tramos. Confirmación con{" "}
+                  <b>propuesta + contrato</b>.
                 </p>
               </article>
             </div>
@@ -383,26 +542,42 @@ export default function Convenios() {
             <div className="grid grid-2">
               <article className="card-soft">
                 <h2 className="h6 m0">Propón tu convenio</h2>
-                <p className="m0">Cuéntanos tu organización y tamaño. Te respondemos en minutos.</p>
+                <p className="m0">
+                  Cuéntanos tu organización y tamaño. Te respondemos en minutos.
+                </p>
                 <form
                   className="mt12"
                   onSubmit={(e) => {
                     e.preventDefault();
-                    window.open(`https://wa.me/${WAPP}?text=${waTextProponer}`, "_blank", "noreferrer");
+                    window.open(
+                      `https://wa.me/${WAPP}?text=${waTextProponer}`,
+                      "_blank",
+                      "noreferrer"
+                    );
                   }}
                 >
                   <div className="grid grid-2">
                     <Field label="Organización">
-                      <input className="field" placeholder="Nombre de la entidad" required />
+                      <input
+                        className="field"
+                        placeholder="Nombre de la entidad"
+                        required
+                      />
                     </Field>
                     <Field label="Tamaño estimado (personas)">
                       <input className="field" placeholder="Ej: 20–50" required />
                     </Field>
                   </div>
                   <Field label="Contacto (correo o WhatsApp)">
-                    <input className="field" placeholder="tu@correo.cl / +56 9 ..." required />
+                    <input
+                      className="field"
+                      placeholder="tu@correo.cl / +56 9 ..."
+                      required
+                    />
                   </Field>
-                  <button className="btn btn-primary mt12" type="submit">Agendar por WhatsApp</button>
+                  <button className="btn btn-primary mt12" type="submit">
+                    Agendar por WhatsApp
+                  </button>
                 </form>
               </article>
 
@@ -425,7 +600,7 @@ export default function Convenios() {
   );
 }
 
-/* ---------- Subcomponentes ---------- */
+/* ================== Subcomponentes ================== */
 function Tab({ id, label, on, onClick }) {
   return (
     <button
@@ -450,7 +625,7 @@ function Field({ label, children }) {
   );
 }
 
-/* ---------- CSS local ---------- */
+/* ================== CSS local ================== */
 const css = `
 :root{
   --blue:#3b549d; --green:#249554; --yellow:#f2ce3d; --rose:#d6a0c5; --orange:#cd5732;
@@ -493,10 +668,7 @@ const css = `
 .pill{
   display:inline-block; padding:.28rem .6rem; border-radius:999px; background:#101a2f; border:1px solid #263257; color:#e5e7eb; font-weight:700;
 }
-@keyframes slide{
-  from{ transform:translateX(0) }
-  to{ transform:translateX(-50%) }
-}
+@keyframes slide{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
 
 /* Tabs */
 .tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:16px 0; }
@@ -534,13 +706,12 @@ const css = `
 .field{
   width:100%; border:1px solid #2a3557; border-radius:12px; padding:.55rem .75rem; background:#0f172a; color:#eaf2ff;
 }
+.field::placeholder{ color:#97a3bb; }
 .check{ display:flex; gap:8px; align-items:center; color:var(--ink2); }
 .check input{ transform:scale(1.15); }
 
 /* Sumarios */
-.sum{
-  display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; align-items:end;
-}
+.sum{ display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; align-items:end; }
 .k{ font-weight:800; color:var(--muted); }
 .big{ font-size:1.3rem; font-weight:1000; }
 .ok{ color:var(--ok) }

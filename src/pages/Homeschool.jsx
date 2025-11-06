@@ -590,6 +590,50 @@ h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-heigh
   color:#FFFFFF;
 }
 
+/* ====== Parche final: total periodo + flechas ====== */
+
+/* Monto del total de período (refuerzo contraste) */
+.sum .big {
+  color: #FFD266;          /* tono ámbar legible */
+  font-weight: 1000;
+  text-shadow: 0 0 3px rgba(0, 0, 0, .3);
+}
+.sum .big.ok { color: var(--green); } /* mantiene el verde del mensual */
+
+/* Título "Total período" también más visible */
+.sum .k {
+  color: #E8EEFF;
+  font-weight: 900;
+}
+
+/* Flechas del carrusel (reforzadas) */
+.hs-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 2px solid #FFD266;
+  background: linear-gradient(145deg, #101832 0%, #1A2757 100%);
+  color: #FFD266;
+  font-size: 22px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55);
+  transition: all 0.15s ease;
+}
+.hs-btn:hover {
+  filter: brightness(1.15);
+  transform: translateY(-50%) scale(1.05);
+}
+.hs-btn:focus-visible {
+  outline: 3px solid #22D3EE;
+  outline-offset: 2px;
+}
+.hs-btn.prev { left: -8px; }
+.hs-btn.next { right: -8px; }
+
 /* Focus global */
 button:focus-visible,.btn:focus-visible,input:focus-visible{outline:3px solid #22D3EE;outline-offset:2px}
 `;

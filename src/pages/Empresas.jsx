@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import {
   SERVICE_LINES,
   EMP_PACKS,
-  PRICING,
   UI_OPTIONS,
   calcQuote,
   clp,
@@ -12,7 +11,7 @@ import {
 } from "../data/empresas.js";
 
 import logoAzul from "../assets/img/Logos/lael-inst-azul.png";
-import imgHero from "../assets/img/lael/office-bg.jpg"; // puedes cambiar esta imagen
+import imgHero from "../assets/img/lael/office-bg.jpg";
 
 export default function Empresas() {
   const [form, setForm] = useState({
@@ -20,19 +19,11 @@ export default function Empresas() {
     headcount: 20,
     durationUnit: "months",
     durationValue: 1,
-    sessionsPerWeek: 2,
-    hoursPerSession: 1.5,
     modality: "online",
-    mixedOnsiteSessions: 0,
-    addCert: false,
-    addMaterials: true,
-    addExecReport: true,
   });
 
   const q = useMemo(() => calcQuote(form), [form]);
   const setField = (k, v) => setForm((f) => ({ ...f, [k]: v }));
-  const currLine =
-    SERVICE_LINES.find((l) => l.id === form.lineId) || SERVICE_LINES[0];
 
   const waText = encodeURIComponent(
     `Hola 👋, quiero una propuesta corporativa.\n` +
@@ -73,11 +64,11 @@ export default function Empresas() {
               className="btn btn-primary"
               href={`https://wa.me/${WAPP_INTL}?text=${waText}`}
               target="_blank"
-              rel="noreferrer"
+              rel="noreferrer noopener"
             >
               Solicitar propuesta
             </a>
-            <Link className="btn btn-ghost" to="/inscripcion">
+            <Link className="btn btn-secondary" to="/inscripcion">
               Reunión de diagnóstico
             </Link>
           </div>
@@ -87,26 +78,22 @@ export default function Empresas() {
       {/* BENEFICIOS */}
       <section className="block container">
         <h2>Qué ofrecemos</h2>
-        <div className="grid grid-3 beneficios">
+        <div className="grid grid-4 beneficios">
           <div className="b-item">
             <h3>🎯 Formación adaptada</h3>
-            <p>
-              Programas modulares según nivel, rubro y objetivos de la empresa.
-            </p>
+            <p>Programas modulares según nivel, rubro y objetivos de la empresa.</p>
           </div>
           <div className="b-item">
             <h3>💻 Flexibilidad total</h3>
-            <p>
-              Modalidades online o mixtas, con sesiones en vivo y cápsulas
-              grabadas.
-            </p>
+            <p>Modalidades online o mixtas, con sesiones en vivo y cápsulas grabadas.</p>
           </div>
           <div className="b-item">
             <h3>📊 Seguimiento ejecutivo</h3>
-            <p>
-              Reportes de avance, asistencia e indicadores de cumplimiento por
-              cohorte.
-            </p>
+            <p>Reportes de avance, asistencia e indicadores de cumplimiento por cohorte.</p>
+          </div>
+          <div className="b-item">
+            <h3>📬 Propuesta en 24 h</h3>
+            <p>Envío de propuesta formal y presupuesto detallado al correo de contacto.</p>
           </div>
         </div>
       </section>
@@ -220,7 +207,7 @@ export default function Empresas() {
             <a
               href={`https://wa.me/${WAPP_INTL}?text=${waText}`}
               target="_blank"
-              rel="noreferrer"
+              rel="noreferrer noopener"
               className="btn btn-primary"
             >
               Solicitar cotización
@@ -234,19 +221,10 @@ export default function Empresas() {
         <div className="qa-card">
           <h2>Metodología y cumplimiento</h2>
           <ul>
-            <li>
-              <b>Diseño por competencias:</b> contenidos precisos, sin relleno.
-            </li>
-            <li>
-              <b>Rúbricas y QA:</b> estándares por sesión y observación docente.
-            </li>
-            <li>
-              <b>Facturación electrónica:</b> respaldo y reportes para
-              auditorías.
-            </li>
-            <li>
-              <b>Certificados y constancias:</b> disponibles por participante.
-            </li>
+            <li><b>Diseño por competencias:</b> contenidos precisos, sin relleno.</li>
+            <li><b>Rúbricas y QA:</b> estándares por sesión y observación docente.</li>
+            <li><b>Facturación electrónica:</b> respaldo y reportes para auditorías.</li>
+            <li><b>Certificados y constancias:</b> disponibles por participante.</li>
           </ul>
         </div>
       </section>
@@ -254,12 +232,9 @@ export default function Empresas() {
       {/* FOOTER */}
       <footer className="corp-footer">
         <div className="container">
+          <p>© {new Date().getFullYear()} Instituto Lael SpA — RUT 78.084.019-6</p>
           <p>
-            © {new Date().getFullYear()} Instituto Lael SpA — RUT 78.084.019-6
-          </p>
-          <p>
-            Capacitación corporativa online y presencial en sede del cliente.
-            Contacto:{" "}
+            Capacitación corporativa online y presencial en sede del cliente. Contacto:{" "}
             <b>
               <a href="mailto:contacto@institutolael.cl">
                 contacto@institutolael.cl
@@ -278,10 +253,11 @@ const css = `
   --bg:#0b1220;
   --ink:#ffffff;
   --ink2:#e3e9ff;
-  --accent:#facc15;              /* Amarillo Lael CTA */
-  --accent-dark:#E0B90F;         /* Hover */
-  --accent-press:#C9A60E;        /* Active */
-  --focus:#22d3ee;               /* Cian foco accesible */
+  --accent:#FFC928; /* Amarillo Lael */
+  --accent-dark:#E0B90F;
+  --accent-press:#C9A60E;
+  --secondary:#3b549d; /* Azul Lael */
+  --focus:#22d3ee;
   --bd:#1f2a44;
   --card:#101827;
 }
@@ -305,25 +281,35 @@ h1,h2,h3{margin:0 0 .4rem;}
 .hero p{max-width:60ch;margin:0 auto;font-size:1.1rem;color:var(--ink2);}
 .cta-row{margin-top:18px;display:flex;justify-content:center;gap:12px;flex-wrap:wrap;}
 
-/* Botones */
+/* BOTONES */
 .btn{
-  padding:.7rem 1.2rem;border-radius:12px;font-weight:850;text-decoration:none;cursor:pointer;
-  border:2px solid transparent;transition:.18s transform ease, .18s box-shadow ease, .18s background ease, .18s border-color ease;
+  padding:.7rem 1.2rem;
+  border-radius:12px;
+  font-weight:850;
+  text-decoration:none;
+  cursor:pointer;
+  border:2px solid transparent;
+  transition:.18s transform ease,.18s box-shadow ease,.18s background ease,.18s border-color ease;
   display:inline-flex;align-items:center;justify-content:center;
 }
 .btn:focus-visible{outline:3px solid var(--focus);outline-offset:2px;}
-.btn-primary{background:var(--accent);color:#111; border-color:var(--accent-dark); box-shadow:0 8px 22px rgba(250,204,21,.28);}
+.btn-primary{background:var(--accent);color:#0b0f19;border-color:var(--accent-dark);box-shadow:0 8px 22px rgba(255,201,40,.28);}
 .btn-primary:hover{background:var(--accent-dark);}
-.btn-primary:active{background:var(--accent-press); transform:translateY(1px); box-shadow:none;}
+.btn-primary:active{background:var(--accent-press);transform:translateY(1px);box-shadow:none;}
+.btn-secondary{background:var(--secondary);color:#fff;border-color:var(--secondary);}
+.btn-secondary:hover{background:#32488d;box-shadow:0 10px 22px rgba(59,84,157,.3);}
+.btn-secondary:active{background:#2a3c7a;transform:translateY(1px);}
 .btn-ghost{border:1px solid var(--ink2);color:var(--ink2);background:transparent;}
 .btn-ghost:hover{background:rgba(255,255,255,.08);}
 
 /* BENEFICIOS */
-.beneficios .b-item{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;}
+.grid{display:grid;gap:22px;}
+.grid-4{grid-template-columns:repeat(4,minmax(220px,1fr));}
+@media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,minmax(240px,1fr));}}
+@media(max-width:640px){.grid-4{grid-template-columns:1fr;}}
+.beneficios .b-item{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:20px;}
+.beneficios h3{color:#fff;margin:0 0 .3rem;}
 .beneficios p{color:var(--ink2);margin:0;}
-.grid{display:grid;gap:18px;}
-.grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
-.grid-4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
 
 /* PACKS */
 .packs-grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}

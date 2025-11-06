@@ -123,7 +123,7 @@ export default function Convenios() {
             Precio preferente para <b>red de iglesias</b>, <b>colegios</b> y{" "}
             <b>empresas</b>. Si perteneces a un partner, validas tu pertenencia y
             el descuento se aplica de forma <b>automática</b>. Para nuevos acuerdos,
-            lo dejamos listo en <b>15 minutos</b>.
+            lo dejamos listo en <b>20 minutos</b>.
           </p>
 
           <div className="cta">

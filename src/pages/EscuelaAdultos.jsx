@@ -1,5 +1,4 @@
 // src/pages/EscuelaAdultos.jsx
-import HeroImg from "../assets/img/office-bg.jpg";
 import Aula1 from "../assets/img/bootcamp.jpg";
 import Aula2 from "../assets/img/coaching.jpg";
 import Aula3 from "../assets/img/inclusion.jpg";
@@ -184,7 +183,7 @@ export default function EscuelaAdultos() {
         </div>
       </section>
 
-      {/* FORMULARIO CORTO */}
+      {/* FORMULARIO */}
       <section id="formulario" className="formulario reveal">
         <div className="container form-box">
           <h2>Preinscripción rápida 📝</h2>
@@ -247,7 +246,7 @@ export default function EscuelaAdultos() {
   );
 }
 
-/* ---------- Tarjeta de características ---------- */
+/* ---------- Componente Tarjeta ---------- */
 function FeatureCard({ img, title, bullets = [] }) {
   return (
     <article className="fcard">
@@ -261,14 +260,22 @@ function FeatureCard({ img, title, bullets = [] }) {
   );
 }
 
-/* ---------- Estilos ---------- */
+/* ---------- CSS ---------- */
 const css = `
 .adultos { background:#0b1220; color:#f1f5f9; font-family:system-ui, sans-serif; }
 .container{ width:min(1120px,92vw); margin:0 auto }
 
 /* HERO */
 .hero{ position:relative; overflow:hidden; }
-.hero-bg{ position:absolute; inset:0; background:url(${HeroImg}); background-size:cover; background-position:center; filter:brightness(.5); }
+.hero-bg{
+  position:absolute; inset:0;
+  background-image:
+    radial-gradient(1200px 400px at -10% -20%, rgba(88,80,236,.10), transparent 60%),
+    radial-gradient(1000px 360px at 110% 0%, rgba(245,158,11,.10), transparent 60%),
+    linear-gradient(180deg, rgba(11,18,32,.20), rgba(11,18,32,.85) 60%, rgba(11,18,32,.95));
+  background-size:cover; background-position:center;
+  filter:saturate(105%);
+}
 .hero-grid{ position:relative; z-index:2; display:grid; grid-template-columns:1.2fr .8fr; gap:24px; padding:72px 0; }
 .hero-copy h1 span{ color:#FBBF24; }
 .hero-icon{ display:grid; place-items:center; background:rgba(17,24,39,.6); border-radius:20px; color:#FBBF24; }

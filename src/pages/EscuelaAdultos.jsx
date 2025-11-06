@@ -1,7 +1,9 @@
-import HeroImg from "../assets/img/onboarding.jpg"; // ← imagen NUEVA para el hero (prueba office-bg.jpg o study-online.jpg si prefieres)
-import Aula1 from "../assets/img/bootcamp.jpg";
-import Aula2 from "../assets/img/coaching.jpg";
-import Aula3 from "../assets/img/inclusion.jpg";
+// src/pages/EscuelaAdultos.jsx
+// Usamos new URL(...) para evitar errores de path en el build de Vite/Rollup.
+const HERO_URL  = new URL("../assets/img/study-online.jpg", import.meta.url).toString();  // cambia a office-bg.jpg si lo prefieres
+const AULA1_URL = new URL("../assets/img/bootcamp.jpg",      import.meta.url).toString();
+const AULA2_URL = new URL("../assets/img/coaching.jpg",      import.meta.url).toString();
+const AULA3_URL = new URL("../assets/img/inclusion.jpg",     import.meta.url).toString();
 
 export default function EscuelaAdultos(){
   return (
@@ -49,7 +51,7 @@ export default function EscuelaAdultos(){
       {/* 3 RAZONES — tarjetas con foto */}
       <section className="cards container reveal">
         <article className="card">
-          <figure className="ph"><img src={Aula1} alt="" /></figure>
+          <figure className="ph"><img src={AULA1_URL} alt="" /></figure>
           <h3>¿A quién va dirigido?</h3>
           <ul>
             <li>Adultos que no completaron Básica o Media.</li>
@@ -59,7 +61,7 @@ export default function EscuelaAdultos(){
         </article>
 
         <article className="card">
-          <figure className="ph"><img src={Aula2} alt="" /></figure>
+          <figure className="ph"><img src={AULA2_URL} alt="" /></figure>
           <h3>Modalidad y horarios</h3>
           <ul>
             <li>100% online. <strong>En vivo</strong> y quedan grabadas.</li>
@@ -69,7 +71,7 @@ export default function EscuelaAdultos(){
         </article>
 
         <article className="card">
-          <figure className="ph"><img src={Aula3} alt="" /></figure>
+          <figure className="ph"><img src={AULA3_URL} alt="" /></figure>
           <h3>Enfoque y respaldo</h3>
           <ul>
             <li>Contenidos alineados a <strong>Exámenes Libres</strong> (Mineduc).</li>
@@ -176,7 +178,7 @@ const css = `
   position:absolute; inset:0;
   background-image:
     linear-gradient(180deg, rgba(11,18,32,.20), rgba(11,18,32,.65) 60%, rgba(11,18,32,.9)),
-    url(${HeroImg});
+    url(${HERO_URL});
   background-size:cover; background-position:center;
   filter:saturate(105%);
 }

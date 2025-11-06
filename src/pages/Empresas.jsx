@@ -332,6 +332,68 @@ h1,h2,h3{margin:0 0 .4rem;}
 .qa-card ul{margin:0;padding-left:20px;color:var(--ink2);}
 .qa-card li{margin:.3rem 0;}
 
+/* ===== PATCH: colores CTA + separación + select caret (dark) ===== */
+
+/* 1) CTA amarillo y fantasma azul, consistentes */
+:root{
+  --cta:#FFCC33;
+  --cta-dark:#E6B800;
+  --cta-press:#CCA300;
+  --cta-ink:#0f1115;
+  --blue:#60A5FA;           /* azul del ghost */
+}
+
+/* CTA principal (WhatsApp / Cotización) */
+.btn-primary{
+  background:var(--cta);
+  color:var(--cta-ink);
+  border-color:var(--cta-dark);
+  box-shadow:0 10px 26px rgba(255,204,51,.18);
+}
+.btn-primary:hover{ background:var(--cta-dark); }
+.btn-primary:active{ background:var(--cta-press); transform:translateY(1px); }
+
+/* “Reunión de diagnóstico” (ghost) en azul y con hover sutil */
+.btn-ghost{
+  color:var(--blue);
+  border:1px solid var(--blue);
+  background:transparent;
+}
+.btn-ghost:hover{
+  background:color-mix(in srgb, var(--blue) 14%, transparent);
+}
+
+/* 2) Más aire entre bloques (programas ↔ estimador ↔ metodología) */
+.block{ margin:56px 0; }                   /* antes 48px */
+.packs-grid{ margin-bottom:26px; }
+.est-card{ margin-top:22px; }
+.qa-card{ margin-top:28px; }
+
+@media (max-width: 960px){
+  .block{ margin:42px 0; }                 /* un pelín más compacto en mobile */
+}
+
+/* 3) Selects: caret claro y padding para que no se “coma” el texto */
+.field{
+  appearance:none;
+  padding-right:40px;                       /* espacio para la flecha */
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 20 20' fill='%23eaf2ff'><path d='M5.23 7.21a.75.75 0 0 1 1.06.02L10 10.94l3.71-3.71a.75.75 0 1 1 1.06 1.06l-4.24 4.24a.75.75 0 0 1-1.06 0L5.21 8.27a.75.75 0 0 1 .02-1.06z'/></svg>");
+  background-repeat:no-repeat;
+  background-position:right 12px center;
+  background-size:16px;
+  color-scheme: dark;
+}
+.field option{ background:#0f172a; color:#eaf2ff; }
+
+/* 4) Botones “Cargar en estimador”: mismo CTA que el resto */
+.pack-card .btn-primary{
+  background:var(--cta);
+  color:var(--cta-ink);
+  border-color:var(--cta-dark);
+}
+.pack-card .btn-primary:hover{ background:var(--cta-dark); }
+
 /* FOOTER */
 .corp-footer{margin:60px 0 20px;text-align:center;color:var(--ink2);font-size:.92rem;}
 .corp-footer a{color:var(--accent);}

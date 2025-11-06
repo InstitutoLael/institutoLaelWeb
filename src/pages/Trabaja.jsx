@@ -691,6 +691,27 @@ a:hover{ text-decoration:underline; }
 }
 .vision-text{ margin:0; color:#EAF2FF; }
 
+.steps{
+  border:1px dashed rgba(165,180,252,.45);
+  background:linear-gradient(180deg,#101832,#0F172A);
+}
+
+.legal-ribbon{
+  margin: -4px 0 12px;
+}
+
+.actions{ 
+  display:flex; 
+  flex-wrap:wrap; 
+  gap:12px; 
+  justify-content:center;
+}
+
+.area-tab:hover:not([aria-selected="true"]){
+  border-color:#818CF8;
+  box-shadow:0 0 0 3px rgba(129,140,248,.15) inset;
+}
+
 /* Accesibilidad */
 .btn-primary:focus-visible, .btn-ghost:focus-visible, .choice:focus-visible,
 .input:focus-visible, select.input:focus-visible, textarea.input:focus-visible, .area-tab:focus-visible {

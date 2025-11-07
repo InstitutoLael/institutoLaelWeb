@@ -19,7 +19,7 @@ const LOGOS = [
   { src: losolivos, alt: "Los Olivos HomeSchool" },
 ];
 
-// Ajustes de escala finos por marca (opcional)
+// Escalas finas (opcional)
 const SCALE = {
   "Naamá Studio": 2.40,
   "Instituto Nacional de Ortodoncia": 1.38,
@@ -28,9 +28,13 @@ const SCALE = {
   "Universidad asociada 2": 1.18,
 };
 
-export default function PartnersMarquee({ height = 32, gap = 40, speed = 100 }) {
-  // Repetimos para sensación de loop continuo (idéntico a tu versión)
-  const list = [...LOGOS, ...LOGOS, ...LOGOS, ...LOGOS];
+export default function PartnersMarquee({
+  height = 32,
+  gap = 40,
+  speed = 40, // ⬅️ más rápido por defecto (antes 100s parecía “quieto”)
+}) {
+  // Para un loop perfecto con translateX(-50%) necesitamos dos mitades idénticas:
+  const list = [...LOGOS, ...LOGOS];
 
   const css = `
     .marquee{
@@ -45,13 +49,13 @@ export default function PartnersMarquee({ height = 32, gap = 40, speed = 100 }) 
       display:flex; gap:${gap}px; width:max-content;
       padding:14px 22px;
       will-change: transform;
-      transform: translateZ(0); /* acelera GPU */
+      transform: translateZ(0);
       animation: marquee-scroll ${speed}s linear infinite;
     }
-    /* Pausa: hover, foco (teclado) y active (toque) */
-    .marquee:hover .marquee__track,
-    .marquee:focus-within .marquee__track,
-    .marquee:active .marquee__track{ animation-play-state: paused; }
+    /* Solo pausa en hover (desktop). En móvil no se pausa para evitar “quedarse pegado”. */
+    @media (hover:hover){
+      .marquee:hover .marquee__track{ animation-play-state: paused; }
+    }
 
     .marquee__item{
       flex:0 0 auto; display:grid; place-items:center;
@@ -64,14 +68,16 @@ export default function PartnersMarquee({ height = 32, gap = 40, speed = 100 }) 
       transition: transform .22s ease, filter .22s ease;
       user-select:none; -webkit-user-drag:none;
     }
-    .marquee__logo:hover{ transform: scale(1.05); filter: drop-shadow(0 0 6px rgba(255,255,255,1)); }
+    @media (hover:hover){
+      .marquee__logo:hover{ transform: scale(1.05); filter: drop-shadow(0 0 6px rgba(255,255,255,1)); }
+    }
 
     @keyframes marquee-scroll{
       0%   { transform: translate3d(0,0,0); }
-      100% { transform: translate3d(-50%,0,0); } /* seguimos con -50% como en tu versión */
+      100% { transform: translate3d(-50%,0,0); } /* dos mitades idénticas → seamless */
     }
 
-    /* Reduce motion: detiene la animación y deja estático */
+    /* Respeta usuarios con “reducir movimiento”: deja estático */
     @media (prefers-reduced-motion: reduce){
       .marquee__track{ animation: none !important; }
     }
@@ -89,7 +95,6 @@ export default function PartnersMarquee({ height = 32, gap = 40, speed = 100 }) 
       aria-label="Alianzas y colaboradores"
       aria-roledescription="cinta de logos"
       aria-live="off"
-      tabIndex={-1} /* permite :focus-within sin tomar foco por defecto */
     >
       <style>{css}</style>
       <div className="marquee__track">
@@ -100,10 +105,9 @@ export default function PartnersMarquee({ height = 32, gap = 40, speed = 100 }) 
               src={item.src}
               alt={item.alt}
               title={item.alt}
-              height={height} /* ayuda a reducir CLS */
+              height={height}
               loading="lazy"
               decoding="async"
-              fetchpriority="low"
               draggable="false"
               style={{ transform: `scale(${SCALE[item.alt] || 1})` }}
               onError={(e)=>{ e.currentTarget.style.opacity = ".4"; }}

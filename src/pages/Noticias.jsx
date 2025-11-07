@@ -1,6 +1,7 @@
 // src/pages/Noticias.jsx
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import SEOHead from "../components/SEOHead.jsx";
 
 /**
  * Fuente local de noticias (puedes editar/añadir sin tocar el componente).
@@ -16,7 +17,7 @@ const NEWS = [
       "Gracias a todas/os quienes confiaron en Lael. Te contamos cómo vienen los intensivos y la planificación 2026.",
     date: "2025-11-01",
     type: "PAES",
-    href: "https://www.instagram.com/inst.lael", // ejemplo externo
+    href: "https://www.instagram.com/inst.lael",
   },
   {
     id: "2025-10-idiomas-conversacion",
@@ -82,10 +83,29 @@ const CAT_EMOJI = {
 };
 
 export default function Noticias() {
-  const [q, setQ] = useState("");
-  const [cat, setCat] = useState("Todos");
-  const [page, setPage] = useState(1);
+  const loc = useLocation();
+  const nav = useNavigate();
+
+  // Lee filtros desde la URL (para SEO y compartir enlaces)
+  const params = new URLSearchParams(loc.search);
+  const q0 = params.get("q") ?? "";
+  const cat0 = params.get("cat") ?? "Todos";
+  const page0 = Math.max(1, parseInt(params.get("page") || "1", 10));
+
+  const [q, setQ] = useState(q0);
+  const [cat, setCat] = useState(cat0);
+  const [page, setPage] = useState(page0);
   const PAGE_SIZE = 6;
+
+  // Sincroniza estado -> URL (sin recargar)
+  useEffect(() => {
+    const sp = new URLSearchParams();
+    if (q.trim()) sp.set("q", q.trim());
+    if (cat !== "Todos") sp.set("cat", cat);
+    if (page > 1) sp.set("page", String(page));
+    const next = sp.toString() ? `?${sp.toString()}` : "";
+    if (next !== loc.search) nav({ pathname: loc.pathname, search: next }, { replace: true });
+  }, [q, cat, page]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Filtro + búsqueda + orden fecha desc
   const results = useMemo(() => {
@@ -105,11 +125,55 @@ export default function Noticias() {
   const pageSafe = Math.min(page, totalPages);
   const slice = results.slice((pageSafe - 1) * PAGE_SIZE, pageSafe * PAGE_SIZE);
 
-  // Resetear a página 1 al cambiar filtros/busca
-  useMemo(() => setPage(1), [q, cat]);
+  // Reset a página 1 al cambiar filtros/búsqueda
+  useEffect(() => { setPage(1); }, [q, cat]);
+
+  // -------- SEO --------
+  const base = "https://www.institutolael.cl/noticias";
+  const canonical = `${base}${loc.search || ""}`;
+  const desc =
+    "Noticias de Instituto Lael: PAES, Idiomas e inclusión (LSCh), inscripciones, becas y convenios.";
+
+  // JSON-LD: CollectionPage + NewsArticle
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Noticias — Instituto Lael",
+    url: canonical,
+    isPartOf: { "@type": "WebSite", name: "Instituto Lael", url: "https://www.institutolael.cl" },
+    about: ["PAES", "Idiomas", "LSCh", "Homeschool", "Empresas", "Institucional"],
+    hasPart: slice.map((n) => ({
+      "@type": "NewsArticle",
+      "@id": `#${n.id}`,
+      headline: n.title,
+      description: n.excerpt,
+      datePublished: n.date,
+      dateModified: n.date,
+      inLanguage: "es-CL",
+      articleSection: n.type,
+      mainEntityOfPage: n.href || `${base}#${n.id}`,
+      author: { "@type": "Organization", name: "Instituto Lael" },
+      publisher: {
+        "@type": "Organization",
+        name: "Instituto Lael",
+        logo: { "@type": "ImageObject", url: "https://www.institutolael.cl/og/lael-logo-512.png" }
+      }
+    })),
+  };
 
   return (
     <section className="news">
+      {/* HEAD META */}
+      <SEOHead
+        title="Noticias | Instituto Lael"
+        description={desc}
+        canonical={canonical}
+        ogImage="https://www.institutolael.cl/og/noticias-og.jpg"
+        twitterImage="https://www.institutolael.cl/og/noticias-og.jpg"
+      />
+      <script type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
       <style>{css}</style>
 
       {/* HERO */}
@@ -145,11 +209,13 @@ export default function Noticias() {
               </button>
             </form>
 
-            <div className="chips">
+            <div className="chips" role="tablist" aria-label="Filtrar por categoría">
               {CATS.map((c) => (
                 <button
                   key={c.id}
                   type="button"
+                  role="tab"
+                  aria-selected={cat === c.id}
                   className={"chip " + (cat === c.id ? "on" : "")}
                   onClick={() => setCat(c.id)}
                   style={{ ["--c"]: c.color }}
@@ -166,7 +232,7 @@ export default function Noticias() {
       <div className="container">
         {slice.length ? (
           <>
-            <div className="grid">
+            <div className="grid" aria-live="polite">
               {slice.map((n) => (
                 <NewsCard key={n.id} n={n} />
               ))}
@@ -240,23 +306,27 @@ function NewsCard({ n }) {
           <span className="muted">Interno</span>
         )}
       </div>
+      {/* microdata mínima dentro del card */}
+      <meta itemProp="datePublished" content={n.date} />
+      <meta itemProp="dateModified" content={n.date} />
+      <meta itemProp="about" content={n.type} />
     </>
   );
 
+  const commonProps = {
+    className: "card",
+    style: { ["--bar"]: color },
+    itemScope: true,
+    itemType: "https://schema.org/NewsArticle",
+    itemID: `#${n.id}`,
+  };
+
   return n.href ? (
-    <a
-      className="card"
-      href={n.href}
-      target="_blank"
-      rel="noreferrer"
-      style={{ ["--bar"]: color }}
-    >
+    <a {...commonProps} href={n.href} target="_blank" rel="noreferrer">
       {inner}
     </a>
   ) : (
-    <article className="card" style={{ ["--bar"]: color }}>
-      {inner}
-    </article>
+    <article {...commonProps}>{inner}</article>
   );
 }
 

@@ -1,3 +1,4 @@
+
 // src/pages/Empresas.jsx
 import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -9,6 +10,9 @@ import {
   clp,
   WAPP_INTL,
 } from "../data/empresas.js";
+
+import SEOHead from "../components/SEOHead";
+import { seoDefaults } from "../seo.config";
 
 import logoAzul from "../assets/img/Logos/lael-inst-azul.png";
 import imgHero from "../assets/img/lael/office-bg.jpg";
@@ -35,12 +39,90 @@ export default function Empresas() {
       `¿Podrían contactarme?`
   );
 
+  // 🧠 UX detalle: título cambia cuando se sale y vuelve
   useEffect(() => {
-    document.title = "Capacitación Corporativa | Instituto Lael SpA";
+    const blur = () =>
+      (document.title = "💼 Capacitación Empresarial | Instituto Lael");
+    const focus = () =>
+      (document.title = "Capacitación Corporativa | Instituto Lael SpA");
+    window.addEventListener("blur", blur);
+    window.addEventListener("focus", focus);
+    return () => {
+      window.removeEventListener("blur", blur);
+      window.removeEventListener("focus", focus);
+    };
   }, []);
+
+  /* ---------------- SEO JSON-LD ---------------- */
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Instituto Lael SpA",
+      "url": seoDefaults.site,
+      "logo": `${seoDefaults.site}/meta/logo-lael.png`,
+      "sameAs": [
+        "https://www.instagram.com/institutolael",
+        "https://www.youtube.com/@institutolael",
+        "https://www.linkedin.com/company/instituto-lael/",
+      ],
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "telephone": "+56 9 6462 6568",
+          "contactType": "customer support",
+          "areaServed": "CL",
+          "availableLanguage": ["Spanish"],
+        },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Capacitación corporativa",
+      "provider": {
+        "@type": "Organization",
+        "name": "Instituto Lael SpA",
+        "url": seoDefaults.site,
+      },
+      "areaServed": "Chile",
+      "offers": {
+        "@type": "Offer",
+        "url": `${seoDefaults.site}/empresas`,
+        "priceCurrency": "CLP",
+        "price": q.total.toFixed(0),
+        "availability": "https://schema.org/InStock",
+        "eligibleRegion": "CL",
+      },
+      "description":
+        "Programas de formación corporativa en inglés, LSCh, habilidades blandas y empleabilidad. Modalidades online o mixtas, con reportes ejecutivos y certificación.",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "OfferCatalog",
+      "name": "Programas de capacitación empresarial",
+      "itemListElement": EMP_PACKS.map((p, i) => ({
+        "@type": "Offer",
+        "position": i + 1,
+        "name": p.title,
+        "description": p.subtitle,
+        "url": `${seoDefaults.site}/empresas#${p.id}`,
+        "category": "Corporate Training",
+      })),
+    },
+  ];
 
   return (
     <section className="empresas">
+      {/* 🧭 SEO HEAD */}
+      <SEOHead
+        title="Capacitación Corporativa"
+        description="Capacitación corporativa en inglés, LSCh, habilidades blandas y empleabilidad. Diseñamos programas modulares con seguimiento ejecutivo y certificación. Propuesta en 24 h."
+        path="/empresas"
+        image={`${seoDefaults.site}/meta/og-empresas.jpg`}
+        jsonLd={jsonLd}
+      />
+
       <style>{css}</style>
 
       {/* HERO */}
@@ -111,6 +193,7 @@ export default function Empresas() {
             return (
               <article
                 key={p.id}
+                id={p.id}
                 className="pack-card"
                 style={{ "--accent": line.brandColor }}
               >
@@ -246,6 +329,8 @@ export default function Empresas() {
     </section>
   );
 }
+
+/* Mantén tu mismo CSS (ya es óptimo visualmente) */
 
 /* ===== CSS ===== */
 const css = `

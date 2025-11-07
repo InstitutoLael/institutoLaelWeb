@@ -1,13 +1,43 @@
 // src/pages/Contacto.jsx
 import { useEffect } from "react";
+import SEOHead from "../components/SEOHead";
+import { seoDefaults } from "../seo.config";
 
 export default function Contacto() {
+  // 🧠 Aviso al intentar salir o cambiar de pestaña
   useEffect(() => {
-    document.title = "Contacto | Instituto Lael";
+    const handleBlur = () => {
+      document.title = "😢 ¡Vuelve pronto! | Instituto Lael";
+    };
+    const handleFocus = () => {
+      document.title = "Contacto — Instituto Lael";
+    };
+    window.addEventListener("blur", handleBlur);
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("focus", handleFocus);
+    };
   }, []);
 
   return (
     <section className="contacto-page">
+      {/* 🧭 SEO y metadatos */}
+      <SEOHead
+        title="Contacto"
+        description="¿Tienes dudas sobre PAES, Inglés o LSCh? Contáctanos por WhatsApp o correo, respondemos en menos de 24 h hábiles."
+        path="/contacto"
+        image={`${seoDefaults.site}/meta/og-lael.jpg`}
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "ContactPage",
+          name: "Contacto — Instituto Lael",
+          url: `${seoDefaults.site}/contacto`,
+        }}
+      />
+
+      {/* 🎨 Estilos locales */}
       <style>{css}</style>
 
       <div className="container">

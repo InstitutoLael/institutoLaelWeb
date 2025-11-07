@@ -1,10 +1,25 @@
 // src/pages/Docentes.jsx
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { teachers } from "../data/teachers.js";
+import SEOHead from "../components/SEOHead";
+import { seoDefaults } from "../seo.config";
 
 export default function Docentes() {
   const [active, setActive] = useState("Todos");
   const [query, setQuery] = useState("");
+
+  // Título dinámico al cambiar de pestaña (opcional, lindo detalle UX)
+  useEffect(() => {
+    const onBlur = () => (document.title = "👋 ¡No te vayas! | Instituto Lael");
+    const onFocus = () => (document.title = "Docentes — Instituto Lael");
+    window.addEventListener("blur", onBlur);
+    window.addEventListener("focus", onFocus);
+    return () => {
+      window.removeEventListener("blur", onBlur);
+      window.removeEventListener("focus", onFocus);
+    };
+  }, []);
 
   // subjects únicos (normalizados)
   const subjects = useMemo(() => {
@@ -14,9 +29,10 @@ export default function Docentes() {
   }, []);
 
   const filtered = useMemo(() => {
-    const bySubject = active === "Todos"
-      ? teachers
-      : teachers.filter((t) => (t.subject || "").trim() === active);
+    const bySubject =
+      active === "Todos"
+        ? teachers
+        : teachers.filter((t) => (t.subject || "").trim() === active);
 
     const q = query.trim().toLowerCase();
     if (!q) return bySubject;
@@ -34,8 +50,48 @@ export default function Docentes() {
     });
   }, [active, query]);
 
+  // ---------- JSON-LD ----------
+  const jsonLd = useMemo(() => {
+    const list = teachers.map((t, idx) => {
+      const person = {
+        "@type": "Person",
+        name: t.name || "",
+        description: t.bio || undefined,
+        jobTitle: t.subject || undefined,
+        url: `${seoDefaults.site}/docentes#${slug(t.name || `docente-${idx + 1}`)}`,
+      };
+      // Incluye imagen sólo si es absoluta (evita 404 en rich results)
+      if (t.photo && /^https?:\/\//i.test(t.photo)) {
+        person.image = t.photo;
+      }
+      // Enlaces sociales opcionales
+      const sameAs = [t.linkedin, t.youtube].filter(Boolean);
+      if (sameAs.length) person.sameAs = sameAs;
+      return { "@type": "ListItem", position: idx + 1, item: person };
+    });
+
+    return [
+      {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "Equipo Docente — Instituto Lael",
+        url: `${seoDefaults.site}/docentes`,
+        itemListElement: list,
+      },
+    ];
+  }, []);
+
   return (
     <section className="teachers-page">
+      {/* SEO */}
+      <SEOHead
+        title="Docentes"
+        description="Profes reales con vocación y experiencia: PAES, Idiomas e LSCh. Conócelos y filtra por asignatura."
+        path="/docentes"
+        image={`${seoDefaults.site}/meta/og-lael.jpg`}
+        jsonLd={jsonLd}
+      />
+
       <style>{css}</style>
 
       {/* HERO */}
@@ -85,7 +141,7 @@ export default function Docentes() {
       <div className="container">
         <div className="grid">
           {filtered.map((t) => (
-            <TeacherCard key={t.id} t={t} />
+            <TeacherCard key={t.id || slug(t.name)} t={t} />
           ))}
         </div>
       </div>
@@ -99,7 +155,7 @@ function TeacherCard({ t }) {
   const first = (t.name || "?").trim().charAt(0).toUpperCase();
 
   return (
-    <article className="card" style={{ "--accent": accent }}>
+    <article className="card" id={slug(t.name)} style={{ "--accent": accent }}>
       <figure className="avatar" aria-hidden="true">
         {t.photo ? (
           <img src={t.photo} alt="" loading="lazy" decoding="async" />
@@ -114,12 +170,18 @@ function TeacherCard({ t }) {
           {t.subject && <div className="sub">{t.subject}</div>}
         </div>
 
-        {t.bio && <p className="bio clamp" data-clamp="3">{t.bio}</p>}
+        {t.bio && (
+          <p className="bio clamp" data-clamp="3">
+            {t.bio}
+          </p>
+        )}
 
         {!!(t.tags && t.tags.length) && (
           <ul className="tags" aria-label="Especialidades">
             {t.tags.map((tag, i) => (
-              <li key={i} className="tag">{tag}</li>
+              <li key={i} className="tag">
+                {tag}
+              </li>
             ))}
           </ul>
         )}
@@ -127,22 +189,12 @@ function TeacherCard({ t }) {
         {/* Acciones opcionales */}
         <div className="actions">
           {t.linkedin && (
-            <a
-              className="btn-ghost"
-              href={t.linkedin}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a className="btn-ghost" href={t.linkedin} target="_blank" rel="noreferrer">
               LinkedIn
             </a>
           )}
           {t.youtube && (
-            <a
-              className="btn-ghost"
-              href={t.youtube}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a className="btn-ghost" href={t.youtube} target="_blank" rel="noreferrer">
               YouTube
             </a>
           )}
@@ -153,7 +205,9 @@ function TeacherCard({ t }) {
               const p = e.currentTarget.closest(".card")?.querySelector(".bio");
               if (!p) return;
               p.classList.toggle("clamp");
-              e.currentTarget.textContent = p.classList.contains("clamp") ? "Ver más" : "Ver menos";
+              e.currentTarget.textContent = p.classList.contains("clamp")
+                ? "Ver más"
+                : "Ver menos";
             }}
           >
             Ver más
@@ -162,6 +216,16 @@ function TeacherCard({ t }) {
       </div>
     </article>
   );
+}
+
+/* ---------- helpers ---------- */
+function slug(s = "") {
+  return String(s)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
 }
 
 /* ---------- CSS ---------- */

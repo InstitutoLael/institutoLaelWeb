@@ -1,5 +1,9 @@
 // src/pages/EscuelaAdultos.jsx
+import { useEffect } from "react";
+import SEOHead from "../components/SEOHead";
+import { seoDefaults } from "../seo.config";
 
+// Assets (mantengo tu patrón new URL para Vite)
 const LogoMark = new URL("../assets/img/Logos/lael-inst-blanco.png", import.meta.url).href;
 
 // Tarjetas con foto
@@ -13,8 +17,78 @@ const Gal2 = new URL("../assets/img/lael/study-online.jpg", import.meta.url).hre
 const Gal3 = new URL("../assets/img/lael/soft.jpg", import.meta.url).href;
 
 export default function EscuelaAdultos() {
+  // UX: “no te vayas” cuando el usuario sale de la pestaña
+  useEffect(() => {
+    const onBlur = () => (document.title = "No te vayas 💛 Termina tus estudios");
+    const onFocus = () => (document.title = "Escuela para Adultos | Instituto Lael");
+    window.addEventListener("blur", onBlur);
+    window.addEventListener("focus", onFocus);
+    // título inicial
+    document.title = "Escuela para Adultos | Instituto Lael";
+    return () => {
+      window.removeEventListener("blur", onBlur);
+      window.removeEventListener("focus", onFocus);
+    };
+  }, []);
+
+  // ---------- SEO JSON-LD ----------
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Instituto Lael SpA",
+      "url": seoDefaults.site,
+      "logo": `${seoDefaults.site}/meta/logo-lael.png`,
+      "sameAs": [
+        "https://www.instagram.com/institutolael",
+        "https://www.youtube.com/@institutolael",
+        "https://www.linkedin.com/company/instituto-lael/"
+      ],
+      "contactPoint": [{
+        "@type": "ContactPoint",
+        "telephone": "+56 9 6462 6568",
+        "contactType": "customer support",
+        "areaServed": "CL",
+        "availableLanguage": ["Spanish"]
+      }]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Escuela para Adultos (Básica y Media)",
+      "provider": {
+        "@type": "Organization",
+        "name": "Instituto Lael SpA",
+        "url": seoDefaults.site
+      },
+      "areaServed": "Chile",
+      "url": `${seoDefaults.site}/escuela-adultos`,
+      "description": "Programa flexible para personas adultas (18+) que necesitan completar su enseñanza Básica o Media. Online en vivo + grabaciones. Alineado a Exámenes Libres (Mineduc)."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Escuela para Adultos — Enseñanza Básica y Media (Exámenes Libres)",
+      "description": "Clases online en vivo y grabadas. Plan personalizado, horarios PM, acompañamiento y simulacros. Pensado para retomar estudios y rendir Exámenes Libres.",
+      "provider": {
+        "@type": "Organization",
+        "name": "Instituto Lael SpA",
+        "sameAs": seoDefaults.site
+      }
+    }
+  ];
+
   return (
     <div className="adultos">
+      {/* SEO */}
+      <SEOHead
+        title="Escuela para Adultos"
+        description="Termina tus estudios con apoyo real: programa flexible para adultos (18+) que necesitan completar Básica o Media. Clases online en vivo + grabaciones, horarios PM y preparación para Exámenes Libres (Mineduc)."
+        path="/escuela-adultos"
+        image={`${seoDefaults.site}/meta/og-escuela-adultos.jpg`}
+        jsonLd={jsonLd}
+      />
+
       <style>{css}</style>
 
       {/* HERO */}

@@ -1,11 +1,15 @@
 // src/pages/NotFound.jsx
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import SEOHead from "../components/SEOHead.jsx";
 
 export default function NotFound() {
   const nav = useNavigate();
   const loc = useLocation();
   const h1Ref = useRef(null);
+
+  // ---- SEO dinámico (canonical = URL actual, noindex) ----
+  const canonicalUrl = `https://www.institutolael.cl${loc.pathname}${loc.search || ""}`;
 
   // Foco al título (accesibilidad)
   useEffect(() => {
@@ -44,7 +48,7 @@ export default function NotFound() {
     { to: "/convenios", label: "Convenios" },
   ];
 
-  // Sugerencias según URL (typos frecuentes)
+  // Sugerencias según URL
   const suggestions = useMemo(() => {
     const p = loc.pathname.toLowerCase();
     const map = [
@@ -64,9 +68,7 @@ export default function NotFound() {
   // Buscador (debounce simple)
   const [q, setQ] = useState("");
   useEffect(() => {
-    const id = setTimeout(() => {
-      // noop, dejamos listo por si conectas a /buscar más adelante
-    }, 220);
+    const id = setTimeout(() => {}, 220);
     return () => clearTimeout(id);
   }, [q]);
 
@@ -82,7 +84,6 @@ export default function NotFound() {
       await navigator.clipboard.writeText(window.location.href);
       alert("URL copiada ✅");
     } catch {
-      // fallback
       prompt("Copia la URL:", window.location.href);
     }
   };
@@ -104,20 +105,23 @@ export default function NotFound() {
 
   return (
     <section className="nf">
+      {/* SEO */}
+      <SEOHead
+        title="404 — Página no encontrada | Instituto Lael"
+        description="La página que buscas no existe. Te ayudamos a encontrar el contenido correcto en Instituto Lael."
+        canonical={canonicalUrl}
+        robots="noindex,follow"
+        ogImage="https://www.institutolael.cl/assets/img/og/404-og.jpg"
+        twitterImage="https://www.institutolael.cl/assets/img/og/404-og.jpg"
+      />
+
       <style>{css}</style>
 
       <div className="wrap container">
         <div className="card-404">
-          <div className="emoji" aria-hidden>
-            🧭
-          </div>
+          <div className="emoji" aria-hidden>🧭</div>
 
-          <h1
-            className="title"
-            tabIndex={-1}
-            ref={h1Ref}
-            aria-live="polite"
-          >
+          <h1 className="title" tabIndex={-1} ref={h1Ref} aria-live="polite">
             404 — Página no encontrada
           </h1>
 
@@ -146,21 +150,13 @@ export default function NotFound() {
               aria-label="Buscar"
               autoComplete="off"
             />
-            <button className="btn btn-primary" type="submit">
-              Buscar
-            </button>
+            <button className="btn btn-primary" type="submit">Buscar</button>
           </form>
 
           <div className="cta-row">
-            <Link className="btn btn-ghost" to="/" aria-label="Volver al inicio">
-              ← Volver al inicio
-            </Link>
-            <button className="btn btn-outline" type="button" onClick={copyUrl}>
-              Copiar URL
-            </button>
-            <a className="btn btn-outline" href={mailto}>
-              Reportar error
-            </a>
+            <Link className="btn btn-ghost" to="/" aria-label="Volver al inicio">← Volver al inicio</Link>
+            <button className="btn btn-outline" type="button" onClick={copyUrl}>Copiar URL</button>
+            <a className="btn btn-outline" href={mailto}>Reportar error</a>
             <a
               className="btn btn-outline"
               href={`https://wa.me/56964626568?text=${encodeURIComponent(
@@ -197,7 +193,6 @@ export default function NotFound() {
 
 /* ---------- Deco simple ---------- */
 function Bubbles() {
-  // Menos burbujas si el usuario prefiere menos movimiento
   const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
   const count = reduce ? 6 : 16;
 
@@ -265,9 +260,7 @@ const css = `
 }
 .sugg-pill:hover{ transform: translateY(-1px); box-shadow:0 8px 18px rgba(16,24,40,.25); }
 
-.search{
-  display:flex; gap:8px; align-items:stretch; margin:14px 0 10px;
-}
+.search{ display:flex; gap:8px; align-items:stretch; margin:14px 0 10px; }
 .input{
   flex:1; border:1px solid #2b375c; background:#0f172a; color:#eaf2ff; border-radius:12px;
   padding:.65rem .8rem;

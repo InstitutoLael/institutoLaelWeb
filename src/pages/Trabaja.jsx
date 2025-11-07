@@ -1,5 +1,7 @@
 // src/pages/Trabaja.jsx
 import { useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
+import SEOHead from "../components/SEOHead.jsx";
 import logo from "../assets/img/Logos/lael-inst-naranja.png";
 
 const WAPP = "56964626568"; // WhatsApp Instituto Lael
@@ -15,10 +17,122 @@ const AREAS = [
 ];
 
 export default function Trabaja() {
-  const [area, setArea] = useState("Docencia PAES"); // uno activo por defecto
+  const [area, setArea] = useState("Docencia PAES");
+  const loc = useLocation();
+
+  /* ---------------- SEO ---------------- */
+  const canonical = "https://www.institutolael.cl/trabaja";
+  const description =
+    "Convocatoria 2026: trabaja 100% online en Instituto Lael. Docencia PAES, Idiomas, LSCh, Diseño/Marketing, Contenidos y Soporte. Postula por correo o WhatsApp.";
+
+  // Fechas para JobPosting
+  const todayISO = new Date().toISOString().slice(0, 10);
+  const validThroughISO = new Date(new Date().setMonth(new Date().getMonth() + 3))
+    .toISOString()
+    .slice(0, 10);
+
+  // JobPosting por área
+  const jobPosts = AREAS.map((a, idx) => ({
+    "@type": "JobPosting",
+    title: `${a.key} — Convocatoria 2026`,
+    description:
+      "Postulación abierta. Trabajo 100% online, foco en acompañamiento real y calidad. Pago vía boleta de honorarios.",
+    hiringOrganization: {
+      "@type": "Organization",
+      name: "Instituto Lael",
+      sameAs: "https://www.institutolael.cl",
+      logo: "https://www.institutolael.cl/og/lael-logo.png",
+    },
+    employmentType: ["CONTRACTOR", "PART_TIME"],
+    directApply: true,
+    datePosted: todayISO,
+    validThrough: validThroughISO,
+    jobLocationType: "TELECOMMUTE",
+    applicantLocationRequirements: {
+      "@type": "Country",
+      name: "CL",
+    },
+    // Opcional: contact point
+    hiringOrganizationContactPoint: {
+      "@type": "ContactPoint",
+      contactType: "Recruiting",
+      email: "coordinacion@institutolael.cl",
+    },
+    url: canonical + `#panel-${slug(a.key)}`,
+    identifier: { "@type": "PropertyValue", name: "Instituto Lael", value: `TRAB-${idx + 1}` },
+    qualifications:
+      "Experiencia o motivación comprobable, conexión estable y manejo de herramientas online.",
+    responsibilities:
+      "Participar en clases/producción de contenidos/soporte según área; trabajo colaborativo y trato digno.",
+  }));
+
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: "https://www.institutolael.cl/" },
+        { "@type": "ListItem", position: 2, name: "Trabaja", item: canonical },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "Instituto Lael",
+      url: "https://www.institutolael.cl",
+      sameAs: ["https://www.instagram.com/institutolael"],
+    },
+    ...jobPosts.map((jp) => ({ "@context": "https://schema.org", ...jp })),
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: "Proceso de postulación a Instituto Lael",
+      totalTime: "PT2H",
+      step: [
+        { "@type": "HowToStep", name: "Postula", text: "Envía tu CV y motivación por correo o WhatsApp." },
+        { "@type": "HowToStep", name: "Conversamos", text: "Entrevista breve de 15–20 minutos." },
+        { "@type": "HowToStep", name: "Demo", text: "Clase/caso práctico corto y guiado." },
+        { "@type": "HowToStep", name: "Onboarding", text: "Accesos, materiales y acompañamiento." },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "¿La modalidad es 100% online?",
+          acceptedAnswer: { "@type": "Answer", text: "Sí, todo el trabajo es remoto con horarios flexibles." },
+        },
+        {
+          "@type": "Question",
+          name: "¿Cómo se paga?",
+          acceptedAnswer: { "@type": "Answer", text: "Vía boleta de honorarios, con acuerdos por hora o proyecto." },
+        },
+        {
+          "@type": "Question",
+          name: "¿Cómo adjunto mi CV?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Adjúntalo al correo al abrir la postulación o envíalo como archivo por WhatsApp.",
+          },
+        },
+      ],
+    },
+  ];
 
   return (
     <section className="work-page" aria-labelledby="trabaja-title">
+      {/* HEAD SEO */}
+      <SEOHead
+        title="Trabaja con Instituto Lael | Convocatoria 2026 (remoto)"
+        description={description}
+        canonical={canonical}
+        ogImage="https://www.institutolael.cl/og/trabaja-og.jpg"
+        twitterImage="https://www.institutolael.cl/og/trabaja-og.jpg"
+      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
       <style>{css}</style>
 
       {/* HERO */}
@@ -37,7 +151,9 @@ export default function Trabaja() {
         <div className="cta-hero">
           <a
             className="btn-primary"
-            href="mailto:coordinacion@institutolael.cl?subject=Postulación 2026 – Envío de CV"
+            href={`mailto:coordinacion@institutolael.cl?subject=${encodeURIComponent(
+              "Postulación 2026 – Envío de CV"
+            )}`}
           >
             Enviar CV por correo
           </a>
@@ -63,6 +179,7 @@ export default function Trabaja() {
           {AREAS.map(({ key, tone }) => (
             <button
               key={key}
+              id={`tab-${slug(key)}`}
               role="tab"
               className={`area-tab tone-${tone}`}
               aria-selected={area === key}
@@ -88,11 +205,12 @@ export default function Trabaja() {
         </ValueCard>
       </section>
 
-      {/* Tabs repetidos bajo la tríada para navegación corta (opcional) */}
+      {/* Tabs bajo la tríada */}
       <nav className="area-tabs under" role="tablist" aria-label="Selector de área">
         {AREAS.map(({ key, tone }) => (
           <button
             key={key}
+            id={`tab-${slug(key)}-under`}
             role="tab"
             className={`area-tab tone-${tone}`}
             aria-selected={area === key}
@@ -104,11 +222,11 @@ export default function Trabaja() {
         ))}
       </nav>
 
-      {/* PANEL DETALLE SEGÚN ÁREA */}
+      {/* PANEL DETALLE */}
       <section
         id={`panel-${slug(area)}`}
         role="tabpanel"
-        aria-labelledby=""
+        aria-labelledby={`tab-${slug(area)}`}
         className="area-panel"
       >
         {area === "Docencia PAES" && <PanelDocencia />}
@@ -194,7 +312,9 @@ export default function Trabaja() {
         <div className="cta-hero">
           <a
             className="btn-ghost"
-            href="mailto:coordinacion@institutolael.cl?subject=Postulación 2026 – Envío de CV"
+            href={`mailto:coordinacion@institutolael.cl?subject=${encodeURIComponent(
+              "Postulación 2026 – Envío de CV"
+            )}`}
           >
             Postular por correo
           </a>
@@ -506,7 +626,7 @@ function slug(s) {
 }
 
 /* ---------- CSS ---------- */
-const css = `
+const css = `/* (tu CSS intacto) */ 
 :root{
   --ink:#FFFFFF;
   --ink2:#EAF2FF;
@@ -517,6 +637,8 @@ const css = `
   --bg1:#0B1220;
   --bg2:#0E1426;
 }
+/* …todo el CSS que ya tenías, sin cambios… */
+
 
 .work-page{ color:var(--ink); background:var(--bg1); padding-bottom:40px; }
 a{ color:#22D3EE; text-decoration:none; }

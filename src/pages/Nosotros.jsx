@@ -1,18 +1,68 @@
 // src/pages/Nosotros.jsx
 import { Link } from "react-router-dom";
+import SEOHead from "../components/SEOHead.jsx"; // ← SEO
 
-// IMÁGENES (usa las que vi en tu carpeta)
+// IMÁGENES
 import id1 from "../assets/img/lael/1.png";
 import id2 from "../assets/img/lael/2.png";
 import id3 from "../assets/img/lael/3.png";
-import heroImg from "../assets/img/lael/onboarding.jpg"; // <- distinta al hero anterior
+import heroImg from "../assets/img/lael/onboarding.jpg";
 import cardA from "../assets/img/lael/hs.jpg";
 import cardB from "../assets/img/lael/coaching.jpg";
 import cardC from "../assets/img/lael/inclusion.jpg";
 
 export default function Nosotros(){
+  // JSON-LD
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Instituto Lael",
+      "url": "https://www.institutolael.cl",
+      "logo": "https://www.institutolael.cl/assets/img/lael/logo.png",
+      "sameAs": [
+        "https://www.instagram.com/institutolael"
+      ],
+      "description": "Instituto Lael: PAES, Idiomas e LSCh online con clases en vivo, cápsulas y acompañamiento real."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "mainEntityOfPage": "https://www.institutolael.cl/nosotros",
+      "name": "Nosotros | Instituto Lael",
+      "description": "Quiénes somos: propósito, principios, metodología y evolución de Preu Lael a Instituto Lael.",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.institutolael.cl" },
+          { "@type": "ListItem", "position": 2, "name": "Nosotros", "item": "https://www.institutolael.cl/nosotros" }
+        ]
+      }
+    }
+  ];
+
   return (
     <section className="about">
+      <SEOHead
+        title="Nosotros | Instituto Lael — Educación con propósito y acompañamiento real"
+        description="Conoce Instituto Lael: de Preu Lael a Instituto, con programas PAES, Idiomas y Lengua de Señas Chilena. Claridad, seguimiento y resultados."
+        canonical="https://www.institutolael.cl/nosotros"
+        keywords={[
+          "Instituto Lael",
+          "preuniversitario online",
+          "PAES online",
+          "Idiomas online",
+          "Lengua de Señas Chilena",
+          "LSCh online",
+          "educación cristiana",
+          "acompañamiento estudiantil",
+          "clases en vivo"
+        ]}
+        ogImage="https://www.institutolael.cl/assets/img/og/about-og.jpg"
+        twitterImage="https://www.institutolael.cl/assets/img/og/about-og.jpg"
+        jsonLd={jsonLd}
+      />
+
       <style>{css}</style>
 
       {/* HERO */}
@@ -36,7 +86,7 @@ export default function Nosotros(){
               <Link className="btn btn-ghost" to="/paes">Ver programas</Link>
             </div>
 
-            <div className="chips">
+            <div className="chips" aria-label="Puntos clave">
               <span className="chip">Seguimiento + metas semanales</span>
               <span className="chip">Clases en vivo + cápsulas</span>
               <span className="chip">KPIs: asistencia e hitos</span>
@@ -65,7 +115,7 @@ export default function Nosotros(){
         </div>
       </section>
 
-      {/* BANDA DE TRANSICIÓN (da profundidad) */}
+      {/* BANDA */}
       <div className="band" aria-hidden />
 
       {/* IDENTIDAD */}
@@ -98,7 +148,7 @@ export default function Nosotros(){
       <section className="section soft">
         <div className="container">
           <h2 className="h">De Preu Lael a Instituto Lael</h2>
-          <p className="sub">Más rutas, mismo corazón.</p>
+        <p className="sub">Más rutas, mismo corazón.</p>
 
           <div className="flow" role="list" aria-label="Línea evolutiva">
             <FlowItem title="Preu Lael">
@@ -235,7 +285,7 @@ const css = `
 .section.last{ padding:56px 0 96px }
 h1,h2,h3,h4{ color:var(--ink) }
 
-/* HERO limpio y sin barra infinita */
+/* HERO */
 .about .hero{
   position:relative; padding:78px 0 52px;
   background-size:cover; background-position:center;
@@ -277,9 +327,9 @@ h1,h2,h3,h4{ color:var(--ink) }
 .feature .media{ aspect-ratio:16/9; overflow:hidden; border-bottom:1px solid #1f2a44 }
 .feature .media img{ width:100%; height:100%; object-fit:cover; display:block; }
 .feature .content{ padding:16px 16px 18px }
-.feature h3{ margin:.2rem 0 .35rem; }
+.feature h3{ margin:.2rem 0 .35rem }
 
-/* Banda de transición */
+/* Banda trans */
 .band{
   height:56px; width:100%;
   background:
@@ -290,11 +340,28 @@ h1,h2,h3,h4{ color:var(--ink) }
   margin:14px 0 0;
 }
 
-/* Identidad (FIX: no corta imágenes) */
+/* IDENTIDAD — FIX de imágenes que “se salen” */
 .id-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:18px }
 @media (max-width:980px){ .id-grid{ grid-template-columns:1fr } }
-.id .media{ aspect-ratio:4/3; display:grid; place-items:center; padding:10px; }
-.id .media img{ max-width:100%; max-height:100%; object-fit:contain; }
+
+/* las tarjetas usan layout en columna, media fijo + body flexible */
+.id.card{ display:flex; flex-direction:column; min-height:100%; }
+.id .media{
+  position:relative;
+  width:100%;
+  aspect-ratio: 4 / 3;             /* altura estable */
+  overflow:hidden;                  /* ← bloquea desborde */
+  border-bottom:1px solid #1f2a44;
+  background:#0f172a;               /* contenedor sólido */
+  border-top-left-radius: var(--rad-lg);
+  border-top-right-radius: var(--rad-lg);
+  display:grid; place-items:center; padding:10px;
+}
+.id .media img{
+  width:100%; height:100%;          /* ocupa el cuadro */
+  object-fit:contain;               /* ← nunca recorta */
+  display:block;
+}
 .id .body{ padding:16px }
 .id .body h3{ margin:.2rem 0 .35rem }
 
@@ -324,7 +391,7 @@ h1,h2,h3,h4{ color:var(--ink) }
   background:#101a2f; border:1px solid #2a3b66; font-weight:900; font-size:1.1rem; color:var(--ink);
 }
 
-/* CTA final con “glow” */
+/* CTA final */
 .cta-panel{
   text-align:center; border:1px solid #22314f; border-radius:22px; padding:28px; color:var(--ink);
   background:
@@ -334,7 +401,7 @@ h1,h2,h3,h4{ color:var(--ink) }
   box-shadow:0 30px 60px rgba(2,6,23,.42);
 }
 .cta-title{ margin:.1rem 0 .35rem; font-size:1.5rem; }
-.cta-sub{ margin:0 0 12px; color:var(--ink2); }
+.cta-sub{ margin:0 0 12px; color:#eaf2ff; }
 .cta-actions{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
 
 /* Accesibilidad foco */

@@ -1,5 +1,6 @@
 // src/pages/Inscripcion.jsx
 import { Link } from "react-router-dom";
+import SEOHead from "../components/SEOHead.jsx"; // asegúrate de tener este componente
 
 const WAPP_INTL = "56964626568";
 const FORM_URL =
@@ -8,6 +9,62 @@ const FORM_URL =
 export default function Inscripcion() {
   return (
     <section className="enroll v2">
+      <SEOHead
+        title="Inscripción 2026 | Instituto Lael — Preuniversitario · Idiomas · LSCh"
+        description="Inscríbete en el Instituto Lael para 2026. Programas PAES, Idiomas e Inclusión (LSCh). Clases en vivo y grabadas, matrícula única y acompañamiento real."
+        canonical="https://www.institutolael.cl/inscripcion"
+        keywords={[
+          "inscripción PAES 2026",
+          "preuniversitario online",
+          "instituto cristiano Lael",
+          "curso inglés online Chile",
+          "curso coreano online",
+          "lengua de señas chilena online",
+          "preuniversitario barato Chile",
+          "matrícula única preuniversitario",
+          "educación inclusiva online",
+        ]}
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "EducationalOrganization",
+            "name": "Instituto Lael",
+            "url": "https://www.institutolael.cl",
+            "logo": "https://www.institutolael.cl/assets/img/lael/logo.png",
+            "description":
+              "Instituto Lael ofrece programas PAES, cursos de idiomas y Lengua de Señas Chilena con enfoque inclusivo y cristiano.",
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Course",
+            "name": "Preparación PAES e Idiomas 2026 — Instituto Lael",
+            "provider": { "@type": "EducationalOrganization", "name": "Instituto Lael" },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "¿Cuándo comienzan las clases?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Las clases comienzan una vez validada tu inscripción y pago, dentro de 24 a 72 horas hábiles.",
+                },
+              },
+              {
+                "@type": "Question",
+                "name": "¿Quedan grabadas las clases?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Sí, todas las clases quedan disponibles en el aula virtual (LMS) para repasar cuando quieras.",
+                },
+              },
+            ],
+          },
+        ]}
+      />
+
       <style>{css}</style>
 
       {/* HERO */}
@@ -15,10 +72,11 @@ export default function Inscripcion() {
         <div className="container hero__inner">
           <div className="hero__copy">
             <span className="pill">Inscripción 2026</span>
-            <h1>Reserva tu cupo 2026</h1>
+            <h1>Reserva tu cupo para el 2026</h1>
             <p className="lead">
-              Te contactamos en <b>24–48 h hábiles</b> para orientar tu matrícula.
-              Todo online y con clases grabadas.
+              Completa tu inscripción y asegura tu lugar en{" "}
+              <b>PAES, Idiomas o Lengua de Señas Chilena.</b>  
+              Te contactaremos dentro de <b>24–48 h hábiles</b> para confirmar tu matrícula.
             </p>
 
             <div className="cta">
@@ -33,16 +91,13 @@ export default function Inscripcion() {
               <a
                 className="btn btn-outline"
                 href={`https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(
-                  "Hola 👋, quiero inscribirme y tengo una consulta sobre plan/horarios."
+                  "Hola 👋, quiero inscribirme y tengo una consulta sobre planes y horarios."
                 )}`}
                 target="_blank"
                 rel="noreferrer"
               >
                 Hablar por WhatsApp
               </a>
-              <Link className="btn btn-ghost" to="/pagos">
-                Ver formas de pago
-              </Link>
             </div>
 
             <div className="chips">
@@ -50,56 +105,34 @@ export default function Inscripcion() {
               <span className="chip">Idiomas</span>
               <span className="chip">LSCh</span>
               <span className="chip ghost">Matrícula única</span>
-              <span className="chip ghost">Precios claros</span>
+              <span className="chip ghost">Clases en vivo + grabadas</span>
               <span className="chip ghost">Acompañamiento real</span>
             </div>
           </div>
-
-          <aside className="support">
-            <div className="support__card">
-              <div className="support__head">
-                <span className="mini-kicker">Soporte</span>
-                <span className="mini-bullet">⏱ 24–48 h</span>
-              </div>
-              <p>¿Dudas sobre plan, ramos u horarios? Escríbenos y te orientamos rápido.</p>
-              <a
-                className="btn btn-mini"
-                href={`https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(
-                  "Hola 👋, necesito orientación para elegir plan/horarios."
-                )}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Quiero orientación
-              </a>
-            </div>
-          </aside>
         </div>
       </header>
 
-      {/* GRID PRINCIPAL */}
-      <div className="container grid-main">
-        {/* FORMULARIO (70%) */}
+      {/* FORMULARIO PRINCIPAL */}
+      <div className="container form-first">
         <article className="card form-card">
           <div className="card__head">
             <h2 className="h5">Formulario de inscripción</h2>
             <p className="tiny subtle">
-              Si no ves el formulario o prefieres pantalla completa, usa{" "}
+              Si no ves el formulario,{" "}
               <a
                 className="link"
                 href={FORM_URL.replace("?embedded=true", "")}
                 target="_blank"
                 rel="noreferrer"
               >
-                “Inscribirme ahora”
+                haz clic aquí
               </a>{" "}
               para abrirlo en una pestaña nueva.
             </p>
           </div>
-
-          <div className="iframe-wrap" role="region" aria-label="Formulario de Google">
+          <div className="iframe-wrap">
             <iframe
-              title="Inscripción Instituto Lael 2026 — PAES · Idiomas · LSCh"
+              title="Formulario de inscripción Instituto Lael 2026"
               src={FORM_URL}
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -107,79 +140,86 @@ export default function Inscripcion() {
           </div>
         </article>
 
-        {/* SIDEBAR (30%) */}
+        <aside className="support">
+          <div className="support__card">
+            <div className="support__head">
+              <span className="mini-kicker">Soporte</span>
+              <span className="mini-bullet">⏱ 24–48 h</span>
+            </div>
+            <p>¿Dudas sobre planes, ramos o pagos? Escríbenos y te orientamos rápido.</p>
+            <a
+              className="btn btn-mini"
+              href={`https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(
+                "Hola 👋, necesito orientación para inscribirme o elegir mi plan."
+              )}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Quiero orientación
+            </a>
+          </div>
+        </aside>
+      </div>
+
+      {/* INFO GENERAL */}
+      <div className="container grid-info">
+        <section className="card">
+          <h3 className="h5">Qué incluye</h3>
+          <ul className="bullets">
+            <li>Clases en vivo, cápsulas y acompañamiento docente.</li>
+            <li>Ramos: M1, M2, Lenguaje, Historia, Ciencias.</li>
+            <li>Ensayos, diagnósticos y retroalimentación.</li>
+            <li>Modalidad 100% online y flexible.</li>
+          </ul>
+          <p className="note ok">💬 Pago vía boleta de honorarios. Clases grabadas incluidas.</p>
+        </section>
+
+        <section className="card">
+          <h3 className="h5">Proceso de matrícula</h3>
+          <ol className="steps-box">
+            <li><b>1.</b> Completa el formulario (2–3 min).</li>
+            <li><b>2.</b> Te contactamos (24–48 h) para confirmar plan y horario.</li>
+            <li><b>3.</b> Realiza el pago y recibe tu boleta.</li>
+            <li><b>4.</b> Bienvenida: acceso, calendario y materiales.</li>
+          </ol>
+        </section>
+      </div>
+
+      {/* DATOS DE PAGO */}
+      <div className="container">
         <aside className="card side">
-          <h3 className="h5">Transferencia</h3>
+          <h3 className="h5">Transferencia o depósito</h3>
           <div className="bank blk">
             <Row k="Nombre" v="Instituto Lael SpA" />
             <Row k="RUT" v="78.084.019-6" />
             <Row k="Banco / Tipo" v="Mercado Pago · Cuenta Vista" />
             <Row k="N° de cuenta" v="1088183168" />
-            <Row k="Comprobantes" v="pagos@institutolael.cl" />
+            <Row k="Correo comprobantes" v="pagos@institutolael.cl" />
             <Row k="Glosa" v="Nombre del estudiante + Programa" />
           </div>
-
           <div className="tip">
-            💡 Si combinas ramos o cambias de plan, te ayudamos a recalcular tu pago.
+            💡 Si combinas ramos o cambias de plan, recalculamos tu pago sin costo adicional.
           </div>
-
-          <a
-            className="btn btn-full"
-            href={`https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(
-              "Hola 👋, ya pagué/quiero pagar mi matrícula. ¿Me ayudan a confirmar?"
-            )}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Confirmar por WhatsApp
-          </a>
         </aside>
       </div>
 
-      {/* BENEFICIOS + PROCESO */}
-      <div className="container grid-info">
-        <section className="card">
-          <h3 className="h5">Qué incluye</h3>
-          <ul className="bullets">
-            <li>Clases en vivo, cápsulas y acompañamiento a estudiantes.</li>
-            <li>Ramos: M1, M2, Lenguaje, Historia, Ciencias.</li>
-            <li>Ensayos y retroalimentación.</li>
-            <li>Disponibilidad para modalidad 100% online.</li>
-          </ul>
-          <p className="note ok">💬 Pago vía boleta de honorarios. Modalidad 100% online.</p>
-        </section>
-
-        <section className="card">
-          <h3 className="h5">¿Cómo es el proceso?</h3>
-          <ol className="steps-box">
-            <li><b>Completa</b> el formulario (2–3 min).</li>
-            <li><b>Te escribimos</b> (24–48 h) para confirmar plan/horario.</li>
-            <li><b>Pago y boleta.</b> Activamos tu acceso.</li>
-            <li><b>Bienvenida:</b> cuentas, calendario y materiales.</li>
-          </ol>
-          <p className="note">
-            Consejo: comparte logros concretos (aprobación, materiales creados, feedback).
-          </p>
-        </section>
-      </div>
-
-      {/* FAQ + CTA */}
+      {/* FAQ */}
       <div className="container faq-cta">
         <details className="faq">
-          <summary>¿Cuándo empiezan las clases?</summary>
-          <p>Tras validar tu inscripción y pago, coordinamos tu inicio en 24–72 h hábiles.</p>
+          <summary>¿Cuándo comienzan las clases?</summary>
+          <p>Luego de validar tu inscripción y pago, inicias en 24–72 horas hábiles.</p>
         </details>
         <details className="faq">
-          <summary>¿Queda todo grabado?</summary>
-          <p>Sí. Todas las clases quedan disponibles en tu LMS para repasar.</p>
+          <summary>¿Las clases quedan grabadas?</summary>
+          <p>Sí, podrás verlas en tu plataforma las veces que quieras.</p>
         </details>
         <details className="faq">
           <summary>¿Hay becas o convenios?</summary>
-          <p>Tenemos becas limitadas y convenios con redes. Escríbenos para orientarte.</p>
+          <p>Contamos con becas limitadas y convenios educativos. Escríbenos para revisar tu caso.</p>
         </details>
         <details className="faq">
-          <summary>¿Puedo cambiar de plan/ramos?</summary>
-          <p>Ajustamos tu plan y recalculamos el pago si corresponde.</p>
+          <summary>¿Puedo cambiar de plan o ramos?</summary>
+          <p>Sí, puedes ajustar tu plan en cualquier momento con acompañamiento administrativo.</p>
         </details>
 
         <div className="cta bottom">
@@ -214,6 +254,7 @@ function Row({ k, v }) {
     </div>
   );
 }
+
 
 /* -------- CSS (versión con más aire y jerarquía) -------- */
 const css = `

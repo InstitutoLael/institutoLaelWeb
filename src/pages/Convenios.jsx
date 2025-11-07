@@ -1,6 +1,8 @@
 // src/pages/Convenios.jsx
 import { useMemo, useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import SEOHead from "../components/SEOHead";
+import { seoDefaults } from "../seo.config";
 
 import {
   LSCH_GROUP_PLANS,
@@ -24,6 +26,18 @@ const clp = (n) =>
 const WAPP = "56964626568";
 
 export default function Convenios() {
+  // Cambia el título cuando el usuario cambia de pestaña (opcional)
+  useEffect(() => {
+    const blur = () => (document.title = "😢 ¡Vuelve pronto! | Instituto Lael");
+    const focus = () => (document.title = "Convenios — Instituto Lael");
+    window.addEventListener("blur", blur);
+    window.addEventListener("focus", focus);
+    return () => {
+      window.removeEventListener("blur", blur);
+      window.removeEventListener("focus", focus);
+    };
+  }, []);
+
   const marqueeItems = [
     "Iglesias",
     "Colegios",
@@ -34,7 +48,7 @@ export default function Convenios() {
   ];
 
   const PANELS = ["iglesias", "colegios", "empresas"];
-  const [openPanel, setOpenPanel] = useState("iglesias"); // ← abierto por defecto
+  const [openPanel, setOpenPanel] = useState("iglesias"); // abierto por defecto
   const sectionRef = useRef(null);
 
   const togglePanel = (key) => {
@@ -56,7 +70,7 @@ export default function Convenios() {
     const convenio = churchMonthly * p * m + LSCH_ENROLLMENT_FEE * p;
     const ahorro = Math.max(0, publico - convenio);
     return { publico, convenio, ahorro };
-  }, [ig]);
+  }, [ig, publicLSChMonthly, churchMonthly]);
 
   const [hs, setHs] = useState({ mensualBase: "", personas: 1, meses: 1 });
   const hsNums = useMemo(() => {
@@ -98,8 +112,53 @@ export default function Convenios() {
     )} | Total con –5%: ${clp(empNums.con)}`
   );
 
+  // JSON-LD: catálogo de ofertas de convenios
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "OfferCatalog",
+      name: "Convenios y Partners — Instituto Lael",
+      url: `${seoDefaults.site}/convenios`,
+      itemListElement: [
+        {
+          "@type": "Offer",
+          name: "Red de Iglesias — LSCh",
+          url: `${seoDefaults.site}/convenios#iglesias`,
+          priceCurrency: "CLP",
+          price: String(churchMonthly),
+          category: "Educación inclusiva (LSCh)",
+        },
+        {
+          "@type": "Offer",
+          name: "Colegios / Homeschool",
+          url: `${seoDefaults.site}/convenios#colegios`,
+          priceCurrency: "CLP",
+          price: "variable",
+          category: "Programas escolares / Homeschool",
+        },
+        {
+          "@type": "Offer",
+          name: "Empresas",
+          url: `${seoDefaults.site}/convenios#empresas`,
+          priceCurrency: "CLP",
+          price: "variable",
+          category: "Formación corporativa",
+        },
+      ],
+    },
+  ];
+
   return (
     <main className="cv">
+      {/* SEO */}
+      <SEOHead
+        title="Convenios & Partners"
+        description="Beneficios preferentes para Iglesias, Colegios/Homeschool y Empresas. Validación rápida y descuentos automáticos en Instituto Lael."
+        path="/convenios"
+        image={`${seoDefaults.site}/meta/og-lael.jpg`}
+        jsonLd={jsonLd}
+      />
+
       <style>{css}</style>
 
       <section className="hero">
@@ -141,7 +200,7 @@ export default function Convenios() {
         </div>
       </section>
 
-      {/* BLOQUE INTRO */}
+      {/* Intro 3 tarjetas */}
       <section className="container tri">
         <Article
           icon="🏁"
@@ -171,7 +230,7 @@ export default function Convenios() {
         />
       </section>
 
-      {/* CHIPS MOVIDOS ABAJO */}
+      {/* Chips debajo del intro */}
       <section className="chips-zone" ref={sectionRef}>
         <div className="container chips">
           {PANELS.map((key) => (
@@ -179,6 +238,7 @@ export default function Convenios() {
               key={key}
               className={"chip " + (openPanel === key ? "on" : "")}
               onClick={() => togglePanel(key)}
+              id={key}
             >
               {key === "iglesias"
                 ? "Red de Iglesias"
@@ -190,7 +250,7 @@ export default function Convenios() {
         </div>
       </section>
 
-      {/* BLOQUES ACORDEÓN */}
+      {/* Bloques acordeón */}
       <section className="container stack">
         {openPanel === "iglesias" && (
           <Panel
@@ -316,7 +376,7 @@ function Estimator({ type, data, setData, totals, link }) {
 
   return (
     <div className="estimator">
-      <div className={isEmp ? "grid1" : isHs ? "grid3" : "grid3"}>
+      <div className={isEmp ? "grid1" : "grid3"}>
         {isIglesia && (
           <>
             <label>
@@ -350,6 +410,7 @@ function Estimator({ type, data, setData, totals, link }) {
             </label>
           </>
         )}
+
         {isHs && (
           <>
             <label>
@@ -363,6 +424,7 @@ function Estimator({ type, data, setData, totals, link }) {
               Personas
               <input
                 type="number"
+                min="1"
                 value={data.personas}
                 onChange={(e) =>
                   setData((s) => ({ ...s, personas: Number(e.target.value) }))
@@ -373,6 +435,7 @@ function Estimator({ type, data, setData, totals, link }) {
               Meses
               <input
                 type="number"
+                min="1"
                 value={data.meses}
                 onChange={(e) =>
                   setData((s) => ({ ...s, meses: Number(e.target.value) }))
@@ -381,6 +444,7 @@ function Estimator({ type, data, setData, totals, link }) {
             </label>
           </>
         )}
+
         {isEmp && (
           <label>
             Total sin convenio
@@ -502,4 +566,4 @@ const css = `
 /* UTILIDADES */
 h2,h3{color:#fff}
 b,strong{color:#fff}
-`
+`;

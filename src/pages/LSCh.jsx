@@ -11,6 +11,7 @@ import {
   clp,
 } from "../data/lsch.js";
 import { Link } from "react-router-dom";
+import SEOHead from "../components/SEOHead.jsx"; // <- SEO
 import senasImg from "../assets/img/lael/senas.jpg";
 import laelLogoWhite from "../assets/img/Logos/lael-inst-blanco.png";
 
@@ -71,8 +72,80 @@ export default function LSCh() {
     `Mensualidad estimada: ${clp(totalMonthly)}`,
   ].join("\n");
 
+  /* ======= SEO ======= */
+  const faqEntities = [
+    {
+      "@type": "Question",
+      name: "¿Quedan grabadas las clases?",
+      acceptedAnswer: { "@type": "Answer", text: "Sí. Subimos cada clase el mismo día para que puedas repasar." }
+    },
+    {
+      "@type": "Question",
+      name: "¿Necesito experiencia previa?",
+      acceptedAnswer: { "@type": "Answer", text: "No. Puedes partir desde A0–A1; hay ruta guiada por módulos." }
+    },
+    {
+      "@type": "Question",
+      name: "¿Entregan certificado?",
+      acceptedAnswer: { "@type": "Answer", text: `Sí, hay certificación opcional (+${clp(CERTIFICATE_FEE)}).` }
+    },
+    {
+      "@type": "Question",
+      name: "¿Hay precio convenio para iglesias?",
+      acceptedAnswer: { "@type": "Answer", text: "Sí. Contamos con precio preferente con convenio vigente." }
+    }
+  ];
+
+  const courseInstances = [
+    {
+      "@type": "Course",
+      name: "Lengua de Señas Chilena — Módulos por nivel",
+      description: "Programa LSCh online con clases en vivo, cápsulas, práctica guiada y opción de certificación.",
+      provider: {
+        "@type": "EducationalOrganization",
+        name: "Instituto Lael",
+        url: "https://www.institutolael.cl"
+      }
+    }
+  ];
+
   return (
-    <section className="lsch">
+    <section className="lsch" itemScope itemType="https://schema.org/Course">
+      <SEOHead
+        title="LSCh online | Instituto Lael — Lengua de Señas Chilena con clases en vivo"
+        description="Aprende Lengua de Señas Chilena (LSCh) online: clases en vivo + cápsulas, práctica guiada, opción de certificación y precio convenio para iglesias. Matrícula única."
+        canonical="https://www.institutolael.cl/lsch"
+        keywords={[
+          "Lengua de Señas Chilena",
+          "LSCh online",
+          "curso lengua de señas",
+          "curso LSCh Chile",
+          "curso lengua de señas cristiano",
+          "inclusión educativa Chile",
+          "clases en vivo lengua de señas",
+          "certificado LSCh",
+          "convenio iglesias LSCh",
+        ]}
+        ogImage="https://www.institutolael.cl/assets/img/og/lsch-og.jpg"
+        twitterImage="https://www.institutolael.cl/assets/img/og/lsch-og.jpg"
+        jsonLd={[
+          {
+            "@context": "https://schema.org",
+            "@type": "EducationalOrganization",
+            "name": "Instituto Lael",
+            "url": "https://www.institutolael.cl",
+            "logo": "https://www.institutolael.cl/assets/img/lael/logo.png",
+            "description": "Instituto Lael ofrece programas PAES, Idiomas y Lengua de Señas Chilena, con enfoque inclusivo y cristiano."
+          },
+          ...courseInstances,
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": faqEntities
+          }
+        ]}
+      />
+
       <style>{css}</style>
 
       {/* HERO */}
@@ -81,34 +154,46 @@ export default function LSCh() {
           <div className="hero__left">
             <span className="pill">LSCh online</span>
             <h1 className="mega">
-              Lengua de Señas Chilena <span className="under">sin enredos</span>
+              <span itemProp="name">Lengua de Señas Chilena</span> <span className="under">sin enredos</span>
             </h1>
 
-            <p className="lead">
-              Clases en vivo + cápsulas. Acompañamiento real y ruta por módulos.
-              Matrícula única <b>{clp(LSCH_ENROLLMENT_FEE)}</b>.
+            <p className="lead" itemProp="description">
+              Clases en vivo + cápsulas. Práctica guiada, opción de certificación y{" "}
+              <b>precio convenio para iglesias</b>. Matrícula única <b>{clp(LSCH_ENROLLMENT_FEE)}</b>.
             </p>
 
-            <ul className="badges">
+            <ul className="badges" aria-label="Beneficios">
               <li className="tag tag-green">Práctica guiada</li>
               <li className="tag tag-blue">Todo queda grabado</li>
               <li className="tag tag-pink">Docente sorda</li>
             </ul>
 
-            <div className="cta">
+            <nav className="cta" aria-label="Acciones principales">
               <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-              <a className="btn btn-ghost" href={`https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, quisiera info de LSCh.")}`} target="_blank" rel="noreferrer">WhatsApp</a>
-            </div>
+              <a
+                className="btn btn-ghost"
+                href={`https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, quisiera info de LSCh.")}`}
+                target="_blank" rel="noreferrer"
+                aria-label="Abrir WhatsApp para consultar por LSCh"
+              >
+                WhatsApp
+              </a>
+            </nav>
 
-            <ol className="steps-mini">
+            <ol className="steps-mini" aria-label="Cómo funciona">
               <li><b>1.</b> Elige módulos</li>
               <li><b>2.</b> Elige plan (grupal o 1:1)</li>
-              <li><b>3.</b> Escribe por WhatsApp</li>
+              <li><b>3.</b> Escríbenos por WhatsApp</li>
             </ol>
           </div>
 
           <figure className="hero__img">
-            <img src={senasImg} alt="Clase de lengua de señas" loading="eager" decoding="async" />
+            <img
+              src={senasImg}
+              alt="Clase de Lengua de Señas Chilena en vivo con práctica guiada"
+              loading="eager"
+              decoding="async"
+            />
             <figcaption>Situaciones reales + feedback en vivo.</figcaption>
           </figure>
         </div>
@@ -116,10 +201,15 @@ export default function LSCh() {
 
       {/* CONTEXTO */}
       <div className="container">
-        <div className="card rowy wrap mini-card">
+        <div className="card rowy wrap mini-card" aria-label="Preferencias de plan y certificación">
           {/* Convenio iglesias */}
           <label className="switch">
-            <input type="checkbox" checked={church} onChange={e => setChurch(e.target.checked)} />
+            <input
+              type="checkbox"
+              checked={church}
+              onChange={e => setChurch(e.target.checked)}
+              aria-label="Aplicar precio convenio para iglesias"
+            />
             <span className="track"><i /></span>
             <div className="lbl">
               <b className="ink">{CHURCH_CONVENIO.label}</b> · <b className="ink">{clp(CHURCH_CONVENIO.monthlyFlat)}/mes</b>
@@ -139,6 +229,7 @@ export default function LSCh() {
                   type="button"
                   className={"chip strong " + (purpose === p ? "on" : "")}
                   onClick={() => setPurpose(prev => prev === p ? "" : p)}
+                  aria-pressed={purpose === p}
                 >
                   {p}
                 </button>
@@ -148,6 +239,7 @@ export default function LSCh() {
                 className={"chip cert " + (certSelected ? "on" : "")}
                 onClick={() => setCertSelected(v => !v)}
                 title="Certificación oficial (pago único)"
+                aria-pressed={certSelected}
               >
                 Certificación +{clp(CERTIFICATE_FEE)}
               </button>
@@ -164,25 +256,34 @@ export default function LSCh() {
           {LSCH_MODULES.map(m => {
             const active = selectedModules.includes(m.id);
             return (
-              <article key={m.id} className={"card module " + (active ? "on" : "")}>
+              <article key={m.id} className={"card module " + (active ? "on" : "")} itemScope itemType="https://schema.org/CreativeWork">
                 <header className="module__head">
                   <span className="tag tag-chip">{m.tag}</span>
-                  <h3 className="ink">{m.name}</h3>
+                  <h3 className="ink" itemProp="name">{m.name}</h3>
                 </header>
 
                 <ul className="bullets compact">
-                  {m.bullets.slice(0, 3).map((b, i) => <li key={i} className="ink-2">{b}</li>)}
+                  {m.bullets.slice(0, 3).map((b, i) => <li key={i} className="ink-2" itemProp="about">{b}</li>)}
                 </ul>
 
                 <details className="mini-faq">
                   <summary>Ver contenidos</summary>
-                  <ul className="bullets">{m.bullets.map((b, i) => <li key={i} className="ink-2">{b}</li>)}</ul>
-                  <div className="chips">{m.servesFor.map((s, i) => <span key={i} className="chip ghost">{s}</span>)}</div>
+                  <ul className="bullets">
+                    {m.bullets.map((b, i) => <li key={i} className="ink-2">{b}</li>)}
+                  </ul>
+                  <div className="chips" aria-label="Aplicaciones">
+                    {m.servesFor.map((s, i) => <span key={i} className="chip ghost">{s}</span>)}
+                  </div>
                 </details>
 
-                {/* CTA al pie (mejor ubicación visual) */}
+                {/* CTA al pie */}
                 <div className="module__footer">
-                  <button className={"btn-pill " + (active ? "on" : "")} onClick={() => toggleModule(m.id)}>
+                  <button
+                    className={"btn-pill " + (active ? "on" : "")}
+                    onClick={() => toggleModule(m.id)}
+                    aria-pressed={active}
+                    aria-label={active ? `Quitar módulo ${m.name}` : `Agregar módulo ${m.name}`}
+                  >
                     {active ? "Quitar" : "Agregar"}
                   </button>
                 </div>
@@ -205,7 +306,7 @@ export default function LSCh() {
                 {p.badge && <div className="badge">{p.badge}</div>}
                 <h3 className="ink">{p.title}</h3>
 
-                <div className="price">
+                <div className="price" aria-label={`Precio mensual ${clp(monthly)}`}>
                   <span className="big ink">{clp(monthly)}</span>
                   <span className="per">/mes</span>
                 </div>
@@ -214,7 +315,11 @@ export default function LSCh() {
                   {church ? "Precio convenio aplicado" : "Mejor precio por duración"}
                 </div>
 
-                <button className={"btn-outline " + (active ? "active" : "")} onClick={() => setSelectedGroupId(p.id)}>
+                <button
+                  className={"btn-outline " + (active ? "active" : "")}
+                  onClick={() => setSelectedGroupId(p.id)}
+                  aria-pressed={active}
+                >
                   {active ? "Seleccionado" : "Elegir plan"}
                 </button>
               </article>
@@ -235,14 +340,18 @@ export default function LSCh() {
                 {p.badge && <div className="badge alt">{p.badge}</div>}
                 <h3 className="ink">{p.title}</h3>
 
-                <div className="price">
+                <div className="price" aria-label={`Precio mensual ${clp(p.monthly)}`}>
                   <span className="big ink">{clp(p.monthly)}</span>
                   <span className="per">/mes</span>
                 </div>
 
                 <div className="note">Agenda prioritaria con la docente</div>
 
-                <button className={"btn-outline " + (active ? "active" : "")} onClick={() => setSelectedOneId(active ? null : p.id)}>
+                <button
+                  className={"btn-outline " + (active ? "active" : "")}
+                  onClick={() => setSelectedOneId(active ? null : p.id)}
+                  aria-pressed={active}
+                >
                   {active ? "Quitar 1:1" : "Agregar 1:1"}
                 </button>
               </article>
@@ -255,7 +364,7 @@ export default function LSCh() {
       <section className="container">
         <div className="card summary">
           <div className="summary-left">
-            <img className="brand-logo" src={laelLogoWhite} alt="Lael" />
+            <img className="brand-logo" src={laelLogoWhite} alt="Logo Instituto Lael" />
             <div className="info">
               <div className="title ink">Tu selección</div>
 
@@ -289,8 +398,15 @@ export default function LSCh() {
             </div>
 
             <div className="cta">
-              <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-              <a className="btn btn-ghost" href={`https://wa.me/56964626568?text=${encodeURIComponent(whatsappText)}`} target="_blank" rel="noreferrer">WhatsApp</a>
+              <Link className="btn btn-primary" to="/inscripcion" aria-label="Ir a inscripción">Inscribirme</Link>
+              <a
+                className="btn btn-ghost"
+                href={`https://wa.me/56964626568?text=${encodeURIComponent(whatsappText)}`}
+                target="_blank" rel="noreferrer"
+                aria-label="Enviar selección por WhatsApp"
+              >
+                WhatsApp
+              </a>
             </div>
           </div>
         </div>
@@ -474,17 +590,8 @@ const css = `
 .hs-btn.prev { left: -18px; }
 .hs-btn.next { right: -18px; }
 
-.hscroll-wrap {
-  position: relative;
-}
-.hscroll {
-  display: flex;
-  gap: 12px;
-  overflow: auto;
-  scroll-snap-type: x mandatory;
-  padding: 4px 4px 16px;
-  scrollbar-width: none;
-}
+.hscroll-wrap { position: relative; }
+.hscroll { display: flex; gap: 12px; overflow: auto; scroll-snap-type: x mandatory; padding: 4px 4px 16px; scrollbar-width: none; }
 .hscroll::-webkit-scrollbar { display: none; }
 
 /* FAQ */

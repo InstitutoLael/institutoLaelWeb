@@ -2,6 +2,8 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import PartnersMarquee from "../components/PartnersMarquee.jsx";
+import SEOHead from "../components/SEOHead.jsx";
+import { seoDefaults } from "../seo.config";
 
 // Imágenes identidad
 import id1 from "../assets/img/lael/1.png";
@@ -13,7 +15,6 @@ function extractYouTubeId(url) {
     const u = new URL(url);
     if (u.hostname === "youtu.be") return u.pathname.slice(1);
     if (u.searchParams.get("v")) return u.searchParams.get("v");
-    // /embed/ID
     const m = u.pathname.match(/\/embed\/([a-zA-Z0-9_-]{6,})/);
     return m ? m[1] : "";
   } catch {
@@ -48,25 +49,134 @@ export default function Home() {
     const els = Array.from(document.querySelectorAll(".reveal"));
     if (!("IntersectionObserver" in window)) {
       els.forEach((el) => el.classList.add("in"));
-      return;
+    } else {
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+      els.forEach((el) => io.observe(el));
+      return () => io.disconnect();
     }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("in");
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
   }, []);
+
+  // UX: “no te vayas” cuando pierde foco y restablecer al volver
+  useEffect(() => {
+    const baseTitle = "Instituto Lael — Educación online con acompañamiento real";
+    const onBlur = () => (document.title = "No te vayas 💛 ¡Sigue aprendiendo en Lael!");
+    const onFocus = () => (document.title = baseTitle);
+    document.title = baseTitle;
+    window.addEventListener("blur", onBlur);
+    window.addEventListener("focus", onFocus);
+    return () => {
+      window.removeEventListener("blur", onBlur);
+      window.removeEventListener("focus", onFocus);
+    };
+  }, []);
+
+  // ---------- SEO JSON-LD enriquecido ----------
+  const videoUrl = "https://youtu.be/THBr7MOVS0s?si=nODyq69xbCt1TqRr";
+  const videoId = extractYouTubeId(videoUrl);
+  const videoEmbed = `https://www.youtube.com/embed/${videoId}`;
+  const jsonLd = [
+    // Organization (útil también en Home)
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Instituto Lael SpA",
+      "url": seoDefaults.site,
+      "logo": `${seoDefaults.site}/meta/logo-lael.png`,
+      "sameAs": [
+        "https://www.instagram.com/institutolael",
+        "https://www.youtube.com/@institutolael",
+        "https://www.linkedin.com/company/instituto-lael/"
+      ],
+      "contactPoint": [{
+        "@type": "ContactPoint",
+        "telephone": "+56 9 6462 6568",
+        "contactType": "customer support",
+        "areaServed": "CL",
+        "availableLanguage": ["Spanish"]
+      }]
+    },
+    // WebSite con SearchAction
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Instituto Lael",
+      "url": seoDefaults.site,
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${seoDefaults.site}/?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
+    },
+    // ItemList de programas destacados (PAES, Idiomas, LSCh)
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "Programas Lael",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "PAES — Preparación",
+          "url": `${seoDefaults.site}/paes`
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Idiomas — Inglés y Coreano",
+          "url": `${seoDefaults.site}/idiomas`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Lengua de Señas Chilena (LSCh)",
+          "url": `${seoDefaults.site}/lsch`
+        }
+      ]
+    },
+    // VideoObject del hero (mejora rich results si Google lo toma)
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      "name": "Clase real: PAES M1 (ejercitación guiada)",
+      "description": "Mira un extracto de una clase real de PAES M1 con ejercitación guiada y explicaciones claras.",
+      "thumbnailUrl": [
+        `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+      ],
+      "uploadDate": "2024-01-01",
+      "embedUrl": videoEmbed,
+      "url": videoUrl,
+      "publisher": {
+        "@type": "Organization",
+        "name": "Instituto Lael SpA",
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${seoDefaults.site}/meta/logo-lael.png`
+        }
+      }
+    }
+  ];
 
   return (
     <div className="home">
+      {/* SEO HEAD */}
+      <SEOHead
+        title="Instituto Lael"
+        description="PAES, Idiomas e LSCh con acompañamiento real: clases en vivo + cápsulas, material descargable y seguimiento. 87% logra su objetivo y 9/10 nos recomiendan."
+        path="/"
+        image={`${seoDefaults.site}/meta/og-home.jpg`}
+        jsonLd={jsonLd}
+      />
+
       <style>{css}</style>
 
       {/* HERO — limpio con preview a la derecha */}
@@ -104,7 +214,7 @@ export default function Home() {
 
           {/* DERECHA: video + accesos rápidos */}
           <div className="hero__media">
-            <YouTubeBox url="https://youtu.be/THBr7MOVS0s?si=nODyq69xbCt1TqRr" />
+            <YouTubeBox url={videoUrl} />
             <ul className="hero__quicklinks" aria-label="Accesos directos">
               <li><Link to="/paes" className="qk">PAES</Link></li>
               <li><Link to="/idiomas" className="qk">Idiomas</Link></li>
@@ -203,7 +313,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* FAQ (aporta People Also Ask si Google lo toma) */}
       <section className="faq reveal">
         <div className="container">
           <h3 className="faq__title">Preguntas frecuentes</h3>

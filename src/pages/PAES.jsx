@@ -1,6 +1,8 @@
 // src/pages/PAES.jsx
-import { useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import SEOHead from "../components/SEOHead.jsx";
+
 import {
   ENROLLMENT_FEE,
   PAES_SUBJECTS,
@@ -21,6 +23,7 @@ const essaysForCount = (n) => (!n ? 0 : n >= 5 ? 5 : n);
 export default function PAES() {
   const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
   const builderRef = useRef(null);
+  const loc = useLocation();
 
   const selectedSubjects = useMemo(
     () => PAES_SUBJECTS.filter((s) => selectedSubjectIds.includes(s.id)),
@@ -61,8 +64,119 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
   const annual3 = priceAnnual(3);
   const annual7 = priceAnnual(7);
 
+  /* -------------------- SEO -------------------- */
+  const baseUrl = "https://www.institutolael.cl/paes";
+  const canonical = baseUrl; // esta página no usa query params visibles
+  const description =
+    "Preparación PAES con clases en vivo + cápsulas, ensayos guiados y acompañamiento real. Planes por ramos o full. Matrícula única y precios claros.";
+
+  // JSON-LD: Service (offers), ItemList (Courses), FAQPage y Breadcrumb
+  const offers = [
+    { count: 1, annual: annual1, monthly: priceForCount(1) },
+    { count: 2, annual: annual2, monthly: priceForCount(2) },
+    { count: 3, annual: annual3, monthly: priceForCount(3) },
+    { count: 7, annual: annual7, monthly: priceForCount(7) },
+  ].map((o) => ({
+    "@type": "Offer",
+    name: `${o.count} ramo${o.count > 1 ? "s" : ""}`,
+    price: o.monthly,
+    priceCurrency: "CLP",
+    priceSpecification: {
+      "@type": "UnitPriceSpecification",
+      price: o.monthly,
+      priceCurrency: "CLP",
+      unitCode: "MON", // mensual
+      referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode: "MON" },
+    },
+    eligibleQuantity: { "@type": "QuantitativeValue", value: o.count },
+    availability: "https://schema.org/InStock",
+    url: canonical,
+  }));
+
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Preparación PAES — Instituto Lael",
+      serviceType: "TutoringService",
+      areaServed: "CL",
+      description,
+      provider: { "@type": "EducationalOrganization", name: "Instituto Lael", url: "https://www.institutolael.cl" },
+      offers,
+      termsOfService: "https://www.institutolael.cl/pagos",
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: "Ramos PAES",
+      itemListElement: PAES_SUBJECTS.map((s, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: {
+          "@type": "Course",
+          name: s.name,
+          description: `Ramo PAES ${s.name} con clases en vivo, cápsulas y ensayo mensual.`,
+          provider: { "@type": "Organization", name: "Instituto Lael" },
+        },
+      })),
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "Si falto a una clase, ¿qué pasa?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "La clase queda grabada y tienes cápsulas/material. También puedes acceder a tutoría si la necesitas.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "¿Hay ensayos y feedback?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Sí. Realizamos ensayos con retroalimentación detallada y pautas, según tu plan.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "¿Puedo cambiar de plan?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Sí, ajustamos tus ramos y plan según tu avance y tiempos.",
+          },
+        },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Inicio", item: "https://www.institutolael.cl/" },
+        { "@type": "ListItem", position: 2, name: "PAES", item: canonical },
+      ],
+    },
+  ];
+
+  useEffect(() => {
+    // (opcional) pixel de vista para medición simple en el futuro
+  }, [loc.pathname]);
+
+  /* -------------------- UI -------------------- */
   return (
     <section className="paes" style={{ "--accent": "#5850EC", "--accentSoft": "rgba(88,80,236,.10)" }}>
+      {/* HEAD META */}
+      <SEOHead
+        title="PAES | Instituto Lael"
+        description={description}
+        canonical={canonical}
+        ogImage="https://www.institutolael.cl/og/paes-og.jpg"
+        twitterImage="https://www.institutolael.cl/og/paes-og.jpg"
+      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
       <style>{css}</style>
 
       {/* HERO enfocado */}
@@ -95,7 +209,7 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
             </ul>
           </div>
 
-          <figure className="hero__img" aria-hidden>
+          <figure className="hero__img">
             <img
               src={studyOnline}
               alt="Estudiante en clase online preparándose para la PAES"
@@ -108,7 +222,7 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
       </header>
 
       {/* BENEFICIOS cortos (compacto, reemplaza secciones largas) */}
-      <section className="benefits">
+      <section className="benefits" aria-label="Beneficios clave">
         <div className="container benefits__row" role="list">
           <div className="benefit" role="listitem">📘 Clases en vivo + cápsulas</div>
           <div className="benefit" role="listitem">🧠 Ensayos guiados (1/mes)</div>
@@ -195,7 +309,7 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
             </button>
           </div>
 
-          <div className="subjects">
+          <div className="subjects" role="group" aria-label="Ramos disponibles">
             {PAES_SUBJECTS.map((s) => {
               const on = selectedSubjectIds.includes(s.id);
               return (
@@ -280,7 +394,7 @@ Matrícula: ${clp(ENROLLMENT_FEE)}`
       </div>
 
       {/* CTA pegajosa móvil */}
-      <div className="sticky-cta">
+      <div className="sticky-cta" role="navigation" aria-label="Acciones rápidas">
         <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
         <a className="btn btn-ghost" href={`https://wa.me/56964626568?text=${waMsg}`} target="_blank" rel="noreferrer">
           WhatsApp
@@ -334,7 +448,7 @@ function ComboCard({ plan, onChoose }) {
   );
 }
 
-/* ---------- CSS ---------- */
+/* ---------- CSS (igual que el tuyo) ---------- */
 const css = `
 :root{
   --bg:#0b1220; --panel:#0e1424; --soft:#0d1528; --bd:#1f2a44;

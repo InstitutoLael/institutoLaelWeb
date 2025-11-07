@@ -1,4 +1,5 @@
 // src/components/PartnersMarquee.jsx
+
 import gws from "../assets/img/Partners/GoogleWorkspace.png";
 import transbank from "../assets/img/Partners/Transbank.png";
 import onepay from "../assets/img/Partners/onepay.png";
@@ -19,7 +20,7 @@ const LOGOS = [
   { src: losolivos, alt: "Los Olivos HomeSchool" },
 ];
 
-// Escalas finas (opcional)
+// Corrección fina
 const SCALE = {
   "Naamá Studio": 2.40,
   "Instituto Nacional de Ortodoncia": 1.38,
@@ -28,20 +29,15 @@ const SCALE = {
   "Universidad asociada 2": 1.18,
 };
 
-export default function PartnersMarquee({
-  height = 32,
-  gap = 40,
-  speed = 40, // ⬅️ más rápido por defecto (antes 100s parecía “quieto”)
-}) {
-  // Para un loop perfecto con translateX(-50%) necesitamos dos mitades idénticas:
-  const list = [...LOGOS, ...LOGOS];
+export default function PartnersMarquee({ height = 32, gap = 40, speed = 100 }) {
+  const list = [...LOGOS, ...LOGOS, ...LOGOS, ...LOGOS];
 
   const css = `
     .marquee{
       position:relative; overflow:hidden; border-radius:18px;
-      background:#fff;
+      background:#fff; /* fondo blanco sólido */
       border:1px solid #e6e8ff;
-      box-shadow:0 0 30px rgba(255,255,255,.9);
+      box-shadow:0 0 30px rgba(255,255,255,.9); /* halo blanco difuminado */
       -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
               mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
     }
@@ -49,13 +45,9 @@ export default function PartnersMarquee({
       display:flex; gap:${gap}px; width:max-content;
       padding:14px 22px;
       will-change: transform;
-      transform: translateZ(0);
       animation: marquee-scroll ${speed}s linear infinite;
     }
-    /* Solo pausa en hover (desktop). En móvil no se pausa para evitar “quedarse pegado”. */
-    @media (hover:hover){
-      .marquee:hover .marquee__track{ animation-play-state: paused; }
-    }
+    .marquee:hover .marquee__track{ animation-play-state: paused; }
 
     .marquee__item{
       flex:0 0 auto; display:grid; place-items:center;
@@ -64,22 +56,17 @@ export default function PartnersMarquee({
     .marquee__logo{
       display:block;
       height:${height}px; width:auto; object-fit:contain;
-      filter: drop-shadow(0 0 4px rgba(255,255,255,.9));
+      filter: drop-shadow(0 0 4px rgba(255,255,255,.9)); /* resalta logos oscuros */
       transition: transform .22s ease, filter .22s ease;
-      user-select:none; -webkit-user-drag:none;
     }
-    @media (hover:hover){
-      .marquee__logo:hover{ transform: scale(1.05); filter: drop-shadow(0 0 6px rgba(255,255,255,1)); }
+    .marquee__logo:hover{
+      transform: scale(1.05);
+      filter: drop-shadow(0 0 6px rgba(255,255,255,1));
     }
 
     @keyframes marquee-scroll{
       0%   { transform: translate3d(0,0,0); }
-      100% { transform: translate3d(-50%,0,0); } /* dos mitades idénticas → seamless */
-    }
-
-    /* Respeta usuarios con “reducir movimiento”: deja estático */
-    @media (prefers-reduced-motion: reduce){
-      .marquee__track{ animation: none !important; }
+      100% { transform: translate3d(-50%,0,0); }
     }
 
     @media (max-width:576px){
@@ -90,12 +77,7 @@ export default function PartnersMarquee({
   `;
 
   return (
-    <section
-      className="marquee"
-      aria-label="Alianzas y colaboradores"
-      aria-roledescription="cinta de logos"
-      aria-live="off"
-    >
+    <section className="marquee" aria-label="Alianzas y colaboradores">
       <style>{css}</style>
       <div className="marquee__track">
         {list.map((item, i) => (
@@ -104,11 +86,8 @@ export default function PartnersMarquee({
               className="marquee__logo"
               src={item.src}
               alt={item.alt}
-              title={item.alt}
-              height={height}
               loading="lazy"
               decoding="async"
-              draggable="false"
               style={{ transform: `scale(${SCALE[item.alt] || 1})` }}
               onError={(e)=>{ e.currentTarget.style.opacity = ".4"; }}
             />

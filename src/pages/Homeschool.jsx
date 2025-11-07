@@ -874,6 +874,35 @@ h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-heigh
 .hs-btn:focus-visible { outline:3px solid #22D3EE; outline-offset:2px; }
 .hs-btn.prev { left:-8px; } .hs-btn.next { right:-8px; }
 
+/* Fix hard: asegurar contraste en Homeschool */
+.homeschool, .homeschool * { box-sizing: border-box; }
+.homeschool{
+  background:#0b1220;           /* fondo consistente */
+  color:#ffffff;                 /* tinta por defecto */
+  min-height: 100dvh;            /* que no “colapse” */
+}
+
+/* Si hay secciones con overlay oscuro, atenúalas */
+.homeschool .section,
+.homeschool .card,
+.homeschool .panel{
+  background: linear-gradient(180deg,#0f172a,#0b1220);
+  border:1px solid #1f2a44;
+  color:#fff;
+}
+
+/* Imágenes y media que podían “apagar” todo */
+.homeschool img{ display:block; max-width:100%; height:auto; }
+.homeschool .hero__img{ 
+  border-radius: 16px; 
+  overflow:hidden; 
+  background:#0f172a; 
+}
+
+/* Botones visibles siempre */
+.homeschool .btn-primary{ background:#F59E0B; border-color:#D97706; color:#0B1220; }
+.homeschool .btn-ghost{ color:#fff; border:1px solid #334155; }
+
 /* Focus global */
 button:focus-visible,.btn:focus-visible,input:focus-visible{outline:3px solid #22D3EE;outline-offset:2px}
 `;

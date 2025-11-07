@@ -4,5 +4,5 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "./",               // ✅ rutas relativas para Cloudflare Pages
+  base: "./", // rutas relativas para dominio propio / Cloudflare Pages
 });

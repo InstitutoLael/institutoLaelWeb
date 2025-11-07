@@ -15,7 +15,8 @@ import { CartProvider } from "./context/CartContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    {/* 👇 SIN basename; Cloudflare sirve en dominio raíz */}
+    <BrowserRouter>
       <CartProvider>
         <App />
       </CartProvider>

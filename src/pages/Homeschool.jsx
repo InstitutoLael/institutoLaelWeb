@@ -19,6 +19,20 @@ import {
 import heroHS from "../assets/img/lael/hs.jpg";
 import logoWhite from "../assets/img/Logos/lael-inst-blanco.png";
 
+/* ───────── Helpers globales ───────── */
+const abs = (p) => {
+  try {
+    return typeof window !== "undefined"
+      ? new URL(p, window.location.origin).toString()
+      : p;
+  } catch {
+    return p;
+  }
+};
+
+const OG_IMG = abs(heroHS);
+const LOGO_ABS = abs(logoWhite);
+
 /* ───────── SEOHead (sin dependencias) ───────── */
 function SEOHead({
   title,
@@ -40,7 +54,8 @@ function SEOHead({
     document.title = title;
 
     const setMeta = (attr, key, val) => {
-      let el = document.head.querySelector(`${attr}[${key}]="${val.key}"`);
+      // FIX selector: el atributo debe ir dentro del corchete
+      let el = document.head.querySelector(`${attr}[${key}="${val.key}"]`);
       if (!el) {
         el = document.createElement(attr);
         el.setAttribute(key, val.key);
@@ -228,7 +243,7 @@ Necesito orientación para clases/ensayos y presupuesto.`
       "@type": ["EducationalOrganization", "Organization"],
       "name": "Instituto Lael SpA",
       "url": "https://www.institutolael.cl/",
-      "logo": "https://www.institutolael.cl/assets/img/Logos/lael-inst-azul.png",
+      "logo": LOGO_ABS,
       "sameAs": [
         "https://www.instagram.com/institutolael",
         "https://www.youtube.com/@institutolael"
@@ -285,7 +300,7 @@ Necesito orientación para clases/ensayos y presupuesto.`
           "price": "2000",
           "eligibleQuantity": {
             "@type": "QuantitativeValue",
-            "unitCode": "NMB",  // number
+            "unitCode": "NMB",
             "value": "1"
           }
         },
@@ -333,7 +348,7 @@ Necesito orientación para clases/ensayos y presupuesto.`
         }
       ]
     },
-    // WebSite + SearchAction (mejora de presencia)
+    // WebSite + SearchAction
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
@@ -368,13 +383,13 @@ Necesito orientación para clases/ensayos y presupuesto.`
         description={pageDesc}
         canonical={canonical}
         keywords={keywords}
-        image={"https://www.institutolael.cl/assets/img/lael/hs-og.jpg"}
+        image={OG_IMG}
         jsonLd={jsonLd}
       />
 
       <style>{css}</style>
 
-      {/* BREADCRUMBS (visible + accesibles) */}
+      {/* BREADCRUMBS */}
       <nav className="breadcrumbs" aria-label="breadcrumb">
         <div className="container">
           <ol>
@@ -622,7 +637,7 @@ Necesito orientación para clases/ensayos y presupuesto.`
           </div>
         </section>
 
-        {/* Resultados 2025 (contadores) */}
+        {/* Resultados 2025 */}
         <section className="block">
           <header className="sec-head">
             <h2>Resultados 2025</h2>
@@ -649,7 +664,7 @@ Necesito orientación para clases/ensayos y presupuesto.`
           </div>
         </section>
 
-        {/* FAQ visible (refuerza SEO y responde dudas de intención de búsqueda) */}
+        {/* FAQ */}
         <section className="block">
           <header className="sec-head">
             <h2>Preguntas frecuentes</h2>
@@ -854,54 +869,26 @@ h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-heigh
 .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media (max-width:980px){.grid-2,.grid-3{grid-template-columns:1fr}}
 
-/* ====== Parche contraste de TÍTULOS y rótulos ====== */
-:root{
-  --title:#DDE7FF;          /* blanco-azulado alto contraste */
-  --subtitle:#C7D6FF;       /* para subtítulos si lo necesitas */
+/* ====== Parche contraste y fondo aplicado a .apoyo (antes .homeschool) ====== */
+.apoyo, .apoyo * { box-sizing: border-box; }
+.apoyo{
+  background:#0b1220;
+  color:#ffffff;
+  min-height: 100dvh;
 }
-.sec-head h2{ color:#FFFFFF; letter-spacing:.2px; }
-.card .step-title{ color:var(--title); letter-spacing:.2px; text-shadow:0 0 1px rgba(0,0,0,.25); }
-.card .label{ color:var(--title); font-weight:900; }
-.block .mt12 .step-title{ color:var(--title); }
-.card h3{ color:#FFFFFF; }
-
-/* Totales + flechas */
-.sum .big { color:#FFD266; font-weight:1000; text-shadow:0 0 3px rgba(0,0,0,.3); }
-.sum .big.ok { color: var(--green); }
-.sum .k { color:#E8EEFF; font-weight:900; }
-.hs-btn { position:absolute; top:50%; transform:translateY(-50%); width:42px; height:42px; border-radius:999px; border:2px solid #FFD266; background:linear-gradient(145deg,#101832 0%,#1A2757 100%); color:#FFD266; font-size:22px; font-weight:900; cursor:pointer; box-shadow:0 8px 22px rgba(0,0,0,.55); transition:all .15s ease; }
-.hs-btn:hover { filter:brightness(1.15); transform:translateY(-50%) scale(1.05); }
-.hs-btn:focus-visible { outline:3px solid #22D3EE; outline-offset:2px; }
-.hs-btn.prev { left:-8px; } .hs-btn.next { right:-8px; }
-
-/* Fix hard: asegurar contraste en Homeschool */
-.homeschool, .homeschool * { box-sizing: border-box; }
-.homeschool{
-  background:#0b1220;           /* fondo consistente */
-  color:#ffffff;                 /* tinta por defecto */
-  min-height: 100dvh;            /* que no “colapse” */
-}
-
-/* Si hay secciones con overlay oscuro, atenúalas */
-.homeschool .section,
-.homeschool .card,
-.homeschool .panel{
+.apoyo .section,
+.apoyo .card,
+.apoyo .panel{
   background: linear-gradient(180deg,#0f172a,#0b1220);
   border:1px solid #1f2a44;
   color:#fff;
 }
-
-/* Imágenes y media que podían “apagar” todo */
-.homeschool img{ display:block; max-width:100%; height:auto; }
-.homeschool .hero__img{ 
-  border-radius: 16px; 
-  overflow:hidden; 
-  background:#0f172a; 
-}
+.apoyo img{ display:block; max-width:100%; height:auto; }
+.apoyo .hero__img{ border-radius: 16px; overflow:hidden; background:#0f172a; }
 
 /* Botones visibles siempre */
-.homeschool .btn-primary{ background:#F59E0B; border-color:#D97706; color:#0B1220; }
-.homeschool .btn-ghost{ color:#fff; border:1px solid #334155; }
+.apoyo .btn-primary{ background:#F59E0B; border-color:#D97706; color:#0B1220; }
+.apoyo .btn-ghost{ color:#fff; border:1px solid #334155; }
 
 /* Focus global */
 button:focus-visible,.btn:focus-visible,input:focus-visible{outline:3px solid #22D3EE;outline-offset:2px}

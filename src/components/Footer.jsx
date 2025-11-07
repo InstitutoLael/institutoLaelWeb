@@ -3,9 +3,19 @@ import { Link } from "react-router-dom";
 import { FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import logoReal from "../assets/img/Logos/lael-inst-naranja.png";
 
-function wspLink(phone = "56964626568", msg = "Hola 👋 Necesito información, por favor.") {
+function wspLink(
+  phone = "56964626568",
+  msg = "Hola 👋 Me gustaría conversar mi caso."
+) {
   const clean = String(phone).replace(/\D/g, "");
-  return `https://wa.me/${clean}?text=${encodeURIComponent(msg)}`;
+  const base = `https://wa.me/${clean}`;
+  // si podemos, agregamos la URL actual al mensaje para contexto
+  let body = msg;
+  try {
+    const here = typeof window !== "undefined" ? window.location.href : "";
+    if (here) body += `\n\n(Página: ${here})`;
+  } catch {}
+  return `${base}?text=${encodeURIComponent(body)}`;
 }
 
 function ExternalA({ href, children, className = "", ariaLabel }) {
@@ -30,17 +40,17 @@ export default function Footer() {
       <style>{css}</style>
 
       {/* CTA superior */}
-      <section className="cta">
+      <section className="cta" aria-labelledby="footer-cta-title">
         <div className="container cta__row">
           <div className="cta__text">
             <span className="chip">¿Listo para empezar?</span>
-            <h4>Clases en vivo + cápsulas + acompañamiento real.</h4>
+            <h4 id="footer-cta-title">Clases en vivo + cápsulas + acompañamiento real.</h4>
             <p className="muted">Matrícula única. Precios claros. Sin letra chica.</p>
           </div>
-          <div className="cta__actions">
+          <div className="cta__actions" role="group" aria-label="Acciones rápidas">
             <Link to="/inscripcion" className="btn btn-primary">Inscribirme</Link>
             <ExternalA
-              href={wspLink("56964626568", "Hola 👋 Me gustaría conversar mi caso.")}
+              href={wspLink("56964626568")}
               className="btn btn-ghost"
               ariaLabel="Abrir WhatsApp Instituto Lael"
             >
@@ -53,7 +63,7 @@ export default function Footer() {
 
       {/* Cuerpo */}
       <section className="body">
-        <div className="container grid">
+        <div className="container grid" aria-label="Mapa del sitio">
           {/* Col 1 - Marca */}
           <div className="col brand">
             <Link to="/" aria-label="Ir al inicio" className="brand__link">
@@ -72,6 +82,7 @@ export default function Footer() {
                 href="https://www.instagram.com/institutolael"
                 ariaLabel="Instagram Instituto Lael"
                 className="social__a"
+                title="Instagram"
               >
                 <FaInstagram size={18} aria-hidden="true" />
                 <span className="sr-only">Instagram</span>
@@ -80,6 +91,7 @@ export default function Footer() {
                 href="https://www.youtube.com/@institutolael"
                 ariaLabel="YouTube Instituto Lael"
                 className="social__a"
+                title="YouTube"
               >
                 <FaYoutube size={20} aria-hidden="true" />
                 <span className="sr-only">YouTube</span>
@@ -88,6 +100,7 @@ export default function Footer() {
                 href={wspLink("56964626568")}
                 ariaLabel="WhatsApp Instituto Lael"
                 className="social__a"
+                title="WhatsApp"
               >
                 <FaWhatsapp size={18} aria-hidden="true" />
                 <span className="sr-only">WhatsApp</span>
@@ -101,15 +114,16 @@ export default function Footer() {
             <ul className="links">
               <li><Link to="/paes" className="link">PAES</Link></li>
               <li><Link to="/idiomas" className="link">Idiomas</Link></li>
-              <li><Link to="/lsch" className="link">Lengua de Señas</Link></li>
+              <li><Link to="/lsch" className="link">LSCh (Lengua de Señas)</Link></li>
               <li><Link to="/homeschool" className="link">Homeschool</Link></li>
+              <li><Link to="/escuelaadultos" className="link">Escuela Adultos</Link></li>
               <li><Link to="/empresas" className="link">Empresas</Link></li>
             </ul>
           </div>
 
-          {/* Col 3 - Comunidad */}
+          {/* Col 3 - Recursos */}
           <div className="col">
-            <h4 className="ttl">Comunidad</h4>
+            <h4 className="ttl">Recursos</h4>
             <ul className="links">
               <li><Link to="/docentes" className="link">Docentes</Link></li>
               <li><Link to="/noticias" className="link">Noticias</Link></li>
@@ -119,22 +133,30 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 4 - Soporte */}
+          {/* Col 4 - Soporte / Datos */}
           <div className="col">
             <h4 className="ttl">Soporte</h4>
             <ul className="links">
-              <li><Link to="/contacto" className="link">Contacto</Link></li>
               <li><Link to="/inscripcion" className="link">Inscripción</Link></li>
               <li><Link to="/pagos" className="link">Pagos</Link></li>
               <li className="stack">
                 <ExternalA
-                  href={wspLink("56964626568")}
+                  href={wspLink("56964626568", "Hola 👋 Necesito ayuda con mi caso.")}
                   className="link strong"
                   ariaLabel="Abrir WhatsApp Instituto Lael"
                 >
                   +56 9 6462 6568 (WhatsApp)
                 </ExternalA>
-                <a href="tel:+56964626568" className="subtel">Llamar: +56 9 6462 6568</a>
+                <a href="tel:+56964626568" className="subtel" aria-label="Llamar al +56 9 6462 6568">
+                  Llamar: +56 9 6462 6568
+                </a>
+              </li>
+              {/* Datos de contacto opcionales */}
+              <li className="stack">
+                <a href="mailto:contacto@institutolael.cl" className="link">
+                  contacto@institutolael.cl
+                </a>
+                <span className="subtel">RUT: 78.084.019-6</span>
               </li>
             </ul>
           </div>
@@ -142,7 +164,7 @@ export default function Footer() {
       </section>
 
       {/* Legal */}
-      <section className="legal">
+      <section className="legal" aria-label="Información legal y enlaces">
         <div className="container legal__row">
           <nav aria-label="Legal" className="legal__nav">
             <Link to="/terminos" className="legal__a">Términos</Link>
@@ -169,18 +191,19 @@ const css = `
 
 /* CTA */
 .cta{ background:linear-gradient(180deg,#0e1424,#0b1220); border-bottom:1px solid var(--bd); }
-.cta__row{ display:flex; gap:16px; align-items:center; justify-content:space-between; padding:18px 0; flex-wrap:wrap; }
-.chip{ display:inline-block; padding:.22rem .6rem; border:1px solid #334155; border-radius:999px; font-weight:900; font-size:.8rem; }
-.cta h4{ margin:.4rem 0 .2rem; }
+.cta__row{ display:flex; gap:16px; align-items:center; justify-content:space-between; padding:22px 0; flex-wrap:wrap; }
+.chip{ display:inline-block; padding:.24rem .62rem; border:1px solid #334155; border-radius:999px; font-weight:900; font-size:.8rem; }
+.cta h4{ margin:.45rem 0 .22rem; }
 .cta .muted{ margin:0; color:var(--mut); }
 .cta__actions{ display:flex; gap:10px; flex-wrap:wrap; }
-.btn{ display:inline-flex; align-items:center; gap:8px; padding:.6rem .9rem; border-radius:12px; border:1px solid #2f3341; text-decoration:none; font-weight:900; }
+.btn{ display:inline-flex; align-items:center; gap:8px; padding:.66rem .96rem; border-radius:12px; border:1px solid #2f3341; text-decoration:none; font-weight:900; }
 .btn-primary{ background:linear-gradient(180deg,#fbbf24,#f59e0b); color:var(--ctaTxt); border-color:#d97706; }
 .btn-outline{ background:transparent; color:#fff; border-color:#334155; }
 .btn-ghost{ background:transparent; color:#fff; border-color:#334155; }
+.btn:hover{ transform: translateY(-1px); box-shadow:0 10px 22px rgba(2,6,23,.25); }
 
 /* Body grid */
-.body{ padding:26px 0; }
+.body{ padding:28px 0; }
 .grid{
   display:grid; gap:18px;
   grid-template-columns: 1.4fr 1fr 1fr 1fr;
@@ -190,13 +213,13 @@ const css = `
 
 .col{ min-width:0; }
 .brand__link{ display:inline-block; }
-.brand__logo{ height:40px; width:auto; display:block; margin:0 0 10px; }
+.brand__logo{ height:42px; width:auto; display:block; margin:0 0 10px; }
 
-.ttl{ margin:0 0 10px; font-weight:700; }
+.ttl{ margin:0 0 10px; font-weight:800; }
 .links{ list-style:none; margin:0; padding:0; }
 .link{ color:var(--mut); text-decoration:none; display:inline-block; padding:6px 0; }
 .link:hover{ color:#fff; text-decoration:underline; }
-.strong{ font-weight:700; }
+.strong{ font-weight:800; }
 .subtel{ color:#94a3b8; font-size:.86rem; text-decoration:none; }
 .subtel:hover{ color:#fff; }
 
@@ -207,8 +230,9 @@ const css = `
 .social__a{
   display:inline-grid; place-items:center; width:34px; height:34px; border-radius:8px;
   color:#e5e7eb; background:#101a2f; border:1px solid #233154; text-decoration:none;
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s;
 }
-.social__a:hover{ color:#fff; }
+.social__a:hover{ color:#fff; transform: translateY(-1px); border-color:#3a4c7a; }
 
 /* Legal */
 .legal{ border-top:1px solid var(--bd); padding:14px 0; }

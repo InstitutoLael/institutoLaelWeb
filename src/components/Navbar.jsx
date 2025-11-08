@@ -408,22 +408,24 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 }
 .mp-overlay.show{ opacity:1; pointer-events:auto; }
 
-/* Panel móvil con fondo sólido (no se mezcla con el hero) */
+/* Panel móvil con fondo sólido y visible */
 .mobile-panel{
-  position:fixed; top:0; right:0; bottom:0; left:0;   /* ocupa todo */
+  position:fixed;
+  inset:0; /* equivale a top:0; right:0; bottom:0; left:0 */
   width:100vw;
-  background:#0b1220; /* sólido */
-  box-shadow:0 0 0 1px #22304d inset;
+  background:linear-gradient(180deg, #0b1220 60%, #111d3a 100%); /* color sólido bonito */
   transform:translateX(100%);
-  transition:transform .22s ease-out;
-  display:flex; flex-direction:column;
-  z-index:5000; overscroll-behavior:contain; -webkit-overflow-scrolling:touch;
+  transition:transform .25s ease-out, background .3s ease;
+  display:flex;
+  flex-direction:column;
+  z-index:9500; /* sobre el overlay */
   pointer-events:none;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 .mobile-panel.open{
   transform:translateX(0);
   pointer-events:auto;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .mp-head{ display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid #22304d; }

@@ -15,12 +15,14 @@ export default function Navbar({ onOpenSearch }) {
   const firstItemRef = useRef(null);
   const location = useLocation();
 
+  // Detecta primer toque para desactivar hover en táctiles
   useEffect(() => {
     const firstTouch = () => { isTouch.current = true; };
     window.addEventListener("touchstart", firstTouch, { once: true, passive: true });
     return () => window.removeEventListener("touchstart", firstTouch);
   }, []);
 
+  // Bloquea scroll cuando el panel móvil está abierto
   useEffect(() => {
     const cls = "no-scroll";
     document.documentElement.classList.toggle(cls, mobileOpen);
@@ -31,11 +33,13 @@ export default function Navbar({ onOpenSearch }) {
     };
   }, [mobileOpen]);
 
+  // Cierra todo al cambiar de ruta
   useEffect(() => {
     setMobileOpen(false);
     setProgOpen(false);
   }, [location.pathname]);
 
+  // Hover del dropdown (solo desktop)
   const openDrop = () => {
     if (isTouch.current) return;
     clearTimeout(closeTimer.current);
@@ -46,6 +50,7 @@ export default function Navbar({ onOpenSearch }) {
     closeTimer.current = setTimeout(() => setProgOpen(false), 120);
   };
 
+  // ESC y Ctrl/⌘+K
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -61,6 +66,7 @@ export default function Navbar({ onOpenSearch }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onOpenSearch]);
 
+  // Clic afuera del dropdown
   useEffect(() => {
     if (!progOpen) return;
     const onDocDown = (e) => {
@@ -70,6 +76,7 @@ export default function Navbar({ onOpenSearch }) {
     return () => document.removeEventListener("mousedown", onDocDown);
   }, [progOpen]);
 
+  // Accesibilidad: foco al primer ítem del dropdown
   useEffect(() => {
     if (progOpen && kbdOpen) {
       firstItemRef.current?.focus();
@@ -82,6 +89,7 @@ export default function Navbar({ onOpenSearch }) {
     setProgOpen(false);
   };
 
+  // Navegación con flechas dentro del dropdown
   const onDropKeyDown = (e) => {
     const items = Array.from(dropRef.current?.querySelectorAll('[role="menuitem"]') || []);
     const i = items.indexOf(document.activeElement);
@@ -97,10 +105,12 @@ export default function Navbar({ onOpenSearch }) {
       <style>{css}</style>
 
       <div className="container nav-row">
+        {/* Logo */}
         <Link to="/" className="brand" aria-label="Inicio Instituto Lael">
           <img src={logo} alt="Instituto Lael" className="brand-logo" />
         </Link>
 
+        {/* NAV DESKTOP */}
         <nav className="navwrap" aria-label="Navegación principal">
           <ul className="nav">
             <li><NavLink to="/" end className={link}>Inicio</NavLink></li>
@@ -123,6 +133,7 @@ export default function Navbar({ onOpenSearch }) {
                 Programas ▾
               </button>
 
+              {/* Dropdown solo se muestra en >=1000px */}
               <div
                 id="prog-menu"
                 className="dropdown"
@@ -163,10 +174,12 @@ export default function Navbar({ onOpenSearch }) {
             <li><NavLink to="/escuelaadultos" className={link}>Escuela Adultos</NavLink></li>
             <li><NavLink to="/convenios" className={link}>Convenios</NavLink></li>
             <li><NavLink to="/trabaja" className={link}>Trabaja</NavLink></li>
+
             <li><NavLink to="/inscripcion" className="nav-cta">Inscripción</NavLink></li>
           </ul>
         </nav>
 
+        {/* TOOLS */}
         <div className="tools">
           <button
             className="tool-btn"
@@ -188,12 +201,14 @@ export default function Navbar({ onOpenSearch }) {
         </div>
       </div>
 
+      {/* Overlay móvil */}
       <div
         className={"mp-overlay " + (mobileOpen ? "show" : "")}
         onClick={closeMobile}
         aria-hidden={!mobileOpen}
       />
 
+      {/* Panel móvil */}
       <aside
         id="mobile-panel"
         className={"mobile-panel " + (mobileOpen ? "open" : "")}
@@ -284,12 +299,12 @@ const css = `
   --wa:#25D366;
 }
 
+/* no scroll cuando panel móvil abierto */
 html.no-scroll, body.no-scroll { overflow: hidden; }
 
 /* Barra */
 .lael-nav{
-  position: sticky; top: 0;
-  z-index: 12000;
+  position: sticky; top: 0; z-index: 4000;
   backdrop-filter: saturate(120%) blur(10px);
   background:
     radial-gradient(900px 240px at 10% -20%, rgba(88,80,236,.10), transparent 60%),
@@ -297,29 +312,113 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
     var(--nav-bg);
   border-bottom: 1px solid var(--nav-bd);
 }
+.nav-row{ display:flex; align-items:center; gap:16px; min-height:66px; position:relative; }
 
-/* Overlay móvil oscuro */
+/* Logo */
+.brand-logo{ height:36px; width:auto; display:block; }
+@media (min-width: 768px){ .brand-logo{ height:40px; } }
+
+/* Nav desktop */
+.navwrap{ margin-left:auto; }
+.nav{ display:flex; align-items:center; gap:8px; list-style:none; margin:0; padding:0; }
+.nav-link, .nav-cta, .drop-btn{
+  background:transparent; border:0; cursor:pointer;
+  color:var(--link); font-weight:900;
+  padding:.55rem .75rem; border-radius:10px; transition:background .15s ease, transform .15s ease;
+}
+.nav-link:hover, .drop-btn:hover{ color:var(--link-act); background:#0f172a; }
+.nav-link.active{
+  color:#fff; background:linear-gradient(180deg,#101a2f,#0f172a); border:1px solid #233154;
+}
+.nav-cta{
+  color:var(--cta-text);
+  background:linear-gradient(180deg,#fde047,#facc15);
+  border:1px solid #eab308;
+  box-shadow:0 10px 22px rgba(250,204,21,.25);
+}
+.nav-cta:hover{ filter:brightness(1.05); }
+
+/* Tools */
+.tools{ display:flex; align-items:center; gap:8px; margin-left:8px; }
+.tool-btn{
+  width:38px; height:38px; border-radius:10px; background:#0f172a;
+  border:1px solid #233154; color:#fff;
+}
+.tool-btn:hover{ transform:translateY(-1px); }
+
+/* --- Hamburguesa --- */
+.burger{
+  display:none;
+  width:42px; height:42px;
+  border-radius:12px;
+  background:#141b2e; border:1px solid #233154;
+  place-items:center;
+}
+.burger span{
+  width:22px; height:3px; background:#fff; display:block; border-radius:2px;
+  transition:all .25s ease;
+}
+.burger.on span:nth-child(1){ transform: rotate(45deg) translate(5px, 5px); }
+.burger.on span:nth-child(2){ opacity:0; }
+.burger.on span:nth-child(3){ transform: rotate(-45deg) translate(5px, -5px); }
+
+/* Dropdown escritorio */
+.has-drop{ position:relative; }
+.dropdown{
+  position:absolute; left:0; top:calc(100% + 10px);
+  width:min(92vw,900px);
+  background:var(--drop-bg); border:1px solid var(--drop-bd); border-radius:14px;
+  box-shadow:0 26px 60px rgba(2,6,23,.38);
+  opacity:0; transform:translateY(6px); pointer-events:none; transition:.16s;
+  padding:12px; z-index:4500;
+}
+.has-drop.open .dropdown{ opacity:1; transform:translateY(0); pointer-events:auto; }
+.drop-head{ padding:8px 10px 12px; }
+.drop-title{ color:#fff; font-weight:900; font-size:1.05rem; }
+.drop-sub{ color:#a3b2d8; margin:2px 0 0; font-size:.9rem; }
+.drop-grid{ display:grid; gap:10px; grid-template-columns:repeat(2,minmax(0,1fr)); }
+.drop-item{
+  display:block; padding:12px; border-radius:12px;
+  background:linear-gradient(180deg,#0f172a,#0b1220);
+  color:#fff; border:1px solid #22304d; transition:transform .12s, box-shadow .12s;
+}
+.drop-item:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); }
+.di-head{ display:flex; align-items:center; gap:8px; color:#a5b4fc; font-weight:800; font-size:.78rem; }
+.mini-badge{ background:#1f2937; color:#fde047; border:1px solid #eab308; padding:.14rem .35rem; border-radius:999px; font-size:.68rem; }
+.drop-item .title{ font-weight:900; font-size:1.05rem; margin-top:4px; }
+.drop-item .desc{ color:#c9d4f6; margin-top:4px; font-size:.92rem; line-height:1.35; }
+.drop-item .go{ display:inline-block; margin-top:6px; color:#c7d2fe; font-weight:800; }
+
+.acc-indigo{ border-color:#31386b; }
+.acc-green{ border-color:#1f7a3a; }
+.acc-rose{ border-color:#781a2a; }
+.acc-amber{ border-color:#7a560e; }
+
+/* ***** MÓVIL ***** */
+@media(max-width:1000px){
+  .navwrap{ display:none; }
+  .burger{ display:grid; }
+  .dropdown{ display:none !important; }
+}
+
+/* Overlay móvil oscuro para separar del contenido */
 .mp-overlay{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.72);
-  opacity:0;
-  transition:opacity .25s ease;
-  pointer-events:none;
-  z-index:12005;
+  position:fixed; inset:0; background:rgba(0,0,0,.7);
+  opacity:0; transition:.18s; pointer-events:none; z-index:4900;
 }
 .mp-overlay.show{ opacity:1; pointer-events:auto; }
 
-/* Panel móvil visible y sólido */
+/* Panel móvil con fondo sólido y visible */
 .mobile-panel{
   position:fixed;
-  inset:0;
+  inset:0; /* equivale a top:0; right:0; bottom:0; left:0 */
   width:100vw;
-  background:linear-gradient(180deg,#0b1220 60%,#111d3a 100%);
+  background:linear-gradient(180deg, #0b1220 60%, #111d3a 100%); /* color sólido bonito */
   transform:translateX(100%);
   transition:transform .25s ease-out, background .3s ease;
   display:flex;
   flex-direction:column;
-  z-index:12010;
+  z-index:9500; /* sobre el overlay */
   pointer-events:none;
   overflow-y:auto;
   -webkit-overflow-scrolling:touch;
@@ -328,9 +427,6 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
   transform:translateX(0);
   pointer-events:auto;
 }
-
-/* resto del CSS igual... */
-
 
 .mp-head{ display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid #22304d; }
 .mp-title{ color:#fff; font-weight:900; }

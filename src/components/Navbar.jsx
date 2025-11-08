@@ -15,20 +15,22 @@ export default function Navbar({ onOpenSearch }) {
   const firstItemRef = useRef(null);
   const location = useLocation();
 
-  // Detecta primer toque
   useEffect(() => {
     const firstTouch = () => { isTouch.current = true; };
     window.addEventListener("touchstart", firstTouch, { once: true, passive: true });
     return () => window.removeEventListener("touchstart", firstTouch);
   }, []);
 
-  // Bloquea scroll
   useEffect(() => {
-    document.documentElement.classList.toggle("no-scroll", mobileOpen);
-    document.body.classList.toggle("no-scroll", mobileOpen);
+    const cls = "no-scroll";
+    document.documentElement.classList.toggle(cls, mobileOpen);
+    document.body.classList.toggle(cls, mobileOpen);
+    return () => {
+      document.documentElement.classList.remove(cls);
+      document.body.classList.remove(cls);
+    };
   }, [mobileOpen]);
 
-  // Cierra al cambiar de ruta
   useEffect(() => {
     setMobileOpen(false);
     setProgOpen(false);
@@ -44,19 +46,21 @@ export default function Navbar({ onOpenSearch }) {
     closeTimer.current = setTimeout(() => setProgOpen(false), 120);
   };
 
-  // Atajos teclado
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === "Escape") { setProgOpen(false); setMobileOpen(false); }
+      if (e.key === "Escape") {
+        setProgOpen(false);
+        setMobileOpen(false);
+      }
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault(); onOpenSearch?.();
+        e.preventDefault();
+        onOpenSearch?.();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [onOpenSearch]);
 
-  // Click fuera del dropdown
   useEffect(() => {
     if (!progOpen) return;
     const onDocDown = (e) => {
@@ -66,7 +70,6 @@ export default function Navbar({ onOpenSearch }) {
     return () => document.removeEventListener("mousedown", onDocDown);
   }, [progOpen]);
 
-  // Accesibilidad: foco
   useEffect(() => {
     if (progOpen && kbdOpen) {
       firstItemRef.current?.focus();
@@ -77,6 +80,16 @@ export default function Navbar({ onOpenSearch }) {
   const closeMobile = () => {
     setMobileOpen(false);
     setProgOpen(false);
+  };
+
+  const onDropKeyDown = (e) => {
+    const items = Array.from(dropRef.current?.querySelectorAll('[role="menuitem"]') || []);
+    const i = items.indexOf(document.activeElement);
+    if (e.key === "ArrowDown") { e.preventDefault(); items[Math.min(i + 1, items.length - 1)]?.focus(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); items[Math.max(i - 1, 0)]?.focus(); }
+    else if (e.key === "Home") { e.preventDefault(); items[0]?.focus(); }
+    else if (e.key === "End") { e.preventDefault(); items[items.length - 1]?.focus(); }
+    else if (e.key === "Escape") { e.preventDefault(); setProgOpen(false); }
   };
 
   return (
@@ -93,16 +106,18 @@ export default function Navbar({ onOpenSearch }) {
           <ul className="nav">
             <li><NavLink to="/" end className={link}>Inicio</NavLink></li>
             <li className={"has-drop " + (progOpen ? "open" : "")}
-              onMouseEnter={openDrop} onMouseLeave={closeDrop}>
+                onMouseEnter={openDrop} onMouseLeave={closeDrop}>
               <button
                 type="button" className="nav-link drop-btn"
                 onClick={() => setProgOpen((v) => !v)}
-                aria-expanded={progOpen} aria-haspopup="true"
-                aria-controls="prog-menu" onFocus={openDrop}>
+                aria-expanded={progOpen}
+                aria-haspopup="true"
+                aria-controls="prog-menu"
+                onFocus={openDrop}>
                 Programas ▾
               </button>
 
-              <div id="prog-menu" className="dropdown" role="menu" ref={dropRef}>
+              <div id="prog-menu" className="dropdown" role="menu" ref={dropRef} onKeyDown={onDropKeyDown}>
                 <div className="drop-head">
                   <div className="drop-title">Programas</div>
                   <p className="drop-sub">Elige tu ruta. Todo con acompañamiento.</p>
@@ -123,7 +138,6 @@ export default function Navbar({ onOpenSearch }) {
                 </div>
               </div>
             </li>
-
             <li><NavLink to="/empresas" className={link}>Empresas</NavLink></li>
             <li><NavLink to="/nosotros" className={link}>Nosotros</NavLink></li>
             <li><NavLink to="/escuelaadultos" className={link}>Escuela Adultos</NavLink></li>
@@ -137,31 +151,27 @@ export default function Navbar({ onOpenSearch }) {
           <button className="tool-btn" onClick={onOpenSearch} aria-label="Buscar (Ctrl/⌘+K)">
             <SearchIcon />
           </button>
-          <button
-            className={"burger " + (mobileOpen ? "on" : "")}
-            onClick={() => setMobileOpen((v) => !v)}
-            aria-label="Abrir menú móvil"
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-panel"
-          >
+          <button className={"burger " + (mobileOpen ? "on" : "")}
+                  onClick={() => setMobileOpen((v) => !v)}
+                  aria-label="Abrir menú móvil"
+                  aria-expanded={mobileOpen}
+                  aria-controls="mobile-panel">
             <span /><span /><span />
           </button>
         </div>
       </div>
 
-      {/* Overlay */}
+      {/* Overlay móvil */}
       <div className={"mp-overlay " + (mobileOpen ? "show" : "")} onClick={closeMobile} aria-hidden={!mobileOpen} />
 
       {/* Panel móvil */}
-      <aside
-        id="mobile-panel"
-        className={"mobile-panel " + (mobileOpen ? "open" : "")}
-        aria-hidden={!mobileOpen}
-        aria-label="Menú móvil"
-        role="dialog"
-        aria-modal="true"
-      >
-        <div className="mp-head">
+      <aside id="mobile-panel"
+             className={"mobile-panel " + (mobileOpen ? "open" : "")}
+             aria-hidden={!mobileOpen}
+             aria-label="Menú móvil"
+             role="dialog"
+             aria-modal="true">
+        <div className="mp-head" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
           <div className="mp-title">Menú</div>
           <button className="mp-close" onClick={closeMobile} aria-label="Cerrar">✕</button>
         </div>
@@ -187,16 +197,12 @@ export default function Navbar({ onOpenSearch }) {
           <Link to="/trabaja" className="mp-link" onClick={closeMobile}>Trabaja con nosotros</Link>
         </div>
 
-        <div className="mp-actions">
+        <div className="mp-actions" style={{ paddingBottom: "env(safe-area-inset-bottom, 12px)" }}>
           <Link to="/inscripcion" className="mp-cta" onClick={closeMobile}>Inscripción</Link>
-          <a
-            className="mp-wa"
-            href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20quisiera%20informaci%C3%B3n%20sobre%20los%20programas%20LAEL"
-            target="_blank"
-            rel="noreferrer"
-          >
-            WhatsApp
-          </a>
+          <a className="mp-wa"
+             href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20quisiera%20informaci%C3%B3n%20sobre%20los%20programas%20LAEL"
+             target="_blank"
+             rel="noreferrer">WhatsApp</a>
         </div>
       </aside>
     </header>
@@ -208,7 +214,6 @@ function DropItem({ to, title, kicker, children, badge, accent = "indigo", refEl
     accent === "green" ? "acc-green" :
     accent === "rose" ? "acc-rose" :
     accent === "amber" ? "acc-amber" : "acc-indigo";
-
   return (
     <Link to={to} className={"drop-item " + accentClass} role="menuitem" ref={refEl}>
       <div className="di-head">
@@ -231,65 +236,42 @@ function SearchIcon() {
   );
 }
 
-/* ✅ CSS FINAL */
 const css = `
+:root{
+  --nav-bg: rgba(11,18,32,.78);
+  --nav-bd: #1f2a44;
+  --link: #eaf2ff;
+  --link-act: #ffffff;
+  --cta: #fde047; --cta-text:#111827;
+  --drop-bg:#0e1424; --drop-bd:#1f2a44;
+  --indigo:#5850EC; --green:#16a34a; --rose:#e11d48; --amber:#f59e0b;
+  --wa:#25D366;
+}
+
 html.no-scroll, body.no-scroll { overflow: hidden; }
 
 /* Overlay móvil */
 .mp-overlay{
-  position:fixed; inset:0; background:rgba(0,0,0,.72);
-  opacity:0; transition:opacity .2s ease;
-  pointer-events:none; z-index:900000;
+  position:fixed; inset:0;
+  background:rgba(0,0,0,.72);
+  opacity:0; transition:opacity .25s ease;
+  pointer-events:none;
+  z-index:9000;
 }
 .mp-overlay.show{ opacity:1; pointer-events:auto; }
 
 /* Panel móvil */
 .mobile-panel{
   position:fixed; inset:0;
-  width:100vw; background:#0b1220 !important;
-  transform:translate3d(100%,0,0);
+  width:100vw;
+  background:#0b1220;
+  transform:translateX(100%);
   transition:transform .25s ease-out;
   display:flex; flex-direction:column;
-  z-index:999999;
-  overflow:auto; -webkit-overflow-scrolling:touch;
+  z-index:9500;
   pointer-events:none;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
-.mobile-panel.open{
-  transform:translate3d(0,0,0);
-  pointer-events:auto;
-}
-.mobile-panel::before{
-  content:""; position:absolute; inset:0;
-  background:#0b1220; z-index:-1;
-}
-
-/* Cabezal */
-.mp-head{
-  position:sticky; top:0;
-  display:flex; justify-content:space-between; align-items:center;
-  background:#0b1220; padding:12px 14px;
-  border-bottom:1px solid #22304d;
-}
-.mp-title{ color:#fff; font-weight:900; }
-.mp-close{ background:#0f172a; color:#fff; border:1px solid #233154; border-radius:10px; padding:.45rem .6rem; }
-
-/* Secciones */
-.mp-section{ padding:10px 14px; border-bottom:1px solid #14203a; background:#0b1220; }
-.mp-kicker{ color:#a5b4fc; font-weight:900; font-size:.8rem; margin-bottom:6px; }
-.mp-link{ color:#eaf2ff; font-weight:700; text-decoration:none; display:block; padding:.5rem 0; }
-
-/* Botones inferiores */
-.mp-actions{ padding:14px; display:grid; gap:10px; margin-top:auto; background:#0b1220; }
-.mp-cta{
-  text-align:center; font-weight:900;
-  padding:.8rem 1rem; border-radius:12px;
-  color:#111827; background:linear-gradient(180deg,#fde047,#facc15);
-  border:1px solid #eab308;
-}
-.mp-wa{
-  text-align:center; font-weight:900;
-  padding:.8rem 1rem; border-radius:12px;
-  color:#0a3d21; background:#25D366;
-  border:1px solid #128C7E; text-decoration:none;
-}
+.mobile-panel.open{ transform:translateX(0); pointer-events:auto; }
 `;

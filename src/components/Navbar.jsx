@@ -247,7 +247,7 @@ export default function Navbar({ onOpenSearch }) {
           <Link to="/inscripcion" className="mp-cta" onClick={closeMobile}>Inscripción</Link>
           <a
             className="mp-wa"
-            href="https://wa.me/56964626568"
+            href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20quisiera%20informaci%C3%B3n%20sobre%20los%20programas%20LAEL"
             target="_blank"
             rel="noreferrer"
           >
@@ -346,7 +346,7 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 }
 .tool-btn:hover{ transform:translateY(-1px); }
 
-/* --- Hamburguesa mejorada --- */
+/* --- Hamburguesa --- */
 .burger{
   display:none;
   width:42px; height:42px;
@@ -401,19 +401,19 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
   .dropdown{ display:none !important; }
 }
 
-/* Overlay móvil más oscuro */
+/* Overlay móvil oscuro para separar del contenido */
 .mp-overlay{
   position:fixed; inset:0; background:rgba(0,0,0,.7);
   opacity:0; transition:.18s; pointer-events:none; z-index:4900;
 }
 .mp-overlay.show{ opacity:1; pointer-events:auto; }
 
-/* Panel móvil: cubre completamente y no es transparente */
+/* Panel móvil con fondo sólido (no se mezcla con el hero) */
 .mobile-panel{
-  position:fixed; top:0; right:0; bottom:0;
-  width:100vw; max-width:440px;
+  position:fixed; top:0; right:0; bottom:0; left:0;   /* ocupa todo */
+  width:100vw;
   background:#0b1220; /* sólido */
-  box-shadow:-4px 0 24px rgba(0,0,0,.6);
+  box-shadow:0 0 0 1px #22304d inset;
   transform:translateX(100%);
   transition:transform .22s ease-out;
   display:flex; flex-direction:column;

@@ -214,6 +214,8 @@ export default function Navbar({ onOpenSearch }) {
         className={"mobile-panel " + (mobileOpen ? "open" : "")}
         aria-hidden={!mobileOpen}
         aria-label="Menú móvil"
+        role="dialog"
+        aria-modal="true"
       >
         <div className="mp-head" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
           <div className="mp-title">Menú</div>
@@ -344,10 +346,21 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 }
 .tool-btn:hover{ transform:translateY(-1px); }
 
-/* Hamburguesa */
-.burger{ display:none; width:42px; height:38px; background:#0f172a; border:1px solid #233154; border-radius:10px; }
-.burger span{ width:18px; height:2px; background:#cfe0ff; display:block; border-radius:2px; transition:.18s; }
-.burger.on span:nth-child(2){ transform:scaleX(.7); }
+/* --- Hamburguesa mejorada --- */
+.burger{
+  display:none;
+  width:42px; height:42px;
+  border-radius:12px;
+  background:#141b2e; border:1px solid #233154;
+  place-items:center;
+}
+.burger span{
+  width:22px; height:3px; background:#fff; display:block; border-radius:2px;
+  transition:all .25s ease;
+}
+.burger.on span:nth-child(1){ transform: rotate(45deg) translate(5px, 5px); }
+.burger.on span:nth-child(2){ opacity:0; }
+.burger.on span:nth-child(3){ transform: rotate(-45deg) translate(5px, -5px); }
 
 /* Dropdown escritorio */
 .has-drop{ position:relative; }
@@ -384,22 +397,23 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 /* ***** MÓVIL ***** */
 @media(max-width:1000px){
   .navwrap{ display:none; }
-  .burger{ display:flex; justify-content:center; align-items:center; }
-  .dropdown{ display:none !important; } /* desactiva dropdown en móvil */
+  .burger{ display:grid; }
+  .dropdown{ display:none !important; }
 }
 
-/* Overlay móvil */
+/* Overlay móvil más oscuro */
 .mp-overlay{
-  position:fixed; inset:0; background:rgba(2,6,23,.45);
+  position:fixed; inset:0; background:rgba(0,0,0,.7);
   opacity:0; transition:.18s; pointer-events:none; z-index:4900;
 }
 .mp-overlay.show{ opacity:1; pointer-events:auto; }
 
-/* Panel móvil (off-canvas estable) */
+/* Panel móvil: cubre completamente y no es transparente */
 .mobile-panel{
   position:fixed; top:0; right:0; bottom:0;
-  width:100vw; max-width:440px;  /* <- 100% de viewport, no queda recortado */
-  background:linear-gradient(180deg,#0f172a,#0b1220);
+  width:100vw; max-width:440px;
+  background:#0b1220; /* sólido */
+  box-shadow:-4px 0 24px rgba(0,0,0,.6);
   transform:translateX(100%);
   transition:transform .22s ease-out;
   display:flex; flex-direction:column;

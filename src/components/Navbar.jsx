@@ -22,7 +22,7 @@ export default function Navbar({ onOpenSearch }) {
     return () => window.removeEventListener("touchstart", firstTouch);
   }, []);
 
-  // Bloquea scroll cuando el menú móvil está abierto
+  // Bloquea scroll cuando el panel móvil está abierto
   useEffect(() => {
     const cls = "no-scroll";
     document.documentElement.classList.toggle(cls, mobileOpen);
@@ -33,13 +33,13 @@ export default function Navbar({ onOpenSearch }) {
     };
   }, [mobileOpen]);
 
-  // Cierra menús al cambiar de ruta
+  // Cierra todo al cambiar de ruta
   useEffect(() => {
     setMobileOpen(false);
     setProgOpen(false);
   }, [location.pathname]);
 
-  // Dropdown con hover delay (desactivado en táctiles)
+  // Hover del dropdown (solo desktop)
   const openDrop = () => {
     if (isTouch.current) return;
     clearTimeout(closeTimer.current);
@@ -50,7 +50,7 @@ export default function Navbar({ onOpenSearch }) {
     closeTimer.current = setTimeout(() => setProgOpen(false), 120);
   };
 
-  // Cerrar con ESC + atajo Ctrl/⌘+K
+  // ESC y Ctrl/⌘+K
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -66,7 +66,7 @@ export default function Navbar({ onOpenSearch }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onOpenSearch]);
 
-  // Clic afuera para cerrar dropdown
+  // Clic afuera del dropdown
   useEffect(() => {
     if (!progOpen) return;
     const onDocDown = (e) => {
@@ -76,7 +76,7 @@ export default function Navbar({ onOpenSearch }) {
     return () => document.removeEventListener("mousedown", onDocDown);
   }, [progOpen]);
 
-  // Accesibilidad: foco al primer ítem si abrimos con teclado
+  // Accesibilidad: foco al primer ítem del dropdown
   useEffect(() => {
     if (progOpen && kbdOpen) {
       firstItemRef.current?.focus();
@@ -89,7 +89,7 @@ export default function Navbar({ onOpenSearch }) {
     setProgOpen(false);
   };
 
-  // Navegación por teclado dentro del dropdown
+  // Navegación con flechas dentro del dropdown
   const onDropKeyDown = (e) => {
     const items = Array.from(dropRef.current?.querySelectorAll('[role="menuitem"]') || []);
     const i = items.indexOf(document.activeElement);
@@ -133,11 +133,10 @@ export default function Navbar({ onOpenSearch }) {
                 Programas ▾
               </button>
 
+              {/* Dropdown solo se muestra en >=1000px */}
               <div
                 id="prog-menu"
                 className="dropdown"
-                onMouseEnter={openDrop}
-                onMouseLeave={closeDrop}
                 role="menu"
                 ref={dropRef}
                 onKeyDown={onDropKeyDown}
@@ -216,7 +215,7 @@ export default function Navbar({ onOpenSearch }) {
         aria-hidden={!mobileOpen}
         aria-label="Menú móvil"
       >
-        <div className="mp-head">
+        <div className="mp-head" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
           <div className="mp-title">Menú</div>
           <button className="mp-close" onClick={closeMobile} aria-label="Cerrar">✕</button>
         </div>
@@ -242,10 +241,10 @@ export default function Navbar({ onOpenSearch }) {
           <Link to="/trabaja" className="mp-link" onClick={closeMobile}>Trabaja con nosotros</Link>
         </div>
 
-        <div className="mp-actions">
+        <div className="mp-actions" style={{ paddingBottom: "env(safe-area-inset-bottom, 12px)" }}>
           <Link to="/inscripcion" className="mp-cta" onClick={closeMobile}>Inscripción</Link>
           <a
-            className="mp-ghost"
+            className="mp-wa"
             href="https://wa.me/56964626568"
             target="_blank"
             rel="noreferrer"
@@ -288,16 +287,17 @@ function SearchIcon() {
 
 const css = `
 :root{
-  --nav-bg: rgba(11,18,32,.75);
+  --nav-bg: rgba(11,18,32,.78);
   --nav-bd: #1f2a44;
   --link: #eaf2ff;
   --link-act: #ffffff;
   --cta: #fde047; --cta-text:#111827;
   --drop-bg:#0e1424; --drop-bd:#1f2a44;
   --indigo:#5850EC; --green:#16a34a; --rose:#e11d48; --amber:#f59e0b;
+  --wa:#25D366;
 }
 
-/* sin scroll cuando panel móvil abierto */
+/* no scroll cuando panel móvil abierto */
 html.no-scroll, body.no-scroll { overflow: hidden; }
 
 /* Barra */
@@ -313,14 +313,12 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 .nav-row{ display:flex; align-items:center; gap:16px; min-height:66px; position:relative; }
 
 /* Logo */
-.brand-logo{ height:36px; width:auto; }
+.brand-logo{ height:36px; width:auto; display:block; }
 @media (min-width: 768px){ .brand-logo{ height:40px; } }
 
 /* Nav desktop */
 .navwrap{ margin-left:auto; }
-.nav{
-  display:flex; align-items:center; gap:8px; list-style:none; margin:0; padding:0;
-}
+.nav{ display:flex; align-items:center; gap:8px; list-style:none; margin:0; padding:0; }
 .nav-link, .nav-cta, .drop-btn{
   background:transparent; border:0; cursor:pointer;
   color:var(--link); font-weight:900;
@@ -346,7 +344,7 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 }
 .tool-btn:hover{ transform:translateY(-1px); }
 
-/* Burger */
+/* Hamburguesa */
 .burger{ display:none; width:42px; height:38px; background:#0f172a; border:1px solid #233154; border-radius:10px; }
 .burger span{ width:18px; height:2px; background:#cfe0ff; display:block; border-radius:2px; transition:.18s; }
 .burger.on span:nth-child(2){ transform:scaleX(.7); }
@@ -359,9 +357,12 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
   background:var(--drop-bg); border:1px solid var(--drop-bd); border-radius:14px;
   box-shadow:0 26px 60px rgba(2,6,23,.38);
   opacity:0; transform:translateY(6px); pointer-events:none; transition:.16s;
-  padding:12px; z-index: 4500;
+  padding:12px; z-index:4500;
 }
 .has-drop.open .dropdown{ opacity:1; transform:translateY(0); pointer-events:auto; }
+.drop-head{ padding:8px 10px 12px; }
+.drop-title{ color:#fff; font-weight:900; font-size:1.05rem; }
+.drop-sub{ color:#a3b2d8; margin:2px 0 0; font-size:.9rem; }
 .drop-grid{ display:grid; gap:10px; grid-template-columns:repeat(2,minmax(0,1fr)); }
 .drop-item{
   display:block; padding:12px; border-radius:12px;
@@ -369,30 +370,41 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
   color:#fff; border:1px solid #22304d; transition:transform .12s, box-shadow .12s;
 }
 .drop-item:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); }
+.di-head{ display:flex; align-items:center; gap:8px; color:#a5b4fc; font-weight:800; font-size:.78rem; }
+.mini-badge{ background:#1f2937; color:#fde047; border:1px solid #eab308; padding:.14rem .35rem; border-radius:999px; font-size:.68rem; }
+.drop-item .title{ font-weight:900; font-size:1.05rem; margin-top:4px; }
+.drop-item .desc{ color:#c9d4f6; margin-top:4px; font-size:.92rem; line-height:1.35; }
+.drop-item .go{ display:inline-block; margin-top:6px; color:#c7d2fe; font-weight:800; }
 
-/* En móviles: esconder dropdown completamente */
+.acc-indigo{ border-color:#31386b; }
+.acc-green{ border-color:#1f7a3a; }
+.acc-rose{ border-color:#781a2a; }
+.acc-amber{ border-color:#7a560e; }
+
+/* ***** MÓVIL ***** */
 @media(max-width:1000px){
   .navwrap{ display:none; }
   .burger{ display:flex; justify-content:center; align-items:center; }
-  .dropdown{ display:none !important; }
+  .dropdown{ display:none !important; } /* desactiva dropdown en móvil */
 }
 
 /* Overlay móvil */
 .mp-overlay{
   position:fixed; inset:0; background:rgba(2,6,23,.45);
-  opacity:0; transition:.18s; pointer-events:none; z-index: 4900;
+  opacity:0; transition:.18s; pointer-events:none; z-index:4900;
 }
 .mp-overlay.show{ opacity:1; pointer-events:auto; }
 
-/* Panel móvil (off-canvas real) */
+/* Panel móvil (off-canvas estable) */
 .mobile-panel{
-  position:fixed; top:0; right:0; bottom:0; width:86vw; max-width:420px;
+  position:fixed; top:0; right:0; bottom:0;
+  width:100vw; max-width:440px;  /* <- 100% de viewport, no queda recortado */
   background:linear-gradient(180deg,#0f172a,#0b1220);
   transform:translateX(100%);
-  transition:transform .18s ease-out;
+  transition:transform .22s ease-out;
   display:flex; flex-direction:column;
-  z-index: 5000;
-  pointer-events:none; /* no capta toques cuando está cerrado */
+  z-index:5000; overscroll-behavior:contain; -webkit-overflow-scrolling:touch;
+  pointer-events:none;
 }
 .mobile-panel.open{
   transform:translateX(0);
@@ -418,9 +430,13 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
   padding:.8rem 1rem; border-radius:12px;
   color:#111827; background:linear-gradient(180deg,#fde047,#facc15); border:1px solid #eab308;
 }
-.mp-ghost{
+.mp-wa{
   display:inline-block; text-align:center; font-weight:900;
   padding:.8rem 1rem; border-radius:12px;
-  color:#eaf2ff; background:#0f172a; border:1px solid #233154; text-decoration:none;
+  color:#0a3d21; background:var(--wa); border:1px solid #128C7E; text-decoration:none;
 }
+
+/* misc */
+.container{ width:min(1100px, 100%); margin-inline:auto; padding-inline:14px; }
+.brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
 `;

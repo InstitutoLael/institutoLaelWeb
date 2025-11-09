@@ -12,6 +12,7 @@ export default function Navbar({ onOpenSearch }) {
   const isTouch = useRef(false);
   const closeTimer = useRef(null);
   const dropRef = useRef(null);
+  const dropWrapRef = useRef(null); // ⬅️ NUEVO: wrapper del botón + dropdown
   const firstItemRef = useRef(null);
   const location = useLocation();
 
@@ -73,10 +74,11 @@ export default function Navbar({ onOpenSearch }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onOpenSearch]);
 
+  // ⬇️ Click fuera: ahora acepta clics dentro del <li class="has-drop"> (botón + panel)
   useEffect(() => {
     if (!progOpen) return;
     const onDocDown = (e) => {
-      if (!dropRef.current?.contains(e.target)) setProgOpen(false);
+      if (!dropWrapRef.current?.contains(e.target)) setProgOpen(false);
     };
     document.addEventListener("mousedown", onDocDown);
     return () => document.removeEventListener("mousedown", onDocDown);
@@ -120,6 +122,7 @@ export default function Navbar({ onOpenSearch }) {
             <li role="none"><NavLink to="/" end className={link} role="menuitem">Inicio</NavLink></li>
 
             <li
+              ref={dropWrapRef}                      // ⬅️ wrapper
               className={"has-drop " + (progOpen ? "open" : "")}
               onMouseEnter={openDrop}
               onMouseLeave={closeDrop}
@@ -128,7 +131,7 @@ export default function Navbar({ onOpenSearch }) {
               <button
                 type="button"
                 className="nav-link drop-btn"
-                onClick={() => setProgOpen((v) => !v)}
+                onClick={() => setProgOpen((v) => !v)} // clic abre/cierra sin cerrarse al instante
                 onKeyDown={(e) => e.key === "ArrowDown" && (setProgOpen(true), setKbdOpen(true))}
                 aria-expanded={progOpen}
                 aria-haspopup="true"
@@ -190,11 +193,18 @@ export default function Navbar({ onOpenSearch }) {
             <WaIcon /><span>WhatsApp</span>
           </a>
 
-          <button className="tool-btn" onClick={onOpenSearch} aria-label="Abrir búsqueda (Ctrl/⌘+K)" title="Buscar (Ctrl/⌘+K)">
+          <button
+            type="button"
+            className="tool-btn"
+            onClick={onOpenSearch}
+            aria-label="Abrir búsqueda (Ctrl/⌘+K)"
+            title="Buscar (Ctrl/⌘+K)"
+          >
             <SearchIcon />
           </button>
 
           <button
+            type="button"                                 // ⬅️ evita comportamiento “submit”
             className={"burger " + (mobileOpen ? "on" : "")}
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Abrir menú móvil" aria-expanded={mobileOpen} aria-controls="mobile-panel"
@@ -215,7 +225,7 @@ export default function Navbar({ onOpenSearch }) {
       >
         <div className="mp-head" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
           <div className="mp-title">Menú</div>
-          <button className="mp-close" onClick={closeMobile} aria-label="Cerrar">✕</button>
+          <button type="button" className="mp-close" onClick={closeMobile} aria-label="Cerrar">✕</button>
         </div>
 
         <div className="mp-section">
@@ -296,10 +306,8 @@ const css = `
   --wa:#25D366;
 }
 
-/* Lock body scroll when mobile menu is open */
 html.no-scroll, body.no-scroll { overflow: hidden; }
 
-/* Header */
 .lael-nav{
   position: sticky; top: 0; z-index: 4000;
   backdrop-filter: saturate(120%) blur(10px);
@@ -313,19 +321,16 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 }
 .lael-nav.elev{ box-shadow: 0 10px 30px rgba(2,6,23,.35); }
 
-/* GRID del header: Logo | Nav | Tools */
 .nav-row{
   display:grid; grid-template-columns:auto 1fr auto;
   align-items:center; column-gap:14px; min-height:66px; position:relative;
 }
 
-/* Brand */
 .brand-logo{ height:34px; width:auto; display:block; }
 @media (min-width: 1024px){ .brand-logo{ height:36px; } }
 @media (min-width: 1280px){ .brand-logo{ height:40px; } }
 
-/* Desktop nav */
-.navwrap{ min-width:0; } /* evita empuje de columnas */
+.navwrap{ min-width:0; }
 .nav{
   display:flex; align-items:center; gap:6px; list-style:none; margin:0; padding:0;
   flex-wrap:nowrap; white-space:nowrap; overflow:hidden;
@@ -352,10 +357,9 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 }
 .nav-cta:hover{ filter:brightness(1.05); }
 
-/* Tools */
 .tools{
   display:flex; align-items:center; gap:8px; margin-left:4px;
-  flex-shrink:0; /* nunca se colapsa */
+  flex-shrink:0;
 }
 .tool-btn{
   width:40px; height:40px; border-radius:12px; background:#0f172a;
@@ -363,7 +367,6 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 }
 .tool-btn:hover{ transform:translateY(-1px); }
 
-/* WhatsApp (desktop) */
 .wa-btn{
   display:inline-flex; align-items:center; gap:8px;
   height:40px; padding:0 .9rem; border-radius:12px;
@@ -373,7 +376,6 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 .wa-btn:hover{ filter:brightness(1.04); transform: translateY(-1px); }
 .wa-btn svg{ flex:0 0 auto; }
 
-/* Burger */
 .burger{
   display:none; width:42px; height:42px; border-radius:12px;
   background:#141b2e; border:1px solid #233154; place-items:center;
@@ -386,7 +388,6 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 .burger.on span:nth-child(2){ opacity:0; }
 .burger.on span:nth-child(3){ transform: rotate(-45deg) translate(5px, -5px); }
 
-/* Dropdown */
 .has-drop{ position:relative; }
 .dropdown{
   position:absolute; left:0; top:calc(100% + 10px);
@@ -419,14 +420,12 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 .acc-rose{ border-color:#781a2a; }
 .acc-amber{ border-color:#7a560e; }
 
-/* Desktop densidad extra en pantallas muy anchas */
 @media (min-width:1400px){
   .nav{ gap:8px; }
   .nav-link, .drop-btn{ font-size: .98rem; padding:.48rem .68rem; }
   .nav-cta{ padding:.5rem .8rem; }
 }
 
-/* Mobile */
 @media(max-width:1000px){
   .navwrap{ display:none; }
   .wa-btn{ display:none; }
@@ -434,14 +433,12 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
   .dropdown{ display:none !important; }
 }
 
-/* Backdrop */
 .mp-overlay{
   position:fixed; inset:0; background:rgba(0,0,0,.7);
   opacity:0; transition:.18s; pointer-events:none; z-index:4900;
 }
 .mp-overlay.show{ opacity:1; pointer-events:auto; }
 
-/* Mobile Panel (solid) */
 .mobile-panel{
   position:fixed; inset:0; width:100vw;
   background:linear-gradient(180deg, #0b1220 60%, #111d3a 100%);
@@ -477,7 +474,6 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
   color:#0a3d21; background:var(--wa); border:1px solid #128C7E; text-decoration:none;
 }
 
-/* Container */
 .container{ width:min(1200px, 100%); margin-inline:auto; padding-inline:14px; }
 .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
 `;

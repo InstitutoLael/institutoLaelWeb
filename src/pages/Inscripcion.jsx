@@ -1,11 +1,143 @@
 // src/pages/Inscripcion.jsx
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import SEOHead from "../components/SEOHead.jsx"; // asegúrate de tener este componente
+import SEOHead from "../components/SEOHead.jsx";
 
 const WAPP_INTL = "56964626568";
 const FORM_URL =
   "https://docs.google.com/forms/d/e/1FAIpQLSfDVse7cbhnAOhA2OklnmBvaeKZY4ZDWOmrYFqSfAvV8joVOA/viewform?embedded=true";
 
+/* ===== UI Helpers ===== */
+function Row({ k, v }) {
+  return (
+    <div className="row">
+      <strong>{k}:</strong> <span>{v}</span>
+    </div>
+  );
+}
+
+function Toast({ kind = "ok", msg }) {
+  if (!msg) return null;
+  return (
+    <div className={`toast ${kind === "error" ? "toast--error" : "toast--ok"}`}>
+      {msg}
+    </div>
+  );
+}
+
+/* ===== QuickContact (mini-form + WA/Email) ===== */
+function QuickContact() {
+  const [fields, setFields] = useState({ nombre: "", email: "", programa: "" });
+  const [toast, setToast] = useState({ kind: "ok", msg: "" });
+
+  const set = (k) => (e) => setFields((s) => ({ ...s, [k]: e.target.value }));
+  const need = (x) => x.trim().length > 0;
+  const notify = (kind, msg) => {
+    setToast({ kind, msg });
+    setTimeout(() => setToast({ kind: "ok", msg: "" }), 3200);
+  };
+
+  const openWA = () => {
+    const { nombre, email, programa } = fields;
+    if (!need(nombre) || !need(email) || !need(programa)) {
+      notify("error", "Completa Nombre, Email y Programa para escribir por WhatsApp.");
+      return;
+    }
+    const mensaje = `¡Hola! Me interesa inscribirme en Instituto Lael.
+
+📋 *Mis datos:*
+• Nombre: ${nombre}
+• Email: ${email}
+• Programa de interés: ${programa}
+
+¿Podrían enviarme info sobre metodología, proceso de admisión, costos y fechas?
+¡Gracias!`;
+    const url = `https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(mensaje)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+    notify("ok", "Abriendo WhatsApp…");
+  };
+
+  const openMail = () => {
+    const { nombre, email, programa } = fields;
+    if (!need(nombre) || !need(email) || !need(programa)) {
+      notify("error", "Completa Nombre, Email y Programa para enviar correo.");
+      return;
+    }
+    const subject = `Consulta de admisión — ${programa} — ${nombre}`;
+    const body = `Hola equipo de Instituto Lael,
+
+Quisiera información para inscribirme.
+
+Nombre: ${nombre}
+Email: ${email}
+Programa: ${programa}
+
+Me gustaría saber metodología, costos, fechas y requisitos.
+
+Gracias,
+${nombre}`;
+
+    window.open(
+      `mailto:contacto@institutolael.cl?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+    );
+    notify("ok", "Abriendo cliente de correo…");
+  };
+
+  return (
+    <>
+      <Toast kind={toast.kind} msg={toast.msg} />
+
+      <article className="card form-card" style={{ marginTop: 18 }}>
+        <div className="card__head">
+          <h2 className="h5">Consulta rápida</h2>
+          <p className="tiny subtle">Déjanos tus datos y programa. Respondemos en 24–48 h hábiles.</p>
+        </div>
+
+        <div className="qc-grid">
+          <div className="qc-field">
+            <label className="qc-lb">Nombre completo</label>
+            <input
+              className="qc-in"
+              value={fields.nombre}
+              onChange={set("nombre")}
+              placeholder="Tu nombre"
+              autoComplete="name"
+            />
+          </div>
+          <div className="qc-field">
+            <label className="qc-lb">Email</label>
+            <input
+              className="qc-in"
+              type="email"
+              value={fields.email}
+              onChange={set("email")}
+              placeholder="correo@ejemplo.com"
+              autoComplete="email"
+            />
+          </div>
+          <div className="qc-field">
+            <label className="qc-lb">Programa</label>
+            <select className="qc-in" value={fields.programa} onChange={set("programa")}>
+              <option value="">Selecciona…</option>
+              <option>Preparación PAES Online</option>
+              <option>Idiomas Online</option>
+              <option>Lengua de Señas Chilena (LSCh)</option>
+              <option>Matemáticas Avanzadas</option>
+              <option>Ciencias</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="cta" style={{ marginTop: 10 }}>
+          <button className="btn btn-primary" onClick={openWA}>WhatsApp</button>
+          <button className="btn btn-outline" onClick={openMail}>Enviar correo</button>
+        </div>
+      </article>
+    </>
+  );
+}
+
+/* ===== Página ===== */
 export default function Inscripcion() {
   return (
     <section className="enroll v2">
@@ -28,36 +160,36 @@ export default function Inscripcion() {
           {
             "@context": "https://schema.org",
             "@type": "EducationalOrganization",
-            "name": "Instituto Lael",
-            "url": "https://www.institutolael.cl",
-            "logo": "https://www.institutolael.cl/assets/img/lael/logo.png",
-            "description":
+            name: "Instituto Lael",
+            url: "https://www.institutolael.cl",
+            logo: "https://www.institutolael.cl/assets/img/lael/logo.png",
+            description:
               "Instituto Lael ofrece programas PAES, cursos de idiomas y Lengua de Señas Chilena con enfoque inclusivo y cristiano.",
           },
           {
             "@context": "https://schema.org",
             "@type": "Course",
-            "name": "Preparación PAES e Idiomas 2026 — Instituto Lael",
-            "provider": { "@type": "EducationalOrganization", "name": "Instituto Lael" },
+            name: "Preparación PAES e Idiomas 2026 — Instituto Lael",
+            provider: { "@type": "EducationalOrganization", name: "Instituto Lael" },
           },
           {
             "@context": "https://schema.org",
             "@type": "FAQPage",
-            "mainEntity": [
+            mainEntity: [
               {
                 "@type": "Question",
-                "name": "¿Cuándo comienzan las clases?",
-                "acceptedAnswer": {
+                name: "¿Cuándo comienzan las clases?",
+                acceptedAnswer: {
                   "@type": "Answer",
-                  "text": "Las clases comienzan una vez validada tu inscripción y pago, dentro de 24 a 72 horas hábiles.",
+                  text: "Las clases comienzan una vez validada tu inscripción y pago, dentro de 24 a 72 horas hábiles.",
                 },
               },
               {
                 "@type": "Question",
-                "name": "¿Quedan grabadas las clases?",
-                "acceptedAnswer": {
+                name: "¿Quedan grabadas las clases?",
+                acceptedAnswer: {
                   "@type": "Answer",
-                  "text": "Sí, todas las clases quedan disponibles en el aula virtual (LMS) para repasar cuando quieras.",
+                  text: "Sí, todas las clases quedan disponibles en el aula virtual (LMS) para repasar cuando quieras.",
                 },
               },
             ],
@@ -65,7 +197,7 @@ export default function Inscripcion() {
         ]}
       />
 
-      <style>{css}</style>
+      <style>{css + extraCss}</style>
 
       {/* HERO */}
       <header className="hero">
@@ -75,8 +207,8 @@ export default function Inscripcion() {
             <h1>Reserva tu cupo para el 2026</h1>
             <p className="lead">
               Completa tu inscripción y asegura tu lugar en{" "}
-              <b>PAES, Idiomas o Lengua de Señas Chilena.</b>  
-              Te contactaremos dentro de <b>24–48 h hábiles</b> para confirmar tu matrícula.
+              <b>PAES, Idiomas o Lengua de Señas Chilena.</b> Te contactaremos dentro de{" "}
+              <b>24–48 h hábiles</b> para confirmar tu matrícula.
             </p>
 
             <div className="cta">
@@ -111,6 +243,11 @@ export default function Inscripcion() {
           </div>
         </div>
       </header>
+
+      {/* Consulta rápida */}
+      <div className="container form-first">
+        <QuickContact />
+      </div>
 
       {/* FORMULARIO PRINCIPAL */}
       <div className="container form-first">
@@ -247,16 +384,7 @@ export default function Inscripcion() {
   );
 }
 
-function Row({ k, v }) {
-  return (
-    <div className="row">
-      <strong>{k}:</strong> <span>{v}</span>
-    </div>
-  );
-}
-
-
-/* -------- CSS (versión con más aire y jerarquía) -------- */
+/* ===== CSS base tuyo + extras mínimos ===== */
 const css = `
 :root{
   --bg:#0B1220; --panel:#0C1427; --soft:#0F192F; --bd:#22304D;
@@ -338,7 +466,7 @@ h1{ margin:.5rem 0 .45rem; font-size:clamp(2rem, 3.8vw + .4rem, 2.9rem); letter-
 @media (max-width:640px){ .iframe-wrap{ height:76vh; } }
 .iframe-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
 
-/* Sidebar */
+/* Sidebar / datos */
 .blk{ display:grid; gap:8px; margin:10px 0 14px; }
 .row{ display:flex; gap:8px; flex-wrap:wrap; }
 .row strong{ color:#fff; }
@@ -372,4 +500,28 @@ h1{ margin:.5rem 0 .45rem; font-size:clamp(2rem, 3.8vw + .4rem, 2.9rem); letter-
 
 /* helpers */
 .subtle{ color:var(--muted); }
+`;
+
+const extraCss = `
+/* Toast minimal */
+.toast{
+  position: fixed; right: 18px; top: 18px; z-index: 1050;
+  padding: .7rem .95rem; border-radius: 12px; box-shadow: var(--shadow);
+  font-weight: 900; letter-spacing:.2px; border:1px solid #2b3b61;
+  animation: toastIn .24s ease-out;
+}
+.toast--ok{ background:#0c1f16; color:#86EFAC; }
+.toast--error{ background:#2a1313; color:#FCA5A5; }
+@keyframes toastIn{ from{ transform: translateY(-8px); opacity:0 } to{ transform: translateY(0); opacity:1 } }
+
+/* Quick contact fields */
+.qc-grid{ display:grid; grid-template-columns: 1.2fr 1.2fr 1fr; gap:12px; }
+@media (max-width: 900px){ .qc-grid{ grid-template-columns:1fr; } }
+.qc-field{ display:flex; flex-direction:column; gap:6px; }
+.qc-lb{ font-size:.9rem; color:#cfe0ff; font-weight:900; }
+.qc-in{
+  background:#0f172a; color:#eaf2ff; border:1px solid var(--bd); border-radius:10px;
+  padding:.7rem .8rem;
+}
+.qc-in:focus{ outline:none; border-color:#53D3F3; box-shadow: 0 0 0 3px rgba(83,211,243,.18); }
 `;

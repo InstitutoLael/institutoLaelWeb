@@ -225,11 +225,15 @@ export default function Navbar({ onOpenSearch }) {
           </button>
 
           <button
-            className={"burger " + (mobileOpen ? "on" : "")}
-            onClick={() => setMobileOpen(v => !v)}
-            aria-label="Abrir menú móvil"
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-panel"
+          type="button"                                   // evita submit fantasma
+          className={"burger " + (mobileOpen ? "on" : "")}
+          onClick={() => setMobileOpen(v => !v)}          // click normal
+          onTouchEnd={(e) => { e.preventDefault(); setMobileOpen(v => !v); }} // iOS/Android
+          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setMobileOpen(v => !v); }} // a11y
+          aria-label="Abrir menú móvil"
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-panel"
+            
           >
             <span /><span /><span />
           </button>

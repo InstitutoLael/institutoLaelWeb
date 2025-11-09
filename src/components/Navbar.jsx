@@ -9,20 +9,21 @@ export default function Navbar({ onOpenSearch }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [progOpen, setProgOpen] = useState(false);
   const [kbdOpen, setKbdOpen] = useState(false);
+
   const isTouch = useRef(false);
   const closeTimer = useRef(null);
   const dropRef = useRef(null);
   const firstItemRef = useRef(null);
   const location = useLocation();
 
-  // Detect first touch
+  // Detectar primer toque (desactiva hover en táctiles)
   useEffect(() => {
     const firstTouch = () => { isTouch.current = true; };
     window.addEventListener("touchstart", firstTouch, { once: true, passive: true });
     return () => window.removeEventListener("touchstart", firstTouch);
   }, []);
 
-  // Lock scroll when mobile panel is open
+  // Bloquear scroll al abrir panel móvil
   useEffect(() => {
     const cls = "no-scroll";
     document.documentElement.classList.toggle(cls, mobileOpen);
@@ -33,13 +34,13 @@ export default function Navbar({ onOpenSearch }) {
     };
   }, [mobileOpen]);
 
-  // Close on route change
+  // Cerrar todo al cambiar de ruta
   useEffect(() => {
     setMobileOpen(false);
     setProgOpen(false);
   }, [location.pathname]);
 
-  // Elevation on scroll
+  // Sombra sticky al hacer scroll
   useEffect(() => {
     const header = document.querySelector(".lael-nav");
     const onScroll = () => {
@@ -52,18 +53,18 @@ export default function Navbar({ onOpenSearch }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Hover open/close (desktop)
+  // Hover (desktop) abre/cierra
   const openDrop = () => {
-    if (isTouch.current) return;
+    if (isTouch.current) return; // en táctil, solo click
     clearTimeout(closeTimer.current);
     setProgOpen(true);
   };
-  const scheduleCloseDrop = () => {
+  const closeDrop = () => {
     clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setProgOpen(false), 140);
+    closeTimer.current = setTimeout(() => setProgOpen(false), 120);
   };
 
-  // ESC and Ctrl/⌘+K
+  // ESC y Ctrl/⌘+K
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -79,7 +80,7 @@ export default function Navbar({ onOpenSearch }) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onOpenSearch]);
 
-  // Click outside (solo para cerrar si está abierto)
+  // Clic fuera del dropdown
   useEffect(() => {
     if (!progOpen) return;
     const onDocDown = (e) => {
@@ -89,7 +90,7 @@ export default function Navbar({ onOpenSearch }) {
     return () => document.removeEventListener("mousedown", onDocDown);
   }, [progOpen]);
 
-  // Focus first item when opening with keyboard
+  // Foco al primer ítem si abriste con teclado
   useEffect(() => {
     if (progOpen && kbdOpen) {
       firstItemRef.current?.focus();
@@ -102,7 +103,7 @@ export default function Navbar({ onOpenSearch }) {
     setProgOpen(false);
   };
 
-  // Keyboard nav inside dropdown
+  // Navegación con flechas dentro del dropdown
   const onDropKeyDown = (e) => {
     const items = Array.from(dropRef.current?.querySelectorAll('[role="menuitem"]') || []);
     const i = items.indexOf(document.activeElement);
@@ -118,12 +119,12 @@ export default function Navbar({ onOpenSearch }) {
       <style>{css}</style>
 
       <div className="container nav-row">
-        {/* Brand */}
+        {/* Logo */}
         <Link to="/" className="brand" aria-label="Inicio Instituto Lael">
           <img src={logo} alt="Instituto Lael" className="brand-logo" />
         </Link>
 
-        {/* Desktop Nav */}
+        {/* NAV DESKTOP */}
         <nav className="navwrap" aria-label="Navegación principal">
           <ul className="nav" role="menubar" aria-label="Secciones del sitio">
             <li role="none"><NavLink to="/" end className={link} role="menuitem">Inicio</NavLink></li>
@@ -131,13 +132,13 @@ export default function Navbar({ onOpenSearch }) {
             <li
               className={"has-drop " + (progOpen ? "open" : "")}
               onMouseEnter={openDrop}
-              onMouseLeave={scheduleCloseDrop}
+              onMouseLeave={closeDrop}
               role="none"
             >
               <button
                 type="button"
                 className="nav-link drop-btn"
-                onClick={() => setProgOpen((v) => !v)}
+                onClick={() => setProgOpen(v => !v)}                 // <— CLICK funciona en desktop/táctil
                 onKeyDown={(e) => e.key === "ArrowDown" && (setProgOpen(true), setKbdOpen(true))}
                 aria-expanded={progOpen}
                 aria-haspopup="true"
@@ -153,8 +154,6 @@ export default function Navbar({ onOpenSearch }) {
                 role="menu"
                 ref={dropRef}
                 onKeyDown={onDropKeyDown}
-                onMouseEnter={openDrop}          // mantiene abierto al entrar
-                onMouseLeave={scheduleCloseDrop} // cierra sólo al salir realmente
                 aria-label="Menú Programas"
               >
                 <div className="drop-head">
@@ -163,17 +162,30 @@ export default function Navbar({ onOpenSearch }) {
                 </div>
 
                 <div className="drop-grid">
-                  <DropItem refEl={firstItemRef} to="/paes" title="PAES" kicker="Ingreso a la U" badge="Top elección">
+                  <DropItem
+                    refEl={firstItemRef}
+                    to="/paes"
+                    title="PAES"
+                    kicker="Ingreso a la U"
+                    badge="Top elección"
+                  >
                     Matemáticas, Lenguaje, Ciencias e Historia con ensayos y tutoría.
                   </DropItem>
+
                   <DropItem to="/idiomas" title="Idiomas" kicker="EN · KR" accent="green">
                     Clases en vivo + cápsulas. Conversación y objetivos académicos/laborales.
                   </DropItem>
+
                   <DropItem to="/lsch" title="LSCh" kicker="Lengua de Señas" accent="rose">
                     Módulos + proyecto final. Inclusión práctica y aplicada.
                   </DropItem>
+
                   <DropItem to="/homeschool" title="Homeschool" kicker="Apoyo escolar" accent="amber">
                     Planes flexibles, seguimiento y materiales por niveles.
+                  </DropItem>
+
+                  <DropItem to="/escuelaadultos" title="Escuela de Adultos" kicker="2x2" accent="indigo">
+                    Enseñanza media para adultos con apoyo docente y materiales.
                   </DropItem>
                 </div>
               </div>
@@ -181,7 +193,6 @@ export default function Navbar({ onOpenSearch }) {
 
             <li role="none"><NavLink to="/empresas" className={link} role="menuitem">Empresas</NavLink></li>
             <li role="none"><NavLink to="/nosotros" className={link} role="menuitem">Nosotros</NavLink></li>
-            <li role="none"><NavLink to="/escuelaadultos" className={link} role="menuitem">Escuela Adultos</NavLink></li>
             <li role="none"><NavLink to="/convenios" className={link} role="menuitem">Convenios</NavLink></li>
             <li role="none"><NavLink to="/trabaja" className={link} role="menuitem">Trabaja</NavLink></li>
 
@@ -191,38 +202,55 @@ export default function Navbar({ onOpenSearch }) {
           </ul>
         </nav>
 
-        {/* Tools */}
+        {/* TOOLS */}
         <div className="tools">
           <a
             className="wa-btn"
             href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20quisiera%20informaci%C3%B3n%20sobre%20los%20programas%20LAEL"
-            target="_blank" rel="noreferrer" aria-label="Hablar por WhatsApp" title="Hablar por WhatsApp"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Hablar por WhatsApp"
+            title="Hablar por WhatsApp"
           >
             <WaIcon /><span>WhatsApp</span>
           </a>
 
-          <button className="tool-btn" onClick={onOpenSearch} aria-label="Abrir búsqueda (Ctrl/⌘+K)" title="Buscar (Ctrl/⌘+K)">
+          <button
+            className="tool-btn"
+            onClick={onOpenSearch}
+            aria-label="Abrir búsqueda (Ctrl/⌘+K)"
+            title="Buscar (Ctrl/⌘+K)"
+          >
             <SearchIcon />
           </button>
 
           <button
             className={"burger " + (mobileOpen ? "on" : "")}
-            onClick={() => setMobileOpen((v) => !v)}
-            aria-label="Abrir menú móvil" aria-expanded={mobileOpen} aria-controls="mobile-panel"
+            onClick={() => setMobileOpen(v => !v)}
+            aria-label="Abrir menú móvil"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-panel"
           >
             <span /><span /><span />
           </button>
         </div>
       </div>
 
-      {/* Backdrop */}
-      <div className={"mp-overlay " + (mobileOpen ? "show" : "")} onClick={closeMobile} aria-hidden={!mobileOpen} />
+      {/* Backdrop móvil */}
+      <div
+        className={"mp-overlay " + (mobileOpen ? "show" : "")}
+        onClick={closeMobile}
+        aria-hidden={!mobileOpen}
+      />
 
-      {/* Mobile Panel */}
+      {/* Panel móvil */}
       <aside
         id="mobile-panel"
         className={"mobile-panel " + (mobileOpen ? "open" : "")}
-        aria-hidden={!mobileOpen} aria-label="Menú móvil" role="dialog" aria-modal="true"
+        aria-hidden={!mobileOpen}
+        aria-label="Menú móvil"
+        role="dialog"
+        aria-modal="true"
       >
         <div className="mp-head" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
           <div className="mp-title">Menú</div>
@@ -241,18 +269,25 @@ export default function Navbar({ onOpenSearch }) {
           <Link to="/idiomas" className="mp-link" onClick={closeMobile}>Idiomas</Link>
           <Link to="/lsch" className="mp-link" onClick={closeMobile}>LSCh</Link>
           <Link to="/homeschool" className="mp-link" onClick={closeMobile}>Homeschool</Link>
+          <Link to="/escuelaadultos" className="mp-link" onClick={closeMobile}>Escuela Adultos</Link>
         </div>
 
         <div className="mp-section">
           <div className="mp-kicker">Oportunidades</div>
-          <Link to="/escuelaadultos" className="mp-link" onClick={closeMobile}>Escuela Adultos</Link>
           <Link to="/convenios" className="mp-link" onClick={closeMobile}>Convenios</Link>
           <Link to="/trabaja" className="mp-link" onClick={closeMobile}>Trabaja con nosotros</Link>
         </div>
 
         <div className="mp-actions" style={{ paddingBottom: "env(safe-area-inset-bottom, 12px)" }}>
           <Link to="/inscripcion" className="mp-cta" onClick={closeMobile}>Inscripción</Link>
-          <a className="mp-wa" href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20quisiera%20informaci%C3%B3n%20sobre%20los%20programas%20LAEL" target="_blank" rel="noreferrer">WhatsApp</a>
+          <a
+            className="mp-wa"
+            href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20quisiera%20informaci%C3%B3n%20sobre%20los%20programas%20LAEL"
+            target="_blank"
+            rel="noreferrer"
+          >
+            WhatsApp
+          </a>
         </div>
       </aside>
     </header>
@@ -307,7 +342,7 @@ const css = `
   --wa:#25D366;
 }
 
-/* Lock body scroll when mobile menu is open */
+/* No scroll cuando panel móvil abierto */
 html.no-scroll, body.no-scroll { overflow: hidden; }
 
 /* Header */
@@ -324,7 +359,7 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 }
 .lael-nav.elev{ box-shadow: 0 10px 30px rgba(2,6,23,.35); }
 
-/* GRID header: Logo | Nav | Tools */
+/* GRID: Logo | Nav | Tools */
 .nav-row{
   display:grid; grid-template-columns:auto 1fr auto;
   align-items:center; column-gap:14px; min-height:66px; position:relative;
@@ -335,11 +370,12 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 @media (min-width: 1024px){ .brand-logo{ height:36px; } }
 @media (min-width: 1280px){ .brand-logo{ height:40px; } }
 
-/* Desktop nav */
+/* Nav desktop */
 .navwrap{ min-width:0; }
 .nav{
-  display:flex; align-items:center; gap:6px; list-style:none; margin:0; padding:0;
-  flex-wrap:nowrap; white-space:nowrap; overflow:hidden;
+  display:flex; align-items:center; gap:8px; list-style:none; margin:0; padding:0;
+  flex-wrap:nowrap; white-space:nowrap;
+  overflow:visible; /* ¡IMPORTANTE! permite que el dropdown se vea */
 }
 .nav-link, .nav-cta, .drop-btn{
   background:transparent; border:0; cursor:pointer;
@@ -361,6 +397,7 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
   padding:.45rem .7rem;
   border-radius:12px;
 }
+.nav-cta:hover{ filter:brightness(1.05); }
 
 /* Tools */
 .tools{
@@ -397,19 +434,14 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 .burger.on span:nth-child(3){ transform: rotate(-45deg) translate(5px, -5px); }
 
 /* Dropdown */
-.has-drop{
-  position:relative;
-  /* puente de hover: esta zona cuenta como "dentro" para no cerrar al bajar */
-  padding-bottom:12px;
-}
+.has-drop{ position:relative; }
 .dropdown{
-  position:absolute; left:0; top:100%;       /* sin gap */
-  margin-top:12px;                            /* espacio visual, pero dentro de has-drop */
+  position:absolute; left:0; top:calc(100% + 10px);
   width:min(92vw,900px);
   background:var(--drop-bg); border:1px solid var(--drop-bd); border-radius:14px;
   box-shadow:0 26px 60px rgba(2,6,23,.38);
   opacity:0; transform:translateY(6px); pointer-events:none; transition:.16s;
-  padding:12px; z-index:10000;                /* sobre todo */
+  padding:12px; z-index:4500;
 }
 .has-drop.open .dropdown{ opacity:1; transform:translateY(0); pointer-events:auto; }
 .drop-head{ padding:8px 10px 12px; }
@@ -434,13 +466,6 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 .acc-rose{ border-color:#781a2a; }
 .acc-amber{ border-color:#7a560e; }
 
-/* Extra densidad en pantallas muy anchas */
-@media (min-width:1400px){
-  .nav{ gap:8px; }
-  .nav-link, .drop-btn{ font-size: .98rem; padding:.48rem .68rem; }
-  .nav-cta{ padding:.5rem .8rem; }
-}
-
 /* Mobile */
 @media(max-width:1000px){
   .navwrap{ display:none; }
@@ -456,7 +481,7 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 }
 .mp-overlay.show{ opacity:1; pointer-events:auto; }
 
-/* Mobile Panel (solid) */
+/* Mobile Panel (fondo sólido) */
 .mobile-panel{
   position:fixed; inset:0; width:100vw;
   background:linear-gradient(180deg, #0b1220 60%, #111d3a 100%);
@@ -492,7 +517,7 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
   color:#0a3d21; background:var(--wa); border:1px solid #128C7E; text-decoration:none;
 }
 
-/* Container */
+/* Contenedor */
 .container{ width:min(1200px, 100%); margin-inline:auto; padding-inline:14px; }
 .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
 `;

@@ -487,15 +487,23 @@ html.no-scroll, body.no-scroll { overflow: hidden; }
 
 /* Mobile Panel (fondo sólido) */
 .mobile-panel{
-  position:fixed; inset:0; width:100vw;
+   position:fixed;
+  inset:0;
+  width:100vw;
+  height:100vh; /* ✅ fuerza alto completo */
   background:linear-gradient(180deg, #0b1220 60%, #111d3a 100%);
   transform:translateX(100%);
   transition:transform .25s ease-out, background .3s ease;
-  display:flex; flex-direction:column;
-  z-index:9500; pointer-events:none;
-  overflow-y:auto; -webkit-overflow-scrolling:touch;
+  display:flex;
+  flex-direction:column;
+  z-index:9999; /* ✅ encima de todo el contenido */
+  pointer-events:none;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
-.mobile-panel.open{ transform:translateX(0); pointer-events:auto; }
+.mobile-panel.open{ 
+  transform:translateX(0);
+  pointer-events:auto;
 
 .mp-head{ display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid #22304d; }
 .mp-title{ color:#fff; font-weight:900; }

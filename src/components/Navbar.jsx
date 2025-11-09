@@ -184,7 +184,7 @@ export default function Navbar({ onOpenSearch }) {
                     Planes flexibles, seguimiento y materiales por niveles.
                   </DropItem>
 
-                  <DropItem to="/escuelaadultos" title="Escuela de Adultos" kicker="2x2" accent="indigo">
+                  <DropItem to="/escuelaadultos" title="Escuela de Adultos" kicker="2x1 o 4x1" accent="indigo">
                     Enseñanza media para adultos con apoyo docente y materiales.
                   </DropItem>
                 </div>
@@ -212,7 +212,7 @@ export default function Navbar({ onOpenSearch }) {
             aria-label="Hablar por WhatsApp"
             title="Hablar por WhatsApp"
           >
-            <WaIcon /><span>WhatsApp</span>
+            <WaIcon />
           </a>
 
           <button

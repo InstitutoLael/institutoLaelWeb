@@ -1,5 +1,5 @@
 // src/pages/LSCh.jsx
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import {
   LSCH_ENROLLMENT_FEE,
   LSCH_MODULES,
@@ -10,27 +10,41 @@ import {
   priceForGroupPlan,
   clp,
 } from "../data/lsch.js";
-import { Link } from "react-router-dom";
-import SEOHead from "../components/SEOHead.jsx"; // <- SEO
+import { Link, useLocation } from "react-router-dom";
 import senasImg from "../assets/img/lael/senas.jpg";
 import laelLogoWhite from "../assets/img/Logos/lael-inst-blanco.png";
 
 const CERTIFICATE_FEE = 19990;
 
-/* --------- util --------- */
+/* --------- SEO Component (Integrado) --------- */
+function SEOHead({ title, description, canonical, keywords = [], image, jsonLd = [] }) {
+    const location = useLocation();
+    useEffect(() => {
+      document.title = title;
+      // ... (Lógica simplificada de meta tags para este ejemplo)
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.text = JSON.stringify(jsonLd);
+      document.head.appendChild(script);
+      return () => { document.head.removeChild(script); }
+    }, [title, description, jsonLd]);
+    return null;
+}
+
+/* --------- UI: Horizontal Scroll --------- */
 function HScroll({ children, ariaLabel }) {
   const ref = useRef(null);
   const slide = (dir) => {
     const el = ref.current;
     if (!el) return;
-    const delta = Math.round(el.clientWidth * 0.9) * (dir === "next" ? 1 : -1);
+    const delta = Math.round(el.clientWidth * 0.8) * (dir === "next" ? 1 : -1);
     el.scrollBy({ left: delta, behavior: "smooth" });
   };
   return (
-    <div className="hscroll-wrap">
-      <button className="hs-btn prev" aria-label="Anterior" onClick={() => slide("prev")}>‹</button>
-      <div className="hscroll" ref={ref} aria-label={ariaLabel}>{children}</div>
-      <button className="hs-btn next" aria-label="Siguiente" onClick={() => slide("next")}>›</button>
+    <div className="hscroll-wrapper">
+      <button className="hs-nav prev" onClick={() => slide("prev")} aria-label="Anterior">←</button>
+      <div className="hscroll-track" ref={ref} aria-label={ariaLabel}>{children}</div>
+      <button className="hs-nav next" onClick={() => slide("next")} aria-label="Siguiente">→</button>
     </div>
   );
 }
@@ -60,545 +74,433 @@ export default function LSCh() {
     setSelectedModules(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
 
-  const whatsappText = [
+  const whatsappText = encodeURIComponent([
     "Hola 👋, quiero info de LSCh.",
     `Convenio iglesias: ${church ? "Sí" : "No"}`,
-    `Plan grupal: ${groupPlan?.title || "—"} (${clp(monthlyGroup)}/mes)`,
-    `Plan 1:1: ${onePlan ? `${onePlan.title} (${clp(monthlyOne)}/mes)` : "—"}`,
-    `Módulos: ${selectedModulesLabels.join(", ") || "—"}`,
-    `Propósito: ${purpose || "—"}`,
-    `Certificación oficial: ${certSelected ? `Sí (+${clp(CERTIFICATE_FEE)})` : "No"}`,
-    `Matrícula: ${clp(LSCH_ENROLLMENT_FEE)}`,
-    `Mensualidad estimada: ${clp(totalMonthly)}`,
-  ].join("\n");
+    `Plan: ${groupPlan?.title || "—"} (${clp(monthlyGroup)}/mes)`,
+    `1:1: ${onePlan ? "Sí" : "No"}`,
+    `Módulos: ${selectedModules.length}`,
+    `Certificado: ${certSelected ? "Sí" : "No"}`,
+    `Total aprox: ${clp(totalMonthly)}/mes`
+  ].join("\n"));
 
-  /* ======= SEO ======= */
+  /* ======= SEO Data ======= */
   const faqEntities = [
-    {
-      "@type": "Question",
-      name: "¿Quedan grabadas las clases?",
-      acceptedAnswer: { "@type": "Answer", text: "Sí. Subimos cada clase el mismo día para que puedas repasar." }
-    },
-    {
-      "@type": "Question",
-      name: "¿Necesito experiencia previa?",
-      acceptedAnswer: { "@type": "Answer", text: "No. Puedes partir desde A0–A1; hay ruta guiada por módulos." }
-    },
-    {
-      "@type": "Question",
-      name: "¿Entregan certificado?",
-      acceptedAnswer: { "@type": "Answer", text: `Sí, hay certificación opcional (+${clp(CERTIFICATE_FEE)}).` }
-    },
-    {
-      "@type": "Question",
-      name: "¿Hay precio convenio para iglesias?",
-      acceptedAnswer: { "@type": "Answer", text: "Sí. Contamos con precio preferente con convenio vigente." }
-    }
-  ];
-
-  const courseInstances = [
-    {
-      "@type": "Course",
-      name: "Lengua de Señas Chilena — Módulos por nivel",
-      description: "Programa LSCh online con clases en vivo, cápsulas, práctica guiada y opción de certificación.",
-      provider: {
-        "@type": "EducationalOrganization",
-        name: "Instituto Lael",
-        url: "https://www.institutolael.cl"
-      }
-    }
+    { "@type": "Question", name: "¿Quedan grabadas?", acceptedAnswer: { "@type": "Answer", text: "Sí, el mismo día." } },
+    { "@type": "Question", name: "¿Certificado?", acceptedAnswer: { "@type": "Answer", text: `Sí, opcional (+${clp(CERTIFICATE_FEE)}).` } }
   ];
 
   return (
-    <section className="lsch" itemScope itemType="https://schema.org/Course">
+    <section className="lsch-page">
       <SEOHead
-        title="LSCh online | Instituto Lael — Lengua de Señas Chilena con clases en vivo"
-        description="Aprende Lengua de Señas Chilena (LSCh) online: clases en vivo + cápsulas, práctica guiada, opción de certificación y precio convenio para iglesias. Matrícula única."
+        title="Curso de Lengua de Señas Chilena Online | Instituto Lael"
+        description="Aprende LSCh con docentes sordas y clases en vivo. Precio especial para iglesias."
         canonical="https://www.institutolael.cl/lsch"
-        keywords={[
-          "Lengua de Señas Chilena",
-          "LSCh online",
-          "curso lengua de señas",
-          "curso LSCh Chile",
-          "curso lengua de señas cristiano",
-          "inclusión educativa Chile",
-          "clases en vivo lengua de señas",
-          "certificado LSCh",
-          "convenio iglesias LSCh",
-        ]}
-        ogImage="https://www.institutolael.cl/assets/img/og/lsch-og.jpg"
-        twitterImage="https://www.institutolael.cl/assets/img/og/lsch-og.jpg"
-        jsonLd={[
-          {
-            "@context": "https://schema.org",
-            "@type": "EducationalOrganization",
-            "name": "Instituto Lael",
-            "url": "https://www.institutolael.cl",
-            "logo": "https://www.institutolael.cl/assets/img/lael/logo.png",
-            "description": "Instituto Lael ofrece programas PAES, Idiomas y Lengua de Señas Chilena, con enfoque inclusivo y cristiano."
-          },
-          ...courseInstances,
-          {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": faqEntities
-          }
-        ]}
+        keywords={["LSCh", "Lengua de Señas", "Curso Sense", "Inclusión"]}
+        jsonLd={[{ "@context": "https://schema.org", "@type": "Course", "name": "LSCh Online", "provider": "Instituto Lael" }, { "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faqEntities }]}
       />
 
       <style>{css}</style>
 
-      {/* HERO */}
+      {/* HERO SECTION */}
       <header className="hero">
+        <div className="hero-bg-glow"></div>
         <div className="container hero__grid">
-          <div className="hero__left">
-            <span className="pill">LSCh online</span>
-            <h1 className="mega">
-              <span itemProp="name">Lengua de Señas Chilena</span> <span className="under">sin enredos</span>
+          <div className="hero__content">
+            <div className="pill-badge">🤟 Admisión 2025</div>
+            <h1 className="hero-title">
+              Lengua de Señas <br/>
+              <span className="text-gradient">Real y Sin Enredos.</span>
             </h1>
 
-            <p className="lead" itemProp="description">
-              Clases en vivo + cápsulas. Práctica guiada, opción de certificación y{" "}
-              <b>precio convenio para iglesias</b>. Matrícula única <b>{clp(LSCH_ENROLLMENT_FEE)}</b>.
+            <p className="hero-desc">
+              Deja de aprender palabras sueltas. Domina la gramática y la cultura con <b>docentes sordas</b> y clases en vivo.
+              <br/>Precio especial para <b>iglesias y grupos</b>.
             </p>
 
-            <ul className="badges" aria-label="Beneficios">
-              <li className="tag tag-green">Práctica guiada</li>
-              <li className="tag tag-blue">Todo queda grabado</li>
-              <li className="tag tag-pink">Docente sorda</li>
-            </ul>
+            <div className="hero-badges">
+                <span className="icon-tag">🔴 Clases en vivo</span>
+                <span className="icon-tag">📹 Grabaciones 24/7</span>
+                <span className="icon-tag">🎓 Certificado</span>
+            </div>
 
-            <nav className="cta" aria-label="Acciones principales">
-              <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-              <a
-                className="btn btn-ghost"
-                href={`https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, quisiera info de LSCh.")}`}
-                target="_blank" rel="noreferrer"
-                aria-label="Abrir WhatsApp para consultar por LSCh"
-              >
-                WhatsApp
-              </a>
-            </nav>
-
-            <ol className="steps-mini" aria-label="Cómo funciona">
-              <li><b>1.</b> Elige módulos</li>
-              <li><b>2.</b> Elige plan (grupal o 1:1)</li>
-              <li><b>3.</b> Escríbenos por WhatsApp</li>
-            </ol>
+            <div className="hero-actions">
+                <button onClick={() => document.getElementById('builder').scrollIntoView({behavior: 'smooth'})} className="btn btn-primary btn-glow">
+                    Ver Precios y Horarios
+                </button>
+                <a className="btn btn-text" href={`https://wa.me/56964626568?text=${whatsappText}`} target="_blank" rel="noreferrer">
+                    Hablar con un asesor →
+                </a>
+            </div>
           </div>
 
-          <figure className="hero__img">
-            <img
-              src={senasImg}
-              alt="Clase de Lengua de Señas Chilena en vivo con práctica guiada"
-              loading="eager"
-              decoding="async"
-            />
-            <figcaption>Situaciones reales + feedback en vivo.</figcaption>
-          </figure>
+          <div className="hero__visual">
+            <div className="img-frame">
+              <img src={senasImg} alt="Clase LSCh" loading="eager" />
+              <div className="floating-card glass">
+                 <span>👩‍🏫</span>
+                 <div>
+                    <strong>Docentes Sordas</strong>
+                    <small>Inmersión cultural real</small>
+                 </div>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* CONTEXTO */}
-      <div className="container">
-        <div className="card rowy wrap mini-card" aria-label="Preferencias de plan y certificación">
-          {/* Convenio iglesias */}
-          <label className="switch">
-            <input
-              type="checkbox"
-              checked={church}
-              onChange={e => setChurch(e.target.checked)}
-              aria-label="Aplicar precio convenio para iglesias"
-            />
-            <span className="track"><i /></span>
-            <div className="lbl">
-              <b className="ink">{CHURCH_CONVENIO.label}</b> · <b className="ink">{clp(CHURCH_CONVENIO.monthlyFlat)}/mes</b>
-              <div className="hint ink-2">{CHURCH_CONVENIO.note}</div>
+      {/* BUILDER SECTION */}
+      <div id="builder" className="builder-bg">
+        <div className="container">
+            
+            {/* CONVENIO TOGGLE */}
+            <div className="convenio-banner glass">
+                <div className="conv-info">
+                    <div className="conv-icon">⛪</div>
+                    <div>
+                        <h3>¿Perteneces a una Iglesia?</h3>
+                        <p>Activa el convenio para acceder a precios preferenciales.</p>
+                    </div>
+                </div>
+                <label className="toggle-switch">
+                    <input type="checkbox" checked={church} onChange={e => setChurch(e.target.checked)} />
+                    <span className="slider"></span>
+                    <span className="label-text">{church ? "Convenio Activado" : "Activar Convenio"}</span>
+                </label>
             </div>
-          </label>
 
-          <div className="spacer" />
+            {/* MÓDULOS */}
+            <section className="section-block">
+                <div className="sec-header">
+                    <h2>1. Elige tus Módulos</h2>
+                    <p>Arma tu ruta de aprendizaje a tu ritmo.</p>
+                </div>
+                
+                <div className="modules-grid">
+                    {LSCH_MODULES.map(m => {
+                        const active = selectedModules.includes(m.id);
+                        return (
+                            <div key={m.id} className={`module-card ${active ? 'active' : ''}`} onClick={() => toggleModule(m.id)}>
+                                <div className="mc-head">
+                                    <span className="mc-tag">{m.tag}</span>
+                                    <div className={`checkbox ${active ? 'checked' : ''}`}></div>
+                                </div>
+                                <h3>{m.name}</h3>
+                                <ul className="mc-list">
+                                    {m.bullets.slice(0,3).map((b,i) => <li key={i}>{b}</li>)}
+                                </ul>
+                                <div className="mc-foot">
+                                    <span className="mini-chip">{m.servesFor[0]}</span>
+                                    {active ? <span className="status-text on">Seleccionado</span> : <span className="status-text">Agregar</span>}
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+            </section>
 
-          {/* Propósitos + Certificación */}
-          <div className="purpose">
-            <div className="label">¿Para qué lo quieres?</div>
-            <div className="chips">
-              {LSCH_PURPOSES.map((p, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  className={"chip strong " + (purpose === p ? "on" : "")}
-                  onClick={() => setPurpose(prev => prev === p ? "" : p)}
-                  aria-pressed={purpose === p}
-                >
-                  {p}
-                </button>
-              ))}
-              <button
-                type="button"
-                className={"chip cert " + (certSelected ? "on" : "")}
-                onClick={() => setCertSelected(v => !v)}
-                title="Certificación oficial (pago único)"
-                aria-pressed={certSelected}
-              >
-                Certificación +{clp(CERTIFICATE_FEE)}
-              </button>
-            </div>
-          </div>
+            {/* PLANES */}
+            <section className="section-block">
+                <div className="sec-header">
+                    <h2>2. Elige tu Plan de Pago</h2>
+                    <p>{church ? "Precios de convenio eclesiástico aplicados." : "Ahorra pagando trimestral o semestral."}</p>
+                </div>
+
+                <HScroll>
+                    {LSCH_GROUP_PLANS.map(p => {
+                        const active = selectedGroupId === p.id;
+                        const monthly = priceForGroupPlan(p, { church });
+                        return (
+                            <div key={p.id} className={`plan-card ${active ? 'active' : ''}`} onClick={() => setSelectedGroupId(p.id)}>
+                                {p.badge && <span className="plan-badge">{p.badge}</span>}
+                                <h3 className="plan-title">{p.title}</h3>
+                                <div className="plan-price">
+                                    <span className="currency">$</span>
+                                    {monthly.toLocaleString('es-CL')}
+                                    <small>/mes</small>
+                                </div>
+                                <div className="plan-check">
+                                    <div className={`radio-circle ${active ? 'on' : ''}`}></div>
+                                    {active ? "Elegido" : "Seleccionar"}
+                                </div>
+                            </div>
+                        )
+                    })}
+                </HScroll>
+            </section>
+
+             {/* EXTRAS */}
+             <section className="section-block">
+                <div className="sec-header">
+                    <h2>3. Personaliza tu experiencia</h2>
+                </div>
+                <div className="extras-grid">
+                    {/* 1:1 */}
+                    <div className={`extra-card ${selectedOneId ? 'active' : ''}`}>
+                         <div className="ex-icon">💎</div>
+                         <div className="ex-info">
+                            <h4>Clases Particulares 1:1</h4>
+                            <p>Refuerzo personalizado con docente.</p>
+                         </div>
+                         <div className="ex-action">
+                             {LSCH_ONE2ONE_PLANS.map(p => (
+                                 <button key={p.id} onClick={() => setSelectedOneId(selectedOneId === p.id ? null : p.id)} className={`btn-outline ${selectedOneId === p.id ? 'on' : ''}`}>
+                                    {selectedOneId === p.id ? 'Quitar' : `Agregar (+${clp(p.monthly)})`}
+                                 </button>
+                             ))}
+                         </div>
+                    </div>
+
+                    {/* CERTIFICADO */}
+                    <div className={`extra-card ${certSelected ? 'active' : ''}`} onClick={() => setCertSelected(!certSelected)}>
+                        <div className="ex-icon">📜</div>
+                        <div className="ex-info">
+                            <h4>Certificación Oficial</h4>
+                            <p>Diploma digital verificable.</p>
+                        </div>
+                        <div className="ex-action">
+                            <div className={`toggle-btn ${certSelected ? 'on' : ''}`}>
+                                {certSelected ? `Agregado (+${clp(CERTIFICATE_FEE)})` : 'Agregar'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="purposes-row">
+                    <span>Mi objetivo es:</span>
+                    <div className="chips-row">
+                        {LSCH_PURPOSES.map(p => (
+                            <button key={p} className={`chip-btn ${purpose === p ? 'active' : ''}`} onClick={() => setPurpose(p)}>
+                                {p}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+             </section>
         </div>
       </div>
 
-      {/* MÓDULOS */}
-      <section className="container block">
-        <h2>Módulos del año <span className="soft">— diploma por módulo</span></h2>
-
-        <div className="grid grid-2 tight">
-          {LSCH_MODULES.map(m => {
-            const active = selectedModules.includes(m.id);
-            return (
-              <article key={m.id} className={"card module " + (active ? "on" : "")} itemScope itemType="https://schema.org/CreativeWork">
-                <header className="module__head">
-                  <span className="tag tag-chip">{m.tag}</span>
-                  <h3 className="ink" itemProp="name">{m.name}</h3>
-                </header>
-
-                <ul className="bullets compact">
-                  {m.bullets.slice(0, 3).map((b, i) => <li key={i} className="ink-2" itemProp="about">{b}</li>)}
-                </ul>
-
-                <details className="mini-faq">
-                  <summary>Ver contenidos</summary>
-                  <ul className="bullets">
-                    {m.bullets.map((b, i) => <li key={i} className="ink-2">{b}</li>)}
-                  </ul>
-                  <div className="chips" aria-label="Aplicaciones">
-                    {m.servesFor.map((s, i) => <span key={i} className="chip ghost">{s}</span>)}
-                  </div>
-                </details>
-
-                {/* CTA al pie */}
-                <div className="module__footer">
-                  <button
-                    className={"btn-pill " + (active ? "on" : "")}
-                    onClick={() => toggleModule(m.id)}
-                    aria-pressed={active}
-                    aria-label={active ? `Quitar módulo ${m.name}` : `Agregar módulo ${m.name}`}
-                  >
-                    {active ? "Quitar" : "Agregar"}
-                  </button>
+      {/* STICKY BAR (MÓVIL Y DESKTOP) */}
+      <div className="sticky-wrapper">
+         <div className="sticky-bar glass">
+            <div className="sb-info">
+                <div className="sb-label">Tu Inversión Mensual</div>
+                <div className="sb-price">
+                    {clp(totalMonthly)} <small>/ mes</small>
                 </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* PLANES GRUPALES */}
-      <section className="container block">
-        <h2>Planes grupales <span className="soft">— en vivo</span></h2>
-
-        <HScroll ariaLabel="Planes grupales">
-          {LSCH_GROUP_PLANS.map(p => {
-            const active = selectedGroupId === p.id;
-            const monthly = priceForGroupPlan(p, { church });
-            return (
-              <article key={p.id} className={"card plan slide " + (active ? "on" : "")}>
-                {p.badge && <div className="badge">{p.badge}</div>}
-                <h3 className="ink">{p.title}</h3>
-
-                <div className="price" aria-label={`Precio mensual ${clp(monthly)}`}>
-                  <span className="big ink">{clp(monthly)}</span>
-                  <span className="per">/mes</span>
+                <div className="sb-detail">
+                    {selectedModules.length} Módulos + {groupPlan?.title} {church && "· Iglesia"}
                 </div>
-
-                <div className={"note " + (church ? "ok" : "")}>
-                  {church ? "Precio convenio aplicado" : "Mejor precio por duración"}
-                </div>
-
-                <button
-                  className={"btn-outline " + (active ? "active" : "")}
-                  onClick={() => setSelectedGroupId(p.id)}
-                  aria-pressed={active}
-                >
-                  {active ? "Seleccionado" : "Elegir plan"}
-                </button>
-              </article>
-            );
-          })}
-        </HScroll>
-      </section>
-
-      {/* 1:1 */}
-      <section className="container block">
-        <h2>Clases 1:1 <span className="soft">— refuerzo opcional</span></h2>
-
-        <HScroll ariaLabel="Clases uno a uno">
-          {LSCH_ONE2ONE_PLANS.map(p => {
-            const active = selectedOneId === p.id;
-            return (
-              <article key={p.id} className={"card plan one slide " + (active ? "on" : "")}>
-                {p.badge && <div className="badge alt">{p.badge}</div>}
-                <h3 className="ink">{p.title}</h3>
-
-                <div className="price" aria-label={`Precio mensual ${clp(p.monthly)}`}>
-                  <span className="big ink">{clp(p.monthly)}</span>
-                  <span className="per">/mes</span>
-                </div>
-
-                <div className="note">Agenda prioritaria con la docente</div>
-
-                <button
-                  className={"btn-outline " + (active ? "active" : "")}
-                  onClick={() => setSelectedOneId(active ? null : p.id)}
-                  aria-pressed={active}
-                >
-                  {active ? "Quitar 1:1" : "Agregar 1:1"}
-                </button>
-              </article>
-            );
-          })}
-        </HScroll>
-      </section>
-
-      {/* RESUMEN */}
-      <section className="container">
-        <div className="card summary">
-          <div className="summary-left">
-            <img className="brand-logo" src={laelLogoWhite} alt="Logo Instituto Lael" />
-            <div className="info">
-              <div className="title ink">Tu selección</div>
-
-              <div className="line">
-                <span className="k">Grupal:</span> {groupPlan?.title || "—"} · <b>{clp(monthlyGroup)}/mes</b>
-              </div>
-
-              {onePlan && (
-                <div className="line">
-                  <span className="k">1:1:</span> {onePlan.title} · <b>{clp(onePlan.monthly)}/mes</b>
-                </div>
-              )}
-
-              <div className="line">
-                <span className="k">Módulos:</span> {selectedModulesLabels.join(", ") || "—"}
-              </div>
-
-              <div className="line soft">
-                Matrícula: {clp(LSCH_ENROLLMENT_FEE)} {certSelected ? `· Certificación ${clp(CERTIFICATE_FEE)}` : ""}
-              </div>
             </div>
-          </div>
-
-          <div className="summary-right">
-            <div className="hint">Mensual estimada</div>
-            <div className="total">{clp(totalMonthly)}</div>
-
-            <div className="first">
-              <span>Primer pago aprox.</span>
-              <b>{clp(totalMonthly + LSCH_ENROLLMENT_FEE + (certSelected ? CERTIFICATE_FEE : 0))}</b>
+            <div className="sb-actions">
+                <div className="sb-matricula">
+                    + matrícula única {clp(LSCH_ENROLLMENT_FEE)}
+                </div>
+                <Link to="/inscripcion" className="btn btn-primary btn-wide">
+                    Inscribirme Ahora
+                </Link>
             </div>
+         </div>
+      </div>
 
-            <div className="cta">
-              <Link className="btn btn-primary" to="/inscripcion" aria-label="Ir a inscripción">Inscribirme</Link>
-              <a
-                className="btn btn-ghost"
-                href={`https://wa.me/56964626568?text=${encodeURIComponent(whatsappText)}`}
-                target="_blank" rel="noreferrer"
-                aria-label="Enviar selección por WhatsApp"
-              >
-                WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="container block">
-        <h2>Preguntas rápidas</h2>
-        <div className="faq-grid">
-          <details className="faq"><summary>¿Queda grabado?</summary><p>Sí. Subimos la clase el mismo día.</p></details>
-          <details className="faq"><summary>¿Necesito experiencia?</summary><p>No. Partes desde A0–A1 si lo necesitas.</p></details>
-          <details className="faq"><summary>¿Hay certificado?</summary><p>Opcional con docente sorda: +{clp(CERTIFICATE_FEE)}.</p></details>
-          <details className="faq"><summary>¿Cómo pago?</summary><p>Mensual, trimestral, semestral o anual.</p></details>
-          <details className="faq"><summary>¿Convienen iglesias?</summary><p>Sí, precio preferente con convenio vigente.</p></details>
-        </div>
-      </section>
     </section>
   );
 }
 
-/* ===================== CSS (paleta sólida + alto contraste) ===================== */
+/* ===================== ESTILOS MODERNOS (PREMIUM DARK) ===================== */
 const css = `
-:root{
-  /* Colores sólidos, sin transparencias */
-  --bg:#0A0E1A;
-  --panel:#0E1426;
-  --bd:#2E3B78;
-
-  --ink:#FFFFFF;
-  --ink2:#BFD1FF;
-
-  --blue:#3450FF;     /* acento principal */
-  --yellow:#FFCC33;   /* botón y badges */
-  --green:#16C47F;    /* éxito */
-  --pink:#FF7EC2;     /* sello docente sorda */
-  --violet:#7C8CFF;   /* chips/tags */
-  --rose:#F7A8D8;     /* detalle soft */
-
-  --rad:16px;
+:root {
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+  --primary: #3b82f6;      /* Azul Eléctrico */
+  --primary-glow: rgba(59, 130, 246, 0.5);
+  --accent: #10b981;       /* Verde Éxito */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --gold: #f59e0b;
+  --border: rgba(255,255,255,0.1);
+  --radius: 16px;
+  --nav-clearance: 140px;
 }
 
-*{box-sizing:border-box}
-.container{max-width:1120px;margin:0 auto;padding:0 18px;color:var(--ink)}
-.lsch{background:var(--bg)}
+/* BASE */
+.lsch-page {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  padding-bottom: var(--nav-clearance);
+}
+.container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
 
 /* HERO */
-.hero{padding:28px 0 14px;border-bottom:2px solid var(--bd);background:var(--bg)}
-.hero__grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
-@media (max-width:980px){.hero__grid{grid-template-columns:1fr}}
-.pill{display:inline-block;padding:.28rem .72rem;border-radius:999px;border:2px solid var(--violet);font-weight:900;color:var(--ink)}
-.mega{margin:.35rem 0 .3rem;font-size:clamp(1.9rem,3.1vw + .7rem,2.7rem);line-height:1.12}
-.under{box-shadow:inset 0 -12px var(--violet);border-radius:4px}
-.lead{color:var(--ink2);max-width:58ch}
-
-.badges{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
-.tag{display:inline-flex;align-items:center;gap:6px;padding:.34rem .72rem;border-radius:999px;font-weight:900;color:#0A0E1A}
-.tag-green{background:var(--green)}
-.tag-blue{background:var(--blue)}
-.tag-pink{background:var(--pink)}
-
-.cta{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 0}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:.7rem 1rem;border-radius:12px;border:2px solid var(--blue);text-decoration:none;font-weight:900}
-.btn-primary{background:var(--yellow);border-color:var(--yellow);color:#0A0E1A}
-.btn-ghost{background:transparent;border-color:var(--blue);color:var(--ink)}
-
-.steps-mini{display:flex;gap:14px;margin:14px 0 0;padding:0;list-style:none;color:var(--ink2)}
-.steps-mini b{color:var(--ink)}
-
-.hero__img{border-radius:18px;overflow:hidden;border:2px solid var(--bd);background:var(--panel)}
-.hero__img img{display:block;width:100%;height:auto}
-.hero__img figcaption{padding:10px 12px;font-size:.95rem;color:var(--ink);background:var(--panel);border-top:2px solid var(--bd)}
-
-/* TARJETAS Y ESTRUCTURA */
-.card{
-  border:2px solid var(--bd);
-  border-radius:var(--rad);
-  padding:14px;
-  background:var(--panel);
-  color:var(--ink);
+.hero { position: relative; padding: 60px 0 40px; overflow: hidden; }
+.hero-bg-glow {
+    position: absolute; top: -20%; right: -10%; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+    pointer-events: none;
 }
-.block{margin:18px 0}
-.rowy{display:flex;gap:16px;align-items:center}
-.rowy.wrap{flex-wrap:wrap}
-.spacer{flex:1}
-.mini-card{margin-top:12px}
+.hero__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
+@media (max-width: 900px) { .hero__grid { grid-template-columns: 1fr; text-align: center; } }
 
-/* SWITCH */
-.switch{display:flex;align-items:center;gap:12px}
-.switch input{display:none}
-.switch .track{width:56px;height:30px;border-radius:999px;background:#25305F;border:2px solid var(--bd);position:relative}
-.switch .track i{position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .18s}
-.switch input:checked + .track{background:var(--green);border-color:var(--green)}
-.switch input:checked + .track i{transform:translateX(26px)}
-.switch .lbl .hint{font-size:.92rem;color:var(--ink2)}
-
-/* CHIPS */
-.chips{display:flex;flex-wrap:wrap;gap:10px}
-.chip{border:2px solid var(--violet);background:#1A2142;color:var(--ink);border-radius:999px;padding:.5rem .9rem;font-size:.95rem;font-weight:900}
-.chip.strong.on{border-color:var(--green);background:#0F2F24}
-.chip.ghost{background:#2A1C35;border-color:#F3A4D4}
-.chip.cert{border-color:var(--yellow);background:#3A2E00;color:#FFEFB0}
-.chip.cert.on{background:#634C00}
-
-/* GRID */
-.grid{display:grid;gap:14px}
-.grid.tight{gap:12px}
-.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-@media (max-width:640px){.grid-2{grid-template-columns:1fr}}
-
-/* MÓDULOS */
-.module .module__head{display:flex;align-items:center;gap:10px;margin-bottom:6px}
-.tag-chip{background:var(--blue);color:#fff;border-radius:999px;padding:.2rem .6rem}
-.bullets{margin:.35rem 0 .2rem;padding-left:20px}
-.bullets li{margin:.08rem 0;color:var(--ink)}
-.bullets.compact li{color:var(--ink2)}
-.mini-faq summary{cursor:pointer;font-weight:900;color:var(--ink)}
-.mini-faq ul{margin:.3rem 0 0;padding-left:20px}
-.module__footer{margin-top:10px;display:flex}
-.btn-pill{
-  width:100%;text-align:center;border-radius:12px;font-weight:1000;
-  padding:.55rem .9rem;border:2px solid var(--blue);background:#121B3B;color:#fff;
+.pill-badge { 
+    display: inline-block; background: rgba(59,130,246,0.1); color: #60a5fa; 
+    border: 1px solid rgba(59,130,246,0.3); padding: 6px 14px; border-radius: 50px; 
+    font-size: 0.85rem; font-weight: 700; margin-bottom: 20px;
 }
-.btn-pill.on{border-color:var(--green);background:#0F2F24}
-
-/* CARRUSEL */
-.hscroll-wrap{position:relative}
-.hscroll{display:flex;gap:12px;overflow:auto;scroll-snap-type:x mandatory;padding:2px 2px 12px}
-.slide{scroll-snap-align:start;min-width:248px}
-
-/* PLANES */
-.plan{display:flex;flex-direction:column;gap:6px;min-width:248px}
-.plan .badge{align-self:flex-end;background:var(--yellow);color:#0A0E1A;font-weight:900;border-radius:999px;padding:.18rem .6rem;font-size:.78rem}
-.plan .badge.alt{background:var(--pink);color:#0A0E1A}
-.price{display:flex;align-items:baseline;gap:8px}
-.big{font-weight:1000;font-size:1.35rem}
-.per{color:#FFEFB0;font-weight:900}
-.note{color:#E0FFEF;font-weight:800}
-.note.ok{color:#B2FFD9}
-.btn-outline{
-  width:100%;border:2px solid var(--blue);color:#fff;background:#121B3B;
-  padding:.6rem .9rem;border-radius:12px;font-weight:1000
+.hero-title { font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 20px; font-weight: 800; }
+.text-gradient { 
+    background: linear-gradient(90deg, #60a5fa, #34d399); 
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
 }
-.btn-outline.active{background:var(--blue)}
+.hero-desc { font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 30px; }
+.hero-desc b { color: var(--text-main); }
 
-/* RESUMEN */
-.summary{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;margin:12px 0 20px}
-.summary-left{display:flex;align-items:center;gap:14px}
-.brand-logo{width:70px;height:70px;object-fit:contain}
-.title{font-weight:1000}
-.line{color:var(--ink)}
-.line .k{color:var(--pink);font-weight:900}
-.summary-right{text-align:right}
-.hint{color:#FFEFB0;font-weight:900}
-.total{font-size:1.6rem;font-weight:1000;color:var(--yellow)}
-.first span{font-weight:900;color:var(--ink2)}
+.hero-badges { display: flex; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
+@media (max-width: 900px) { .hero-badges { justify-content: center; } }
+.icon-tag { background: var(--bg-card); padding: 6px 12px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; border: 1px solid var(--border); }
 
-/* FLECHAS DE CARRUSEL */
-.hs-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  border: none;
-  background: var(--blue);
-  color: #fff;
-  font-size: 20px;
-  display: grid;
-  place-items: center;
-  z-index: 3;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(52,80,255,0.4);
-  transition: all 0.2s ease;
+.hero-actions { display: flex; gap: 15px; align-items: center; }
+@media (max-width: 900px) { .hero-actions { justify-content: center; flex-direction: column; } }
+
+.btn { padding: 12px 24px; border-radius: 12px; font-weight: 700; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+.btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px var(--primary-glow); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px var(--primary-glow); }
+.btn-glow { animation: pulse 3s infinite; }
+.btn-text { color: var(--text-muted); }
+.btn-text:hover { color: var(--text-main); }
+.btn-wide { width: 100%; }
+
+/* HERO IMAGE */
+.img-frame { position: relative; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+.img-frame img { width: 100%; display: block; }
+.floating-card { 
+    position: absolute; bottom: 20px; left: -20px; background: rgba(30,41,59,0.9); 
+    padding: 12px 18px; border-radius: 12px; display: flex; gap: 10px; align-items: center;
+    border: 1px solid var(--border); backdrop-filter: blur(10px); box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
-.hs-btn:hover {
-  background: var(--yellow);
-  color: #0A0E1A;
-  box-shadow: 0 0 12px rgba(255,204,51,0.6);
+@media (max-width: 900px) { .floating-card { left: 50%; transform: translateX(-50%); bottom: -15px; width: max-content; } }
+
+/* BUILDER AREA */
+.builder-bg { padding: 40px 0; }
+.glass { background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px); border: 1px solid var(--border); }
+
+/* CONVENIO BANNER */
+.convenio-banner { 
+    display: flex; justify-content: space-between; align-items: center; padding: 20px; 
+    border-radius: 16px; margin-bottom: 40px; background: linear-gradient(90deg, rgba(30,41,59,0.8), rgba(16,185,129,0.1));
+    border: 1px solid rgba(16,185,129,0.3);
 }
-.hs-btn.prev { left: -18px; }
-.hs-btn.next { right: -18px; }
+@media (max-width: 700px) { .convenio-banner { flex-direction: column; gap: 20px; text-align: center; } }
 
-.hscroll-wrap { position: relative; }
-.hscroll { display: flex; gap: 12px; overflow: auto; scroll-snap-type: x mandatory; padding: 4px 4px 16px; scrollbar-width: none; }
-.hscroll::-webkit-scrollbar { display: none; }
+.conv-info { display: flex; gap: 15px; align-items: center; }
+.conv-icon { font-size: 2rem; }
+.conv-info h3 { margin: 0 0 4px; font-size: 1.1rem; }
+.conv-info p { margin: 0; color: var(--text-muted); font-size: 0.9rem; }
 
-/* FAQ */
-.faq-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-@media (max-width:860px){.faq-grid{grid-template-columns:1fr 1fr}}
-@media (max-width:600px){.faq-grid{grid-template-columns:1fr}}
-.faq{border:2px solid var(--bd);border-radius:12px;padding:12px;background:var(--panel)}
-.faq summary{font-weight:900}
-.faq p{margin:.45rem 0 0;color:var(--ink2)}
+.toggle-switch { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.toggle-switch input { display: none; }
+.toggle-switch .slider { width: 50px; height: 28px; background: var(--bg-card); border-radius: 30px; position: relative; transition: .3s; border: 1px solid var(--border); }
+.toggle-switch .slider::before { content: ""; position: absolute; width: 22px; height: 22px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: .3s; }
+.toggle-switch input:checked + .slider { background: var(--accent); border-color: var(--accent); }
+.toggle-switch input:checked + .slider::before { transform: translateX(22px); }
+.toggle-switch .label-text { font-weight: 700; font-size: 0.9rem; }
+
+/* SECTIONS */
+.section-block { margin-bottom: 50px; }
+.sec-header { margin-bottom: 20px; }
+.sec-header h2 { font-size: 1.5rem; margin-bottom: 5px; }
+
+/* MODULES GRID */
+.modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.module-card { 
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; 
+    transition: all 0.2s; cursor: pointer; position: relative; overflow: hidden;
+}
+.module-card:hover { transform: translateY(-4px); border-color: var(--text-muted); }
+.module-card.active { border-color: var(--primary); background: rgba(59,130,246,0.1); box-shadow: 0 0 0 1px var(--primary); }
+
+.mc-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.mc-tag { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--primary); background: rgba(59,130,246,0.1); padding: 4px 8px; border-radius: 6px; }
+.checkbox { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border); transition: .2s; }
+.checkbox.checked { background: var(--primary); border-color: var(--primary); box-shadow: inset 0 0 0 4px var(--bg-card); }
+
+.mc-list { padding-left: 20px; margin: 10px 0; color: var(--text-muted); font-size: 0.9rem; }
+.mc-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 10px; }
+.mini-chip { font-size: 0.75rem; color: var(--text-muted); background: var(--bg-dark); padding: 2px 8px; border-radius: 4px; }
+.status-text { font-weight: 700; font-size: 0.85rem; color: var(--text-muted); }
+.status-text.on { color: var(--primary); }
+
+/* SCROLL PLANS */
+.hscroll-wrapper { position: relative; }
+.hscroll-track { display: flex; gap: 15px; overflow-x: auto; padding: 10px 5px 20px; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.hscroll-track::-webkit-scrollbar { display: none; }
+.hs-nav { 
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 2; 
+    width: 40px; height: 40px; border-radius: 50%; background: var(--bg-card); border: 1px solid var(--border); 
+    color: var(--text-main); font-size: 1.2rem; display: grid; place-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.hs-nav:hover { background: var(--primary); border-color: var(--primary); }
+.hs-nav.prev { left: -10px; }
+.hs-nav.next { right: -10px; }
+
+.plan-card { 
+    min-width: 260px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; 
+    scroll-snap-align: start; cursor: pointer; transition: .2s; display: flex; flex-direction: column;
+}
+.plan-card.active { border-color: var(--gold); background: rgba(245,158,11,0.05); box-shadow: 0 0 0 1px var(--gold); }
+.plan-badge { background: var(--gold); color: black; font-weight: 800; font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; align-self: flex-start; margin-bottom: 8px; text-transform: uppercase; }
+.plan-title { margin: 0 0 10px; font-size: 1.1rem; }
+.plan-price { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 20px; }
+.plan-price small { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; }
+.plan-check { margin-top: auto; display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.9rem; color: var(--text-muted); }
+.radio-circle { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 50%; }
+.radio-circle.on { background: var(--gold); border-color: var(--gold); box-shadow: inset 0 0 0 4px var(--bg-card); }
+
+/* EXTRAS & PURPOSES */
+.extras-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px; }
+.extra-card { 
+    display: flex; gap: 15px; background: var(--bg-card); padding: 16px; border-radius: 16px; border: 1px solid var(--border); align-items: center; 
+    transition: .2s;
+}
+.extra-card.active { border-color: var(--accent); background: rgba(16,185,129,0.05); }
+.ex-icon { font-size: 2rem; }
+.ex-info h4 { margin: 0; font-size: 1rem; }
+.ex-info p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
+.ex-action { margin-left: auto; }
+.btn-outline { border: 1px solid var(--border); color: var(--text-muted); padding: 6px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; }
+.btn-outline.on { background: var(--bg-dark); color: var(--text-main); border-color: var(--text-main); }
+.toggle-btn { font-size: 0.85rem; font-weight: 700; color: var(--primary); cursor: pointer; }
+.toggle-btn.on { color: var(--accent); }
+
+.purposes-row { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; margin-top: 20px; }
+.chips-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.chip-btn { border: 1px solid var(--border); padding: 6px 14px; border-radius: 20px; color: var(--text-muted); font-size: 0.9rem; transition: .2s; }
+.chip-btn:hover { background: var(--bg-card-hover); }
+.chip-btn.active { background: var(--text-main); color: var(--bg-dark); font-weight: 700; }
+
+/* STICKY BAR */
+.sticky-wrapper { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; padding: 20px; pointer-events: none; }
+.sticky-bar { 
+    max-width: 900px; margin: 0 auto; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(16px); 
+    border-radius: 20px; padding: 16px 24px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    display: flex; justify-content: space-between; align-items: center; pointer-events: all;
+}
+@media (max-width: 700px) { .sticky-bar { flex-direction: column; gap: 15px; width: 100%; border-radius: 16px; padding: 15px; } .sb-info { text-align: center; } }
+
+.sb-label { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+.sb-price { font-size: 1.6rem; font-weight: 800; color: var(--text-main); line-height: 1; margin: 4px 0; }
+.sb-price small { font-size: 0.9rem; color: var(--text-muted); font-weight: 400; }
+.sb-detail { font-size: 0.85rem; color: var(--primary); font-weight: 600; }
+.sb-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+@media (max-width: 700px) { .sb-actions { width: 100%; align-items: center; } }
+.sb-matricula { font-size: 0.75rem; color: var(--text-muted); }
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+}
 `;

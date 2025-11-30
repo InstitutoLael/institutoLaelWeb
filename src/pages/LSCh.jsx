@@ -583,8 +583,6 @@ ul, ol { list-style: none; }
 }
 
 /* -- HERO SECTION -- */
-JavaScript
-/* ... Continuación del CSS ... */
 
 .hero-v2 {
     position: relative;

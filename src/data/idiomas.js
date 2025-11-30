@@ -1,95 +1,26 @@
 // src/data/idiomas.js
 
-// Matrícula única (no mensual)
-export const ENROLLMENT_FEE = 7990;
+// 🧾 Matrícula única
+// Subimos a 10.990. Esto filtra a los curiosos de los comprometidos
+// y te da flujo de caja inmediato para pagar publicidad.
+export const ENROLLMENT_FEE = 10990;
 
-// Catálogo de idiomas (puedes sumar más)
-export const LANGUAGES = [
-  {
-    id: "espanol",
-    code: "ES",
-    name: "Español para Extranjeros (ELE)",
-    emoji: "🇨🇱",
-    color: "#f59e0b",
-    summary:
-      "Comunicación práctica para vivir, estudiar o trabajar en Chile. Enfoque en comprensión y situaciones reales.",
-    includes: [
-      "Clases en vivo (Zoom/Meet)",
-      "Cápsulas grabadas y quizzes",
-      "Vocabulario de trámites y vida diaria",
-      "Práctica de conversación guiada",
-    ],
-    levels: ["Inicial A1–A2", "Funcional B1"],
-    outcomes: [
-      "Integración y vida cotidiana en Chile",
-      "Trabajo y estudios con mejor comunicación",
-      "Bases para certificaciones internacionales",
-    ],
-  },
-  {
-    id: "ingles",
-    code: "EN",
-    name: "Inglés",
-    emoji: "🇬🇧",
-    color: "#2563eb",
-    summary:
-      "Para viajes, trabajo y estudios: conversación real, listening y pronunciación con foco en fluidez.",
-    includes: [
-      "Clases en vivo (Zoom/Meet)",
-      "Cápsulas grabadas",
-      "Material descargable y quizzes",
-      "Simulaciones de entrevista",
-    ],
-    levels: ["Inicial A1–A2", "Funcional B1", "Avanzado B2+"],
-    outcomes: [
-      "Viajes con confianza",
-      "Atención a clientes internacionales",
-      "Postulación a becas/intercambio",
-    ],
-  },
-  {
-    id: "coreano",
-    code: "KR",
-    name: "Coreano (TOPIK I)",
-    emoji: "🇰🇷",
-    color: "#ef4444",
-    summary:
-      "Base sólida para TOPIK I: lectura, vocabulario esencial y cultura K como motivación.",
-    includes: [
-      "Hangul desde cero",
-      "Vocabulario + gramática TOPIK I",
-      "Ejercicios tipo prueba",
-      "Cultura / K-life para conversación",
-    ],
-    levels: ["TOPIK I · Preparación"],
-    outcomes: ["Certificación TOPIK I", "Bases para TOPIK II", "Viajes/Estudios"],
-  },
-  {
-    id: "portugues",
-    code: "PT",
-    name: "Portugués (2026)",
-    emoji: "🇧🇷",
-    color: "#16a34a",
-    summary:
-      "Programa en preparación con foco en empleabilidad regional, turismo y negocios MERCOSUR.",
-    includes: [
-      "Conversación guiada",
-      "Vocabulario laboral",
-      "Cultura y fonética",
-      "Quizzes y cápsulas",
-    ],
-    levels: ["Inicial → Funcional"],
-    outcomes: ["Empleabilidad Mercosur", "Viajes", "Relaciones comerciales"],
-    comingSoon: true,
-  },
-];
+/**
+ * 🧠 LÓGICA DE PRECIOS 2025
+ * Objetivo: Pagar al docente ~7.000 - 8.000 por alumno.
+ * * 1 Curso: $17.990
+ * -> Si tienes 10 alumnos: Ingresas $179.900.
+ * -> Pagas al profe: $75.000 ($7.500 x 10).
+ * -> Te quedan: $104.900 (Margen > 50%).
+ * * Es un precio psicológico bajo (menos de 20 mil) pero rentable.
+ */
 
-// Precios “bundle” (mejor margen y fomenta multi-curso)
 export function computeLangBundle(n) {
   if (n <= 0) return 0;
-  if (n === 1) return 11990;   // 1 curso
-  if (n === 2) return 21900;   // 2 cursos
-  if (n >= 3) return 29900;    // 3+
+  // Estrategia: Incentivar que tomen 2 idiomas o inviten a un amigo
+  if (n === 1) return 17990;   // Precio base (rentable)
+  if (n === 2) return 32990;   // Ahorran $3.000 aprox
+  if (n >= 3) return 45990;    // "Oferta Loca": ~$15.300 c/u
   return 0;
 }
 
@@ -100,3 +31,87 @@ export const clp = (n) =>
     currency: "CLP",
     maximumFractionDigits: 0,
   });
+
+// Catálogo de idiomas mejorado en copy para justificar el nuevo valor
+export const LANGUAGES = [
+  {
+    id: "ingles",
+    code: "EN",
+    name: "Inglés Comunicativo",
+    emoji: "🇺🇸", // Bandera USA suele vender más en Latam por trabajo/viajes
+    color: "#2563eb",
+    summary:
+      "Deja de traducir en tu mente. Enfoque 100% en perder el miedo a hablar, pronunciación y vocabulario laboral.",
+    includes: [
+      "Clases en vivo con feedback real",
+      "Simulacros de entrevista y viajes",
+      "Material digital incluido",
+      "Club de conversación semanal",
+    ],
+    levels: ["Básico A1-A2", "Pre-Intermedio B1", "Intermedio B2"],
+    outcomes: [
+      "Viajar sin depender del traductor",
+      "Mejorar oportunidades laborales",
+      "Entender series y música",
+    ],
+  },
+  {
+    id: "coreano",
+    code: "KR",
+    name: "Coreano + Cultura K",
+    emoji: "🇰🇷",
+    color: "#ef4444",
+    summary:
+      "Mucho más que el alfabeto. Aprende el idioma a través de la cultura, K-Dramas y preparación para certificación.",
+    includes: [
+      "Hangul (alfabeto) desde cero",
+      "Gramática para el examen TOPIK I",
+      "Análisis de K-Pop y Dramas",
+      "Etiqueta y cultura coreana",
+    ],
+    levels: ["Nivel 1 (Hangul)", "Nivel 2 (Frases)", "Nivel 3 (TOPIK)"],
+    outcomes: [
+      "Leer y escribir Hangul fluido",
+      "Entender a tus idols sin subtítulos",
+      "Certificación internacional TOPIK I",
+    ],
+  },
+  {
+    id: "espanol",
+    code: "ES",
+    name: "Español para Extranjeros",
+    emoji: "🇨🇱",
+    color: "#f59e0b",
+    summary:
+      "Domina el español de Chile. Clases prácticas para trámites, trabajo y vida social en el país.",
+    includes: [
+      "Chilenismos y cultura local",
+      "Español para trámites y visas",
+      "Redacción de correos formales",
+      "Práctica de fluidez diaria",
+    ],
+    levels: ["Sobrevivencia (A1-A2)", "Laboral (B1)"],
+    outcomes: [
+      "Integración rápida en Chile",
+      "Mejor desempeño en entrevistas",
+      "Confianza al hablar con nativos",
+    ],
+  },
+  {
+    id: "portugues",
+    code: "PT",
+    name: "Portugués (2026)",
+    emoji: "🇧🇷",
+    color: "#16a34a",
+    summary:
+      "El idioma de los negocios y el turismo en Sudamérica. Programa intensivo de conversación.",
+    includes: [
+      "Fonética y pronunciación",
+      "Portugués de negocios",
+      "Cultura brasileña",
+    ],
+    levels: ["Inicial → Intermedio"],
+    outcomes: ["Turismo", "Negocios Mercosur"],
+    comingSoon: true, // Esto desactiva el botón de compra en la UI
+  },
+];

@@ -1,6 +1,6 @@
 // src/data/lsch.js
 // === Lengua de Señas Chilena — Instituto Lael ===
-// Actualizado 2025–2026: versión profesional y coherente con branding general.
+// Estrategia de Precios 2025: Rentabilidad + Accesibilidad
 
 // 🔢 Utilidad: formato CLP
 export const clp = (n) =>
@@ -10,117 +10,147 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// 🧾 Matrícula única (obligatoria, pago inicial)
-export const LSCH_ENROLLMENT_FEE = 10990;
+// 🧾 Matrícula única (Cubre gastos administrativos iniciales)
+// Subida leve para filtrar compromiso real.
+export const LSCH_ENROLLMENT_FEE = 12990;
 
 /**
- * 🎯 Política de precios 2025–2026
- * - Programas grupales con descuentos por duración.
- * - Precio preferente para iglesias o comunidades con convenio.
- * - Todos los cursos incluyen clases en vivo, material descargable y diploma.
+ * 🎯 LÓGICA DE PRECIOS 2025
+ * * 1. Precio Base (Mensual): $19.990 -> Posiciona el curso como profesional.
+ * 2. "Sweet Spot" (Trimestral): $16.990 -> Incentiva el compromiso a mediano plazo.
+ * 3. Convenio (Volumen): $12.990 -> Mantiene el acceso masivo rentable por volumen.
+ * * Margen estimado (costo docente $7.200):
+ * - Base: ~$12.790 de margen (Excelente)
+ * - Trimestral: ~$9.790 de margen (Muy bueno)
+ * - Convenio: ~$5.790 de margen (Bueno por volumen)
  */
 
-// 🧩 Estructura anual: 4 módulos + taller final
+// 🧩 Estructura Académica (Intacta, funciona bien)
 export const LSCH_MODULES = [
   {
     id: "lsch-m1",
-    name: "Módulo 1 · Nivel Inicial",
+    name: "Módulo 1 · Inicial",
     tag: "A0–A1",
     bullets: [
-      "Alfabeto manual, saludos y presentaciones",
-      "Vocabulario cotidiano y expresiones básicas",
-      "Primer contacto con la comunidad sorda",
+      "Alfabeto, saludos y cultura sorda",
+      "Vocabulario cotidiano esencial",
+      "Estructura gramatical básica",
     ],
-    servesFor: [
-      "Comenzar desde cero en LSCh",
-      "Voluntariado o atención básica inclusiva",
-    ],
+    servesFor: ["Personas sin conocimientos previos"],
     accent: "#16a34a",
   },
   {
     id: "lsch-m2",
-    name: "Módulo 2 · Nivel Básico",
+    name: "Módulo 2 · Básico",
     tag: "A1–A2",
     bullets: [
-      "Rutinas y contextos de servicio",
-      "Preguntas y respuestas frecuentes",
-      "Role-play y vocabulario ampliado (hogar, trabajo, estudio)",
+      "Rutinas, verbos y tiempos",
+      "Clasificadores y descripción",
+      "Role-play de situaciones reales",
     ],
-    servesFor: [
-      "Atención de público inclusiva",
-      "Apoyo a compañeros/as sordos en clases o trabajo",
-    ],
+    servesFor: ["Quienes ya manejan el alfabeto y saludos"],
     accent: "#10b981",
   },
   {
     id: "lsch-m3",
-    name: "Módulo 3 · Nivel Intermedio",
+    name: "Módulo 3 · Intermedio",
     tag: "A2–B1",
     bullets: [
-      "Contextos laborales y profesionales",
-      "Narración de experiencias y opiniones",
-      "Feedback y retroalimentación guiada",
+      "Contextos laborales y técnicos",
+      "Narración fluida y argumentación",
+      "Interpretación básica",
     ],
-    servesFor: [
-      "Interacción fluida con personas sordas",
-      "Comunicación en entornos laborales inclusivos",
-    ],
+    servesFor: ["Profundización gramatical y fluidez"],
     accent: "#22c55e",
   },
   {
-    id: "lsch-conv",
-    name: "Taller de Conversación y Práctica",
+    id: "lsch-adv",
+    name: "Club de Práctica Avanzada",
     tag: "B1+",
     bullets: [
-      "Simulación de casos reales",
-      "Conversación espontánea y correcciones en vivo",
-      "Perfeccionamiento de precisión y fluidez",
+      "100% Conversación sin voz",
+      "Análisis de videos de la comunidad sorda",
+      "Debates y actualidad",
     ],
-    servesFor: [
-      "Uso frecuente en trabajo o comunidad",
-      "Mantener y profundizar la competencia comunicativa",
-    ],
+    servesFor: ["Mantener el nivel y agilidad"],
     accent: "#059669",
   },
 ];
 
-// 💡 Planes grupales 100% online (mercado general)
+// 💡 Planes Grupales (Estrategia de Anclaje)
 export const LSCH_GROUP_PLANS = [
-  { id: "g-month", title: "Mensual", months: 1, monthly: 16990, badge: "Flexible" },
-  { id: "g-quarter", title: "Trimestral", months: 3, monthly: 14990, total: 14990 * 3, save: "–12%" },
-  { id: "g-semester", title: "Semestral", months: 6, monthly: 12990, total: 12990 * 6, save: "–24%" },
-  { id: "g-annual", title: "Anual", months: 12, monthly: 11990, total: 11990 * 12, save: "–29%" },
+  { 
+    id: "g-month", 
+    title: "Plan Mensual", 
+    monthly: 19990, 
+    badge: "Flexible",
+    desc: "Pago mes a mes, sin ataduras."
+  },
+  { 
+    id: "g-quarter", 
+    title: "Plan Trimestral", 
+    monthly: 16990, // El precio atractivo
+    save: "Ahorras $9.000",
+    badge: "Recomendado",
+    desc: "Compromiso ideal para ver resultados."
+  },
+  { 
+    id: "g-semester", 
+    title: "Plan Semestral", 
+    monthly: 14990, 
+    save: "Ahorras $30.000",
+    desc: "La opción más económica a largo plazo."
+  },
 ];
 
-// 🙌 Convenio Iglesias o Comunidades
+// 🙌 Convenio Iglesias (El "Gancho" de Volumen)
 export const CHURCH_CONVENIO = {
   enabled: true,
-  codeExamples: ["CCINT", "IGLESIA", "FUNDACIÓN"],
-  monthlyFlat: 10990, // antes 11.990 → más coherente y simple
-  label: "Convenio Iglesias / Fundaciones",
-  note: "Valor preferente para comunidades con convenio confirmado.",
+  monthlyFlat: 12990, // Margen seguro sobre los $7.200 de la profe
+  label: "Convenio Iglesias / Ministerios",
+  note: "Tarifa preferencial aplicada por convenio activo.",
 };
 
-// 🧑‍🏫 Planes individuales (1:1) — 100% online
+// 🧑‍🏫 Planes 1:1 (SIMPLIFICADO: PACKS DE HORAS)
+// Esto es mucho más fácil de vender que una mensualidad fija 1:1.
+// El alumno controla su presupuesto y el profesor llena sus huecos.
 export const LSCH_ONE2ONE_PLANS = [
-  { id: "o-month", title: "Mensual 1:1", months: 1, monthly: 34990, badge: "Personalizado" },
-  { id: "o-quarter", title: "Trimestral 1:1", months: 3, monthly: 32990, total: 32990 * 3, save: "–6%" },
-  { id: "o-semester", title: "Semestral 1:1", months: 6, monthly: 30990, total: 30990 * 6, save: "–12%" },
-  { id: "o-annual", title: "Anual 1:1", months: 12, monthly: 28990, total: 28990 * 12, save: "–18%" },
+  { 
+    id: "o-light", 
+    title: "Pack Básico (4h/mes)", 
+    monthly: 45000, 
+    detail: "1 hora semanal",
+    badge: "Refuerzo"
+  },
+  { 
+    id: "o-standard", 
+    title: "Pack Estándar (8h/mes)", 
+    monthly: 80000, 
+    detail: "2 horas semanales",
+    badge: "Popular"
+  },
+  { 
+    id: "o-intensive", 
+    title: "Pack Intensivo (12h/mes)", 
+    monthly: 110000, 
+    detail: "3 horas semanales",
+    badge: "Acelerado"
+  },
 ];
 
-// 🎯 Propósitos (orientativos, no alteran precio)
+// 🎯 Propósitos
 export const LSCH_PURPOSES = [
-  "Atención de público inclusiva",
-  "Trabajo con equipos o personas sordas",
-  "Responsabilidad social / inclusión institucional",
-  "Interés personal o familiar",
-  "Otro (lo indicaré en mi mensaje)",
+  "Ministerio de Sordos / Iglesia",
+  "Desarrollo Profesional (Salud/Educación)",
+  "Interés Personal / Cultura",
+  "Tengo familiares/amigos sordos",
 ];
 
 // ===== Helpers =====
 export function priceForGroupPlan(plan, { church = false } = {}) {
   if (!plan) return 0;
+  // Si es convenio iglesia, el precio es plano ($12.990) sin importar el plan elegido
+  // Esto simplifica la decisión para ellos: "Tengo convenio, pago esto".
   if (church && CHURCH_CONVENIO.enabled) return CHURCH_CONVENIO.monthlyFlat;
   return plan.monthly;
 }

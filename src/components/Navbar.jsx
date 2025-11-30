@@ -1,535 +1,329 @@
 // src/components/Navbar.jsx
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
+// Asegúrate de que la ruta de tu logo sea correcta
 import logo from "../assets/img/Logos/lael-inst-naranja.png";
 
-const link = ({ isActive }) => "nav-link" + (isActive ? " active" : "");
+const linkClass = ({ isActive }) => "nav-link" + (isActive ? " active" : "");
 
 export default function Navbar({ onOpenSearch }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [progOpen, setProgOpen] = useState(false);
-  const [kbdOpen, setKbdOpen] = useState(false);
-
-  const isTouch = useRef(false);
-  const closeTimer = useRef(null);
-  const dropRef = useRef(null);
-  const firstItemRef = useRef(null);
   const location = useLocation();
+  const headerRef = useRef(null);
 
-  // Detectar primer toque (desactiva hover en táctiles)
-  useEffect(() => {
-    const firstTouch = () => { isTouch.current = true; };
-    window.addEventListener("touchstart", firstTouch, { once: true, passive: true });
-    return () => window.removeEventListener("touchstart", firstTouch);
-  }, []);
-
-  // Bloquear scroll al abrir panel móvil
-  useEffect(() => {
-    const cls = "no-scroll";
-    document.documentElement.classList.toggle(cls, mobileOpen);
-    document.body.classList.toggle(cls, mobileOpen);
-    return () => {
-      document.documentElement.classList.remove(cls);
-      document.body.classList.remove(cls);
-    };
-  }, [mobileOpen]);
-
-  // Cerrar todo al cambiar de ruta
+  // Cerrar menú al cambiar de ruta
   useEffect(() => {
     setMobileOpen(false);
     setProgOpen(false);
   }, [location.pathname]);
 
-  // Sombra sticky al hacer scroll
+  // Bloquear scroll del body cuando el menú móvil está abierto
   useEffect(() => {
-    const header = document.querySelector(".lael-nav");
-    const onScroll = () => {
-      if (!header) return;
-      if (window.scrollY > 4) header.classList.add("elev");
-      else header.classList.remove("elev");
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
+
+  // Efecto de sombra al hacer scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        headerRef.current?.classList.add("scrolled");
+      } else {
+        headerRef.current?.classList.remove("scrolled");
+      }
     };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Hover (desktop) abre/cierra
-  const openDrop = () => {
-    if (isTouch.current) return; // en táctil, solo click
-    clearTimeout(closeTimer.current);
-    setProgOpen(true);
-  };
-  const closeDrop = () => {
-    clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setProgOpen(false), 120);
-  };
-
-  // ESC y Ctrl/⌘+K
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "Escape") {
-        setProgOpen(false);
-        setMobileOpen(false);
-      }
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        onOpenSearch?.();
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onOpenSearch]);
-
-  // Clic fuera del dropdown
-  useEffect(() => {
-    if (!progOpen) return;
-    const onDocDown = (e) => {
-      if (!dropRef.current?.contains(e.target)) setProgOpen(false);
-    };
-    document.addEventListener("mousedown", onDocDown);
-    return () => document.removeEventListener("mousedown", onDocDown);
-  }, [progOpen]);
-
-  // Foco al primer ítem si abriste con teclado
-  useEffect(() => {
-    if (progOpen && kbdOpen) {
-      firstItemRef.current?.focus();
-      setKbdOpen(false);
-    }
-  }, [progOpen, kbdOpen]);
-
-  const closeMobile = () => {
-    setMobileOpen(false);
-    setProgOpen(false);
-  };
-
-  // Navegación con flechas dentro del dropdown
-  const onDropKeyDown = (e) => {
-    const items = Array.from(dropRef.current?.querySelectorAll('[role="menuitem"]') || []);
-    const i = items.indexOf(document.activeElement);
-    if (e.key === "ArrowDown") { e.preventDefault(); items[Math.min(i + 1, items.length - 1)]?.focus(); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); items[Math.max(i - 1, 0)]?.focus(); }
-    else if (e.key === "Home") { e.preventDefault(); items[0]?.focus(); }
-    else if (e.key === "End") { e.preventDefault(); items[items.length - 1]?.focus(); }
-    else if (e.key === "Escape") { e.preventDefault(); setProgOpen(false); }
-  };
-
   return (
-    <header className="lael-nav" role="banner">
+    <header className="lael-nav" ref={headerRef}>
       <style>{css}</style>
 
-      <div className="container nav-row">
-        {/* Logo */}
-        <Link to="/" className="brand" aria-label="Inicio Instituto Lael">
-          <img src={logo} alt="Instituto Lael" className="brand-logo" />
+      <div className="container nav-content">
+        
+        {/* LOGO */}
+        <Link to="/" className="brand-link" aria-label="Volver al inicio">
+          <img src={logo} alt="Instituto Lael" className="logo-img" />
         </Link>
 
-        {/* NAV DESKTOP */}
-        <nav className="navwrap" aria-label="Navegación principal">
-          <ul className="nav" role="menubar" aria-label="Secciones del sitio">
-            <li role="none"><NavLink to="/" end className={link} role="menuitem">Inicio</NavLink></li>
-
-            <li
-              className={"has-drop " + (progOpen ? "open" : "")}
-              onMouseEnter={openDrop}
-              onMouseLeave={closeDrop}
-              role="none"
+        {/* DESKTOP NAV */}
+        <nav className="desktop-nav">
+          <NavLink to="/" className={linkClass}>Inicio</NavLink>
+          
+          {/* Dropdown Programas */}
+          <div 
+            className="nav-item-drop"
+            onMouseEnter={() => setProgOpen(true)}
+            onMouseLeave={() => setProgOpen(false)}
+          >
+            <button 
+                className={`nav-link drop-trigger ${progOpen ? 'active' : ''}`}
+                onClick={() => setProgOpen(!progOpen)}
             >
-              <button
-                type="button"
-                className="nav-link drop-btn"
-                onClick={() => setProgOpen(v => !v)}                 // <— CLICK funciona en desktop/táctil
-                onKeyDown={(e) => e.key === "ArrowDown" && (setProgOpen(true), setKbdOpen(true))}
-                aria-expanded={progOpen}
-                aria-haspopup="true"
-                aria-controls="prog-menu"
-                onFocus={openDrop}
-              >
-                Programas ▾
-              </button>
-
-              <div
-                id="prog-menu"
-                className="dropdown"
-                role="menu"
-                ref={dropRef}
-                onKeyDown={onDropKeyDown}
-                aria-label="Menú Programas"
-              >
-                <div className="drop-head">
-                  <div className="drop-title">Programas</div>
-                  <p className="drop-sub">Elige tu ruta. Acompañamiento real.</p>
+              Programas <span className="arrow">▾</span>
+            </button>
+            
+            <div className={`mega-menu ${progOpen ? 'visible' : ''}`}>
+                <div className="mega-grid">
+                    <MegaItem to="/paes" title="Preu PAES" desc="Matemática, Lenguaje, Ciencias." icon="🎓" color="#3B82F6" />
+                    <MegaItem to="/idiomas" title="Idiomas" desc="Inglés, Coreano, Portugués." icon="🌍" color="#10B981" />
+                    <MegaItem to="/lsch" title="Lengua de Señas" desc="Inclusión y cultura sorda." icon="🤟" color="#8B5CF6" />
+                    <MegaItem to="/escuelaadultos" title="Nivelación Estudios" desc="Termina tu 4to medio." icon="📜" color="#F59E0B" />
                 </div>
+            </div>
+          </div>
 
-                <div className="drop-grid">
-                  <DropItem
-                    refEl={firstItemRef}
-                    to="/paes"
-                    title="PAES"
-                    kicker="Ingreso a la U"
-                    badge="Top elección"
-                  >
-                    Matemáticas, Lenguaje, Ciencias e Historia con ensayos y tutoría.
-                  </DropItem>
-
-                  <DropItem to="/idiomas" title="Idiomas" kicker="EN · KR" accent="green">
-                    Clases en vivo + cápsulas. Conversación y objetivos académicos/laborales.
-                  </DropItem>
-
-                  <DropItem to="/lsch" title="LSCh" kicker="Lengua de Señas" accent="rose">
-                    Módulos + proyecto final. Inclusión práctica y aplicada.
-                  </DropItem>
-
-                  <DropItem to="/homeschool" title="Homeschool" kicker="Apoyo escolar" accent="amber">
-                    Planes flexibles, seguimiento y materiales por niveles.
-                  </DropItem>
-
-                  <DropItem to="/escuelaadultos" title="Escuela de Adultos" kicker="2x1 o 4x1" accent="indigo">
-                    Enseñanza media para adultos con apoyo docente y materiales.
-                  </DropItem>
-                </div>
-              </div>
-            </li>
-
-            <li role="none"><NavLink to="/empresas" className={link} role="menuitem">Empresas</NavLink></li>
-            <li role="none"><NavLink to="/nosotros" className={link} role="menuitem">Nosotros</NavLink></li>
-            <li role="none"><NavLink to="/convenios" className={link} role="menuitem">Convenios</NavLink></li>
-            <li role="none"><NavLink to="/trabaja" className={link} role="menuitem">Trabaja</NavLink></li>
-
-            <li role="none">
-              <NavLink to="/inscripcion" className="nav-cta" role="menuitem">Inscripción</NavLink>
-            </li>
-          </ul>
+          <NavLink to="/empresas" className={linkClass}>Empresas</NavLink>
+          <NavLink to="/nosotros" className={linkClass}>Nosotros</NavLink>
+          <NavLink to="/trabaja" className={linkClass}>Trabaja</NavLink>
         </nav>
 
-        {/* TOOLS */}
-        <div className="tools">
-          <a
-            className="wa-btn"
-            href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20quisiera%20informaci%C3%B3n%20sobre%20los%20programas%20LAEL"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Hablar por WhatsApp"
-            title="Hablar por WhatsApp"
-          >
-            <WaIcon />
-          </a>
-
-          <button
-            className="tool-btn"
-            onClick={onOpenSearch}
-            aria-label="Abrir búsqueda (Ctrl/⌘+K)"
-            title="Buscar (Ctrl/⌘+K)"
-          >
-            <SearchIcon />
-          </button>
-
-          <button
-          type="button"                                   // evita submit fantasma
-          className={"burger " + (mobileOpen ? "on" : "")}
-          onClick={() => setMobileOpen(v => !v)}          // click normal
-          onTouchEnd={(e) => { e.preventDefault(); setMobileOpen(v => !v); }} // iOS/Android
-          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setMobileOpen(v => !v); }} // a11y
-          aria-label="Abrir menú móvil"
-          aria-expanded={mobileOpen}
-          aria-controls="mobile-panel"
+        {/* RIGHT ACTIONS */}
+        <div className="nav-actions">
+            <a 
+                href="https://wa.me/56964626568" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="btn-whatsapp-nav"
+                aria-label="Hablar por WhatsApp"
+            >
+                <WhatsAppIcon />
+            </a>
+            <Link to="/inscripcion" className="btn-inscripcion-nav">
+                Inscripción
+            </Link>
             
-          >
-            <span /><span /><span />
-          </button>
+            {/* Burger Button */}
+            <button 
+                className={`burger-btn ${mobileOpen ? 'open' : ''}`} 
+                onClick={() => setMobileOpen(!mobileOpen)}
+                aria-label="Abrir menú"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+      </div>
+
+      {/* MOBILE MENU OVERLAY */}
+      <div className={`mobile-menu-overlay ${mobileOpen ? 'open' : ''}`}>
+        <div className="mobile-menu-content">
+            <div className="mm-header">
+                <span className="mm-title">Menú</span>
+                <button className="mm-close" onClick={() => setMobileOpen(false)}>✕</button>
+            </div>
+            
+            <div className="mm-links">
+                <MobileLink to="/" onClick={() => setMobileOpen(false)}>Inicio</MobileLink>
+                <div className="mm-divider">Programas</div>
+                <MobileLink to="/paes" onClick={() => setMobileOpen(false)}>Preu PAES</MobileLink>
+                <MobileLink to="/idiomas" onClick={() => setMobileOpen(false)}>Idiomas</MobileLink>
+                <MobileLink to="/lsch" onClick={() => setMobileOpen(false)}>Lengua de Señas</MobileLink>
+                <MobileLink to="/escuelaadultos" onClick={() => setMobileOpen(false)}>Nivelación de Estudios</MobileLink>
+                
+                <div className="mm-divider">Institucional</div>
+                <MobileLink to="/empresas" onClick={() => setMobileOpen(false)}>Empresas</MobileLink>
+                <MobileLink to="/nosotros" onClick={() => setMobileOpen(false)}>Nosotros</MobileLink>
+                <MobileLink to="/convenios" onClick={() => setMobileOpen(false)}>Convenios</MobileLink>
+                <MobileLink to="/trabaja" onClick={() => setMobileOpen(false)}>Trabaja con Nosotros</MobileLink>
+            </div>
+
+            <div className="mm-footer">
+                <Link to="/inscripcion" className="btn-mm-primary" onClick={() => setMobileOpen(false)}>
+                    Inscribirme Ahora
+                </Link>
+                <a href="https://wa.me/56964626568" className="btn-mm-secondary">
+                    Hablar por WhatsApp
+                </a>
+            </div>
         </div>
       </div>
 
-      {/* Backdrop móvil */}
-      <div
-        className={"mp-overlay " + (mobileOpen ? "show" : "")}
-        onClick={closeMobile}
-        aria-hidden={!mobileOpen}
-      />
-
-      {/* Panel móvil */}
-      <aside
-        id="mobile-panel"
-        className={"mobile-panel " + (mobileOpen ? "open" : "")}
-        aria-hidden={!mobileOpen}
-        aria-label="Menú móvil"
-        role="dialog"
-        aria-modal="true"
-      >
-        <div className="mp-head" style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}>
-          <div className="mp-title">Menú</div>
-          <button className="mp-close" onClick={closeMobile} aria-label="Cerrar">✕</button>
-        </div>
-
-        <div className="mp-section">
-          <Link to="/" className="mp-link" onClick={closeMobile}>Inicio</Link>
-          <Link to="/nosotros" className="mp-link" onClick={closeMobile}>Nosotros</Link>
-          <Link to="/empresas" className="mp-link" onClick={closeMobile}>Empresas</Link>
-        </div>
-
-        <div className="mp-section">
-          <div className="mp-kicker">Programas</div>
-          <Link to="/paes" className="mp-link" onClick={closeMobile}>PAES</Link>
-          <Link to="/idiomas" className="mp-link" onClick={closeMobile}>Idiomas</Link>
-          <Link to="/lsch" className="mp-link" onClick={closeMobile}>LSCh</Link>
-          <Link to="/homeschool" className="mp-link" onClick={closeMobile}>Homeschool</Link>
-          <Link to="/escuelaadultos" className="mp-link" onClick={closeMobile}>Escuela Adultos</Link>
-        </div>
-
-        <div className="mp-section">
-          <div className="mp-kicker">Oportunidades</div>
-          <Link to="/convenios" className="mp-link" onClick={closeMobile}>Convenios</Link>
-          <Link to="/trabaja" className="mp-link" onClick={closeMobile}>Trabaja con nosotros</Link>
-        </div>
-
-        <div className="mp-actions" style={{ paddingBottom: "env(safe-area-inset-bottom, 12px)" }}>
-          <Link to="/inscripcion" className="mp-cta" onClick={closeMobile}>Inscripción</Link>
-          <a
-            className="mp-wa"
-            href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20quisiera%20informaci%C3%B3n%20sobre%20los%20programas%20LAEL"
-            target="_blank"
-            rel="noreferrer"
-          >
-            WhatsApp
-          </a>
-        </div>
-      </aside>
     </header>
   );
 }
 
-function DropItem({ to, title, kicker, children, badge, accent = "indigo", refEl }) {
-  const accentClass =
-    accent === "green" ? "acc-green" :
-    accent === "rose" ? "acc-rose" :
-    accent === "amber" ? "acc-amber" : "acc-indigo";
-
-  return (
-    <Link to={to} className={"drop-item " + accentClass} role="menuitem" ref={refEl}>
-      <div className="di-head">
-        <span className="kicker">{kicker}</span>
-        {badge && <span className="mini-badge">{badge}</span>}
-      </div>
-      <div className="title">{title}</div>
-      <div className="desc">{children}</div>
-      <span className="go">Ver más →</span>
-    </Link>
-  );
+/* --- SUBCOMPONENTES --- */
+function MegaItem({ to, title, desc, icon, color }) {
+    return (
+        <Link to={to} className="mega-item">
+            <div className="mi-icon" style={{backgroundColor: `${color}20`, color: color}}>{icon}</div>
+            <div className="mi-text">
+                <strong>{title}</strong>
+                <span>{desc}</span>
+            </div>
+        </Link>
+    );
 }
 
-function SearchIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M21 21l-4.2-4.2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="2" />
-    </svg>
-  );
+function MobileLink({ to, children, onClick }) {
+    return (
+        <Link to={to} className="mm-link" onClick={onClick}>
+            {children} <span className="mm-arrow">→</span>
+        </Link>
+    );
 }
 
-function WaIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden fill="currentColor">
-      <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.34.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.08-.13-.27-.2-.57-.35M12.05 21.78h-.01A9.87 9.87 0 017.01 20.4l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26C2.16 6.49 6.6 2.05 12.05 2.05c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.89 6.99c-.01 5.45-4.44 9.84-9.88 9.84" />
-    </svg>
-  );
+function WhatsAppIcon() {
+    return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
+            <path d="M12.046 2a9.95 9.95 0 0 0-8.6 14.971L2 22l5.18-1.374A9.95 9.95 0 1 0 12.046 2zM7.2 18.4l-.311.09-3.023.802.807-2.947.093-.317A8.05 8.05 0 1 1 7.2 18.4z"/>
+        </svg>
+    );
 }
 
+/* ================= CSS (GLASS & RESPONSIVE) ================= */
 const css = `
-:root{
-  --nav-bg: rgba(11,18,32,.78);
-  --nav-bd: #1f2a44;
-  --link: #eaf2ff;
-  --link-act: #ffffff;
-  --cta: #fde047; --cta-text:#111827;
-  --drop-bg:#0e1424; --drop-bd:#1f2a44;
-  --indigo:#5850EC; --green:#16a34a; --rose:#e11d48; --amber:#f59e0b;
-  --wa:#25D366;
+:root {
+    --nav-height: 70px;
+    --bg-glass: rgba(15, 23, 42, 0.85);
+    --border: rgba(255, 255, 255, 0.1);
+    --text: #F8FAFC;
+    --text-muted: #94A3B8;
+    --primary: #3B82F6;
+    --accent: #F59E0B;
 }
 
-/* No scroll cuando panel móvil abierto */
-html.no-scroll, body.no-scroll { overflow: hidden; }
-
-/* Header */
-.lael-nav{
-  position: sticky; top: 0; z-index: 4000;
-  backdrop-filter: saturate(120%) blur(10px);
-  -webkit-backdrop-filter: saturate(120%) blur(10px);
-  background:
-    radial-gradient(900px 240px at 10% -20%, rgba(88,80,236,.10), transparent 60%),
-    radial-gradient(900px 240px at 90% -20%, rgba(22,163,74,.08), transparent 60%),
-    var(--nav-bg);
-  border-bottom: 1px solid var(--nav-bd);
-  transition: box-shadow .18s ease;
+/* HEADER BASE */
+.lael-nav {
+    position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
+    z-index: 999; transition: background 0.3s, box-shadow 0.3s;
+    background: transparent;
 }
-.lael-nav.elev{ box-shadow: 0 10px 30px rgba(2,6,23,.35); }
-
-/* GRID: Logo | Nav | Tools */
-.nav-row{
-  display:grid; grid-template-columns:auto 1fr auto;
-  align-items:center; column-gap:14px; min-height:66px; position:relative;
+.lael-nav.scrolled {
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
-/* Brand */
-.brand-logo{ height:34px; width:auto; display:block; }
-@media (min-width: 1024px){ .brand-logo{ height:36px; } }
-@media (min-width: 1280px){ .brand-logo{ height:40px; } }
-
-/* Nav desktop */
-.navwrap{ min-width:0; }
-.nav{
-  display:flex; align-items:center; gap:8px; list-style:none; margin:0; padding:0;
-  flex-wrap:nowrap; white-space:nowrap;
-  overflow:visible; /* ¡IMPORTANTE! permite que el dropdown se vea */
-}
-.nav-link, .nav-cta, .drop-btn{
-  background:transparent; border:0; cursor:pointer;
-  color:var(--link); font-weight:800;
-  padding:.45rem .6rem; border-radius:10px;
-  transition:background .15s ease, transform .15s ease, color .15s ease;
-  font-size: clamp(.9rem, .85vw, 1rem);
-  line-height:1.1;
-}
-.nav-link:hover, .drop-btn:hover{ color:var(--link-act); background:#0f172a; }
-.nav-link.active{
-  color:#fff; background:linear-gradient(180deg,#101a2f,#0f172a); border:1px solid #233154;
-}
-.nav-cta{
-  color:var(--cta-text);
-  background:linear-gradient(180deg,#fde047,#facc15);
-  border:1px solid #eab308;
-  box-shadow:0 8px 18px rgba(250,204,21,.22);
-  padding:.45rem .7rem;
-  border-radius:12px;
-}
-.nav-cta:hover{ filter:brightness(1.05); }
-
-/* Tools */
-.tools{
-  display:flex; align-items:center; gap:8px; margin-left:4px;
-  flex-shrink:0;
-}
-.tool-btn{
-  width:40px; height:40px; border-radius:12px; background:#0f172a;
-  border:1px solid #233154; color:#fff; display:grid; place-items:center;
-}
-.tool-btn:hover{ transform:translateY(-1px); }
-
-/* WhatsApp (desktop) */
-.wa-btn{
-  display:inline-flex; align-items:center; gap:8px;
-  height:40px; padding:0 .9rem; border-radius:12px;
-  background: var(--wa); color:#062d17; font-weight:900; text-decoration:none;
-  border:1px solid #128C7E; white-space:nowrap;
-}
-.wa-btn:hover{ filter:brightness(1.04); transform: translateY(-1px); }
-.wa-btn svg{ flex:0 0 auto; }
-
-/* Burger */
-.burger{
-  display:none; width:42px; height:42px; border-radius:12px;
-  background:#141b2e; border:1px solid #233154; place-items:center;
-}
-.burger span{
-  width:22px; height:3px; background:#fff; display:block; border-radius:2px;
-  transition:all .25s ease;
-}
-.burger.on span:nth-child(1){ transform: rotate(45deg) translate(5px, 5px); }
-.burger.on span:nth-child(2){ opacity:0; }
-.burger.on span:nth-child(3){ transform: rotate(-45deg) translate(5px, -5px); }
-
-/* Dropdown */
-.has-drop{ position:relative; }
-.dropdown{
-  position:absolute; left:0; top:calc(100% + 10px);
-  width:min(92vw,900px);
-  background:var(--drop-bg); border:1px solid var(--drop-bd); border-radius:14px;
-  box-shadow:0 26px 60px rgba(2,6,23,.38);
-  opacity:0; transform:translateY(6px); pointer-events:none; transition:.16s;
-  padding:12px; z-index:4500;
-}
-.has-drop.open .dropdown{ opacity:1; transform:translateY(0); pointer-events:auto; }
-.drop-head{ padding:8px 10px 12px; }
-.drop-title{ color:#fff; font-weight:900; font-size:1.05rem; }
-.drop-sub{ color:#a3b2d8; margin:2px 0 0; font-size:.9rem; }
-.drop-grid{ display:grid; gap:10px; grid-template-columns:repeat(2,minmax(0,1fr)); }
-.drop-item{
-  display:block; padding:12px; border-radius:12px;
-  background:linear-gradient(180deg,#0f172a,#0b1220);
-  color:#fff; border:1px solid #22304d; transition:transform .12s, box-shadow .12s;
-  text-decoration:none;
-}
-.drop-item:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.35); }
-.di-head{ display:flex; align-items:center; gap:8px; color:#a5b4fc; font-weight:800; font-size:.78rem; }
-.mini-badge{ background:#1f2937; color:#fde047; border:1px solid #eab308; padding:.14rem .35rem; border-radius:999px; font-size:.68rem; }
-.drop-item .title{ font-weight:900; font-size:1.05rem; margin-top:4px; }
-.drop-item .desc{ color:#c9d4f6; margin-top:4px; font-size:.92rem; line-height:1.35; }
-.drop-item .go{ display:inline-block; margin-top:6px; color:#c7d2fe; font-weight:800; }
-
-.acc-indigo{ border-color:#31386b; }
-.acc-green{ border-color:#1f7a3a; }
-.acc-rose{ border-color:#781a2a; }
-.acc-amber{ border-color:#7a560e; }
-
-/* Mobile */
-@media(max-width:1000px){
-  .navwrap{ display:none; }
-  .wa-btn{ display:none; }
-  .burger{ display:grid; }
-  .dropdown{ display:none !important; }
+.nav-content {
+    display: flex; justify-content: space-between; align-items: center;
+    height: 100%;
 }
 
-/* Backdrop */
-.mp-overlay{
-  position:fixed; inset:0; background:rgba(0,0,0,.7);
-  opacity:0; transition:.18s; pointer-events:none; z-index:4900;
-}
-.mp-overlay.show{ opacity:1; pointer-events:auto; }
+/* BRAND */
+.brand-link { display: flex; align-items: center; }
+.logo-img { height: 32px; width: auto; transition: .2s; }
+.brand-link:hover .logo-img { filter: brightness(1.1); }
 
-/* Mobile Panel (fondo sólido) */
-.mobile-panel{
-   position:fixed;
-  inset:0;
-  width:100vw;
-  height:100vh; /* ✅ fuerza alto completo */
-  background:linear-gradient(180deg, #0b1220 60%, #111d3a 100%);
-  transform:translateX(100%);
-  transition:transform .25s ease-out, background .3s ease;
-  display:flex;
-  flex-direction:column;
-  z-index:9999; /* ✅ encima de todo el contenido */
-  pointer-events:none;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-}
-.mobile-panel.open{ 
-  transform:translateX(0);
-  pointer-events:auto;
+/* DESKTOP NAV */
+.desktop-nav { display: flex; gap: 24px; align-items: center; height: 100%; }
+@media (max-width: 900px) { .desktop-nav { display: none; } }
 
-.mp-head{ display:flex; align-items:center; justify-content:space-between; padding:12px 14px; border-bottom:1px solid #22304d; }
-.mp-title{ color:#fff; font-weight:900; }
-.mp-close{
-  appearance:none; background:#0f172a; color:#fff; border:1px solid #233154;
-  border-radius:10px; padding:.45rem .6rem; font-weight:900;
+.nav-link {
+    color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.95rem;
+    transition: .2s; padding: 8px 12px; border-radius: 8px;
+}
+.nav-link:hover, .nav-link.active { color: var(--text); background: rgba(255,255,255,0.05); }
+
+/* DROPDOWN */
+.nav-item-drop { position: relative; height: 100%; display: flex; align-items: center; }
+.drop-trigger { display: flex; align-items: center; gap: 6px; border: none; background: none; font-family: inherit; cursor: pointer; }
+.arrow { font-size: 0.7rem; transition: transform 0.2s; }
+.drop-trigger.active .arrow { transform: rotate(180deg); }
+
+.mega-menu {
+    position: absolute; top: calc(100% + 10px); left: -50px; 
+    width: 320px; background: #1e293b; border: 1px solid var(--border);
+    border-radius: 16px; padding: 10px; opacity: 0; visibility: hidden;
+    transform: translateY(10px); transition: .2s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.mega-menu.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+
+.mega-grid { display: flex; flex-direction: column; gap: 5px; }
+.mega-item {
+    display: flex; gap: 12px; align-items: center; padding: 12px; border-radius: 10px;
+    text-decoration: none; transition: .2s;
+}
+.mega-item:hover { background: rgba(255,255,255,0.05); }
+.mi-icon { 
+    width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; 
+}
+.mi-text strong { display: block; color: var(--text); font-size: 0.9rem; margin-bottom: 2px; }
+.mi-text span { display: block; color: var(--text-muted); font-size: 0.75rem; }
+
+/* NAV ACTIONS */
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+
+.btn-whatsapp-nav {
+    width: 40px; height: 40px; border-radius: 10px; background: #25D366; color: #000;
+    display: flex; align-items: center; justify-content: center; transition: .2s;
+}
+.btn-whatsapp-nav:hover { transform: translateY(-2px); }
+
+.btn-inscripcion-nav {
+    background: var(--accent); color: #000; padding: 10px 20px; border-radius: 50px;
+    font-weight: 700; text-decoration: none; font-size: 0.9rem; transition: .2s;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.2);
+}
+.btn-inscripcion-nav:hover { background: #d97706; }
+@media (max-width: 600px) { .btn-inscripcion-nav { display: none; } } /* Ocultar botón texto en móvil muy chico */
+
+/* BURGER BTN */
+.burger-btn {
+    width: 40px; height: 40px; background: transparent; border: 1px solid var(--border);
+    border-radius: 10px; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+    cursor: pointer;
+}
+@media (max-width: 900px) { .burger-btn { display: flex; } }
+
+.burger-btn span { width: 20px; height: 2px; background: var(--text); transition: .3s; }
+.burger-btn.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.burger-btn.open span:nth-child(2) { opacity: 0; }
+.burger-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+/* MOBILE MENU FULLSCREEN */
+.mobile-menu-overlay {
+    position: fixed; inset: 0; background: #0f172a; z-index: 3000;
+    transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex; flex-direction: column;
+}
+.mobile-menu-overlay.open { transform: translateX(0); }
+
+.mobile-menu-content {
+    flex: 1; display: flex; flex-direction: column; padding: 20px; overflow-y: auto;
 }
 
-.mp-section{ padding:10px 14px; border-bottom:1px solid #14203a; }
-.mp-kicker{ font-size:.8rem; color:#a5b4fc; font-weight:900; margin-bottom:6px; }
-.mp-link{ display:block; color:#eaf2ff; padding:.5rem 0; font-weight:700; text-decoration:none; }
-.mp-link:active{ opacity:.85; }
-
-.mp-actions{ padding:14px; display:grid; gap:10px; margin-top:auto; }
-.mp-cta{
-  display:inline-block; text-align:center; font-weight:900;
-  padding:.8rem 1rem; border-radius:12px;
-  color:#111827; background:linear-gradient(180deg,#fde047,#facc15); border:1px solid #eab308;
+.mm-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
+    border-bottom: 1px solid var(--border); padding-bottom: 20px;
 }
-.mp-wa{
-  display:inline-block; text-align:center; font-weight:900;
-  padding:.8rem 1rem; border-radius:12px;
-  color:#0a3d21; background:var(--wa); border:1px solid #128C7E; text-decoration:none;
+.mm-title { font-size: 1.5rem; font-weight: 800; color: var(--text); }
+.mm-close { font-size: 1.5rem; color: var(--text-muted); background: none; border: none; padding: 10px; }
+
+.mm-links { display: flex; flex-direction: column; gap: 5px; }
+.mm-divider { 
+    margin-top: 20px; margin-bottom: 10px; font-size: 0.75rem; text-transform: uppercase; 
+    color: var(--primary); font-weight: 700; letter-spacing: 1px; 
 }
 
-/* Contenedor */
-.container{ width:min(1200px, 100%); margin-inline:auto; padding-inline:14px; }
-.brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+.mm-link {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 15px; border-radius: 12px; background: rgba(255,255,255,0.03);
+    color: var(--text); text-decoration: none; font-weight: 600; font-size: 1.1rem;
+}
+.mm-link:active { background: rgba(255,255,255,0.1); }
+.mm-arrow { color: var(--text-muted); }
+
+.mm-footer { margin-top: auto; padding-top: 30px; display: flex; flex-direction: column; gap: 15px; }
+.btn-mm-primary {
+    background: var(--accent); color: #000; padding: 16px; border-radius: 12px;
+    text-align: center; font-weight: 800; text-decoration: none; font-size: 1.1rem;
+}
+.btn-mm-secondary {
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+    padding: 16px; border-radius: 12px; text-align: center; font-weight: 600; text-decoration: none;
+}
 `;

@@ -5,11 +5,23 @@ import PartnersMarquee from "../components/PartnersMarquee.jsx";
 import SEOHead from "../components/SEOHead.jsx";
 import { seoDefaults } from "../seo.config";
 
-// Imágenes identidad
+// Imágenes identidad (Asegúrate que las rutas existan)
 import id1 from "../assets/img/lael/1.png";
 import id3 from "../assets/img/lael/3.png";
 
-/* --- util: extraer ID de YouTube desde cualquier URL --- */
+/* --------------------------------------------------------------------------
+   ICONOS SVG (Estilo Minimalista Premium)
+   -------------------------------------------------------------------------- */
+const Icons = {
+  ArrowRight: () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>,
+  Play: () => <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>,
+  CheckCircle: () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
+  Users: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  Zap: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+  Star: () => <svg width="20" height="20" fill="currentColor" stroke="none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+};
+
+/* --- Utilidades YouTube --- */
 function extractYouTubeId(url) {
   try {
     const u = new URL(url);
@@ -17,61 +29,47 @@ function extractYouTubeId(url) {
     if (u.searchParams.get("v")) return u.searchParams.get("v");
     const m = u.pathname.match(/\/embed\/([a-zA-Z0-9_-]{6,})/);
     return m ? m[1] : "";
-  } catch {
-    return "";
-  }
+  } catch { return ""; }
 }
 
-/* --- componente de video responsivo --- */
-function YouTubeBox({
-  url = "https://youtu.be/THBr7MOVS0s?si=nODyq69xbCt1TqRr",
-  title = "Clase real: PAES M1 (ejercitación guiada)",
-}) {
+function YouTubeBox({ url }) {
   const id = extractYouTubeId(url);
   const src = `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
   return (
-    <div className="video-wrapper" aria-label={title}>
+    <div className="hero-video-frame">
+      <div className="video-glow"></div>
       <iframe
         src={src}
-        title={title}
+        title="Clase demostrativa Lael"
         loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
-        referrerPolicy="strict-origin-when-cross-origin"
       />
     </div>
   );
 }
 
 export default function Home() {
-  // Entrada suave de secciones
+  // Efecto Reveal al hacer scroll
   useEffect(() => {
-    const els = Array.from(document.querySelectorAll(".reveal"));
-    if (!("IntersectionObserver" in window)) {
-      els.forEach((el) => el.classList.add("in"));
-    } else {
-      const io = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add("in");
-              io.unobserve(e.target);
-            }
-          });
-        },
-        { threshold: 0.12 }
-      );
-      els.forEach((el) => io.observe(el));
-      return () => io.disconnect();
-    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+    return () => observer.disconnect();
   }, []);
 
-  // UX: “no te vayas” cuando pierde foco y restablecer al volver
+  // Título dinámico
   useEffect(() => {
     const baseTitle = "Instituto Lael — Educación online con acompañamiento real";
-    const onBlur = () => (document.title = "No te vayas 💛 ¡Sigue aprendiendo en Lael!");
+    const onBlur = () => (document.title = "💛 ¡No te rindas! Sigue aprendiendo...");
     const onFocus = () => (document.title = baseTitle);
-    document.title = baseTitle;
     window.addEventListener("blur", onBlur);
     window.addEventListener("focus", onFocus);
     return () => {
@@ -80,501 +78,461 @@ export default function Home() {
     };
   }, []);
 
-  // ---------- SEO JSON-LD enriquecido ----------
   const videoUrl = "https://youtu.be/THBr7MOVS0s?si=nODyq69xbCt1TqRr";
-  const videoId = extractYouTubeId(videoUrl);
-  const videoEmbed = `https://www.youtube.com/embed/${videoId}`;
-  const jsonLd = [
-    // Organization (útil también en Home)
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Instituto Lael SpA",
-      "url": seoDefaults.site,
-      "logo": `${seoDefaults.site}/meta/logo-lael.png`,
-      "sameAs": [
-        "https://www.instagram.com/institutolael",
-        "https://www.youtube.com/@institutolael",
-        "https://www.linkedin.com/company/instituto-lael/"
-      ],
-      "contactPoint": [{
-        "@type": "ContactPoint",
-        "telephone": "+56 9 6462 6568",
-        "contactType": "customer support",
-        "areaServed": "CL",
-        "availableLanguage": ["Spanish"]
-      }]
-    },
-    // WebSite con SearchAction
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Instituto Lael",
-      "url": seoDefaults.site,
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": `${seoDefaults.site}/?q={search_term_string}`,
-        "query-input": "required name=search_term_string"
-      }
-    },
-    // ItemList de programas destacados (PAES, Idiomas, LSCh)
-    {
-      "@context": "https://schema.org",
-      "@type": "ItemList",
-      "name": "Programas Lael",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "PAES — Preparación",
-          "url": `${seoDefaults.site}/paes`
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Idiomas — Inglés y Coreano",
-          "url": `${seoDefaults.site}/idiomas`
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Lengua de Señas Chilena (LSCh)",
-          "url": `${seoDefaults.site}/lsch`
-        }
-      ]
-    },
-    // VideoObject del hero (mejora rich results si Google lo toma)
-    {
-      "@context": "https://schema.org",
-      "@type": "VideoObject",
-      "name": "Clase real: PAES M1 (ejercitación guiada)",
-      "description": "Mira un extracto de una clase real de PAES M1 con ejercitación guiada y explicaciones claras.",
-      "thumbnailUrl": [
-        `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
-      ],
-      "uploadDate": "2024-01-01",
-      "embedUrl": videoEmbed,
-      "url": videoUrl,
-      "publisher": {
-        "@type": "Organization",
-        "name": "Instituto Lael SpA",
-        "logo": {
-          "@type": "ImageObject",
-          "url": `${seoDefaults.site}/meta/logo-lael.png`
-        }
-      }
-    }
-  ];
 
   return (
-    <div className="home">
-      {/* SEO HEAD */}
-      <SEOHead
-        title="Instituto Lael"
-        description="PAES, Idiomas e LSCh con acompañamiento real: clases en vivo + cápsulas, material descargable y seguimiento. 87% logra su objetivo y 9/10 nos recomiendan."
-        path="/"
-        image={`${seoDefaults.site}/meta/og-home.jpg`}
-        jsonLd={jsonLd}
-      />
-
+    <div className="home-page">
+      <SEOHead title="Instituto Lael | Preuniversitario y Cursos Online" description="Prepara la PAES, aprende idiomas o LSCh con metodología probada. Clases en vivo, plataforma 24/7 y profesores que sí explican." path="/" />
       <style>{css}</style>
 
-      {/* HERO — limpio con preview a la derecha */}
-      <section className="hero reveal">
-        <div className="container hero__wrap">
-          <div className="hero__col">
-            <p className="kicker">Educación online, cercana y clara</p>
-            <h1 className="title">
-              PAES, <span className="grad g2">Idiomas</span> y{" "}
-              <span className="grad g3">LSCh</span> con{" "}
-              <span className="underline">acompañamiento real</span>.
+      {/* --- LUCES AMBIENTALES (El toque premium) --- */}
+      <div className="ambient-light hero-light" />
+      <div className="ambient-light section-light" />
+
+      {/* --- HERO SECTION --- */}
+      <section className="hero-section">
+        <div className="container hero-grid">
+          <div className="hero-content reveal-on-scroll">
+            
+            <div className="badge-wrapper">
+              <span className="pill-badge">🎓 ADMISIÓN 2026 ABIERTA</span>
+            </div>
+
+            <h1 className="hero-title">
+              No estudies solo.<br/>
+              Prepárate con <span className="text-gradient">acompañamiento real.</span>
             </h1>
-            <p className="lead">
-              Clases en vivo + cápsulas, material descargable y seguimiento.{" "}
-              <strong>87%</strong> logra su objetivo y <strong>9 de 10</strong> nos recomiendan.
+            
+            <p className="hero-desc">
+              Ya sea para la <b>PAES</b>, aprender <b>Idiomas</b> o <b>Lengua de Señas</b>. 
+              Olvídate de ser un número más. Aquí te conocemos, te guiamos y celebramos tus logros.
             </p>
-            <div className="cta">
-              <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-              <Link className="btn btn-ghost" to="/paes">Ver programas</Link>
-              <a
-                className="btn btn-link"
-                href="https://wa.me/56964626568?text=Hola%20Lael,%20quisiera%20informaci%C3%B3n"
-                target="_blank"
-                rel="noreferrer"
-              >
-                WhatsApp
+
+            <div className="hero-actions">
+              <Link className="btn btn-primary btn-glow" to="/inscripcion">
+                Asegurar mi cupo <Icons.ArrowRight />
+              </Link>
+              <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="btn btn-outline">
+                Hablar con un asesor
               </a>
             </div>
-            <div className="chips">
-              <Chip to="/paes" label="PAES Matemáticas M1" />
-              <Chip to="/idiomas" label="Inglés B1–B2" />
-              <Chip to="/lsch" label="Lengua de Señas (LSCh)" />
+
+            <div className="hero-stats">
+              <div className="stat-item">
+                <span className="stat-val">87%</span>
+                <span className="stat-label">Logra su meta</span>
+              </div>
+              <div className="divider-v"></div>
+              <div className="stat-item">
+                <span className="stat-val">+11k</span>
+                <span className="stat-label">Horas dictadas</span>
+              </div>
+              <div className="divider-v"></div>
+              <div className="stat-item">
+                <span className="stat-val">4.9/5</span>
+                <span className="stat-label">Valoración</span>
+              </div>
             </div>
           </div>
 
-          {/* DERECHA: video + accesos rápidos */}
-          <div className="hero__media">
+          <div className="hero-media reveal-on-scroll">
             <YouTubeBox url={videoUrl} />
-            <ul className="hero__quicklinks" aria-label="Accesos directos">
-              <li><Link to="/paes" className="qk">PAES</Link></li>
-              <li><Link to="/idiomas" className="qk">Idiomas</Link></li>
-              <li><Link to="/lsch" className="qk">LSCh</Link></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* MARQUEE */}
-      <section className="marquee reveal">
-        <div className="container marquee__wrap">
-          <PartnersMarquee speed={32} height={28} gap={48} />
-        </div>
-      </section>
-
-      {/* TRUST BAR */}
-      <section className="trust reveal">
-        <div className="container trust__row">
-          <TrustPill kpi="87%" label="alcanza su meta" />
-          <TrustPill kpi="+11.000 h" label="clases en vivo" />
-          <TrustPill kpi="9/10" label="nos recomiendan" />
-        </div>
-      </section>
-
-      {/* PROGRAMAS */}
-      <section className="programs reveal">
-        <div className="container">
-          <header className="pg-head">
-            <h2>Programas Lael</h2>
-            <p>Elige tu camino y avanza con acompañamiento real.</p>
-          </header>
-
-          <div className="pg-grid">
-            <ProgramCard
-              title="PAES"
-              tag="Ingreso a la U"
-              text="Planifica ramos o toma un plan con ensayos y tutorías."
-              bullets={["M1, M2, Lenguaje, Historia, Ciencias", "Ensayos + retro detallada"]}
-              to="/paes"
-              accent="indigo"
-            />
-            <ProgramCard
-              title="Idiomas"
-              tag="EN · KR"
-              text="Aprende Inglés (B1–B2) o Coreano TOPIK I con práctica real."
-              bullets={["Cápsulas + clases en vivo", "Club de conversación"]}
-              to="/idiomas"
-              accent="green"
-            />
-            <ProgramCard
-              title="LSCh"
-              tag="Lengua de Señas"
-              text="Proceso práctico y comunicativo, con proyecto final."
-              bullets={["Inicio trimestral", "Acompañamiento docente"]}
-              to="/lsch"
-              accent="rose"
-            />
-          </div>
-
-          <div className="pg-foot">
-            <Link to="/empresas" className="link-inline">Capacitación para empresas →</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* HIGHLIGHTS */}
-      <section className="highlights reveal">
-        <div className="container grid-4">
-          <Feature icon="📈" title="Acompañamiento medible">Tutorías y reportes simples.</Feature>
-          <Feature icon="🧠" title="Clases claras">En vivo + cápsulas con pautas.</Feature>
-          <Feature icon="⏱️" title="Flexibilidad real">Grabadas y recuperaciones.</Feature>
-          <Feature icon="💳" title="Precio transparente">Matrícula única, sin letra chica.</Feature>
-        </div>
-      </section>
-
-      {/* IDENTIDAD */}
-      <section className="identity reveal">
-        <div className="container">
-          <header className="id-head">
-            <span className="pill">Quiénes somos</span>
-            <h2>La identidad detrás de nuestro nombre</h2>
-          </header>
-          <div className="id-grid">
-            <IdCard img={id1} title="Cobertura y propósito" text="Estudiar sin estar solos, guiados y con propósito." />
-            <IdCard img={id3} title="La paloma" text="Símbolo de comienzos genuinos y esperanza." />
-          </div>
-        </div>
-      </section>
-
-      {/* TESTIMONIOS */}
-      <section className="testi reveal">
-        <div className="container testi__grid">
-          <Quote q="Subí 150 puntos en la PAES. Clases claras y apoyo constante." a="Vicente — M1" />
-          <Quote q="Perdí el miedo a hablar inglés. Hoy me expreso con confianza en el trabajo." a="Valentina — Inglés B2" />
-        </div>
-      </section>
-
-      {/* FAQ (aporta People Also Ask si Google lo toma) */}
-      <section className="faq reveal">
-        <div className="container">
-          <h3 className="faq__title">Preguntas frecuentes</h3>
-          <details>
-            <summary><span>Si falto a una clase…</span></summary>
-            <p>Queda grabada y tienes cápsulas/material. También tutoría si la necesitas.</p>
-          </details>
-          <details>
-            <summary><span>¿Ensayos y feedback?</span></summary>
-            <p>Sí. Ensayos con retro detallada y pautas, según plan.</p>
-          </details>
-          <details>
-            <summary><span>¿Puedo cambiar de plan?</span></summary>
-            <p>Sí, ajustamos tu plan y ramos según tu avance y tiempos.</p>
-          </details>
-        </div>
-      </section>
-
-      {/* CTA FINAL */}
-      <section className="cta-final reveal">
-        <div className="container">
-          <div className="cta-final__box">
-            <h3>¿Listo para empezar?</h3>
-            <p>Inscríbete en minutos y comienza con clases en vivo, cápsulas y acompañamiento.</p>
-            <div className="cta">
-              <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-              <a
-                className="btn btn-ghost"
-                href="https://wa.me/56964626568?text=Hola%20Lael%20👋%20¿me%20orientan%20para%20elegir%20mi%20plan?"
-                target="_blank"
-                rel="noreferrer"
-              >
-                WhatsApp
-              </a>
+            
+            {/* Quick Links Flotantes */}
+            <div className="quick-links-card glass-panel">
+              <span className="ql-label">Explora rápido:</span>
+              <div className="ql-buttons">
+                <Link to="/paes" className="ql-btn">PAES</Link>
+                <Link to="/idiomas" className="ql-btn">Idiomas</Link>
+                <Link to="/lsch" className="ql-btn">LSCh</Link>
+              </div>
             </div>
-            <p className="tiny">Respondemos de lunes a viernes. Todas las clases quedan grabadas.</p>
           </div>
         </div>
       </section>
+
+      {/* --- MARQUEE (Tu favorito, intacto pero en mejor contenedor) --- */}
+      <section className="marquee-section">
+        <div className="marquee-wrapper">
+          <PartnersMarquee speed={35} height={32} gap={60} />
+        </div>
+      </section>
+
+      {/* --- PROGRAMAS (Diseño Glass Cards) --- */}
+      <section className="programs-section">
+        <div className="container">
+          <div className="section-head reveal-on-scroll">
+            <h2>Elige tu camino</h2>
+            <p>Programas diseñados para resultados reales, no para rellenar horas.</p>
+          </div>
+
+          <div className="programs-grid">
+            <ProgramCard 
+              title="Preu PAES"
+              subtitle="Ingreso a la Universidad"
+              desc="La preparación más completa. M1, M2, Ciencias, Historia y Lenguaje con ensayos mensuales y tutorías."
+              tags={["Ensayos Reales", "Clases Grabadas", "Tutorías"]}
+              link="/paes"
+              color="indigo"
+              icon={<Icons.Zap />}
+            />
+            <ProgramCard 
+              title="Idiomas"
+              subtitle="Inglés y Coreano"
+              desc="Rompe la barrera del idioma. Metodología comunicativa para que hables desde las primeras semanas."
+              tags={["Niveles A1-B2", "Club de Conversación"]}
+              link="/idiomas"
+              color="green"
+              icon={<Icons.Users />}
+            />
+            <ProgramCard 
+              title="Inclusión LSCh"
+              subtitle="Lengua de Señas Chilena"
+              desc="Aprende a comunicarte con la comunidad sorda. Un curso transformador con enfoque cultural."
+              tags={["Certificado", "Profesores Nativos"]}
+              link="/lsch"
+              color="rose"
+              icon={<Icons.Star />}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* --- POR QUÉ ELEGIRNOS (Grid Bento) --- */}
+      <section className="features-section">
+        <div className="container">
+          <div className="bento-grid reveal-on-scroll">
+            <div className="bento-item large glass-panel">
+              <h3><span className="icon-circle"><Icons.Users/></span> Acompañamiento Real</h3>
+              <p>No eres un usuario más. Nuestros tutores monitorean tu asistencia y rendimiento para que no te quedes atrás.</p>
+            </div>
+            <div className="bento-item glass-panel">
+              <h3><span className="icon-circle"><Icons.Play/></span> Todo Grabado</h3>
+              <p>¿Faltaste? No importa. Accede a la repetición en Full HD cuando quieras.</p>
+            </div>
+            <div className="bento-item glass-panel">
+              <h3><span className="icon-circle"><Icons.CheckCircle/></span> Sin Letra Chica</h3>
+              <p>Matrícula única. Precios transparentes. Sin cláusulas de amarre abusivas.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- IDENTIDAD (Mejorada) --- */}
+      <section className="identity-section">
+        <div className="container identity-grid">
+          <div className="id-text reveal-on-scroll">
+            <span className="pill-badge">NUESTRA ESENCIA</span>
+            <h2>Más que un instituto,<br/>una comunidad.</h2>
+            <p>
+              "Lael" significa <i>perteneciente a Dios</i>. Creemos en la educación con valores, 
+              donde la excelencia académica va de la mano con la calidad humana.
+            </p>
+            <p>
+              Aquí encontrarás un ambiente seguro, respetuoso y motivador para alcanzar tus sueños.
+            </p>
+          </div>
+          <div className="id-images reveal-on-scroll">
+            <div className="img-card card-1">
+              <img src={id1} alt="Estudiantes Lael" />
+            </div>
+            <div className="img-card card-2">
+              <img src={id3} alt="Símbolo Lael" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- CTA FINAL --- */}
+      <section className="final-cta">
+        <div className="container">
+          <div className="cta-box glass-panel reveal-on-scroll">
+            <div className="cta-content">
+              <h2>¿Listo para empezar tu futuro?</h2>
+              <p>Las vacantes son limitadas para asegurar la calidad de las clases.</p>
+              <div className="cta-buttons">
+                <Link to="/inscripcion" className="btn btn-primary btn-lg btn-glow">
+                  Inscribirme Ahora
+                </Link>
+                <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="btn btn-ghost btn-lg">
+                  Consultar por WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
 
-/* ---------- Atoms ---------- */
-function Chip({ to, label }) {
+/* --------------------------------------------------------------------------
+   SUB-COMPONENTES
+   -------------------------------------------------------------------------- */
+function ProgramCard({ title, subtitle, desc, tags, link, color, icon }) {
   return (
-    <Link to={to} className="chip">
-      <span className="dot" /> {label}
+    <Link to={link} className={`program-card accent-${color} reveal-on-scroll`}>
+      <div className="card-icon">{icon}</div>
+      <div className="card-content">
+        <span className="card-subtitle">{subtitle}</span>
+        <h3>{title}</h3>
+        <p>{desc}</p>
+        <div className="card-tags">
+          {tags.map((t, i) => <span key={i} className="tag">{t}</span>)}
+        </div>
+        <div className="card-link">Ver programa →</div>
+      </div>
+      <div className="card-bg-glow" />
     </Link>
   );
 }
-function Feature({ icon, title, children }) {
-  return (
-    <article className="feat">
-      <div className="ico">{icon}</div>
-      <h3>{title}</h3>
-      <p>{children}</p>
-    </article>
-  );
-}
-function ProgramCard({ title, tag, text, bullets = [], to, accent = "indigo" }) {
-  const acc =
-    accent === "green" ? "acc-green" :
-    accent === "rose"  ? "acc-rose"  :
-    "acc-indigo";
 
-  return (
-    <article className={`p-card ${acc}`}>
-      <div className="p-bar" aria-hidden />
-      <div className="p-head">
-        {tag && <div className="p-tag">{tag}</div>}
-        <h3>{title}</h3>
-        <p>{text}</p>
-      </div>
-      <ul className="p-list">
-        {bullets.map((b, i) => <li key={i}>{b}</li>)}
-      </ul>
-      <Link className="btn-more" to={to}>Ver más</Link>
-    </article>
-  );
-}
-function Quote({ q, a }) {
-  return (
-    <blockquote className="quote">
-      <p>“{q}”</p>
-      <footer>— {a}</footer>
-    </blockquote>
-  );
-}
-function IdCard({ img, title, text }) {
-  return (
-    <article className="id-card">
-      <div className="id-media">
-        <img src={img} alt={title} loading="lazy" decoding="async" />
-      </div>
-      <div className="id-body">
-        <h3>{title}</h3>
-        <p>{text}</p>
-      </div>
-    </article>
-  );
-}
-function TrustPill({ kpi, label }) {
-  return (
-    <div className="tpill">
-      <div className="tpill__kpi">{kpi}</div>
-      <div className="tpill__label">{label}</div>
-    </div>
-  );
-}
-
-/* ---------- CSS ---------- */
+/* --------------------------------------------------------------------------
+   CSS STYLES (Glassmorphism Dark Theme)
+   -------------------------------------------------------------------------- */
 const css = `
-:root{
-  --bg:#0b1220;
-  --card:#0e1424;
-  --bd:#1f2a44;
-  --text:#ffffff;
-  --muted:#cfe0ff;
-  --indigo:#3b549d;   /* lael primary */
-  --green:#249554;    /* lael secondary */
-  --rose:#d6a0c5;
-  --amber:#f2ce3d;
+:root {
+  --bg-dark: #050505;
+  --bg-panel: #0F1115;
+  --primary: #6366f1; /* Indigo */
+  --primary-glow: rgba(99, 102, 241, 0.5);
+  --text-main: #ffffff;
+  --text-muted: #94a3b8;
+  --border: rgba(255, 255, 255, 0.08);
+  --glass: rgba(255, 255, 255, 0.03);
+  --glass-hover: rgba(255, 255, 255, 0.06);
+  
+  --indigo: #6366f1;
+  --green: #10b981;
+  --rose: #f43f5e;
 }
 
-*{box-sizing:border-box}
-body, .home{background:linear-gradient(180deg,var(--bg),var(--card)); color:var(--text);}
-.container{max-width:1120px; margin:0 auto; padding:0 22px}
-section { scroll-margin-top: 84px; }
-
-/* HERO */
-.hero{padding:72px 0 36px; border-bottom:1px solid var(--bd)}
-.hero__wrap{display:grid; grid-template-columns:1.1fr .9fr; gap:44px; align-items:center}
-@media (max-width:980px){.hero__wrap{grid-template-columns:1fr; gap:28px}}
-.kicker{color:#f1e9b3; font-weight:900; letter-spacing:.2px; margin:0 0 12px}
-.title{margin:.2rem 0 1rem; font-size:clamp(2.1rem,3.8vw,3rem); line-height:1.12}
-.underline{box-shadow:inset 0 -10px rgba(59,84,157,.28); border-radius:4px}
-.grad{background:linear-gradient(120deg,#A5B4FC,#22d3ee); -webkit-background-clip:text; background-clip:text; color:transparent}
-.g2{background:linear-gradient(120deg,var(--green),#a78bfa); -webkit-background-clip:text; background-clip:text; color:transparent}
-.g3{background:linear-gradient(120deg,var(--amber),#cd5732); -webkit-background-clip:text; background-clip:text; color:transparent}
-.lead{color:#eaf2ff; max-width:62ch}
-.cta{display:flex; flex-wrap:wrap; gap:12px; margin:18px 0 14px}
-.btn{display:inline-flex; align-items:center; gap:8px; padding:.7rem 1rem; border-radius:12px; border:1px solid transparent; text-decoration:none; font-weight:700}
-.btn-primary{background:var(--indigo); color:#fff; border-color:var(--indigo)}
-.btn-ghost{background:transparent; color:#eaf2ff; border-color:#2f3341}
-.btn-link{background:transparent; color:#eaf2ff; text-decoration:underline; text-underline-offset:3px}
-.btn:focus-visible{outline:2px solid var(--amber); outline-offset:2px}
-.chips{display:flex; flex-wrap:wrap; gap:10px; margin-top:10px}
-.chip{display:inline-flex; align-items:center; gap:8px; padding:.48rem .76rem; border-radius:999px; border:1px solid var(--bd); background:#0d1528; color:#fff; text-decoration:none; font-weight:600}
-.chip .dot{width:8px; height:8px; border-radius:50%; background:var(--amber)}
-
-.hero__media{display:flex; flex-direction:column; gap:10px}
-.hero__quicklinks{list-style:none; margin:0; padding:0; display:flex; gap:10px; flex-wrap:wrap;}
-.qk{display:inline-flex; align-items:center; padding:.44rem .7rem; border-radius:999px; border:1px solid var(--bd); background:#0f172a; color:#fff; text-decoration:none; font-weight:700;}
-.qk:hover{ border-color:#2c3b65 }
-
-/* Video responsivo */
-.video-wrapper {
+.home-page {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
   position: relative;
-  padding-bottom: 56.25%;
-  height: 0;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+a { text-decoration: none; color: inherit; }
+
+/* AMBIENT LIGHTS */
+.ambient-light {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  filter: blur(140px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-light { top: -200px; right: -100px; background: var(--primary); }
+.section-light { top: 40%; left: -200px; background: var(--rose); opacity: 0.1; }
+
+/* REVEAL ANIMATION */
+.reveal-on-scroll { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.reveal-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+/* BUTTONS */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 24px; border-radius: 12px; font-weight: 600; transition: all 0.3s ease;
+  cursor: pointer; font-size: 0.95rem;
+}
+.btn-lg { padding: 16px 32px; font-size: 1.1rem; }
+.btn-primary { background: var(--primary); color: white; border: none; }
+.btn-glow { box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+.btn-glow:hover { box-shadow: 0 0 30px rgba(99, 102, 241, 0.6); transform: translateY(-2px); }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
+.btn-outline:hover { border-color: var(--primary); background: var(--glass); }
+.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+.btn-ghost:hover { background: var(--glass); color: white; }
+
+/* HERO SECTION */
+.hero-section {
+  padding: 80px 0;
+  position: relative;
+  z-index: 1;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+}
+.hero-grid { display: grid; grid-template-columns: 1fr 0.9fr; gap: 60px; align-items: center; }
+@media (max-width: 968px) { 
+  .hero-section { padding: 40px 0; text-align: center; min-height: auto; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-actions { justify-content: center; }
+  .hero-stats { justify-content: center; }
+}
+
+.badge-wrapper { margin-bottom: 20px; }
+.pill-badge {
+  background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3);
+  color: #818cf8; padding: 6px 16px; border-radius: 100px; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.02em;
+}
+.text-gradient {
+  background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.hero-desc {
+  font-size: 1.15rem; color: var(--text-muted); line-height: 1.6; max-width: 540px; margin-bottom: 40px;
+}
+@media (max-width: 968px) { .hero-desc { margin-left: auto; margin-right: auto; } }
+
+.hero-actions { display: flex; gap: 16px; margin-bottom: 48px; flex-wrap: wrap; }
+
+.hero-stats {
+  display: flex; gap: 24px; align-items: center;
+  padding-top: 24px; border-top: 1px solid var(--border);
+}
+.stat-item { display: flex; flex-direction: column; }
+.stat-val { font-size: 1.5rem; font-weight: 800; color: white; }
+.stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; }
+.divider-v { width: 1px; height: 30px; background: var(--border); }
+
+/* HERO MEDIA (VIDEO) */
+.hero-video-frame {
+  position: relative;
+  border-radius: 24px;
   overflow: hidden;
-  border-radius: 18px;
-  border: 1px solid var(--bd);
-  box-shadow: 0 18px 36px rgba(2,6,23,.26);
-  background:#0f172a;
+  border: 1px solid var(--border);
+  aspect-ratio: 16/9;
+  background: #000;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  transform: perspective(1000px) rotateY(-5deg);
+  transition: transform 0.5s ease;
 }
-.video-wrapper iframe {
+.hero-video-frame:hover { transform: perspective(1000px) rotateY(0deg); }
+.hero-video-frame iframe { width: 100%; height: 100%; border: none; }
+.video-glow {
   position: absolute; inset: 0;
-  width: 100%; height: 100%; border: 0; border-radius: 18px;
+  box-shadow: inset 0 0 60px rgba(99, 102, 241, 0.2);
+  pointer-events: none; z-index: 2;
 }
 
-/* Marquee */
-.marquee{padding:18px 0}
-.marquee__wrap{
-  position:relative; border-top:1px solid var(--bd); border-bottom:1px solid var(--bd);
-  padding:10px 0; overflow:hidden;
-  mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+.quick-links-card {
+  margin-top: 24px; padding: 16px 24px; border-radius: 16px;
+  display: flex; align-items: center; gap: 16px;
+  background: rgba(15, 17, 21, 0.6); backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
 }
-.marquee__wrap img{ filter:grayscale(1) opacity(.72); transition:filter .2s ease, opacity .2s ease; }
-.marquee__wrap img:hover{ filter:none; opacity:1; }
+@media (max-width: 968px) { .quick-links-card { flex-direction: column; width: 100%; } }
 
-/* TRUST BAR */
-.trust{ padding:22px 0 8px; }
-.trust__row{ display:grid; gap:12px; grid-template-columns: repeat(3,1fr); }
-@media (max-width:780px){ .trust__row{ grid-template-columns:1fr; } }
-.tpill{
-  border:1px solid var(--bd); border-radius:14px;
-  background:linear-gradient(180deg,var(--card),#0d1528);
-  padding:12px 14px; display:flex; align-items:baseline; gap:10px;
+.ql-label { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+.ql-buttons { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.ql-btn {
+  padding: 6px 16px; border-radius: 100px; font-size: 0.85rem; font-weight: 600;
+  background: var(--glass); border: 1px solid var(--border); color: white;
+  transition: all 0.2s;
 }
-.tpill__kpi{ font-weight:1000; font-size:1.2rem; letter-spacing:.3px }
-.tpill__label{ color:#eaf2ff }
+.ql-btn:hover { background: var(--primary); border-color: var(--primary); }
 
-/* PROGRAMAS */
-.programs{padding:44px 0}
-.pg-head h2{margin:0 0 6px}
-.pg-head p{margin:0 0 16px; color:#eaf2ff}
-.pg-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px}
-@media (max-width:980px){.pg-grid{grid-template-columns:1fr}}
-.p-card{position:relative; border:1px solid #e5e7eb; border-radius:16px; background:#fff; color:#0b1220; padding:16px}
-.p-bar{position:absolute; inset:0 0 auto 0; height:6px; border-radius:16px 16px 0 0; background:var(--indigo)}
-.p-tag{display:inline-block; font-size:.75rem; font-weight:900; border:1px solid #e5e7eb; color:#0b1220; background:#fff; padding:.16rem .52rem; border-radius:999px}
-.p-head h3{margin:.45rem 0 .22rem; font-size:1.08rem}
-.p-head p{margin:0; color:#334155}
-.p-list{margin:12px 0 14px; padding:0; list-style:none}
-.p-list li{position:relative; margin:6px 0; padding-left:18px}
-.p-list li::before{content:""; position:absolute; left:0; top:.5rem; width:10px; height:10px; border-radius:50%; background:var(--indigo)}
-.btn-more{display:inline-flex; align-items:center; justify-content:center; padding:.58rem .9rem; border-radius:12px; text-decoration:none; border:2px solid #0b1220; color:#0b1220; font-weight:900}
-.acc-green .p-bar, .acc-green .p-list li::before{background:var(--green)}
-.acc-rose .p-bar, .acc-rose .p-list li::before{background:var(--rose)}
-.acc-indigo .p-bar, .acc-indigo .p-list li::before{background:var(--indigo)}
-.pg-foot{margin-top:10px}
-.link-inline{color:#eaf2ff; text-decoration:underline; text-underline-offset:3px}
+/* MARQUEE */
+.marquee-section { padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: #08090c; }
+.marquee-wrapper { opacity: 0.7; transition: opacity 0.3s; }
+.marquee-wrapper:hover { opacity: 1; }
 
-/* Highlights */
-.highlights{padding:40px 0}
-.grid-4{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
-@media (max-width:980px){.grid-4{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:560px){.grid-4{grid-template-columns:1fr}}
-.feat{border:1px solid var(--bd); border-radius:16px; padding:16px; background:linear-gradient(180deg,var(--card),#0d1528)}
-.feat h3{margin:.4rem 0 .2rem}
-.feat p{margin:0; color:#eaf2ff}
-.ico{font-size:1.1rem}
+/* PROGRAMS SECTION */
+.programs-section { padding: 100px 0; }
+.section-head { text-align: center; margin-bottom: 60px; max-width: 700px; margin-left: auto; margin-right: auto; }
+.section-head h2 { font-size: 2.5rem; margin-bottom: 16px; font-weight: 800; }
+.section-head p { font-size: 1.1rem; color: var(--text-muted); }
 
-/* Identidad */
-.identity{padding:44px 0}
-.id-head{text-align:center; margin-bottom:14px}
-.pill{display:inline-block; padding:.22rem .6rem; border:1px solid #334155; border-radius:999px; font-weight:700; font-size:.78rem}
-.id-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
-@media (max-width:980px){.id-grid{grid-template-columns:1fr}}
-.id-card{border:1px solid var(--bd); border-radius:16px; overflow:hidden; background:linear-gradient(180deg,#0f172a,#0b1220)}
-.id-media{aspect-ratio:4/3; display:grid; place-items:center; background:#0b1220}
-.id-media img{max-width:100%; height:100%; object-fit:contain}
-.id-body{padding:12px 14px}
+.programs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
 
-/* Testimonios */
-.testi{padding:40px 0}
-.testi__grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
-@media (max-width:980px){.testi__grid{grid-template-columns:1fr}}
-.quote{margin:0; padding:16px; border-radius:16px; border:1px solid var(--bd); background:var(--card)}
-.quote p{margin:0 0 10px}
-.quote footer{color:#e5e7eb}
+.program-card {
+  position: relative;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  padding: 32px;
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  display: flex; flex-direction: column; height: 100%;
+}
+.program-card:hover { transform: translateY(-10px); border-color: rgba(255,255,255,0.2); }
 
-/* FAQ */
-.faq{padding:40px 0}
-.faq__title{margin:0 0 10px}
-.faq details{border:1px solid var(--bd); border-radius:14px; background:var(--card); padding:12px 14px; margin-bottom:10px}
-.faq summary{cursor:pointer; font-weight:900; list-style:none; display:flex; align-items:center; gap:8px}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"▸"; margin-left:auto; transform:rotate(0deg); transition:transform .16s ease; color:var(--amber)}
-.faq details[open] summary::after{transform:rotate(90deg)}
-.faq p{margin:.5rem 0 0; color:#eaf2ff}
+.card-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px; font-size: 1.5rem;
+  background: var(--glass); border: 1px solid var(--border);
+}
+.accent-indigo .card-icon { color: var(--indigo); background: rgba(99, 102, 241, 0.1); }
+.accent-green .card-icon { color: var(--green); background: rgba(16, 185, 129, 0.1); }
+.accent-rose .card-icon { color: var(--rose); background: rgba(244, 63, 94, 0.1); }
 
-/* CTA final */
-.cta-final{padding:24px 0 44px}
-.cta-final__box{border:1px solid var(--bd); border-radius:18px; padding:24px; text-align:center; background:linear-gradient(180deg,var(--bg),var(--card))}
-.tiny{font-size:.9rem; color:#eaf2ff}
+.card-subtitle { font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 1px; }
+.program-card h3 { font-size: 1.5rem; margin: 8px 0 12px; font-weight: 800; }
+.program-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; flex-grow: 1; }
 
-/* Reveal */
-.reveal{opacity:0; transform:translateY(12px); transition:opacity .5s ease, transform .5s ease}
-.reveal.in{opacity:1; transform:translateY(0)}
-@media (prefers-reduced-motion: reduce){.reveal{transition:none}}
-`;
+.card-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+.tag { font-size: 0.75rem; padding: 4px 10px; border-radius: 6px; background: var(--glass); color: var(--text-muted); }
+
+.card-link { font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; }
+.accent-indigo .card-link { color: var(--indigo); }
+.accent-green .card-link { color: var(--green); }
+.accent-rose .card-link { color: var(--rose); }
+
+/* BENTO FEATURES */
+.features-section { padding: 60px 0; }
+.bento-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 24px; }
+@media (max-width: 768px) { .bento-grid { grid-template-columns: 1fr; } }
+
+.glass-panel {
+  background: var(--bg-panel); border: 1px solid var(--border);
+  padding: 32px; border-radius: 20px;
+}
+.bento-item h3 { display: flex; align-items: center; gap: 12px; font-size: 1.2rem; margin-bottom: 12px; }
+.icon-circle { 
+  width: 36px; height: 36px; background: var(--glass); border-radius: 50%; 
+  display: flex; align-items: center; justify-content: center; color: var(--primary); 
+}
+.bento-item p { font-size: 0.95rem; color: var(--text-muted); }
+
+/* IDENTITY SECTION */
+.identity-section { padding: 100px 0; position: relative; }
+.identity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+@media (max-width: 968px) { .identity-grid { grid-template-columns: 1fr; } }
+
+.id-text h2 { font-size: 2.5rem; margin-bottom: 24px; line-height: 1.1; }
+.id-text p { font-size: 1.1rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+
+.id-images { display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; position: relative; height: 400px; }
+.img-card { 
+  border-radius: 20px; overflow: hidden; border: 1px solid var(--border);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  position: absolute; transition: transform 0.5s ease;
+}
+.img-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card-1 { width: 60%; height: 80%; top: 0; left: 0; z-index: 1; transform: rotate(-3deg); }
+.card-2 { width: 50%; height: 60%; bottom: 0; right: 0; z-index: 2; transform: rotate(3deg); border: 4px solid var(--bg-dark); }
+.id-images:hover .card-1 { transform: rotate(-5deg) scale(1.02); }
+.id-images:hover .card-2 { transform: rotate(5deg) scale(1.05); }
+
+/* FINAL CTA */
+.final-cta { padding: 80px 0 120px; }
+.cta-box {
+  text-align: center; padding: 60px 20px;
+  background: linear-gradient(180deg, var(--bg-panel), #08090c);
+  border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.cta-box::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+.cta-content h2 { font-size: 2.5rem; margin-bottom: 16px; }
+.cta-content p { color: var(--text-muted); margin-bottom: 32px; font-size: 1.1rem; }
+.cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+`

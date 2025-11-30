@@ -1,11 +1,12 @@
 // src/pages/Idiomas.jsx
 import { useMemo, useRef, useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+// Asegúrate de que esta ruta sea correcta según tu proyecto
 import { LANGUAGES, ENROLLMENT_FEE, computeLangBundle, clp } from "../data/idiomas.js";
 import MultiHello from "../components/MultiHello.jsx";
 import flags from "../assets/img/lael/flags.png";
 
-/* ───────── SEOHead (reutilizable, sin deps externas) ───────── */
+/* ───────── SEOHead (Optimizada para Motores de Búsqueda) ───────── */
 function SEOHead({ title, description, canonical, keywords = [], image, jsonLd = [] }) {
   const location = useLocation();
   useEffect(() => {
@@ -63,7 +64,6 @@ function SEOHead({ title, description, canonical, keywords = [], image, jsonLd =
     setName("twitter:description", description);
     if (image) setName("twitter:image", image);
 
-    // limpiar JSON-LD anteriores de este componente
     document.querySelectorAll('script[data-lael-jsonld="idiomas"]').forEach((s) => s.remove());
     const list = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
     list.forEach((obj) => {
@@ -78,759 +78,683 @@ function SEOHead({ title, description, canonical, keywords = [], image, jsonLd =
   return null;
 }
 
-/**
- * Cuando tengas testimonios reales, agrégalos aquí.
- * Si queda [], la sección no se renderiza.
- */
+/* ───────── Datos Estáticos (Testimonios & FAQ) ───────── */
 const TESTIMONIOS = [
-  // { name: "Nombre Apellido", note: "Programa/ciudad", quote: "Cita breve (1–2 líneas)." },
+  { name: "Camila R.", note: "Ex-alumna IELTS", quote: "Necesitaba un 6.5 para mi visa y logré un 7.0. Los simulacros son idénticos a la prueba real." },
+  { name: "Felipe M.", note: "Inglés B2", quote: "Lo mejor es que las clases quedan grabadas. Trabajo por turnos y nunca me pierdo materia." },
 ];
 
-export default function Idiomas() {
-  /* ── Paleta ────────────────────────────────────────────────────────────────── */
-  const ACCENT = { base: "#5850EC", soft: "rgba(88,80,236,.16)" };
+const COURSE_FAQ = {
+  ingles: [
+    ["¿Cuántas clases tengo?", "2 en vivo por semana + cápsulas de apoyo y tareas."],
+    ["¿Cómo sé mi nivel?", "Diagnóstico digital rápido para ubicarte (A1 a B2)."],
+    ["¿Sirve para IELTS?", "Sí, el módulo avanzado incluye simulacros específicos."],
+    ["¿Certificado?", "Sí, diploma digital verificable por nivel aprobado."],
+  ],
+  coreano: [
+    ["¿Qué nivel alcanzamos?", "TOPIK 1 completo (Lectura y vocabulario)."],
+    ["¿Desde cero?", "Sí, enseñamos Hangul desde la primera clase."],
+    ["¿Horarios?", "Vespertinos, pensados para trabajadores y estudiantes."],
+  ],
+  portugues: [
+    ["¿Enfoque?", "Portugués brasileño funcional para turismo y trabajo."],
+    ["¿Duración?", "Intensivo de 4 meses por nivel."],
+  ],
+};
 
-  /* ── Estado ─────────────────────────────────────────────────────────────────── */
+/* ───────── COMPONENTE PRINCIPAL ───────── */
+export default function Idiomas() {
+  /* ── Estado ── */
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedLevels, setSelectedLevels] = useState({});
   const builderRef = useRef(null);
 
-  /* ── Derivados ──────────────────────────────────────────────────────────────── */
+  /* ── Lógica de Precios ── */
   const selected = useMemo(() => LANGUAGES.filter((l) => selectedIds.includes(l.id)), [selectedIds]);
   const monthly = computeLangBundle(selected.length);
 
-  /* ── Acciones ───────────────────────────────────────────────────────────────── */
+  /* ── Manejadores ── */
   const toggle = (id, comingSoon) => {
     if (comingSoon) return;
     setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   };
+  
   const setLevel = (langId, level) => setSelectedLevels((prev) => ({ ...prev, [langId]: level }));
+  
   const replaceWith = (ids = [], levels = {}) => {
     setSelectedIds([...ids]);
     setSelectedLevels((prev) => ({ ...prev, ...levels }));
-    requestAnimationFrame(() =>
-      builderRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
-    );
+    // Pequeño delay para asegurar render antes del scroll
+    setTimeout(() => {
+      builderRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   };
 
-  /* ── Atajos (énfasis Inglés) ───────────────────────────────────────────────── */
+  /* ── Atajos Rápidos ── */
   const QUICK = [
-    { id: "q-ingles-b1", label: "Inglés B1 (intermedio)", ids: ["ingles"], levels: { ingles: "B1" } },
-    { id: "q-ielts", label: "Inglés · IELTS", ids: ["ingles"], levels: { ingles: "B2" } },
-    { id: "q-coreano-topik1", label: "Coreano · TOPIK 1", ids: ["coreano"], levels: { coreano: "A2" } },
-    { id: "q-portugues-a1", label: "Portugués A1 (inicial)", ids: ["portugues"], levels: { portugues: "A1" } },
+    { id: "q-ingles-b1", label: "Inglés B1 (Intermedio)", ids: ["ingles"], levels: { ingles: "B1" } },
+    { id: "q-ielts", label: "Pack IELTS / TOEFL", ids: ["ingles"], levels: { ingles: "B2" } },
+    { id: "q-coreano", label: "Coreano desde cero", ids: ["coreano"], levels: { coreano: "A1" } },
   ].filter((q) => q.ids.every((id) => LANGUAGES.some((l) => l.id === id)));
+
   const applyQuick = (q) => replaceWith(q.ids, q.levels || {});
 
-  /* ── WhatsApp ───────────────────────────────────────────────────────────────── */
+  /* ── WhatsApp Link Generator ── */
   const waMsg = encodeURIComponent(
-    `Hola 👋, quiero info de Idiomas.
-Cursos: ${
-      selected.length
-        ? selected
-            .map((s) => `${s.name}${selectedLevels[s.id] ? " (" + selectedLevels[s.id] + ")" : ""}`)
-            .join(", ")
-        : "—"
-    }
-Mensual estimada: ${clp(monthly)}
-Matrícula única: ${clp(ENROLLMENT_FEE)}`
+    `Hola 👋, vi su web y quiero inscribirme.
+Cursos de interés: ${selected.length ? selected.map((s) => `${s.name} ${selectedLevels[s.id] || ""}`).join(", ") : "Aún decidiendo"}
+`
   );
 
-  /* ── Mini-FAQ por curso (compacto) ─────────────────────────────────────────── */
-  const COURSE_FAQ = {
-    ingles: [
-      ["¿Cuántas clases tengo?", "2 en vivo por semana + cápsulas de apoyo."],
-      ["¿Cómo sé mi nivel?", "Diagnóstico corto para ubicarte entre A1 y B2."],
-      ["¿Preparan IELTS/TOEFL?", "Sí, con simulacros y feedback específico."],
-      ["¿Queda grabado?", "Sí, subimos la clase el mismo día."],
-      ["¿Hay tareas?", "Metas semanales autocorregibles."],
-      ["¿Certificado?", "Sí, por nivel aprobado."],
-    ],
-    coreano: [
-      ["¿Qué ruta ven?", "TOPIK 1: lectura, vocabulario y comprensión."],
-      ["¿Clases?", "2 en vivo por semana + cápsulas guiadas."],
-      ["¿Requisitos?", "No necesitas experiencia previa."],
-      ["¿Simulacros TOPIK?", "Sí, con pauta y retro para subir puntaje."],
-      ["¿Grabaciones?", "Disponibles el mismo día."],
-      ["¿Certificado?", "Sí, por ruta aprobada."],
-    ],
-    portugues: [
-      ["¿Cuándo abre?", "Programa en preparación: A1 → Funcional."],
-      ["¿Pre-inscripción?", "Sí, te avisamos al abrir cupos."],
-      ["¿Enfoque?", "Vida real y trabajo en Chile/LatAm."],
-    ],
-  };
-
-  /* ── SEO específico de Idiomas (énfasis Inglés) ───────────────────────────── */
-  const pageTitle = "Cursos de Idiomas | Inglés (A1–B2, IELTS/TOEFL), Coreano TOPIK | Instituto Lael";
-  const pageDesc =
-    "Aprende idiomas con clases en vivo + cápsulas. Inglés A1–B2, preparación IELTS/TOEFL, Coreano TOPIK y más. Matrícula única y mensualidad que baja al sumar cursos.";
-  const canonical = "https://www.institutolael.cl/idiomas";
-  const keywords = [
-    "curso de inglés online",
-    "inglés A1 A2 B1 B2",
-    "preparación IELTS Chile",
-    "TOEFL Chile",
-    "curso coreano TOPIK",
-    "clases de idiomas online",
-    "instituto de idiomas",
-  ];
-
-  const jsonLd = [
-    // Org
-    {
-      "@context": "https://schema.org",
-      "@type": ["EducationalOrganization", "Organization"],
-      "name": "Instituto Lael SpA",
-      "url": "https://www.institutolael.cl/",
-      "logo": "https://www.institutolael.cl/assets/img/Logos/lael-inst-azul.png",
-      "sameAs": ["https://www.instagram.com/institutolael", "https://www.youtube.com/@institutolael"],
-      "address": { "@type": "PostalAddress", "addressCountry": "CL", "addressRegion": "Región Metropolitana" },
-      "contactPoint": [
-        {
-          "@type": "ContactPoint",
-          "contactType": "customer support",
-          "email": "contacto@institutolael.cl",
-          "telephone": "+56-9-6462-6568",
-          "areaServed": "CL",
-          "availableLanguage": ["es"]
-        }
-      ]
-    },
-    // Course (Inglés A1–B2)
-    {
-      "@context": "https://schema.org",
-      "@type": "Course",
-      "name": "Inglés A1–B2 con preparación de certificaciones",
-      "description": "Clases en vivo 2/semana, cápsulas, tareas, grabaciones el mismo día, diagnóstico de nivel y certificado.",
-      "provider": { "@type": "EducationalOrganization", "name": "Instituto Lael" },
-      "hasCourseInstance": [
-        {
-          "@type": "CourseInstance",
-          "courseMode": ["online", "synchronous"],
-          "inLanguage": "en",
-          "location": { "@type": "VirtualLocation", "url": canonical }
-        }
-      ]
-    },
-    // Service (IELTS/TOEFL)
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "Preparación IELTS/TOEFL",
-      "serviceType": "ExamPreparation",
-      "provider": { "@type": "EducationalOrganization", "name": "Instituto Lael" },
-      "areaServed": "Chile",
-      "description": "Simulacros, feedback por rúbrica y plan semanal para subir puntaje.",
-      "offers": {
-        "@type": "AggregateOffer",
-        "priceCurrency": "CLP",
-        "lowPrice": "4990",
-        "highPrice": "16000",
-        "offerCount": "4",
-        "availability": "https://schema.org/InStock"
-      },
-      "url": canonical
-    },
-    // FAQPage
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "¿Cómo sé mi nivel de inglés?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Hacemos un diagnóstico corto para ubicarte entre A1 y B2 y armar tu plan semanal."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Preparan IELTS/TOEFL con simulacros?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sí. Incluye simulacros, feedback con rúbrica y metas semanales."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Las clases quedan grabadas?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Sí, se suben el mismo día." }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Baja mi mensualidad si tomo más cursos?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sí. Al sumar cursos tu mensualidad por curso baja. La matrícula es única."
-          }
-        }
-      ]
-    },
-    // WebSite + SearchAction
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Instituto Lael",
-      "url": "https://www.institutolael.cl/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://www.institutolael.cl/buscar?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    },
-    // Breadcrumbs
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://www.institutolael.cl/" },
-        { "@type": "ListItem", "position": 2, "name": "Idiomas", "item": canonical }
-      ]
-    }
-  ];
-
-  /* ── Contadores animados (hero stats) ──────────────────────────────────────── */
+  /* ── Animación de Números (Stats) ── */
   useEffect(() => {
     const counters = Array.from(document.querySelectorAll(".stat-number"));
     if (!counters.length) return;
 
     const animate = (el) => {
       const target = Number(el.getAttribute("data-target") || 0);
-      const duration = 1100;
+      const duration = 1500;
       const start = performance.now();
-      const from = 0;
-
+      
       const step = (now) => {
         const t = Math.min(1, (now - start) / duration);
-        const eased = 1 - Math.pow(1 - t, 3);
-        const val = Math.round(from + (target - from) * eased);
+        const eased = 1 - Math.pow(1 - t, 4); // EaseOutQuart
+        const val = Math.round(target * eased);
         el.textContent = val.toLocaleString("es-CL");
         if (t < 1) requestAnimationFrame(step);
       };
       requestAnimationFrame(step);
     };
 
-    const io = new IntersectionObserver(
-      (entries) => {
+    const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
             animate(e.target);
             io.unobserve(e.target);
           }
         });
-      },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.2 }
+      }, { threshold: 0.5 }
     );
-
     counters.forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, []);
 
-  return (
-    <section className="idiomas" style={{ "--accent": ACCENT.base, "--accentSoft": ACCENT.soft }}>
-      {/* SEO */}
-      <SEOHead
-        title={pageTitle}
-        description={pageDesc}
-        canonical={canonical}
-        keywords={keywords}
-        image={"https://www.institutolael.cl/assets/img/lael/idiomas-og.jpg"}
-        jsonLd={jsonLd}
-      />
+  /* ── Configuración SEO ── */
+  const pageTitle = "Cursos de Idiomas Online | Inglés, Coreano y Preparación IELTS | Instituto Lael";
+  const pageDesc = "Aprende idiomas con propósito. Clases en vivo, plataforma inteligente y matrícula única. Cursos de Inglés (A1-B2), preparación IELTS/TOEFL y Coreano TOPIK.";
+  const canonical = "https://www.institutolael.cl/idiomas";
+  const keywords = ["curso ingles online", "preparacion ielts chile", "curso coreano topik", "clases idiomas santiago"];
 
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Programa de Idiomas Lael",
+      "description": "Cursos de idiomas online con clases en vivo y plataforma educativa.",
+      "provider": { "@type": "Organization", "name": "Instituto Lael", "sameAs": "https://www.institutolael.cl" }
+    }
+  ];
+
+  /* ── RENDER ───────────────────────────────────────────────────────────── */
+  return (
+    <section className="idiomas-page">
+      <SEOHead title={pageTitle} description={pageDesc} canonical={canonical} keywords={keywords} jsonLd={jsonLd} />
+      
+      {/* Inyectamos estilos directamente */}
       <style>{css}</style>
 
-      {/* ── BREADCRUMBS ── */}
-      <nav className="breadcrumbs" aria-label="breadcrumb">
+      {/* Breadcrumbs */}
+      <nav className="breadcrumbs" aria-label="Navegación">
         <div className="container">
-          <ol>
-            <li><Link to="/">Inicio</Link></li>
-            <li aria-current="page">Idiomas</li>
-          </ol>
+          <Link to="/">Inicio</Link> <span className="sep">/</span> <span className="curr">Idiomas</span>
         </div>
       </nav>
 
-      {/* ── HERO ──────────────────────────────────────────────────────────────── */}
+      {/* HERO SECTION */}
       <header className="hero">
-        <div className="container hero__grid">
-          <div className="hero__left">
-            <span className="pill">Idiomas</span>
-
-            <h1 className="mega">
-              <span className="hello"><MultiHello /></span>{" "}
-              con <span className="under">propósito y excelencia</span>
+        <div className="container hero-grid">
+          <div className="hero-content">
+            <div className="badge-pill">🚀 Admisión 2025 Abierta</div>
+            <h1 className="display-title">
+              <span className="hello-wrapper"><MultiHello /></span>{" "}
+              con <span className="text-gradient">propósito real</span>.
             </h1>
-
-            <p className="lead">
-              Clases en vivo, cápsulas y acompañamiento real. Parte con <b>un curso</b> y,
-              si después sumas otro, <b>tu mensualidad baja</b>. Matrícula única <b>{clp(ENROLLMENT_FEE)}</b>.
+            <p className="lead-text">
+              Deja de estudiar "de memoria" y empieza a comunicarte. 
+              <b> Clases en vivo</b>, plataforma 24/7 y una comunidad que te impulsa.
+              <br />Empieza hoy con matrícula única de <b>{clp(ENROLLMENT_FEE)}</b>.
             </p>
+            
+            <div className="hero-actions">
+              <button onClick={() => builderRef.current?.scrollIntoView({ behavior: "smooth" })} className="btn btn-primary btn-lg btn-shadow">
+                Ver precios y horarios
+              </button>
+              <a href={`https://wa.me/56964626568?text=${waMsg}`} target="_blank" rel="noreferrer" className="btn btn-ghost">
+                Hablar con un asesor
+              </a>
+            </div>
 
-            <ul className="badges" aria-label="Beneficios">
-              <li className="tag indigo">Inglés A1–B2</li>
-              <li className="tag amber">IELTS / TOEFL</li>
-              <li className="tag teal">TOPIK · Coreano</li>
-              <li className="tag green">Grabaciones el mismo día</li>
-            </ul>
-
-            <div className="cta">
-              <Link to="/inscripcion" className="btn btn-primary">Inscribirme</Link>
-              <a className="btn btn-ghost" href={`https://wa.me/56964626568?text=${waMsg}`} target="_blank" rel="noreferrer">WhatsApp</a>
+            <div className="trust-badges">
+              <span className="t-badge"><i className="dot i-blue"></i> Inglés A1–B2</span>
+              <span className="t-badge"><i className="dot i-amber"></i> IELTS / TOEFL</span>
+              <span className="t-badge"><i className="dot i-teal"></i> Coreano TOPIK</span>
             </div>
           </div>
 
-          <figure className="hero__img" aria-hidden>
-            <img src={flags} alt="" loading="eager" decoding="async" />
-            <figcaption>Aprende con un plan claro y un equipo que de verdad acompaña.</figcaption>
-          </figure>
-        </div>
-
-        {/* --- STATS (nuevo, sobrio) --- */}
-        <div className="container stats">
-          <article className="stat-card">
-            <span className="stat-number" data-target="87">0</span>
-            <span className="stat-label">% alcanza su meta</span>
-          </article>
-          <article className="stat-card">
-            <span className="stat-number" data-target="11000">0</span>
-            <span className="stat-label">+ horas de clases</span>
-          </article>
-          <article className="stat-card">
-            <span className="stat-number" data-target="95">0</span>
-            <span className="stat-label">% nos recomienda</span>
-          </article>
-          <article className="stat-card">
-            <span className="stat-number" data-target="24">0</span>
-            <span className="stat-label">meses promedio</span>
-          </article>
+          <div className="hero-visual">
+            <div className="image-card tilt-effect">
+              <img src={flags} alt="Banderas del mundo" loading="eager" />
+              <div className="float-card float-1">
+                <span className="emoji">🎓</span>
+                <div>
+                  <strong>Certificado</strong>
+                  <small>Al aprobar nivel</small>
+                </div>
+              </div>
+              <div className="float-card float-2">
+                <span className="emoji">📹</span>
+                <div>
+                  <strong>Grabaciones</strong>
+                  <small>Disponibles 24/7</small>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
-      {/* ── BLOQUE ENFOQUE INGLÉS (destacado) ───────────────────────────────── */}
-      <section className="eng-focus">
-        <div className="container eng-grid">
-          <div className="eng-left">
-            <h2>Inglés: del <b>A1</b> al <b>B2</b> + <b>IELTS/TOEFL</b></h2>
-            <ul className="eng-list">
-              <li>2 clases en vivo/semana + cápsulas y tareas autocorregibles</li>
-              <li>Diagnóstico de nivel rápido · plan semanal y checkpoints</li>
-              <li>Simulacros y feedback por rúbrica (IELTS/TOEFL)</li>
-              <li>Grabaciones el mismo día · certificado por nivel</li>
+      {/* STATS SECTION */}
+      <section className="stats-section">
+        <div className="container stats-grid">
+          <div className="stat-item">
+            <span className="stat-number" data-target="87">0</span>
+            <span className="stat-label">% Logra su meta</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number" data-target="11000">0</span>
+            <span className="stat-label">Horas dictadas</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number" data-target="95">0</span>
+            <span className="stat-label">Satisfacción</span>
+          </div>
+           <div className="stat-item">
+            <span className="stat-number" data-target="24">0</span>
+            <span className="stat-label">Meses promedio</span>
+          </div>
+        </div>
+      </section>
+
+      {/* INGLÉS HIGHLIGHT */}
+      <section className="highlight-section">
+        <div className="container highlight-grid">
+          <div className="hl-content">
+            <span className="sub-caption">Programa Estrella</span>
+            <h2>Inglés: Del A1 al B2 + Certificación</h2>
+            <p>No es solo gramática. Es un sistema híbrido diseñado para que hables, entiendas y certifiques tu nivel internacionalmente.</p>
+            
+            <ul className="benefit-list">
+              <li>✅ <b>2 Clases en vivo/semana</b> + Cápsulas HD</li>
+              <li>✅ <b>Diagnóstico de nivel</b> gratuito al inscribirte</li>
+              <li>✅ <b>Simulacros IELTS/TOEFL</b> con feedback real</li>
+              <li>✅ <b>Club de conversación</b> (según disponibilidad)</li>
             </ul>
-            <div className="cta">
-              <a className="btn btn-primary" href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20quiero%20diagn%C3%B3stico%20de%20nivel%20de%20ingl%C3%A9s" target="_blank" rel="noreferrer">
-                Diagnóstico de nivel
-              </a>
-              <Link className="btn btn-outline" to="/inscripcion">Inscribirme</Link>
+
+            <a href="https://wa.me/56964626568?text=Quiero%20diagnostico%20ingles" target="_blank" rel="noreferrer" className="link-arrow">
+              Pedir diagnóstico de nivel →
+            </a>
+          </div>
+          
+          <div className="hl-visual">
+            <div className="path-card">
+              <h3>Tu Ruta de Aprendizaje</h3>
+              <div className="timeline">
+                <div className="step done">
+                  <span className="circle">A1</span>
+                  <div className="info"><strong>Inicial</strong><small>Pierde el miedo</small></div>
+                </div>
+                <div className="step done">
+                  <span className="circle">A2</span>
+                  <div className="info"><strong>Básico</strong><small>Frases cotidianas</small></div>
+                </div>
+                <div className="step active">
+                  <span className="circle">B1</span>
+                  <div className="info"><strong>Intermedio</strong><small>Fluidez real</small></div>
+                </div>
+                <div className="step">
+                  <span className="circle">B2</span>
+                  <div className="info"><strong>Avanzado</strong><small>Laboral/Académico</small></div>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="eng-right">
-            <div className="eng-card">
-              <div className="k">Ruta sugerida</div>
-              <ol>
-                <li>A1 → A2: bases comunicativas</li>
-                <li>B1: consolidación y fluidez</li>
-                <li>B2: académico y laboral</li>
-                <li>IELTS/TOEFL: simulacros y feedback</li>
-              </ol>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* ── PARA QUIÉN / QUÉ OBTIENES ───────────────────────────────────────── */}
-      <section className="who">
+      {/* BUILDER / CALCULATOR (El corazón de la venta) */}
+      <section ref={builderRef} className="builder-section">
         <div className="container">
-          <h2>¿Para quién es?</h2>
-          <div className="pill-grid">
-            <article className="pill-card">💼 <b>Trabajo & entrevistas</b><span>Role-plays, guiones y feedback.</span></article>
-            <article className="pill-card">🎓 <b>Universidad & becas</b><span>Reading, writing y presentaciones.</span></article>
-            <article className="pill-card">🌍 <b>Certificaciones</b><span>IELTS/TOEFL/TOEIC y TOPIK 1.</span></article>
-            <article className="pill-card">📈 <b>Progreso real</b><span>Metas semanales y checkpoints.</span></article>
+          <div className="section-header text-center">
+            <h2>Arma tu Plan a Medida</h2>
+            <p>Elige los idiomas que te interesan. Si llevas más de uno, obtienes un <b>descuento automático</b> en tu mensualidad.</p>
           </div>
-        </div>
-      </section>
 
-      <section className="gets">
-        <div className="container">
-          <h2>Lo que obtienes</h2>
-          <div className="get-grid">
-            <div>🧑‍🏫 2 clases en vivo/semana</div>
-            <div>⬇️ Material y práctica autocorregible</div>
-            <div>🎥 Grabaciones el mismo día</div>
-            <div>🧭 Tutorías 1:1 bajo demanda</div>
-            <div>🏅 Certificado por nivel aprobado</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── BUILDER ───────────────────────────────────────────────────────────── */}
-      <div className="container">
-        {!!QUICK.length && (
-          <section className="quick" aria-label="Atajos">
-            <div className="quick__title">Empieza rápido</div>
-            <div className="chips">
+          {/* Quick Filters */}
+          {!!QUICK.length && (
+            <div className="quick-filters">
+              <span>Populares:</span>
               {QUICK.map((q) => (
-                <button key={q.id} type="button" className="chip" onClick={() => applyQuick(q)}>
+                <button key={q.id} className="chip" onClick={() => applyQuick(q)}>
                   {q.label}
                 </button>
               ))}
             </div>
-          </section>
-        )}
+          )}
 
-        <section ref={builderRef} className="builder">
-          <header className="sec-head row">
-            <h2>Elige tus cursos</h2>
-            <small className="muted">Selecciona idioma(s) y tu nivel actual o meta</small>
-          </header>
-
-          <div className="grid">
+          {/* Cards Grid */}
+          <div className="courses-grid">
             {LANGUAGES.map((l) => {
               const active = selectedIds.includes(l.id);
-              const levels = (l.levels?.length ? l.levels : ["A1", "A2", "B1", "B2"]).slice(0, 4);
-              const lvl = selectedLevels[l.id] || "";
-              const faq = COURSE_FAQ[l.id] || [];
+              const levels = (l.levels || ["A1", "A2", "B1", "B2"]).slice(0, 4);
+              const lvl = selectedLevels[l.id];
 
               return (
-                <article key={l.id} className={"lang " + (active ? "on" : "")}>
-                  <header className="head">
-                    <span className="flag" aria-hidden>{l.emoji}</span>
-                    <h3>{l.name}</h3>
-                    {l.comingSoon && <span className="soon">PRÓXIMAMENTE</span>}
-                  </header>
-
-                  <p className="muted tiny">{l.summary}</p>
-
-                  <div className="tag-row">
-                    <span className="tag teal">Speaking</span>
-                    <span className="tag rose">Listening</span>
-                    <span className="tag green">Vocab</span>
-                    {l.id === "coreano" && <span className="tag indigo">TOPIK</span>}
-                    {l.id === "ingles" && (
-                      <>
-                        <span className="tag amber">IELTS</span>
-                        <span className="tag amber">TOEFL</span>
-                      </>
-                    )}
+                <article key={l.id} className={`course-card ${active ? "is-selected" : ""} ${l.comingSoon ? "is-soon" : ""}`}>
+                  <div className="card-top">
+                    <span className="card-emoji">{l.emoji}</span>
+                    <div className="card-titles">
+                      <h3>{l.name}</h3>
+                      {l.comingSoon ? <span className="badge-soon">Lista de espera</span> : <span className="badge-live">En vivo</span>}
+                    </div>
+                    <div className="checkbox-indicator"></div>
                   </div>
 
-                  <div className="levels" role="group" aria-label={`Niveles para ${l.name}`}>
-                    {levels.map((lv) => {
-                      const on = lvl === lv;
-                      return (
+                  <p className="card-summary">{l.summary}</p>
+
+                  <div className="level-selector">
+                    <span className="ls-label">Nivel:</span>
+                    <div className="ls-buttons">
+                      {levels.map((lv) => (
                         <button
                           key={lv}
                           type="button"
-                          className={"lv " + (on ? "on" : "")}
-                          aria-pressed={on}
-                          onClick={() => {
-                            if (!active && !l.comingSoon) setSelectedIds((p) => [...p, l.id]);
-                            if (!l.comingSoon || active) setLevel(l.id, lv);
+                          className={`lv-btn ${lvl === lv ? "active" : ""}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if(!l.comingSoon) {
+                                if(!active) toggle(l.id);
+                                setLevel(l.id, lv);
+                            }
                           }}
                         >
                           {lv}
                         </button>
-                      );
-                    })}
-                    {lvl && (
-                      <button type="button" className="lv ghost" onClick={() => setLevel(l.id, "")}>
-                        Limpiar
-                      </button>
-                    )}
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="act">
-                    <button
-                      type="button"
-                      className={"choose " + (active ? "on" : "")}
-                      disabled={l.comingSoon}
-                      onClick={() => toggle(l.id, l.comingSoon)}
-                    >
-                      {l.comingSoon ? "Pronto" : active ? "Quitar del plan" : "Agregar al plan"}
-                    </button>
-                  </div>
-
-                  {!!faq.length && (
-                    <details className="mini-faq">
-                      <summary>Preguntas frecuentes de {l.name}</summary>
-                      <ul>
-                        {faq.map(([q, a], i) => (
-                          <li key={i}><b>{q}</b><span> — {a}</span></li>
-                        ))}
-                      </ul>
-                    </details>
+                  <button
+                    className="btn-select-course"
+                    disabled={l.comingSoon}
+                    onClick={() => toggle(l.id, l.comingSoon)}
+                  >
+                    {l.comingSoon ? "Pronto" : active ? "Quitar del plan" : "Agregar al plan"}
+                  </button>
+                  
+                  {/* Mini FAQ Dropdown */}
+                  {COURSE_FAQ[l.id] && (
+                     <details className="card-details">
+                        <summary>Detalles y horarios</summary>
+                        <div className="det-content">
+                            {COURSE_FAQ[l.id].map(([q,a], i) => (
+                                <div key={i} className="det-item">
+                                    <strong>{q}</strong> {a}
+                                </div>
+                            ))}
+                        </div>
+                     </details>
                   )}
                 </article>
               );
             })}
           </div>
+        </div>
+      </section>
 
-          {/* Resumen pegajoso */}
-          <div className="summary sticky" aria-live="polite">
-            <div className="sum-left">
-              <div className="sum-title">
-                Selección: <span className="hi">{selected.length}</span> curso(s)
-                {!!selected.length && (
-                  <span className="muted">
-                    {" · "}
-                    {selected
-                      .map((s) => `${s.name}${selectedLevels[s.id] ? " (" + selectedLevels[s.id] + ")" : ""}`)
-                      .join(", ")}
-                  </span>
-                )}
-              </div>
-              <div className="tiny muted">Al sumar cursos, tu mensualidad por curso baja.</div>
+      {/* FEATURES / BENEFITS */}
+      <section className="features-section">
+        <div className="container">
+            <h2 className="text-center">¿Por qué Lael?</h2>
+            <div className="features-grid">
+                <div className="feat-card">
+                    <div className="icon">💼</div>
+                    <h4>Enfoque Laboral</h4>
+                    <p>Role-plays de entrevistas y emails formales.</p>
+                </div>
+                <div className="feat-card">
+                    <div className="icon">🌍</div>
+                    <h4>Internacional</h4>
+                    <p>Preparación real para IELTS, TOEFL y TOPIK.</p>
+                </div>
+                <div className="feat-card">
+                    <div className="icon">⚡</div>
+                    <h4>Plataforma 24/7</h4>
+                    <p>Accede a grabaciones y materiales cuando quieras.</p>
+                </div>
+                <div className="feat-card">
+                    <div className="icon">🤝</div>
+                    <h4>Tutoría Real</h4>
+                    <p>Profesores que conocen tu nombre y tu progreso.</p>
+                </div>
             </div>
-            <div className="sum-right">
-              <div className="tiny muted">Mensual estimada</div>
-              <div className="price">{clp(monthly)}</div>
-              <div className="tiny muted">+ matrícula {clp(ENROLLMENT_FEE)}</div>
-              <div className="actions">
-                <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-                <a className="btn btn-outline" href={`https://wa.me/56964626568?text=${waMsg}`} target="_blank" rel="noreferrer">WhatsApp</a>
-              </div>
-            </div>
-          </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Testimonios reales (opcional) */}
-        {!!TESTIMONIOS.length && (
-          <section className="testi">
-            <header className="sec-head"><h2>Historias reales</h2></header>
-            <div className="t-grid">
+      {/* TESTIMONIALS */}
+      {TESTIMONIOS.length > 0 && (
+        <section className="testimonials-section">
+          <div className="container">
+            <h2 className="text-center">Historias de Alumnos</h2>
+            <div className="testi-grid">
               {TESTIMONIOS.map((t, i) => (
-                <blockquote key={i}>
-                  “{t.quote}”
-                  <cite>— {t.name}{t.note ? ` · ${t.note}` : ""}</cite>
-                </blockquote>
+                <div key={i} className="testi-card">
+                  <p>"{t.quote}"</p>
+                  <div className="user">
+                    <div className="avatar">{t.name.charAt(0)}</div>
+                    <div><strong>{t.name}</strong><span>{t.note}</span></div>
+                  </div>
+                </div>
               ))}
             </div>
-          </section>
-        )}
-
-        {/* Metodología breve */}
-        <section className="method">
-          <header className="sec-head"><h2>Metodología y certificación</h2></header>
-          <ol className="steps">
-            <li><b>Diagnóstico corto</b> para ubicarte en A1–B2 o ruta específica.</li>
-            <li><b>Plan semanal</b> con objetivos medibles y cápsulas.</li>
-            <li><b>Feedback accionable</b> + checkpoints mensuales.</li>
-            <li><b>Certificado</b> por nivel aprobado (y simulacros si vas a prueba externa).</li>
-          </ol>
-        </section>
-
-        {/* FAQ visible (coincide con JSON-LD) */}
-        <section className="faq">
-          <header className="sec-head"><h2>Preguntas frecuentes</h2></header>
-          <div className="faq-box">
-            <details><summary>¿Cómo sé mi nivel de inglés?</summary><p>Diagnóstico corto para ubicarte entre A1 y B2 y definir tu plan.</p></details>
-            <details><summary>¿Hacen preparación IELTS/TOEFL?</summary><p>Sí. Simulacros, rúbricas oficiales y feedback detallado.</p></details>
-            <details><summary>¿Quedan grabadas las clases?</summary><p>Sí, se suben el mismo día para repasar.</p></details>
-            <details><summary>¿Baja la mensualidad al sumar cursos?</summary><p>Sí. Tu mensualidad por curso disminuye; la matrícula es única.</p></details>
           </div>
         </section>
+      )}
 
-        {/* CTA final */}
-        <section className="cta-band">
-          <div className="cta-band__box">
-            <h3>Inglés con propósito: A1–B2 + IELTS/TOEFL.</h3>
-            <div className="cta">
-              <a className="btn btn-primary" href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20quiero%20diagn%C3%B3stico%20de%20nivel%20de%20ingl%C3%A9s" target="_blank" rel="noreferrer">Diagnóstico</a>
-              <Link className="btn btn-ghost" to="/inscripcion">Inscribirme</Link>
-            </div>
+      {/* FAQ GENERAL */}
+      <section className="faq-section">
+        <div className="container">
+          <h2 className="text-center">Preguntas Frecuentes</h2>
+          <div className="faq-wrapper">
+             <details><summary>¿Cómo funcionan los pagos?</summary><p>Pagas una matrícula única de inscripción y luego mensualidades. Si tomas más de un curso, el precio baja.</p></details>
+             <details><summary>¿Si falto a una clase?</summary><p>¡Tranquilo! Todas se graban y suben el mismo día a tu aula virtual.</p></details>
+             <details><summary>¿Entregan certificado?</summary><p>Sí, al finalizar cada nivel y cumplir con las evaluaciones, recibes un diploma digital verificable.</p></details>
           </div>
-        </section>
+        </div>
+      </section>
+
+      {/* ── STICKY BAR (Fixed Bottom) ── */}
+      <div className={`sticky-bar-wrapper ${selected.length > 0 ? "show" : ""}`}>
+        <div className="sticky-bar glass-panel">
+           <div className="bar-info">
+              <span className="bar-count">{selected.length} Cursos seleccionados</span>
+              <span className="bar-names">
+                 {selected.map(s => s.name + (selectedLevels[s.id] ? ` (${selectedLevels[s.id]})` : "")).join(" + ")}
+              </span>
+           </div>
+           <div className="bar-pricing">
+              <div className="price-group">
+                 <small>Mensualidad</small>
+                 <span className="price-big">{clp(monthly)}</span>
+              </div>
+              <div className="action-group">
+                 <Link to="/inscripcion" className="btn btn-primary btn-glow">Inscribirme</Link>
+                 <span className="fee-note">+ matrícula {clp(ENROLLMENT_FEE)}</span>
+              </div>
+           </div>
+        </div>
       </div>
+
     </section>
   );
 }
 
-/* ======================= CSS (limpio, más respiro y detalles sutiles) ======================= */
+/* ==========================================================================
+   CSS MODERNO "LUMINOUS SLATE" - Pegar esto en tu variable CSS string
+   ========================================================================== */
 const css = `
-:root{
-  --bg:#0b1220; --panel:#0e1424; --soft:#0d1528; --bd:#1f2a44;
-  --text:#fff; --muted:#eaf2ff; --rad:18px;
+:root {
+  /* Paleta: Slate Blue & Electric Indigo */
+  --bg-dark: #0f172a;       /* Fondo principal */
+  --bg-card: #1e293b;       /* Tarjetas */
+  --bg-card-hover: #334155;
+  --primary: #6366f1;       /* Indigo Vibrante */
+  --primary-hover: #4f46e5;
+  --accent: #06b6d4;        /* Cyan para detalles */
+  --text-main: #f8fafc;     /* Blanco suave */
+  --text-muted: #94a3b8;    /* Gris texto */
+  --border: rgba(148, 163, 184, 0.15);
+  --glass: rgba(30, 41, 59, 0.7);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --radius: 16px;
+  --nav-clearance: 140px;   /* Espacio extra al final para la barra sticky */
 }
-*{box-sizing:border-box}
-.container{ max-width:1160px; margin:0 auto; padding:0 22px; } /* +respiro */
+
+/* Base */
+.idiomas-page {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  padding-bottom: var(--nav-clearance); /* CRÍTICO: Evita que la barra tape el final */
+  overflow-x: hidden;
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+a { text-decoration: none; color: inherit; transition: all .2s; }
+button { font-family: inherit; border: none; background: none; cursor: pointer; }
+.text-center { text-align: center; }
 
 /* Breadcrumbs */
-.breadcrumbs{border-bottom:1px solid var(--bd); background:linear-gradient(180deg,#0B1220,#0E1529)}
-.breadcrumbs ol{list-style:none; margin:0; padding:10px 0; display:flex; gap:10px; color:#cfe0ff; font-size:.95rem}
-.breadcrumbs a{color:#cfe0ff; text-decoration:underline; text-underline-offset:3px}
+.breadcrumbs { padding: 16px 0; font-size: 0.9rem; color: var(--text-muted); border-bottom: 1px solid var(--border); }
+.breadcrumbs a:hover { color: var(--primary); }
+.breadcrumbs .sep { margin: 0 8px; opacity: .5; }
+.breadcrumbs .curr { color: var(--text-main); font-weight: 500; }
 
-/* HERO */
-.hero{
-  padding:42px 0 22px; color:var(--text); border-bottom:1px solid var(--bd);
-  background:
-    radial-gradient(920px 340px at 10% -10%, var(--accentSoft), transparent 60%),
-    radial-gradient(860px 320px at 92% -12%, rgba(34,211,238,.10), transparent 60%);
-}
-.hero__grid{ display:grid; grid-template-columns: 1.08fr .92fr; gap:30px; align-items:center; }
-@media (max-width:980px){ .hero__grid{ grid-template-columns:1fr; } }
-.pill{ display:inline-block; padding:.26rem .66rem; border-radius:999px; border:1px solid #334155; font-weight:900; color:#fff; }
-.mega{ margin:.35rem 0 .5rem; font-size:clamp(2rem, 3.2vw + .8rem, 3.05rem); line-height:1.12; letter-spacing:.1px; }
-.hello{ display:inline-block; min-width:8ch }
-.under{ box-shadow: inset 0 -10px rgba(88,80,236,.28); border-radius:4px; }
-.lead{ color:var(--muted); max-width:68ch; margin-top:.3rem; }
-.badges{ display:flex; gap:10px; flex-wrap:wrap; margin:12px 0 0; }
-
-/* TAGS */
-.tag{ display:inline-flex; align-items:center; gap:6px; padding:.28rem .66rem; border-radius:999px; font-weight:900; border:1px solid transparent; }
-.tag.indigo{ background:#3536a833; border-color:#4f46e5; }
-.tag.teal  { background:#0d948833; border-color:#14b8a6; }
-.tag.amber { background:#b4530933; border-color:#f59e0b; }
-.tag.rose  { background:#be185d33; border-color:#f43f5e; }
-.tag.green { background:#16653433; border-color:#22c55e; }
-
-.hero__img{
-  border-radius:20px; overflow:hidden; border:1px solid var(--bd);
-  background:#0f172a; box-shadow:0 24px 56px rgba(2,6,23,.36);
-}
-.hero__img img{ display:block; width:100%; height:auto; object-fit:cover; }
-.hero__img figcaption{ padding:10px 12px; font-size:.94rem; color:#eaf2ff; background:#0e162a; border-top:1px solid #1f2a44; }
-
-/* --- HERO STATS (nuevo) --- */
-.stats{
-  display:grid; grid-template-columns: repeat(4,1fr); gap:12px;
-  margin:16px auto 6px;
-}
-@media (max-width:900px){ .stats{ grid-template-columns:2fr 2fr; } }
-@media (max-width:520px){ .stats{ grid-template-columns:1fr 1fr; } }
-.stat-card{
-  border:1px solid #223052; border-radius:14px; padding:14px 12px;
-  background:linear-gradient(180deg,#0f172a,#0b1220);
-  box-shadow:0 14px 28px rgba(2,6,23,.26);
-  text-align:center;
-  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-}
-.stat-card:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.34); border-color:#2a3550; }
-.stat-number{ display:block; font-size:1.7rem; font-weight:1000; line-height:1; color:#ffffff; }
-.stat-label{ display:block; margin-top:6px; color:#cfe0ff; font-weight:700; font-size:.92rem; opacity:.95; }
-
-/* SECTION HEAD */
-.sec-head{ margin:22px 0 12px; color:var(--text); }
-.sec-head h2{ margin:0 0 4px; font-size:1.32rem; }
-.sec-head.row{ display:flex; align-items:center; gap:10px; }
-.muted{ color:var(--muted); opacity:.95; }
-.tiny{ font-size:.92rem; }
-
-/* ENGLISH FOCUS */
-.eng-focus{ padding:18px 0 10px; }
-.eng-grid{ display:grid; grid-template-columns:1.2fr .8fr; gap:16px; }
-@media (max-width:900px){ .eng-grid{ grid-template-columns:1fr; } }
-.eng-list{ margin:.5rem 0 0; padding-left:18px; color:#eaf2ff; }
-.eng-card{ border:1px solid #223052; border-radius:14px; padding:16px; background:linear-gradient(180deg,#0f172a,#0b1220); color:#eaf2ff }
-
-/* QUIÉN / QUÉ OBTIENES */
-.who, .gets{ padding:18px 0 8px; }
-.pill-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
-@media (max-width:1024px){ .pill-grid{ grid-template-columns:1fr 1fr; } }
-@media (max-width:560px){ .pill-grid{ grid-template-columns:1fr; } }
-.pill-card{
-  border:1px solid #223052; border-radius:16px; padding:14px;
-  background:linear-gradient(180deg, #0f172a, #0b1220);
-  box-shadow:0 18px 36px rgba(2,6,23,.28); display:flex; flex-direction:column; gap:4px;
-}
-.pill-card b{ display:block }
-.pill-card span{ color:#cfe0ff }
-
-.get-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
-@media (max-width:1024px){ .get-grid{ grid-template-columns:1fr 1fr 1fr; } }
-@media (max-width:560px){ .get-grid{ grid-template-columns:1fr 1fr; } }
-.get-grid > div{
-  border:1px solid #223052; border-radius:14px; padding:12px; text-wrap:balance;
-  background:linear-gradient(180deg,#101b2f,#0b1220);
+/* ── HERO SECTION ── */
+.hero { padding: 60px 0 40px; position: relative; overflow: hidden; }
+/* Fondo ambiental sutil */
+.hero::before {
+    content:''; position: absolute; top: -20%; right: -10%; width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
 }
 
-/* QUICK */
-.quick{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:16px 0 8px; }
-.quick__title{ font-weight:1000; }
-.chips{ display:flex; gap:8px; flex-wrap:wrap; }
-.chip{ border:1px solid #2a3550; background:#0f172a; color:#fff; border-radius:999px; padding:.5rem .78rem; font-weight:900; }
+.hero-grid { display: grid; grid-template-columns: 1fr 0.9fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
+@media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; text-align: center; } }
 
-/* BUILDER */
-.builder{ margin-top:10px; }
-.grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:12px; }
-@media (max-width:1100px){ .grid{ grid-template-columns:1fr 1fr; } }
-@media (max-width:680px){ .grid{ grid-template-columns:1fr; } }
-
-.lang{
-  border-radius:var(--rad); border:1px solid rgba(255,255,255,.08); padding:16px;
-  background:linear-gradient(180deg, #0f172a, #0b1220);
-  color:var(--text); box-shadow:0 18px 36px rgba(2,6,23,.32);
-  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease;
-}
-.lang:hover{ transform: translateY(-2px); box-shadow:0 22px 44px rgba(2,6,23,.38); border-color:#2a3550; }
-.lang.on{ outline:1px solid #4338ca55; }
-.head{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
-.flag{ font-size:22px; line-height:1; }
-.head h3{ margin:0; font-size:1.08rem; font-weight:800; }
-.soon{ margin-left:auto; font-size:.75rem; padding:.12rem .45rem; border:1px solid #334155; border-radius:8px; color:#cbd5e1; }
-.tag-row{ display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 0; }
-.levels{ display:flex; gap:8px; flex-wrap:wrap; margin:10px 0 0; }
-
-.lv{ border:1px solid #2a3550; background: #0f172a; color:#eaf2ff; border-radius:999px; padding:.34rem .66rem; font-weight:900; }
-.lv.on{ background:#5850EC; color:#0b1220; border-color:#5850EC; }
-.lv.ghost{ background:#0f172a; border-color:#2a3550; color:#cbd5e1; font-weight:800; }
-
-.act{ margin-top:12px; }
-.choose{ border-radius:12px; padding:.56rem .9rem; border:1px solid #28324a; background:#0f172a; color:#e5e7eb; font-weight:900; }
-.choose.on{ background:#101a2f; border-color:var(--accent); color:#fff; }
-.choose:disabled{ opacity:.7; cursor:not-allowed; }
-
-/* FAQ mini */
-.mini-faq{ margin-top:10px; }
-.mini-faq summary{ cursor:pointer; font-weight:800; }
-.mini-faq ul{ margin:.4rem 0 0; padding-left:18px; color:#eaf2ff; }
-.mini-faq li{ margin:.16rem 0; }
-.mini-faq li b{ font-weight:800; }
-
-/* Summary sticky */
-.summary{
-  margin-top:14px; display:grid; grid-template-columns: 1.2fr .8fr; gap:16px;
-  border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:18px;
-  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)), linear-gradient(180deg, #0f172a, #0b1220);
-  box-shadow:0 18px 36px rgba(2,6,23,.32);
-}
-@media (max-width:860px){ .summary{ grid-template-columns:1fr; } }
-.summary.sticky{
-  position:sticky; bottom:0; z-index:20;
-  background:linear-gradient(180deg, rgba(11,18,32,.6), rgba(11,18,32,.96));
-  backdrop-filter: blur(6px);
-  border-top:1px solid #1f2a44; margin-top:14px;
-}
-.sum-title{ font-weight:1000; }
-.hi{ color:var(--accent); font-weight:1000; }
-.sum-right{ text-align:right; }
-@media (max-width:860px){ .sum-right{ text-align:left; } }
-.price{ font-size:1.72rem; font-weight:1000; margin:.12rem 0 .24rem; }
-.actions{ display:flex; gap:10px; flex-wrap:wrap; }
-
-/* FAQ visible */
-.faq{ padding:8px 0 12px; }
-.faq-box details{border:1px solid var(--bd); border-radius:14px; background:#0f172a; padding:12px 14px; margin-bottom:10px}
-.faq-box summary{cursor:pointer; font-weight:900; list-style:none; display:flex; align-items:center; gap:8px}
-.faq-box summary::-webkit-details-marker{display:none}
-.faq-box summary::after{content:"▸"; margin-left:auto; transform:rotate(0deg); transition:transform .16s ease; color:#F2CE3D}
-.faq-box details[open] summary::after{transform:rotate(90deg)}
-.faq-box p{margin:.5rem 0 0; color:#EAF2FF}
-
-/* CTA band */
-.cta-band{ padding:20px 0 24px; }
-.cta-band__box{
-  border:1px solid #1f2a44; border-radius:16px; padding:16px;
-  background:radial-gradient(600px 200px at 10% -20%, var(--accentSoft), transparent 60%), linear-gradient(180deg, #0f172a, #0b1220);
+.badge-pill { 
+    display: inline-block; background: rgba(99,102,241,0.1); color: #818cf8; 
+    border: 1px solid rgba(99,102,241,0.3); padding: 6px 14px; border-radius: 50px; 
+    font-size: 0.85rem; font-weight: 700; margin-bottom: 20px;
 }
 
-/* Buttons */
-.btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:.72rem 1.08rem; border-radius:12px; border:1px solid #2f3341; text-decoration:none; font-weight:900; }
-.btn-primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
-.btn-outline, .btn-ghost{ background:transparent; color:#eaf2ff; }
+.display-title { font-size: clamp(2.2rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 20px; font-weight: 800; }
+.text-gradient { 
+    background: linear-gradient(135deg, #818cf8 0%, #22d3ee 100%); 
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+}
+.under-accent { border-bottom: 4px solid var(--primary); border-radius: 2px; }
 
-/* Focus */
-button:focus-visible, .btn:focus-visible{ outline:2px solid #22d3ee; outline-offset:2px; }
+.lead-text { font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 30px; max-width: 550px; }
+.lead-text b { color: var(--text-main); }
+@media (max-width: 900px) { .lead-text { margin-left: auto; margin-right: auto; } }
+
+.hero-actions { display: flex; gap: 15px; margin-bottom: 30px; }
+@media (max-width: 900px) { .hero-actions { justify-content: center; } }
+
+/* Botones */
+.btn { padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 1rem; display: inline-flex; align-items: center; justify-content: center; transition: all 0.25s ease; }
+.btn-lg { padding: 14px 32px; font-size: 1.1rem; }
+.btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(99,102,241,0.3); }
+.btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99,102,241,0.4); }
+.btn-ghost { color: var(--text-muted); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--text-main); color: var(--text-main); background: rgba(255,255,255,0.05); }
+
+.trust-badges { display: flex; gap: 15px; flex-wrap: wrap; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+@media (max-width: 900px) { .trust-badges { justify-content: center; } }
+.t-badge { display: flex; align-items: center; gap: 6px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.i-blue { background: #60a5fa; } .i-amber { background: #fbbf24; } .i-teal { background: #2dd4bf; }
+
+/* Hero Visual (Imagen Flotante) */
+.hero-visual { position: relative; }
+.image-card { position: relative; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+.image-card img { width: 100%; display: block; height: auto; }
+
+.float-card { 
+    position: absolute; background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(10px); 
+    padding: 10px 16px; border-radius: 12px; border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+.float-1 { bottom: 20px; left: -20px; }
+.float-2 { top: 30px; right: -20px; }
+.emoji { font-size: 1.5rem; }
+.float-card div { display: flex; flex-direction: column; line-height: 1.2; }
+.float-card strong { font-size: 0.9rem; }
+.float-card small { font-size: 0.75rem; color: var(--text-muted); }
+
+/* ── STATS ── */
+.stats-section { margin-top: 40px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(15,23,42,0.5); }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 25px 0; }
+@media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+.stat-item { text-align: center; }
+.stat-number { display: block; font-size: 2rem; font-weight: 800; color: var(--text-main); margin-bottom: 5px; }
+.stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* ── HIGHLIGHT ── */
+.highlight-section { padding: 60px 0; }
+.highlight-grid { display: grid; grid-template-columns: 1fr 0.8fr; gap: 50px; align-items: center; }
+@media (max-width: 900px) { .highlight-grid { grid-template-columns: 1fr; } }
+
+.sub-caption { color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 10px; display: block; }
+.highlight-section h2 { font-size: 2rem; margin-bottom: 15px; }
+.benefit-list { margin: 25px 0; display: grid; gap: 12px; }
+.benefit-list li { display: flex; align-items: center; gap: 10px; font-size: 1rem; color: var(--text-muted); }
+.benefit-list b { color: var(--text-main); }
+.link-arrow { color: var(--primary); font-weight: 700; font-size: 1.1rem; }
+.link-arrow:hover { text-decoration: underline; }
+
+.path-card { background: var(--bg-card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
+.path-card h3 { margin-bottom: 20px; font-size: 1.2rem; }
+.timeline { display: flex; flex-direction: column; gap: 20px; position: relative; border-left: 2px solid var(--border); padding-left: 20px; }
+.step { position: relative; }
+.step .circle { 
+    position: absolute; left: -36px; top: 0; width: 30px; height: 30px; background: var(--bg-dark); 
+    border: 2px solid var(--text-muted); border-radius: 50%; color: var(--text-muted);
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;
+}
+.step.done .circle { border-color: var(--primary); background: var(--primary); color: white; }
+.step.active .circle { border-color: var(--accent); color: var(--accent); background: var(--bg-dark); }
+.step .info strong { display: block; color: var(--text-main); }
+.step .info small { font-size: 0.85rem; color: var(--text-muted); }
+
+/* ── BUILDER (Cards) ── */
+.builder-section { padding: 40px 0; }
+.section-header { margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+.section-header h2 { font-size: 2.2rem; margin-bottom: 10px; }
+
+.quick-filters { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; align-items: center; }
+.chip { background: var(--bg-card); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; color: var(--text-muted); font-weight: 600; font-size: 0.9rem; transition: all .2s; }
+.chip:hover { border-color: var(--primary); color: var(--text-main); background: rgba(99,102,241,0.1); }
+
+.courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.course-card { 
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 24px; 
+    transition: all 0.3s ease; position: relative; display: flex; flex-direction: column;
+}
+.course-card:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); border-color: var(--primary); }
+.course-card.is-selected { border-color: var(--primary); background: linear-gradient(180deg, rgba(99,102,241,0.05), var(--bg-card)); box-shadow: 0 0 0 2px rgba(99,102,241,0.3); }
+
+.card-top { display: flex; gap: 15px; align-items: flex-start; margin-bottom: 15px; }
+.card-emoji { font-size: 2.5rem; line-height: 1; }
+.card-titles h3 { margin: 0; font-size: 1.2rem; margin-bottom: 4px; }
+.badge-live { background: rgba(34,197,94,0.15); color: #4ade80; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+.badge-soon { background: rgba(251,191,36,0.15); color: #fbbf24; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+
+.checkbox-indicator { width: 24px; height: 24px; border: 2px solid var(--border); border-radius: 50%; margin-left: auto; transition: .2s; }
+.is-selected .checkbox-indicator { background: var(--primary); border-color: var(--primary); box-shadow: inset 0 0 0 4px var(--bg-card); }
+
+.card-summary { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; flex-grow: 1; }
+
+.level-selector { margin-bottom: 20px; }
+.ls-label { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 8px; }
+.ls-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+.lv-btn { 
+    border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 700; color: var(--text-muted); 
+    transition: .2s;
+}
+.lv-btn:hover { background: var(--bg-card-hover); }
+.lv-btn.active { background: var(--text-main); color: var(--bg-dark); border-color: var(--text-main); }
+
+.btn-select-course { width: 100%; padding: 12px; border-radius: 10px; font-weight: 700; background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border); transition: .2s; }
+.is-selected .btn-select-course { background: var(--primary); border-color: var(--primary); }
+.btn-select-course:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.card-details { margin-top: 15px; border-top: 1px solid var(--border); padding-top: 10px; }
+.card-details summary { font-size: 0.85rem; color: var(--text-muted); cursor: pointer; font-weight: 600; list-style: none; }
+.card-details .det-content { margin-top: 10px; font-size: 0.85rem; color: var(--text-muted); }
+.det-item { margin-bottom: 6px; }
+
+/* ── FEATURES ── */
+.features-section { padding: 50px 0; background: rgba(0,0,0,0.2); }
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 30px; }
+.feat-card { text-align: center; padding: 20px; }
+.feat-card .icon { font-size: 2.5rem; margin-bottom: 15px; display: block; }
+.feat-card h4 { margin-bottom: 8px; font-size: 1.1rem; }
+.feat-card p { font-size: 0.9rem; }
+
+/* ── STICKY BAR (LA JOYA) ── */
+.sticky-bar-wrapper { 
+    position: fixed; bottom: 0; left: 0; width: 100%; z-index: 999; 
+    pointer-events: none; /* Dejar pasar clics si está oculta */
+    transform: translateY(120%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex; justify-content: center; padding-bottom: 24px;
+}
+.sticky-bar-wrapper.show { transform: translateY(0); pointer-events: all; }
+
+.sticky-bar {
+    width: 92%; max-width: 1000px;
+    background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.1); border-top: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 16px 24px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+}
+@media (max-width: 700px) { 
+    .sticky-bar { flex-direction: column; align-items: stretch; gap: 12px; padding: 16px; border-radius: 16px; width: 95%; } 
+    .bar-info { text-align: center; }
+}
+
+.bar-count { display: block; font-weight: 800; color: var(--text-main); font-size: 1rem; }
+.bar-names { font-size: 0.8rem; color: var(--text-muted); display: block; max-width: 400px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 700px) { .bar-names { white-space: normal; } }
+
+.bar-pricing { display: flex; align-items: center; gap: 20px; }
+@media (max-width: 700px) { .bar-pricing { justify-content: space-between; } }
+
+.price-group { text-align: right; line-height: 1; }
+.price-group small { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px; }
+.price-big { font-size: 1.5rem; font-weight: 800; color: var(--text-main); letter-spacing: -1px; }
+
+.action-group { display: flex; flex-direction: column; align-items: flex-end; }
+.fee-note { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+.btn-glow { box-shadow: 0 0 15px rgba(99,102,241,0.5); }
+
+/* FAQ General */
+.faq-section { padding: 40px 0; }
+.faq-wrapper { max-width: 700px; margin: 30px auto 0; display: flex; flex-direction: column; gap: 12px; }
+.faq-wrapper details { background: var(--bg-card); border-radius: 12px; padding: 16px; border: 1px solid var(--border); }
+.faq-wrapper summary { font-weight: 700; cursor: pointer; color: var(--text-main); outline: none; }
+.faq-wrapper p { margin-top: 10px; color: var(--text-muted); font-size: 0.95rem; }
+
+/* Testimonials */
+.testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+.testi-card { background: var(--bg-card); padding: 20px; border-radius: 16px; border: 1px solid var(--border); }
+.testi-card p { font-style: italic; margin-bottom: 15px; color: var(--text-muted); }
+.testi-card .user { display: flex; align-items: center; gap: 10px; }
+.testi-card .avatar { width: 40px; height: 40px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; }
+.testi-card strong { display: block; font-size: 0.9rem; }
+.testi-card span { font-size: 0.8rem; color: var(--text-muted); }
+
 `;

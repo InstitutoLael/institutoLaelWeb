@@ -1,920 +1,394 @@
-// src/pages/Homeschool.jsx
-import { useMemo, useRef, useState, useEffect } from "react";
+// src/pages/Homeschool.jsx -> AHORA: LAEL ACADEMY
+import { useState, useMemo, useRef, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  ENROLLMENT_FEE,
-  PACKS,
-  SUBJECTS,
-  MODES,
-  MONTH_CHOICES,
-  HOURS_CHOICES,
-  ESSAY_ADDONS,
-  estimateMonthly,
-  getUpliftRate,
-  clp,
-  estimateSchoolEssaysTotal,
-} from "../data/homeschool.js";
+import heroImg from "../assets/img/lael/hs.jpg"; // Asegúrate de tener esta img o cambia la ruta
 
-// Assets
-import heroHS from "../assets/img/lael/hs.jpg";
-import logoWhite from "../assets/img/Logos/lael-inst-blanco.png";
+// --- DATA LOCAL (Para asegurar que funcione YA MISMO) ---
+// Puedes mover esto a tu archivo data/homeschool.js si prefieres
+const ENROLLMENT_FEE = 15000;
 
-/* ───────── Helpers globales ───────── */
-const abs = (p) => {
-  try {
-    return typeof window !== "undefined"
-      ? new URL(p, window.location.origin).toString()
-      : p;
-  } catch {
-    return p;
-  }
+const SUBJECTS = [
+  { id: 'mat', name: 'Matemáticas', icon: '📐', desc: 'Álgebra, Cálculo, PAES.' },
+  { id: 'len', name: 'Lenguaje', icon: '📚', desc: 'Lectura, Escritura, PAES.' },
+  { id: 'cie', name: 'Ciencias', icon: '🧬', desc: 'Física, Química, Biología.' },
+  { id: 'his', name: 'Historia', icon: '🏛️', desc: 'Historia y Cs. Sociales.' },
+  { id: 'ing', name: 'Inglés', icon: '🇬🇧', desc: 'Refuerzo escolar.' },
+];
+
+const LEVELS = [
+  { id: 'basica', label: 'Básica', desc: '1º a 8º Básico' },
+  { id: 'media', label: 'Media', desc: 'Iº a IVº Medio' },
+  { id: 'paes', label: 'PAES', desc: 'Prep. Universitaria' },
+  { id: 'exam', label: 'Ex. Libres', desc: 'Validación Mineduc' },
+];
+
+const PACKS = [
+  { id: 'p4', hours: 4, title: 'Pack Mensual', price: 79990, badge: null },
+  { id: 'p8', hours: 8, title: 'Pack Semestral', price: 149990, badge: 'Popular' },
+  { id: 'p12', hours: 12, title: 'Pack Intensivo', price: 209990, badge: 'Mejor Valor' },
+];
+
+/* --- SEO COMPONENT --- */
+const SEOHead = () => {
+    useEffect(() => { document.title = "Lael Academy | Tutorías y Soluciones Educativas"; }, []);
+    return null;
 };
 
-const OG_IMG = abs(heroHS);
-const LOGO_ABS = abs(logoWhite);
+/* --- COMPONENTE PRINCIPAL --- */
+export default function LaelAcademy() {
+  const [isSchool, setIsSchool] = useState(false); // Switch: Persona vs Colegio
+  const [selectedSubject, setSelectedSubject] = useState('mat');
+  const [selectedLevel, setSelectedLevel] = useState('media');
+  const [selectedPack, setSelectedPack] = useState('p8');
+  
+  const pricingRef = useRef(null);
 
-/* ───────── SEOHead (sin dependencias) ───────── */
-function SEOHead({
-  title,
-  description,
-  canonical,
-  keywords = [],
-  image,
-  jsonLd = [],
-}) {
-  const location = useLocation();
+  // Cálculos
+  const currentPack = PACKS.find(p => p.id === selectedPack);
+  const totalPrice = currentPack ? currentPack.price : 0;
 
-  useEffect(() => {
-    const url =
-      canonical ||
-      (typeof window !== "undefined"
-        ? `${window.location.origin}${location.pathname}`
-        : "");
-
-    document.title = title;
-
-    const setMeta = (attr, key, val) => {
-      // FIX selector: el atributo debe ir dentro del corchete
-      let el = document.head.querySelector(`${attr}[${key}="${val.key}"]`);
-      if (!el) {
-        el = document.createElement(attr);
-        el.setAttribute(key, val.key);
-        document.head.appendChild(el);
-      }
-      el.setAttribute("content", val.content);
-    };
-
-    const setName = (name, content) =>
-      setMeta("meta", "name", { key: name, content });
-    const setProp = (property, content) =>
-      setMeta("meta", "property", { key: property, content });
-
-    // description + keywords
-    setName("description", description);
-    if (keywords.length) setName("keywords", keywords.join(", "));
-
-    // Canonical
-    let link = document.head.querySelector('link[rel="canonical"]');
-    if (!link) {
-      link = document.createElement("link");
-      link.setAttribute("rel", "canonical");
-      document.head.appendChild(link);
+  // WhatsApp Link Generator
+  const waLink = useMemo(() => {
+    if (isSchool) {
+        return `https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, soy de un Colegio/Institución y busco apoyo en corrección de ensayos o reforzamiento.")}`;
     }
-    link.setAttribute("href", url);
+    const subj = SUBJECTS.find(s => s.id === selectedSubject)?.name;
+    const lvl = LEVELS.find(l => l.id === selectedLevel)?.label;
+    const pck = PACKS.find(p => p.id === selectedPack);
+    
+    const text = `Hola Lael Academy.
+Me interesa el apoyo académico:
+• Materia: ${subj}
+• Nivel: ${lvl}
+• Plan: ${pck?.title} (${pck?.hours} hrs)
 
-    // Open Graph
-    setProp("og:type", "website");
-    setProp("og:title", title);
-    setProp("og:description", description);
-    setProp("og:url", url);
-    if (image) setProp("og:image", image);
-    setProp("og:locale", "es_CL");
-    // Twitter
-    setName("twitter:card", "summary_large_image");
-    setName("twitter:title", title);
-    setName("twitter:description", description);
-    if (image) setName("twitter:image", image);
+Inversión: $${pck?.price.toLocaleString('es-CL')}
+¿Cómo coordinamos el horario?`;
+    return `https://wa.me/56964626568?text=${encodeURIComponent(text)}`;
+  }, [isSchool, selectedSubject, selectedLevel, selectedPack]);
 
-    // JSON-LD (limpiamos previos marcados por este comp.)
-    document
-      .querySelectorAll('script[data-lael-jsonld="1"]')
-      .forEach((s) => s.remove());
-
-    const ensureArray = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
-    ensureArray.forEach((obj) => {
-      const s = document.createElement("script");
-      s.type = "application/ld+json";
-      s.dataset.laelJsonld = "1";
-      s.text = JSON.stringify(obj);
-      document.head.appendChild(s);
-    });
-  }, [title, description, canonical, keywords, image, jsonLd, location.pathname]);
-
-  return null;
-}
-
-/* ───────── Util: Carrusel horizontal ───────── */
-function HScroll({ children, ariaLabel }) {
-  const ref = useRef(null);
-  const slide = (dir) => {
-    const el = ref.current;
-    if (!el) return;
-    const delta = Math.round(el.clientWidth * 0.9) * (dir === "next" ? 1 : -1);
-    el.scrollBy({ left: delta, behavior: "smooth" });
-  };
   return (
-    <div className="hs-wrap">
-      <button className="hs-btn prev" aria-label="Anterior" onClick={() => slide("prev")}>‹</button>
-      <div className="hs" ref={ref} aria-label={ariaLabel}>{children}</div>
-      <button className="hs-btn next" aria-label="Siguiente" onClick={() => slide("next")}>›</button>
+    <div className="academy-page">
+      <SEOHead />
+      <style>{css}</style>
+
+      {/* --- HERO HEADER --- */}
+      <header className="acad-hero">
+        <div className="container hero-cont">
+            <div className="hero-text">
+                <div className="hero-badge">🎓 Lael Academy</div>
+                <h1>
+                    Resultados Académicos <br />
+                    <span className="text-glow">Extraordinarios.</span>
+                </h1>
+                <p className="hero-copy">
+                    Ya sea para subir notas, preparar la PAES o externalizar evaluaciones en tu colegio. 
+                    Conectamos a docentes expertos con tus metas.
+                </p>
+
+                {/* SWITCH PERSONA / COLEGIO */}
+                <div className="user-toggle-wrapper">
+                    <div className="user-toggle">
+                        <button 
+                            className={`toggle-btn ${!isSchool ? 'active' : ''}`}
+                            onClick={() => setIsSchool(false)}
+                        >
+                            👤 Estudiantes
+                        </button>
+                        <button 
+                            className={`toggle-btn ${isSchool ? 'active' : ''}`}
+                            onClick={() => setIsSchool(true)}
+                        >
+                            🏫 Colegios
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div className="hero-visual">
+                <img src={heroImg} alt="Estudiante Lael Academy" className="hero-img-main" />
+                <div className="float-card glass">
+                    <span className="fc-icon">📈</span>
+                    <div>
+                        <strong>Mejora Continua</strong>
+                        <small>Seguimiento personalizado</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </header>
+
+      {/* --- CONTENIDO DINÁMICO --- */}
+      <div className="main-content container">
+        
+        {/* VISTA 1: ESTUDIANTES (B2C) */}
+        {!isSchool && (
+            <div className="flow-container fade-in">
+                
+                <div className="steps-grid">
+                    {/* Paso 1: Materia */}
+                    <section className="step-card">
+                        <h3 className="step-title"><span className="num">1</span> ¿Qué materia reforzamos?</h3>
+                        <div className="subjects-grid">
+                            {SUBJECTS.map(s => (
+                                <div 
+                                    key={s.id} 
+                                    className={`subject-item ${selectedSubject === s.id ? 'selected' : ''}`}
+                                    onClick={() => setSelectedSubject(s.id)}
+                                >
+                                    <div className="s-icon">{s.icon}</div>
+                                    <div className="s-name">{s.name}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* Paso 2: Nivel */}
+                    <section className="step-card">
+                        <h3 className="step-title"><span className="num">2</span> Tu Nivel Actual</h3>
+                        <div className="levels-grid">
+                            {LEVELS.map(l => (
+                                <button 
+                                    key={l.id}
+                                    className={`level-btn ${selectedLevel === l.id ? 'selected' : ''}`}
+                                    onClick={() => setSelectedLevel(l.id)}
+                                >
+                                    <strong>{l.label}</strong>
+                                    <small>{l.desc}</small>
+                                </button>
+                            ))}
+                        </div>
+                    </section>
+                </div>
+
+                {/* Paso 3: Packs (Precios) - Full Width */}
+                <section className="step-card full-width" ref={pricingRef}>
+                    <h3 className="step-title center"><span className="num">3</span> Elige tu Intensidad</h3>
+                    <div className="packs-grid">
+                        {PACKS.map(p => (
+                            <div 
+                                key={p.id}
+                                className={`pack-card ${selectedPack === p.id ? 'selected' : ''}`}
+                                onClick={() => setSelectedPack(p.id)}
+                            >
+                                {p.badge && <span className="save-badge">{p.badge}</span>}
+                                <div className="pack-head">
+                                    <h4>{p.title}</h4>
+                                    <span className="hours">{p.hours} Horas Cronológicas</span>
+                                </div>
+                                <div className="pack-price">
+                                    ${p.price.toLocaleString('es-CL')}
+                                </div>
+                                <div className="pack-features">
+                                    <span>✓ Docente experto asignado</span>
+                                    <span>✓ Material de apoyo</span>
+                                    <span>✓ Horario flexible</span>
+                                </div>
+                                <div className={`radio-select ${selectedPack === p.id ? 'on' : ''}`}></div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* FAQ */}
+                <section className="faq-section">
+                    <h3>Preguntas Frecuentes</h3>
+                    <div className="faq-grid">
+                        <details>
+                            <summary>¿Sirve para Exámenes Libres?</summary>
+                            <p>Sí, absolutamente. Nuestros docentes conocen el temario del Mineduc y preparan específicamente para rendir estos exámenes con éxito.</p>
+                        </details>
+                        <details>
+                            <summary>¿Las clases son individuales?</summary>
+                            <p>Sí, estos packs son para clases 1 a 1. Si buscas grupos pequeños, consulta por nuestros talleres de temporada.</p>
+                        </details>
+                        <details>
+                            <summary>¿Cómo agendo las horas?</summary>
+                            <p>Una vez inscrito, te contactará coordinación académica para asignar al docente que mejor calce con tu horario y necesidades.</p>
+                        </details>
+                    </div>
+                </section>
+
+                {/* STICKY BAR */}
+                <div className="academy-sticky visible">
+                    <div className="sticky-content container">
+                        <div className="sticky-info">
+                            <span>Total a Pagar</span>
+                            <strong>${totalPrice.toLocaleString('es-CL')}</strong>
+                        </div>
+                        <a href={waLink} target="_blank" rel="noreferrer" className="btn-whatsapp">
+                            Agendar Clases
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        )}
+
+        {/* VISTA 2: COLEGIOS (B2B) */}
+        {isSchool && (
+            <div className="flow-container fade-in">
+                <div className="b2b-hero">
+                    <h2>Aliados Estratégicos para su Colegio</h2>
+                    <p>Reduzca la carga administrativa y asegure calidad académica externa.</p>
+                </div>
+                
+                <div className="services-grid">
+                    <div className="service-card">
+                        <span className="srv-icon">📝</span>
+                        <h3>Corrección Ensayos PAES</h3>
+                        <p>Externalice la corrección de ensayos masivos. Entregamos reportes estadísticos detallados por alumno y por curso.</p>
+                    </div>
+                    <div className="service-card">
+                        <span className="srv-icon">📊</span>
+                        <h3>Nivelación Académica</h3>
+                        <p>Programas intensivos de reforzamiento para cursos completos en Matemáticas y Lenguaje.</p>
+                    </div>
+                    <div className="service-card">
+                        <span className="srv-icon">👩‍🏫</span>
+                        <h3>Capacitación Docente</h3>
+                        <p>Talleres prácticos de metodologías activas y herramientas digitales para su planta docente.</p>
+                    </div>
+                </div>
+
+                <div className="b2b-cta-box">
+                    <h3>¿Listo para optimizar su gestión académica?</h3>
+                    <p>Trabajamos con facturación y convenios personalizados.</p>
+                    <a href={waLink} target="_blank" rel="noreferrer" className="btn-contact-pro">
+                        Solicitar Reunión / Cotización
+                    </a>
+                </div>
+            </div>
+        )}
+
+      </div>
     </div>
   );
 }
 
-/* ───────── Util: Contador animado ───────── */
-function Counter({ target, duration = 1500, suffix = "" }) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    let current = 0;
-    const step = Math.max(15, Math.floor(duration / Math.max(1, target)));
-    const timer = setInterval(() => {
-      current += 1;
-      if (current >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(current);
-      }
-    }, step);
-    return () => clearInterval(timer);
-  }, [target, duration]);
-  return <span>{count}{suffix}</span>;
-}
-
-/* ───────── Página ───────── */
-export default function Homeschool() {
-  /* Familias (config) */
-  const [mode, setMode] = useState("oneToOne");
-  const [hoursPerWeek, setHoursPerWeek] = useState(2);
-  const [months, setMonths] = useState(3);
-  const [subjectIds, setSubjectIds] = useState(["leng", "mat"]);
-  const [essayAddonId, setEssayAddonId] = useState("");
-
-  /* Instituciones (ensayos) */
-  const [sStudents, setSStudents] = useState(50);
-  const [sExams, setSExams] = useState(1);
-  const [sGrading, setSGrading] = useState(true);
-  const [sPrinted, setSPrinted] = useState(false);
-
-  /* Cálculos familia */
-  const subjectsCount = subjectIds.length;
-  const monthly = useMemo(
-    () => estimateMonthly({ mode, hoursPerWeek, subjectsCount }),
-    [mode, hoursPerWeek, subjectsCount]
-  );
-  const uplift = getUpliftRate(subjectsCount);
-  const addonPrice = useMemo(
-    () => ESSAY_ADDONS.find((x) => x.id === essayAddonId)?.price || 0,
-    [essayAddonId]
-  );
-  const totalPeriod = monthly * months + addonPrice + ENROLLMENT_FEE;
-
-  const toggleSubj = (id) =>
-    setSubjectIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
-
-  /* WhatsApp – familias */
-  const wappMsgFamily = encodeURIComponent(
-    `Hola 👋, quiero apoyo educativo.
-Busco ensayos y/o clases con profes Lael.
-Modalidad: ${mode === "oneToOne" ? "1:1" : "Micro-grupo"}
-Horas/sem: ${hoursPerWeek}
-Meses: ${months}
-Materias: ${subjectIds.map((s) => SUBJECTS.find((x) => x.id === s)?.name).join(", ") || "—"}
-${essayAddonId ? `Add-on: ${ESSAY_ADDONS.find((a) => a.id === essayAddonId)?.label}\n` : ""}
-Mensual aprox: ${clp(monthly)} | Matrícula: ${clp(ENROLLMENT_FEE)}`
-  );
-
-  /* Cálculos instituciones */
-  const school = estimateSchoolEssaysTotal({
-    students: sStudents,
-    examsPerStudent: sExams,
-    withGrading: sGrading,
-    printed: sPrinted,
-  });
-
-  /* WhatsApp – instituciones */
-  const wappMsgSchool = encodeURIComponent(
-    `Hola 👋, quiero cotizar ENSAYOS para colegio.
-Estudiantes: ${sStudents}
-Ensayos por estudiante: ${sExams}
-Corrección+reporte: ${sGrading ? "Sí" : "No"}
-Impreso por Lael: ${sPrinted ? "Sí" : "No"}
-Total estimado: ${clp(school.total)}`
-  );
-
-  /* WhatsApp – alianza Los Olivos */
-  const wappMsgOlivos = encodeURIComponent(
-    `Hola 👋, vengo por la alianza con "Los Olivos".
-Necesito orientación para clases/ensayos y presupuesto.`
-  );
-
-  /* SEO — metas + JSON-LD */
-  const pageTitle = "Homeschool, Ensayos PAES y Exámenes Libres | Instituto Lael";
-  const pageDesc =
-    "Apoyo integral para familias e instituciones: clases 1:1 o micro-grupo, ensayos PAES y exámenes libres con corrección y reportes. Convenios para colegios y directores.";
-  const canonical = "https://www.institutolael.cl/homeschool";
-  const keywords = [
-    "homeschool Chile",
-    "exámenes libres",
-    "validación de estudios",
-    "ensayos PAES",
-    "ensayos exámenes libres",
-    "clases online PAES",
-    "apoyo escolar 1:1",
-    "convenio colegios",
-    "director académico",
-    "instituciones educativas",
-  ];
-
-  const jsonLd = [
-    // EducationalOrganization / Organization
-    {
-      "@context": "https://schema.org",
-      "@type": ["EducationalOrganization", "Organization"],
-      "name": "Instituto Lael SpA",
-      "url": "https://www.institutolael.cl/",
-      "logo": LOGO_ABS,
-      "sameAs": [
-        "https://www.instagram.com/institutolael",
-        "https://www.youtube.com/@institutolael"
-      ],
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "CL",
-        "addressRegion": "Región Metropolitana"
-      },
-      "contactPoint": [{
-        "@type": "ContactPoint",
-        "contactType": "customer support",
-        "email": "contacto@institutolael.cl",
-        "telephone": "+56-9-6462-6568",
-        "areaServed": "CL",
-        "availableLanguage": ["es"]
-      }]
-    },
-    // Service (Homeschool y Exámenes Libres)
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "Apoyo Homeschool y Exámenes Libres",
-      "serviceType": "TutoringService",
-      "provider": { "@type": "EducationalOrganization", "name": "Instituto Lael" },
-      "areaServed": "Chile",
-      "description": "Clases 1:1 o micro-grupo, cápsulas, planificación y ensayos con corrección y reportes para exámenes libres.",
-      "offers": {
-        "@type": "AggregateOffer",
-        "priceCurrency": "CLP",
-        "lowPrice": "4990",
-        "highPrice": "16000",
-        "offerCount": "4",
-        "availability": "https://schema.org/InStock"
-      },
-      "url": canonical
-    },
-    // Product/Offer (Ensayos PAES para colegios)
-    {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": "Ensayos PAES para colegios (single-site)",
-      "brand": "Instituto Lael",
-      "category": "Education",
-      "description": "Licencia single-site, PDF con ID y marca de agua. Corrección y reportes opcionales. Impresión opcional.",
-      "isAccessoryOrSparePartFor": "Exámenes Libres / PAES",
-      "offers": {
-        "@type": "Offer",
-        "priceCurrency": "CLP",
-        "price": "2000",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "CLP",
-          "price": "2000",
-          "eligibleQuantity": {
-            "@type": "QuantitativeValue",
-            "unitCode": "NMB",
-            "value": "1"
-          }
-        },
-        "availability": "https://schema.org/InStock",
-        "url": canonical + "#ensayos-colegios"
-      },
-      "url": canonical + "#ensayos-colegios"
-    },
-    // FAQPage
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "¿Hacen clases para exámenes libres y validación de estudios?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sí. Diseñamos un plan 1:1 o micro-grupo con cápsulas, tutorías y simulacros. Incluye seguimiento y materiales."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Ofrecen ensayos PAES para colegios con reportes?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sí. Entregamos PDF con ID y marca de agua. Opcional: corrección con reportes por alumno y por cohorte e impresión por Lael."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Puedo ajustar horas, meses y materias?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sí. El configurador permite ajustar horas/semana, duración y materias. El precio se actualiza en tiempo real."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Cómo solicito convenio como director/a?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Desde la misma página puedes cotizar por WhatsApp o solicitar contacto para convenio institucional."
-          }
-        }
-      ]
-    },
-    // WebSite + SearchAction
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Instituto Lael",
-      "url": "https://www.institutolael.cl/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://www.institutolael.cl/buscar?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    },
-    // BreadcrumbList
-    {
-      "@context":"https://schema.org",
-      "@type":"BreadcrumbList",
-      "itemListElement":[
-        {"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.institutolael.cl/"},
-        {"@type":"ListItem","position":2,"name":"Homeschool, Ensayos y Exámenes Libres","item": canonical}
-      ]
-    }
-  ];
-
-  useEffect(() => {
-    document.title = pageTitle;
-  }, []);
-
-  /* SVG WhatsApp inline (para no depender de assets externos) */
-  const WhatsAppIcon = ({ size = 18 }) => (
-    <svg
-      viewBox="0 0 24 24"
-      width={size}
-      height={size}
-      aria-hidden="true"
-      focusable="false"
-      role="img"
-    >
-      <path fill="#25D366" d="M12.04 2C6.57 2 2.11 6.46 2.11 11.93c0 2.09.57 3.98 1.56 5.62L2 22l4.6-1.51a10.02 10.02 0 0 0 5.44 1.59c5.47 0 9.93-4.46 9.93-9.93C21.97 6.46 17.51 2 12.04 2z"/>
-      <path fill="#fff" d="M17.23 14.4c-.24.68-1.2 1.26-1.66 1.29-.44.04-1 .05-1.63-.1-.38-.1-.87-.28-1.5-.54-2.63-1.13-4.34-3.75-4.47-3.92-.13-.17-1.07-1.42-1.07-2.7 0-1.28.68-1.9.92-2.16.24-.26.52-.32.7-.32.17 0 .35 0 .5.01.16.01.38-.06.59.45.24.58.82 2 .89 2.15.07.15.11.32.02.5-.09.19-.13.31-.27.48-.13.17-.28.39-.4.53-.13.15-.27.31-.12.58.15.26.67 1.1 1.43 1.78.99.88 1.82 1.15 2.09 1.28.26.13.42.11.58-.07.17-.18.67-.78.85-1.05.18-.26.36-.22.59-.13.24.09 1.51.71 1.77.84.26.13.43.19.49.3.06.11.06.64-.18 1.32z"/>
-    </svg>
-  );
-
-  return (
-    <section className="apoyo">
-      {/* SEO Head */}
-      <SEOHead
-        title={pageTitle}
-        description={pageDesc}
-        canonical={canonical}
-        keywords={keywords}
-        image={OG_IMG}
-        jsonLd={jsonLd}
-      />
-
-      <style>{css}</style>
-
-      {/* BREADCRUMBS */}
-      <nav className="breadcrumbs" aria-label="breadcrumb">
-        <div className="container">
-          <ol>
-            <li><Link to="/">Inicio</Link></li>
-            <li aria-current="page">Homeschool, Ensayos y Exámenes Libres</li>
-          </ol>
-        </div>
-      </nav>
-
-      {/* HERO */}
-      <header className="hero">
-        <div className="container hero__grid">
-          <div className="hero__left">
-            <img className="brand" src={logoWhite} alt="Instituto Lael" />
-            <h1>Apoyo Lael para <span className="under">colegios y familias</span></h1>
-            <p className="lead">
-              Clases en vivo + cápsulas. Ensayos con corrección y reportes. Acompañamiento real de nuestros profes.
-              <br />Matrícula única: <b>{clp(ENROLLMENT_FEE)}</b>.
-            </p>
-
-            <ul className="sr-captures">
-              <li>Homeschool Chile · Exámenes Libres · Validación de estudios</li>
-              <li>Ensayos PAES para colegios y directores · Convenios institucionales</li>
-            </ul>
-
-            <div className="service-chips">
-              <span className="chip solid blue">🎓 Clases con profes Lael</span>
-              <span className="chip solid amber">📈 Ensayos y reportes</span>
-              <span className="chip solid green">🏫 Acompañamiento a colegios</span>
-            </div>
-
-            <div className="cta">
-              <Link to="/inscripcion" className="btn btn-primary">Inscribirme</Link>
-              <a className="btn btn-wa" href={`https://wa.me/56964626568?text=${wappMsgFamily}`} target="_blank" rel="noreferrer">
-                <WhatsAppIcon /> WhatsApp
-              </a>
-            </div>
-          </div>
-
-          <figure className="hero__img">
-            <img src={heroHS} alt="Clases y ensayos con acompañamiento real" />
-            <figcaption>Metas pequeñas, progreso real, profes que acompañan.</figcaption>
-          </figure>
-        </div>
-      </header>
-
-      <div className="container">
-
-        {/* Alianza Los Olivos */}
-        <section className="block">
-          <div className="card partner">
-            <div className="partner-left">
-              <div className="pill">Alianza educativa</div>
-              <h2>“Los Olivos” × Lael</h2>
-              <p className="muted">
-                Colaboramos en enseñanza media, reforzamiento, <b>ensayos PAES</b> y apoyo para exámenes libres.
-                Rutas personalizadas y docentes Lael a cargo.
-              </p>
-            </div>
-            <div className="partner-right">
-              <a className="btn btn-primary" href={`https://wa.me/56964626568?text=${wappMsgOlivos}`} target="_blank" rel="noreferrer">
-                Hablar por la alianza
-              </a>
-              <Link className="btn btn-wa-outline" to="/inscripcion">
-                Quiero contacto
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Packs listos */}
-        <section className="block" id="packs">
-          <header className="sec-head">
-            <h2>Puntos de partida</h2>
-            <p className="muted">Elige un pack de ejemplo y luego ajusta horas, meses y materias.</p>
-          </header>
-
-          <HScroll ariaLabel="Packs listos">
-            {PACKS.map((p) => {
-              const modeLabel = p.mode === "microGroup" ? "Micro-grupo" : "1:1";
-              const fakeMonthly = estimateMonthly({
-                mode: p.mode,
-                hoursPerWeek: p.hoursPerWeek,
-                subjectsCount: 2,
-              });
-              return (
-                <article className="card pack slide" key={p.id}>
-                  {p.badge && <div className="badge">{p.badge}</div>}
-                  <h3 className="ink">{p.title}</h3>
-                  <div className="mini muted">{modeLabel} · {p.hoursPerWeek} h/sem · {p.months} mes(es)</div>
-                  <div className="price">{clp(fakeMonthly)} <span>/mes</span></div>
-                  <ul className="list">
-                    <li>Clases en vivo + cápsulas</li>
-                    <li>Plan semanal y seguimiento</li>
-                    <li>Soporte por mensajes</li>
-                  </ul>
-                  <button
-                    className="btn btn-primary w100"
-                    onClick={() => { setMode(p.mode); setHoursPerWeek(p.hoursPerWeek); setMonths(p.months); }}
-                  >
-                    Usar este pack
-                  </button>
-                </article>
-              );
-            })}
-          </HScroll>
-        </section>
-
-        {/* Configurador */}
-        <section className="block" id="configurador">
-          <header className="sec-head">
-            <h2>Arma tu plan</h2>
-            <p className="muted">4 pasos simples. Precio en tiempo real.</p>
-          </header>
-
-          <div className="grid grid-2">
-            {/* Paso 1 */}
-            <article className="card">
-              <div className="step-title">1) Modalidad</div>
-              <div className="chips">
-                {MODES.map((m) => (
-                  <button key={m.id} type="button" className={"chip outline " + (mode === m.id ? "on" : "")} onClick={() => setMode(m.id)}>
-                    {m.label} {m.id === "oneToOne" ? "👩‍🏫" : "🧑‍🤝‍🧑"}
-                  </button>
-                ))}
-              </div>
-              <p className="tiny muted mt6">1:1 = foco total. Micro-grupo = 3 a 6 estudiantes (accesible y motivante).</p>
-            </article>
-
-            {/* Paso 2 */}
-            <article className="card">
-              <div className="step-title">2) Horas por semana</div>
-              <div className="chips">
-                {HOURS_CHOICES.map((h) => (
-                  <button key={h.v} type="button" className={"chip outline " + (hoursPerWeek === h.v ? "on" : "")} onClick={() => setHoursPerWeek(h.v)}>
-                    {h.label} ⏱️
-                  </button>
-                ))}
-              </div>
-            </article>
-
-            {/* Paso 3 */}
-            <article className="card">
-              <div className="step-title">3) Duración</div>
-              <div className="chips">
-                {MONTH_CHOICES.map((m) => (
-                  <button key={m.v} type="button" className={"chip outline " + (months === m.v ? "on" : "")} onClick={() => setMonths(m.v)}>
-                    {m.label} 📅
-                  </button>
-                ))}
-              </div>
-            </article>
-
-            {/* Paso 4 */}
-            <article className="card">
-              <div className="step-title">4) Materias</div>
-              <div className="chips">
-                {SUBJECTS.map((s) => {
-                  const on = subjectIds.includes(s.id);
-                  return (
-                    <button key={s.id} type="button" className={"chip outline " + (on ? "on" : "")} onClick={() => toggleSubj(s.id)}>
-                      {s.name}
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="tiny muted mt6">
-                Cobramos por <b>horas/semana</b>. Si son muchas materias, sumamos planificación (+<b>{Math.round(uplift * 100)}%</b>).
-              </p>
-            </article>
-          </div>
-
-          {/* Ensayos opcionales */}
-          <article className="card mt12">
-            <div className="step-title">Ensayos (opcional)</div>
-            <div className="chips">
-              <button type="button" className={"chip outline " + (!essayAddonId ? "on" : "")} onClick={() => setEssayAddonId("")}>Sin ensayos</button>
-              {ESSAY_ADDONS.map((a) => (
-                <button key={a.id} type="button" className={"chip outline " + (essayAddonId === a.id ? "on" : "")} onClick={() => setEssayAddonId(a.id)}>
-                  {a.label} — {clp(a.price)}
-                </button>
-              ))}
-            </div>
-          </article>
-
-          {/* Resumen */}
-          <div className="sum card">
-            <div className="sum-left">
-              <div className="k">Mensual estimado</div>
-              <div className="big ok">{clp(monthly)}</div>
-              <div className="mini muted">
-                Matrícula: {clp(ENROLLMENT_FEE)}{essayAddonId ? ` · Ensayos: ${clp(addonPrice)}` : ""}
-              </div>
-            </div>
-            <div className="sum-right">
-              <div className="k">Total período ({months} mes/es)</div>
-              <div className="big">{clp(totalPeriod)}</div>
-              <div className="cta-inline">
-                <Link className="btn btn-primary" to="/inscripcion">Inscribirme</Link>
-                <a className="btn btn-wa" href={`https://wa.me/56964626568?text=${wappMsgFamily}`} target="_blank" rel="noreferrer"> <WhatsAppIcon/> WhatsApp</a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Ensayos para colegios */}
-        <section className="block inst" id="ensayos-colegios">
-          <header className="sec-head">
-            <h2>Ensayos para colegios</h2>
-            <p className="muted">Licencia single-site. PDF con ID de licencia y marca de agua. Impresión opcional por Lael.</p>
-          </header>
-
-          <div className="grid grid-3">
-            <article className="card ink">
-              <div className="label">Estudiantes</div>
-              <input type="number" min="1" className="field" value={sStudents} onChange={(e) => setSStudents(Number(e.target.value) || 1)} />
-              <div className="tiny muted mt6">Descuentos por volumen.</div>
-            </article>
-            <article className="card ink">
-              <div className="label">Ensayos por estudiante</div>
-              <input type="number" min="1" className="field" value={sExams} onChange={(e) => setSExams(Number(e.target.value) || 1)} />
-            </article>
-            <article className="card ink">
-              <div className="label">Opciones</div>
-              <div className="opt-grid">
-                <label className="check">
-                  <input type="checkbox" checked={sGrading} onChange={(e) => setSGrading(e.target.checked)} />
-                  <span>Corrección + reporte (+$2.000/est/ens)</span>
-                </label>
-                <label className="check">
-                  <input type="checkbox" checked={sPrinted} onChange={(e) => setSPrinted(e.target.checked)} />
-                  <span>Impreso por Lael (+$1.000/est/ens)</span>
-                </label>
-              </div>
-              <div className="tiny muted mt6">Si no imprimimos, entregamos <b>PDF</b> con <b>marca de agua</b> e <b>ID</b>.</div>
-            </article>
-          </div>
-
-          <div className="sum card ink">
-            <div><div className="k">Valor base por est/ens</div><div className="big">{clp(school.unit)}</div></div>
-            <div><div className="k">Add-ons por est/ens</div><div className="big">{clp(school.addons)}</div></div>
-            <div><div className="k">Total estimado</div><div className="big ok">{clp(school.total)}</div></div>
-            <div className="cta-inline">
-              <a className="btn btn-wa" href={`https://wa.me/56964626568?text=${wappMsgSchool}`} target="_blank" rel="noreferrer"><WhatsAppIcon/> Cotizar por WhatsApp</a>
-              <Link className="btn btn-wa-outline" to="/inscripcion">Solicitar convenio</Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Resultados 2025 */}
-        <section className="block">
-          <header className="sec-head">
-            <h2>Resultados 2025</h2>
-            <p className="muted">Datos reales de nuestro trabajo este año.</p>
-          </header>
-
-          <div className="stats">
-            <div className="stat blue">
-              <div className="n"><Counter target={27} suffix="" /></div>
-              <div className="t">Estudiantes reforzados</div>
-            </div>
-            <div className="stat amber">
-              <div className="n"><Counter target={3} suffix="" /></div>
-              <div className="t">Homeschool aliados</div>
-            </div>
-            <div className="stat green">
-              <div className="n"><Counter target={7} suffix="" /></div>
-              <div className="t">Escuelas en convenio</div>
-            </div>
-            <div className="stat rose">
-              <div className="n"><Counter target={5} suffix="" /></div>
-              <div className="t">Ensayos aplicados</div>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section className="block">
-          <header className="sec-head">
-            <h2>Preguntas frecuentes</h2>
-            <p className="muted">Homeschool, exámenes libres, ensayos PAES y convenios con colegios.</p>
-          </header>
-
-          <div className="faq-box">
-            <details>
-              <summary>¿Hacen clases para exámenes libres y validación de estudios?</summary>
-              <p>Sí. Diseñamos un plan 1:1 o micro-grupo con cápsulas, tutorías y simulacros. Incluye seguimiento y materiales.</p>
-            </details>
-            <details>
-              <summary>¿Ofrecen ensayos PAES para colegios con reportes?</summary>
-              <p>Entregamos PDF con ID y marca de agua. Opcional: corrección con reportes por alumno/cohorte e impresión por Lael.</p>
-            </details>
-            <details>
-              <summary>¿Puedo ajustar horas, meses y materias?</summary>
-              <p>Claro. Usa el configurador para horas/semana, duración y materias; el precio se actualiza en tiempo real.</p>
-            </details>
-            <details>
-              <summary>¿Cómo solicito convenio como director/a?</summary>
-              <p>Desde esta página puedes cotizar por WhatsApp o <Link to="/inscripcion">solicitar contacto</Link> para convenio institucional.</p>
-            </details>
-          </div>
-        </section>
-
-      </div>
-    </section>
-  );
-}
-
-/* ================= CSS (paleta sólida + contraste reforzado) ================= */
+/* ================= CSS PREMIUM DARK ================= */
 const css = `
-:root{
-  --ink:#ffffff; --ink2:#E6EDFF;
-  --bg:#0B1220; --panel:#0E1529; --bd:#223052;
-
-  --blue:#3B56FF; --blueSoft:#1D2B6B;
-  --amber:#F59E0B; --amberSoft:#6B4A0A;
-  --green:#10B981; --greenSoft:#0E4F3F;
-  --rose:#E879F9; --roseSoft:#5A2B60;
-
-  --wa:#25D366; --waBorder:#16A34A; --waText:#062b12;
-
-  --card:#0F172A;
-  --shadow:0 18px 36px rgba(2,6,23,.42);
-  --rad:18px;
+:root {
+  --bg-dark: #050505;
+  --bg-card: #121212;
+  --bg-highlight: #1E1E1E;
+  --primary: #D4AF37; /* Dorado Elegante */
+  --primary-hover: #B5952F;
+  --text-main: #FFFFFF;
+  --text-muted: #A0A0A0;
+  --border: #333333;
+  --radius: 16px;
+  --nav-height: 100px;
 }
 
-*{box-sizing:border-box}
-.apoyo{background:var(--bg);color:var(--ink)}
-.container{max-width:1120px;margin:0 auto;padding:0 18px;color:var(--ink)}
-.muted{color:var(--ink2)}
-.mt6{margin-top:6px}.mt12{margin-top:12px}
-.w100{width:100%}
-.ink{color:var(--ink)}
+.academy-page {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  padding-bottom: var(--nav-height);
+}
 
-/* Breadcrumbs */
-.breadcrumbs{border-bottom:1px solid var(--bd); background:linear-gradient(180deg,#0B1220,#0E1529)}
-.breadcrumbs ol{list-style:none; margin:0; padding:8px 0; display:flex; gap:8px; color:#cfe0ff; font-size:.92rem}
-.breadcrumbs a{color:#cfe0ff; text-decoration:underline; text-underline-offset:3px}
+.container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; font-family: inherit; }
 
 /* HERO */
-.hero{
-  padding:26px 0 16px;border-bottom:1px solid var(--bd);
-  background: linear-gradient(135deg, #0E162E 0%, #1B1F3B 100%);
-}
-.hero__grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:center}
-@media (max-width:980px){.hero__grid{grid-template-columns:1fr}}
-.brand{width:86px;filter:drop-shadow(0 6px 18px rgba(255,255,255,.2));opacity:.95}
-h1{margin:.2rem 0 .34rem;font-size:clamp(1.8rem,3.2vw + .6rem,2.6rem);line-height:1.12}
-.under{box-shadow:inset 0 -10px rgba(59,86,255,.55);border-radius:4px}
-.lead{max-width:62ch;color:var(--ink2)}
-.sr-captures{margin:10px 0 0; padding-left:18px; color:#E6EDFF; opacity:.95}
-.sr-captures li::marker{color:#FFD266}
-.service-chips{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
-.chip{font-weight:900;border-radius:999px;padding:.44rem .8rem}
-.chip.solid{background:#fff;color:#0B1220}
-.chip.solid.blue{background:var(--blue);color:#fff}
-.chip.solid.amber{background:var(--amber);color:#0B1220}
-.chip.solid.green{background:var(--green);color:#fff}
-.chip.solid.rose{background:var(--rose);color:#0B1220}
+.acad-hero { padding: 60px 0 40px; background: radial-gradient(circle at 50% 0%, #1a1a1a, transparent 70%); }
+.hero-cont { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
+@media (max-width: 800px) { .hero-cont { grid-template-columns: 1fr; text-align: center; } }
 
-/* CTA */
-.cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:.64rem 1rem;border-radius:12px;border:2px solid transparent;font-weight:1000;text-decoration:none}
-.btn-primary{background:var(--amber);color:#0B1220}
-.btn-ghost{background:#0B1220;border-color:#2A3B64;color:#EAF2FF}
+.hero-badge { display: inline-block; background: rgba(212, 175, 55, 0.15); color: var(--primary); padding: 4px 12px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; margin-bottom: 15px; border: 1px solid rgba(212, 175, 55, 0.3); }
+h1 { font-size: clamp(2.5rem, 5vw, 3.5rem); line-height: 1.1; margin-bottom: 20px; font-weight: 800; }
+.text-glow { color: var(--primary); text-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+.hero-copy { font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 30px; }
 
-/* WhatsApp (verde) */
-.btn-wa{background:var(--wa); border:2px solid var(--waBorder); color:var(--waText); font-weight:1000}
-.btn-wa:hover{filter:brightness(1.05)}
-.btn-wa-outline{background:transparent; border:2px solid var(--wa); color:var(--wa); font-weight:1000}
-.btn-wa-outline:hover{filter:brightness(1.1)}
+/* TOGGLE */
+.user-toggle-wrapper { display: flex; justify-content: flex-start; }
+@media (max-width: 800px) { .user-toggle-wrapper { justify-content: center; } }
+.user-toggle { background: var(--bg-highlight); padding: 4px; border-radius: 50px; display: inline-flex; border: 1px solid var(--border); }
+.toggle-btn { background: transparent; color: var(--text-muted); padding: 10px 24px; border-radius: 50px; font-weight: 600; transition: .3s; }
+.toggle-btn.active { background: var(--primary); color: #000; font-weight: 700; }
 
-/* Hero image */
-.hero__img{border-radius:20px;overflow:hidden;border:2px solid #1F2B56;background:#0F172A;box-shadow:var(--shadow)}
-.hero__img img{display:block;width:100%;height:auto}
-.hero__img figcaption{padding:8px 10px;background:#101836;border-top:2px solid #22305A;color:var(--ink2)}
+/* VISUAL */
+.hero-visual { position: relative; }
+.hero-img-main { width: 100%; border-radius: 20px; border: 1px solid var(--border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+.float-card { position: absolute; bottom: 20px; right: -10px; background: rgba(20, 20, 20, 0.9); backdrop-filter: blur(10px); padding: 12px 20px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+@media (max-width: 800px) { .hero-visual { margin-top: 40px; max-width: 500px; margin-left: auto; margin-right: auto; } .float-card { right: 10px; } }
+.fc-icon { font-size: 1.5rem; }
+.float-card strong { display: block; font-size: 0.9rem; }
+.float-card small { font-size: 0.75rem; color: var(--primary); }
 
-/* Secciones */
-.block{margin:20px 0}
-.sec-head h2{margin:0}
-.sec-head p{margin:4px 0 0}
+/* STEPS GRID */
+.steps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+@media (max-width: 700px) { .steps-grid { grid-template-columns: 1fr; } }
 
-/* Card base */
-.card{background:var(--card);border:2px solid #223052;border-radius:var(--rad);padding:14px;box-shadow:var(--shadow)}
+.step-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+.step-card.full-width { grid-column: 1 / -1; }
+.step-title { font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+.step-title.center { justify-content: center; }
+.num { background: var(--bg-highlight); width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.8rem; font-weight: 700; color: var(--primary); border: 1px solid var(--border); }
 
-/* Partner */
-.partner{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
-.partner .pill{display:inline-block;padding:.2rem .6rem;border-radius:999px;background:#12204B;color:#E6EDFF;font-weight:900}
-.partner-right{display:flex;gap:10px;flex-wrap:wrap}
+/* SUBJECTS */
+.subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.subject-item { background: var(--bg-highlight); border: 1px solid var(--border); border-radius: 12px; padding: 15px; text-align: center; cursor: pointer; transition: .2s; }
+.subject-item:hover { border-color: var(--text-muted); }
+.subject-item.selected { border-color: var(--primary); background: rgba(212, 175, 55, 0.1); }
+.s-icon { font-size: 1.5rem; margin-bottom: 5px; }
+.s-name { font-size: 0.9rem; font-weight: 600; }
 
-/* Carrusel */
-.hs-wrap{position:relative}
-.hs{display:flex;gap:12px;overflow:auto;scroll-snap-type:x mandatory;padding:2px 2px 14px}
-.slide{scroll-snap-align:start;min-width:260px}
+/* LEVELS */
+.levels-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.level-btn { background: var(--bg-highlight); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: left; transition: .2s; }
+.level-btn:hover { border-color: var(--text-muted); }
+.level-btn.selected { border-color: var(--primary); background: rgba(212, 175, 55, 0.1); }
+.level-btn strong { display: block; font-size: 0.95rem; }
+.level-btn small { font-size: 0.75rem; color: var(--text-muted); }
 
-/* Flechas con alto contraste */
-.hs-btn{
-  position:absolute;top:50%;transform:translateY(-50%);
-  width:38px;height:38px;border-radius:999px;
-  border:2px solid #FFD266;
-  background:#0B1220;
-  color:#FFD266;
-  font-size:20px;font-weight:900;cursor:pointer;
-  box-shadow:0 6px 18px rgba(0,0,0,.4);
-}
-.hs-btn:hover{ filter:brightness(1.05) }
-.hs-btn:focus-visible{ outline:3px solid #22D3EE; outline-offset:2px }
-.hs-btn.prev{left:-6px}.hs-btn.next{right:-6px}
+/* PACKS */
+.packs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+.pack-card { background: var(--bg-highlight); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; position: relative; cursor: pointer; transition: .2s; display: flex; flex-direction: column; }
+.pack-card:hover { transform: translateY(-5px); border-color: var(--text-muted); }
+.pack-card.selected { border-color: var(--primary); box-shadow: 0 0 20px rgba(212, 175, 55, 0.1); }
 
-/* PACKS – tarjeta con contraste reforzado */
-.pack{
-  background:#101830;
-  border:2px solid #2C3B6A;
-  border-radius:var(--rad);
-  padding:18px;
-  color:#F4F6FF;
-  box-shadow:0 8px 24px rgba(0,0,0,.4);
-  transition:transform .1s ease;
-}
-.pack:hover{ transform:translateY(-2px); }
-
-.pack .badge{display:inline-block;background:var(--amber);color:#0B1220;font-weight:900;border-radius:10px;padding:.18rem .52rem;margin-bottom:6px}
-.pack h3{ margin:.08rem 0 0; color:#FFFFFF; }
-.pack .mini{ color:#C3D0FF; }
-
-.pack .price{font-weight:1000;font-size:1.42rem;margin:.28rem 0 .38rem;color:#FFD266}
-.pack .price span{font-size:.95rem;color:#FFE9BE}
-
-/* Lista interna con marcador visible */
-.pack .list{ margin:.08rem 0 .5rem; padding-left:20px; }
-.pack .list li{
-  color:#E8EEFF;
-  line-height:1.35;
-  margin:.28rem 0;
-  list-style:disc;
-}
-.pack .list li::marker{ color:#FFD266; }
-
-/* Botón del pack con relieve */
-.pack .btn.w100{ box-shadow:0 8px 18px rgba(245,158,11,.30); transition:all .15s ease; }
-.pack .btn.w100:hover{ box-shadow:0 10px 22px rgba(245,158,11,.45); filter:brightness(1.05); }
-
-/* Chips outline (selector) */
-.chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip.outline{background:#0F172A;border:2px solid #2A3B64;color:#EAF2FF}
-.chip.outline.on{border-color:var(--blue);box-shadow:0 0 0 2px rgba(59,86,255,.25) inset;background:#111E48}
-
-/* Step / resumen */
-.step-title{font-weight:1000;margin-bottom:8px}
-.sum{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;margin-top:12px}
-.sum .k{font-weight:900;color:#CFE3FF}
-.sum .big{font-weight:1000;font-size:1.6rem}
-.sum .ok{color:var(--green)}
-.sum .mini{font-size:.92rem}
-.sum .cta-inline{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-
-/* Inputs */
-.field{width:100%;border:2px solid #2A3B64;border-radius:12px;padding:.6rem .8rem;background:#0F172A;color:#EAF2FF}
-.opt-grid{display:grid;gap:8px}
-.check{display:flex;align-items:center;gap:8px}
-.check input{transform:scale(1.15)}
-
-/* Stats (contraste corregido) */
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-@media (max-width:980px){.stats{grid-template-columns:1fr 1fr}}
-@media (max-width:600px){.stats{grid-template-columns:1fr}}
-.stat{border-radius:16px;padding:18px 14px}
-.stat .n{font-size:2rem;font-weight:1000;line-height:1}
-.stat .t{opacity:.95;font-weight:800;margin-top:6px}
-
-.stat.blue{background:var(--blue);color:#fff}
-.stat.amber{background:var(--amber);color:#0B1220}
-.stat.green{background:var(--green);color:#001b13}
-.stat.rose{background:var(--rose);color:#2b0c2e}
+.save-badge { position: absolute; top: 15px; right: 15px; background: var(--primary); color: #000; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; }
+.pack-head h4 { font-size: 1.2rem; margin: 0 0 5px; }
+.hours { font-size: 0.85rem; color: var(--text-muted); }
+.pack-price { font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin: 15px 0; }
+.pack-features { margin-bottom: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: var(--text-muted); }
+.radio-select { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); margin-top: auto; align-self: flex-start; }
+.pack-card.selected .radio-select { background: var(--primary); border-color: var(--primary); }
 
 /* FAQ */
-.faq-box details{border:1px solid var(--bd); border-radius:14px; background:var(--card); padding:12px 14px; margin-bottom:10px}
-.faq-box summary{cursor:pointer; font-weight:900; list-style:none; display:flex; align-items:center; gap:8px}
-.faq-box summary::-webkit-details-marker{display:none}
-.faq-box summary::after{content:"▸"; margin-left:auto; transform:rotate(0deg); transition:transform .16s ease; color:#F2CE3D}
-.faq-box details[open] summary::after{transform:rotate(90deg)}
-.faq-box p{margin:.5rem 0 0; color:#EAF2FF}
+.faq-section { margin-top: 40px; }
+.faq-section h3 { margin-bottom: 20px; font-size: 1.5rem; text-align: center; }
+.faq-grid { display: grid; gap: 10px; max-width: 800px; margin: 0 auto; }
+details { background: var(--bg-card); padding: 15px; border-radius: 12px; border: 1px solid var(--border); }
+summary { font-weight: 700; cursor: pointer; }
+details p { margin-top: 10px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
 
-/* Grid helpers */
-.grid{display:grid;gap:12px}
-.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
-.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media (max-width:980px){.grid-2,.grid-3{grid-template-columns:1fr}}
+/* STICKY */
+.academy-sticky { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; background: rgba(18, 18, 18, 0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--border); padding: 15px 0; transform: translateY(100%); transition: .3s; }
+.academy-sticky.visible { transform: translateY(0); }
+.sticky-content { display: flex; justify-content: space-between; align-items: center; }
+.sticky-info span { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); display: block; }
+.sticky-info strong { font-size: 1.5rem; color: var(--primary); }
+.btn-whatsapp { background: #25D366; color: #000; font-weight: 700; padding: 12px 24px; border-radius: 50px; transition: .2s; }
+.btn-whatsapp:hover { filter: brightness(1.1); }
 
-/* ====== Parche contraste y fondo aplicado a .apoyo (antes .homeschool) ====== */
-.apoyo, .apoyo * { box-sizing: border-box; }
-.apoyo{
-  background:#0b1220;
-  color:#ffffff;
-  min-height: 100dvh;
-}
-.apoyo .section,
-.apoyo .card,
-.apoyo .panel{
-  background: linear-gradient(180deg,#0f172a,#0b1220);
-  border:1px solid #1f2a44;
-  color:#fff;
-}
-.apoyo img{ display:block; max-width:100%; height:auto; }
-.apoyo .hero__img{ border-radius: 16px; overflow:hidden; background:#0f172a; }
+/* B2B */
+.b2b-hero { text-align: center; margin-bottom: 40px; padding: 40px 20px; background: linear-gradient(180deg, rgba(212,175,55,0.1), transparent); border-radius: var(--radius); border: 1px solid var(--border); }
+.b2b-hero h2 { font-size: 2rem; margin-bottom: 10px; color: var(--primary); }
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+.service-card { background: var(--bg-card); padding: 30px; border-radius: var(--radius); border: 1px solid var(--border); text-align: center; }
+.srv-icon { font-size: 2.5rem; display: block; margin-bottom: 15px; }
+.service-card h3 { margin-bottom: 10px; font-size: 1.2rem; }
+.service-card p { font-size: 0.9rem; color: var(--text-muted); }
+.b2b-cta-box { text-align: center; background: var(--bg-highlight); padding: 40px; border-radius: var(--radius); border: 1px solid var(--primary); }
+.btn-contact-pro { display: inline-block; background: var(--primary); color: #000; padding: 14px 30px; border-radius: 8px; font-weight: 700; margin-top: 20px; transition: .2s; }
+.btn-contact-pro:hover { background: var(--primary-hover); }
 
-/* Botones visibles siempre */
-.apoyo .btn-primary{ background:#F59E0B; border-color:#D97706; color:#0B1220; }
-.apoyo .btn-ghost{ color:#fff; border:1px solid #334155; }
-
-/* Focus global */
-button:focus-visible,.btn:focus-visible,input:focus-visible{outline:3px solid #22D3EE;outline-offset:2px}
+/* Fade In Animation */
+.fade-in { animation: fadeIn 0.5s ease-in; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 `;

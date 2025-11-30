@@ -1,439 +1,377 @@
 // src/pages/EscuelaAdultos.jsx
-import { useEffect } from "react";
-import SEOHead from "../components/SEOHead";
-import { seoDefaults } from "../seo.config";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-// Assets (patrón Vite new URL)
-const LogoMark = new URL("../assets/img/Logos/lael-inst-blanco.png", import.meta.url).href;
+// --- ASSETS (Ajusta los nombres de tus imágenes aquí) ---
+// Usa imágenes que evoquen superación: un adulto estudiando en el metro, manos escribiendo, etc.
+const HeroImg = new URL("../assets/img/lael/study-online.jpg", import.meta.url).href;
 
-// Tarjetas con foto (si no existen, puedes comentar estas 3 líneas)
-const Aula1 = new URL("../assets/img/lael/bootcamp.jpg", import.meta.url).href;
-const Aula2 = new URL("../assets/img/lael/coaching.jpg", import.meta.url).href;
-const Aula3 = new URL("../assets/img/lael/inclusion.jpg", import.meta.url).href;
+/* ================= DATOS DEL PROYECTO (Configuración) ================= */
 
-// Galería
-const Gal1 = new URL("../assets/img/lael/hs.jpg", import.meta.url).href;
-const Gal2 = new URL("../assets/img/lael/study-online.jpg", import.meta.url).href;
-const Gal3 = new URL("../assets/img/lael/soft.jpg", import.meta.url).href;
+const clp = (n) => Number(n).toLocaleString("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
+
+const PLANS = [
+  {
+    id: "beca",
+    title: "Beca Reinserción",
+    price: 0,
+    tag: "Cupos Sociales",
+    desc: "Para personas en programas de reinserción, gendarmería o situación de calle.",
+    features: [
+      "Clases grabadas (YouTube - Bajo consumo)",
+      "Guías de estudio en PDF por WhatsApp",
+      "Inscripción a exámenes Mineduc",
+      "Certificado de participación"
+    ],
+    cta: "Postular a Gratuidad",
+    color: "#34D399", // Verde Esperanza
+    isHighlight: false,
+    wapp: "Hola Instituto Lael. Necesito información para postular a la Beca de Reinserción Gratuita. Mi situación es..."
+  },
+  {
+    id: "trabajador",
+    title: "Plan Solidario",
+    price: 12990, // Precio bajo que cubre costos
+    period: "mensual",
+    tag: "Tú estudias, tú ayudas",
+    desc: "Para trabajadores. Tu mensualidad financia tu educación y apoya una beca.",
+    features: [
+      "Todo lo de la Beca",
+      "Campus Virtual 24/7",
+      "Resolución de dudas prioritaria",
+      "Ayudas a financiar a otros ❤️"
+    ],
+    cta: "Inscribirme",
+    color: "#FBBF24", // Dorado
+    isHighlight: true,
+    wapp: "Hola, soy trabajador y quiero terminar mis estudios con el Plan Solidario de $12.990."
+  },
+  {
+    id: "tutor",
+    title: "Plan Tutoría",
+    price: 29990,
+    period: "mensual",
+    tag: "Clases en Vivo",
+    desc: "Para quienes necesitan un profesor en vivo y guía constante.",
+    features: [
+      "Clases en vivo (Zoom)",
+      "Corrección de ensayos",
+      "Tutoría personalizada",
+      "Donas 2 becas completas ❤️"
+    ],
+    cta: "Inscribirme",
+    color: "#818CF8", // Indigo
+    isHighlight: false,
+    wapp: "Hola, quiero contratar el Plan Tutoría con clases en vivo."
+  }
+];
+
+const FAQS = [
+  { q: "¿Las clases consumen muchos datos?", a: "No. Usamos YouTube en formato optimizado y enviamos los materiales por WhatsApp para que no gastes tus megas." },
+  { q: "¿El certificado es válido?", a: "Sí. Te preparamos para los Exámenes Libres del Mineduc. Al aprobar, obtienes tu Licencia de Enseñanza Media válida para trabajar o estudiar." },
+  { q: "¿Cuánto dura el proceso?", a: "Depende de tu ritmo. Tenemos ciclos intensivos de 3 meses y ciclos normales de 6 meses. Tú eliges cuándo rendir." },
+  { q: "¿Cómo sé si califico a la beca?", a: "Las becas son para personas sin ingresos formales, derivadas de fundaciones o con antecedentes de reinserción. Escríbenos para evaluar tu caso." }
+];
+
+/* ================= COMPONENTE PRINCIPAL ================= */
+
+const SEO = () => {
+    useEffect(() => { document.title = "Programa Caminos | Nivelación de Estudios"; }, []);
+    return null;
+};
 
 export default function EscuelaAdultos() {
-  // UX: “no te vayas” cuando se pierde foco
-  useEffect(() => {
-    const onBlur = () => (document.title = "No te vayas 💛 Termina tus estudios");
-    const onFocus = () => (document.title = "Escuela para Adultos | Instituto Lael");
-    window.addEventListener("blur", onBlur);
-    window.addEventListener("focus", onFocus);
-    document.title = "Escuela para Adultos | Instituto Lael";
-    return () => {
-      window.removeEventListener("blur", onBlur);
-      window.removeEventListener("focus", onFocus);
-    };
-  }, []);
-
-  // ---------- SEO JSON-LD ----------
-  const jsonLd = [
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Instituto Lael SpA",
-      "url": seoDefaults.site,
-      "logo": `${seoDefaults.site}/meta/logo-lael.png`,
-      "sameAs": [
-        "https://www.instagram.com/institutolael",
-        "https://www.youtube.com/@institutolael",
-        "https://www.linkedin.com/company/instituto-lael/"
-      ],
-      "contactPoint": [{
-        "@type": "ContactPoint",
-        "telephone": "+56 9 6462 6568",
-        "contactType": "customer support",
-        "areaServed": "CL",
-        "availableLanguage": ["Spanish"]
-      }]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "serviceType": "Escuela para Adultos (Básica y Media)",
-      "provider": {
-        "@type": "Organization",
-        "name": "Instituto Lael SpA",
-        "url": seoDefaults.site
-      },
-      "areaServed": "Chile",
-      "url": `${seoDefaults.site}/escuela-adultos`,
-      "description": "Programa flexible para personas adultas (18+) que necesitan completar su enseñanza Básica o Media. Online en vivo + grabaciones. Alineado a Exámenes Libres (Mineduc)."
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Course",
-      "name": "Escuela para Adultos — Enseñanza Básica y Media (Exámenes Libres)",
-      "description": "Clases online en vivo y grabadas. Plan personalizado, horarios PM, acompañamiento y simulacros. Pensado para retomar estudios y rendir Exámenes Libres.",
-      "provider": {
-        "@type": "Organization",
-        "name": "Instituto Lael SpA",
-        "sameAs": seoDefaults.site
-      }
-    }
-  ];
+  const [activeFaq, setActiveFaq] = useState(null);
 
   return (
-    <div className="adultos">
-      {/* SEO */}
-      <SEOHead
-        title="Escuela para Adultos"
-        description="Termina tus estudios con apoyo real: programa flexible para adultos (18+) que necesitan completar Básica o Media. Clases online en vivo + grabaciones, horarios PM y preparación para Exámenes Libres (Mineduc)."
-        path="/escuela-adultos"
-        image={`${seoDefaults.site}/meta/og-escuela-adultos.jpg`}
-        jsonLd={jsonLd}
-      />
-
+    <div className="caminos-page">
+      <SEO />
       <style>{css}</style>
 
-      {/* HERO */}
-      <section className="hero">
-        <div className="hero-bg" aria-hidden />
-        <div className="container hero-grid">
-          <div className="hero-copy">
-            {/* SIN sello/kicker arriba para no duplicar logo */}
-            <h1>Escuela para Adultos</h1>
-            <p className="sub">Termina tus estudios con apoyo real</p>
+      {/* --- HERO: DIGNIDAD Y FUTURO --- */}
+      <header className="hero">
+        <div className="hero-overlay"></div>
+        <img src={HeroImg} alt="Adulto estudiando" className="hero-bg" />
+        
+        <div className="container hero-content">
+            <div className="badge-pill">Programa Caminos 2025</div>
+            <h1>
+                Tu pasado no define <br/>
+                <span className="text-highlight">tu futuro.</span>
+            </h1>
             <p className="lead">
-              Programa flexible para personas adultas (18+) que necesitan completar su
-              enseñanza Básica o Media: quienes retoman tras años, migran desde <strong>homeschool</strong>
-              o buscan reinserción educativa.
+                Termina tu enseñanza básica o media a tu ritmo, desde tu celular.
+                Un programa diseñado para trabajadores y personas que buscan una 
+                <strong> segunda oportunidad real</strong>.
             </p>
-
-            <ul className="chips" aria-label="Características del programa">
-              <li>Horarios PM</li>
-              <li>Clases en vivo + grabaciones</li>
-              <li>Ajustado a Exámenes Libres</li>
-              <li>Plan personalizado</li>
-            </ul>
-
-            <div className="cta">
-              <a className="btn btn-primary" href="#formulario">
-                Preinscribirme
-                <span className="arrow">→</span>
-              </a>
-
-              <a
-                className="btn btn-wa"
-                href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20me%20interesa%20la%20Escuela%20para%20Adultos"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="wa-ico">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
-                  <path d="M12.046 2a9.95 9.95 0 0 0-8.6 14.971L2 22l5.18-1.374A9.95 9.95 0 1 0 12.046 2zM7.2 18.4l-.311.09-3.023.802.807-2.947.093-.317A8.05 8.05 0 1 1 7.2 18.4z"/>
-                </svg>
-                Consultar ahora
-              </a>
+            <div className="hero-actions">
+                <a href="#planes" className="btn-primary">Ver Planes y Becas</a>
+                <a href="#metodo" className="btn-outline">¿Cómo funciona?</a>
             </div>
-          </div>
-
-          {/* Logo en tarjeta translúcida a la derecha */}
-          <div className="hero-logo" aria-hidden>
-            <img src={LogoMark} alt="Instituto Lael" loading="eager" decoding="async" />
-          </div>
         </div>
-      </section>
+      </header>
 
-      {/* RUTAS */}
-      <section className="rutas">
+      {/* --- EL MÉTODO (Accesibilidad) --- */}
+      <section id="metodo" className="method-section">
         <div className="container">
-          <h2>Elige tu ruta educativa</h2>
-          <p className="muted">Planificamos según tu nivel y fecha objetivo de rendición.</p>
-
-          <div className="flow">
-            <div className="pill">
-              <span className="tag">Básica</span>
-              <h3>1° a 8° Básico</h3>
-              <ul>
-                <li>Matemáticas básicas</li>
-                <li>Comprensión lectora</li>
-                <li>Ciencias naturales</li>
-                <li>Historia y geografía</li>
-              </ul>
+            <div className="sec-title">
+                <h2>Estudia sin barreras</h2>
+                <p>Sabemos que tu tiempo y tus recursos son valiosos. Creamos esto pensando en ti.</p>
             </div>
-            <div className="pill">
-              <span className="tag violeta">Media inicial</span>
-              <h3>1° y 2° Medio</h3>
-              <ul>
-                <li>Álgebra y geometría</li>
-                <li>Literatura y redacción</li>
-                <li>Biología y química</li>
-                <li>Inglés básico</li>
-              </ul>
+            
+            <div className="grid-3">
+                <div className="feature-card">
+                    <span className="icon">📱</span>
+                    <h3>Desde tu Celular</h3>
+                    <p>Plataforma ligera. Clases grabadas en formato YouTube (privado) para que estudies en el trayecto al trabajo sin gastar de más.</p>
+                </div>
+                <div className="feature-card">
+                    <span className="icon">🕒</span>
+                    <h3>A tu Ritmo</h3>
+                    <p>Sin horarios fijos obligatorios. Tú decides si estudias de noche, de mañana o los fines de semana. El contenido siempre está ahí.</p>
+                </div>
+                <div className="feature-card">
+                    <span className="icon">📜</span>
+                    <h3>Validez Oficial</h3>
+                    <p>Te preparamos específicamente para aprobar los Exámenes Libres. Obtén tu licencia de enseñanza media válida por el Estado.</p>
+                </div>
             </div>
-            <div className="pill">
-              <span className="tag slate">Media final</span>
-              <h3>3° y 4° Medio</h3>
-              <ul>
-                <li>Preparación Exámenes Libres</li>
-                <li>Simulacros</li>
-                <li>Orientación vocacional</li>
-                <li>Certificación Mineduc</li>
-              </ul>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* HORARIOS */}
-      <section className="grid2 container">
-        <div className="box box-slim">
-          <h2>Horarios compatibles con tu vida</h2>
-          <p className="muted">Clases vespertinas pensadas para adultos que trabajan.</p>
-
-          <div className="horarios">
-            <div className="h-card">
-              <div className="h-day">LUN &amp; MIÉ</div>
-              <div className="h-time">19:00 — 20:20</div>
-              <div className="h-sub">Lenguaje y Comunicación</div>
-            </div>
-            <div className="h-card">
-              <div className="h-day">MAR &amp; JUE</div>
-              <div className="h-time">19:00 — 20:20</div>
-              <div className="h-sub">Matemática</div>
-            </div>
-            <div className="h-card">
-              <div className="h-day">VIERNES</div>
-              <div className="h-time">19:00 — 20:00</div>
-              <div className="h-sub">Taller de estudio y repaso</div>
-            </div>
-          </div>
-
-          <p className="nota">* Horarios sujetos a tramo y disponibilidad. Todas las clases quedan grabadas.</p>
-        </div>
-      </section>
-
-      {/* ¿QUÉ INCLUYE? */}
-      <section className="incluye">
+      {/* --- PLANES (Modelo Solidario) --- */}
+      <section id="planes" className="pricing-section">
         <div className="container">
-          <h2>¿Qué incluye el programa?</h2>
-          <p className="muted">Todo lo que necesitas para completar tu educación exitosamente.</p>
+            <div className="sec-title">
+                <h2>Elige tu Camino</h2>
+                <p>Nuestro modelo es solidario: Quien puede pagar un poco, ayuda a quien no tiene nada.</p>
+            </div>
 
-          <div className="cards6">
-            <FeatureTile title="100% Online en Vivo" desc="Clases interactivas que quedan grabadas para repasar cuando necesites." />
-            <FeatureTile title="Horarios Flexibles" desc="Tarde/noche para estudiar sin dejar trabajo o responsabilidades." />
-            <FeatureTile title="Acompañamiento Personal" desc="Seguimiento individualizado y apoyo constante." />
-            <FeatureTile title="Certificación Oficial" desc="Alineado con Exámenes Libres del Mineduc." />
-            <FeatureTile title="Ambiente de Respeto" desc="Comunidad de apoyo, sin juicios, hecha para adultos." />
-            <FeatureTile title="Becas Disponibles" desc="Apoyos económicos caso a caso (prioridad: reinserción y jefas de hogar)." />
-          </div>
+            <div className="plans-container">
+                {PLANS.map(plan => (
+                    <div key={plan.id} className={`plan-card ${plan.isHighlight ? 'featured' : ''}`}>
+                        <div className="plan-header" style={{borderTopColor: plan.color}}>
+                            <span className="tag" style={{background: plan.color, color: '#000'}}>{plan.tag}</span>
+                            <h3>{plan.title}</h3>
+                            <div className="price-box">
+                                <span className="currency">{plan.price === 0 ? '' : '$'}</span>
+                                <span className="amount">{plan.price === 0 ? 'GRATIS' : plan.price.toLocaleString('es-CL')}</span>
+                                {plan.period && <span className="freq">/{plan.period}</span>}
+                            </div>
+                            <p className="desc">{plan.desc}</p>
+                        </div>
+                        <div className="plan-body">
+                            <ul>
+                                {plan.features.map((feat, i) => (
+                                    <li key={i}>{feat}</li>
+                                ))}
+                            </ul>
+                            <a 
+                                href={`https://wa.me/56964626568?text=${encodeURIComponent(plan.wapp)}`} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className="btn-plan"
+                                style={{
+                                    background: plan.isHighlight ? plan.color : 'transparent', 
+                                    borderColor: plan.color, 
+                                    color: plan.isHighlight ? '#000' : plan.color
+                                }}
+                            >
+                                {plan.cta}
+                            </a>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
       </section>
 
-      {/* REQUISITOS + CTA lateral */}
-      <section className="req-cta container">
-        <div className="req">
-          <h2>Requisitos <span className="hl">simples</span></h2>
-          <p className="muted">Solo necesitas lo básico para comenzar tu proceso educativo.</p>
-
-          <ul className="req-list">
-            <li><strong>Cédula de identidad vigente</strong> · Documento oficial actualizado</li>
-            <li><strong>Certificados previos (si los tienes)</strong> · Cualquier documentación educativa</li>
-            <li><strong>Compromiso de asistencia</strong> · Mínimo 75% de participación en clases</li>
-          </ul>
-        </div>
-
-        <aside className="panel">
-          <h3>¿Listo para comenzar?</h3>
-          <p>Completa tu preinscripción y te orientamos sobre la mejor ruta.</p>
-          <a className="btn btn-primary wfull" href="#formulario">
-            Preinscribirme ahora <span className="arrow">→</span>
-          </a>
-          <a
-            className="btn btn-wa wfull"
-            href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20me%20interesa%20la%20Escuela%20para%20Adultos"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="wa-ico">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
-              <path d="M12.046 2a9.95 9.95 0 0 0-8.6 14.971L2 22l5.18-1.374A9.95 9.95 0 1 0 12.046 2zM7.2 18.4l-.311.09-3.023.802.807-2.947.093-.317A8.05 8.05 0 1 1 7.2 18.4z"/>
-            </svg>
-            Consultar ahora
-          </a>
-        </aside>
-      </section>
-
-      {/* GALERÍA */}
-      <section className="galeria">
-        <div className="container g">
-          <figure className="gx"><img src={Gal1} alt="Clase en línea con acompañamiento" /></figure>
-          <figure className="gx"><img src={Gal2} alt="Estudio en casa con guía" /></figure>
-          <figure className="gx"><img src={Gal3} alt="Ambiente amable para aprender" /></figure>
+      {/* --- EMPRESAS (RSE) --- */}
+      <section className="sponsor-section">
+        <div className="container sponsor-box">
+            <div className="sp-content">
+                <h3>🤝 Para Empresas y Fundaciones</h3>
+                <p>
+                    ¿Buscas nivelar estudios de tus colaboradores o apadrinar un grupo de reinserción? 
+                    <br/>Gestionamos el proceso completo. Entregamos reportes de avance y certificado de impacto social.
+                </p>
+            </div>
+            <div className="sp-action">
+                <a href="https://wa.me/56964626568?text=Hola,%20soy%20empresa%20y%20quiero%20apadrinar%20un%20curso" target="_blank" rel="noreferrer" className="btn-sponsor">
+                    Quiero ser Padrino
+                </a>
+            </div>
         </div>
       </section>
 
-      {/* FORMULARIO */}
-      <section id="formulario" className="formulario">
-        <div className="container form-box">
-          <h2>Preinscripción rápida 📝</h2>
-          <p className="muted">Completa tus datos y te contactamos para orientarte.</p>
-          <div className="google-form-placeholder">
-            <p>Formulario disponible aquí muy pronto.</p>
-            <small>Podrás completar tu preinscripción directamente con tu cuenta de Google.</small>
-          </div>
+      {/* --- FAQ --- */}
+      <section className="faq-section">
+        <div className="container">
+            <h2>Preguntas Frecuentes</h2>
+            <div className="faq-list">
+                {FAQS.map((faq, i) => (
+                    <div key={i} className={`faq-item ${activeFaq === i ? 'open' : ''}`} onClick={() => setActiveFaq(activeFaq === i ? null : i)}>
+                        <div className="faq-question">
+                            {faq.q}
+                            <span className="toggle">{activeFaq === i ? '−' : '+'}</span>
+                        </div>
+                        {activeFaq === i && <div className="faq-answer">{faq.a}</div>}
+                    </div>
+                ))}
+            </div>
         </div>
       </section>
 
-      {/* CTA FINAL */}
-      <section className="cta-final">
-        <div className="container inner">
-          <div>
-            <h3>Nunca es tarde para terminar el colegio</h3>
-            <p className="muted">Estudia con método, en horarios compatibles y con acompañamiento real.</p>
-          </div>
-          <div className="actions">
-            <a className="btn btn-primary" href="#formulario">Comenzar mi proceso <span className="arrow">→</span></a>
-            <a
-              className="btn btn-wa"
-              href="https://wa.me/56964626568?text=Hola%20%F0%9F%91%8B%20me%20interesa%20la%20Escuela%20para%20Adultos"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="wa-ico">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/>
-                <path d="M12.046 2a9.95 9.95 0 0 0-8.6 14.971L2 22l5.18-1.374A9.95 9.95 0 1 0 12.046 2zM7.2 18.4l-.311.09-3.023.802.807-2.947.093-.317A8.05 8.05 0 1 1 7.2 18.4z"/>
-              </svg>
-              Consultar ahora
-            </a>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
 
-function FeatureCard({ img, title, bullets = [] }) {
-  return (
-    <article className="fcard">
-      <img src={img} alt="" />
-      <div className="overlay" />
-      <div className="content">
-        <h3>{title}</h3>
-        <ul>{bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>
-      </div>
-    </article>
-  );
-}
-
-function FeatureTile({ title, desc }) {
-  return (
-    <div className="tile">
-      <span className="ico" aria-hidden />
-      <h3>{title}</h3>
-      <p>{desc}</p>
-    </div>
-  );
-}
-
+/* ================= ESTILOS (DARK PREMIUM & ACCESIBLE) ================= */
 const css = `
-.adultos { background:#0b1220; color:#f1f5f9; font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height:1.6; }
-.container{ width:min(1120px,92vw); margin:0 auto; }
+:root {
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #F59E0B; /* Dorado Esperanza */
+  --success: #34D399;
+  --radius: 16px;
+}
+
+.caminos-page {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+a { text-decoration: none; color: inherit; }
+button { border: none; background: none; cursor: pointer; }
 
 /* HERO */
-.hero{ position:relative; overflow:hidden; margin-bottom:0; }
-.hero-bg{
-  position:absolute; inset:0;
-  background:
-    radial-gradient(900px 240px at 10% -20%, rgba(88,80,236,.10), transparent 60%),
-    radial-gradient(900px 240px at 90% -20%, rgba(22,163,74,.08), transparent 60%),
-    linear-gradient(180deg, rgba(11,18,32,0.85), rgba(11,18,32,0.98));
+.hero {
+  position: relative; height: 80vh; min-height: 600px;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; overflow: hidden;
 }
-.hero-grid{ position:relative; z-index:2; display:grid; grid-template-columns:1.2fr .8fr; gap:48px; padding:72px 0 24px; align-items:center; }
-.hero-copy h1{ margin:0 0 .2rem; letter-spacing:.3px; font-weight:900; font-size:2.7rem; }
-.hero-copy .sub{ margin:.25rem 0 1rem; color:#cbd5e1; font-weight:700; }
-.lead{ max-width:760px; opacity:.95; font-size:1.08rem; margin-bottom:20px; }
-.chips{ display:flex; flex-wrap:wrap; gap:10px; list-style:none; margin:20px 0 22px; padding:0; }
-.chips li{ background:rgba(255,255,255,.10); padding:.5rem .9rem; border-radius:999px; border:1px solid #253049; font-size:.95rem; }
-
-/* Hero logo */
-.hero-logo{ display:grid; place-items:center; padding:36px; border-radius:20px;
-  background:rgba(17,24,39,.55); border:1px solid #1e293b;
-  box-shadow:0 20px 48px rgba(2,6,23,.45);
-  backdrop-filter:saturate(110%) blur(3px); min-height:220px;
+.hero-bg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 0; opacity: 0.5; filter: contrast(1.1);
 }
-.hero-logo img{ width:180px; height:auto; filter:drop-shadow(0 6px 24px rgba(255,255,255,.25)); }
-
-/* BOTONES */
-.btn{ display:inline-flex; align-items:center; justify-content:center; gap:.55rem; padding:.9rem 1.2rem; border-radius:12px; font-weight:800; text-decoration:none; cursor:pointer; border:1px solid transparent; transition:.18s ease; }
-.btn .arrow{ margin-left:.35rem; }
-.btn-primary{ background:linear-gradient(180deg,#fbbf24,#f59e0b); color:#0b1220; border-color:#d97706; }
-.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(245,158,11,.25); }
-.btn-wa{ color:#0a3d21; background:#25D366; border:1px solid #128C7E; }
-.btn-wa:hover{ transform:translateY(-2px); box-shadow:0 18px 36px rgba(37,211,102,.25); }
-.wa-ico{ display:block; }
-.wfull{ width:100%; }
-
-/* RUTAS */
-.rutas{ padding:40px 0; background:rgba(15,23,42,.35); border-top:1px solid #152238; border-bottom:1px solid #152238; margin:0 0 80px; }
-.rutas h2{ margin:0 0 6px; }
-.flow{ display:grid; gap:24px; grid-template-columns:repeat(3,1fr); margin-top:16px; }
-.pill{ background:#0f172a; padding:22px; border-radius:16px; border:1px solid #1e293b; transition:.15s ease; }
-.pill:hover{ transform:translateY(-2px); border-color:#2e3c5c; box-shadow:0 16px 36px rgba(2,6,23,.25); }
-.pill .tag{ display:inline-block; font-size:.8rem; font-weight:800; background:#4f46e5; border:1px solid #4338ca; color:#e0e7ff; padding:.22rem .6rem; border-radius:999px; margin-bottom:10px; }
-.pill .tag.violeta{ background:#7c3aed; border-color:#6d28d9; }
-.pill .tag.slate{ background:#334155; border-color:#1f2937; }
-.pill h3{ margin:.2rem 0 .6rem; }
-.pill ul{ margin:0; padding-left:1.05rem; }
-
-/* HORARIOS */
-.grid2{ display:grid; grid-template-columns:1fr; gap:24px; margin:40px auto 40px; }
-.box-slim{ background:#0f172a; border:1px solid #1e293b; border-radius:16px; padding:24px; }
-.horarios{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:6px; }
-.h-card{ background:#0b1220; border:1px solid #1f2a44; border-radius:16px; padding:16px; text-align:center; }
-.h-day{ font-size:.82rem; font-weight:900; color:#facc15; letter-spacing:.3px; }
-.h-time{ font-size:1.35rem; font-weight:900; margin:.25rem 0; }
-.h-sub{ color:#cbd5e1; }
-.nota{ color:#9fb0d2; font-style:italic; margin:.75rem 0 0; }
-
-/* ¿QUÉ INCLUYE? */
-.incluye{ padding:36px 0 10px; }
-.cards6{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:16px; }
-.tile{ background:#0f172a; border:1px solid #1f2a44; border-radius:16px; padding:22px; transition:.15s ease; }
-.tile:hover{ transform:translateY(-2px); border-color:#2e3c5c; box-shadow:0 16px 36px rgba(2,6,23,.25); }
-.tile .ico{ width:36px; height:36px; border-radius:10px; display:inline-block; background:linear-gradient(135deg,#5850EC,#f59e0b); margin-bottom:12px; }
-
-/* REQUISITOS + PANEL */
-.req-cta{ display:grid; grid-template-columns:1.2fr .8fr; gap:24px; margin:40px auto 20px; }
-.req-list{ list-style:disc; padding-left:1.25rem; display:grid; gap:10px; }
-.req-list li{ background:#0f172a; border:1px solid #1f2a44; border-radius:12px; padding:.9rem; }
-.hl{ color:#86efac; }
-.panel{ background:#0f172a; border:1px solid #1f2a44; border-radius:16px; padding:22px; align-self:start; }
-.panel h3{ margin:0 0 .4rem; }
-
-/* GALERÍA */
-.galeria{ padding:10px 0 24px; }
-.g{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-.g img{ width:100%; height:220px; object-fit:cover; border-radius:14px; }
-
-/* FORMULARIO */
-.formulario{ padding:40px 0 80px; }
-.form-box{ background:#0f172a; border:1px solid #1e293b; border-radius:18px; padding:36px; text-align:center; }
-.google-form-placeholder{ margin-top:20px; background:rgba(255,255,255,.04); border-radius:12px; padding:40px 20px; border:1px dashed #334155; }
-.google-form-placeholder p{ font-weight:600; margin-bottom:6px; }
-
-/* CTA FINAL */
-.cta-final{ background:linear-gradient(135deg,rgba(245,158,11,.16),rgba(88,80,236,.16)); padding:36px 0; border-top:1px solid #1e293b; }
-.inner{ display:flex; justify-content:space-between; align-items:center; gap:20px; }
-
-/* MISC */
-.muted{ color:#cbd5e1; }
-
-/* RESPONSIVE */
-@media(max-width:980px){
-  .hero-grid{ grid-template-columns:1fr; gap:28px; }
-  .hero-logo{ justify-self:center; }
-  .flow, .cards6, .g{ grid-template-columns:1fr; }
-  .req-cta{ grid-template-columns:1fr; }
-  .horarios{ grid-template-columns:1fr; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(15,23,42,0.6), #0f172a);
+  z-index: 1;
 }
-@media(max-width:640px){
-  .hero-copy h1{ font-size:1.9rem; }
-  .hero-logo img{ width:140px; }
+.hero-content { position: relative; z-index: 2; max-width: 800px; padding-top: 40px; }
+
+.badge-pill {
+  display: inline-block; background: rgba(245, 158, 11, 0.15); color: var(--accent);
+  padding: 6px 16px; border-radius: 50px; font-weight: 700; text-transform: uppercase;
+  font-size: 0.85rem; margin-bottom: 24px; border: 1px solid rgba(245, 158, 11, 0.4);
+  backdrop-filter: blur(4px);
 }
+
+h1 { font-size: clamp(2.5rem, 5vw, 4.2rem); line-height: 1.1; margin-bottom: 24px; font-weight: 800; }
+.text-highlight { 
+    color: var(--accent); 
+    background: linear-gradient(120deg, #FCD34D, #F59E0B);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.lead { font-size: 1.2rem; line-height: 1.6; color: #e2e8f0; margin-bottom: 40px; max-width: 650px; margin-left: auto; margin-right: auto; }
+
+.hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--accent); color: #000; padding: 14px 32px; border-radius: 50px;
+  font-weight: 700; text-decoration: none; transition: .2s; box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(245, 158, 11, 0.5); }
+.btn-outline {
+  background: rgba(255,255,255,0.05); color: #fff; padding: 14px 32px; border-radius: 50px;
+  font-weight: 700; text-decoration: none; border: 1px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(4px);
+}
+.btn-outline:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+
+/* SECTIONS */
+.sec-title { text-align: center; margin-bottom: 60px; }
+.sec-title h2 { font-size: 2.5rem; margin-bottom: 12px; font-weight: 800; }
+.sec-title p { font-size: 1.15rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+
+/* METHOD */
+.method-section { padding: 80px 0; background: var(--bg-dark); }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+.feature-card {
+  background: var(--bg-card); padding: 35px 30px; border-radius: var(--radius); text-align: center;
+  border: 1px solid rgba(255,255,255,0.05); transition: .3s;
+}
+.feature-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.feature-card .icon { font-size: 3.5rem; display: block; margin-bottom: 20px; }
+.feature-card h3 { font-size: 1.5rem; margin-bottom: 12px; color: var(--text-main); }
+.feature-card p { color: var(--text-muted); line-height: 1.6; }
+
+/* PRICING */
+.pricing-section { padding: 80px 0; background: #0b1120; }
+.plans-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; align-items: start; }
+
+.plan-card {
+  background: var(--bg-card); border-radius: 24px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;
+  position: relative; transition: .3s;
+}
+.plan-card.featured { 
+  transform: scale(1.05); z-index: 2; border-color: var(--accent); 
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4); background: #162032;
+}
+@media (max-width: 900px) { .plan-card.featured { transform: none; margin: 20px 0; } }
+
+.plan-header { padding: 40px 30px; text-align: center; border-top: 6px solid transparent; background: rgba(0,0,0,0.2); }
+.plan-header .tag { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 0.5px; }
+.plan-header h3 { font-size: 1.8rem; margin-bottom: 15px; font-weight: 800; }
+.price-box { margin-bottom: 15px; display: flex; justify-content: center; align-items: baseline; gap: 4px; }
+.currency { font-size: 1.5rem; color: var(--text-muted); }
+.amount { font-size: 3rem; font-weight: 800; color: var(--text-main); }
+.freq { color: var(--text-muted); font-size: 1rem; }
+.desc { font-size: 0.95rem; color: var(--text-muted); font-style: italic; line-height: 1.5; }
+
+.plan-body { padding: 30px; display: flex; flex-direction: column; height: 100%; flex-grow: 1; }
+.plan-body ul { list-style: none; padding: 0; margin-bottom: 40px; flex-grow: 1; }
+.plan-body li { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0; display: flex; align-items: start; gap: 10px; font-size: 0.95rem; }
+.plan-body li::before { content: "✓"; color: var(--success); font-weight: bold; flex-shrink: 0; }
+
+.btn-plan {
+  display: block; text-align: center; padding: 16px; border-radius: 12px;
+  font-weight: 700; text-decoration: none; border: 2px solid; transition: .2s;
+  font-size: 1.1rem;
+}
+.btn-plan:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+/* SPONSOR */
+.sponsor-section { margin: 80px 0; }
+.sponsor-box {
+  background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid #334155;
+  padding: 50px; border-radius: 24px; display: flex; align-items: center; justify-content: space-between; gap: 40px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+@media (max-width: 800px) { .sponsor-box { flex-direction: column; text-align: center; padding: 30px; } }
+.sp-content h3 { font-size: 2rem; margin-bottom: 15px; color: var(--text-main); }
+.sp-content p { font-size: 1.1rem; color: var(--text-muted); }
+.btn-sponsor {
+  background: transparent; color: var(--text-main); padding: 16px 36px; border-radius: 50px;
+  font-weight: 700; text-decoration: none; border: 2px solid var(--text-muted); white-space: nowrap; transition: .2s;
+}
+.btn-sponsor:hover { border-color: var(--text-main); background: rgba(255,255,255,0.05); }
+
+/* FAQ */
+.faq-section { padding-bottom: 100px; }
+.faq-list { max-width: 800px; margin: 0 auto; }
+.faq-item { background: var(--bg-card); border-radius: 12px; margin-bottom: 15px; overflow: hidden; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); transition: .2s; }
+.faq-item:hover { border-color: var(--text-muted); }
+.faq-question { padding: 24px; font-weight: 700; font-size: 1.1rem; display: flex; justify-content: space-between; align-items: center; }
+.faq-answer { padding: 0 24px 24px; color: var(--text-muted); line-height: 1.6; border-top: 1px solid rgba(255,255,255,0.05); margin-top: -5px; padding-top: 20px; }
+.toggle { font-size: 1.5rem; color: var(--accent); font-weight: 300; }
 `;

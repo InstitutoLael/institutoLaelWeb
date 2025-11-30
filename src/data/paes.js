@@ -1,10 +1,11 @@
 // src/data/paes.js
 /* ──────────────────────────────────────────────────────────────────────────
-   PAES — Única fuente de verdad (2026)
-   - Ensayos: 1 por ramo inscrito / mes (regla global)
-   - Descuentos automáticos por n° de ramos (sin “regalar” el full)
-   - Planes por asignatura + Combos estratégicos (copy claro)
-   - Helpers de ANUALIDAD (mar–oct: 8 meses) y tabla de referencia
+   PAES — Única fuente de verdad (2026) - ESTRATEGIA EQUILIBRIO (Volumen + Sueldo Profe)
+   
+   Estrategia de Precios:
+   - Base: $6.990 (Permite pagar $2.000/alumno al profe y deja margen)
+   - Pack 5 Ramos: Queda en aprox $26.000 (Súper competitivo vs competencia)
+   - Matrícula: Baja ($4.990) para reducir fricción de entrada.
    ────────────────────────────────────────────────────────────────────────── */
 
 // 🔢 CLP formatter (reutilizable en componentes)
@@ -16,27 +17,29 @@ export const clp = (n) =>
   });
 
 // 📅 Parámetros de anualidad académica (mar–oct: 8 meses)
-export const ACADEMIC_MONTHS = 8; // cambia a 9 si cierras en noviembre
-export const ACADEMIC_PERIOD_LABEL = "marzo a octubre"; // para UI
+export const ACADEMIC_MONTHS = 8; 
+export const ACADEMIC_PERIOD_LABEL = "marzo a octubre"; 
 
 // 🧾 Matrícula obligatoria (pago único)
-export const ENROLLMENT_FEE = 7990;
+// BAJADA A $4.990 para eliminar barrera de entrada
+export const ENROLLMENT_FEE = 4990;
 
 /**
  * 💵 Precio base por ramo/mes
- * - 2026 propuesto: 8.990 (ajustado para 2 h/sem sostenibles)
+ * ANTES: 8.990 (Muy caro, espanta alumnos)
+ * AHORA: 6.990 (Equilibrio perfecto para pagar $2.000 al profe)
  */
-export const PER_SUBJECT_MONTHLY = 8990;
+export const PER_SUBJECT_MONTHLY = 6990;
 
 /**
  * 🔻 Descuentos por cantidad de ramos (graduales)
- * - Cap en 20% para 5+
+ * Aumentados para premiar el Pack Full y asegurar volumen
  */
 export const DISCOUNTS_BY_COUNT = [
-  { min: 5, rate: 0.20 }, // 20% (5+)
-  { min: 4, rate: 0.15 }, // 15% (4)
-  { min: 3, rate: 0.10 }, // 10% (3)
-  { min: 2, rate: 0.05 }, // 5%  (2)
+  { min: 5, rate: 0.25 }, // 25% OFF (El Pack de 5 queda muy atractivo)
+  { min: 4, rate: 0.20 }, // 20% OFF 
+  { min: 3, rate: 0.15 }, // 15% OFF
+  { min: 2, rate: 0.10 }, // 10% OFF
 ];
 
 // 📝 Ensayos: 1 por ramo / mes (regla global)
@@ -130,7 +133,7 @@ export const PAES_SUBJECTS = [
 export const PAES_PLANS = PAES_SUBJECTS.map((s) => ({
   id: `plan-${s.id}`,
   title: s.name,
-  tagline: "Comienza por 1 ramo (puedes sumar después)",
+  tagline: "Ramo Individual",
   subjectsIncluded: 1,
   subjects: [s.id],
   monthly: priceForCount(1),
@@ -143,42 +146,33 @@ export const PAES_PLANS = PAES_SUBJECTS.map((s) => ({
     "Soporte por WhatsApp",
   ],
   // toques visuales suaves (opcionales en UI)
-  badge: s.id === "his" ? "Impulsa Historia" : undefined,
-  color: s.id === "his" ? "amber" : undefined,
+  badge: s.id === "m1" ? "Base Fundamental" : undefined,
+  color: "slate", 
 }));
 
-/* ───────── Combos estratégicos (copy claro) ───────── */
+/* ───────── Combos estratégicos (SIMPLIFICADOS Y OPTIMIZADOS) ───────── 
+   Menos opciones = Más ventas.
+*/
 export const PAES_COMBOS = [
-  // HUMANIDADES
+  // 1. EL GANCHO ECONÓMICO (Humanista)
   {
     id: "hum-duo",
-    title: "Dúo Humanidades",
+    title: "Pack Humanista",
     tagline: "Lenguaje + Historia",
     subjects: ["len", "his"],
-    monthly: priceForSubjects(["len", "his"]),
+    monthly: priceForSubjects(["len", "his"]), // ~$12.580 (Súper pagable)
     annual: priceAnnualForSubjects(["len", "his"]),
     essaysPerMonth: essaysForCount(2),
     features: ["2 ramos", "Clases en vivo + cápsulas", "2 ensayos/mes"],
-    badge: "Popular",
+    badge: "Económico",
     color: "amber",
   },
-  {
-    id: "hum-trio",
-    title: "Trío Humanidades",
-    tagline: "Lenguaje + Historia + M1",
-    subjects: ["len", "his", "m1"],
-    monthly: priceForSubjects(["len", "his", "m1"]),
-    annual: priceAnnualForSubjects(["len", "his", "m1"]),
-    essaysPerMonth: essaysForCount(3),
-    features: ["3 ramos", "Tutoría mensual", "3 ensayos/mes"],
-    color: "indigo",
-  },
 
-  // STEM / CIENCIAS
+  // 2. EL CIENTÍFICO BÁSICO
   {
     id: "stem-basico",
-    title: "STEM Básico",
-    tagline: "M1 + Biología",
+    title: "Pack Ciencias",
+    tagline: "M1 + Biología (o Física/Química)",
     subjects: ["m1", "bio"],
     monthly: priceForSubjects(["m1", "bio"]),
     annual: priceAnnualForSubjects(["m1", "bio"]),
@@ -186,81 +180,39 @@ export const PAES_COMBOS = [
     features: ["2 ramos", "2 ensayos/mes", "Material descargable"],
     color: "green",
   },
+
+  // 3. EL RECOMENDADO (3 Ramos)
   {
-    id: "stem-fuerte",
-    title: "STEM Fuerte",
-    tagline: "M1 + M2 + Física",
-    subjects: ["m1", "m2", "fis"],
-    monthly: priceForSubjects(["m1", "m2", "fis"]),
-    annual: priceAnnualForSubjects(["m1", "m2", "fis"]),
+    id: "trio-fundamental",
+    title: "Trío Fundamental",
+    tagline: "M1 + Lenguaje + Historia",
+    subjects: ["len", "his", "m1"],
+    monthly: priceForSubjects(["len", "his", "m1"]), // ~$17.800
+    annual: priceAnnualForSubjects(["len", "his", "m1"]),
     essaysPerMonth: essaysForCount(3),
     features: ["3 ramos", "Tutoría mensual", "3 ensayos/mes"],
     badge: "Recomendado",
-    color: "green",
-  },
-  {
-    id: "stem-quimica",
-    title: "Ciencias con Química",
-    tagline: "M1 + Química",
-    subjects: ["m1", "qui"],
-    monthly: priceForSubjects(["m1", "qui"]),
-    annual: priceAnnualForSubjects(["m1", "qui"]),
-    essaysPerMonth: essaysForCount(2),
-    features: ["2 ramos", "2 ensayos/mes"],
-    color: "rose",
-  },
-
-  // SALUD
-  {
-    id: "salud-trio",
-    title: "Ruta Salud",
-    tagline: "Biología + Química + M1",
-    subjects: ["bio", "qui", "m1"],
-    monthly: priceForSubjects(["bio", "qui", "m1"]),
-    annual: priceAnnualForSubjects(["bio", "qui", "m1"]),
-    essaysPerMonth: essaysForCount(3),
-    features: ["3 ramos", "Tutoría mensual", "3 ensayos/mes"],
-    color: "rose",
-  },
-
-  // COMPLETOS
-  {
-    id: "cuatro-equilibrado",
-    title: "Cuatro Equilibrado",
-    tagline: "Lenguaje + Historia + M1 + Biología",
-    subjects: ["len", "his", "m1", "bio"],
-    monthly: priceForSubjects(["len", "his", "m1", "bio"]),
-    annual: priceAnnualForSubjects(["len", "his", "m1", "bio"]),
-    essaysPerMonth: essaysForCount(4),
-    features: ["4 ramos", "Tutoría mensual", "4 ensayos/mes"],
     color: "indigo",
   },
+
+  // 4. LA ESTRELLA: FULL 5 RAMOS
   {
     id: "full-5",
-    title: "Full 5",
+    title: "Full 5 Ramos",
     tagline: "Lenguaje + M1 + Historia + 2 de Ciencias",
-    subjects: ["len", "m1", "his", "bio", "qui"],
-    monthly: priceForSubjects(["len", "m1", "his", "bio", "qui"]),
+    subjects: ["len", "m1", "his", "bio", "qui"], // Ejemplo configurable
+    monthly: priceForSubjects(["len", "m1", "his", "bio", "qui"]), // ~$26.200
     annual: priceAnnualForSubjects(["len", "m1", "his", "bio", "qui"]),
     essaysPerMonth: essaysForCount(5),
-    features: ["5 ramos", "Tutoría avanzada", "5 ensayos/mes"],
-    badge: "Precio/valor",
-    color: "indigo",
+    features: ["5 ramos", "Tutoría avanzada", "5 ensayos/mes", "Soporte 24/7"],
+    badge: "Mejor Precio/Valor",
+    color: "rose",
   },
-  {
-    id: "full-6",
-    title: "Full 6",
-    tagline: "Lenguaje + M1 + Historia + 3 de Ciencias",
-    subjects: ["len", "m1", "his", "bio", "qui", "fis"],
-    monthly: priceForSubjects(["len", "m1", "his", "bio", "qui", "fis"]),
-    annual: priceAnnualForSubjects(["len", "m1", "his", "bio", "qui", "fis"]),
-    essaysPerMonth: essaysForCount(6),
-    features: ["6 ramos", "Tutoría avanzada", "6 ensayos/mes"],
-    color: "indigo",
-  },
+
+  // 5. PARA EL QUE QUIERE TODO (7 Ramos)
   {
     id: "completo-7",
-    title: "Completo 7",
+    title: "Plan Maestro (7 Ramos)",
     tagline: "Todos los ramos PAES",
     subjects: ["m1", "m2", "len", "his", "bio", "fis", "qui"],
     monthly: priceForSubjects(["m1", "m2", "len", "his", "bio", "fis", "qui"]),
@@ -268,31 +220,7 @@ export const PAES_COMBOS = [
     essaysPerMonth: essaysForCount(7),
     features: ["7 ramos", "Tutoría avanzada", "7 ensayos/mes", "Soporte premium"],
     badge: "Máxima cobertura",
-    color: "amber",
-  },
-
-  // INTENSIVOS (push Historia/Lenguaje)
-  {
-    id: "intensivo-historia",
-    title: "Intensivo Historia",
-    tagline: "Historia + Lenguaje",
-    subjects: ["his", "len"],
-    monthly: priceForSubjects(["his", "len"]),
-    annual: priceAnnualForSubjects(["his", "len"]),
-    essaysPerMonth: essaysForCount(2),
-    features: ["2 ramos", "2 ensayos/mes", "Refuerzo crítico"],
-    badge: "Dale fuerte a Historia",
-    color: "amber",
-  },
-  {
-    id: "intensivo-len-m1",
-    title: "Intensivo Base",
-    tagline: "Lenguaje + M1",
-    subjects: ["len", "m1"],
-    monthly: priceForSubjects(["len", "m1"]),
-    annual: priceAnnualForSubjects(["len", "m1"]),
-    essaysPerMonth: essaysForCount(2),
-    features: ["2 ramos", "2 ensayos/mes"],
+    color: "violet",
   },
 ];
 

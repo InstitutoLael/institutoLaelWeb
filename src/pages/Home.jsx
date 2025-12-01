@@ -2,20 +2,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEOHead from "../components/SEOHead.jsx";
-// Asegúrate de tener este componente, si no, comenta la línea
 import PartnersMarquee from "../components/PartnersMarquee.jsx"; 
 
-// ASSETS (Ajusta las rutas a tus imágenes reales)
-import heroVideoPoster from "../assets/img/lael/study-online.jpg"; 
-import id1 from "../assets/img/lael/1.png";
-import id3 from "../assets/img/lael/3.png";
-
 /* --------------------------------------------------------------------------
-   ICONOS SVG (Estilo Bold)
+   ICONOS SVG
    -------------------------------------------------------------------------- */
 const Icons = {
   Arrow: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>,
-  Star: () => <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>,
   Bolt: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>,
   Globe: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
   Hand: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
@@ -26,18 +19,10 @@ const Typewriter = ({ words }) => {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
   const [reverse, setReverse] = useState(false);
-  const [blink, setBlink] = useState(true);
 
-  // Blinking cursor
-  useEffect(() => {
-    const timeout2 = setTimeout(() => setBlink((prev) => !prev), 500);
-    return () => clearTimeout(timeout2);
-  }, [blink]);
-
-  // Typing logic
   useEffect(() => {
     if (subIndex === words[index].length + 1 && !reverse) {
-      setTimeout(() => setReverse(true), 2500); 
+      setTimeout(() => setReverse(true), 2500);
       return;
     }
     if (subIndex === 0 && reverse) {
@@ -54,7 +39,6 @@ const Typewriter = ({ words }) => {
   return <span className="typewriter">{words[index].substring(0, subIndex)}<span className="cursor">|</span></span>;
 };
 
-/* --- MAIN --- */
 export default function Home() {
   return (
     <div className="home-v2">
@@ -123,7 +107,7 @@ export default function Home() {
 
             <div className="bento-grid">
                 
-                {/* PAES (Grande) */}
+                {/* PAES */}
                 <Link to="/paes" className="bento-card large paes">
                     <div className="card-bg-icon"><Icons.Bolt /></div>
                     <div className="card-info">
@@ -182,7 +166,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- PROMO ACADEMY (FIXED) --- */}
+      {/* --- PROMO ACADEMY --- */}
       <section className="academy-promo">
         <div className="container promo-inner">
             <div className="promo-txt">
@@ -193,11 +177,10 @@ export default function Home() {
             </div>
             
             <div className="promo-visual">
-                {/* Círculos decorativos */}
                 <div className="circle c1"></div>
                 <div className="circle c2"></div>
                 
-                {/* TARJETA CORREGIDA: FONDO OSCURO Y TEXTO BLANCO */}
+                {/* TARJETA FLOTANTE FIXED */}
                 <div className="promo-card-float">
                     <span className="emoji">👩‍🏫</span>
                     <strong>Profe Particular</strong>
@@ -230,11 +213,10 @@ export default function Home() {
   );
 }
 
-/* ================= CSS (FUTURISTIC DARK PREMIUM) ================= */
+/* ================= CSS (FIXED RESPONSIVE) ================= */
 const css = `
 :root {
   --bg-deep: #050505;
-  --bg-surface: #0F1115;
   --bg-card: #141414;
   --text-main: #FFFFFF;
   --text-muted: #A1A1AA;
@@ -249,6 +231,7 @@ const css = `
   color: var(--text-main);
   font-family: 'Inter', system-ui, sans-serif;
   overflow-x: hidden;
+  width: 100%;
 }
 
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
@@ -257,7 +240,7 @@ a { text-decoration: none; color: inherit; }
 /* HERO CINEMÁTICO */
 .hero-cinema {
     position: relative; min-height: 85vh; display: flex; align-items: center; justify-content: center;
-    text-align: center; overflow: hidden; padding-top: 80px;
+    text-align: center; overflow: hidden; padding: 120px 0 80px;
 }
 
 .glow-spot {
@@ -273,7 +256,7 @@ a { text-decoration: none; color: inherit; }
 }
 
 .hero-title {
-    font-size: clamp(3.5rem, 7vw, 5.5rem); font-weight: 800; line-height: 1.05; margin-bottom: 24px; letter-spacing: -0.03em;
+    font-size: clamp(2.8rem, 8vw, 5.5rem); font-weight: 800; line-height: 1.05; margin-bottom: 24px; letter-spacing: -0.03em;
 }
 .typewriter {
     background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
@@ -301,13 +284,17 @@ a { text-decoration: none; color: inherit; }
     display: inline-flex; gap: 40px; padding: 20px 40px; border-radius: 20px;
     background: rgba(15, 17, 21, 0.6); border: 1px solid var(--border); backdrop-filter: blur(12px);
 }
-@media (max-width: 600px) { .hero-stats-glass { flex-direction: column; gap: 15px; width: 100%; } .sep { display: none; } }
+@media (max-width: 768px) { 
+    .hero-stats-glass { flex-direction: column; gap: 15px; width: 100%; box-sizing: border-box; } 
+    .sep { display: none; } 
+    .hero-title { font-size: 2.5rem; }
+}
 
 .stat strong { font-size: 1.8rem; display: block; color: var(--text-main); }
 .stat span { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 .sep { width: 1px; height: 40px; background: var(--border); }
 
-/* MARQUEE SECTION (NUEVO) */
+/* MARQUEE */
 .marquee-section { 
     border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
     background: #08090c; padding: 20px 0; text-align: center;
@@ -316,30 +303,28 @@ a { text-decoration: none; color: inherit; }
     font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); 
     margin-bottom: 15px; letter-spacing: 2px; font-weight: 700;
 }
-.marquee-wrapper { opacity: 0.7; transition: opacity 0.3s; }
-.marquee-wrapper:hover { opacity: 1; }
+.marquee-wrapper { opacity: 0.8; }
 
-/* BENTO GRID */
-.hub-section { padding: 100px 0; }
-.sec-head { text-align: center; margin-bottom: 60px; }
+/* BENTO GRID (RESPONSIVE FIX) */
+.hub-section { padding: 80px 0; }
+.sec-head { text-align: center; margin-bottom: 50px; }
 .sec-head h2 { font-size: 2.5rem; margin-bottom: 10px; font-weight: 700; }
 .sec-head p { color: var(--text-muted); font-size: 1.2rem; }
 
 .bento-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 280px); /* Altura fija para alineación perfecta */
+    grid-template-rows: repeat(2, 280px);
     gap: 24px;
 }
-@media (max-width: 900px) { .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; } }
 
+/* CARDS STYLES */
 .bento-card {
     background: var(--bg-card); border: 1px solid var(--border); border-radius: 30px;
     position: relative; overflow: hidden; padding: 32px; display: flex; flex-direction: column;
     justify-content: flex-end; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
-.bento-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.2); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+.bento-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.2); }
 
 .card-bg-icon {
     position: absolute; top: -20px; right: -20px; font-size: 12rem; opacity: 0.05;
@@ -353,28 +338,46 @@ a { text-decoration: none; color: inherit; }
 .bento-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
 .link-arrow { color: var(--primary); font-weight: 700; font-size: 0.9rem; }
 
-/* Grid Areas */
-.large.paes { 
-    grid-column: 1 / 3; grid-row: 1 / 3; 
-    background: radial-gradient(circle at 100% 0%, #1e1b4b, var(--bg-card));
-}
+/* Grid Desktop */
+.large.paes { grid-column: 1 / 3; grid-row: 1 / 3; background: radial-gradient(circle at 100% 0%, #1e1b4b, var(--bg-card)); }
 .large.paes h3 { font-size: 2.5rem; }
 .medium.lang { grid-column: 3 / 4; grid-row: 1 / 2; }
 .medium.lsch { grid-column: 3 / 4; grid-row: 2 / 3; }
-
-/* Filas inferiores */
-.wide { grid-column: span 3; height: auto; padding: 40px; }
-@media (min-width: 900px) { 
+.wide { grid-column: span 3; padding: 40px; }
+@media (min-width: 901px) {
     .wide.corporate { grid-column: 1 / 3; }
     .wide.adults { grid-column: 3 / 4; }
 }
+
+/* Horizontal Layout */
 .card-info.row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-@media (max-width: 600px) { .card-info.row { flex-direction: column; align-items: flex-start; gap: 20px; } }
-
 .btn-small { background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: #fff; padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; }
-.bento-card:hover .btn-small { background: #fff; color: #000; }
 
-/* ACADEMY PROMO */
+/* --- RESPONSIVE FIX (MOBILE) --- */
+@media (max-width: 900px) {
+    .bento-grid {
+        grid-template-columns: 1fr; /* Una sola columna */
+        grid-template-rows: auto;   /* Altura automática */
+        gap: 20px;
+    }
+
+    /* Resetear grid-column para que no se rompa */
+    .large.paes, .medium.lang, .medium.lsch, .wide.corporate, .wide.adults {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+        min-height: 250px;
+    }
+
+    /* Ajuste para tarjetas anchas en móvil */
+    .card-info.row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .btn-small { width: 100%; }
+}
+
+/* PROMO SECTION */
 .academy-promo { margin: 60px 0; padding: 0 20px; }
 .promo-inner {
     background: linear-gradient(90deg, #0F172A, #1e1b4b);
@@ -395,35 +398,18 @@ a { text-decoration: none; color: inherit; }
 .c1 { width: 100%; height: 100%; animation: spin 20s linear infinite; }
 .c2 { width: 70%; height: 70%; border-style: dashed; animation: spin 10s linear infinite reverse; }
 
-/* --- CORRECCIÓN CSS TARJETA FLOTANTE --- */
+/* Fixed Promo Card */
 .promo-card-float { 
     background: #1f2937; /* Fondo Gris Oscuro Sólido */
-    border: 1px solid rgba(255,255,255,0.1);
-    padding: 20px 30px; 
-    border-radius: 20px; 
-    text-align: center; 
-    z-index: 2;
-    transform: rotate(-5deg); 
-    transition: .3s;
+    border: 1px solid rgba(255,255,255,0.1); padding: 20px 30px; border-radius: 20px; 
+    text-align: center; z-index: 2; transform: rotate(-5deg); transition: .3s;
     box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
-/* Aseguramos que el texto sea blanco */
-.promo-card-float strong {
-    display: block;
-    color: #ffffff;
-    font-size: 1.1rem;
-    margin-bottom: 4px;
-}
-/* Efecto Hover */
-.promo-inner:hover .promo-card-float { 
-    transform: rotate(0deg) scale(1.1); 
-    background: #000000;
-    border-color: var(--primary);
-}
-
+.promo-card-float strong { display: block; color: #ffffff; font-size: 1.1rem; margin-bottom: 4px; }
+.promo-inner:hover .promo-card-float { transform: rotate(0deg) scale(1.1); background: #000000; border-color: var(--primary); }
 .emoji { font-size: 2rem; display: block; margin-bottom: 5px; }
 
-/* FINAL CTA */
+/* CTA FINAL */
 .final-cta { padding: 100px 0; text-align: center; }
 .final-cta h2 { font-size: 3rem; margin-bottom: 60px; line-height: 1.1; }
 .cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 800px; margin: 0 auto; }
@@ -433,9 +419,8 @@ a { text-decoration: none; color: inherit; }
     padding: 40px; border-radius: 30px; text-align: left; position: relative; transition: .3s;
     display: flex; flex-direction: column; justify-content: space-between; height: 200px;
 }
-.cta-box.primary { background: #000; color: #FFFFFF; }
+.cta-box.primary { background: var(--text-main); color: #000; }
 .cta-box.secondary { background: #1a1a1a; border: 1px solid var(--border); color: #fff; }
-
 .cta-box h3 { font-size: 1.8rem; margin-bottom: 10px; }
 .cta-box .arr { font-size: 2rem; align-self: flex-end; }
 .cta-box:hover { transform: translateY(-10px); }

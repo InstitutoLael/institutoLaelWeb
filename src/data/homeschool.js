@@ -1,7 +1,6 @@
-// src/data/homeschool.js
-// === Lael Academy: Tutorías y Reforzamiento ===
+// === Lael Academy: Hub de Entrenamiento Académico ===
 
-// 🔢 Helper Moneda
+// 🔢 Helper de Moneda
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -12,11 +11,11 @@ export const clp = (n) =>
 // 🧾 Matrícula (Gestión de ingreso)
 export const ENROLLMENT_FEE = 15000;
 
-// 🤝 ALIANZA ESTRATÉGICA (Nuevo)
+// 🤝 ALIANZA ESTRATÉGICA (Validación Legal)
 export const ALLIANCE = {
   name: "Los Olivos Homeschool",
-  status: "Partner Oficial",
-  desc: "¿Buscas colegio paraguas? Recomendamos a nuestros partners de Los Olivos para la validación legal, mientras nosotros nos encargamos de la excelencia académica."
+  role: "Colegio Paraguas Partner",
+  desc: "Validación de estudios y certificados Mineduc a través de nuestra alianza exclusiva.",
 };
 
 // 📚 Materias (Con colores para el diseño Bento)
@@ -33,10 +32,10 @@ export const LEVELS = [
   { id: 'basica', label: 'Ed. Básica', desc: '1º a 8º Básico' },
   { id: 'media', label: 'Ed. Media', desc: 'Iº a IVº Medio' },
   { id: 'paes', label: 'Prep. PAES', desc: 'Intensivo U' },
-  { id: 'exam', label: 'Ex. Libres', desc: 'Apoyo Mineduc' },
+  { id: 'exam', label: 'Ex. Libres', desc: 'Apoyo temario' },
 ];
 
-// 📦 PACKS DE HORAS (Suscripción Mensual)
+// 📦 PACKS DE HORAS (B2C)
 export const PACKS = [
   { 
     id: 'p4', 
@@ -44,7 +43,7 @@ export const PACKS = [
     title: 'Pack Mantenimiento', 
     price: 79990, 
     badge: null,
-    desc: "1 hora semanal. Ideal para resolver dudas puntuales y mantener el ritmo."
+    desc: "1 hora semanal. Ideal para resolver dudas puntuales."
   },
   { 
     id: 'p8', 
@@ -52,7 +51,7 @@ export const PACKS = [
     title: 'Pack Progreso', 
     price: 149990, 
     badge: 'Más Popular',
-    desc: "2 horas semanales. El estándar para subir notas y cubrir vacíos."
+    desc: "2 horas semanales. El estándar para subir notas."
   },
   { 
     id: 'p12', 
@@ -60,11 +59,11 @@ export const PACKS = [
     title: 'Pack Intensivo', 
     price: 209990, 
     badge: 'Mejor Valor',
-    desc: "3 horas semanales. Preparación de exámenes importantes o PAES."
+    desc: "3 horas semanales. Preparación de exámenes importantes."
   },
 ];
 
-// 🏫 B2B: Servicios a Colegios
+// 🏫 SERVICIOS COLEGIOS (B2B)
 export const SCHOOL_SERVICES = [
   {
     id: 'ensayos',

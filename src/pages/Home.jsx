@@ -1,16 +1,17 @@
 // src/pages/Home.jsx
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import PartnersMarquee from "../components/PartnersMarquee.jsx";
 import SEOHead from "../components/SEOHead.jsx";
-import { seoDefaults } from "../seo.config";
+// Si no tienes este componente, coméntalo o pídemelo
+import PartnersMarquee from "../components/PartnersMarquee.jsx"; 
 
-// Imágenes identidad (Asegúrate que las rutas existan)
+// ASSETS (Ajusta las rutas a tus imágenes reales)
+import heroBg from "../assets/img/lael/study-online.jpg"; // Una imagen inspiradora general
 import id1 from "../assets/img/lael/1.png";
 import id3 from "../assets/img/lael/3.png";
 
 /* --------------------------------------------------------------------------
-   ICONOS SVG (Estilo Minimalista Premium)
+   ICONOS SVG (Minimalistas Premium)
    -------------------------------------------------------------------------- */
 const Icons = {
   ArrowRight: () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>,
@@ -19,6 +20,32 @@ const Icons = {
   Users: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
   Zap: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
   Star: () => <svg width="20" height="20" fill="currentColor" stroke="none" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+};
+
+/* --- COMPONENTES UI --- */
+const Typewriter = ({ words }) => {
+  const [index, setIndex] = useState(0);
+  const [subIndex, setSubIndex] = useState(0);
+  const [reverse, setReverse] = useState(false);
+
+  // Efecto de escritura simple
+  useEffect(() => {
+    if (subIndex === words[index].length + 1 && !reverse) {
+      setTimeout(() => setReverse(true), 2000);
+      return;
+    }
+    if (subIndex === 0 && reverse) {
+      setReverse(false);
+      setIndex((prev) => (prev + 1) % words.length);
+      return;
+    }
+    const timeout = setTimeout(() => {
+      setSubIndex((prev) => prev + (reverse ? -1 : 1));
+    }, Math.max(reverse ? 50 : 100, parseInt(Math.random() * 50)));
+    return () => clearTimeout(timeout);
+  }, [subIndex, index, reverse, words]);
+
+  return <span className="typewriter">{words[index].substring(0, subIndex)}<span className="cursor">|</span></span>;
 };
 
 /* --- Utilidades YouTube --- */
@@ -65,19 +92,6 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  // Título dinámico
-  useEffect(() => {
-    const baseTitle = "Instituto Lael — Educación online con acompañamiento real";
-    const onBlur = () => (document.title = "💛 ¡No te rindas! Sigue aprendiendo...");
-    const onFocus = () => (document.title = baseTitle);
-    window.addEventListener("blur", onBlur);
-    window.addEventListener("focus", onFocus);
-    return () => {
-      window.removeEventListener("blur", onBlur);
-      window.removeEventListener("focus", onFocus);
-    };
-  }, []);
-
   const videoUrl = "https://youtu.be/THBr7MOVS0s?si=nODyq69xbCt1TqRr";
 
   return (
@@ -99,8 +113,8 @@ export default function Home() {
             </div>
 
             <h1 className="hero-title">
-              No estudies solo.<br/>
-              Prepárate con <span className="text-gradient">acompañamiento real.</span>
+              Educación para <br/>
+              <Typewriter words={["tu Futuro.", "la PAES.", "el Trabajo.", "la Vida."]} />
             </h1>
             
             <p className="hero-desc">
@@ -152,11 +166,13 @@ export default function Home() {
       </section>
 
       {/* --- MARQUEE (Tu favorito, intacto pero en mejor contenedor) --- */}
-      <section className="marquee-section">
+      {/* Si tienes el componente PartnersMarquee, descomenta esto: */}
+      {/* <section className="marquee-section">
         <div className="marquee-wrapper">
           <PartnersMarquee speed={35} height={32} gap={60} />
         </div>
-      </section>
+      </section> 
+      */}
 
       {/* --- PROGRAMAS (Diseño Glass Cards) --- */}
       <section className="programs-section">
@@ -383,6 +399,11 @@ a { text-decoration: none; color: inherit; }
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 
+/* TYPEWRITER */
+.typewriter { color: var(--primary); display: inline-block; min-width: 200px; text-align: left; }
+.cursor { animation: blink 1s step-end infinite; color: var(--text-muted); font-weight: 100; margin-left: 5px; }
+@keyframes blink { 50% { opacity: 0; } }
+
 .hero-desc {
   font-size: 1.15rem; color: var(--text-muted); line-height: 1.6; max-width: 540px; margin-bottom: 40px;
 }
@@ -535,4 +556,4 @@ a { text-decoration: none; color: inherit; }
 .cta-content p { color: var(--text-muted); margin-bottom: 32px; font-size: 1.1rem; }
 .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
-`
+`;

@@ -32,7 +32,7 @@ export default function PromoBanner() {
   );
 }
 
-/* ================= CSS (ELEGANT RIBBON) ================= */
+/* ================= CSS (ELEGANT RIBBON) - CORREGIDO ================= */
 const css = `
 .promo-top-bar {
   background: linear-gradient(90deg, #1e1b4b, #312e81); /* Azul oscuro corporativo */
@@ -41,8 +41,15 @@ const css = `
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   padding: 10px 0;
-  position: relative;
-  z-index: 5000; /* Encima del Navbar */
+  
+  /* ------------------------------------- */
+  /* CAMBIOS CLAVE: FIXED, TOP, LEFT, Z-INDEX */
+  position: fixed; /* CRÍTICO: Debe ser fixed para superponerse a otros elementos fijos */
+  top: 0;          /* Posiciona en la parte superior del viewport */
+  left: 0;         /* Alinea a la izquierda */
+  width: 100%;     /* Asegura que cubra todo el ancho */
+  z-index: 9999;   /* Z-Index extremadamente alto para estar encima de cualquier navbar */
+  /* ------------------------------------- */
 }
 
 .promo-content {
@@ -94,6 +101,7 @@ const css = `
   font-size: 1.1rem;
   cursor: pointer;
   padding: 5px;
+  z-index: 10000; /* Asegurar que la X esté encima del contenido del banner */
 }
 .promo-close:hover {
   color: #fff;

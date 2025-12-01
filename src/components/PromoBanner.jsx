@@ -1,4 +1,4 @@
-// src/components/PromoBanner.jsx - CORREGIDO
+// src/components/PromoBanner.jsx - CÓDIGO FINAL CORREGIDO
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -42,12 +42,12 @@ const css = `
   font-size: 0.9rem;
   padding: 10px 0;
   
-  /* CAMBIOS CLAVE */
+  /* CAMBIOS CLAVE: FIXED Y Z-INDEX ALTO */
   position: fixed; 
   top: 0;          
   left: 0;         
   width: 100%;     
-  z-index: 9999;   /* Súper alto para estar encima de todo */
+  z-index: 9999; 
 }
 
 .promo-content {
@@ -57,11 +57,11 @@ const css = `
   gap: 12px;
   flex-wrap: wrap;
   text-align: center;
-  padding-right: 40px; /* Espacio para la X */
+  padding-right: 40px; 
 }
 
 .promo-tag {
-  background: #F59E0B; /* Dorado Lael */
+  background: #F59E0B; 
   color: #000;
   font-weight: 800;
   font-size: 0.7rem;

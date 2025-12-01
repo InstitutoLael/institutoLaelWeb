@@ -2,12 +2,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEOHead from "../components/SEOHead.jsx";
-import PartnersMarquee from "../components/PartnersMarquee.jsx"; // Si lo tienes
+import PartnersMarquee from "../components/PartnersMarquee.jsx"; // ✅ ¡Ahora sí activo!
 
 // ASSETS
-import heroVideoPoster from "../assets/img/lael/study-online.jpg"; // Imagen de fondo si no carga video
-// Importa imágenes de identidad si las usas, si no, usaremos gradientes
+import heroVideoPoster from "../assets/img/lael/study-online.jpg"; 
+// Importa imágenes de identidad
 import id1 from "../assets/img/lael/1.png";
+import id3 from "../assets/img/lael/3.png";
 
 /* --- ICONOS SVG (Estilo Bold) --- */
 const Icons = {
@@ -18,7 +19,7 @@ const Icons = {
   Hand: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
 };
 
-/* --- COMPONENTE TYPEWRITER MEJORADO --- */
+/* --- COMPONENTE TYPEWRITER --- */
 const Typewriter = ({ words }) => {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
@@ -34,7 +35,7 @@ const Typewriter = ({ words }) => {
   // Typing logic
   useEffect(() => {
     if (subIndex === words[index].length + 1 && !reverse) {
-      setTimeout(() => setReverse(true), 2500); // Espera más tiempo antes de borrar
+      setTimeout(() => setReverse(true), 2500); 
       return;
     }
     if (subIndex === 0 && reverse) {
@@ -102,10 +103,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- MARQUEE (Partners) --- */}
-      <div className="marquee-wrapper">
-        <PartnersMarquee />
-      </div>
+      {/* --- MARQUEE DE PARTNERS (ACTIVO ✅) --- */}
+      <section className="marquee-section">
+        <div className="marquee-label">Confían en nosotros:</div>
+        <div className="marquee-wrapper">
+            <PartnersMarquee speed={35} height={32} gap={60} />
+        </div>
+      </section>
 
       {/* --- BENTO GRID (El Hub) --- */}
       <section className="hub-section">
@@ -298,6 +302,18 @@ a { text-decoration: none; color: inherit; }
 .stat span { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 .sep { width: 1px; height: 40px; background: var(--border); }
 
+/* MARQUEE SECTION (NUEVO) */
+.marquee-section { 
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    background: #08090c; padding: 20px 0; text-align: center;
+}
+.marquee-label { 
+    font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); 
+    margin-bottom: 15px; letter-spacing: 2px; font-weight: 700;
+}
+.marquee-wrapper { opacity: 0.7; transition: opacity 0.3s; }
+.marquee-wrapper:hover { opacity: 1; }
+
 /* BENTO GRID */
 .hub-section { padding: 100px 0; }
 .sec-head { text-align: center; margin-bottom: 60px; }
@@ -374,8 +390,8 @@ a { text-decoration: none; color: inherit; }
 .c1 { width: 100%; height: 100%; animation: spin 20s linear infinite; }
 .c2 { width: 70%; height: 70%; border-style: dashed; animation: spin 10s linear infinite reverse; }
 .promo-card-float { 
-    background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 20px; 
-    border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); text-align: center; z-index: 2;
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);
+    padding: 15px 25px; border-radius: 16px; font-size: 1.2rem; font-weight: 700; text-align: center; z-index: 2;
     transform: rotate(-5deg); transition: .3s;
 }
 .promo-inner:hover .promo-card-float { transform: rotate(0deg) scale(1.1); }

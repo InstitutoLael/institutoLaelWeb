@@ -1,359 +1,245 @@
 // src/pages/Docentes.jsx
-import { useMemo, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { teachers } from "../data/teachers.js";
-import SEOHead from "../components/SEOHead";
-import { seoDefaults } from "../seo.config";
+import { useEffect } from "react";
+import { FaLinkedin, FaInstagram, FaEnvelope } from "react-icons/fa"; 
+import SEOHead from "../components/SEOHead.jsx";
+
+// --- DATA DEL EQUIPO REAL ---
+const TEAM = [
+  {
+    id: "diego",
+    name: "Diego Chaparro",
+    role: "Director & Profe Matemáticas",
+    bio: "Fundador de Instituto Lael. Comenzó enseñando matemáticas con una pizarra y hoy lidera la visión educativa. Cree firmemente que los números no son difíciles, solo están mal explicados.",
+    tags: ["Liderazgo", "Matemáticas", "Estrategia"],
+    color: "#F59E0B", // Gold
+    img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=F59E0B&color=fff&size=200", // Cambiar por foto real cuando puedas
+    social: { linkedin: "#", instagram: "#" }
+  },
+  {
+    id: "camila",
+    name: "Camila Acuña",
+    role: "Coordinadora Académica",
+    bio: "El corazón operativo de Lael. Se encarga de que cada alumno tenga su material a tiempo, los horarios cuadren y que la experiencia educativa sea impecable.",
+    tags: ["Coordinación", "Gestión", "Planificación"],
+    color: "#F43F5E", // Rose
+    img: "https://ui-avatars.com/api/?name=Camila+Acuna&background=F43F5E&color=fff&size=200",
+    social: { linkedin: "#" }
+  },
+  {
+    id: "fernanda",
+    name: "Fernanda",
+    role: "Educadora & Facilitadora LSCh",
+    bio: "Nuestra profesora nativa (Sorda) y Educadora de Párvulos profesional. Combina la cultura sorda con una pedagogía experta, paciente y estructurada.",
+    tags: ["Sorda Nativa", "Educ. Párvulos", "LSCh"],
+    color: "#10B981", // Emerald
+    img: "https://ui-avatars.com/api/?name=Fernanda+LSCh&background=10B981&color=fff&size=200",
+    social: { instagram: "#" }
+  },
+  {
+    id: "martin",
+    name: "Martín",
+    role: "Profe de Ciencias",
+    bio: "Especialista en Biología y Química. Transforma materias complejas en clases dinámicas, enfocándose en que entiendas el 'por qué' de los fenómenos científicos.",
+    tags: ["Biología", "Química", "PAES Ciencias"],
+    color: "#3B82F6", // Blue
+    img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=3B82F6&color=fff&size=200",
+    social: {}
+  }
+];
 
 export default function Docentes() {
-  const [active, setActive] = useState("Todos");
-  const [query, setQuery] = useState("");
-
-  // Título dinámico al cambiar de pestaña (opcional, lindo detalle UX)
-  useEffect(() => {
-    const onBlur = () => (document.title = "👋 ¡No te vayas! | Instituto Lael");
-    const onFocus = () => (document.title = "Docentes — Instituto Lael");
-    window.addEventListener("blur", onBlur);
-    window.addEventListener("focus", onFocus);
-    return () => {
-      window.removeEventListener("blur", onBlur);
-      window.removeEventListener("focus", onFocus);
-    };
-  }, []);
-
-  // subjects únicos (normalizados)
-  const subjects = useMemo(() => {
-    const set = new Set();
-    teachers.forEach((t) => t.subject && set.add(t.subject.trim()));
-    return ["Todos", ...Array.from(set).sort((a, b) => a.localeCompare(b, "es"))];
-  }, []);
-
-  const filtered = useMemo(() => {
-    const bySubject =
-      active === "Todos"
-        ? teachers
-        : teachers.filter((t) => (t.subject || "").trim() === active);
-
-    const q = query.trim().toLowerCase();
-    if (!q) return bySubject;
-
-    return bySubject.filter((t) => {
-      const hay =
-        (t.name || "").toLowerCase() +
-        " " +
-        (t.subject || "").toLowerCase() +
-        " " +
-        (t.bio || "").toLowerCase() +
-        " " +
-        (t.tags || []).join(" ").toLowerCase();
-      return hay.includes(q);
-    });
-  }, [active, query]);
-
-  // ---------- JSON-LD ----------
-  const jsonLd = useMemo(() => {
-    const list = teachers.map((t, idx) => {
-      const person = {
-        "@type": "Person",
-        name: t.name || "",
-        description: t.bio || undefined,
-        jobTitle: t.subject || undefined,
-        url: `${seoDefaults.site}/docentes#${slug(t.name || `docente-${idx + 1}`)}`,
-      };
-      // Incluye imagen sólo si es absoluta (evita 404 en rich results)
-      if (t.photo && /^https?:\/\//i.test(t.photo)) {
-        person.image = t.photo;
-      }
-      // Enlaces sociales opcionales
-      const sameAs = [t.linkedin, t.youtube].filter(Boolean);
-      if (sameAs.length) person.sameAs = sameAs;
-      return { "@type": "ListItem", position: idx + 1, item: person };
-    });
-
-    return [
-      {
-        "@context": "https://schema.org",
-        "@type": "ItemList",
-        name: "Equipo Docente — Instituto Lael",
-        url: `${seoDefaults.site}/docentes`,
-        itemListElement: list,
-      },
-    ];
-  }, []);
-
   return (
-    <section className="teachers-page">
-      {/* SEO */}
-      <SEOHead
-        title="Docentes"
-        description="Profes reales con vocación y experiencia: PAES, Idiomas e LSCh. Conócelos y filtra por asignatura."
-        path="/docentes"
-        image={`${seoDefaults.site}/meta/og-lael.jpg`}
-        jsonLd={jsonLd}
+    <div className="team-page">
+      <SEOHead 
+        title="Nuestro Equipo | Instituto Lael" 
+        description="Conoce a los profesionales detrás de tu educación. Liderazgo, vocación y experiencia." 
       />
-
       <style>{css}</style>
 
-      {/* HERO */}
-      <header className="hero">
-        <div className="container">
-          <span className="badge">Equipo docente</span>
-          <h1>Personas reales, acompañamiento real 💚</h1>
-          <p className="lead">
-            Profes con vocación y experiencia. Humanos, cercanos y claros — nada robóticos.
-          </p>
+      {/* --- LUCES AMBIENTALES --- */}
+      <div className="glow-spot top-center"></div>
 
-          {/* Filtros */}
-          <div className="filters" role="tablist" aria-label="Filtrar por asignatura">
-            <div className="chips">
-              {subjects.map((s) => (
-                <button
-                  key={s}
-                  role="tab"
-                  aria-selected={active === s}
-                  className={"chip " + (active === s ? "on" : "")}
-                  onClick={() => setActive(s)}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-
-            <label className="search">
-              <span className="sr-only">Buscar docente</span>
-              <input
-                type="search"
-                placeholder="Buscar por nombre, ramo o tema…"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </label>
-          </div>
-
-          <div className="meta">
-            {filtered.length} {filtered.length === 1 ? "docente" : "docentes"} encontrados
-            {active !== "Todos" && <> · <span className="soft">Filtro: {active}</span></>}
-          </div>
-        </div>
-      </header>
-
-      {/* GRID */}
       <div className="container">
-        <div className="grid">
-          {filtered.map((t) => (
-            <TeacherCard key={t.id || slug(t.name)} t={t} />
+        
+        {/* HEADER */}
+        <header className="team-header">
+          <span className="badge-team">Humanos, no Robots</span>
+          <h1>Mentores con <span className="text-grad">Vocación.</span></h1>
+          <p className="lead">
+            Detrás de cada clase, guía y ensayo, hay un equipo de personas reales 
+            comprometidas con tu futuro. Conoce a quienes lideran tu proceso.
+          </p>
+        </header>
+
+        {/* GRID DEL EQUIPO */}
+        <div className="team-grid">
+          {TEAM.map((member) => (
+            <div 
+              key={member.id} 
+              className={`team-card ${member.id === 'diego' ? 'featured' : ''}`}
+              style={{ '--accent': member.color }}
+            >
+              <div className="card-bg-glow"></div>
+              
+              <div className="member-visual">
+                <img src={member.img} alt={member.name} className="member-img" />
+                <div className="member-social">
+                  {member.social.linkedin && <a href={member.social.linkedin} target="_blank" rel="noreferrer"><FaLinkedin/></a>}
+                  {member.social.instagram && <a href={member.social.instagram} target="_blank" rel="noreferrer"><FaInstagram/></a>}
+                  <a href={`mailto:contacto@institutolael.cl`}><FaEnvelope/></a>
+                </div>
+              </div>
+
+              <div className="member-info">
+                <span className="member-role" style={{ color: member.color }}>{member.role}</span>
+                <h3>{member.name}</h3>
+                <p>{member.bio}</p>
+                
+                <div className="tags-row">
+                  {member.tags.map(tag => (
+                    <span key={tag} className="tag">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
           ))}
         </div>
+
+        {/* CTA UNIRSE */}
+        <div className="join-cta">
+          <h3>¿Eres profe y tienes esta misma pasión?</h3>
+          <p>Siempre buscamos talentos para sumar a nuestras filas.</p>
+          <a href="/trabaja" className="btn-join">Postular al Equipo →</a>
+        </div>
+
       </div>
-    </section>
+    </div>
   );
 }
 
-/* ---------- Card de docente ---------- */
-function TeacherCard({ t }) {
-  const accent = t.accent || "#3b549d";
-  const first = (t.name || "?").trim().charAt(0).toUpperCase();
-
-  return (
-    <article className="card" id={slug(t.name)} style={{ "--accent": accent }}>
-      <figure className="avatar" aria-hidden="true">
-        {t.photo ? (
-          <img src={t.photo} alt="" loading="lazy" decoding="async" />
-        ) : (
-          <span className="initial">{first}</span>
-        )}
-      </figure>
-
-      <div className="info">
-        <div className="head">
-          <h3 className="name">{t.name}</h3>
-          {t.subject && <div className="sub">{t.subject}</div>}
-        </div>
-
-        {t.bio && (
-          <p className="bio clamp" data-clamp="3">
-            {t.bio}
-          </p>
-        )}
-
-        {!!(t.tags && t.tags.length) && (
-          <ul className="tags" aria-label="Especialidades">
-            {t.tags.map((tag, i) => (
-              <li key={i} className="tag">
-                {tag}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {/* Acciones opcionales */}
-        <div className="actions">
-          {t.linkedin && (
-            <a className="btn-ghost" href={t.linkedin} target="_blank" rel="noreferrer">
-              LinkedIn
-            </a>
-          )}
-          {t.youtube && (
-            <a className="btn-ghost" href={t.youtube} target="_blank" rel="noreferrer">
-              YouTube
-            </a>
-          )}
-          <button
-            className="btn-more"
-            type="button"
-            onClick={(e) => {
-              const p = e.currentTarget.closest(".card")?.querySelector(".bio");
-              if (!p) return;
-              p.classList.toggle("clamp");
-              e.currentTarget.textContent = p.classList.contains("clamp")
-                ? "Ver más"
-                : "Ver menos";
-            }}
-          >
-            Ver más
-          </button>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-/* ---------- helpers ---------- */
-function slug(s = "") {
-  return String(s)
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)+/g, "");
-}
-
-/* ---------- CSS ---------- */
+/* ================= CSS (DARK PREMIUM TEAM) ================= */
 const css = `
-:root{
-  --bg:#0b1220;
-  --panel:#0e1424;
-  --soft:#101a2f;
-  --bd:#1f2a44;
-  --ink:#ffffff;
-  --ink2:#eaf2ff;
-  --muted:#cfe0ff;
+:root {
+  --bg-deep: #050505;
+  --bg-card: #0F1115;
+  --border: rgba(255, 255, 255, 0.1);
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
 }
 
-*{box-sizing:border-box}
-.teachers-page{ color:var(--ink); background:linear-gradient(180deg,var(--bg),var(--panel)); }
-.container{ max-width:1120px; margin:0 auto; padding:0 18px; }
+.team-page {
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  padding-bottom: 80px;
+  position: relative;
+  overflow-x: hidden;
+}
 
-/* HERO */
-.hero{ padding:28px 0 12px; border-bottom:1px solid var(--bd);
-  background:
-    radial-gradient(880px 320px at 12% -10%, rgba(59,84,157,.18), transparent 60%),
-    radial-gradient(840px 300px at 92% -8%, rgba(36,149,84,.14), transparent 60%);
-}
-.badge{
-  display:inline-block; padding:.28rem .6rem; border-radius:999px;
-  border:1px solid #334155; background:#0f172a; color:#c7d2fe; font-weight:900;
-}
-.hero h1{ margin:.35rem 0 .25rem; font-size:clamp(1.8rem,3vw + .6rem,2.4rem); }
-.lead{ margin:0; color:var(--ink2); }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
-/* Filtros */
-.filters{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:12px; }
-.chips{ display:flex; gap:8px; flex-wrap:wrap; }
-.chip{
-  border:1px solid #2b3656; background:#0f172a; color:#eaf2ff; padding:.46rem .8rem;
-  border-radius:999px; font-weight:900; cursor:pointer;
+/* AMBIENT LIGHT */
+.glow-spot {
+  position: absolute; width: 600px; height: 600px; border-radius: 50%;
+  filter: blur(150px); opacity: 0.15; pointer-events: none; z-index: 0;
 }
-.chip.on{ border-color:#6b7cff; box-shadow:0 0 0 2px rgba(79,70,229,.18) inset; }
-.search input{
-  border:1px solid #2a3557; background:#0f172a; color:#eaf2ff; border-radius:12px;
-  padding:.55rem .75rem; min-width:240px; font-weight:800;
+.top-center { top: -300px; left: 50%; transform: translateX(-50%); background: #6366F1; }
+
+/* HEADER */
+.team-header { text-align: center; padding: 120px 0 60px; position: relative; z-index: 2; }
+.badge-team {
+  display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; 
+  text-transform: uppercase; margin-bottom: 20px; color: #cbd5e1; letter-spacing: 1px;
 }
-.meta{ margin-top:6px; color:#cfe0ff; }
-.meta .soft{ color:#a5b4fc; }
+.team-header h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; margin-bottom: 20px; line-height: 1.1; }
+.text-grad { background: linear-gradient(135deg, #fff 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.lead { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6; }
 
 /* GRID */
-.grid{
-  display:grid; gap:14px;
-  grid-template-columns: repeat(12, minmax(0,1fr));
-  padding:14px 0 28px;
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  position: relative; z-index: 2;
 }
-@media (max-width:640px){ .grid{ grid-template-columns:1fr; } }
-@media (min-width:641px) and (max-width:1023px){ .grid{ grid-template-columns: repeat(6,1fr); } }
-@media (min-width:1024px){ .grid{ grid-template-columns: repeat(12,1fr); } }
 
 /* CARD */
-.card{
-  grid-column: span 6;
-  display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:flex-start;
-  padding:14px; border-radius:16px;
-  background:
-    radial-gradient(420px 160px at -12% -16%, color-mix(in srgb, var(--accent, #3b549d), #ffffff 88%) 0, transparent 60%),
-    linear-gradient(180deg, #ffffff, #f8fafc);
-  border:1px solid color-mix(in srgb, var(--accent, #3b549d), #e5e7eb 86%);
-  box-shadow:0 12px 28px rgba(16,24,40,.06);
-  color:#0b1220;
+.team-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px;
+  padding: 30px; display: flex; flex-direction: column; align-items: center; text-align: center;
+  position: relative; overflow: hidden; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
-@media (max-width:640px){
-  .card{ grid-template-columns:72px 1fr; }
-}
-@media (prefers-color-scheme: dark){
-  .card{
-    background:
-      radial-gradient(520px 200px at 110% -18%, color-mix(in srgb, var(--accent, #3b549d), transparent 86%) 0, transparent 60%),
-      linear-gradient(180deg, #0f172a, #0b1220);
-    border-color:#1f2a44; color:#fff;
-    box-shadow:0 16px 38px rgba(2,6,23,.36);
-  }
-}
+.team-card:hover { transform: translateY(-10px); border-color: var(--accent); }
 
-/* Avatar */
-.avatar{
-  width:92px; height:92px; border-radius:50%; overflow:hidden; display:grid; place-items:center;
-  background:#fff; border:1px solid color-mix(in srgb, var(--accent, #3b549d), #dbeafe 72%);
+/* Glow Effect on Hover */
+.card-bg-glow {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at top, var(--accent), transparent 70%);
+  opacity: 0; transition: .5s; z-index: 0;
 }
-.avatar img{ width:100%; height:100%; object-fit:cover; }
-.initial{ font-weight:1000; color:#0f172a; font-size:1.6rem; }
-@media (prefers-color-scheme: dark){
-  .avatar{ background:#0b1220; border-color:#1f2a44; }
-  .initial{ color:#e5e7eb; }
+.team-card:hover .card-bg-glow { opacity: 0.1; }
+
+/* Visuals */
+.member-visual { position: relative; z-index: 2; margin-bottom: 20px; }
+.member-img {
+  width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
+  border: 2px solid var(--accent); box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  transition: .3s;
 }
+.team-card:hover .member-img { transform: scale(1.05); box-shadow: 0 0 30px var(--accent); }
+
+/* Social Icons (Hidden by default, show on hover) */
+.member-social {
+  position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%) translateY(20px);
+  display: flex; gap: 10px; opacity: 0; transition: .3s;
+  background: rgba(0,0,0,0.8); padding: 5px 10px; border-radius: 20px; border: 1px solid var(--border);
+}
+.team-card:hover .member-social { opacity: 1; transform: translateX(-50%) translateY(0); }
+.member-social a { color: #fff; font-size: 1rem; padding: 5px; transition: .2s; }
+.member-social a:hover { color: var(--accent); }
 
 /* Info */
-.head{ display:flex; align-items:baseline; gap:10px; flex-wrap:wrap; }
-.name{ margin:0; font-size:1.08rem; font-weight:1000; }
-.sub{ color:#475569; font-style:italic; font-size:.96rem; }
-@media (prefers-color-scheme: dark){ .sub{ color:#9fb3c8; } }
-
-.bio{ margin:.45rem 0 .2rem; color:#334155; }
-@media (prefers-color-scheme: dark){ .bio{ color:#cfe0ff; } }
-
-.clamp{
-  display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden;
-  -webkit-line-clamp:3;
+.member-info { position: relative; z-index: 2; }
+.member-role {
+  font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+  display: block; margin-bottom: 8px;
 }
+.team-card h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 700; color: #fff; }
+.team-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
 
 /* Tags */
-.tags{ display:flex; flex-wrap:wrap; gap:6px; margin:6px 0 0; padding:0; list-style:none; }
-.tag{
-  background:#f1f5f9; color:#0f172a; border-radius:999px; padding:4px 10px; font-size:.74rem; border:1px solid #e2e8f0;
-}
-@media (prefers-color-scheme: dark){
-  .tag{ background:#0e162e; color:#eaf2ff; border-color:#2a3557; }
+.tags-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.tag {
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  color: var(--text-muted); font-size: 0.7rem; padding: 4px 10px; border-radius: 6px;
 }
 
-/* Actions */
-.actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-.btn-ghost, .btn-more{
-  padding:.48rem .76rem; border-radius:10px; font-weight:900; cursor:pointer;
-  border:1px solid #22304d; background:#0f172a; color:#eaf2ff;
+/* DESTACADO (Director) */
+.team-card.featured {
+  grid-column: 1 / -1; /* Ocupa todo el ancho en desktop si quieres, o déjalo igual */
+  background: linear-gradient(180deg, #161209, #0F1115);
+  border-color: #F59E0B;
 }
-.btn-more{ border-style:dashed; }
-.btn-ghost:hover, .btn-more:hover{ transform:translateY(-1px); box-shadow:0 10px 22px rgba(2,6,23,.28); }
+@media (min-width: 900px) {
+  .team-card.featured {
+    flex-direction: row; text-align: left; align-items: center; padding: 40px; gap: 40px;
+  }
+  .team-card.featured .member-img { width: 160px; height: 160px; }
+  .team-card.featured .member-social { bottom: 20px; transform: translateX(-50%); } 
+}
 
-/* Cols */
-@media (min-width:1024px){
-  .card:nth-child(3n+1){ grid-column: span 12; } /* cada 3, una más ancha */
-  .card:nth-child(3n+2), .card:nth-child(3n+3){ grid-column: span 6; }
+/* JOIN CTA */
+.join-cta {
+  margin-top: 80px; text-align: center; padding: 60px;
+  background: rgba(255,255,255,0.02); border: 1px dashed var(--border); border-radius: 30px;
 }
+.join-cta h3 { font-size: 1.8rem; margin-bottom: 10px; }
+.join-cta p { color: var(--text-muted); margin-bottom: 30px; }
+.btn-join {
+  display: inline-block; background: #fff; color: #000; padding: 12px 30px;
+  border-radius: 50px; font-weight: 700; text-decoration: none; transition: .2s;
+}
+.btn-join:hover { transform: scale(1.05); }
 `;

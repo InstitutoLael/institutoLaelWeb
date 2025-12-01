@@ -89,6 +89,7 @@ export default function App() {
             <Route path="/noticias" element={<Noticias />} />
             <Route path="/terminos" element={<Terminos />} />
             <Route path="/privacidad" element={<Privacidad />} />
+            <Route path="/contacto" element={<Contacto />} />
 
             {/* 404 */}
             <Route path="*" element={<NotFound />} />

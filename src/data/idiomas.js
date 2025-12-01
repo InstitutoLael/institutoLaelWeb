@@ -1,30 +1,29 @@
 // src/data/idiomas.js
 
-// 🧾 Matrícula única
-// Subimos a 10.990. Esto filtra a los curiosos de los comprometidos
-// y te da flujo de caja inmediato para pagar publicidad.
+/* ──────────────────────────────────────────────────────────────────────────
+   LÓGICA DE NEGOCIO Y PRECIOS (2025-2026)
+   ────────────────────────────────────────────────────────────────────────── */
+
+// 🧾 Matrícula única (Filtro de compromiso + Flujo de caja inmediato)
 export const ENROLLMENT_FEE = 10990;
 
 /**
- * 🧠 LÓGICA DE PRECIOS 2025
- * Objetivo: Pagar al docente ~7.000 - 8.000 por alumno.
- * * 1 Curso: $17.990
- * -> Si tienes 10 alumnos: Ingresas $179.900.
- * -> Pagas al profe: $75.000 ($7.500 x 10).
- * -> Te quedan: $104.900 (Margen > 50%).
- * * Es un precio psicológico bajo (menos de 20 mil) pero rentable.
+ * 🧠 CALCULADORA DE PRECIOS "BUNDLE"
+ * Estrategia: Margen > 50% para el instituto.
+ * * - 1 Idioma: $17.990 (Barrera de entrada baja, ganancia por volumen)
+ * - 2 Idiomas: $32.990 (Ticket promedio ideal)
+ * - 3+ Idiomas: $45.990 (La "Oferta Irresistible")
  */
-
 export function computeLangBundle(n) {
-  if (n <= 0) return 0;
-  // Estrategia: Incentivar que tomen 2 idiomas o inviten a un amigo
-  if (n === 1) return 17990;   // Precio base (rentable)
-  if (n === 2) return 32990;   // Ahorran $3.000 aprox
-  if (n >= 3) return 45990;    // "Oferta Loca": ~$15.300 c/u
+  const count = Math.max(0, Number(n || 0));
+  if (count === 0) return 0;
+  if (count === 1) return 17990; 
+  if (count === 2) return 32990; // Ahorro visible
+  if (count >= 3) return 45990;  // Ganga absoluta
   return 0;
 }
 
-// CLP helper
+// 🔢 Formateador de moneda CLP
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -32,86 +31,117 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// Catálogo de idiomas mejorado en copy para justificar el nuevo valor
+/* ──────────────────────────────────────────────────────────────────────────
+   CATÁLOGO DE IDIOMAS (DATA VISUAL)
+   ────────────────────────────────────────────────────────────────────────── */
 export const LANGUAGES = [
+  // 1. INGLÉS (El Producto Estrella)
   {
     id: "ingles",
     code: "EN",
     name: "Inglés Comunicativo",
-    emoji: "🇺🇸", // Bandera USA suele vender más en Latam por trabajo/viajes
-    color: "#2563eb",
+    emoji: "🇺🇸", 
+    color: "#3b82f6", // Azul Intenso
+    badge: "Más Vendido",
     summary:
-      "Deja de traducir en tu mente. Enfoque 100% en perder el miedo a hablar, pronunciación y vocabulario laboral.",
+      "Deja de traducir en tu mente. Nuestro método se enfoca 100% en perder el miedo a hablar, mejorar tu pronunciación y prepararte para el mundo laboral real.",
     includes: [
-      "Clases en vivo con feedback real",
-      "Simulacros de entrevista y viajes",
-      "Material digital incluido",
+      "Role-plays de situaciones reales",
+      "Simulacros de entrevista laboral",
       "Club de conversación semanal",
+      "Material PDF incluido",
     ],
-    levels: ["Básico A1-A2", "Pre-Intermedio B1", "Intermedio B2"],
+    // Niveles cortos para los botones del UI
+    levels: ["A1 (Básico)", "A2 (Elem.)", "B1 (Interm.)", "B2 (Avanz.)"],
     outcomes: [
       "Viajar sin depender del traductor",
-      "Mejorar oportunidades laborales",
-      "Entender series y música",
+      "Acceder a mejores sueldos",
+      "Entender series en audio original",
     ],
   },
+
+  // 2. COREANO (El Fenómeno Viral)
   {
     id: "coreano",
     code: "KR",
     name: "Coreano + Cultura K",
     emoji: "🇰🇷",
-    color: "#ef4444",
+    color: "#ec4899", // Rosa K-Pop
+    badge: "Tendencia",
     summary:
-      "Mucho más que el alfabeto. Aprende el idioma a través de la cultura, K-Dramas y preparación para certificación.",
+      "Mucho más que el alfabeto. Aprende el idioma a través de la cultura, K-Dramas y K-Pop. Prepárate para tu viaje soñado o certificación TOPIK.",
     includes: [
       "Hangul (alfabeto) desde cero",
-      "Gramática para el examen TOPIK I",
-      "Análisis de K-Pop y Dramas",
+      "Gramática enfocada en TOPIK I",
+      "Análisis de letras de canciones",
       "Etiqueta y cultura coreana",
     ],
-    levels: ["Nivel 1 (Hangul)", "Nivel 2 (Frases)", "Nivel 3 (TOPIK)"],
+    levels: ["Nivel 1 (Hangul)", "Nivel 2 (Básico)", "Nivel 3 (TOPIK)"],
     outcomes: [
       "Leer y escribir Hangul fluido",
       "Entender a tus idols sin subtítulos",
-      "Certificación internacional TOPIK I",
+      "Certificación internacional",
     ],
   },
+
+  // 3. JAPONÉS (La Nueva Joya - PÉTICIÓN AGREGADA)
+  {
+    id: "japones",
+    code: "JP",
+    name: "Japonés Inicial",
+    emoji: "🇯🇵",
+    color: "#ef4444", // Rojo Japón
+    summary:
+      "El idioma del anime y la tecnología. Domina los silabarios Hiragana y Katakana y empieza a construir tus primeras oraciones para viajar a Tokio.",
+    includes: [
+      "Escritura (Hiragana/Katakana)",
+      "Frases de supervivencia",
+      "Cultura y etiqueta japonesa",
+    ],
+    levels: ["N5 (Inicial)", "N4 (Básico)"],
+    outcomes: ["Leer manga básico", "Turismo en Japón"],
+    comingSoon: true, // Activa el modo "Lista de Espera"
+  },
+
+  // 4. ESPAÑOL (Nicho Rentable)
   {
     id: "espanol",
     code: "ES",
     name: "Español para Extranjeros",
     emoji: "🇨🇱",
-    color: "#f59e0b",
+    color: "#f59e0b", // Amarillo/Ámbar
     summary:
-      "Domina el español de Chile. Clases prácticas para trámites, trabajo y vida social en el país.",
+      "Domina el español de Chile. Clases 100% prácticas diseñadas para ayudarte con trámites, conseguir trabajo y socializar con confianza.",
     includes: [
       "Chilenismos y cultura local",
       "Español para trámites y visas",
-      "Redacción de correos formales",
+      "Simulación de entrevistas",
       "Práctica de fluidez diaria",
     ],
-    levels: ["Sobrevivencia (A1-A2)", "Laboral (B1)"],
+    levels: ["A1 (Sobrevivencia)", "A2 (Básico)", "B1 (Laboral)"],
     outcomes: [
       "Integración rápida en Chile",
-      "Mejor desempeño en entrevistas",
-      "Confianza al hablar con nativos",
+      "Mejor desempeño laboral",
+      "Hacer amigos locales",
     ],
   },
+
+  // 5. PORTUGUÉS (Futuro)
   {
     id: "portugues",
     code: "PT",
-    name: "Portugués (2026)",
+    name: "Portugués Brasil",
     emoji: "🇧🇷",
-    color: "#16a34a",
+    color: "#16a34a", // Verde Brasil
     summary:
-      "El idioma de los negocios y el turismo en Sudamérica. Programa intensivo de conversación.",
+      "El idioma de los negocios y el turismo en Sudamérica. Programa intensivo de conversación para viajeros y profesionales.",
     includes: [
       "Fonética y pronunciación",
       "Portugués de negocios",
       "Cultura brasileña",
     ],
-    levels: ["Inicial → Intermedio"],
+    levels: ["Inicial", "Intermedio"],
     outcomes: ["Turismo", "Negocios Mercosur"],
-    comingSoon: true, // Esto desactiva el botón de compra en la UI
+    comingSoon: true, 
   },
 ];

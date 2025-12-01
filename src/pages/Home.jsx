@@ -2,15 +2,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEOHead from "../components/SEOHead.jsx";
-import PartnersMarquee from "../components/PartnersMarquee.jsx"; // ✅ ¡Ahora sí activo!
+// Asegúrate de tener este componente, si no, comenta la línea
+import PartnersMarquee from "../components/PartnersMarquee.jsx"; 
 
-// ASSETS
+// ASSETS (Ajusta las rutas a tus imágenes reales)
 import heroVideoPoster from "../assets/img/lael/study-online.jpg"; 
-// Importa imágenes de identidad
 import id1 from "../assets/img/lael/1.png";
 import id3 from "../assets/img/lael/3.png";
 
-/* --- ICONOS SVG (Estilo Bold) --- */
+/* --------------------------------------------------------------------------
+   ICONOS SVG (Estilo Bold)
+   -------------------------------------------------------------------------- */
 const Icons = {
   Arrow: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>,
   Star: () => <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>,
@@ -103,7 +105,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- MARQUEE DE PARTNERS (ACTIVO ✅) --- */}
+      {/* --- MARQUEE DE PARTNERS --- */}
       <section className="marquee-section">
         <div className="marquee-label">Confían en nosotros:</div>
         <div className="marquee-wrapper">
@@ -180,7 +182,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- PROMO ACADEMY --- */}
+      {/* --- PROMO ACADEMY (FIXED) --- */}
       <section className="academy-promo">
         <div className="container promo-inner">
             <div className="promo-txt">
@@ -189,14 +191,17 @@ export default function Home() {
                 <p>Presentamos <strong>Lael Academy</strong>. Packs de tutorías 1 a 1 para salvar el semestre escolar o preparar un examen específico.</p>
                 <Link to="/homeschool" className="btn-white">Explorar Tutorías</Link>
             </div>
+            
             <div className="promo-visual">
                 {/* Círculos decorativos */}
                 <div className="circle c1"></div>
                 <div className="circle c2"></div>
+                
+                {/* TARJETA CORREGIDA: FONDO OSCURO Y TEXTO BLANCO */}
                 <div className="promo-card-float">
                     <span className="emoji">👩‍🏫</span>
                     <strong>Profe Particular</strong>
-                    <small>A un click de distancia</small>
+                    <small style={{ color: '#94a3b8' }}>A un click de distancia</small> 
                 </div>
             </div>
         </div>
@@ -389,12 +394,33 @@ a { text-decoration: none; color: inherit; }
 .circle { position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
 .c1 { width: 100%; height: 100%; animation: spin 20s linear infinite; }
 .c2 { width: 70%; height: 70%; border-style: dashed; animation: spin 10s linear infinite reverse; }
+
+/* --- CORRECCIÓN CSS TARJETA FLOTANTE --- */
 .promo-card-float { 
-    background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);
-    padding: 15px 25px; border-radius: 16px; font-size: 1.2rem; font-weight: 700; text-align: center; z-index: 2;
-    transform: rotate(-5deg); transition: .3s;
+    background: #1f2937; /* Fondo Gris Oscuro Sólido */
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 20px 30px; 
+    border-radius: 20px; 
+    text-align: center; 
+    z-index: 2;
+    transform: rotate(-5deg); 
+    transition: .3s;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
-.promo-inner:hover .promo-card-float { transform: rotate(0deg) scale(1.1); }
+/* Aseguramos que el texto sea blanco */
+.promo-card-float strong {
+    display: block;
+    color: #ffffff;
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+}
+/* Efecto Hover */
+.promo-inner:hover .promo-card-float { 
+    transform: rotate(0deg) scale(1.1); 
+    background: #000000;
+    border-color: var(--primary);
+}
+
 .emoji { font-size: 2rem; display: block; margin-bottom: 5px; }
 
 /* FINAL CTA */

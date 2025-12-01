@@ -1,6 +1,5 @@
 // src/data/lsch.js
 // === Lengua de Señas Chilena — Instituto Lael ===
-// Edición "Professional Impact"
 
 // 🔢 Formateador CLP
 export const clp = (n) =>
@@ -13,90 +12,63 @@ export const clp = (n) =>
 // 🧾 Matrícula única
 export const LSCH_ENROLLMENT_FEE = 12990;
 
-// 📢 Slogan Central (Para usar en el Hero)
+// 📢 Slogan
 export const LSCH_TAGLINE = "Rompe la barrera del sonido. Conecta sin límites.";
 
 /**
- * 🎓 ESTRUCTURA ACADÉMICA RENOVADA
- * Usamos una paleta "Teal/Cyan" para evocar tecnología, salud y comunidad sorda.
+ * 🎓 ESTRUCTURA ACADÉMICA
  */
 export const LSCH_MODULES = [
   {
     id: "nivel-1",
     code: "N1",
-    name: "Fundamentos Visuales", // Nombre más técnico
+    name: "Fundamentos Visuales",
     tag: "A1 · Inicial",
-    color: "#2dd4bf", // Teal 400 (Brillante)
-    icon: "HandWave",
-    summary: "Domina la dactilología y la estructura gramatical básica. Pierde el miedo a usar tu cuerpo como herramienta de comunicación.",
-    bullets: [
-      "Alfabeto y Dactilología",
-      "Expresión facial y corporal",
-      "Cultura y Comunidad Sorda",
-    ],
+    summary: "Domina la dactilología y la estructura gramatical básica. Pierde el miedo a usar tu cuerpo como herramienta.",
+    bullets: ["Alfabeto y Dactilología", "Expresión facial", "Cultura Sorda"],
   },
   {
     id: "nivel-2",
     code: "N2",
     name: "Gramática Espacial",
     tag: "A2 · Básico",
-    color: "#06b6d4", // Cyan 500 (Tecnológico)
-    icon: "HandOkay",
     summary: "Deja de pensar en español y empieza a pensar en imágenes. Aprende clasificadores y verbos direccionales.",
-    bullets: [
-      "Verbos y Tiempos verbales",
-      "Clasificadores y descripción",
-      "Role-play situaciones reales",
-    ],
+    bullets: ["Verbos y Tiempos", "Clasificadores", "Role-play real"],
   },
   {
     id: "nivel-3",
     code: "N3",
     name: "Fluidez y Contexto",
     tag: "B1 · Intermedio",
-    color: "#0ea5e9", // Sky 500 (Profundo)
-    icon: "HandRock",
-    summary: "Para contextos laborales y técnicos. Ideal para profesionales de la salud, educación y atención al cliente.",
-    bullets: [
-      "Vocabulario técnico/laboral",
-      "Narración y argumentación",
-      "Interpretación básica",
-    ],
+    summary: "Para contextos laborales. Ideal para profesionales de la salud, educación y atención al cliente.",
+    bullets: ["Vocabulario técnico", "Narración", "Interpretación básica"],
   },
   {
     id: "club-adv",
     code: "PRO",
-    name: "Club de Práctica Avanzada",
+    name: "Club Avanzado",
     tag: "B1+ · Experto",
-    color: "#6366f1", // Indigo (Diferenciador)
-    icon: "HandSparkle",
     summary: "Mantenimiento de nivel. 100% inmersión visual sin voz. Análisis de videos nativos.",
-    bullets: [
-      "Debates y actualidad",
-      "Análisis de videos nativos",
-      "Velocidad de respuesta",
-    ],
+    bullets: ["Debates y actualidad", "Velocidad de respuesta", "Sin voz"],
   },
 ];
 
-// 💡 Planes Grupales (Estrategia de Anclaje)
+// 💡 Planes Grupales
 export const LSCH_GROUP_PLANS = [
   { 
     id: "g-month", 
     title: "Plan Mensual", 
     monthly: 19990, 
     badge: "Flexible",
-    color: "slate",
-    desc: "Pago mes a mes. Sin ataduras ni contratos a largo plazo."
+    desc: "Pago mes a mes. Sin ataduras."
   },
   { 
     id: "g-quarter", 
     title: "Plan Trimestral", 
-    monthly: 16990, // PRECIO GANCHO
+    monthly: 16990, 
     save: "Ahorras $9.000",
     badge: "Más Vendido",
-    color: "teal", // Color principal para destacar
-    desc: "El compromiso ideal para ver resultados reales y certificar nivel."
+    desc: "El compromiso ideal para ver resultados."
   },
   { 
     id: "g-semester", 
@@ -104,55 +76,32 @@ export const LSCH_GROUP_PLANS = [
     monthly: 14990, 
     save: "Ahorras $30.000",
     badge: "Mejor Valor",
-    color: "cyan",
-    desc: "La opción inteligente para dominar el idioma completo."
+    desc: "Opción inteligente a largo plazo."
   },
 ];
 
-// 🙌 Convenio Iglesias (Motor de Volumen)
+// 🙌 Convenio Iglesias
 export const CHURCH_CONVENIO = {
   enabled: true,
   monthlyFlat: 12990, 
   label: "Convenio Iglesias / Ministerios",
-  subLabel: "Tarifa preferencial activa",
-  desc: "Precio especial para grupos de ministerio de sordos.",
-  color: "amber"
 };
 
-// 🧑‍🏫 Planes 1:1 (Personalizado)
+// 🧑‍🏫 Planes 1:1
 export const LSCH_ONE2ONE_PLANS = [
-  { 
-    id: "o-light", 
-    title: "Pack Refuerzo", 
-    hours: 4,
-    monthly: 45000, 
-    detail: "1 hora/semana"
-  },
-  { 
-    id: "o-standard", 
-    title: "Pack Estándar", 
-    hours: 8,
-    monthly: 80000, 
-    detail: "2 horas/semana",
-    badge: "Recomendado"
-  },
-  { 
-    id: "o-intensive", 
-    title: "Pack Intensivo", 
-    hours: 12,
-    monthly: 110000, 
-    detail: "3 horas/semana"
-  },
+  { id: "o-light", title: "Pack Refuerzo", monthly: 45000 },
+  { id: "o-standard", title: "Pack Estándar", monthly: 80000 },
+  { id: "o-intensive", title: "Pack Intensivo", monthly: 110000 },
 ];
 
-// 🏢 Datos para Sección Corporativa (Ley 21.015)
+// 🏢 IMPORTANTE: Esta es la variable nueva que seguro faltaba
 export const CORPORATE_WHY = [
-  { icon: "Briefcase", title: "Ley de Inclusión 21.015", desc: "Cumple con la normativa capacitando a tu equipo en gestión inclusiva." },
-  { icon: "Heart", title: "Responsabilidad Social", desc: "Genera un ambiente laboral empático y accesible para todos." },
-  { icon: "UserCheck", title: "Atención al Cliente", desc: "Marca la diferencia atendiendo a la comunidad sorda en su idioma." },
+  { title: "Ley de Inclusión 21.015", desc: "Cumple con la normativa capacitando a tu equipo." },
+  { title: "Responsabilidad Social", desc: "Genera un ambiente laboral empático y accesible." },
+  { title: "Atención al Cliente", desc: "Marca la diferencia atendiendo en su idioma." },
 ];
 
-// Helpers de Precio
+// Helper
 export function priceForGroupPlan(plan, { church = false } = {}) {
   if (!plan) return 0;
   if (church && CHURCH_CONVENIO.enabled) return CHURCH_CONVENIO.monthlyFlat;

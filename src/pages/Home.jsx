@@ -1,49 +1,20 @@
+// src/pages/Home.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEOHead from "../components/SEOHead.jsx";
 import PartnersMarquee from "../components/PartnersMarquee.jsx"; 
 
 /* --------------------------------------------------------------------------
-   ICONOS SVG (Tus originales, estilizados con Tailwind)
+   ICONOS SVG
    -------------------------------------------------------------------------- */
 const Icons = {
-  Arrow: () => (
-    <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-      <path d="M5 12h14M12 5l7 7-7 7"/>
-    </svg>
-  ),
-  Bolt: () => (
-    <svg className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-    </svg>
-  ),
-  Globe: () => (
-    <svg className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-    </svg>
-  ),
-  Hand: () => (
-    <svg className="w-full h-full" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-      <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
-    </svg>
-  )
+  Arrow: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>,
+  Bolt: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>,
+  Globe: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
+  Hand: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
 };
 
-/* --- COMPONENTE AURORA BACKGROUND (Efecto Visual de Fondo) --- */
-const BackgroundAurora = () => (
-  <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none bg-bg-deep">
-    {/* Orbe Dorado (PAES) */}
-    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-lael-gold/10 rounded-full blur-[120px] animate-blob mix-blend-screen" />
-    {/* Orbe Rosa (Idiomas) */}
-    <div className="absolute top-[20%] right-[-10%] w-[400px] h-[400px] bg-lael-pink/10 rounded-full blur-[100px] animate-blob animation-delay-2000 mix-blend-screen" />
-    {/* Orbe Azul (Institucional) */}
-    <div className="absolute bottom-[-10%] left-[20%] w-[600px] h-[600px] bg-lael-navy/15 rounded-full blur-[130px] animate-blob animation-delay-4000 mix-blend-screen" />
-    {/* Textura de Ruido (Noise) para calidad cinematográfica */}
-    <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}></div>
-  </div>
-);
-
-/* --- COMPONENTE TYPEWRITER (Tu lógica original) --- */
+/* --- COMPONENTE TYPEWRITER --- */
 const Typewriter = ({ words }) => {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
@@ -65,241 +36,395 @@ const Typewriter = ({ words }) => {
     return () => clearTimeout(timeout);
   }, [subIndex, index, reverse, words]);
 
-  return (
-    <span className="inline-block bg-gradient-to-r from-lael-gold via-white to-lael-pink bg-clip-text text-transparent">
-      {words[index].substring(0, subIndex)}
-      <span className="animate-pulse text-white ml-1">|</span>
-    </span>
-  );
+  return <span className="typewriter">{words[index].substring(0, subIndex)}<span className="cursor">|</span></span>;
 };
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen bg-bg-deep text-white font-sans selection:bg-lael-gold selection:text-black overflow-x-hidden">
+    <div className="home-v2">
       <SEOHead title="Instituto Lael | El Futuro de la Educación" description="Formación online de alto nivel." />
-      
-      {/* 1. FONDO ANIMADO AURORA */}
-      <BackgroundAurora />
+      <style>{css}</style>
 
-      {/* 2. CONTENIDO PRINCIPAL (Z-Index para estar sobre el fondo) */}
-      <main className="relative z-10">
-
-        {/* --- HERO CINEMÁTICO --- */}
-        <section className="relative min-h-[90vh] flex flex-col justify-center items-center text-center px-4 pt-24 pb-12">
-            
-            {/* Badge Brillante */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8 animate-float shadow-lg shadow-lael-navy/20">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-lael-green opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-lael-green"></span>
-                </span>
-                <span className="text-sm font-medium text-gray-200 tracking-wider uppercase text-[11px]">Admisión 2026 Abierta</span>
-            </div>
-            
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight leading-[1.1] mb-6 drop-shadow-2xl">
-                Aprendizaje que <br className="hidden md:block"/>
+      {/* --- HERO CINEMÁTICO --- */}
+      <section className="hero-cinema">
+        <div className="glow-spot top-left"></div>
+        <div className="glow-spot bottom-right"></div>
+        
+        <div className="container hero-content">
+            <div className="badge-glass">✨ Admisión 2026 Abierta</div>
+            <h1 className="hero-title">
+                Aprendizaje que <br/>
                 <Typewriter words={["Transforma.", "Conecta.", "Impulsa.", "Funciona."]} />
             </h1>
-            
-            <p className="text-lg md:text-2xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
-                Somos el punto de encuentro entre tecnología y humanidad. <br className="hidden md:block"/>
-                Prepara la <span className="text-white font-medium">PAES</span>, domina <span className="text-lael-pink font-medium">idiomas</span> o certifícate.
+            <p className="hero-sub">
+                Somos el punto de encuentro entre tecnología y humanidad. 
+                Prepara la PAES, domina idiomas o certifícate profesionalmente.
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md sm:max-w-none justify-center mb-16">
-                <Link to="/inscripcion" className="group relative px-8 py-4 bg-white text-black rounded-full font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+            <div className="hero-btns">
+                <Link to="/inscripcion" className="btn-main">
                     Empezar Ahora <Icons.Arrow />
                 </Link>
-                <Link to="/nosotros" className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-full font-medium text-lg hover:bg-white/10 backdrop-blur-md transition-all">
+                <Link to="/nosotros" className="btn-sec">
                     Ver Manifiesto
                 </Link>
             </div>
 
-            {/* Stats Flotantes (Glassmorphism Puro) */}
-            <div className="hidden md:flex gap-12 px-10 py-6 rounded-2xl bg-bg-surface/60 border border-white/5 backdrop-blur-xl shadow-2xl">
-                <div className="text-center group">
-                    <strong className="block text-3xl font-bold text-white group-hover:text-lael-blue transition-colors">+3k</strong>
-                    <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Alumnos</span>
+            {/* Stats Flotantes */}
+            <div className="hero-stats-glass">
+                <div className="stat">
+                    <strong>+3k</strong>
+                    <span>Alumnos</span>
                 </div>
-                <div className="w-px h-12 bg-white/10"></div>
-                <div className="text-center group">
-                    <strong className="block text-3xl font-bold text-white group-hover:text-lael-gold transition-colors">98%</strong>
-                    <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Aprobación</span>
+                <div className="sep"></div>
+                <div className="stat">
+                    <strong>98%</strong>
+                    <span>Aprobación</span>
                 </div>
-                <div className="w-px h-12 bg-white/10"></div>
-                <div className="text-center group">
-                    <strong className="block text-3xl font-bold text-white group-hover:text-lael-green transition-colors">100%</strong>
-                    <span className="text-[10px] uppercase tracking-widest text-gray-500 font-bold">Online</span>
-                </div>
-            </div>
-        </section>
-
-        {/* --- MARQUEE DE PARTNERS --- */}
-        <section className="py-10 border-y border-white/5 bg-black/20 backdrop-blur-sm relative z-20">
-            <div className="container mx-auto px-4 text-center mb-6">
-                <span className="text-xs font-bold tracking-[0.3em] text-gray-600 uppercase">Confían en nosotros:</span>
-            </div>
-            <div className="opacity-60 grayscale hover:grayscale-0 transition-all duration-700">
-                <PartnersMarquee speed={35} height={32} gap={60} />
-            </div>
-        </section>
-
-        {/* --- BENTO GRID (El Hub) --- */}
-        <section className="py-24 px-4 relative z-10">
-            <div className="container mx-auto max-w-6xl">
-                <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">Explora nuestros mundos</h2>
-                    <p className="text-gray-400 text-lg">Cada programa es un ecosistema diseñado para tu éxito.</p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[minmax(280px,auto)]">
-                    
-                    {/* 1. PAES (Grande - Gold Theme) */}
-                    <Link to="/paes" className="group relative md:col-span-2 lg:col-span-2 lg:row-span-2 overflow-hidden rounded-[2rem] bg-bg-surface border border-white/5 hover:border-lael-gold/50 transition-all duration-500 p-8 flex flex-col justify-end min-h-[400px]">
-                        {/* Glow Gradient */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-lael-gold/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500" />
-                        
-                        {/* Icono de Fondo Gigante */}
-                        <div className="absolute -right-8 -top-8 w-64 h-64 text-white opacity-[0.03] group-hover:opacity-[0.08] group-hover:rotate-12 transition-all duration-700">
-                           <Icons.Bolt />
-                        </div>
-
-                        {/* Logo Color (Asegúrate de tener la imagen) */}
-                        <img src="/lael-inst-amarillo.png" alt="PAES" className="absolute top-8 right-8 w-20 opacity-20 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500" />
-
-                        <div className="relative z-10">
-                            <span className="inline-block px-3 py-1 bg-lael-gold/10 border border-lael-gold/20 text-lael-gold rounded-lg text-xs font-bold uppercase tracking-wider mb-4">
-                                Preuniversitario
-                            </span>
-                            <h3 className="text-3xl md:text-4xl font-bold text-white mb-2">Preu PAES</h3>
-                            <p className="text-gray-400 max-w-md mb-6 leading-relaxed">El programa más completo. Ensayos, clases en vivo y tutoría personalizada.</p>
-                            <span className="inline-flex items-center text-lael-gold font-bold text-sm uppercase tracking-wide group-hover:translate-x-2 transition-transform">
-                                Ver Planes <span className="ml-2">→</span>
-                            </span>
-                        </div>
-                    </Link>
-
-                    {/* 2. IDIOMAS (Vertical - Pink Theme) */}
-                    <Link to="/idiomas" className="group relative md:col-span-1 lg:col-span-1 lg:row-span-2 overflow-hidden rounded-[2rem] bg-bg-surface border border-white/5 hover:border-lael-pink/50 transition-all duration-500 p-8 flex flex-col justify-between min-h-[300px]">
-                        <div className="absolute inset-0 bg-gradient-to-b from-lael-pink/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        
-                        <div className="w-14 h-14 bg-lael-pink/10 rounded-2xl flex items-center justify-center text-lael-pink border border-lael-pink/20 mb-4 group-hover:scale-110 transition-transform">
-                            <div className="w-8 h-8"><Icons.Globe /></div>
-                        </div>
-
-                        <div className="relative z-10 mt-auto">
-                            <span className="text-lael-pink text-xs font-bold uppercase tracking-wider block mb-2">Global</span>
-                            <h3 className="text-2xl font-bold text-white mb-2">Idiomas</h3>
-                            <p className="text-gray-400 text-sm leading-relaxed mb-4">Inglés, Coreano y más. Habla desde el día 1.</p>
-                            <img src="/lael-inst-rosa.png" alt="Idiomas" className="w-12 opacity-50 group-hover:opacity-100 transition-opacity absolute bottom-4 right-4" />
-                        </div>
-                    </Link>
-
-                    {/* 3. LENGUA DE SEÑAS (Green Theme) */}
-                    <Link to="/lsch" className="group relative md:col-span-1 lg:col-span-1 lg:row-span-1 overflow-hidden rounded-[2rem] bg-bg-surface border border-white/5 hover:border-lael-green/50 transition-all duration-500 p-8 flex flex-col justify-between min-h-[280px]">
-                        <div className="absolute inset-0 bg-gradient-to-br from-lael-green/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                        
-                        <div className="absolute top-4 right-4 text-lael-green opacity-20 group-hover:opacity-100 transition-opacity">
-                            <div className="w-10 h-10"><Icons.Hand /></div>
-                        </div>
-
-                        <div className="relative z-10 mt-auto">
-                            <span className="text-lael-green text-xs font-bold uppercase tracking-wider block mb-2">Inclusión</span>
-                            <h3 className="text-xl font-bold text-white mb-1">Lengua de Señas</h3>
-                            <p className="text-gray-400 text-sm">Cultura sorda y comunicación real.</p>
-                        </div>
-                    </Link>
-
-                    {/* 4. EMPRESAS (Corporate - Navy Theme) */}
-                    <Link to="/empresas" className="group relative md:col-span-2 lg:col-span-2 overflow-hidden rounded-[2rem] bg-gradient-to-r from-bg-surface to-lael-navy/10 border border-white/5 hover:border-lael-navy/50 transition-all duration-500 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-                        <div className="text-left">
-                            <span className="text-lael-navy text-xs font-bold uppercase tracking-wider block mb-2">B2B</span>
-                            <h3 className="text-2xl font-bold text-white mb-1">Lael Corporate</h3>
-                            <p className="text-gray-400 text-sm">Capacitación para equipos de alto rendimiento.</p>
-                        </div>
-                        <button className="px-6 py-2 rounded-full border border-white/20 text-white text-sm font-bold group-hover:bg-white group-hover:text-lael-navy transition-all shrink-0">
-                            Cotizar
-                        </button>
-                    </Link>
-
-                    {/* 5. ADULTOS (Orange Theme) */}
-                    <Link to="/escuela-adultos" className="group relative md:col-span-2 lg:col-span-2 overflow-hidden rounded-[2rem] bg-gradient-to-r from-bg-surface to-lael-orange/10 border border-white/5 hover:border-lael-orange/50 transition-all duration-500 p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-                        <div className="text-left">
-                            <span className="text-lael-orange text-xs font-bold uppercase tracking-wider block mb-2">Impacto Social</span>
-                            <h3 className="text-2xl font-bold text-white mb-1">Nivelación de Estudios</h3>
-                            <p className="text-gray-400 text-sm">Termina tu 4to medio con dignidad y tecnología.</p>
-                        </div>
-                        <button className="px-6 py-2 rounded-full border border-white/20 text-white text-sm font-bold group-hover:bg-white group-hover:text-lael-orange transition-all shrink-0">
-                            Ver Becas
-                        </button>
-                    </Link>
-
+                <div className="sep"></div>
+                <div className="stat">
+                    <strong>100%</strong>
+                    <span>Online</span>
                 </div>
             </div>
-        </section>
+        </div>
+      </section>
 
-        {/* --- PROMO ACADEMY --- */}
-        <section className="py-10 px-4 mb-10">
-            <div className="container mx-auto max-w-5xl">
-                <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-r from-[#0F172A] to-[#1e1b4b] border border-white/10 p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10 group">
-                    
-                    {/* Elementos Decorativos de Fondo */}
-                    <div className="absolute -right-20 -top-20 w-80 h-80 bg-lael-blue/20 rounded-full blur-[80px]" />
-                    <div className="absolute left-10 bottom-10 w-40 h-40 border border-white/5 rounded-full animate-spin-slow opacity-30"></div>
-                    
-                    <div className="relative z-10 max-w-lg text-center md:text-left">
-                        <span className="inline-block px-3 py-1 bg-lael-gold text-black text-xs font-extrabold rounded-md mb-4 shadow-[0_0_15px_rgba(242,192,78,0.4)]">
-                            NUEVO LANZAMIENTO
-                        </span>
-                        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">¿Necesitas un refuerzo puntual?</h2>
-                        <p className="text-gray-300 text-lg mb-8 leading-relaxed">
-                            Presentamos <strong className="text-white">Lael Academy</strong>. Packs de tutorías 1 a 1 para salvar el semestre escolar o preparar un examen.
-                        </p>
-                        <Link to="/homeschool" className="inline-block bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-gray-200 hover:scale-105 transition-all shadow-lg">
-                            Explorar Tutorías
-                        </Link>
+      {/* --- MARQUEE DE PARTNERS --- */}
+      <section className="marquee-section">
+        <div className="marquee-label">Confían en nosotros:</div>
+        <div className="marquee-wrapper">
+            <PartnersMarquee speed={35} height={32} gap={60} />
+        </div>
+      </section>
+
+      {/* --- BENTO GRID (El Hub) --- */}
+      <section className="hub-section">
+        <div className="container">
+            <div className="sec-head">
+                <h2>Explora nuestros mundos</h2>
+                <p>Cada programa es un ecosistema diseñado para tu éxito.</p>
+            </div>
+
+            <div className="bento-grid">
+                
+                {/* PAES */}
+                <Link to="/paes" className="bento-card large paes">
+                    <div className="card-bg-icon"><Icons.Bolt /></div>
+                    <div className="card-info">
+                        <span className="card-tag">Preuniversitario</span>
+                        <h3>Preu PAES</h3>
+                        <p>El programa más completo. Ensayos, clases en vivo y tutoría personalizada.</p>
+                        <span className="link-arrow">Ver Planes →</span>
                     </div>
-                    
-                    {/* Visual Flotante */}
-                    <div className="relative z-10 transform rotate-[-3deg] group-hover:rotate-0 transition-transform duration-500 ease-out">
-                         <div className="bg-[#1A1A1A] border border-white/10 p-6 rounded-2xl shadow-2xl w-64 text-center backdrop-blur-md">
-                            <div className="text-5xl mb-4">👩‍🏫</div>
-                            <strong className="block text-white text-lg">Profe Particular</strong>
-                            <small className="text-gray-500 block mb-3">A un click de distancia</small>
-                            <div className="w-full bg-gray-800 h-1.5 rounded-full overflow-hidden">
-                                <div className="bg-lael-green h-full w-3/4 animate-pulse"></div>
-                            </div>
-                        </div>
+                </Link>
+
+                {/* IDIOMAS */}
+                <Link to="/idiomas" className="bento-card medium lang">
+                    <div className="card-bg-icon"><Icons.Globe /></div>
+                    <div className="card-info">
+                        <span className="card-tag">Global</span>
+                        <h3>Idiomas</h3>
+                        <p>Inglés, Coreano y más. Habla desde el día 1.</p>
                     </div>
+                </Link>
+
+                {/* LSCh */}
+                <Link to="/lsch" className="bento-card medium lsch">
+                    <div className="card-bg-icon"><Icons.Hand /></div>
+                    <div className="card-info">
+                        <span className="card-tag">Inclusión</span>
+                        <h3>Lengua de Señas</h3>
+                        <p>Cultura sorda y comunicación real.</p>
+                    </div>
+                </Link>
+
+                {/* EMPRESAS */}
+                <Link to="/empresas" className="bento-card wide corporate">
+                    <div className="card-info row">
+                        <div>
+                            <span className="card-tag">B2B</span>
+                            <h3>Lael Corporate</h3>
+                            <p>Capacitación para equipos de alto rendimiento.</p>
+                        </div>
+                        <button className="btn-small">Cotizar</button>
+                    </div>
+                </Link>
+
+                {/* ADULTOS */}
+                <Link to="/escuela-adultos" className="bento-card wide adults">
+                    <div className="card-info row">
+                        <div>
+                            <span className="card-tag">Impacto Social</span>
+                            <h3>Nivelación de Estudios</h3>
+                            <p>Termina tu 4to medio con dignidad y tecnología.</p>
+                        </div>
+                        <button className="btn-small">Ver Becas</button>
+                    </div>
+                </Link>
+
+            </div>
+        </div>
+      </section>
+
+      {/* --- PROMO ACADEMY --- */}
+      <section className="academy-promo">
+        <div className="container promo-inner">
+            <div className="promo-txt">
+                <span className="promo-badge">NUEVO LANZAMIENTO</span>
+                <h2>¿Necesitas un refuerzo puntual?</h2>
+                <p>Presentamos <strong>Lael Academy</strong>. Packs de tutorías 1 a 1 para salvar el semestre escolar o preparar un examen específico.</p>
+                <Link to="/homeschool" className="btn-white">Explorar Tutorías</Link>
+            </div>
+            
+            <div className="promo-visual">
+                <div className="circle c1"></div>
+                <div className="circle c2"></div>
+                
+                {/* TARJETA FLOTANTE FIXED */}
+                <div className="promo-card-float">
+                    <span className="emoji">👩‍🏫</span>
+                    <strong>Profe Particular</strong>
+                    <small style={{ color: '#94a3b8' }}>A un click de distancia</small> 
                 </div>
             </div>
-        </section>
+        </div>
+      </section>
 
-        {/* --- CTA FINAL --- */}
-        <section className="py-24 px-4 bg-black/30">
-            <div className="container mx-auto max-w-3xl text-center">
-                <h2 className="text-4xl md:text-5xl font-bold mb-12 tracking-tight">
-                    No dejes para mañana <br/>
-                    <span className="text-gray-500">lo que puedes aprender hoy.</span>
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <Link to="/inscripcion" className="group p-8 rounded-3xl bg-white text-black text-left hover:scale-[1.02] transition-transform shadow-xl">
-                        <h3 className="text-2xl font-bold mb-2 flex items-center justify-between">
-                            Inscripción Online <span className="group-hover:translate-x-1 transition-transform">→</span>
-                        </h3>
-                        <p className="text-gray-600">Reserva tu cupo en 2 minutos.</p>
-                    </Link>
-                    <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="group p-8 rounded-3xl bg-bg-surface border border-white/10 text-white text-left hover:border-lael-green/50 hover:bg-white/5 transition-all">
-                        <h3 className="text-2xl font-bold mb-2 flex items-center justify-between">
-                            Hablar con Admisión <span className="text-2xl">💬</span>
-                        </h3>
-                        <p className="text-gray-400">Resolvemos tus dudas por WhatsApp.</p>
-                    </a>
-                </div>
+      {/* --- CTA FINAL --- */}
+      <section className="final-cta">
+        <div className="container">
+            <h2>No dejes para mañana <br/>lo que puedes aprender hoy.</h2>
+            <div className="cta-grid">
+                <Link to="/inscripcion" className="cta-box primary">
+                    <h3>Inscripción Online</h3>
+                    <p>Reserva tu cupo en 2 minutos.</p>
+                    <span className="arr">→</span>
+                </Link>
+                <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="cta-box secondary">
+                    <h3>Hablar con Admisión</h3>
+                    <p>Resolvemos tus dudas por WhatsApp.</p>
+                    <span className="arr">💬</span>
+                </a>
             </div>
-        </section>
+        </div>
+      </section>
 
-      </main>
     </div>
   );
 }
+
+/* ================= CSS (FIXED RESPONSIVE) ================= */
+const css = `
+:root {
+  --bg-deep: #050505;
+  --bg-card: #141414;
+  --text-main: #FFFFFF;
+  --text-muted: #A1A1AA;
+  --primary: #6366F1;
+  --accent: #F59E0B;
+  --gradient-main: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  --border: rgba(255,255,255,0.08);
+}
+
+.home-v2 {
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+a { text-decoration: none; color: inherit; }
+
+/* HERO CINEMÁTICO */
+.hero-cinema {
+    position: relative; min-height: 85vh; display: flex; align-items: center; justify-content: center;
+    text-align: center; overflow: hidden; padding: 120px 0 80px;
+}
+
+.glow-spot {
+    position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(120px); opacity: 0.15; pointer-events: none;
+}
+.top-left { top: -200px; left: -100px; background: var(--primary); }
+.bottom-right { bottom: -200px; right: -100px; background: var(--accent); }
+
+.badge-glass {
+    display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; margin-bottom: 24px;
+    backdrop-filter: blur(10px); color: #c7d2fe; letter-spacing: 1px; text-transform: uppercase;
+}
+
+.hero-title {
+    font-size: clamp(2.8rem, 8vw, 5.5rem); font-weight: 800; line-height: 1.05; margin-bottom: 24px; letter-spacing: -0.03em;
+}
+.typewriter {
+    background: var(--gradient-main); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.cursor { color: var(--text-muted); font-weight: 100; animation: blink 1s infinite; }
+
+.hero-sub {
+    font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; line-height: 1.6;
+}
+
+.hero-btns { display: flex; gap: 16px; justify-content: center; margin-bottom: 60px; flex-wrap: wrap; }
+.btn-main {
+    background: var(--text-main); color: #000; padding: 16px 32px; border-radius: 100px;
+    font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;
+    transition: transform 0.2s; box-shadow: 0 0 30px rgba(255,255,255,0.15);
+}
+.btn-main:hover { transform: scale(1.05); }
+.btn-sec {
+    background: rgba(255,255,255,0.05); color: #fff; padding: 16px 32px; border-radius: 100px;
+    font-weight: 600; border: 1px solid rgba(255,255,255,0.1); transition: background 0.2s;
+}
+.btn-sec:hover { background: rgba(255,255,255,0.1); }
+
+.hero-stats-glass {
+    display: inline-flex; gap: 40px; padding: 20px 40px; border-radius: 20px;
+    background: rgba(15, 17, 21, 0.6); border: 1px solid var(--border); backdrop-filter: blur(12px);
+}
+@media (max-width: 768px) { 
+    .hero-stats-glass { flex-direction: column; gap: 15px; width: 100%; box-sizing: border-box; } 
+    .sep { display: none; } 
+    .hero-title { font-size: 2.5rem; }
+}
+
+.stat strong { font-size: 1.8rem; display: block; color: var(--text-main); }
+.stat span { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.sep { width: 1px; height: 40px; background: var(--border); }
+
+/* MARQUEE */
+.marquee-section { 
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    background: #08090c; padding: 20px 0; text-align: center;
+}
+.marquee-label { 
+    font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); 
+    margin-bottom: 15px; letter-spacing: 2px; font-weight: 700;
+}
+.marquee-wrapper { opacity: 0.8; }
+
+/* BENTO GRID (RESPONSIVE FIX) */
+.hub-section { padding: 80px 0; }
+.sec-head { text-align: center; margin-bottom: 50px; }
+.sec-head h2 { font-size: 2.5rem; margin-bottom: 10px; font-weight: 700; }
+.sec-head p { color: var(--text-muted); font-size: 1.2rem; }
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 280px);
+    gap: 24px;
+}
+
+/* CARDS STYLES */
+.bento-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 30px;
+    position: relative; overflow: hidden; padding: 32px; display: flex; flex-direction: column;
+    justify-content: flex-end; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.bento-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.2); }
+
+.card-bg-icon {
+    position: absolute; top: -20px; right: -20px; font-size: 12rem; opacity: 0.05;
+    transition: transform 0.5s ease; color: #fff;
+}
+.bento-card:hover .card-bg-icon { transform: scale(1.1) rotate(5deg); opacity: 0.1; }
+
+.card-info { position: relative; z-index: 2; }
+.card-tag { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 8px; letter-spacing: 1px; }
+.bento-card h3 { font-size: 1.8rem; margin-bottom: 8px; font-weight: 700; }
+.bento-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
+.link-arrow { color: var(--primary); font-weight: 700; font-size: 0.9rem; }
+
+/* Grid Desktop */
+.large.paes { grid-column: 1 / 3; grid-row: 1 / 3; background: radial-gradient(circle at 100% 0%, #1e1b4b, var(--bg-card)); }
+.large.paes h3 { font-size: 2.5rem; }
+.medium.lang { grid-column: 3 / 4; grid-row: 1 / 2; }
+.medium.lsch { grid-column: 3 / 4; grid-row: 2 / 3; }
+.wide { grid-column: span 3; padding: 40px; }
+@media (min-width: 901px) {
+    .wide.corporate { grid-column: 1 / 3; }
+    .wide.adults { grid-column: 3 / 4; }
+}
+
+/* Horizontal Layout */
+.card-info.row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.btn-small { background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: #fff; padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; }
+
+/* --- RESPONSIVE FIX (MOBILE) --- */
+@media (max-width: 900px) {
+    .bento-grid {
+        grid-template-columns: 1fr; /* Una sola columna */
+        grid-template-rows: auto;   /* Altura automática */
+        gap: 20px;
+    }
+
+    /* Resetear grid-column para que no se rompa */
+    .large.paes, .medium.lang, .medium.lsch, .wide.corporate, .wide.adults {
+        grid-column: 1 / -1 !important;
+        grid-row: auto !important;
+        min-height: 250px;
+    }
+
+    /* Ajuste para tarjetas anchas en móvil */
+    .card-info.row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .btn-small { width: 100%; }
+}
+
+/* PROMO SECTION */
+.academy-promo { margin: 60px 0; padding: 0 20px; }
+.promo-inner {
+    background: linear-gradient(90deg, #0F172A, #1e1b4b);
+    border: 1px solid var(--border); border-radius: 40px; padding: 80px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; overflow: hidden;
+}
+@media (max-width: 900px) { .promo-inner { flex-direction: column; text-align: center; gap: 50px; padding: 40px; } }
+
+.promo-badge { background: var(--accent); color: #000; font-weight: 800; font-size: 0.75rem; padding: 4px 12px; border-radius: 4px; margin-bottom: 20px; display: inline-block; }
+.promo-txt h2 { font-size: 2.5rem; margin-bottom: 15px; }
+.promo-txt p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 30px; max-width: 500px; }
+.btn-white { background: #fff; color: #000; padding: 14px 32px; border-radius: 50px; font-weight: 700; display: inline-block; transition: .2s; }
+.btn-white:hover { transform: scale(1.05); }
+
+.promo-visual { position: relative; width: 200px; height: 200px; display: flex; justify-content: center; align-items: center; }
+.circle { position: absolute; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); }
+.c1 { width: 100%; height: 100%; animation: spin 20s linear infinite; }
+.c2 { width: 70%; height: 70%; border-style: dashed; animation: spin 10s linear infinite reverse; }
+
+/* Fixed Promo Card */
+.promo-card-float { 
+    background: #1f2937; /* Fondo Gris Oscuro Sólido */
+    border: 1px solid rgba(255,255,255,0.1); padding: 20px 30px; border-radius: 20px; 
+    text-align: center; z-index: 2; transform: rotate(-5deg); transition: .3s;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+.promo-card-float strong { display: block; color: #ffffff; font-size: 1.1rem; margin-bottom: 4px; }
+.promo-inner:hover .promo-card-float { transform: rotate(0deg) scale(1.1); background: #000000; border-color: var(--primary); }
+.emoji { font-size: 2rem; display: block; margin-bottom: 5px; }
+
+/* CTA FINAL */
+.final-cta { padding: 100px 0; text-align: center; }
+.final-cta h2 { font-size: 3rem; margin-bottom: 60px; line-height: 1.1; }
+.cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 800px; margin: 0 auto; }
+@media (max-width: 700px) { .cta-grid { grid-template-columns: 1fr; } }
+
+.cta-box {
+    padding: 40px; border-radius: 30px; text-align: left; position: relative; transition: .3s;
+    display: flex; flex-direction: column; justify-content: space-between; height: 200px;
+}
+.cta-box.primary { background: var(--text-main); color: #000; }
+.cta-box.secondary { background: #1a1a1a; border: 1px solid var(--border); color: #fff; }
+.cta-box h3 { font-size: 1.8rem; margin-bottom: 10px; }
+.cta-box .arr { font-size: 2rem; align-self: flex-end; }
+.cta-box:hover { transform: translateY(-10px); }
+
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+`;

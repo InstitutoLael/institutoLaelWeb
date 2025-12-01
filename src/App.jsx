@@ -32,7 +32,7 @@ const NotFound = lazy(() => import("./pages/NotFound.jsx"));
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
-import PromoBanner from "./components/PromoBanner.jsx";
+// import PromoBanner from "./components/PromoBanner.jsx";
 // import ScrollToTop from "./components/ScrollToTop.jsx"; // Si creaste el archivo, úsalo. Si no, usa la función local abajo.
 
 export default function App() {
@@ -47,8 +47,8 @@ export default function App() {
     <>
       <style>{globalCss}</style>
 
-      {/* Banner de Urgencia */}
-      <PromoBanner />
+     {/* Banner de Urgencia - ELIMINADO */}
+      {/* <PromoBanner /> */}
 
       {/* Navbar Fijo */}
       <Navbar />

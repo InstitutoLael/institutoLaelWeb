@@ -1,165 +1,140 @@
-// src/components/Navbar.jsx
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-// Asegúrate de que la ruta del logo sea correcta
+// Asegúrate de que la ruta sea correcta
 import logo from "../assets/img/Logos/lael-inst-naranja.png";
 
-const linkClass = ({ isActive }) => "nav-link" + (isActive ? " active" : "");
+/* ──────────────────────────────────────────────────────────────────────────
+   1. ICONOS SVG (Sistema Unificado)
+   ────────────────────────────────────────────────────────────────────────── */
+const Icons = {
+  ChevronDown: () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>,
+  Menu: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>,
+  X: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>,
+  WhatsApp: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.08-.13-.27-.2-.57-.35M12.05 21.78h-.01A9.87 9.87 0 017.01 20.4l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26C2.16 6.49 6.6 2.05 12.05 2.05c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.89 6.99c-.01 5.45-4.44 9.84-9.88 9.84" /></svg>,
+  // Iconos de Programas
+  Grad: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>,
+  World: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>,
+  Hand: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>,
+  Book: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>,
+  Rocket: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>,
+  ArrowR: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+};
 
-export default function Navbar({ onOpenSearch }) {
+/* ──────────────────────────────────────────────────────────────────────────
+   2. COMPONENTE NAVBAR
+   ────────────────────────────────────────────────────────────────────────── */
+export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [progOpen, setProgOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const headerRef = useRef(null);
 
-  // Cerrar menú al cambiar de ruta
+  // Cerrar menú al navegar
   useEffect(() => {
     setMobileOpen(false);
-    setProgOpen(false);
   }, [location.pathname]);
 
-  // Bloquear scroll cuando menú móvil está abierto
+  // Lock body scroll
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  // Efecto Glass al hacer scroll
+  // Scroll Listener eficiente
   useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (window.scrollY > 10) {
-            headerRef.current?.classList.add("scrolled");
-          } else {
-            headerRef.current?.classList.remove("scrolled");
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header className="lael-nav" ref={headerRef}>
+    <header className={`lael-nav ${scrolled ? 'scrolled' : ''}`}>
       <style>{css}</style>
 
       <div className="container nav-content">
         
-        {/* LOGO */}
+        {/* BRAND */}
         <Link to="/" className="brand-link" aria-label="Inicio">
-          <img src={logo} alt="Instituto Lael" className="logo-img" width="140" height="40" />
+          <img src={logo} alt="Instituto Lael" className="logo-img" />
         </Link>
 
-        {/* DESKTOP NAV */}
+        {/* DESKTOP MENU */}
         <nav className="desktop-nav">
-          <NavLink to="/" className={linkClass}>Inicio</NavLink>
+          <NavLink to="/" className="nav-link">Inicio</NavLink>
           
-          {/* Dropdown: Programas */}
-          <div 
-            className="nav-item-drop"
-            onMouseEnter={() => setProgOpen(true)}
-            onMouseLeave={() => setProgOpen(false)}
-          >
-            <button 
-                className={`nav-link drop-trigger ${progOpen ? 'active' : ''}`}
-                onClick={() => setProgOpen(!progOpen)}
-            >
-              Programas <span className="arrow">▾</span>
+          {/* MEGA MENU TRIGGER */}
+          <div className="dropdown-wrapper">
+            <button className="nav-link drop-btn">
+              Programas <span className="chevron"><Icons.ChevronDown/></span>
             </button>
             
-            {/* MEGA MENU */}
-            <div className={`mega-menu ${progOpen ? 'visible' : ''}`}>
-                <div className="mega-grid">
-                    <MegaItem to="/paes" title="Preu PAES" desc="Matemática, Lenguaje, Ciencias." icon="🎓" color="#3B82F6" />
-                    <MegaItem to="/idiomas" title="Idiomas" desc="Inglés, Coreano, Portugués." icon="🌍" color="#10B981" />
-                    <MegaItem to="/lsch" title="Lengua de Señas" desc="Inclusión y cultura sorda." icon="🤟" color="#8B5CF6" />
-                    
-                    {/* 👇 AQUÍ ESTÁ EL LINK QUE NECESITAS 👇 */}
-                    <MegaItem to="/escuela-adultos" title="Escuela de Adultos" desc="Termina tu 4to medio." icon="📜" color="#F59E0B" />
-                    
-                    <MegaItem to="/homeschool" title="Lael Academy" desc="Tutorías y reforzamiento." icon="🚀" color="#F43F5E" />
-                </div>
+            <div className="mega-menu">
+              <div className="mega-grid">
+                <MegaItem to="/paes" title="Preu PAES" desc="Matemática, Lenguaje y Ciencias." icon={<Icons.Grad/>} color="#3B82F6" />
+                <MegaItem to="/idiomas" title="Idiomas" desc="Inglés, Coreano, Portugués." icon={<Icons.World/>} color="#10B981" />
+                <MegaItem to="/lsch" title="Lengua de Señas" desc="Inclusión y cultura sorda." icon={<Icons.Hand/>} color="#8B5CF6" />
+                <MegaItem to="/escuela-adultos" title="Escuela Adultos" desc="Termina tu 4to medio (2x1)." icon={<Icons.Book/>} color="#F59E0B" />
+                <MegaItem to="/homeschool" title="Lael Academy" desc="Tutorías y reforzamiento." icon={<Icons.Rocket/>} color="#F43F5E" />
+              </div>
             </div>
           </div>
 
-          <NavLink to="/empresas" className={linkClass}>Empresas</NavLink>
-          <NavLink to="/nosotros" className={linkClass}>Nosotros</NavLink>
-          <NavLink to="/convenios" className={linkClass}>Convenios</NavLink>
-          <NavLink to="/trabaja" className={linkClass}>Trabaja</NavLink>
+          <NavLink to="/empresas" className="nav-link">Empresas</NavLink>
+          <NavLink to="/nosotros" className="nav-link">Nosotros</NavLink>
+          <NavLink to="/convenios" className="nav-link">Convenios</NavLink>
+          <NavLink to="/trabaja" className="nav-link">Trabaja</NavLink>
         </nav>
 
-        {/* RIGHT ACTIONS */}
+        {/* ACTIONS */}
         <div className="nav-actions">
-            <a 
-                href="https://wa.me/56964626568" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="btn-whatsapp-nav"
-                aria-label="WhatsApp"
-            >
-                <WhatsAppIcon />
-            </a>
-            
-            <Link to="/inscripcion" className="btn-inscripcion-nav">
-                Inscripción
-            </Link>
-            
-            {/* Burger Button (Móvil) */}
-            <button 
-                className={`burger-btn ${mobileOpen ? 'open' : ''}`} 
-                onClick={() => setMobileOpen(!mobileOpen)}
-                aria-label="Menú"
-            >
-                <span className="b-line top"></span>
-                <span className="b-line mid"></span>
-                <span className="b-line bot"></span>
-            </button>
+          <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="action-btn wa" aria-label="WhatsApp">
+            <Icons.WhatsApp />
+          </a>
+          <Link to="/inscripcion" className="action-btn primary">
+            Inscripción
+          </Link>
+          
+          <button 
+            className="burger-btn" 
+            onClick={() => setMobileOpen(true)}
+            aria-label="Abrir Menú"
+          >
+            <Icons.Menu />
+          </button>
         </div>
 
       </div>
 
-      {/* MOBILE MENU (Panel Deslizante) */}
-      <div className={`mobile-menu-overlay ${mobileOpen ? 'open' : ''}`}>
-        <div className="mm-backdrop" onClick={() => setMobileOpen(false)}></div>
+      {/* MOBILE MENU (Slide Panel) */}
+      <div className={`mobile-overlay ${mobileOpen ? 'open' : ''}`}>
+        <div className="mobile-backdrop" onClick={() => setMobileOpen(false)}></div>
+        
+        <div className="mobile-panel">
+          <div className="mp-header">
+            <span className="mp-title">Menú</span>
+            <button className="mp-close" onClick={() => setMobileOpen(false)}><Icons.X/></button>
+          </div>
 
-        <div className="mobile-menu-content">
-            <div className="mm-header">
-                <span className="mm-title">Menú</span>
-                <button className="mm-close" onClick={() => setMobileOpen(false)}>✕</button>
-            </div>
+          <div className="mp-body">
+            <MobileLink to="/">Inicio</MobileLink>
             
-            <div className="mm-scroll-area">
-                <MobileLink to="/" onClick={() => setMobileOpen(false)}>Inicio</MobileLink>
-                
-                <div className="mm-divider">Programas</div>
-                <MobileLink to="/paes" onClick={() => setMobileOpen(false)}>Preu PAES</MobileLink>
-                <MobileLink to="/idiomas" onClick={() => setMobileOpen(false)}>Idiomas</MobileLink>
-                <MobileLink to="/lsch" onClick={() => setMobileOpen(false)}>Lengua de Señas</MobileLink>
-                
-                {/* 👇 LINKS MÓVILES 👇 */}
-                <MobileLink to="/escuela-adultos" onClick={() => setMobileOpen(false)}>Escuela de Adultos (2x1)</MobileLink>
-                <MobileLink to="/homeschool" onClick={() => setMobileOpen(false)}>Lael Academy (Tutorías)</MobileLink>
-                
-                <div className="mm-divider">Institucional</div>
-                <MobileLink to="/empresas" onClick={() => setMobileOpen(false)}>Empresas</MobileLink>
-                <MobileLink to="/nosotros" onClick={() => setMobileOpen(false)}>Nosotros</MobileLink>
-                <MobileLink to="/convenios" onClick={() => setMobileOpen(false)}>Convenios</MobileLink>
-                <MobileLink to="/trabaja" onClick={() => setMobileOpen(false)}>Trabaja con Nosotros</MobileLink>
-            </div>
+            <div className="mp-divider">Programas Educativos</div>
+            <MobileLink to="/paes" icon={<Icons.Grad/>} color="#3B82F6">Preu PAES</MobileLink>
+            <MobileLink to="/idiomas" icon={<Icons.World/>} color="#10B981">Idiomas</MobileLink>
+            <MobileLink to="/lsch" icon={<Icons.Hand/>} color="#8B5CF6">Lengua de Señas</MobileLink>
+            <MobileLink to="/escuela-adultos" icon={<Icons.Book/>} color="#F59E0B">Escuela de Adultos</MobileLink>
+            <MobileLink to="/homeschool" icon={<Icons.Rocket/>} color="#F43F5E">Lael Academy</MobileLink>
 
-            <div className="mm-footer">
-                <Link to="/inscripcion" className="btn-mm-primary" onClick={() => setMobileOpen(false)}>
-                    Inscribirme Ahora
-                </Link>
-                <a href="https://wa.me/56964626568" className="btn-mm-secondary">
-                    WhatsApp
-                </a>
-            </div>
+            <div className="mp-divider">Institucional</div>
+            <MobileLink to="/empresas">Empresas</MobileLink>
+            <MobileLink to="/nosotros">Nosotros</MobileLink>
+            <MobileLink to="/convenios">Convenios</MobileLink>
+            <MobileLink to="/trabaja">Trabaja con Nosotros</MobileLink>
+          </div>
+
+          <div className="mp-footer">
+            <Link to="/inscripcion" className="mp-btn-primary">Inscribirme Ahora</Link>
+            <a href="https://wa.me/56964626568" className="mp-btn-wa"><Icons.WhatsApp/> Hablar por WhatsApp</a>
+          </div>
         </div>
       </div>
 
@@ -167,182 +142,175 @@ export default function Navbar({ onOpenSearch }) {
   );
 }
 
-/* --- SUBCOMPONENTES --- */
+/* --- HELPERS --- */
 function MegaItem({ to, title, desc, icon, color }) {
-    return (
-        <Link to={to} className="mega-item">
-            <div className="mi-icon" style={{backgroundColor: `${color}15`, color: color}}>{icon}</div>
-            <div className="mi-text">
-                <strong>{title}</strong>
-                <span>{desc}</span>
-            </div>
-        </Link>
-    );
+  return (
+    <Link to={to} className="mega-item" style={{'--item-color': color}}>
+      <div className="mi-icon">{icon}</div>
+      <div className="mi-info">
+        <strong>{title}</strong>
+        <span>{desc}</span>
+      </div>
+    </Link>
+  );
 }
 
-function MobileLink({ to, children, onClick }) {
-    return (
-        <Link to={to} className="mm-link" onClick={onClick}>
-            {children} <span className="mm-arrow">→</span>
-        </Link>
-    );
+function MobileLink({ to, children, icon, color }) {
+  return (
+    <Link to={to} className="mob-link" style={{'--mob-color': color || '#94a3b8'}}>
+      <div className="mob-content">
+        {icon && <span className="mob-icon">{icon}</span>}
+        {children}
+      </div>
+      <Icons.ArrowR />
+    </Link>
+  );
 }
 
-function WhatsAppIcon() {
-    return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.08-.13-.27-.2-.57-.35M12.05 21.78h-.01A9.87 9.87 0 017.01 20.4l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26C2.16 6.49 6.6 2.05 12.05 2.05c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.89 6.99c-.01 5.45-4.44 9.84-9.88 9.84" />
-        </svg>
-    );
-}
-
-/* ================= CSS (GLASS PREMIUM) ================= */
+/* ──────────────────────────────────────────────────────────────────────────
+   3. CSS - GLASS PREMIUM
+   ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
-    --nav-height: 70px;
-    --bg-glass: rgba(11, 18, 32, 0.85);
-    --border: rgba(255, 255, 255, 0.08);
-    --text: #F8FAFC;
-    --text-muted: #94A3B8;
-    --primary: #3B82F6;
-    --accent: #F59E0B;
+  --nav-height: 70px;
+  --glass-bg: rgba(5, 5, 5, 0.85); /* Casi negro, muy elegante */
+  --glass-border: rgba(255, 255, 255, 0.08);
+  
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  
+  --primary: #3b82f6;
+  --accent: #f59e0b;
 }
 
-/* HEADER BASE */
+/* BASE */
 .lael-nav {
-    position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
-    z-index: 9999;
-    transition: background 0.3s ease, box-shadow 0.3s ease;
-    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 100%);
+  position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
+  z-index: 9999;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  background: transparent;
 }
 .lael-nav.scrolled {
-    background: var(--bg-glass);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border);
 }
 
-.nav-content { display: flex; justify-content: space-between; align-items: center; height: 100%; }
+.nav-content {
+  display: flex; justify-content: space-between; align-items: center; height: 100%;
+}
 
 /* LOGO */
-.brand-link { display: flex; align-items: center; padding: 5px 0; }
-.logo-img { height: 36px; width: auto; transition: transform 0.2s; }
+.brand-link { display: flex; align-items: center; }
+.logo-img { height: 32px; width: auto; transition: transform 0.2s; }
 .brand-link:hover .logo-img { transform: scale(1.05); }
 
 /* DESKTOP NAV */
-.desktop-nav { display: flex; gap: 8px; align-items: center; height: 100%; }
-@media (max-width: 960px) { .desktop-nav { display: none; } }
+.desktop-nav { display: flex; align-items: center; gap: 6px; height: 100%; }
+@media (max-width: 1024px) { .desktop-nav { display: none; } }
 
 .nav-link {
-    color: var(--text-muted); text-decoration: none; font-weight: 600; font-size: 0.95rem;
-    transition: all 0.2s; padding: 8px 14px; border-radius: 8px;
+  color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+  padding: 8px 16px; border-radius: 50px; transition: 0.2s; cursor: pointer; border: none; background: none;
+  font-family: inherit;
 }
-.nav-link:hover, .nav-link.active, .drop-trigger.active { color: var(--text); background: rgba(255,255,255,0.08); }
+.nav-link:hover, .nav-link.active { color: var(--text); background: rgba(255,255,255,0.05); }
 
-/* DROPDOWN */
-.nav-item-drop { position: relative; height: 100%; display: flex; align-items: center; }
-.drop-trigger { display: flex; align-items: center; gap: 6px; border: none; background: none; font-family: inherit; cursor: pointer; }
-.arrow { font-size: 0.7rem; transition: transform 0.2s; }
-.drop-trigger.active .arrow { transform: rotate(180deg); }
+/* DROPDOWN MEGA MENU */
+.dropdown-wrapper { position: relative; height: 100%; display: flex; align-items: center; }
+.drop-btn { display: flex; align-items: center; gap: 6px; }
+.chevron { font-size: 0.7rem; transition: transform 0.2s; opacity: 0.7; }
+.dropdown-wrapper:hover .chevron { transform: rotate(180deg); }
 
 .mega-menu {
-    position: absolute; top: calc(100% + 15px); left: 50%; transform: translateX(-50%) translateY(10px);
-    width: 340px; background: #151e32; border: 1px solid var(--border);
-    border-radius: 16px; padding: 12px;
-    opacity: 0; visibility: hidden;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(10px);
+  width: 320px; background: #0f1115; border: 1px solid var(--glass-border);
+  border-radius: 16px; padding: 10px;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
 }
-.mega-menu::before { 
-    content:''; position: absolute; top: -6px; left: 50%; margin-left: -6px;
-    width: 12px; height: 12px; background: #151e32; transform: rotate(45deg);
-    border-top: 1px solid var(--border); border-left: 1px solid var(--border);
+.dropdown-wrapper:hover .mega-menu {
+  opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%) translateY(0);
 }
-.mega-menu.visible { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 
 .mega-grid { display: flex; flex-direction: column; gap: 4px; }
 .mega-item {
-    display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: 10px;
-    text-decoration: none; transition: .2s;
+  display: flex; gap: 15px; align-items: center; padding: 12px; border-radius: 12px;
+  text-decoration: none; transition: 0.2s;
 }
 .mega-item:hover { background: rgba(255,255,255,0.05); }
-.mi-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-.mi-text strong { display: block; color: var(--text); font-size: 0.95rem; margin-bottom: 2px; }
-.mi-text span { display: block; color: var(--text-muted); font-size: 0.8rem; }
+.mi-icon { 
+  width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.05); color: var(--item-color); transition: 0.2s;
+}
+.mega-item:hover .mi-icon { background: var(--item-color); color: white; }
+.mi-info strong { display: block; color: var(--text); font-size: 0.95rem; margin-bottom: 2px; }
+.mi-info span { display: block; color: var(--text-muted); font-size: 0.8rem; }
 
 /* ACTIONS */
-.nav-actions { display: flex; align-items: center; gap: 12px; }
-.btn-whatsapp-nav {
-    width: 42px; height: 42px; border-radius: 12px; background: rgba(37, 211, 102, 0.1); 
-    color: #25D366; display: flex; align-items: center; justify-content: center; 
-    transition: .2s; border: 1px solid rgba(37, 211, 102, 0.2);
+.nav-actions { display: flex; gap: 12px; align-items: center; }
+.action-btn { 
+  display: flex; align-items: center; justify-content: center; 
+  font-weight: 600; text-decoration: none; transition: 0.2s;
 }
-.btn-whatsapp-nav:hover { background: rgba(37, 211, 102, 0.2); transform: scale(1.05); }
-.btn-inscripcion-nav {
-    background: var(--accent); color: #000; padding: 10px 24px; border-radius: 50px;
-    font-weight: 700; text-decoration: none; font-size: 0.9rem; transition: .2s;
-    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
+.action-btn.wa {
+  width: 40px; height: 40px; border-radius: 50%; background: rgba(37, 211, 102, 0.1); 
+  color: #25D366; border: 1px solid rgba(37, 211, 102, 0.2);
 }
-.btn-inscripcion-nav:hover { background: #d97706; transform: translateY(-1px); }
-@media (max-width: 600px) { .btn-inscripcion-nav { display: none; } } 
+.action-btn.wa:hover { background: #25D366; color: black; transform: scale(1.05); }
+
+.action-btn.primary {
+  padding: 8px 20px; border-radius: 50px; font-size: 0.9rem;
+  background: var(--accent); color: black; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+}
+.action-btn.primary:hover { background: #fbbf24; transform: translateY(-2px); }
 
 /* BURGER */
 .burger-btn {
-    width: 44px; height: 44px; background: transparent; border: none;
-    display: none; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-    cursor: pointer; z-index: 5000;
+  width: 40px; height: 40px; color: var(--text); background: transparent; 
+  display: none; align-items: center; justify-content: center;
 }
-@media (max-width: 960px) { .burger-btn { display: flex; } }
-.b-line { width: 24px; height: 2px; background: var(--text); border-radius: 4px; transition: 0.3s; }
-.burger-btn.open .top { transform: rotate(45deg) translate(5px, 6px); }
-.burger-btn.open .mid { opacity: 0; }
-.burger-btn.open .bot { transform: rotate(-45deg) translate(5px, -6px); }
+@media (max-width: 1024px) { .burger-btn { display: flex; } .action-btn.primary { display: none; } }
 
 /* MOBILE MENU */
-.mobile-menu-overlay {
-    position: fixed; inset: 0; z-index: 4500; visibility: hidden;
+.mobile-overlay { position: fixed; inset: 0; z-index: 10000; visibility: hidden; }
+.mobile-overlay.open { visibility: visible; }
+
+.mobile-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); opacity: 0; transition: 0.3s; }
+.mobile-overlay.open .mobile-backdrop { opacity: 1; }
+
+.mobile-panel {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 85%; max-width: 320px;
+  background: #0b0d11; border-left: 1px solid var(--glass-border);
+  transform: translateX(100%); transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex; flex-direction: column;
 }
-.mobile-menu-overlay.open { visibility: visible; }
-.mm-backdrop {
-    position: absolute; inset: 0; background: rgba(0,0,0,0.6); opacity: 0; transition: opacity 0.3s;
+.mobile-overlay.open .mobile-panel { transform: translateX(0); }
+
+.mp-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); }
+.mp-title { font-weight: 800; font-size: 1.2rem; color: var(--text); }
+.mp-close { color: var(--text-muted); padding: 5px; }
+
+.mp-body { flex: 1; overflow-y: auto; padding: 20px; }
+.mp-divider { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin: 25px 0 10px; font-weight: 700; letter-spacing: 1px; }
+
+.mob-link {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03);
+  text-decoration: none; color: var(--text); font-size: 1rem;
 }
-.mobile-menu-overlay.open .mm-backdrop { opacity: 1; }
-.mobile-menu-content {
-    position: absolute; top: 0; right: 0; bottom: 0; width: 85%; max-width: 320px;
-    background: #0F172A; border-left: 1px solid var(--border);
-    transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    display: flex; flex-direction: column; will-change: transform;
+.mob-content { display: flex; align-items: center; gap: 12px; }
+.mob-icon { color: var(--mob-color); font-size: 1.1rem; display: flex; }
+
+.mp-footer { padding: 20px; border-top: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 12px; }
+.mp-btn-primary { 
+  display: block; text-align: center; padding: 14px; background: var(--accent); color: black; 
+  font-weight: 700; border-radius: 12px; text-decoration: none;
 }
-.mobile-menu-overlay.open .mobile-menu-content { transform: translateX(0); }
-.mm-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 20px; border-bottom: 1px solid var(--border);
-    margin-top: env(safe-area-inset-top);
-}
-.mm-title { font-size: 1.2rem; font-weight: 800; color: var(--text); }
-.mm-close { font-size: 1.5rem; color: var(--text-muted); background: none; border: none; padding: 5px; }
-.mm-scroll-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; }
-.mm-divider { 
-    margin-top: 20px; margin-bottom: 10px; font-size: 0.75rem; text-transform: uppercase; 
-    color: var(--primary); font-weight: 700; letter-spacing: 1px; 
-}
-.mm-link {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 14px; border-radius: 12px; background: rgba(255,255,255,0.03);
-    color: var(--text); text-decoration: none; font-weight: 600; font-size: 1rem;
-}
-.mm-link:active { background: rgba(255,255,255,0.1); transform: scale(0.98); }
-.mm-arrow { color: var(--text-muted); font-size: 1.2rem; }
-.mm-footer { 
-    padding: 20px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; 
-    margin-bottom: env(safe-area-inset-bottom);
-}
-.btn-mm-primary {
-    background: var(--accent); color: #000; padding: 14px; border-radius: 12px;
-    text-align: center; font-weight: 800; text-decoration: none; font-size: 1rem;
-}
-.btn-mm-secondary {
-    background: transparent; color: var(--text); border: 1px solid var(--border);
-    padding: 14px; border-radius: 12px; text-align: center; font-weight: 600; text-decoration: none;
+.mp-btn-wa {
+  display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px;
+  background: rgba(255,255,255,0.05); color: var(--text); border-radius: 12px;
+  text-decoration: none; border: 1px solid var(--glass-border); font-weight: 600;
 }
 `;

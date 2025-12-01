@@ -27,6 +27,7 @@ const Simulador = lazy(() => import("./pages/Simulador.jsx"));
 const Docentes = lazy(() => import("./pages/Docentes.jsx"));
 const Noticias = lazy(() => import("./pages/Noticias.jsx"));
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
+const Contacto = lazy(() => import("./pages/Contacto.jsx"));
 
 /* ---------- Componentes Globales ---------- */
 import Navbar from "./components/Navbar.jsx";

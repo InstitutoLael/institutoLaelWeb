@@ -433,7 +433,7 @@ a { text-decoration: none; color: inherit; }
     padding: 40px; border-radius: 30px; text-align: left; position: relative; transition: .3s;
     display: flex; flex-direction: column; justify-content: space-between; height: 200px;
 }
-.cta-box.primary { background: var(--text-main); color: #000; }
+.cta-box.primary { background: #000; color: #FFFFFF; }
 .cta-box.secondary { background: #1a1a1a; border: 1px solid var(--border); color: #fff; }
 
 .cta-box h3 { font-size: 1.8rem; margin-bottom: 10px; }

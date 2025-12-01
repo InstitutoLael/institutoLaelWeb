@@ -1,4 +1,4 @@
-// src/components/PromoBanner.jsx
+// src/components/PromoBanner.jsx - CORREGIDO
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -42,14 +42,12 @@ const css = `
   font-size: 0.9rem;
   padding: 10px 0;
   
-  /* ------------------------------------- */
-  /* CAMBIOS CLAVE: FIXED, TOP, LEFT, Z-INDEX */
-  position: fixed; /* CRÍTICO: Debe ser fixed para superponerse a otros elementos fijos */
-  top: 0;          /* Posiciona en la parte superior del viewport */
-  left: 0;         /* Alinea a la izquierda */
-  width: 100%;     /* Asegura que cubra todo el ancho */
-  z-index: 9999;   /* Z-Index extremadamente alto para estar encima de cualquier navbar */
-  /* ------------------------------------- */
+  /* CAMBIOS CLAVE */
+  position: fixed; 
+  top: 0;          
+  left: 0;         
+  width: 100%;     
+  z-index: 9999;   /* Súper alto para estar encima de todo */
 }
 
 .promo-content {
@@ -101,7 +99,7 @@ const css = `
   font-size: 1.1rem;
   cursor: pointer;
   padding: 5px;
-  z-index: 10000; /* Asegurar que la X esté encima del contenido del banner */
+  z-index: 10000; 
 }
 .promo-close:hover {
   color: #fff;
@@ -110,6 +108,6 @@ const css = `
 @media (max-width: 600px) {
   .promo-top-bar { font-size: 0.8rem; }
   .promo-content { justify-content: flex-start; text-align: left; }
-  .promo-tag { display: none; } /* Ocultar tag en móvil si falta espacio */
+  .promo-tag { display: none; }
 }
 `;

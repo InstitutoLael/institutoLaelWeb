@@ -1,156 +1,329 @@
-// src/App.jsx
-import { useEffect, useState, Suspense, lazy } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+// src/components/SearchOverlay.jsx - SIN CAMBIOS
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
 
-/* ---------- Páginas (Lazy Loading) ---------- */
-const Home = lazy(() => import("./pages/Home.jsx"));
-const PAES = lazy(() => import("./pages/PAES.jsx"));
-const LSCh = lazy(() => import("./pages/LSCh.jsx"));
-const Idiomas = lazy(() => import("./pages/Idiomas.jsx"));
-const Empresas = lazy(() => import("./pages/Empresas.jsx"));
-const Homeschool = lazy(() => import("./pages/Homeschool.jsx")); // Lael Academy
-const EscuelaAdultos = lazy(() => import("./pages/EscuelaAdultos.jsx")); // Programa Caminos
-const Nosotros = lazy(() => import("./pages/Nosotros.jsx"));
-const Convenios = lazy(() => import("./pages/Convenios.jsx"));
-const Trabaja = lazy(() => import("./pages/Trabaja.jsx"));
-const Inscripcion = lazy(() => import("./pages/Inscripcion.jsx"));
+const ITEMS = [
+  { title: "Inicio", to: "/", type: "Página" },
+  { title: "PAES", to: "/paes", type: "Programa" },
+  { title: "Lengua de Señas (LSCh)", to: "/lsch", type: "Programa" },
+  { title: "Idiomas", to: "/idiomas", type: "Programa" },
+  { title: "Inscripción", to: "/inscripcion", type: "Página" },
+  { title: "Nosotros", to: "/nosotros", type: "Página" },
+  { title: "Empresas", to: "/empresas", type: "Página" },
+  { title: "Pagos", to: "/pagos", type: "Página" },
+];
 
-// Páginas de Soporte y Legal (NUEVAS)
-const Gracias = lazy(() => import("./pages/Gracias.jsx"));
-const Aula = lazy(() => import("./pages/Aula.jsx")); // Login/Portal
-const Terminos = lazy(() => import("./pages/Terminos.jsx"));
-const Privacidad = lazy(() => import("./pages/Privacidad.jsx"));
+const normalize = (s) =>
+  String(s || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "");
 
-// Páginas secundarias
-const Pagos = lazy(() => import("./pages/Pagos.jsx"));
-const Simulador = lazy(() => import("./pages/Simulador.jsx"));
-const Docentes = lazy(() => import("./pages/Docentes.jsx"));
-const Noticias = lazy(() => import("./pages/Noticias.jsx"));
-const NotFound = lazy(() => import("./pages/NotFound.jsx"));
+const RECENTS_KEY = "lael-search-recents";
+const MAX_RECENTS = 5;
 
-/* ---------- Componentes Globales ---------- */
-import Navbar from "./components/Navbar.jsx";
-import Footer from "./components/Footer.jsx";
-import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
-import PromoBanner from "./components/PromoBanner.jsx";
-// import ScrollToTop from "./components/ScrollToTop.jsx"; // Si creaste el archivo, úsalo. Si no, usa la función local abajo.
+export default function SearchOverlay({ open, onClose, items = ITEMS }) {
+  const nav = useNavigate();
+  const inputRef = useRef(null);
+  const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
+  const [active, setActive] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [recents, setRecents] = useState([]);
 
-export default function App() {
-  const { pathname } = useLocation();
-
-  // Scroll al inicio INSTANTÁNEO al cambiar de ruta
+  // debounce input
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    const t = setTimeout(() => setDebouncedQ(q), 120);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  useEffect(() => {
+    if (open) {
+      setVisible(true);
+      setTimeout(() => inputRef.current?.focus(), 0);
+      document.documentElement.classList.add("no-scroll");
+      document.body.classList.add("no-scroll");
+      try {
+        const raw = localStorage.getItem(RECENTS_KEY);
+        if (raw) setRecents(JSON.parse(raw));
+      } catch {}
+    } else {
+      setVisible(false);
+      document.documentElement.classList.remove("no-scroll");
+      document.body.classList.remove("no-scroll");
+      setQ("");
+      setActive(0);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const onEsc = (e) => e.key === "Escape" && onClose?.();
+    window.addEventListener("keydown", onEsc);
+    return () => window.removeEventListener("keydown", onEsc);
+  }, [open, onClose]);
+
+  const results = useMemo(() => {
+    if (!debouncedQ.trim()) return [];
+    const nq = normalize(debouncedQ);
+    return (items || [])
+      .filter((it) =>
+        normalize(`${it.title} ${it.type}`).includes(nq)
+      )
+      .slice(0, 20);
+  }, [debouncedQ, items]);
+
+  const showingResults = debouncedQ.trim().length > 0 && results.length > 0;
+  const showingRecents = !debouncedQ.trim() && recents.length > 0;
+
+  function go(to, title) {
+    try {
+      const next = [
+        { title, to },
+        ...recents.filter((r) => r.to !== to),
+      ].slice(0, MAX_RECENTS);
+      setRecents(next);
+      localStorage.setItem(RECENTS_KEY, JSON.stringify(next));
+    } catch {}
+    nav(to);
+    onClose?.();
+  }
+
+  const optionId = (i, prefix = "result") => `${prefix}-opt-${i}`;
+
+  function highlight(text) {
+    if (!debouncedQ.trim()) return text;
+    const t = String(text);
+    const nq = normalize(debouncedQ);
+    const nt = normalize(t);
+    const idx = nt.indexOf(nq);
+    if (idx < 0) return t;
+    return (
+      <>
+        {t.slice(0, idx)}
+        <mark className="hl">{t.slice(idx, idx + debouncedQ.length)}</mark>
+        {t.slice(idx + debouncedQ.length)}
+      </>
+    );
+  }
+
+  const onListKey = (e) => {
+    const n = (results.length || 0) || (recents.length || 0);
+    if (!n) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActive((a) => (a + 1) % n);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActive((a) => (a - 1 + n) % n);
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const list = results.length ? results : recents;
+      const chosen = list[active];
+      if (chosen) go(chosen.to, chosen.title);
+    }
+  };
+
+  if (!visible) return null;
 
   return (
-    <>
-      <style>{globalCss}</style>
+    <div
+      className="search-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Búsqueda"
+      onClick={(e) => e.target === e.currentTarget && onClose?.()}
+      onKeyDown={onListKey}
+    >
+      <style>{css}</style>
 
-      {/* Banner de Urgencia */}
-      <PromoBanner />
+      <div className="panel" onClick={(e) => e.stopPropagation()}>
+        {/* Header */}
+        <div className="head">
+          <FaSearch className="ico" aria-hidden />
+          <input
+            ref={inputRef}
+            value={q}
+            onChange={(e) => {
+              setQ(e.target.value);
+              setActive(0);
+            }}
+            placeholder="Busca programas o páginas…"
+            className="q"
+            aria-label="Buscar"
+          />
+          <kbd className="kbd">Esc</kbd>
+        </div>
+        <div className="hint" aria-hidden>
+          Usa ↑/↓ para moverte, Enter para abrir, Esc para cerrar.
+        </div>
 
-      {/* Navbar Fijo */}
-      <Navbar />
+        {/* Anuncio accesible */}
+        <div className="sr-only" aria-live="polite" aria-atomic="true">
+          {debouncedQ
+            ? results.length
+              ? `${results.length} resultados para ${debouncedQ}`
+              : `Sin resultados para ${debouncedQ}`
+            : "Escribe para buscar"}
+        </div>
 
-      <main className="page-content">
-        {/* Loader elegante mientras carga la página */}
-        <Suspense fallback={<div className="page-loader"><div className="spinner"></div></div>}>
-          <Routes>
-            {/* --- PRINCIPALES --- */}
-            <Route path="/" element={<Home />} />
-            
-            {/* Programas */}
-            <Route path="/paes" element={<PAES />} />
-            <Route path="/idiomas" element={<Idiomas />} />
-            <Route path="/lsch" element={<LSCh />} />
-            <Route path="/homeschool" element={<Homeschool />} />
-            <Route path="/escuela-adultos" element={<EscuelaAdultos />} />
-            
-            {/* Institucional */}
-            <Route path="/empresas" element={<Empresas />} />
-            <Route path="/nosotros" element={<Nosotros />} />
-            <Route path="/convenios" element={<Convenios />} />
-            <Route path="/trabaja" element={<Trabaja />} />
-            <Route path="/docentes" element={<Docentes />} />
-            
-            {/* Conversión y Flujo */}
-            <Route path="/inscripcion" element={<Inscripcion />} />
-            <Route path="/gracias" element={<Gracias />} /> {/* Página Éxito */}
-            
-            {/* Portal Alumno */}
-            <Route path="/aula" element={<Aula />} />
-            <Route path="/login" element={<Aula />} /> {/* Alias */}
-            
-            {/* Utilidades y Legal */}
-            <Route path="/pagos" element={<Pagos />} />
-            <Route path="/simulador" element={<Simulador />} />
-            <Route path="/noticias" element={<Noticias />} />
-            <Route path="/terminos" element={<Terminos />} />
-            <Route path="/privacidad" element={<Privacidad />} />
+        {/* Resultados */}
+        <div
+          className="list"
+          role="listbox"
+          aria-activedescendant={
+            (debouncedQ ? results.length : recents.length)
+              ? optionId(active, debouncedQ ? "result" : "recent")
+              : undefined
+          }
+        >
+          {!debouncedQ && !showingRecents && (
+            <div className="empty">
+              Escribe para buscar. Ej: “PAES”, “Inscripción”, “LSCh”.
+            </div>
+          )}
 
-            {/* 404 */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </main>
+          {showingRecents && (
+            <>
+              <div className="section-title flex-row">
+                <span>Recientes</span>
+                <button
+                  type="button"
+                  className="clear"
+                  onClick={() => {
+                    setRecents([]);
+                    try {
+                      localStorage.removeItem(RECENTS_KEY);
+                    } catch {}
+                  }}
+                >
+                  Limpiar
+                </button>
+              </div>
+              {recents.map((r, i) => (
+                <button
+                  key={r.to}
+                  id={optionId(i, "recent")}
+                  role="option"
+                  aria-selected={i === active}
+                  className={"row" + (i === active ? " active" : "")}
+                  onMouseEnter={() => setActive(i)}
+                  onClick={() => go(r.to, r.title)}
+                >
+                  <div className="title">{r.title}</div>
+                  <div className="type">Reciente</div>
+                </button>
+              ))}
+            </>
+          )}
 
-      <Footer />
-      
-      {/* Botón flotante siempre visible */}
-      <FloatingWhatsApp />
-    </>
+          {showingResults && (
+            <>
+              <div className="section-title">Resultados</div>
+              {results.map((r, i) => (
+                <button
+                  key={r.to}
+                  id={optionId(i, "result")}
+                  role="option"
+                  aria-selected={i === active}
+                  className={"row" + (i === active ? " active" : "")}
+                  onMouseEnter={() => setActive(i)}
+                  onClick={() => go(r.to, r.title)}
+                >
+                  <div className="title">{highlight(r.title)}</div>
+                  <div className="type">{r.type}</div>
+                </button>
+              ))}
+            </>
+          )}
+
+          {debouncedQ && !results.length && (
+            <div className="empty">Sin resultados para “{debouncedQ}”.</div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 
-/* ================= CSS GLOBAL (BASE + TEXTURA) ================= */
-const globalCss = `
-:root {
-  /* Paleta "Lael Universe" unificada */
-  --bg-deep: #050505;
-  --text-main: #F8FAFC;
-  --primary: #6366F1;
-  --accent: #F59E0B;
+/* ---------- CSS local ---------- */
+const css = `
+:root{
+  --bg: rgba(2,6,23,.60);
+  --panel:#0e1424; --bd:#1f2a44;
+  --ink:#eaf2ff; --muted:#9fb3c8;
+  --indigo:#5850EC; --hover:#15203a;
+}
+html.no-scroll, body.no-scroll{ overflow:hidden; }
+
+.search-overlay{
+  position:fixed; inset:0; z-index:4000;
+  display:flex; align-items:flex-start; justify-content:center;
+  padding:24px; background:var(--bg); backdrop-filter: blur(4px);
+  animation: fadeIn .12s ease-out both;
+}
+@keyframes fadeIn{ from{ opacity:0 } to{ opacity:1 } }
+
+.panel{
+  width:min(720px, 96vw);
+  border:1px solid var(--bd); border-radius:16px;
+  background:linear-gradient(180deg,#0f172a,#0b1220);
+  color:var(--ink);
+  box-shadow:0 22px 60px rgba(2,6,23,.45);
+  overflow:hidden;
 }
 
-/* Reset básico y scrollbar oscura */
-html {
-  background-color: var(--bg-deep);
-  scroll-behavior: smooth;
+.head{
+  display:flex; align-items:center; gap:10px;
+  padding:12px 14px; border-bottom:1px solid var(--bd);
+}
+.ico{ color:#9fb3c8 }
+.q{
+  flex:1; background:transparent; border:0; outline:none; color:var(--ink);
+  font-size:.95rem;
+}
+.kbd{
+  font-size:.75rem; color:var(--muted);
+  border:1px solid var(--bd); padding:.1rem .4rem; border-radius:6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: var(--bg-deep);
-  color: var(--text-main);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
+.hint{
+  padding: 0 14px 8px; color:#9fb3c8; font-size:.78rem;
 }
 
-/* TEXTURA DE RUIDO (Efecto Cine) */
-body::before {
-  content: "";
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
-  pointer-events: none; z-index: 9999; opacity: 0.4; mix-blend-mode: overlay;
+.list{ max-height:min(60vh, 520px); overflow:auto; }
+.section-title{
+  padding:8px 14px; color:#cbd5e1; font-weight:800; font-size:.78rem; letter-spacing:.2px;
+}
+.row{
+  display:flex; align-items:center; justify-content:space-between;
+  width:100%; padding:10px 14px; background:transparent; border:0;
+  text-align:left; cursor:pointer;
+  transition: background .12s ease, border-left-color .12s ease;
+  border-left:4px solid transparent;
+}
+.row:hover{ background:var(--hover); }
+.row.active{ background:rgba(88,80,236,.10); border-left-color: var(--indigo); }
+.title{ font-weight:800; color:#fff }
+.type{ color:#9fb3c8; font-size:.82rem; }
+.empty{ padding:14px; color:#9fb3c8; font-size:.92rem; }
+
+.hl{
+  background: rgba(88,80,236,.28);
+  color:#fff; padding:0 .1rem; border-radius:3px;
 }
 
-/* Scrollbar personalizada */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #0f1115; }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #475569; }
-
-/* Loader de transición */
-.page-loader {
-  height: 80vh; display: flex; align-items: center; justify-content: center; width: 100%;
+.flex-row{ display:flex; align-items:center; justify-content:space-between; }
+.clear{
+  background:transparent; border:1px solid var(--bd);
+  color:var(--muted); border-radius:10px; padding:.25rem .5rem; font-size:.75rem;
 }
-.spinner {
-  width: 40px; height: 40px; border: 3px solid rgba(99,102,241,0.3);
-  border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
+.clear:hover{ background:var(--hover); color:#fff; }
 
-::selection { background: rgba(99, 102, 241, 0.3); color: #fff; }
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
+  clip:rect(0,0,0,0); white-space:nowrap; border:0;
+}
 `;

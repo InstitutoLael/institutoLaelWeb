@@ -1,5 +1,7 @@
 // src/data/nivelacion.js
+// === Programa Caminos: Nivelación de Estudios ===
 
+// Formateador de dinero
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -7,70 +9,81 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
+/* ESTRATEGIA SOLIDARIA 1x1
+  - Plan Semilla: Beca 100% (Financiado por Padrinos/Empresas)
+  - Plan Oficio: Precio justo para el trabajador.
+  - Plan Padrino: Paga un poco más para subsidiar a otros.
+*/
+
 export const PLANS = [
   {
     id: "beca",
-    title: "Beca Reinserción",
+    tag: "Cupos Limitados",
+    title: "Beca Semilla",
     price: 0,
-    tag: "Cupos Sociales",
-    desc: "Para personas en programas de reinserción, gendarmería o situación de calle.",
+    frequency: "mes",
+    desc: "Para quienes tienen ganas pero hoy no tienen recursos. Postulación con asistente social.",
     features: [
-      "Clases grabadas (YouTube)",
-      "Material de estudio PDF",
-      "Inscripción a exámenes Mineduc",
-      "Certificado de participación"
+      "Clases en vivo y grabadas",
+      "Material digital gratuito",
+      "Tutoría grupal",
+      "Certificado de alumno regular",
     ],
     cta: "Postular a Beca",
-    color: "#34D399", // Verde Esperanza
-    wapp: "Hola, necesito postular a la Beca de Reinserción Gratuita. Vengo de..."
+    color: "#a8a29e", // Gris piedra (Dignidad austera)
+    wapp: "Hola, necesito terminar mis estudios y quisiera postular a la Beca Semilla.",
   },
   {
     id: "trabajador",
-    title: "Plan Solidario",
-    price: 12990,
-    frequency: "mensual",
-    tag: "Tú estudias, tú ayudas",
-    desc: "Para trabajadores. Tu mensualidad financia tu educación y apoya una beca.",
+    tag: "Recomendado",
+    title: "Plan Oficio",
+    price: 15000,
+    frequency: "mes",
+    desc: "Tarifa justa para trabajadores. Tu pago cubre tus costos operativos.",
     features: [
-      "Todo lo de la Beca",
-      "Campus Virtual 24/7",
-      "Resolución de dudas por WhatsApp",
-      "Ayudas a financiar a otros ❤️"
+      "Todo lo incluido en la Beca",
+      "Horarios flexibles noche/fines de semana",
+      "Trámite de inscripción a exámenes",
+      "Acceso prioritario a dudas",
     ],
     cta: "Inscribirme",
-    color: "#FBBF24", // Dorado
-    wapp: "Hola, quiero terminar mis estudios con el Plan Solidario de $12.990."
+    color: "#fbbf24", // Dorado (El estándar)
+    wapp: "Hola, trabajo y quiero terminar mis estudios con el Plan Oficio.",
   },
   {
-    id: "tutor",
-    title: "Plan Tutoría",
-    price: 29990,
-    frequency: "mensual",
-    tag: "Clases en Vivo",
-    desc: "Para quienes necesitan un profesor en vivo y guía constante.",
+    id: "padrino",
+    tag: "Héroe Solidario",
+    title: "Plan Padrino",
+    price: 25000,
+    frequency: "mes",
+    desc: "Tu mensualidad paga tus estudios y financia el 50% de una Beca Semilla.",
     features: [
-      "Clases en vivo (Zoom)",
-      "Corrección de ensayos",
-      "Tutoría personalizada",
-      "Donas 2 becas completas ❤️"
+      "Todos los beneficios académicos",
+      "Diploma de 'Padrino Educativo'",
+      "Reporte de impacto social",
+      "Ayudas a cambiar una vida",
     ],
-    cta: "Inscribirme",
-    color: "#818CF8", // Indigo
-    wapp: "Hola, quiero el Plan Tutoría con clases en vivo."
-  }
+    cta: "Ser Padrino",
+    color: "#f59e0b", // Ámbar intenso (Generosidad)
+    wapp: "Hola, quiero estudiar y además apadrinar a alguien con el Plan Padrino.",
+  },
 ];
 
 export const FAQS = [
   {
-    q: "¿Las clases consumen muchos datos?",
-    a: "No. Usamos un formato optimizado para celular. Además, enviamos guías en PDF liviano por WhatsApp."
+    q: "¿Esto es válido por el Ministerio (Mineduc)?",
+    a: "¡Sí! Nosotros te preparamos para rendir los 'Exámenes Libres'. Al aprobar, recibes el Certificado Oficial del Ministerio de Educación, válido para trabajar, estudiar en la U o trámites.",
   },
   {
-    q: "¿Esto es válido por el Ministerio?",
-    a: "Sí. Nosotros te preparamos para rendir los 'Exámenes Libres' del Mineduc. El certificado que obtienes es oficial y válido para trabajar o estudiar."
+    q: "¿Qué pasa si dejé de estudiar hace 20 años?",
+    a: "No importa. Nuestro método 'Desde Cero' está hecho para adultos que han olvidado materia. Vamos paso a paso, con paciencia y respeto.",
   },
   {
-    q: "¿Cuándo puedo empezar?",
-    a: "¡Hoy mismo! Al ser una plataforma online, no dependemos de marzo. Inscríbete y recibe tu acceso inmediato."
-  }
+    q: "¿Tengo que ir presencial?",
+    a: "No. Todo es 100% online. Puedes ver las clases desde tu celular, en tu casa o en el trabajo. Si no puedes conectarte en vivo, ves la grabación cuando puedas.",
+  },
+  {
+    q: "¿Qué cursos puedo hacer?",
+    a: "Hacemos nivelación de Enseñanza Básica (3º y 4º, 5º y 6º, 7º y 8º) y Enseñanza Media (1º y 2º, 3º y 4º). Puedes sacar dos cursos en un año (2x1).",
+  },
 ];

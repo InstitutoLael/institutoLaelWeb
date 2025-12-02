@@ -181,7 +181,7 @@ export default function Nosotros() {
                 {/* 2023 */}
                 <div className="timeline-event">
                     <div className="timeline-dot"></div>
-                    <span className="event-year">2023 • Nace Preu Lael</span>
+                    <span className="event-year">2021 • Nace Preu Lael</span>
                     <h3 className="event-title">Formalizando el Sueño</h3>
                     <p className="event-desc">
                         La demanda creció. Esos primeros alumnos trajeron a sus amigos, y sus amigos a otros. 

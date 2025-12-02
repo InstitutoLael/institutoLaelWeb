@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-// Asumiendo que SEOHead existe en tu proyecto
 import SEOHead from "../components/SEOHead.jsx"; 
 
 // IMPORTANTE: Asegúrate de tener la imagen en esta ruta
 import studyOnline from "../assets/img/lael/study-online.jpg"; 
 
-// Importamos tu lógica de precios (El cerebro)
+// Importamos tu lógica de precios
 import {
   ENROLLMENT_FEE,
   PAES_SUBJECTS,
@@ -19,7 +18,7 @@ import {
 } from "../data/paes.js";
 
 /* --------------------------------------------------------------------------
-   1. ESTILOS CSS - DISEÑO "WORLD CLASS" (DARK GLASSMORPHISM)
+   1. ESTILOS CSS - DISEÑO "WORLD CLASS"
    -------------------------------------------------------------------------- */
 const css = `
 :root {
@@ -33,18 +32,18 @@ const css = `
   --border: rgba(255, 255, 255, 0.08);
   --border-light: rgba(255, 255, 255, 0.15);
 
-  /* Colores de Marca (Tus Logos) */
-  --primary: #6366f1;       /* Indigo/Azul - Confianza */
+  /* Colores de Marca */
+  --primary: #6366f1;       /* Indigo/Azul */
   --primary-glow: rgba(99, 102, 241, 0.5);
-  --rose: #f43f5e;          /* Rosa - Pasión/Destacado */
+  --rose: #f43f5e;          /* Rosa */
   --rose-glow: rgba(244, 63, 94, 0.5);
-  --green: #10b981;         /* Verde - Ciencias/Éxito */
+  --green: #10b981;         /* Verde */
   --green-glow: rgba(16, 185, 129, 0.5);
-  --amber: #f59e0b;         /* Amarillo - Humanista/Estrellas */
+  --amber: #f59e0b;         /* Amarillo */
   
   --text-main: #ffffff;
   --text-muted: #94a3b8;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
   
   --radius-lg: 24px;
   --radius-md: 16px;
@@ -58,63 +57,45 @@ const css = `
   font-family: var(--font-sans);
   min-height: 100vh;
   position: relative;
-  overflow-x: hidden; /* Previene scroll horizontal indeseado */
-  padding-bottom: 100px; /* Espacio para el footer flotante móvil */
+  overflow-x: hidden;
+  padding-bottom: 120px; /* Espacio extra para sticky bar */
 }
 
-.container {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
+.container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
 
 h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin: 0; }
 p { line-height: 1.6; color: var(--text-muted); margin: 0; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; -webkit-tap-highlight-color: transparent; }
 a { text-decoration: none; color: inherit; }
 
-/* --- LUCES AMBIENTALES (El secreto para que no se vea "fome") --- */
+/* --- LUCES AMBIENTALES --- */
 .ambient-orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.15;
-  pointer-events: none;
-  z-index: 0;
+  position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; pointer-events: none; z-index: 0;
 }
 .orb-1 { width: 600px; height: 600px; top: -200px; left: -100px; background: var(--primary); }
 .orb-2 { width: 500px; height: 500px; bottom: 20%; right: -100px; background: var(--rose); }
 .orb-3 { width: 400px; height: 400px; top: 40%; left: 20%; background: var(--green); opacity: 0.08; }
 
-/* --- BOTONES MODERNOS --- */
+/* --- BOTONES --- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 1rem;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  position: relative; overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden;
 }
-
 .btn-primary {
-  background: var(--primary); color: white;
-  box-shadow: 0 8px 25px -5px var(--primary-glow);
+  background: var(--primary); color: white; box-shadow: 0 8px 25px -5px var(--primary-glow);
 }
 .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 15px 35px -5px var(--primary-glow);
-  filter: brightness(1.1);
+  transform: translateY(-3px); box-shadow: 0 15px 35px -5px var(--primary-glow); filter: brightness(1.1);
 }
-
 .btn-ghost {
-  background: transparent; color: var(--text-muted);
-  border: 1px solid var(--border);
+  background: transparent; color: var(--text-muted); border: 1px solid var(--border);
 }
 .btn-ghost:hover {
-  border-color: var(--text-main); color: var(--text-main);
-  background: var(--glass); transform: translateY(-2px);
+  border-color: var(--text-main); color: var(--text-main); background: var(--glass); transform: translateY(-2px);
 }
-
 .btn-full-cta {
-  width: 100%; display: flex; justify-content: center; align-items: center;
+  width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
   padding: 16px; border-radius: 16px; font-weight: 700; background: var(--primary);
   color: white; transition: 0.3s; margin-top: auto;
 }
@@ -130,17 +111,13 @@ a { text-decoration: none; color: inherit; }
   color: #a5b4fc; padding: 6px 16px; border-radius: 100px;
   font-size: 0.85rem; font-weight: 700; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px;
 }
-
 .hero-title { font-size: clamp(3rem, 6vw, 4.8rem); margin-bottom: 24px; }
 .text-gradient {
   background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
-
 .hero-lead { font-size: 1.25rem; max-width: 580px; margin-bottom: 40px; color: #cbd5e1; }
-
 .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 50px; }
-
 .hero-trust { display: flex; gap: 30px; font-size: 0.95rem; color: var(--text-muted); }
 .trust-item { display: flex; align-items: center; gap: 8px; }
 .trust-item svg { color: var(--green); }
@@ -152,14 +129,12 @@ a { text-decoration: none; color: inherit; }
   animation: float 6s ease-in-out infinite;
 }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-
 .hero-img { width: 100%; height: auto; display: block; filter: brightness(0.9); }
 .floating-badge {
   position: absolute; bottom: 30px; right: 30px;
   background: rgba(15, 17, 21, 0.85); backdrop-filter: blur(12px);
   border: 1px solid var(--border-light); padding: 14px 24px;
-  border-radius: 20px; text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 .stat-num { display: block; font-size: 1.8rem; font-weight: 800; color: var(--green); line-height: 1; }
 .stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
@@ -187,10 +162,9 @@ a { text-decoration: none; color: inherit; }
 
 /* --- PRICING SECTION --- */
 .section-pricing { position: relative; z-index: 1; }
-.pricing-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px; align-items: stretch;
-}
+.section-header { text-align: center; margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
+.section-header h2 { font-size: 2.5rem; margin-bottom: 15px; }
+.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; align-items: stretch; }
 
 .pricing-card {
   background: var(--bg-panel); border: 1px solid var(--border);
@@ -200,15 +174,13 @@ a { text-decoration: none; color: inherit; }
 }
 .pricing-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6); border-color: var(--border-light); }
 
-/* Variaciones por acento */
 .pricing-card.accent-rose:hover { border-color: var(--rose); box-shadow: 0 20px 50px -10px var(--rose-glow); }
 .pricing-card.accent-indigo:hover { border-color: var(--primary); box-shadow: 0 20px 50px -10px var(--primary-glow); }
 .pricing-card.accent-green:hover { border-color: var(--green); box-shadow: 0 20px 50px -10px var(--green-glow); }
 
 .pricing-card.featured {
   background: linear-gradient(180deg, rgba(244, 63, 94, 0.08), var(--bg-panel) 60%);
-  border: 1px solid rgba(244, 63, 94, 0.4);
-  transform: scale(1.05); z-index: 2;
+  border: 1px solid rgba(244, 63, 94, 0.4); transform: scale(1.05); z-index: 2;
 }
 .pricing-card.featured:hover { transform: scale(1.05) translateY(-10px); }
 @media(max-width: 900px) { .pricing-card.featured { transform: scale(1); } }
@@ -238,7 +210,6 @@ a { text-decoration: none; color: inherit; }
 
 .annual-ref { font-size: 0.85rem; color: var(--text-muted); opacity: 0.7; margin-bottom: 25px; }
 .divider { height: 1px; background: var(--border); margin-bottom: 25px; }
-
 .features-list { list-style: none; padding: 0; margin: 0 0 30px 0; display: flex; flex-direction: column; gap: 14px; flex-grow: 1; }
 .features-list li { display: flex; gap: 12px; font-size: 0.95rem; align-items: flex-start; }
 .icon-box { color: var(--green); flex-shrink: 0; margin-top: 2px; }
@@ -252,7 +223,6 @@ a { text-decoration: none; color: inherit; }
 }
 .combos-scroll::-webkit-scrollbar { height: 8px; }
 .combos-scroll::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
-
 .combo-card {
   min-width: 300px; background: var(--bg-panel); border: 1px solid var(--border);
   border-radius: var(--radius-md); padding: 25px; position: relative;
@@ -263,7 +233,6 @@ a { text-decoration: none; color: inherit; }
   position: absolute; top: 15px; right: 15px; background: rgba(245, 158, 11, 0.1); color: var(--amber);
   font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(245, 158, 11, 0.2);
 }
-/* Bordes dinámicos */
 .border-rose { border-top: 3px solid var(--rose); }
 .border-indigo { border-top: 3px solid var(--primary); }
 .border-green { border-top: 3px solid var(--green); }
@@ -278,7 +247,6 @@ a { text-decoration: none; color: inherit; }
 .methodology-tag { color: var(--amber); font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
 .sec-head-left { max-width: 700px; margin-bottom: 60px; }
 .sec-head-left h2 { font-size: 2.8rem; margin-bottom: 20px; }
-
 .methodology-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
 .methodology-card {
   padding: 30px; background: var(--glass); border-radius: var(--radius-lg);
@@ -293,7 +261,7 @@ a { text-decoration: none; color: inherit; }
 .methodology-card h3 { margin-bottom: 12px; font-size: 1.4rem; }
 
 /* --- BUILDER (ARMADOR) --- */
-.section-builder { position: relative; z-index: 2; }
+.section-builder { position: relative; z-index: 2; padding: 100px 0; }
 .builder-panel {
   background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-lg);
   padding: 50px; box-shadow: var(--shadow-float);
@@ -317,13 +285,11 @@ a { text-decoration: none; color: inherit; }
 }
 .subject-chip.active .check-circle { background: white; border-color: white; color: var(--primary); }
 
-/* Builder Summary */
 .builder-summary {
   display: grid; grid-template-columns: 1fr 350px; gap: 50px; align-items: center;
   opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease;
 }
 .builder-summary.visible { opacity: 1; max-height: 600px; padding-top: 10px; }
-
 .summary-count { font-size: 2rem; font-weight: 800; color: var(--primary); margin-bottom: 20px; display: block; }
 .summary-feats li { display: flex; gap: 12px; margin-bottom: 12px; font-size: 1.1rem; }
 .summary-feats li svg { color: var(--green); }
@@ -332,17 +298,17 @@ a { text-decoration: none; color: inherit; }
   background: var(--bg-darker); border: 1px solid var(--border-light);
   border-radius: var(--radius-md); padding: 30px; text-align: center;
 }
-.price-big { font-size: 3.5rem; font-weight: 900; color: white; margin: 10px 0; letter-spacing: -2px; }
+.price-big { font-size: 3.5rem; font-weight: 900; color: white; margin: 10px 0; letter-spacing: -2px; line-height: 1; }
 .price-sub { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; }
 
 @media (max-width: 800px) {
   .builder-panel { padding: 30px 20px; }
   .builder-summary { grid-template-columns: 1fr; }
-  .summary-price-box { order: -1; } /* Precio arriba en móvil */
+  .summary-price-box { order: -1; }
 }
 
 /* --- FAQ --- */
-.section-faq { max-width: 800px; margin: 0 auto; padding-top: 0; }
+.section-faq { max-width: 800px; margin: 0 auto; padding-top: 0; padding-bottom: 80px; }
 .faq-item { border-bottom: 1px solid var(--border); margin-bottom: 10px; }
 .faq-question {
   padding: 24px 0; display: flex; justify-content: space-between; align-items: center;
@@ -372,7 +338,7 @@ a { text-decoration: none; color: inherit; }
 `;
 
 /* --------------------------------------------------------------------------
-   2. ICONOS (SVG PUROS PARA NO DEPENDER DE LIBRERÍAS)
+   2. ICONOS (SVG PUROS)
    -------------------------------------------------------------------------- */
 const Icons = {
   Check: (props) => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><polyline points="20 6 9 17 4 12"/></svg>,
@@ -387,7 +353,6 @@ const Icons = {
 /* --------------------------------------------------------------------------
    3. SUB-COMPONENTES VISUALES
    -------------------------------------------------------------------------- */
-
 function MiniTestimonialsSection() {
     return (
         <section className="section-mini-testimonials">
@@ -489,7 +454,7 @@ function ComboCard({ combo, onSelect }) {
                 <p className="combo-desc">{combo.tagline}</p>
                 <div className="combo-price">{clp(monthly)}</div>
             </div>
-            <button onClick={onSelect} className="btn btn-ghost btn-sm w-full">
+            <button onClick={onSelect} className="btn btn-ghost btn-sm w-full" style={{width:'100%'}}>
                 Seleccionar
             </button>
         </div>
@@ -525,7 +490,6 @@ export default function PAES() {
   const monthly = subjectCount ? priceForSubjects(selectedSubjectIds) : 0;
   const annual = subjectCount ? priceAnnual(subjectCount) : 0;
 
-  // Acciones
   const toggleSubject = (id) =>
     setSelectedSubjectIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
@@ -538,19 +502,15 @@ export default function PAES() {
     }, 100);
   };
 
-  // WhatsApp Link
   const waMsg = encodeURIComponent(
     `Hola 👋, vengo de la web. Me interesa el plan PAES con: ${selectedSubjects.map((s) => s.name).join(", ") || "Ver opciones"}. Mensual estimado: ${subjectCount ? clp(monthly) : "—"}.`
   );
 
-  // Filtramos combos para UI
   const COMBOS_TOP = ["hum-duo", "stem-basico", "trio-fundamental", "full-5", "completo-7"];
   const combos = PAES_COMBOS.filter((c) => COMBOS_TOP.includes(c.id));
 
-  // Datos estáticos
   const stats = {
     p1: { count: 1, m: priceForCount(1), a: priceAnnual(1) },
-    p2: { count: 2, m: priceForCount(2), a: priceAnnual(2) },
     p3: { count: 3, m: priceForCount(3), a: priceAnnual(3) },
     p5: { count: 5, m: priceForCount(5), a: priceAnnual(5) },
   };
@@ -571,7 +531,7 @@ export default function PAES() {
       <div className="ambient-orb orb-2" />
       <div className="ambient-orb orb-3" />
 
-      {/* HEADER HERO */}
+      {/* HERO */}
       <header className="hero">
         <div className="container hero-grid">
           <div className="hero-content">
@@ -589,7 +549,7 @@ export default function PAES() {
               <button onClick={() => builderRef.current?.scrollIntoView({ behavior: 'smooth' })} className="btn btn-primary btn-lg">
                 Armar mi Plan <Icons.ArrowRight />
               </button>
-              <a href={`https://wa.me/56964626568?text=${waMsg}`} target="_blank" rel="noreferrer" className="btn btn-ghost">
+              <a href={`https://wa.me/56964626568?text=${encodeURIComponent("Hola, quiero saber más sobre los planes PAES")}`} target="_blank" rel="noreferrer" className="btn btn-ghost">
                 Hablar por WhatsApp
               </a>
             </div>
@@ -629,7 +589,7 @@ export default function PAES() {
               price={stats.p1.m}
               annual={stats.p1.a}
               features={["1 ensayo mensual", "Clases en vivo", "Acceso a grabaciones"]}
-              accent="indigo" // Color sutil
+              accent="indigo"
             />
             
             <PricingCard 
@@ -648,7 +608,7 @@ export default function PAES() {
               price={stats.p5.m} 
               annual={stats.p5.a}
               features={["5 ensayos mensuales", "Tutoría Avanzada", "Prioridad 24/7", "Orientación Vocacional"]}
-              accent="rose" // Color llamativo
+              accent="rose"
               featured={true}
             />
           </div>
@@ -723,47 +683,57 @@ export default function PAES() {
               </div>
               
               <div className="summary-price-box">
-                <div style={{textTransform:'uppercase', fontSize:'0.8rem', color:'#94a3b8', letterSpacing:'1px'}}>Valor Mensual</div>
-                <div className="price-big">{subjectCount ? clp(monthly) : "$0"}</div>
-                <div className="price-sub">
-                    Matrícula única {clp(ENROLLMENT_FEE)} <br/>
-                    <span style={{opacity: 0.6}}>Anual ref: {clp(annual)}</span>
+                <div style={{textTransform:'uppercase', fontSize:'0.75rem', color:'var(--text-muted)', letterSpacing:'1px', marginBottom:'5px'}}>
+                    Valor Mensual
                 </div>
-                
-                <Link 
-                    to={subjectCount > 0 ? "/inscripcion" : "#"} 
-                    className={`btn btn-primary w-full ${subjectCount === 0 ? 'btn-ghost' : ''}`}
-                    onClick={(e) => { if (subjectCount === 0) e.preventDefault(); }}
+                <div className="price-big">
+                    {clp(monthly).replace("$", "")}
+                    <span style={{fontSize:'1rem', color:'var(--text-muted)', fontWeight:400}}>/mes</span>
+                </div>
+                <div className="price-sub">
+                    Matrícula única: {clp(ENROLLMENT_FEE)} <br/>
+                    Total anual ref: {clp(annual)}
+                </div>
+                <a
+                    href={`https://wa.me/56964626568?text=${waMsg}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn-full-cta"
+                    style={{marginTop:0}}
                 >
-                    {subjectCount > 0 ? "Inscribirme al Plan" : "Elige tus ramos"}
-                </Link>
+                    Inscribir este Plan <Icons.ArrowRight />
+                </a>
               </div>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
+      {/* --- PREGUNTAS FRECUENTES (FAQ) --- */}
       <section className="section section-faq">
         <div className="container">
-          <h3 style={{textAlign: 'center', marginBottom: '40px', fontSize: '2rem'}}>Preguntas Frecuentes</h3>
-          <FaqItem q="¿Qué pasa si falto a una clase?" a="Todas las clases quedan grabadas en tu aula virtual. Puedes verlas cuando quieras, a tu propio ritmo." />
-          <FaqItem q="¿Cómo funcionan los ensayos?" a="Tienes ensayos mensuales programados por ramo. Usamos el formato oficial DEMRE con corrección automática." />
-          <FaqItem q="¿Puedo cambiar mis ramos después?" a="Sí. Puedes sumar o restar ramos mes a mes. Solo debes avisarnos antes del cierre de mes." />
+            <div className="section-header">
+                <h2>Preguntas Frecuentes</h2>
+            </div>
+            <FaqItem q="¿Las clases quedan grabadas?" a="Sí, todas las clases se suben a la plataforma en menos de 24 horas para que puedas repasar cuando quieras." />
+            <FaqItem q="¿Cómo pago la mensualidad?" a="Puedes pagar vía Webpay (Débito/Crédito) o transferencia bancaria. El pago es mensual y sin contratos amarrados." />
+            <FaqItem q="¿Puedo cambiar mis ramos después?" a="¡Claro! Puedes agregar o quitar ramos mes a mes según lo que necesites reforzar." />
+            <FaqItem q="¿Qué incluye la matrícula?" a={`La matrícula es un pago único de ${clp(ENROLLMENT_FEE)} que cubre tus accesos a la plataforma, materiales digitales y gestión administrativa anual.`} />
         </div>
       </section>
 
-      {/* STICKY MOBILE CTA */}
-      <div className="mobile-sticky-bar">
-        <div className="bar-info">
-            <span className="bar-label">Tu Plan ({subjectCount} ramos)</span>
-            <div className="bar-price">{subjectCount ? clp(monthly) : "---"}</div>
-        </div>
-        <Link to="/inscripcion" className="btn-sticky">
-            Inscribirme
-        </Link>
-      </div>
+      {/* --- STICKY MOBILE BAR (Para conversión) --- */}
+      {subjectCount > 0 && (
+          <div className="mobile-sticky-bar">
+              <div>
+                  <div className="bar-label">{subjectCount} Ramos seleccionados</div>
+                  <div className="bar-price">{clp(monthly)}<span style={{fontSize:'0.8rem', fontWeight:400}}>/mes</span></div>
+              </div>
+              <a href={`https://wa.me/56964626568?text=${waMsg}`} className="btn-sticky">
+                  Inscribir
+              </a>
+          </div>
+      )}
 
     </div>
   );

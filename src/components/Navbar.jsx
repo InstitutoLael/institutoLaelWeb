@@ -1,11 +1,9 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-// Ruta de tu logo
+import { useEffect, useState } from "react";
+// Asegúrate de que esta ruta sea correcta según tu estructura
 import logo from "../assets/img/Logos/lael-inst-naranja.png";
 
-/* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG (Sistema Completo)
-   ────────────────────────────────────────────────────────────────────────── */
+/* ─── 1. ICONOS SVG (Sistema Optimizado) ─── */
 const Icons = {
   ChevronDown: () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>,
   Menu: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>,
@@ -20,35 +18,26 @@ const Icons = {
   ArrowR: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
 };
 
-/* ──────────────────────────────────────────────────────────────────────────
-   2. COMPONENTE NAVBAR
-   ────────────────────────────────────────────────────────────────────────── */
+/* ─── 2. COMPONENTE NAVBAR ─── */
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-  // Cerrar menú al navegar
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
+  // Cerrar menú al cambiar de ruta
+  useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
-  // Lock body scroll (IMPORTANTE: Esto evita que el fondo se mueva)
+  // Bloquear scroll del body al abrir menú
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
-      document.body.style.height = "100vh"; // Fija la altura para evitar saltos
     } else {
       document.body.style.overflow = "";
-      document.body.style.height = "";
     }
-    return () => { 
-      document.body.style.overflow = ""; 
-      document.body.style.height = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  // Detectar scroll para efecto glass
+  // Efecto glass al hacer scroll
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -61,19 +50,17 @@ export default function Navbar() {
 
       <div className="container nav-content">
         
-        {/* BRAND */}
-        <Link to="/" className="brand-link" aria-label="Inicio">
+        {/* LOGO */}
+        <Link to="/" className="brand-link" aria-label="Inicio Instituto Lael">
           <img src={logo} alt="Instituto Lael" className="logo-img" />
         </Link>
 
-        {/* DESKTOP MENU */}
+        {/* MENÚ ESCRITORIO */}
         <nav className="desktop-nav">
-          <NavLink to="/" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>
-            Inicio
-          </NavLink>
+          <NavLink to="/" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>Inicio</NavLink>
           
           <div className="dropdown-wrapper">
-            <button className="nav-link drop-btn">
+            <button className={`nav-link drop-btn ${location.pathname.includes('/programas') ? 'active' : ''}`}>
               Programas <span className="chevron"><Icons.ChevronDown/></span>
             </button>
             <div className="mega-menu">
@@ -93,48 +80,48 @@ export default function Navbar() {
           <NavLink to="/trabaja" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>Trabaja</NavLink>
         </nav>
 
-        {/* ACTIONS */}
+        {/* ACCIONES Y BOTÓN MÓVIL */}
         <div className="nav-actions">
-          <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="action-btn wa" aria-label="WhatsApp">
+          <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="action-btn wa" aria-label="Hablar por WhatsApp">
             <Icons.WhatsApp />
           </a>
-          <Link to="/inscripcion" className="action-btn primary">
+          <Link to="/inscripcion" className="action-btn primary mobile-hide-btn">
             Inscripción
           </Link>
           
+          {/* BOTÓN HAMBURGUESA / X (Controlador Maestro) */}
           <button 
-            className={`burger-btn ${mobileOpen ? 'active' : ''}`} 
+            className="burger-btn"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menú"
+            aria-label={mobileOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={mobileOpen}
           >
-            {mobileOpen ? <Icons.X /> : <Icons.Menu />}
+            <div className={`icon-transition ${mobileOpen ? 'rotate' : ''}`}>
+                {mobileOpen ? <Icons.X /> : <Icons.Menu />}
+            </div>
           </button>
         </div>
 
       </div>
 
-      {/* MOBILE MENU (FIXED POSITIONING) */}
+      {/* MENÚ MÓVIL (PANEL DESLIZANTE) */}
       <div className={`mobile-overlay ${mobileOpen ? 'open' : ''}`}>
+        {/* Fondo oscuro clickeable para cerrar */}
         <div className="mobile-backdrop" onClick={() => setMobileOpen(false)}></div>
         
         <div className="mobile-panel">
-          <div className="mp-header">
-            <span className="mp-title">Menú</span>
-            {/* El botón de cerrar ya está en el navbar, pero dejamos uno aquí por usabilidad */}
-            <button className="mp-close" onClick={() => setMobileOpen(false)}><Icons.X/></button>
-          </div>
-
           <div className="mp-body">
+            <span className="mp-label">Navegación</span>
             <MobileLink to="/">Inicio</MobileLink>
             
-            <div className="mp-divider">Programas Educativos</div>
+            <span className="mp-label mt-4">Nuestros Programas</span>
             <MobileLink to="/paes" icon={<Icons.Grad/>} color="#3B82F6">Preu PAES</MobileLink>
             <MobileLink to="/idiomas" icon={<Icons.World/>} color="#10B981">Idiomas</MobileLink>
             <MobileLink to="/lsch" icon={<Icons.Hand/>} color="#8B5CF6">Lengua de Señas</MobileLink>
             <MobileLink to="/escuela-adultos" icon={<Icons.Book/>} color="#F59E0B">Escuela de Adultos</MobileLink>
             <MobileLink to="/homeschool" icon={<Icons.Rocket/>} color="#F43F5E">Lael Academy</MobileLink>
 
-            <div className="mp-divider">Institucional</div>
+            <span className="mp-label mt-4">Institucional</span>
             <MobileLink to="/empresas">Empresas</MobileLink>
             <MobileLink to="/nosotros">Nosotros</MobileLink>
             <MobileLink to="/convenios">Convenios</MobileLink>
@@ -142,8 +129,9 @@ export default function Navbar() {
           </div>
 
           <div className="mp-footer">
-            <Link to="/inscripcion" className="mp-btn-primary">Inscribirme Ahora</Link>
-            <a href="https://wa.me/56964626568" className="mp-btn-wa"><Icons.WhatsApp/> Hablar por WhatsApp</a>
+            <Link to="/inscripcion" className="mp-btn-primary">
+                🚀 Inscribirme Ahora
+            </Link>
           </div>
         </div>
       </div>
@@ -152,7 +140,7 @@ export default function Navbar() {
   );
 }
 
-/* --- HELPERS --- */
+/* ─── HELPERS ─── */
 function MegaItem({ to, title, desc, icon, color }) {
   return (
     <Link to={to} className="mega-item" style={{'--item-color': color}}>
@@ -167,31 +155,30 @@ function MegaItem({ to, title, desc, icon, color }) {
 
 function MobileLink({ to, children, icon, color }) {
   return (
-    <Link to={to} className="mob-link" style={{'--mob-color': color || '#94a3b8'}}>
+    <NavLink to={to} className={({isActive}) => `mob-link ${isActive ? 'active' : ''}`} style={{'--mob-color': color || '#94a3b8'}}>
       <div className="mob-content">
         {icon && <span className="mob-icon">{icon}</span>}
         {children}
       </div>
       <Icons.ArrowR />
-    </Link>
+    </NavLink>
   );
 }
 
-/* ──────────────────────────────────────────────────────────────────────────
-   3. CSS - CORRECCIÓN MOBILE
-   ────────────────────────────────────────────────────────────────────────── */
+/* ─── 3. ESTILOS CSS ─── */
 const css = `
 :root {
   --nav-height: 70px;
-  --glass-bg: rgba(5, 5, 5, 0.9);
+  --bg-dark: #050505; /* Fondo más puro */
+  --glass-bg: rgba(5, 5, 5, 0.85);
   --glass-border: rgba(255, 255, 255, 0.08);
   --text: #f8fafc;
   --text-muted: #94a3b8;
   --primary: #3b82f6;
-  --accent: #f59e0b;
+  --accent: #f59e0b; /* Naranja Lael */
 }
 
-/* BASE */
+/* NAVBAR BASE */
 .lael-nav {
   position: fixed; top: 0; left: 0; width: 100%; height: var(--nav-height);
   z-index: 9999;
@@ -200,98 +187,110 @@ const css = `
 }
 .lael-nav.scrolled {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--glass-border);
 }
 
 .nav-content {
   display: flex; justify-content: space-between; align-items: center; height: 100%;
+  position: relative; z-index: 10002; /* Siempre por encima del overlay móvil */
 }
 
 /* LOGO */
-.brand-link { display: flex; align-items: center; z-index: 10001; /* Asegura que el logo se vea sobre el menú si es necesario */ }
-.logo-img { height: 32px; width: auto; transition: transform 0.2s; }
+.brand-link { display: flex; align-items: center; }
+.logo-img { height: 34px; width: auto; transition: transform 0.2s; }
 .brand-link:hover .logo-img { transform: scale(1.05); }
 
 /* DESKTOP NAV */
-.desktop-nav { display: flex; align-items: center; gap: 6px; height: 100%; }
+.desktop-nav { display: flex; align-items: center; gap: 4px; height: 100%; }
 @media (max-width: 1024px) { .desktop-nav { display: none; } }
 
 .nav-link {
   color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;
-  padding: 8px 16px; border-radius: 50px; transition: 0.2s; cursor: pointer; border: none; background: none;
-  font-family: inherit;
+  padding: 8px 14px; border-radius: 8px; transition: all 0.2s; cursor: pointer; border: none; background: none;
+  font-family: inherit; display: flex; align-items: center; gap: 6px;
 }
-.nav-link:hover, .nav-link.active { color: var(--text); background: rgba(255,255,255,0.05); }
+.nav-link:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.nav-link.active { color: var(--accent); background: rgba(245, 158, 11, 0.1); font-weight: 600; }
 
 /* DROPDOWN */
 .dropdown-wrapper { position: relative; height: 100%; display: flex; align-items: center; }
-.drop-btn { display: flex; align-items: center; gap: 6px; }
-.chevron { font-size: 0.7rem; transition: transform 0.2s; opacity: 0.7; }
-.dropdown-wrapper:hover .chevron { transform: rotate(180deg); }
+.chevron { font-size: 0.7rem; transition: transform 0.3s; opacity: 0.6; display: flex; }
+.dropdown-wrapper:hover .chevron { transform: rotate(180deg); opacity: 1; }
 
 .mega-menu {
-  position: absolute; top: calc(100% + 10px); left: 50%; transform: translateX(-50%) translateY(10px);
-  width: 320px; background: #0f1115; border: 1px solid var(--glass-border);
-  border-radius: 16px; padding: 10px;
+  position: absolute; top: 90%; left: 50%; transform: translateX(-50%) translateY(10px);
+  width: 340px; background: #0f1115; border: 1px solid var(--glass-border);
+  border-radius: 16px; padding: 8px;
   opacity: 0; visibility: hidden; pointer-events: none;
-  transition: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
 }
 .dropdown-wrapper:hover .mega-menu { opacity: 1; visibility: visible; pointer-events: auto; transform: translateX(-50%) translateY(0); }
 
-.mega-grid { display: flex; flex-direction: column; gap: 4px; }
-.mega-item { display: flex; gap: 15px; align-items: center; padding: 12px; border-radius: 12px; text-decoration: none; transition: 0.2s; }
+.mega-grid { display: flex; flex-direction: column; gap: 2px; }
+.mega-item { display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: 10px; text-decoration: none; transition: 0.2s; }
 .mega-item:hover { background: rgba(255,255,255,0.05); }
-.mi-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); color: var(--item-color); transition: 0.2s; }
-.mega-item:hover .mi-icon { background: var(--item-color); color: white; }
+.mi-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); color: var(--item-color); transition: 0.2s; border: 1px solid var(--glass-border); }
+.mega-item:hover .mi-icon { background: var(--item-color); color: white; border-color: transparent; }
 .mi-info strong { display: block; color: var(--text); font-size: 0.95rem; margin-bottom: 2px; }
 .mi-info span { display: block; color: var(--text-muted); font-size: 0.8rem; }
 
 /* ACTIONS */
-.nav-actions { display: flex; gap: 12px; align-items: center; z-index: 10001; }
+.nav-actions { display: flex; gap: 12px; align-items: center; }
 .action-btn { display: flex; align-items: center; justify-content: center; font-weight: 600; text-decoration: none; transition: 0.2s; }
 .action-btn.wa { width: 40px; height: 40px; border-radius: 50%; background: rgba(37, 211, 102, 0.1); color: #25D366; border: 1px solid rgba(37, 211, 102, 0.2); }
 .action-btn.wa:hover { background: #25D366; color: black; transform: scale(1.05); }
-.action-btn.primary { padding: 8px 20px; border-radius: 50px; font-size: 0.9rem; background: var(--accent); color: black; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2); }
-.action-btn.primary:hover { background: #fbbf24; transform: translateY(-2px); }
+.action-btn.primary { padding: 9px 22px; border-radius: 50px; font-size: 0.9rem; background: var(--accent); color: black; box-shadow: 0 0 15px rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.5); }
+.action-btn.primary:hover { background: #fbbf24; transform: translateY(-1px); box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3); }
 
 /* BURGER */
-.burger-btn { width: 40px; height: 40px; color: var(--text); background: transparent; display: none; align-items: center; justify-content: center; z-index: 10002; }
-.burger-btn.active { color: white; }
-@media (max-width: 1024px) { .burger-btn { display: flex; } .action-btn.primary { display: none; } }
+.burger-btn { width: 40px; height: 40px; color: var(--text); background: transparent; display: none; align-items: center; justify-content: center; border: none; cursor: pointer; }
+.icon-transition { display: flex; transition: transform 0.3s ease; }
+.icon-transition.rotate { transform: rotate(90deg); color: var(--accent); }
+@media (max-width: 1024px) { 
+    .burger-btn { display: flex; } 
+    .mobile-hide-btn { display: none; } /* Ocultamos botón 'Inscripción' en header móvil para limpiar visual */
+}
 
-/* --- MOBILE MENU FIXED --- */
-/* CORRECCIÓN: Usamos fixed con inset: 0 para cubrir TODO el viewport siempre */
+/* ─── MOBILE MENU OPTIMIZADO ─── */
 .mobile-overlay { 
-  position: fixed; inset: 0; z-index: 10000; 
-  visibility: hidden; height: 100dvh; width: 100vw;
+  position: fixed; 
+  top: var(--nav-height); /* Se abre DEBAJO del header */
+  left: 0; width: 100%; height: calc(100vh - var(--nav-height));
+  z-index: 10001;
+  visibility: hidden; 
+  overflow: hidden;
 }
 .mobile-overlay.open { visibility: visible; }
 
-.mobile-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.8); opacity: 0; transition: 0.3s; }
+.mobile-backdrop { 
+  position: absolute; inset: 0; 
+  background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+  opacity: 0; transition: 0.3s; 
+}
 .mobile-overlay.open .mobile-backdrop { opacity: 1; }
 
 .mobile-panel {
-  position: absolute; top: 0; right: 0; bottom: 0; height: 100dvh; width: 85%; max-width: 320px;
+  position: absolute; top: 0; right: 0; bottom: 0; 
+  width: 100%; max-width: 320px;
   background: #0b0d11; border-left: 1px solid var(--glass-border);
   transform: translateX(100%); transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+  display: flex; flex-direction: column; 
+  box-shadow: -10px 0 40px rgba(0,0,0,0.8);
 }
 .mobile-overlay.open .mobile-panel { transform: translateX(0); }
 
-.mp-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); margin-top: env(safe-area-inset-top); }
-.mp-title { font-weight: 800; font-size: 1.2rem; color: var(--text); }
-.mp-close { color: var(--text-muted); padding: 5px; }
+.mp-body { flex: 1; overflow-y: auto; padding: 25px; -webkit-overflow-scrolling: touch; }
+.mp-label { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; font-weight: 700; letter-spacing: 1px; opacity: 0.6; }
+.mp-label.mt-4 { margin-top: 25px; }
 
-.mp-body { flex: 1; overflow-y: auto; padding: 20px; -webkit-overflow-scrolling: touch; }
-.mp-divider { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin: 25px 0 10px; font-weight: 700; letter-spacing: 1px; }
-
-.mob-link { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: var(--text); font-size: 1rem; }
+.mob-link { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: var(--text); font-size: 1rem; transition: 0.2s; }
+.mob-link:last-of-type { border-bottom: none; }
+.mob-link.active { color: var(--accent); padding-left: 10px; border-left: 2px solid var(--accent); }
 .mob-content { display: flex; align-items: center; gap: 12px; }
 .mob-icon { color: var(--mob-color); font-size: 1.1rem; display: flex; }
 
-.mp-footer { padding: 20px; border-top: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 12px; margin-bottom: env(safe-area-inset-bottom); }
-.mp-btn-primary { display: block; text-align: center; padding: 14px; background: var(--accent); color: black; font-weight: 700; border-radius: 12px; text-decoration: none; }
-.mp-btn-wa { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: rgba(255,255,255,0.05); color: var(--text); border-radius: 12px; text-decoration: none; border: 1px solid var(--glass-border); font-weight: 600; }
+.mp-footer { padding: 20px; border-top: 1px solid var(--glass-border); background: rgba(255,255,255,0.02); }
+.mp-btn-primary { display: block; text-align: center; padding: 16px; background: linear-gradient(135deg, var(--accent), #eab308); color: black; font-weight: 800; border-radius: 12px; text-decoration: none; font-size: 1.1rem; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3); }
 `;

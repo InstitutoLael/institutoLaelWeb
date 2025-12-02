@@ -1,129 +1,183 @@
 // src/components/StatsBand.jsx
-/**
- * StatsBand — banda de indicadores de confianza del Instituto Lael.
- *
- * Muestra datos clave de forma atractiva y responsiva.
- * Se puede personalizar pasando un array de objetos con "kpi" y "label".
- *
- * Ejemplo:
- * <StatsBand
- *   items={[
- *     { kpi: "87%", label: "alcanza su objetivo" },
- *     { kpi: "+11.000h", label: "clases en vivo" },
- *     { kpi: "9/10", label: "nos recomiendan" },
- *   ]}
- * />
- */
+import { useEffect, useRef, useState } from "react";
 
-export default function StatsBand({
-  items = [
-    { kpi: "87%", label: "alcanza su objetivo" },
-    { kpi: "+11.000h", label: "clases en vivo" },
-    { kpi: "9/10", label: "nos recomiendan" },
-  ],
-}) {
+// --- HOOK: Para detectar cuando el usuario ve la sección ---
+function useOnScreen(ref) {
+  const [isIntersecting, setIntersecting] = useState(false);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setIntersecting(entry.isIntersecting),
+      { threshold: 0.3 } // Se activa cuando el 30% del elemento es visible
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [ref]);
+  return isIntersecting;
+}
+
+// --- COMPONENTE: Número Animado ---
+function AnimatedNumber({ value, duration = 2000, start }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!start) return;
+    
+    let startTime;
+    let animationFrame;
+
+    // Limpiamos el valor (ej: "11.000" -> 11000)
+    const end = parseInt(String(value).replace(/\./g, "").replace(/,/g, ""), 10);
+    if (isNaN(end)) { setCount(value); return; } // Si no es número, lo mostramos tal cual
+
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      
+      // Easing function (easeOutExpo) para que frene suave al final
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      
+      setCount(Math.floor(ease * end));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(step);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [value, duration, start]);
+
+  // Formateamos de vuelta a string con miles (11000 -> "11.000")
+  return count.toLocaleString("es-CL");
+}
+
+// --- CONFIGURACIÓN DEFAULT ---
+const DEFAULT_ITEMS = [
+  { value: "87", suffix: "%", label: "De nuestros alumnos alcanza su puntaje soñado" },
+  { prefix: "+", value: "11000", suffix: "h", label: "Horas de clases en vivo impartidas" },
+  { value: "9", suffix: "/10", label: "Estudiantes nos recomiendan a sus amigos" },
+];
+
+export default function StatsBand({ items = DEFAULT_ITEMS }) {
+  const ref = useRef(null);
+  const isVisible = useOnScreen(ref);
+
   return (
-    <section className="statsband" aria-label="Indicadores de confianza del Instituto Lael">
+    <section className="stats-section" aria-label="Nuestras Cifras" ref={ref}>
       <style>{css}</style>
+      
+      {/* Fondo decorativo sutil */}
+      <div className="stats-glow" aria-hidden="true" />
 
-      {/* Gradientes decorativos */}
-      <div className="statsband-bg" aria-hidden="true" />
-
-      <div className="statsband-grid">
-        {items.map((it, i) => (
-          <figure key={i} className="stat-card" role="group" aria-labelledby={`stat-${i}-label`}>
-            <p className="stat-kpi" id={`stat-${i}-value`}>
-              {it.kpi}
-            </p>
-            <figcaption className="stat-label" id={`stat-${i}-label`}>
-              {it.label}
-            </figcaption>
-          </figure>
-        ))}
+      <div className="stats-container">
+        <div className="stats-grid">
+          {items.map((it, i) => (
+            <div key={i} className="stat-card" style={{ transitionDelay: `${i * 100}ms` }}>
+              <div className="stat-value-wrapper">
+                {it.prefix && <span className="stat-affix">{it.prefix}</span>}
+                <span className="stat-number">
+                  <AnimatedNumber value={it.value} start={isVisible} />
+                </span>
+                {it.suffix && <span className="stat-affix">{it.suffix}</span>}
+              </div>
+              <p className="stat-label">{it.label}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-/* ---------- CSS ---------- */
+/* ---------- CSS "Dark Glass" ---------- */
 const css = `
-.statsband {
-  position: relative;
-  padding: 48px 0;
-  background: linear-gradient(180deg, #0b1220, #0e1424);
-  border-top: 1px solid #1f2a44;
-  border-bottom: 1px solid #1f2a44;
-  overflow: hidden;
-}
-
-.statsband-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(80% 40% at 10% -30%, rgba(88,80,236,0.18), transparent 60%),
-    radial-gradient(80% 40% at 90% -30%, rgba(22,163,74,0.14), transparent 60%);
-}
-
-.statsband-grid {
-  position: relative;
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  gap: 18px;
-  padding: 0 24px;
-}
-
-@media (min-width: 576px) {
-  .statsband-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (min-width: 992px) {
-  .statsband-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-.stat-card {
-  background: linear-gradient(180deg, #0e1424, #0b1220);
-  border: 1px solid #1f2a44;
-  border-radius: 16px;
-  box-shadow: 0 10px 24px rgba(2,6,23,.35);
-  text-align: center;
-  padding: 28px 16px;
-  transition: transform .2s ease, box-shadow .2s ease;
-}
-
-.stat-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 14px 36px rgba(2,6,23,.45);
-}
-
-.stat-kpi {
-  font-size: 2rem;
-  font-weight: 900;
-  background: linear-gradient(90deg, #818cf8, #22d3ee);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-  margin: 0;
-}
-
-.stat-label {
-  color: #cfe0ff;
-  font-size: .95rem;
-  margin-top: 6px;
-  opacity: .9;
-}
-
-@media (prefers-color-scheme: light) {
-  .statsband {
-    background: linear-gradient(180deg, #f9fafb, #eef2ff);
+  .stats-section {
+    position: relative;
+    padding: 80px 20px;
+    background: #0b1221; /* Dark Base */
+    overflow: hidden;
   }
+
+  /* Glow ambiental (Aurora Boreal sutil) */
+  .stats-glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background: 
+      radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08), transparent 40%),
+      radial-gradient(circle at 85% 50%, rgba(45, 212, 191, 0.08), transparent 40%);
+  }
+
+  .stats-container {
+    max-width: 1100px; margin: 0 auto; position: relative; z-index: 1;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 24px;
+  }
+  @media (min-width: 768px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
+
+  /* CARD DISEÑO */
   .stat-card {
-    background: #fff;
-    border-color: #e2e8f0;
-    box-shadow: 0 10px 24px rgba(16,24,40,.06);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 32px 20px;
+    text-align: center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease;
+    
+    /* Animación de entrada */
+    opacity: 0; transform: translateY(20px);
+    animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-play-state: paused; /* Se activa con JS o IntersectionObserver si quisiéramos clases, 
+                                     aquí lo dejé simple, pero el delay inline ayuda */
   }
-  .stat-label { color: #475569; }
-}
+  
+  /* Cuando el componente monta, la animación corre (simplificado) */
+  .stat-card { animation-play-state: running; }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.3); /* Indigo Glow */
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  }
+
+  /* TIPOGRAFÍA DE NÚMEROS */
+  .stat-value-wrapper {
+    display: flex; justify-content: center; align-items: baseline;
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums; /* Evita que los números salten al contar */
+  }
+
+  .stat-number {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    
+    /* Gradiente "Lael" (Indigo -> Teal) */
+    background: linear-gradient(135deg, #fff 20%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stat-affix {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #6366f1; /* Color de acento para símbolos */
+    margin: 0 2px;
+  }
+
+  .stat-label {
+    color: #94a3b8; /* Slate 400 */
+    font-size: 1rem;
+    font-weight: 500;
+    max-width: 200px; margin: 0 auto;
+    line-height: 1.5;
+  }
+
+  @keyframes fadeSlideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
 `;

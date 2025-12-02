@@ -1,8 +1,9 @@
 import { useMemo, useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-// Importamos la data que acabamos de actualizar
+// Importamos la data corregida y completa
 import {
   LSCH_ENROLLMENT_FEE,
+  ENROLLMENT_LABEL,
   LSCH_MODULES,
   LSCH_GROUP_PLANS,
   LSCH_ONE2ONE_PLANS,
@@ -17,7 +18,7 @@ import senasImg from "../assets/img/lael/senas.jpg";
 const CERTIFICATE_FEE = 19990;
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG (Para no depender de librerías externas y evitar errores)
+   1. ICONOS SVG (Sin dependencias externas)
    ────────────────────────────────────────────────────────────────────────── */
 const Icons = {
   Check: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
@@ -25,24 +26,25 @@ const Icons = {
   Lock: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
   Briefcase: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
   Users: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-  Award: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+  Award: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>,
+  Heart: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1 7.8 7.8 7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. ESTILOS CSS - "TURQUESA NEÓN / KINESTHETIC"
+   2. ESTILOS CSS - "KINETIC TEAL" (REBRANDING VISUAL)
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
-  /* Paleta: Turquesa Eléctrico sobre Negro */
+  /* Paleta: Turquesa Eléctrico sobre Negro Profundo */
   --bg-deep: #02040a;       
   --bg-panel: #0d1216;      
   
-  --primary: #14b8a6;       /* Teal 500 */
+  --primary: #14b8a6;       /* Teal 500 - Comunicación */
   --primary-hover: #0d9488;
   --primary-glow: rgba(20, 184, 166, 0.4);
   
-  --accent: #06b6d4;        /* Cyan 500 */
-  --gold: #f59e0b;          /* Amber */
+  --accent: #06b6d4;        /* Cyan 500 - Tecnología */
+  --gold: #f59e0b;          /* Amber - Certificación */
   
   --text-main: #f0fdfa;
   --text-muted: #94a3b8;
@@ -50,7 +52,7 @@ const css = `
   --border: rgba(20, 184, 166, 0.15);
   --glass: rgba(13, 18, 22, 0.7);
   
-  --radius: 16px;
+  --radius: 20px;
   --font-sans: 'Inter', system-ui, sans-serif;
 }
 
@@ -138,15 +140,15 @@ h1,h2,h3,h4,h5 { margin: 0; font-weight: 800; line-height: 1.1; }
 }
 
 /* --- CORPORATE BAR --- */
-.corp-bar { border-block: 1px solid var(--border); background: rgba(20, 184, 166, 0.03); padding: 40px 0; margin-bottom: 80px; }
+.corp-bar { border-block: 1px solid var(--border); background: rgba(20, 184, 166, 0.03); padding: 60px 0; margin-bottom: 80px; }
 .corp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
 .corp-item { display: flex; gap: 15px; align-items: flex-start; }
 .c-icon-box { 
     background: rgba(6, 182, 212, 0.1); color: var(--accent); width: 45px; height: 45px; 
     border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.c-text h4 { margin-bottom: 5px; font-size: 1rem; color: white; }
-.c-text p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+.c-text h4 { margin-bottom: 5px; font-size: 1.1rem; color: white; }
+.c-text p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
 
 
 /* --- CONFIGURATOR UI --- */
@@ -228,7 +230,7 @@ h1,h2,h3,h4,h5 { margin: 0; font-weight: 800; line-height: 1.1; }
     background: var(--bg-panel); border: 1px solid var(--border); border-radius: 20px; padding: 30px;
     box-shadow: 0 20px 50px -10px rgba(0,0,0,0.6); backdrop-filter: blur(10px);
 }
-@media (max-width: 900px) { .sticky-card { display: none; } } /* Oculto en móvil */
+@media (max-width: 900px) { .sticky-card { display: none; } }
 
 .sum-header { display: flex; justify-content: space-between; padding-bottom: 15px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
 .secure-tag { font-size: 0.8rem; color: var(--primary); display: flex; align-items: center; gap: 5px; }
@@ -280,7 +282,7 @@ function SEOHead({ title, description }) {
    ────────────────────────────────────────────────────────────────────────── */
 export default function LSCh() {
   const [church, setChurch] = useState(false);
-  const [selectedGroupId, setSelectedGroupId] = useState("g-quarter");
+  const [selectedGroupId, setSelectedGroupId] = useState("g-quarter"); // Default al Trimestral
   const [selectedOneId, setSelectedOneId] = useState(null);
   const [selectedModules, setSelectedModules] = useState(["nivel-1"]);
   const [certSelected, setCertSelected] = useState(false);
@@ -298,11 +300,15 @@ export default function LSCh() {
   const monthlyOne = onePlan?.monthly || 0;
   
   const totalMonthly = monthlyGroup + monthlyOne;
-  const totalFirstPayment = totalMonthly + LSCH_ENROLLMENT_FEE + (certSelected ? CERTIFICATE_FEE : 0);
+  
+  // Cálculo del Primer Pago (Aquí está la estrategia de matrícula)
+  // Si el plan es Trimestral ("g-quarter") o Iglesia -> Matrícula $0
+  const enrollmentCost = (groupPlan.id === "g-quarter" || church) ? 0 : LSCH_ENROLLMENT_FEE;
+  
+  const totalFirstPayment = totalMonthly + enrollmentCost + (certSelected ? CERTIFICATE_FEE : 0);
 
   const toggleModule = (id) => {
     setSelectedModules(prev => {
-      // Regla de UX: No dejar deseleccionar si es el último (opcional)
       if(prev.includes(id) && prev.length === 1) return prev; 
       return prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
     });
@@ -320,11 +326,11 @@ ${certSelected ? `• Certificación: SÍ` : ''}
 
 💰 *Resumen:*
 • Mensualidad: ${clp(totalMonthly)}
-• Primer Pago (aprox): ${clp(totalFirstPayment)} (Matrícula incl.)
+• Primer Pago (aprox): ${clp(totalFirstPayment)} ${enrollmentCost === 0 ? '(Matrícula Bonificada)' : ''}
 
 ¿Me envían los datos de transferencia?`;
     return `https://wa.me/56964626568?text=${encodeURIComponent(text)}`;
-  }, [church, groupPlan, selectedModules, onePlan, certSelected, totalMonthly, totalFirstPayment]);
+  }, [church, groupPlan, selectedModules, onePlan, certSelected, totalMonthly, totalFirstPayment, enrollmentCost]);
 
   return (
     <div className="lsch-page">
@@ -362,7 +368,6 @@ ${certSelected ? `• Certificación: SÍ` : ''}
 
             <div className="hero-visual">
                 <div className="image-frame">
-                    {/* Fallback simple si la imagen no carga */}
                     {senasImg ? <img src={senasImg} alt="Clase LSCh" /> : <div style={{width:'100%', height:'300px', background:'#111'}}></div>}
                     <div className="float-card">
                         <Icons.Hand />
@@ -504,7 +509,9 @@ ${certSelected ? `• Certificación: SÍ` : ''}
                     <span>Tu Primer Pago Hoy</span>
                     <strong>{clp(totalFirstPayment)}</strong>
                     <small style={{display:'block', fontSize:'0.7rem', color:'var(--text-muted)', marginTop:'5px'}}>
-                        (Incluye Matrícula única de {clp(LSCH_ENROLLMENT_FEE)})
+                        {enrollmentCost === 0 
+                            ? "✨ Matrícula BONIFICADA ($0)" 
+                            : `(Incluye ${ENROLLMENT_LABEL} de ${clp(LSCH_ENROLLMENT_FEE)})`}
                     </small>
                 </div>
 

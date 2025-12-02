@@ -1,320 +1,326 @@
 import { useState, useEffect } from "react";
-import { PERKS, OPENINGS, HR_EMAIL, HR_WAPP } from "../data/jobs.js";
+import SEOHead from "../components/SEOHead.jsx";
 
-// IMAGEN: Ambiente de trabajo relajado/remoto
-const teamImg = "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop";
+// --- DATOS (Puedes moverlos a data/jobs.js después) ---
+const HR_EMAIL = "talento@institutolael.cl";
+const HR_WAPP = "56964626568";
+
+const PERKS = [
+  { icon: "🏠", title: "100% Remoto", desc: "Olvídate del taco. Trabaja desde tu casa o viajando." },
+  { icon: "📅", title: "Horario Flexible", desc: "Tú gestionas tus bloques. Valoramos resultados, no horas silla." },
+  { icon: "🚀", title: "Crecimiento", desc: "Acceso gratuito a nuestros cursos de idiomas para ti." },
+  { icon: "💰", title: "Pagos Puntuales", desc: "Honorarios claros y transferencias en fecha exacta." }
+];
+
+const OPENINGS = [
+  {
+    id: 1,
+    title: "Profesor(a) de Matemáticas PAES",
+    type: "Part-time",
+    tags: ["Remoto", "Noches/Sábados"],
+    salary: "$15.000 - $25.000 / hora",
+    desc: "Buscamos a alguien que ame los números y sepa explicar 'en fácil'. No queremos fórmulas de memoria, queremos lógica.",
+    requirements: ["Experiencia en PAES M1/M2", "Manejo de Zoom/OBS", "Tablet gráfica (Deseable)"]
+  },
+  {
+    id: 2,
+    title: "Docente de Inglés (Speaking Focus)",
+    type: "Part-time",
+    tags: ["Remoto", "Adultos"],
+    salary: "$12.000 - $18.000 / hora",
+    desc: "Necesitamos dinamismo puro. Si tus clases son solo grammar drills, esto no es para ti. Buscamos conversación y role-plays.",
+    requirements: ["Certificación C1/C2", "Experiencia con adultos", "Energía alta"]
+  },
+  {
+    id: 3,
+    title: "Creador de Contenido (TikTok/Reels)",
+    type: "Freelance",
+    tags: ["Proyectos", "Creativo"],
+    salary: "Por proyecto / Video",
+    desc: "El genio detrás de la cámara. Ayúdanos a mostrar la cultura Lael al mundo con videos cortos y virales.",
+    requirements: ["Portafolio de Reels", "Edición en CapCut/Premiere", "Buena ortografía"]
+  }
+];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG
+   1. ICONOS SVG (Minimalistas)
    ────────────────────────────────────────────────────────────────────────── */
 const Icons = {
-  Briefcase: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
-  Clock: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
-  ChevronDown: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>,
+  Briefcase: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
+  ChevronDown: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>,
   Send: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
-  Whatsapp: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  Heart: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. ESTILOS CSS - "TALENT HUB" (Neon Green & Dark)
-   ────────────────────────────────────────────────────────────────────────── */
-const css = `
-:root {
-  --bg-deep: #050505;
-  --bg-card: #111;
-  --bg-hover: #1a1a1a;
-  
-  --primary: #10b981;       /* Emerald 500 (Crecimiento/Dinero) */
-  --primary-glow: rgba(16, 185, 129, 0.4);
-  
-  --text-main: #fff;
-  --text-muted: #a3a3a3;
-  
-  --border: rgba(255,255,255,0.1);
-  --radius: 16px;
-  --font-sans: 'Inter', system-ui, sans-serif;
-}
-
-.jobs-page {
-  background-color: var(--bg-deep);
-  color: var(--text-main);
-  font-family: var(--font-sans);
-  min-height: 100vh;
-  padding-bottom: 100px;
-}
-
-.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-button { cursor: pointer; border: none; font-family: inherit; transition: 0.2s; }
-a { text-decoration: none; color: inherit; transition: 0.2s; }
-
-/* HERO */
-.hero-jobs { padding: 120px 0 80px; position: relative; overflow: hidden; }
-.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-
-.badge-hiring {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);
-  color: var(--primary); padding: 6px 14px; border-radius: 50px; 
-  font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 24px; letter-spacing: 1px;
-}
-.badge-hiring::before { content: ''; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); animation: pulse 2s infinite; }
-
-h1 { font-size: clamp(2.8rem, 5vw, 4.5rem); line-height: 1.05; font-weight: 800; margin-bottom: 24px; letter-spacing: -0.02em; }
-.text-green { color: var(--primary); }
-
-.lead { font-size: 1.2rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 40px; max-width: 500px; }
-
-.hero-actions { display: flex; gap: 15px; }
-.btn-primary {
-  background: var(--primary); color: #000; padding: 14px 32px; border-radius: 50px;
-  font-weight: 700; font-size: 1rem; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-}
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(16, 185, 129, 0.5); }
-
-.btn-outline {
-  background: transparent; color: white; border: 1px solid var(--border); padding: 14px 32px; border-radius: 50px; font-weight: 600;
-}
-.btn-outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
-
-/* Hero Visual */
-.hero-img-box { position: relative; }
-.hero-img { width: 100%; border-radius: 20px; border: 1px solid var(--border); filter: grayscale(20%); opacity: 0.9; }
-.float-stat {
-  position: absolute; bottom: 30px; left: -30px; background: rgba(10,10,10,0.9);
-  padding: 15px 25px; border-radius: 12px; border: 1px solid var(--border);
-  display: flex; gap: 15px; align-items: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-}
-.fs-icon { font-size: 1.8rem; }
-
-@media (max-width: 900px) {
-  .hero-grid { grid-template-columns: 1fr; text-align: center; }
-  .lead { margin-inline: auto; }
-  .hero-actions { justify-content: center; }
-  .hero-img-box { margin-top: 40px; width: 90%; margin-left: auto; margin-right: auto; }
-  .float-stat { left: 50%; transform: translateX(-50%); width: max-content; bottom: -20px; }
-}
-
-/* PERKS */
-.perks-section { padding: 80px 0; background: #0a0a0a; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.sec-title { text-align: center; font-size: 2.5rem; margin-bottom: 60px; font-weight: 800; }
-
-.perks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; }
-.perk-card {
-  background: var(--bg-card); padding: 35px 30px; border-radius: var(--radius); border: 1px solid var(--border);
-  text-align: center; transition: 0.3s;
-}
-.perk-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-.p-icon { font-size: 3rem; margin-bottom: 20px; display: block; filter: drop-shadow(0 0 20px rgba(255,255,255,0.1)); }
-.perk-card h3 { font-size: 1.25rem; margin-bottom: 12px; color: white; }
-.perk-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
-
-/* JOB BOARD */
-.jobs-section { padding: 100px 0; }
-.jobs-list { display: flex; flex-direction: column; gap: 20px; max-width: 900px; margin: 0 auto; }
-
-.job-item {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
-  overflow: hidden; transition: 0.3s;
-}
-.job-item:hover { border-color: var(--text-muted); }
-.job-item.active { border-color: var(--primary); box-shadow: 0 0 30px rgba(16, 185, 129, 0.1); }
-
-.job-header { 
-  padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; 
-  cursor: pointer; background: rgba(255,255,255,0.01);
-}
-.job-info h3 { font-size: 1.3rem; margin: 0 0 8px; color: white; }
-.job-meta { display: flex; gap: 10px; flex-wrap: wrap; }
-.job-tag { 
-  font-size: 0.75rem; background: #262626; color: var(--text-muted); padding: 4px 10px; 
-  border-radius: 4px; font-weight: 600; text-transform: uppercase; 
-}
-.job-type { color: var(--primary); border: 1px solid var(--primary); background: rgba(16, 185, 129, 0.1); }
-
-.btn-toggle { 
-  background: transparent; color: var(--text-muted); padding: 10px; border-radius: 50%; border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center; transition: 0.3s;
-}
-.job-item.active .btn-toggle { transform: rotate(180deg); background: var(--primary); color: black; border-color: var(--primary); }
-
-.job-body { 
-  padding: 0 30px 30px; border-top: 1px solid var(--border); margin-top: 0; 
-  animation: slideDown 0.3s ease-out;
-}
-.job-desc { margin: 25px 0; color: #d4d4d4; font-size: 1rem; line-height: 1.6; }
-.req-title { font-size: 0.9rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 10px; }
-.req-list { list-style: none; padding: 0; margin-bottom: 30px; }
-.req-list li { margin-bottom: 8px; padding-left: 20px; position: relative; color: #e5e5e5; }
-.req-list li::before { content: '•'; color: var(--primary); position: absolute; left: 0; font-weight: bold; }
-
-.job-actions { display: flex; gap: 15px; flex-wrap: wrap; }
-.btn-apply {
-  background: white; color: black; padding: 12px 24px; border-radius: 8px; font-weight: 700;
-  display: flex; align-items: center; gap: 8px; font-size: 0.9rem;
-}
-.btn-apply:hover { background: #e5e5e5; }
-.btn-wapp {
-  background: transparent; color: white; border: 1px solid var(--border); padding: 12px 24px; 
-  border-radius: 8px; font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;
-}
-.btn-wapp:hover { background: rgba(255,255,255,0.05); border-color: white; }
-
-/* CTA GENERAL */
-.cta-box { 
-  margin: 60px 0; padding: 50px; background: linear-gradient(135deg, #111, #0a0a0a); 
-  border: 1px solid var(--border); border-radius: 20px; text-align: center;
-}
-.cta-box h3 { font-size: 1.8rem; margin-bottom: 15px; color: white; }
-.cta-box p { color: var(--text-muted); margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; }
-.link-mail { color: var(--primary); font-size: 1.2rem; font-weight: 700; border-bottom: 2px solid var(--primary); padding-bottom: 2px; }
-.link-mail:hover { color: white; border-color: white; }
-
-@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
-
-@media (max-width: 600px) {
-  .job-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-  .btn-toggle { position: absolute; top: 20px; right: 20px; }
-  .job-item { position: relative; }
-  .job-actions { width: 100%; }
-  .btn-apply, .btn-wapp { width: 100%; justify-content: center; }
-}
-`;
-
-/* ──────────────────────────────────────────────────────────────────────────
-   3. COMPONENTE SEO
-   ────────────────────────────────────────────────────────────────────────── */
-const SEOHead = () => {
-  useEffect(() => { document.title = "Trabaja con Nosotros | Lael Careers"; }, []);
-  return null;
-};
-
-/* ──────────────────────────────────────────────────────────────────────────
-   4. COMPONENTE PRINCIPAL
+   2. COMPONENTE PRINCIPAL
    ────────────────────────────────────────────────────────────────────────── */
 export default function Trabaja() {
   const [activeJob, setActiveJob] = useState(null);
 
-  const toggleJob = (id) => {
-    setActiveJob(activeJob === id ? null : id);
-  };
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   return (
-    <div className="jobs-page">
-      <SEOHead />
+    <div className="careers-page">
+      <SEOHead title="Trabaja con Nosotros | Lael Careers" description="Únete a un equipo que transforma la educación." />
       <style>{css}</style>
 
-      {/* HERO */}
-      <header className="hero-jobs">
-        <div className="container hero-grid">
-          <div className="hero-content">
-            <div className="badge-hiring">Estamos Contratando</div>
-            <h1>
-              Construye el futuro <br/>
-              de la <span className="text-green">educación.</span>
-            </h1>
-            <p className="lead">
-              En Instituto Lael no buscamos empleados, buscamos aliados. 
-              Únete a un equipo que valora tu tiempo, respeta tu trabajo y premia tu impacto.
-            </p>
-            <div className="hero-actions">
-              <a href="#vacantes" className="btn-primary">Ver Vacantes</a>
-              <a href="#cultura" className="btn-outline">Nuestra Cultura</a>
-            </div>
-          </div>
+      {/* Luces de Fondo */}
+      <div className="career-glow glow-1"></div>
+      <div className="career-glow glow-2"></div>
 
-          <div className="hero-img-box">
-            <img src={teamImg} alt="Lael Team" className="hero-img" />
-            <div className="float-stat">
-              <span className="fs-icon">🌍</span>
-              <div>
-                <strong style={{display:'block', color:'white'}}>100% Remoto</strong>
-                <small style={{color:'#a3a3a3'}}>Trabaja desde donde quieras</small>
-              </div>
-            </div>
+      <div className="container">
+        
+        {/* HERO SECTION */}
+        <header className="career-hero">
+          <div className="pill-badge">Hiring Now</div>
+          <h1>
+            Enseña con <span className="text-gradient">Propósito.</span>
+          </h1>
+          <p className="hero-lead">
+            No buscamos "empleados". Buscamos mentores apasionados que quieran dejar una huella real en la vida de sus estudiantes. 
+            Si crees que la educación es un acto de servicio, este es tu lugar.
+          </p>
+          <div className="hero-btns">
+            <a href="#positions" className="btn-primary">Ver Oportunidades</a>
+            <a href="#culture" className="btn-ghost">Nuestra Cultura</a>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* PERKS */}
-      <section id="cultura" className="perks-section">
-        <div className="container">
-          <h2 className="sec-title">Por qué elegir Lael</h2>
+        {/* BENEFICIOS (BENTO GRID) */}
+        <section id="culture" className="perks-section">
+          <h2 className="section-title">¿Por qué Lael?</h2>
           <div className="perks-grid">
             {PERKS.map((p, i) => (
               <div key={i} className="perk-card">
-                <span className="p-icon">{p.icon}</span>
+                <div className="perk-icon">{p.icon}</div>
                 <h3>{p.title}</h3>
                 <p>{p.desc}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* JOB BOARD */}
-      <section id="vacantes" className="jobs-section">
-        <div className="container">
-          <h2 className="sec-title">Posiciones Abiertas</h2>
-          
+        {/* LISTA DE VACANTES */}
+        <section id="positions" className="jobs-section">
+          <h2 className="section-title">Posiciones Abiertas</h2>
           <div className="jobs-list">
             {OPENINGS.map(job => (
-              <div key={job.id} className={`job-item ${activeJob === job.id ? 'active' : ''}`}>
-                <div className="job-header" onClick={() => toggleJob(job.id)}>
-                  <div className="job-info">
+              <div key={job.id} className={`job-card ${activeJob === job.id ? 'open' : ''}`}>
+                
+                {/* Header de la Tarjeta */}
+                <div className="job-header" onClick={() => setActiveJob(activeJob === job.id ? null : job.id)}>
+                  <div className="job-main-info">
                     <h3>{job.title}</h3>
-                    <div className="job-meta">
-                      <span className="job-tag job-type">{job.type}</span>
-                      {job.tags.map((t, i) => <span key={i} className="job-tag">{t}</span>)}
+                    <div className="tags-row">
+                      <span className="tag type">{job.type}</span>
+                      {job.tags.map((t, idx) => <span key={idx} className="tag">{t}</span>)}
                     </div>
                   </div>
-                  <button className="btn-toggle"><Icons.ChevronDown/></button>
+                  <button className="toggle-btn">
+                    <Icons.ChevronDown />
+                  </button>
                 </div>
 
-                {activeJob === job.id && (
-                  <div className="job-body">
-                    <p className="job-desc">{job.desc}</p>
+                {/* Cuerpo Desplegable */}
+                <div className="job-body">
+                  <div className="job-content">
+                    <p className="description">{job.desc}</p>
                     
-                    <div className="req-title">Requisitos</div>
-                    <ul className="req-list">
-                      {job.requirements.map((r, i) => <li key={i}>{r}</li>)}
-                    </ul>
-
-                    <div style={{marginBottom:'20px', fontSize:'0.9rem', color:'#d4d4d4'}}>
-                      <strong>Sueldo Ref:</strong> {job.salary}
+                    <div className="req-box">
+                      <h4>Requisitos</h4>
+                      <ul>
+                        {job.requirements.map((r, idx) => <li key={idx}>{r}</li>)}
+                      </ul>
                     </div>
 
-                    <div className="job-actions">
+                    <div className="salary-box">
+                      <strong>💰 Honorarios Referenciales:</strong> {job.salary}
+                    </div>
+
+                    <div className="apply-actions">
                       <a 
-                        href={`mailto:${HR_EMAIL}?subject=Postulación ${job.title}&body=Hola, adjunto mi CV y portafolio.`}
+                        href={`mailto:${HR_EMAIL}?subject=Postulación: ${job.title}`} 
                         className="btn-apply"
                       >
-                        <Icons.Briefcase/> Enviar CV
+                        <Icons.Send /> Enviar CV por Correo
                       </a>
                       <a 
-                        href={`https://wa.me/${HR_WAPP}?text=${encodeURIComponent(`Hola, soy [Nombre] y me interesa el puesto de ${job.title}.`)}`}
+                        href={`https://wa.me/${HR_WAPP}?text=Hola,%20me%20interesa%20el%20puesto%20de%20${encodeURIComponent(job.title)}`} 
                         target="_blank" 
-                        rel="noreferrer" 
-                        className="btn-wapp"
+                        rel="noreferrer"
+                        className="btn-link"
                       >
-                        <Icons.Whatsapp/> Postular Rápido
+                        Consultar por WhatsApp
                       </a>
                     </div>
                   </div>
-                )}
+                </div>
+
               </div>
             ))}
           </div>
+        </section>
 
-          <div className="cta-box">
-            <h3>¿No encuentras tu rol?</h3>
-            <p>Siempre estamos buscando talento excepcional. Si crees que puedes aportar valor en otra área, escríbenos directamente.</p>
-            <a href={`mailto:${HR_EMAIL}`} className="link-mail">{HR_EMAIL}</a>
+        {/* CTA FINAL (TALENT POOL) */}
+        <section className="talent-pool">
+          <div className="pool-content">
+            <div className="icon-heart"><Icons.Heart/></div>
+            <h3>¿No ves tu cargo ideal?</h3>
+            <p>
+              Siempre estamos buscando talento excepcional. Si eres psicopedagogo, diseñador, o simplemente un crack en lo que haces, queremos conocerte.
+            </p>
+            <a href={`mailto:${HR_EMAIL}`} className="btn-pool">Enviar CV a Base de Talentos</a>
           </div>
+        </section>
 
-        </div>
-      </section>
-
+      </div>
     </div>
   );
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   3. ESTILOS CSS - "CAREER HUB"
+   ────────────────────────────────────────────────────────────────────────── */
+const css = `
+:root {
+  --bg-deep: #050505;
+  --bg-card: #0f1115;
+  --bg-hover: #18181b;
+  
+  --primary: #8b5cf6; /* Violeta */
+  --primary-glow: rgba(139, 92, 246, 0.4);
+  --accent: #ec4899;  /* Rosa */
+  
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  
+  --border: rgba(255,255,255,0.08);
+  --radius: 16px;
+}
+
+.careers-page {
+  background-color: var(--bg-deep); color: var(--text-main);
+  font-family: 'Inter', sans-serif; min-height: 100vh;
+  padding: 120px 0 100px; position: relative; overflow-x: hidden;
+}
+
+.container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+
+/* Background FX */
+.career-glow { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.15; pointer-events: none; }
+.glow-1 { width: 600px; height: 600px; top: -200px; right: -100px; background: var(--primary); }
+.glow-2 { width: 500px; height: 500px; top: 40%; left: -200px; background: var(--accent); }
+
+/* HERO */
+.career-hero { text-align: center; margin-bottom: 100px; }
+.pill-badge { 
+  display: inline-block; background: rgba(236, 72, 153, 0.1); color: #f472b6; 
+  padding: 6px 14px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; 
+  text-transform: uppercase; margin-bottom: 20px; border: 1px solid rgba(236, 72, 153, 0.2);
+}
+.career-hero h1 { font-size: clamp(2.5rem, 5vw, 4.5rem); margin-bottom: 20px; font-weight: 800; line-height: 1.1; }
+.text-gradient { background: linear-gradient(135deg, #a78bfa 0%, #f472b6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.hero-lead { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 40px; line-height: 1.6; }
+
+.hero-btns { display: flex; gap: 15px; justify-content: center; }
+.btn-primary { 
+  background: var(--primary); color: white; padding: 14px 28px; border-radius: 50px; 
+  font-weight: 700; text-decoration: none; transition: 0.3s; box-shadow: 0 10px 25px -5px var(--primary-glow);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px -5px var(--primary-glow); filter: brightness(1.1); }
+.btn-ghost { 
+  background: transparent; color: white; padding: 14px 28px; border-radius: 50px; 
+  font-weight: 600; text-decoration: none; border: 1px solid var(--border); transition: 0.3s;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.05); border-color: white; }
+
+/* PERKS (BENTO) */
+.section-title { font-size: 2rem; margin-bottom: 40px; text-align: center; }
+.perks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 100px; }
+.perk-card {
+  background: var(--bg-card); border: 1px solid var(--border); padding: 30px; border-radius: var(--radius);
+  text-align: center; transition: 0.3s;
+}
+.perk-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+.perk-icon { font-size: 2.5rem; margin-bottom: 15px; }
+.perk-card h3 { font-size: 1.1rem; margin-bottom: 8px; color: white; }
+.perk-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; margin: 0; }
+
+/* JOB LIST (ACCORDION PREMIUM) */
+.jobs-list { display: flex; flex-direction: column; gap: 15px; }
+.job-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; transition: 0.3s;
+}
+.job-card:hover { border-color: rgba(255,255,255,0.2); }
+.job-card.open { border-color: var(--primary); background: rgba(139, 92, 246, 0.03); }
+
+.job-header { 
+  padding: 25px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; 
+}
+.job-main-info h3 { font-size: 1.25rem; margin-bottom: 8px; font-weight: 700; color: white; }
+.tags-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.tag { font-size: 0.75rem; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 6px; }
+.tag.type { color: var(--primary); background: rgba(139, 92, 246, 0.1); font-weight: 700; }
+
+.toggle-btn { 
+  background: transparent; color: var(--text-muted); width: 36px; height: 36px; 
+  display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1px solid var(--border); transition: 0.3s;
+}
+.job-card.open .toggle-btn { transform: rotate(180deg); background: var(--primary); color: white; border-color: var(--primary); }
+
+.job-body { 
+  max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+}
+.job-card.open .job-body { max-height: 600px; /* Suficiente para contenido */ }
+
+.job-content { padding: 0 25px 30px; border-top: 1px solid var(--border); margin-top: 5px; animation: fadeIn 0.5s ease; }
+.description { font-size: 1rem; color: #cbd5e1; line-height: 1.6; margin: 20px 0; }
+
+.req-box h4 { font-size: 0.9rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; letter-spacing: 1px; }
+.req-box ul { list-style: none; padding: 0; margin-bottom: 25px; }
+.req-box li { position: relative; padding-left: 20px; margin-bottom: 6px; font-size: 0.95rem; color: #e2e8f0; }
+.req-box li::before { content: '•'; color: var(--primary); position: absolute; left: 0; font-weight: bold; }
+
+.salary-box { background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; font-size: 0.9rem; color: white; margin-bottom: 25px; display: inline-block; }
+
+.apply-actions { display: flex; gap: 15px; flex-wrap: wrap; }
+.btn-apply {
+  background: white; color: black; padding: 12px 24px; border-radius: 8px; font-weight: 700; 
+  display: flex; align-items: center; gap: 8px; font-size: 0.9rem; text-decoration: none; transition: 0.2s;
+}
+.btn-apply:hover { background: #e2e8f0; transform: translateY(-2px); }
+.btn-link {
+  background: transparent; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600; 
+  border: 1px solid var(--border); text-decoration: none; transition: 0.2s; font-size: 0.9rem;
+}
+.btn-link:hover { border-color: white; }
+
+/* TALENT POOL */
+.talent-pool { margin-top: 80px; text-align: center; }
+.pool-content { 
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); 
+  padding: 50px 30px; border-radius: 24px; border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5);
+}
+.icon-heart { font-size: 2rem; color: var(--accent); margin-bottom: 15px; animation: pulse 2s infinite; }
+.pool-content h3 { font-size: 1.8rem; margin-bottom: 10px; }
+.pool-content p { color: var(--text-muted); max-width: 500px; margin: 0 auto 30px; font-size: 1rem; }
+.btn-pool { 
+  display: inline-block; background: var(--primary); color: white; padding: 14px 30px; 
+  border-radius: 50px; font-weight: 700; text-decoration: none; transition: 0.3s;
+}
+.btn-pool:hover { filter: brightness(1.1); transform: scale(1.05); }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+@media (max-width: 600px) {
+  .job-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+  .toggle-btn { position: absolute; top: 20px; right: 20px; }
+  .job-card { position: relative; }
+  .apply-actions { flex-direction: column; }
+  .btn-apply, .btn-link { width: 100%; justify-content: center; }
+}
+`;

@@ -1,6 +1,6 @@
 // src/App.jsx
 import { useEffect, useState, Suspense, lazy } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 /* ---------- Páginas (Lazy Loading) ---------- */
 const Home = lazy(() => import("./pages/Home.jsx"));
@@ -8,48 +8,59 @@ const PAES = lazy(() => import("./pages/PAES.jsx"));
 const LSCh = lazy(() => import("./pages/LSCh.jsx"));
 const Idiomas = lazy(() => import("./pages/Idiomas.jsx"));
 const Empresas = lazy(() => import("./pages/Empresas.jsx"));
-const Homeschool = lazy(() => import("./pages/Homeschool.jsx")); // Lael Academy
-const EscuelaAdultos = lazy(() => import("./pages/EscuelaAdultos.jsx")); // Programa Caminos
+// Nota: Verifica que el archivo se llame 'Homeschool.jsx' o 'LaelAcademy.jsx'
+const Homeschool = lazy(() => import("./pages/Homeschool.jsx")); 
+// Nota: Verifica si tu archivo es 'EscuelaAdultos.jsx' o 'Nivelacion.jsx' (según lo que creaste antes)
+const EscuelaAdultos = lazy(() => import("./pages/EscuelaAdultos.jsx")); 
+
+/* --- Institucional --- */
 const Nosotros = lazy(() => import("./pages/Nosotros.jsx"));
 const Convenios = lazy(() => import("./pages/Convenios.jsx"));
 const Trabaja = lazy(() => import("./pages/Trabaja.jsx"));
-const Inscripcion = lazy(() => import("./pages/Inscripcion.jsx"));
+const Contacto = lazy(() => import("./pages/Contacto.jsx"));
+// const Docentes = lazy(() => import("./pages/Docentes.jsx")); // Opcional si aun no la tienes
 
-// Páginas de Soporte y Legal (NUEVAS)
-const Gracias = lazy(() => import("./pages/Gracias.jsx"));
-const Aula = lazy(() => import("./pages/Aula.jsx")); // Login/Portal
+/* --- Conversión y Legal --- */
+const Inscripcion = lazy(() => import("./pages/Inscripcion.jsx"));
+// const Gracias = lazy(() => import("./pages/Gracias.jsx")); // Página post-pago
 const Terminos = lazy(() => import("./pages/Terminos.jsx"));
 const Privacidad = lazy(() => import("./pages/Privacidad.jsx"));
+// const Pagos = lazy(() => import("./pages/Pagos.jsx")); // Portal de pagos general
 
-// Páginas secundarias
-const Pagos = lazy(() => import("./pages/Pagos.jsx"));
-const Simulador = lazy(() => import("./pages/Simulador.jsx"));
-const Docentes = lazy(() => import("./pages/Docentes.jsx"));
-const Noticias = lazy(() => import("./pages/Noticias.jsx"));
+/* --- Utilidades --- */
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
-const Contacto = lazy(() => import("./pages/Contacto.jsx"));
 
 /* ---------- Componentes Globales ---------- */
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
-// import PromoBanner from "./components/PromoBanner.jsx";
-// import ScrollToTop from "./components/ScrollToTop.jsx"; // Si creaste el archivo, úsalo. Si no, usa la función local abajo.
+import ScrollToTop from "./components/ScrollToTop.jsx"; // ¡Importante!
+import SearchOverlay from "./components/SearchOverlay.jsx"; // ¡El Buscador!
 
 export default function App() {
-  const { pathname } = useLocation();
+  const [searchOpen, setSearchOpen] = useState(false);
 
-  // Scroll al inicio INSTANTÁNEO al cambiar de ruta
+  // Atajo de teclado: Ctrl+K o Cmd+K para abrir el buscador
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    const handleKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
 
   return (
     <>
       <style>{globalCss}</style>
 
-     {/* Banner de Urgencia - ELIMINADO */}
-      {/* <PromoBanner /> */}
+      {/* Utilidades Invisibles */}
+      <ScrollToTop />
+      
+      {/* Buscador Global (Spotlight) */}
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* Navbar Fijo */}
       <Navbar />
@@ -73,25 +84,16 @@ export default function App() {
             <Route path="/nosotros" element={<Nosotros />} />
             <Route path="/convenios" element={<Convenios />} />
             <Route path="/trabaja" element={<Trabaja />} />
-            <Route path="/docentes" element={<Docentes />} />
+            <Route path="/contacto" element={<Contacto />} />
             
             {/* Conversión y Flujo */}
             <Route path="/inscripcion" element={<Inscripcion />} />
-            <Route path="/gracias" element={<Gracias />} /> {/* Página Éxito */}
             
-            {/* Portal Alumno */}
-            <Route path="/aula" element={<Aula />} />
-            <Route path="/login" element={<Aula />} /> {/* Alias */}
-            
-            {/* Utilidades y Legal */}
-            <Route path="/pagos" element={<Pagos />} />
-            <Route path="/simulador" element={<Simulador />} />
-            <Route path="/noticias" element={<Noticias />} />
+            {/* Legal */}
             <Route path="/terminos" element={<Terminos />} />
             <Route path="/privacidad" element={<Privacidad />} />
-            <Route path="/contacto" element={<Contacto />} />
 
-            {/* 404 */}
+            {/* 404 - Ruta comodín al final */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
@@ -130,26 +132,26 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* TEXTURA DE RUIDO (Efecto Cine) */
+/* TEXTURA DE RUIDO (Efecto Cine - Muy sutil) */
 body::before {
   content: "";
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none; z-index: 9999; opacity: 0.4; mix-blend-mode: overlay;
 }
 
 /* Scrollbar personalizada */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: #0f1115; }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #475569; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #020617; }
+::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; border: 2px solid #020617; }
+::-webkit-scrollbar-thumb:hover { background: #6366f1; }
 
 /* Loader de transición */
 .page-loader {
-  height: 80vh; display: flex; align-items: center; justify-content: center; width: 100%;
+  height: 90vh; display: flex; align-items: center; justify-content: center; width: 100%;
 }
 .spinner {
-  width: 40px; height: 40px; border: 3px solid rgba(99,102,241,0.3);
+  width: 50px; height: 50px; border: 4px solid rgba(99,102,241,0.2);
   border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }

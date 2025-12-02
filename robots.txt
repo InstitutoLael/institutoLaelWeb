@@ -1,3 +1,5 @@
 User-agent: *
 Allow: /
-Sitemap: https://tu-dominio.cl/sitemap.xml
+
+# Aquí está la corrección clave: Tu dominio real
+Sitemap: https://www.institutolael.cl/sitemap.xml

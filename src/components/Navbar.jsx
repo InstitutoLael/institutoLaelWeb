@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-// Asegúrate de que esta ruta sea correcta según tu estructura
-import logo from "../assets/img/Logos/lael-inst-naranja.png";
+// Usamos el logo blanco para mejor contraste en el header oscuro
+import logo from "../assets/img/Logos/lael-inst-blanco.png";
 
 /* ─── 1. ICONOS SVG (Sistema Optimizado) ─── */
 const Icons = {
@@ -60,7 +60,7 @@ export default function Navbar() {
           <NavLink to="/" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>Inicio</NavLink>
           
           <div className="dropdown-wrapper">
-            <button className={`nav-link drop-btn ${location.pathname.includes('/programas') ? 'active' : ''}`}>
+            <button className={`nav-link drop-btn ${['/paes','/idiomas','/lsch','/escuela-adultos','/homeschool'].includes(location.pathname) ? 'active' : ''}`}>
               Programas <span className="chevron"><Icons.ChevronDown/></span>
             </button>
             <div className="mega-menu">
@@ -169,13 +169,13 @@ function MobileLink({ to, children, icon, color }) {
 const css = `
 :root {
   --nav-height: 70px;
-  --bg-dark: #050505; /* Fondo más puro */
+  --bg-dark: #050505;
   --glass-bg: rgba(5, 5, 5, 0.85);
   --glass-border: rgba(255, 255, 255, 0.08);
   --text: #f8fafc;
   --text-muted: #94a3b8;
   --primary: #3b82f6;
-  --accent: #f59e0b; /* Naranja Lael */
+  --accent: #f59e0b;
 }
 
 /* NAVBAR BASE */
@@ -193,7 +193,7 @@ const css = `
 
 .nav-content {
   display: flex; justify-content: space-between; align-items: center; height: 100%;
-  position: relative; z-index: 10002; /* Siempre por encima del overlay móvil */
+  position: relative; z-index: 10002;
 }
 
 /* LOGO */
@@ -250,13 +250,13 @@ const css = `
 .icon-transition.rotate { transform: rotate(90deg); color: var(--accent); }
 @media (max-width: 1024px) { 
     .burger-btn { display: flex; } 
-    .mobile-hide-btn { display: none; } /* Ocultamos botón 'Inscripción' en header móvil para limpiar visual */
+    .mobile-hide-btn { display: none; }
 }
 
-/* ─── MOBILE MENU OPTIMIZADO ─── */
+/* MOBILE MENU */
 .mobile-overlay { 
   position: fixed; 
-  top: var(--nav-height); /* Se abre DEBAJO del header */
+  top: var(--nav-height); 
   left: 0; width: 100%; height: calc(100vh - var(--nav-height));
   z-index: 10001;
   visibility: hidden; 

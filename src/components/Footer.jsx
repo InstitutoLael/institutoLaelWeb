@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { FaInstagram, FaWhatsapp, FaLinkedin, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-// Si tienes el logo blanco, úsalo aquí para mejor contraste en fondo oscuro
-// Si no, el naranja está bien.
-import logo from "../assets/img/Logos/lael-inst-naranja.png"; 
+import { FaInstagram, FaWhatsapp, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaYoutube } from "react-icons/fa";
+
+// 💡 CAMBIO RECOMENDADO: Usa el logo BLANCO para el fondo oscuro. Se ve mucho más elegante.
+// Si prefieres el naranja, solo cambia "blanco" por "naranja" en el nombre del archivo.
+import logo from "../assets/img/Logos/lael-inst-blanco.png"; 
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -20,16 +21,16 @@ export default function Footer() {
             </Link>
             <p className="footer-mission">
                 Educación con propósito. Rompemos barreras académicas y geográficas 
-                para que cumplas tus metas con tecnología y valores.
+                para que cumplas tus metas con tecnología y valores cristianos.
             </p>
             <div className="social-links">
                 <SocialLink href="https://instagram.com/institutolael" icon={<FaInstagram />} label="Instagram" />
-                <SocialLink href="https://wa.me/56964626568" icon={<FaWhatsapp />} label="WhatsApp" />
+                <SocialLink href="https://youtube.com/@institutolael" icon={<FaYoutube />} label="YouTube" />
                 <SocialLink href="https://linkedin.com/company/instituto-lael" icon={<FaLinkedin />} label="LinkedIn" />
             </div>
         </div>
 
-        {/* COLUMNA 2: PROGRAMAS (Rutas corregidas) */}
+        {/* COLUMNA 2: PROGRAMAS */}
         <div className="footer-col links-col">
             <h4>Programas</h4>
             <nav>
@@ -37,7 +38,7 @@ export default function Footer() {
                 <Link to="/escuela-adultos">Escuela 2x1</Link>
                 <Link to="/idiomas">Idiomas (Inglés/Coreano)</Link>
                 <Link to="/lsch">Lengua de Señas</Link>
-                <Link to="/empresas">Lael Corporate</Link>
+                <Link to="/homeschool">Lael Academy</Link>
             </nav>
         </div>
 
@@ -46,16 +47,17 @@ export default function Footer() {
             <h4>Institucional</h4>
             <nav>
                 <Link to="/nosotros">Nuestra Historia</Link>
+                <Link to="/empresas">Capacitación Empresas</Link>
+                <Link to="/convenios">Alianzas</Link>
                 <Link to="/trabaja">Trabaja con Nosotros</Link>
-                <Link to="/inscripcion">Matrícula Online</Link>
-                {/* <Link to="/pagos">Portal de Pagos</Link> <-- Si lo tienes a futuro */}
-                <Link to="/contacto">Contacto</Link>
+                <Link to="/contacto">Centro de Ayuda</Link>
             </nav>
         </div>
 
-        {/* COLUMNA 4: CONTACTO (SEO Local) */}
+        {/* COLUMNA 4: CONTACTO */}
         <div className="footer-col contact-col">
             <h4>Contacto</h4>
+            <p className="contact-text">Atención L-V de 9:00 a 19:00 hrs.</p>
             
             <a 
                 href="https://wa.me/56964626568" 
@@ -63,18 +65,12 @@ export default function Footer() {
                 rel="noreferrer" 
                 className="btn-footer-wa"
             >
-                <FaWhatsapp className="wa-icon"/> +56 9 6462 6568
+                <FaWhatsapp className="wa-icon"/> Hablar por WhatsApp
             </a>
 
-            <div className="contact-list">
-                <div className="c-item">
-                    <FaEnvelope className="c-icon"/>
-                    <a href="mailto:contacto@institutolael.cl">contacto@institutolael.cl</a>
-                </div>
-                <div className="c-item">
-                    <FaMapMarkerAlt className="c-icon"/>
-                    <span>San Joaquín, RM (Oficina)</span>
-                </div>
+            <div className="contact-details">
+                <a href="mailto:contacto@institutolael.cl"><FaEnvelope className="small-icon"/> contacto@institutolael.cl</a>
+                <span><FaMapMarkerAlt className="small-icon"/> San Joaquín, RM (Oficina)</span>
             </div>
             
             <div className="rut-tag">RUT: 78.084.019-6</div>
@@ -107,13 +103,13 @@ function SocialLink({ href, icon, label }) {
     );
 }
 
-/* ================= CSS ================= */
+/* ================= CSS (DARK SLATE) ================= */
 const css = `
 :root {
-    --footer-bg: #020617; /* Slate 950 */
-    --footer-text: #94a3b8; /* Slate 400 */
-    --footer-head: #f8fafc; /* Slate 50 */
-    --primary: #6366f1;
+    --footer-bg: #020617; /* Slate 950 - Coherente con toda la web */
+    --footer-text: #94a3b8;
+    --footer-head: #f8fafc;
+    --primary: #6366f1; /* Indigo */
     --border: rgba(255,255,255,0.08);
 }
 
@@ -140,15 +136,15 @@ const css = `
 @media (max-width: 960px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 600px) { 
     .footer-grid { grid-template-columns: 1fr; gap: 40px; text-align: center; } 
-    .brand-col, .contact-col, .c-item { align-items: center; justify-content: center; } 
+    .brand-col, .contact-col, .contact-details { align-items: center; } 
     .footer-logo { margin: 0 auto; } 
     .social-links { justify-content: center; } 
 }
 
 /* COL 1: BRAND */
 .brand-col { display: flex; flex-direction: column; gap: 20px; }
-.footer-logo { height: 38px; width: auto; margin-bottom: 5px; opacity: 0.9; }
-.footer-mission { line-height: 1.6; max-width: 300px; }
+.footer-logo { height: 38px; width: auto; margin-bottom: 5px; opacity: 0.95; }
+.footer-mission { line-height: 1.6; max-width: 300px; font-size: 0.9rem; }
 
 .social-links { display: flex; gap: 12px; margin-top: 5px; }
 .social-btn {
@@ -159,14 +155,15 @@ const css = `
 .social-btn:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-3px); }
 
 /* COL 2 & 3: LINKS */
-.links-col h4 { color: var(--footer-head); margin-bottom: 20px; font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.links-col h4 { color: var(--footer-head); margin-bottom: 20px; font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 .links-col nav { display: flex; flex-direction: column; gap: 12px; }
-.links-col a { color: var(--footer-text); text-decoration: none; transition: .2s; }
+.links-col a { color: var(--footer-text); text-decoration: none; transition: .2s; font-size: 0.9rem; }
 .links-col a:hover { color: var(--primary); padding-left: 5px; }
 
 /* COL 4: CONTACT */
-.contact-col { display: flex; flex-direction: column; gap: 20px; }
-.contact-col h4 { color: var(--footer-head); font-size: 1rem; font-weight: 700; margin: 0; }
+.contact-col { display: flex; flex-direction: column; gap: 15px; }
+.contact-col h4 { color: var(--footer-head); font-size: 0.95rem; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; }
+.contact-text { font-size: 0.9rem; }
 
 .btn-footer-wa {
     display: inline-flex; align-items: center; gap: 10px; justify-content: center;
@@ -174,15 +171,18 @@ const css = `
     font-weight: 700; text-decoration: none; transition: .2s; border: 1px solid rgba(37, 211, 102, 0.2);
 }
 .btn-footer-wa:hover { background: rgba(37, 211, 102, 0.2); transform: translateY(-2px); }
-.wa-icon { font-size: 1.1rem; }
+.wa-icon { font-size: 1.2rem; }
 
-.contact-list { display: flex; flex-direction: column; gap: 12px; }
-.c-item { display: flex; align-items: center; gap: 10px; color: var(--footer-text); }
-.c-item a { text-decoration: none; color: inherit; transition: .2s; }
-.c-item a:hover { color: white; }
-.c-icon { color: var(--primary); }
+.contact-details { display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; margin-top: 5px; }
+.contact-details a { color: var(--footer-text); text-decoration: none; display: flex; align-items: center; gap: 8px; }
+.contact-details span { display: flex; align-items: center; gap: 8px; }
+.contact-details a:hover { text-decoration: underline; color: var(--footer-head); }
+.small-icon { color: var(--primary); font-size: 0.9rem; }
 
-.rut-tag { font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; width: fit-content; margin-top: 5px; }
+.rut-tag { 
+    font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 4px 8px; 
+    border-radius: 4px; width: fit-content; margin-top: 5px; color: var(--footer-text);
+}
 @media (max-width: 600px) { .rut-tag { margin: 5px auto 0; } }
 
 /* BOTTOM BAR */

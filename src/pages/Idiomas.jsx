@@ -450,13 +450,6 @@ export default function Idiomas() {
       <div className="ambient-orb orb-indigo" />
       <div className="ambient-orb orb-cyan" />
 
-      {/* BREADCRUMBS */}
-      <nav className="breadcrumbs">
-        <div className="container">
-          <Link to="/">Inicio</Link> <span className="sep">/</span> <span className="curr">Idiomas</span>
-        </div>
-      </nav>
-
       {/* HERO SECTION */}
       <header className="hero">
         <div className="container hero-grid">

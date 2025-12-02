@@ -3,8 +3,8 @@ import SEOHead from "../components/SEOHead.jsx";
 
 // DATOS REALES (Los que me pasaste)
 const BANK_DATA = {
-  bank: "Banco Estado",
-  type: "Cta. Vista / Chequera",
+  bank: "Mercado Pago",
+  type: "Cta. Vista",
   number: "1088183168",
   rut: "78.084.019-6",
   name: "Instituto Lael SpA",

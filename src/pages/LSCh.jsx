@@ -2,7 +2,7 @@ import { useMemo, useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // Importamos la data corregida y completa
 import {
-  LSCH_ENROLLMENT_FEE,
+  ENROLLMENT_FEE as LSCH_ENROLLMENT_FEE,
   ENROLLMENT_LABEL,
   LSCH_MODULES,
   LSCH_GROUP_PLANS,

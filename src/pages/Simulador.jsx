@@ -1,9 +1,16 @@
-// src/pages/Simulador.jsx
 import { useState, useMemo, useEffect } from "react";
 import SEOHead from "../components/SEOHead.jsx";
 
-// Importamos la base de datos (Asumo que existe y tiene formato correcto)
-import { DB_CARRERAS } from "../data/simulador.js";
+// 🛑 IMPORTANTE: Eliminamos la importación de la base de datos grande.
+// En su lugar, usamos una pequeña lista de ejemplo (5 carreras) para demostrar la lógica.
+
+const SAMPLE_CARRERAS = [
+    { id: 100, u: "P. Univ. Católica de Chile", carrera: "Medicina", sede: "Casa Central", corte: 815, vacantes: 100, arancel: 10000000, p: { nem: 20, rank: 20, cl: 15, m1: 25, m2: 0, cien: 20 } },
+    { id: 101, u: "Universidad de Chile", carrera: "Ingeniería Civil Industrial", sede: "Beauchef", corte: 780, vacantes: 250, arancel: 8500000, p: { nem: 10, rank: 30, cl: 15, m1: 30, m2: 0, cien: 15 } },
+    { id: 102, u: "Universidad de Concepción", carrera: "Derecho", sede: "Concepción", corte: 745, vacantes: 180, arancel: 7000000, p: { nem: 20, rank: 20, cl: 35, m1: 5, m2: 0, hist: 20 } },
+    { id: 103, u: "Universidad Adolfo Ibáñez", carrera: "Diseño", sede: "Peñalolén", corte: 690, vacantes: 120, arancel: 9500000, p: { nem: 40, rank: 20, cl: 20, m1: 20, m2: 0, cien: 0, hist: 0 } },
+    { id: 104, u: "Univ. Técnica Federico Santa María", carrera: "Técnico en Informática", sede: "Valparaíso", corte: 550, vacantes: 80, arancel: 4000000, p: { nem: 30, rank: 30, cl: 10, m1: 30, m2: 0, cien: 0, hist: 0 } }
+];
 
 /* --- ÍCONOS SVG NATIVOS --- */
 const ICONS = {
@@ -36,21 +43,41 @@ export default function Simulador() {
 
   // 🧠 MOTOR DE CÁLCULO
   const results = useMemo(() => {
-    if (!debouncedSearch || debouncedSearch.length < 2) return [];
-
+    // 1. Filtrado Inteligente (Nombre, U, Sede)
     const lowerQ = debouncedSearch.toLowerCase();
     
-    // 1. Filtrado Inteligente (Nombre, U, Sede)
-    const filtered = DB_CARRERAS.filter(c => 
-      c.carrera.toLowerCase().includes(lowerQ) || 
-      c.u.toLowerCase().includes(lowerQ) ||
-      (c.sede && c.sede.toLowerCase().includes(lowerQ))
-    ).slice(0, 30); // Max 30 para rendimiento
+    // Usamos el SAMPLE_CARRERAS y filtramos por búsqueda
+    const filtered = SAMPLE_CARRERAS.filter(c => 
+        c.carrera.toLowerCase().includes(lowerQ) || 
+        c.u.toLowerCase().includes(lowerQ) ||
+        (c.sede && c.sede.toLowerCase().includes(lowerQ))
+    );
 
+    // Si la búsqueda es muy corta y no muestra nada, muestra todo el sample
+    const careersToAnalyze = (debouncedSearch.length < 2 && filtered.length === 0) 
+        ? SAMPLE_CARRERAS 
+        : filtered;
+    
     // 2. Cálculo Ponderado
-    return filtered.map(c => {
+    return careersToAnalyze.map(c => {
       // Mejor electiva automática
-      const bestElectiva = Math.max(scores.cien, scores.hist);
+      const electivaCien = scores.cien * (c.p.cien || 0);
+      const electivaHist = scores.hist * (c.p.hist || 0);
+      
+      let bestElectivaScore = 0;
+      let electivaPonderation = 0;
+
+      // Si la carrera pide CIENCIAS y/o HISTORIA, toma el puntaje más alto del alumno
+      if (c.p.cien > 0 && c.p.hist > 0) {
+          // Si piden ambas, el alumno puede elegir el mayor puntaje (o lo que la U permita)
+          bestElectivaScore = Math.max(scores.cien, scores.hist);
+          electivaPonderation = c.p.cien > 0 ? c.p.cien : c.p.hist; // Asume que la U usará la ponderación más alta si da a elegir
+      } else {
+          // Si solo pide una (ej. solo CIEN), usa ese puntaje y su ponderación.
+          bestElectivaScore = (c.p.cien > 0) ? scores.cien : scores.hist;
+          electivaPonderation = (c.p.cien > 0) ? c.p.cien : c.p.hist;
+      }
+      
       const p = c.p || {}; // Ponderaciones
 
       const rawSum = 
@@ -59,11 +86,16 @@ export default function Simulador() {
         (scores.m1 * (p.m1 || 0)) + 
         (scores.m2 * (p.m2 || 0)) + 
         (scores.cl * (p.cl || 0)) + 
-        (bestElectiva * (p.cien || p.hist || 0));
+        (bestElectivaScore * electivaPonderation);
+
 
       // Detección automática de escala (si suma ~100 o ~1)
       const totalPerc = Object.values(p).reduce((a, b) => a + b, 0);
-      const finalScore = totalPerc > 1.5 ? Math.round(rawSum / 100) : Math.round(rawSum);
+      
+      // La suma total de ponderaciones DEBE ser 100 para que la división sea correcta
+      const divisor = totalPerc > 90 && totalPerc < 110 ? 100 : 1; 
+      
+      const finalScore = Math.round(rawSum / divisor);
 
       // Estado vs Corte
       const corte = c.corte || 0;
@@ -97,9 +129,9 @@ export default function Simulador() {
         {/* HEADER */}
         <header className="sim-header">
           <div className="ai-badge">
-            <span className="dot"></span> Motor IA 2026 Active
+            <span className="dot"></span> Motor PAES 2026 Ready
           </div>
-          <h1>Simulador de Postulación</h1>
+          <h1>Simulador de Postulación (Demo)</h1>
           <p>La herramienta más potente para proyectar tu futuro académico.</p>
         </header>
 
@@ -144,17 +176,20 @@ export default function Simulador() {
 
         {/* GRID DE RESULTADOS */}
         <div className="results-area">
-          {search.length < 2 ? (
+          {results.length === 0 && debouncedSearch.length < 2 ? (
             <div className="empty-state">
-              <div className="empty-graphic">⚛️</div>
-              <h3>Ingresa tus puntajes arriba y busca una carrera</h3>
-              <p>El sistema calculará automáticamente tu ponderación exacta.</p>
+              <div className="empty-graphic">🧪</div>
+              <h3>Modifica tus puntajes arriba</h3>
+              <p>Esta es una versión demo con 5 carreras de ejemplo. El cálculo es real.</p>
+              <p className="mt-4 text-xs text-yellow-500">
+                Para usar las 25,000 carreras, se requeriría una base de datos externa (ej: Firestore) para evitar que la página colapse.
+              </p>
             </div>
           ) : results.length === 0 ? (
             <div className="empty-state">
               <div className="empty-graphic">🔭</div>
               <h3>No encontramos coincidencias</h3>
-              <p>Prueba con palabras más generales (ej: "Ingeniería" en vez de "Ingeniería Civil...")</p>
+              <p>Esta es una demo. Prueba buscando: "Medicina", "Ingeniería" o "Derecho".</p>
             </div>
           ) : (
             <div className="cards-stack">
@@ -168,6 +203,7 @@ export default function Simulador() {
                     <div className="uni-badge">{r.u}</div>
                     <h3 className="career-name">{r.carrera}</h3>
                     <div className="location-row">📍 {r.sede || "Casa Central"}</div>
+                    <div className="arancel-info">💰 Arancel: ${r.arancel ? r.arancel.toLocaleString('es-CL') : 'N/A'}</div>
                   </div>
 
                   <div className="card-right">
@@ -306,6 +342,8 @@ const css = `
 }
 .career-name { font-size: 1.4rem; font-weight: 800; margin: 0 0 10px; line-height: 1.2; }
 .location-row { font-size: 0.9rem; color: var(--muted); }
+.arancel-info { font-size: 0.85rem; color: #10b981; font-weight: 600; margin-top: 10px; }
+
 
 .card-right { 
   display: flex; flex-direction: column; justify-content: center; 

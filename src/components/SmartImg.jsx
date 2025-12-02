@@ -1,176 +1,161 @@
 // src/components/SmartImg.jsx
-import { useEffect, useId, useRef, useState } from "react";
+import { useState } from "react";
+
+// --- ÍCONOS SVG NATIVOS ---
+const ICONS = {
+  image: <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>,
+  alert: <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+};
 
 /**
- * SmartImg (sin Tailwind)
- * - Lazy loading (nativo) + fade in
- * - Placeholder LQIP opcional (blur -> sharpen)
- * - Fallback accesible si falla
- * - Control de aspect-ratio, object-fit, srcSet/sizes y prioridad
- *
- * Props:
- *  - src (string)                URL principal (requerido)
- *  - alt (string)                Texto alternativo (recomendado)
- *  - ratio (string|number)       "16/10" | "4/3" | 1 (aspect-ratio CSS). Si se omite, auto por imagen
- *  - fit ("cover"|"contain")     object-fit (default "cover")
- *  - lqip (string)               URL de miniatura borrosa opcional
- *  - srcSet (string)             srcset responsivo
- *  - sizes (string)              sizes para layout
- *  - priority (boolean)          si true: eager + fetchpriority=high
- *  - className (string)          clases extra para el <figure>
- *  - style (object)              estilos inline al <figure>
+ * SmartImg Component - Cinematic Reveal
+ * Carga de imágenes con skeleton, blur-in animation y manejo de errores.
+ * * Props:
+ * - src, alt: Básicos.
+ * - ratio: string (ej: "16/9", "1/1"). VITAL para evitar saltos de layout (CLS).
+ * - radius: string (ej: "12px", "50%"). Borde redondeado.
+ * - priority: boolean. Si es true (Hero images), carga eager.
  */
 export default function SmartImg({
   src,
   alt = "",
-  ratio,
-  fit = "cover",
-  lqip,
-  srcSet,
-  sizes,
-  priority = false,
+  ratio = "16/9", // Default panorámico
+  fit = "cover",  // cover | contain
+  radius = "16px", // Border radius por defecto
+  priority = false, // True para la imagen principal (LCP)
   className = "",
-  style,
-  ...rest
+  style = {},
+  ...props
 }) {
-  const [loaded, setLoaded] = useState(false);
-  const [failed, setFailed] = useState(false);
-  const [hasCss, setHasCss] = useState(false);
-  const figId = useId();
-  const styleOnce = useRef(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
-  // Inyecta CSS una sola vez por app
-  useEffect(() => {
-    if (styleOnce.current) return;
-    const id = "__smartimg_css__";
-    if (!document.getElementById(id)) {
-      const s = document.createElement("style");
-      s.id = id;
-      s.textContent = css;
-      document.head.appendChild(s);
-    }
-    styleOnce.current = true;
-    setHasCss(true);
-  }, []);
-
-  // Reset flags si cambia el src
-  useEffect(() => {
-    setLoaded(false);
-    setFailed(false);
-  }, [src]);
-
-  const eager = priority ? "eager" : "lazy";
-  const fetchpriority = priority ? "high" : "auto";
-
-  const figureStyle = {
+  // Combinación de estilos inline para controlar el layout
+  const containerStyle = {
+    aspectRatio: ratio,
+    borderRadius: radius,
     ...style,
-    ...(ratio ? { aspectRatio: String(ratio) } : null),
   };
 
   return (
-    <figure
-      id={figId}
-      className={"smartimg " + className}
-      style={figureStyle}
-      data-loaded={loaded && !failed ? "1" : "0"}
-      data-failed={failed ? "1" : "0"}
-      aria-busy={!loaded && !failed}
-    >
-      {/* Skeleton mientras carga */}
-      {!failed && (
-        <div className="smartimg-skeleton" aria-hidden />
+    <div className={`smart-frame ${className}`} style={containerStyle}>
+      <style>{css}</style>
+
+      {/* 1. SKELETON (Se ve mientras carga) */}
+      {!isLoaded && !hasError && (
+        <div className="smart-skeleton" aria-hidden="true" />
       )}
 
-      {/* LQIP blur bajo la imagen real (si existe) */}
-      {!failed && lqip && (
+      {/* 2. IMAGEN REAL */}
+      {!hasError && (
         <img
-          className="smartimg-lqip"
-          src={lqip}
-          alt=""
-          aria-hidden
-        />
-      )}
-
-      {/* Imagen real */}
-      {!failed && (
-        <img
-          className="smartimg-img"
           src={src}
           alt={alt}
-          decoding="async"
-          loading={eager}
-          fetchpriority={fetchpriority}
-          srcSet={srcSet}
-          sizes={sizes}
-          onLoad={() => setLoaded(true)}
-          onError={() => setFailed(true)}
+          className={`smart-img ${isLoaded ? "loaded" : "loading"}`}
           style={{ objectFit: fit }}
-          {...rest}
+          loading={priority ? "eager" : "lazy"}
+          fetchpriority={priority ? "high" : "auto"}
+          decoding="async"
+          onLoad={() => setIsLoaded(true)}
+          onError={() => {
+            setIsLoaded(true); // Dejamos de cargar
+            setHasError(true); // Mostramos error
+          }}
+          {...props}
         />
       )}
 
-      {/* Fallback accesible si falla */}
-      {failed && (
-        <figcaption className="smartimg-fallback" role="img" aria-label="Imagen no disponible">
-          <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden focusable="false">
-            <path d="M21 15V5a2 2 0 0 0-2-2H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h12" fill="none" stroke="currentColor" strokeWidth="2"/>
-            <path d="M3 13l4-4 3 3 5-5 5 5" fill="none" stroke="currentColor" strokeWidth="2"/>
-            <circle cx="19" cy="19" r="2" fill="none" stroke="currentColor" strokeWidth="2"/>
-            <path d="M21 21l-1.5-1.5" fill="none" stroke="currentColor" strokeWidth="2"/>
-          </svg>
-          <span>Imagen no disponible</span>
-        </figcaption>
+      {/* 3. FALLBACK (Si falla la carga) */}
+      {hasError && (
+        <div className="smart-error" role="img" aria-label="Imagen no disponible">
+          <span className="err-icon">{ICONS.alert}</span>
+          <span className="err-text">No disponible</span>
+        </div>
       )}
-    </figure>
+      
+      {/* 4. Overlay opcional (Glass Reflection) para darle toque premium */}
+      <div className="smart-glass-shine" aria-hidden="true"></div>
+    </div>
   );
 }
 
-/* ---------------- CSS embebido (una sola vez) ---------------- */
+/* ---------------- CSS ENCAPSULADO ---------------- */
 const css = `
-.smartimg{
-  position:relative; display:block; width:100%;
-  overflow:hidden; border-radius:16px;
-  border:1px solid #1f2a44;
-  background:linear-gradient(180deg,#0f172a,#0b1220);
-  box-shadow:0 12px 28px rgba(2,6,23,.30);
-  /* Si no pasas ratio, crecerá con el contenido (img) */
-}
-.smartimg-img, .smartimg-lqip{
-  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
-}
-.smartimg-lqip{
-  filter: blur(12px); transform: scale(1.02);
-  opacity:.75; transition: opacity .35s ease;
-}
-.smartimg[data-loaded="1"] .smartimg-lqip{ opacity:0; }
-.smartimg-img{
-  opacity:0; transition: opacity .35s ease;
-}
-.smartimg[data-loaded="1"] .smartimg-img{ opacity:1; }
+  .smart-frame {
+    position: relative;
+    width: 100%;
+    overflow: hidden; /* Vital para contener el scale-up */
+    background: #0f172a; /* Color de fondo base (Slate 900) */
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Borde sutil */
+    transform: translateZ(0); /* Aceleración hardware */
+  }
 
-/* Skeleton */
-.smartimg-skeleton{
-  position:absolute; inset:0;
-  background:
-    linear-gradient(90deg, rgba(15,23,42,.35), rgba(15,23,42,.55), rgba(15,23,42,.35));
-  animation: smartimg-shimmer 1.2s linear infinite;
-}
-@keyframes smartimg-shimmer{
-  from{ background-position:-200% 0; }
-  to{ background-position:200% 0; }
-}
+  /* IMAGEN */
+  .smart-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    
+    /* ESTADO INICIAL (Cargando) */
+    opacity: 0;
+    transform: scale(1.05); /* Un poco de zoom in */
+    filter: blur(8px); /* Borroso */
+    
+    transition: 
+      opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      filter 0.6s ease;
+    
+    will-change: transform, opacity, filter;
+  }
 
-/* Fallback */
-.smartimg-fallback{
-  position:absolute; inset:0; display:grid; place-items:center;
-  gap:6px; color:#9fb3c8; background:#0b1220;
-  text-align:center; font-size:.9rem;
-}
+  /* ESTADO FINAL (Cargado) */
+  .smart-img.loaded {
+    opacity: 1;
+    transform: scale(1); /* Vuelve a tamaño normal */
+    filter: blur(0); /* Nítido */
+  }
 
-/* Alto contraste (si prefieres) */
-/*
-@media (prefers-contrast: more){
-  .smartimg{ border-color:#2b3e68; }
-}
-*/
+  /* SKELETON ANIMATION */
+  .smart-skeleton {
+    position: absolute; inset: 0;
+    background: #1e293b; /* Slate 800 */
+    z-index: 1; /* Detrás de la imagen cuando carga */
+  }
+  .smart-skeleton::after {
+    content: '';
+    position: absolute; inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent
+    );
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    100% { transform: translateX(100%); }
+  }
+
+  /* ERROR STATE */
+  .smart-error {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; 
+    align-items: center; justify-content: center;
+    gap: 8px;
+    background: #0f172a;
+    color: #475569;
+  }
+  .err-icon { color: #64748b; }
+  .err-text { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* SHINE EFFECT (Brillo sutil superior) */
+  .smart-glass-shine {
+    position: absolute; top: 0; left: 0; right: 0; height: 40%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.03), transparent);
+    pointer-events: none;
+    z-index: 2;
+  }
 `;

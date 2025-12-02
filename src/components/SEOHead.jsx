@@ -1,198 +1,137 @@
 // src/components/SEOHead.jsx
-import { useEffect } from "react";
+import React from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
+
+/* --- CONFIGURACIÓN GLOBAL INSTITUTO LAEL --- */
+const CONFIG = {
+  defaultTitle: "Instituto Lael",
+  titleTemplate: "%s | Instituto Lael",
+  defaultDescription: "Educación online con acompañamiento real. Preuniversitario PAES, Idiomas (Inglés, Coreano) y Lengua de Señas Chilena (LSCh). Clases en vivo y valores cristianos.",
+  siteUrl: "https://institutolael.cl",
+  defaultImage: "https://institutolael.cl/meta/og-lael.jpg", // Tu imagen maestra de 1200x630
+  twitterHandle: "@institutolael",
+  themeColor: "#0f172a", // Dark Mode Base
+  locale: "es_CL"
+};
 
 /**
- * SEOHead — metatags para SPA sin SSR
- *
- * Props:
- * - title:        "PAES | Instituto Lael"
- * - description:  "Clases en vivo..."
- * - path:         "/paes"   -> se usa para canonical (con baseUrl)
- * - image:        URL absoluta a la OG (1200x630 ideal)
- * - siteName:     "Instituto Lael"
- * - baseUrl:      "https://institutolael.cl" (sin slash final)
- * - type:         "website" | "article"
- * - twitterSite:  "@institutolael"
- * - twitterCreator:"@institutolael"
- * - locale:       "es_CL"
- * - noindex:      boolean
- * - jsonLd:       objeto(s) schema.org o false para omitir
+ * SEOHead Component — "The All-Seeing Eye"
+ * * Gestiona absolutamente todo lo que los robots necesitan saber.
+ * Integra: Metadatos, OpenGraph, Twitter Cards y JSON-LD (Schema.org).
  */
 export default function SEOHead({
   title,
   description,
-  path,
-  image = "https://institutolael.cl/meta/og-lael.jpg",
-  siteName = "Instituto Lael",
-  baseUrl = "https://institutolael.cl",
-  type = "website",
-  twitterSite = "@institutolael",
-  twitterCreator = "@institutolael",
-  locale = "es_CL",
-  noindex = false,
-  jsonLd, // puede ser object o array de objects; si no se envía, inyecto Organization+WebSite por defecto en home
+  image,
+  type = "website", // 'website' | 'article' | 'profile'
+  keywords, // String separada por comas o array
+  publishedTime, // ISO String (para artículos)
+  modifiedTime,  // ISO String (para actualizaciones)
+  noindex = false, // true para ocultar página de Google
+  jsonLd, // Datos estructurados extra personalizados
 }) {
-  useEffect(() => {
-    const fullTitle = title ? `${title} — ${siteName}` : siteName;
-    const desc =
-      description ||
-      "Educación online con acompañamiento real: PAES, Inglés y Lengua de Señas Chilena (LSCh).";
-    const url = buildCanonical({ baseUrl, path });
+  const location = useLocation();
+  
+  // 1. URL Canónica Dinámica (Limpia parámetros de tracking como ?utm_source)
+  const pathname = location.pathname;
+  const canonicalUrl = `${CONFIG.siteUrl}${pathname === '/' ? '' : pathname}`;
+  
+  // 2. Imagen Robusta (Si falla la específica, usa la default)
+  const metaImage = image 
+    ? (image.startsWith('http') ? image : `${CONFIG.siteUrl}${image}`)
+    : CONFIG.defaultImage;
 
-    // title
-    document.title = fullTitle;
+  // 3. Descripción con Fallback
+  const metaDescription = description || CONFIG.defaultDescription;
 
-    // robots
-    upsert("meta[name='robots']", {
-      metaName: "robots",
-      content: noindex ? "noindex, nofollow" : "index, follow",
-    });
+  // 4. Normalización de Keywords
+  const metaKeywords = Array.isArray(keywords) ? keywords.join(", ") : keywords;
 
-    // canonical
-    upsert("link[rel='canonical']", {
-      tag: "link",
-      rel: "canonical",
-      href: url,
-    });
-
-    // description
-    upsert("meta[name='description']", {
-      metaName: "description",
-      content: desc,
-    });
-
-    // Open Graph
-    upsert("meta[property='og:type']", { property: "og:type", content: type });
-    upsert("meta[property='og:title']", { property: "og:title", content: fullTitle });
-    upsert("meta[property='og:description']", { property: "og:description", content: desc });
-    upsert("meta[property='og:image']", { property: "og:image", content: image });
-    upsert("meta[property='og:url']", { property: "og:url", content: url });
-    upsert("meta[property='og:site_name']", { property: "og:site_name", content: siteName });
-    upsert("meta[property='og:locale']", { property: "og:locale", content: locale });
-
-    // Twitter
-    upsert("meta[name='twitter:card']", { metaName: "twitter:card", content: "summary_large_image" });
-    upsert("meta[name='twitter:site']", { metaName: "twitter:site", content: twitterSite });
-    upsert("meta[name='twitter:creator']", { metaName: "twitter:creator", content: twitterCreator });
-    upsert("meta[name='twitter:title']", { metaName: "twitter:title", content: fullTitle });
-    upsert("meta[name='twitter:description']", { metaName: "twitter:description", content: desc });
-    upsert("meta[name='twitter:image']", { metaName: "twitter:image", content: image });
-
-    // JSON-LD
-    // Limpio anteriores inyectados por este componente
-    document.querySelectorAll("script[data-seohead-jsonld='1']").forEach((n) => n.remove());
-
-    const payload = resolveJsonLd({
-      jsonLd,
-      siteName,
-      baseUrl,
-      url,
-      path,
-    });
-
-    if (payload) {
-      const items = Array.isArray(payload) ? payload : [payload];
-      items.forEach((item) => {
-        const s = document.createElement("script");
-        s.type = "application/ld+json";
-        s.dataset.seoheadJsonld = "1";
-        s.text = JSON.stringify(item);
-        document.head.appendChild(s);
-      });
-    }
-  }, [
-    title,
-    description,
-    path,
-    image,
-    siteName,
-    baseUrl,
-    type,
-    twitterSite,
-    twitterCreator,
-    locale,
-    noindex,
-    jsonLd,
-  ]);
-
-  return null;
-}
-
-/* ---------------- helpers ---------------- */
-
-function buildCanonical({ baseUrl, path }) {
-  // normaliza base sin slash final
-  const b = String(baseUrl || "").replace(/\/+$/, "");
-  if (path) {
-    const p = String(path).startsWith("/") ? path : `/${path}`;
-    return `${b}${p}`;
-  }
-  // fallback a window si no se pasó path
-  if (typeof window !== "undefined") return window.location.href;
-  return b || "https://institutolael.cl/";
-}
-
-/**
- * Crea o actualiza meta/link según selector.
- * Notas:
- * - Para <meta> usa `metaName` (name="...") o `property` (og:*).
- * - Para <link> define `tag:"link"` y sus attrs (rel, href).
- */
-function upsert(selector, attrs) {
-  const head = document.head;
-  let el = head.querySelector(selector);
-  if (!el) {
-    const tag = attrs.tag || (selector.startsWith("link") ? "link" : "meta");
-    el = document.createElement(tag);
-    head.appendChild(el);
-  }
-  // mapear metaName -> name
-  const out = { ...attrs };
-  if ("metaName" in out) {
-    out.name = out.metaName;
-    delete out.metaName;
-  }
-  // attrs no válidos para meta/link
-  delete out.tag;
-
-  Object.entries(out).forEach(([k, v]) => {
-    if (v != null) el.setAttribute(k, String(v));
-  });
-}
-
-/**
- * Si no se entrega `jsonLd`, inyecta Organization+WebSite cuando `path` es home.
- */
-function resolveJsonLd({ jsonLd, siteName, baseUrl, url, path }) {
-  if (jsonLd === false) return null;
-  if (jsonLd && typeof jsonLd === "object") return jsonLd;
-
-  const isHome = !path || path === "/" || path === "";
-  if (!isHome) return null;
-
-  const org = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": siteName,
-    "url": baseUrl,
-    "logo": "https://institutolael.cl/meta/logo-lael.png",
-    "sameAs": [
-      "https://www.instagram.com/institutolael",
-      "https://www.youtube.com/@institutolael",
-    ],
-  };
-
-  const webSite = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": siteName,
-    "url": baseUrl,
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": `${baseUrl}/?q={search_term_string}`,
-      "query-input": "required name=search_term_string",
+  // 5. Generación de Schema.org (JSON-LD)
+  // Esto es lo que hace que aparezcas con "fichas ricas" en Google
+  const schemaOrg = [
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "Instituto Lael",
+      "url": CONFIG.siteUrl,
+      "logo": `${CONFIG.siteUrl}/meta/logo-lael.png`,
+      "sameAs": [
+        "https://www.instagram.com/institutolael",
+        "https://www.youtube.com/@institutolael",
+        "https://www.facebook.com/institutolael"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "areaServed": "CL",
+        "availableLanguage": ["Es"]
+      }
     },
-  };
+    // Breadcrumbs automáticos basados en la URL actual
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Inicio", "item": CONFIG.siteUrl },
+        ...(pathname !== "/" ? [{
+          "@type": "ListItem",
+          "position": 2,
+          "name": title || "Página",
+          "item": canonicalUrl
+        }] : [])
+      ]
+    },
+    // Inyección manual si la hay
+    ...(Array.isArray(jsonLd) ? jsonLd : (jsonLd ? [jsonLd] : []))
+  ];
 
-  return [org, webSite];
+  return (
+    <Helmet>
+      {/* --- CONTROL DEL NAVEGADOR --- */}
+      <html lang="es-CL" />
+      <title>{title ? CONFIG.titleTemplate.replace('%s', title) : CONFIG.defaultTitle}</title>
+      <meta name="description" content={metaDescription} />
+      {metaKeywords && <meta name="keywords" content={metaKeywords} />}
+      <link rel="canonical" href={canonicalUrl} />
+      <meta name="theme-color" content={CONFIG.themeColor} />
+      
+      {/* --- CONTROL DE ROBOTS --- */}
+      <meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
+
+      {/* --- OPEN GRAPH (El estándar para compartir) --- */}
+      <meta property="og:site_name" content="Instituto Lael" />
+      <meta property="og:locale" content={CONFIG.locale} />
+      <meta property="og:type" content={type} />
+      <meta property="og:title" content={title || CONFIG.defaultTitle} />
+      <meta property="og:description" content={metaDescription} />
+      <meta property="og:url" content={canonicalUrl} />
+      
+      {/* IMÁGENES (Optimizadas para WhatsApp/LinkedIn) */}
+      <meta property="og:image" content={metaImage} />
+      <meta property="og:image:secure_url" content={metaImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={title || "Instituto Lael - Educación Online"} />
+
+      {/* DATOS DE ARTÍCULO (Solo si type='article') */}
+      {type === 'article' && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+      {type === 'article' && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+      {type === 'article' && <meta property="article:author" content="Instituto Lael" />}
+
+      {/* --- TWITTER CARDS (X) --- */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:site" content={CONFIG.twitterHandle} />
+      <meta name="twitter:creator" content={CONFIG.twitterHandle} />
+      <meta name="twitter:title" content={title || CONFIG.defaultTitle} />
+      <meta name="twitter:description" content={metaDescription} />
+      <meta name="twitter:image" content={metaImage} />
+
+      {/* --- SCHEMA.ORG JSON-LD (Invisible para humanos, Oro para Google) --- */}
+      <script type="application/ld+json">
+        {JSON.stringify(schemaOrg)}
+      </script>
+    </Helmet>
+  );
 }

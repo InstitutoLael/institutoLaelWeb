@@ -57,12 +57,12 @@ function etiquetaChance(ppp, corte) {
 
   const diff = ppp - corte;
 
-  if (diff >= 40) return { text: "ASEGURADO", color: "emerald", icon: "🚀" };
-  if (diff >= 15) return { text: "MUY PROBABLE", color: "green", icon: "✅" };
-  if (diff >= 0)  return { text: "COMPETITIVO", color: "blue", icon: "🔹" };
-  if (diff >= -15) return { text: "AJUSTADO", color: "yellow", icon: "⚠️" };
-  if (diff >= -40) return { text: "RIESGOSO", color: "orange", icon: "🔸" };
-  return { text: "MUY DIFÍCIL", color: "red", icon: "🔻" };
+  if (diff >= 40) return { text: "EXCELENTE (Asegurado)", color: "emerald", icon: "🚀" };
+  if (diff >= 15) return { text: "MUY PROBABLE (Buena Opción)", color: "green", icon: "✅" };
+  if (diff >= 0)  return { text: "COMPETITIVO (En la Lucha)", color: "blue", icon: "🔹" };
+  if (diff >= -15) return { text: "AJUSTADO (Cerca del Corte)", color: "yellow", icon: "⚠️" };
+  if (diff >= -40) return { text: "RIESGOSO (Difícil)", color: "orange", icon: "🔸" };
+  return { text: "MUY DIFÍCIL (Lejano)", color: "red", icon: "🔻" };
 }
 
 /* --- COMPONENTE PLACEHOLDER (Para evitar error de importación) --- */
@@ -70,32 +70,32 @@ const SEOHead = () => null;
 
 /* --- MAPEO DE COLORES PARA LA LÓGICA --- */
 const colorMap = {
-    emerald: "#10b981", green: "#3b82f6", blue: "#3b82f6", 
-    yellow: "#f59e0b", orange: "#f97316", red: "#ef4444", gray: "#94a3b8"
+    emerald: "#34D399", green: "#22C55E", blue: "#3B82F6", 
+    yellow: "#FBBF24", orange: "#F97316", red: "#EF4444", gray: "#9CA3AF"
 };
 const colorMapBg = {
-    emerald: "rgba(16,185,129,0.15)", green: "rgba(59,130,246,0.15)", blue: "rgba(59,130,246,0.15)", 
-    yellow: "rgba(245,158,11,0.15)", orange: "rgba(249,115,22,0.15)", red: "rgba(239,68,68,0.1)", gray: "rgba(148,163,184,0.1)"
+    emerald: "rgba(52,211,153,0.15)", green: "rgba(34,197,94,0.15)", blue: "rgba(59,130,246,0.15)", 
+    yellow: "rgba(251,191,36,0.15)", orange: "rgba(249,115,22,0.15)", red: "rgba(239,68,68,0.15)", gray: "rgba(156,163,175,0.1)"
 };
 
 /* --- COMPONENTE PRINCIPAL --- */
 export default function SimuladorPonderacion() {
-  // 1. Estado de Puntajes del Alumno (similares a los del formulario anterior)
+  // 1. Estado de Puntajes del Alumno 
   const [scores, setScores] = useState({
     nem: 650, ranking: 650, cl: 700, m1: 700, m2: 0, cien: 600, hist: 0
   });
 
   // 2. Estado de Ponderaciones de la Carrera (ingresadas por el usuario, en %)
   const [ponderations, setPonderations] = useState({
-    nem: 20, rank: 20, cl: 30, m1: 30, m2: 0, cien: 0, hist: 0 // Ejemplo: Ingeniería U. Chile
+    nem: 20, rank: 20, cl: 30, m1: 30, m2: 0, cien: 0, hist: 0 
   });
   
   // 3. Estado del Puntaje de Corte de Referencia
   const [corteTarget, setCorteTarget] = useState(700);
   
   // 4. Input para el nombre de la carrera (solo estético)
-  const [careerName, setCareerName] = useState("Ingeniería Civil U. de Chile");
-  const [uniName, setUniName] = useState("Universidad de Chile");
+  const [careerName, setCareerName] = useState("Ingeniería Civil");
+  const [uniName, setUniName] = useState("Universidad Ejemplo");
 
 
   // Manejadores de Inputs
@@ -122,7 +122,6 @@ export default function SimuladorPonderacion() {
 
   // 🧠 MOTOR DE CÁLCULO
   const calculationResult = useMemo(() => {
-    // Mapeo de keys para la lógica
     const studentScores = {
       NEM: scores.nem, RANK: scores.ranking, CL: scores.cl, 
       M1: scores.m1, M2: scores.m2, CIEN: scores.cien, HIS: scores.hist 
@@ -139,7 +138,7 @@ export default function SimuladorPonderacion() {
         return { 
             finalScore: 0, 
             diff: 0, 
-            status: { label: "NO ADMISIBLE (Promedio < 458)", color: "#ef4444", bg: "rgba(239,68,68,0.1)", icon: "⛔" },
+            status: { label: "NO ADMISIBLE (Promedio < 458)", color: "#EF4444", bg: "rgba(239,68,68,0.2)", icon: "⛔" },
             admissible: false
         };
     }
@@ -179,40 +178,40 @@ export default function SimuladorPonderacion() {
         
         {/* HEADER */}
         <header className="sim-header">
-          <h1>Calculadora de Ponderación por Perfil</h1>
-          <p>Introduce tus puntajes y el perfil de ponderación de la carrera que te interesa para proyectar tu postulación.</p>
+          <h1>Calculadora de Ponderación por Perfil PAES</h1>
+          <p className="subtitle">Proyecta tu postulación: Ingresa tus puntajes, el perfil de ponderación de la carrera y el corte de referencia.</p>
         </header>
         
         {/* DASHBOARD DE PUNTAJES DEL ALUMNO */}
-        <h2 className="section-title">1. Tus Puntajes PAES</h2>
+        <SectionTitle number="1" title="Tus Puntajes PAES Obtenidos"/>
         <div className="dashboard-panel">
           <div className="inputs-scroll">
             {[
-              { k: 'nem', l: 'NEM' }, { k: 'ranking', l: 'RANK' }, 
+              { k: 'nem', l: 'NEM' }, { k: 'ranking', l: 'RANKING' }, 
               { k: 'cl', l: 'LENGUAJE' }, { k: 'm1', l: 'MATE 1 (M1)' }, 
               { k: 'm2', l: 'MATE 2 (M2)' }, { k: 'cien', l: 'CIENCIAS' }, 
               { k: 'hist', l: 'HISTORIA' }
             ].map((field) => (
-              <div key={field.k} className="input-group">
-                <label>{field.l}</label>
-                <input 
-                  type="number" 
-                  name={field.k} 
-                  value={scores[field.k]} 
-                  onChange={handleScore}
-                  placeholder="0"
-                />
-              </div>
+              <InputGroup 
+                key={field.k} 
+                k={field.k} 
+                label={field.l} 
+                value={scores[field.k]} 
+                onChange={handleScore} 
+                max={1000}
+                placeholder="650"
+                isScore={true}
+              />
             ))}
           </div>
         </div>
 
         {/* PERFIL DE PONDERACIÓN DE CARRERA */}
-        <h2 className="section-title mt-10">2. Perfil de Ponderación y Corte Objetivo</h2>
+        <SectionTitle number="2" title="Perfil de Ponderación y Corte Objetivo"/>
         
         {/* Datos de la Carrera (Editable) */}
-        <div className="dashboard-panel mb-5">
-            <div className="inputs-scroll !grid-cols-2 md:!grid-cols-4 gap-4">
+        <div className="dashboard-panel">
+            <div className="metadata-grid">
                 <div className="input-group col-span-2 md:col-span-2">
                     <label>Universidad / Institución</label>
                     <input type="text" value={uniName} onChange={(e) => setUniName(e.target.value)} />
@@ -222,54 +221,53 @@ export default function SimuladorPonderacion() {
                     <input type="text" value={careerName} onChange={(e) => setCareerName(e.target.value)} />
                 </div>
             </div>
-            <div className="input-group mt-4">
-                <label>Puntaje de Corte Referencia (Ej: 700)</label>
+            
+            <div className="input-group mt-6">
+                <label className="text-xl font-bold text-gray-300">Puntaje de Corte Referencia (Ej: 700)</label>
                 <input 
                   type="number" 
                   value={corteTarget} 
                   onChange={handleCorte} 
-                  placeholder="Puntaje de Corte" 
-                  className="!text-3xl !py-4"
+                  placeholder="700" 
+                  className="corte-input"
                 />
+            </div>
+            
+            <hr className="divider" />
+            
+            <p className="description-text">
+                *Ingresa los **porcentajes de ponderación** (ej: 20 para 20%).
+            </p>
+            <div className="inputs-scroll mt-4">
+              {[
+                { k: 'nem', l: 'NEM (%)' }, { k: 'rank', l: 'RANK (%)' }, 
+                { k: 'cl', l: 'LENGUAJE (%)' }, { k: 'm1', l: 'MATE 1 (%)' }, 
+                { k: 'm2', l: 'MATE 2 (%)' }, { k: 'cien', l: 'CIENCIAS (%)' }, 
+                { k: 'hist', l: 'HISTORIA (%)' }
+              ].map((field) => (
+                <InputGroup 
+                  key={field.k} 
+                  k={field.k} 
+                  label={field.l} 
+                  value={ponderations[field.k]} 
+                  onChange={handlePonderation}
+                  max={100}
+                  placeholder="20"
+                  isScore={false}
+                />
+              ))}
+            </div>
+            
+            <div className="mt-5 text-right font-bold text-sm">
+                <div className={`total-badge ${totalPonderations === 100 ? 'bg-green-600' : 'bg-red-600'}`}>
+                    Total: {totalPonderations}% {totalPonderations !== 100 && "(¡Debe sumar 100!)"}
+                </div>
             </div>
         </div>
 
 
-        {/* PONDERACIONES */}
-        <div className="dashboard-panel">
-          <p className="text-sm text-yellow-400 mb-3">
-              *Ingresa los porcentajes de ponderación (ej: 20 para 20%). Deben sumar 100%.
-          </p>
-          <div className="inputs-scroll">
-            {[
-              { k: 'nem', l: 'NEM (%)' }, { k: 'rank', l: 'RANK (%)' }, 
-              { k: 'cl', l: 'LENGUAJE (%)' }, { k: 'm1', l: 'MATE 1 (%)' }, 
-              { k: 'm2', l: 'MATE 2 (%)' }, { k: 'cien', l: 'CIENCIAS (%)' }, 
-              { k: 'hist', l: 'HISTORIA (%)' }
-            ].map((field) => (
-              <div key={field.k} className="input-group">
-                <label>{field.l}</label>
-                <input 
-                  type="number" 
-                  name={field.k} 
-                  value={ponderations[field.k]} 
-                  onChange={handlePonderation}
-                  placeholder="0"
-                />
-              </div>
-            ))}
-          </div>
-          
-          <div className="mt-5 text-right font-bold text-sm">
-            <span className={totalPonderations === 100 ? 'text-green-500' : 'text-red-500'}>
-              Suma Total de Ponderaciones: {totalPonderations}% {totalPonderations !== 100 && "(¡Ajustar!)"}
-            </span>
-          </div>
-        </div>
-
-
         {/* RESULTADO ÚNICO */}
-        <h2 className="section-title mt-10">3. Resultado del Cálculo</h2>
+        <SectionTitle number="3" title="Resultado de tu Postulación Proyectada"/>
         <div className="result-card-container">
             <ResultCard 
                 result={calculationResult} 
@@ -280,13 +278,40 @@ export default function SimuladorPonderacion() {
         </div>
         
         {/* Leyenda Electiva */}
-        <div className="mt-10 p-4 border border-blue-900 bg-blue-900/20 rounded-xl text-sm text-blue-200 mx-auto max-w-lg">
-            <strong>Nota sobre Electiva (CIENCIAS/HISTORIA):</strong> La calculadora utiliza **automáticamente tu mejor puntaje** entre CIENCIAS o HISTORIA, si la carrera pondera al menos una de ellas.
+        <div className="info-box">
+            <svg className="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <p><strong>Nota sobre Electiva (CIENCIAS/HISTORIA):</strong> La calculadora utiliza **automáticamente tu mejor puntaje** entre CIENCIAS o HISTORIA, si la carrera pondera al menos una de ellas, tal como permite el sistema de admisión.</p>
         </div>
       </div>
     </div>
   );
 }
+
+// Subcomponente Título de Sección
+const SectionTitle = ({ number, title }) => (
+    <h2 className="section-title-wrapper">
+        <span className="section-number">{number}</span>
+        {title}
+    </h2>
+);
+
+// Subcomponente Grupo de Input
+const InputGroup = ({ k, label, value, onChange, max, placeholder, isScore }) => (
+    <div className="input-group">
+        <label>{label}</label>
+        <input 
+            type="number" 
+            name={k} 
+            value={value} 
+            onChange={onChange}
+            placeholder={placeholder}
+            max={max}
+            min={0}
+            className={isScore ? 'score-input' : 'pond-input'}
+        />
+    </div>
+);
+
 
 /* --- COMPONENTE DE TARJETA DE RESULTADO ÚNICO --- */
 const ResultCard = ({ result, corte, career, uni }) => {
@@ -294,7 +319,7 @@ const ResultCard = ({ result, corte, career, uni }) => {
 
     const baseStyle = { 
         borderColor: status.color, 
-        borderLeft: `4px solid ${status.color}`
+        boxShadow: `0 10px 40px ${status.color}33`,
     };
 
     return (
@@ -302,18 +327,20 @@ const ResultCard = ({ result, corte, career, uni }) => {
             <div className="card-left">
                 <div className="uni-badge">{uni}</div>
                 <h3 className="career-name text-2xl">{career}</h3>
-                <div className="text-sm text-gray-400 mt-2">
-                    Puntaje de Corte de Referencia: <strong className="text-white">{corte}</strong>
-                </div>
                 
+                <div className="current-data">
+                    <p>Puntaje de Corte Referencia:</p>
+                    <strong className="text-white text-3xl">{corte}</strong>
+                </div>
+
                 {!admissible && (
-                    <div className="mt-4 p-3 bg-red-900/50 rounded-lg text-red-300 font-bold flex items-center gap-2">
-                        {status.icon} NO ADMISIBLE: No cumples el mínimo DEMRE (Promedio Ponderado Lenguaje + M1 debe ser 458 o más).
+                    <div className="admissible-alert">
+                        <span className="font-bold">{status.icon} NO ADMISIBLE:</span> No cumples el mínimo DEMRE (Promedio Ponderado Lenguaje + M1 debe ser 458 o más).
                     </div>
                 )}
             </div>
 
-            <div className="card-right-single">
+            <div className="card-right-single" style={{ borderLeft: `1px solid ${status.color}66` }}>
                 <div className="status-badge" style={{ background: status.bg, color: status.color }}>
                     {status.icon} {status.label}
                 </div>
@@ -322,12 +349,12 @@ const ResultCard = ({ result, corte, career, uni }) => {
                     <span className="my-score" style={{ color: status.color }}>
                         {finalScore}
                     </span>
-                    <span className="label-score">TU PUNTAJE PONDERADO</span>
+                    <span className="label-score">TU PUNTAJE PONDERADO FINAL</span>
                 </div>
 
-                <div className="diff-info" style={{ color: diff >= 0 ? colorMap.emerald : colorMap.red }}>
-                    Diferencia con el Corte: 
-                    <strong className="ml-1">
+                <div className="diff-info">
+                    DIFERENCIA CON EL CORTE: 
+                    <strong className="ml-1" style={{ color: diff >= 0 ? colorMap.emerald : colorMap.red }}>
                         {diff > 0 ? `+${diff}` : diff} puntos
                     </strong>
                 </div>
@@ -348,7 +375,7 @@ const ResultCard = ({ result, corte, career, uni }) => {
                         ></div>
                     </div>
                     <div className="cut-text">
-                        <span className="text-left">0</span>
+                        <span className="text-left">100</span>
                         <span className="text-right">1000</span>
                     </div>
                 </div>
@@ -358,102 +385,249 @@ const ResultCard = ({ result, corte, career, uni }) => {
 };
 
 
-/* ================= CSS "QUANTUM UI" ================= */
+/* ================= CSS REDISEÑO (Sleek Dark Mode) ================= */
 const css = `
 :root {
-  --bg: #050505;
-  --panel: #0f1115;
-  --border: #222;
-  --text: #fff;
-  --muted: #888;
-  --accent: #6366f1;
+  --bg: #0F172A; /* Slate 900 */
+  --panel: #1E293B; /* Slate 800 */
+  --border: #334155; /* Slate 700 */
+  --text: #F1F5F9; /* Slate 100 */
+  --muted: #94A3B8; /* Slate 400 */
+  --accent: #6366F1; /* Indigo 500 */
+  --accent-light: #A5B4FC; /* Indigo 300 */
 }
 
 .sim-page {
   background: var(--bg); color: var(--text); min-height: 100vh;
   font-family: 'Inter', sans-serif; padding-bottom: 100px;
 }
-.sim-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+.sim-container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
 
 /* HEADER */
 .sim-header { text-align: center; padding: 60px 0 40px; }
-.sim-header h1 { font-size: 2.5rem; font-weight: 800; margin: 0 0 10px; letter-spacing: -1px; }
-.sim-header p { color: var(--muted); font-size: 1.1rem; }
+.sim-header h1 { 
+    font-size: clamp(1.8rem, 5vw, 2.8rem); 
+    font-weight: 900; 
+    margin: 0 0 10px; 
+    letter-spacing: -1px; 
+    color: var(--accent-light);
+}
+.subtitle { color: var(--muted); font-size: 1rem; }
 
-.section-title { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+/* SECTION TITLES */
+.section-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 40px 0 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border);
+}
+.section-number {
+    background: var(--accent);
+    color: white;
+    font-size: 1rem;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 900;
+    box-shadow: 0 0 15px var(--accent)55;
+}
 
-/* DASHBOARD INPUTS (Mismo estilo para Puntajes y Ponderaciones) */
+/* DASHBOARD INPUTS */
 .dashboard-panel {
   background: var(--panel); border: 1px solid var(--border);
-  border-radius: 20px; padding: 20px;
-  box-shadow: 0 10px 30px -5px rgba(0,0,0,0.5);
+  border-radius: 12px; padding: 25px;
+  box-shadow: 0 10px 30px -5px rgba(0,0,0,0.4);
 }
 .inputs-scroll {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); 
   gap: 15px;
 }
-@media (max-width: 700px) { .inputs-scroll { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); } }
+.metadata-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+@media (max-width: 600px) { .metadata-grid { grid-template-columns: 1fr; } }
 
 
 .input-group label {
-  display: block; font-size: 0.7rem; color: var(--muted); font-weight: 700;
-  margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+  display: block; font-size: 0.75rem; color: var(--muted); font-weight: 600;
+  margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
 }
 .input-group input {
-  width: 100%; background: #000; border: 1px solid var(--border);
-  color: #fff; padding: 12px 5px; text-align: center; border-radius: 10px;
-  font-size: 1.1rem; font-weight: 700; transition: all 0.2s;
+  width: 100%; 
+  background: #00000033; /* Slightly transparent black */
+  border: 1px solid var(--border);
+  color: #fff; 
+  padding: 10px 5px; 
+  text-align: center; 
+  border-radius: 8px;
+  font-size: 1.1rem; 
+  font-weight: 700; 
+  transition: all 0.3s ease;
 }
 .input-group input:focus {
-  border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-  transform: translateY(-2px);
+  border-color: var(--accent); 
+  box-shadow: 0 0 0 4px var(--accent)33;
+  background: #000;
 }
-.input-group input[type="text"] { text-align: left; padding: 12px; font-size: 1rem; font-weight: normal; }
+.input-group input[type="text"] { 
+    text-align: left; 
+    padding: 10px 15px; 
+    font-size: 1rem; 
+    font-weight: normal; 
+}
+.corte-input {
+    font-size: 2.2rem !important; 
+    padding: 15px 5px !important;
+    color: #FBBF24 !important; /* Amber */
+}
 
+.divider {
+    border: none;
+    height: 1px;
+    background: var(--border);
+    margin: 25px 0;
+}
+.description-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-bottom: 15px;
+    padding-top: 5px;
+    border-top: 1px solid var(--border);
+}
+.total-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: background 0.3s;
+}
 
-/* RESULTADO ÚNICO */
-.result-card-container { display: flex; justify-content: center; }
+/* RESULTADO ÚNICO CARD */
+.result-card-container { display: flex; justify-content: center; margin-bottom: 40px;}
 
 .sim-card-single {
-  background: var(--panel); border: 1px solid var(--border);
-  border-radius: 16px; padding: 30px; width: 100%; max-width: 600px;
-  display: grid; grid-template-columns: 1fr 240px; gap: 30px;
-  box-shadow: 0 10px 40px rgba(99, 102, 241, 0.2);
-  border-left: 4px solid transparent; 
+  background: var(--panel); 
+  border: 2px solid var(--border);
+  border-radius: 16px; 
+  padding: 30px; 
+  width: 100%; 
+  max-width: 800px;
+  display: grid; 
+  grid-template-columns: 1.5fr 1fr; 
+  gap: 30px;
+  transition: all 0.3s;
+  overflow: hidden;
 }
 @media (max-width: 700px) { .sim-card-single { grid-template-columns: 1fr; } }
 
+.card-left {
+    padding-right: 20px;
+}
 .uni-badge { 
   font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; 
   margin-bottom: 5px; 
 }
-.career-name { font-weight: 800; margin: 0; line-height: 1.2; }
+.career-name { font-weight: 900; margin: 0; line-height: 1.2; color: var(--accent-light); }
 
+.current-data {
+    margin-top: 20px;
+    padding: 15px;
+    background: #00000033;
+    border-radius: 8px;
+    border-left: 3px solid #FBBF24;
+}
+.current-data p {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 5px;
+}
+
+.admissible-alert {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(239,68,68,0.2);
+    border-radius: 8px;
+    border: 1px solid #EF4444;
+    color: #FCA5A5;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
 .card-right-single { 
-  display: flex; flex-direction: column; justify-content: center; 
-  background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px;
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  background: rgba(0,0,0,0.3); 
+  border-radius: 12px; 
+  padding: 20px;
+  position: relative;
 }
 
 .status-badge {
-  align-self: flex-end; font-size: 0.7rem; font-weight: 800; 
-  padding: 6px 10px; border-radius: 8px; text-transform: uppercase; margin-bottom: 15px;
+  align-self: flex-start;
+  font-size: 0.8rem; font-weight: 800; 
+  padding: 8px 12px; border-radius: 8px; text-transform: uppercase; margin-bottom: 15px;
 }
 
-.score-display { text-align: center; margin-bottom: 15px; }
-.my-score { font-size: 2.8rem; font-weight: 900; line-height: 1; display: block; }
+.score-display { text-align: center; margin-bottom: 20px; }
+.my-score { 
+    font-size: 3.5rem; 
+    font-weight: 900; 
+    line-height: 1; 
+    display: block; 
+    text-shadow: 0 0 10px currentColor;
+}
 .label-score { font-size: 0.7rem; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
 
-.diff-info { text-align: center; font-size: 0.9rem; margin-bottom: 20px; }
+.diff-info { text-align: center; font-size: 1rem; margin-bottom: 25px; font-weight: 500; }
 
-.cut-info-single { margin-top: 10px; }
+/* PROGRESS BAR */
+.cut-info-single { padding: 0 5px; }
 .cut-bar-bg { 
-  height: 8px; background: #333; border-radius: 4px; position: relative; margin-bottom: 8px;
+  height: 10px; background: #334155; border-radius: 5px; position: relative; margin-bottom: 8px;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
 }
-.cut-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease-out; }
+.cut-bar-fill { height: 100%; border-radius: 5px; transition: width 0.6s ease-out; }
 .cut-line { 
-  position: absolute; top: -6px; width: 3px; height: 20px; 
-  background: #fff; box-shadow: 0 0 10px white; z-index: 2; border-radius: 3px;
+  position: absolute; top: -8px; width: 4px; height: 26px; 
+  background: #FFF; border-radius: 4px; z-index: 2;
+  box-shadow: 0 0 15px white;
 }
-.cut-text { font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; padding: 0 5px; }
+.cut-text { font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; }
+
+/* INFO BOX */
+.info-box {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    border-radius: 12px;
+    padding: 15px;
+    max-width: 800px;
+    margin: 20px auto;
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    color: #93C5FD;
+}
+.info-icon {
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    color: #60A5FA;
+}
 `;

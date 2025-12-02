@@ -4,26 +4,27 @@ import MultiHello from "../components/MultiHello.jsx";
 // Asegúrate de tener esta imagen o quita la referencia si usas puro CSS
 import flags from "../assets/img/lael/flags.png"; 
 
-// Importa tus datos y helpers (ajusta la ruta si es necesario)
+// Importa tus datos y helpers
 import { LANGUAGES, ENROLLMENT_FEE, computeLangBundle, clp } from "../data/idiomas.js";
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. CSS - "LUMINOUS SLATE" (OPTIMIZADO Y MEJORADO)
+   1. ESTILOS CSS - "LUMINOUS SLATE" (WORLD CLASS UI)
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
   /* --- PALETA DE COLORES "CYBER-ACADEMIC" --- */
-  --bg-deep: #020617;       /* Fondo Infinito (Slate 950) */
-  --bg-panel: #0f172a;      /* Paneles (Slate 900) */
-  --bg-card: #1e293b;       /* Tarjetas (Slate 800) */
+  --bg-deep: #020617;       /* Fondo Infinito */
+  --bg-panel: #0f172a;      /* Paneles */
+  --bg-card: #1e293b;       /* Tarjetas */
   
   --primary: #6366f1;       /* Indigo Vibrante */
   --primary-glow: rgba(99, 102, 241, 0.5);
-  --accent: #06b6d4;        /* Cyan (Tecnología/Futuro) */
+  --accent: #06b6d4;        /* Cyan */
   --accent-glow: rgba(6, 182, 212, 0.5);
+  --rose: #f43f5e;          /* Rosa para alertas/descuentos */
   
-  --text-main: #f8fafc;     /* Blanco suave */
-  --text-muted: #94a3b8;    /* Gris texto */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
   
   --glass: rgba(30, 41, 59, 0.4);
   --glass-border: rgba(255, 255, 255, 0.08);
@@ -32,7 +33,7 @@ const css = `
   --radius-lg: 24px;
   --radius-md: 16px;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --nav-clearance: 140px; 
+  --nav-clearance: 120px; 
 }
 
 /* --- RESET & BASE --- */
@@ -51,7 +52,7 @@ a { text-decoration: none; color: inherit; transition: all .2s; }
 button { font-family: inherit; border: none; background: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .text-center { text-align: center; }
 
-/* --- LUCES AMBIENTALES (DEPTH) --- */
+/* --- LUCES AMBIENTALES --- */
 .ambient-orb {
   position: absolute; border-radius: 50%; filter: blur(120px);
   opacity: 0.15; pointer-events: none; z-index: 0;
@@ -66,7 +67,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 .breadcrumbs .curr { color: var(--text-main); font-weight: 600; }
 
 /* --- HERO SECTION --- */
-.hero { padding: 80px 0 60px; position: relative; z-index: 1; }
+.hero { padding: 100px 0 60px; position: relative; z-index: 1; }
 .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
 
 .badge-pill { 
@@ -76,12 +77,12 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
     font-size: 0.85rem; font-weight: 700; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 0.5px;
 }
 
-.display-title { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 24px; font-weight: 800; letter-spacing: -0.02em; }
+.display-title { font-size: clamp(2.5rem, 5vw, 4.2rem); line-height: 1.1; margin-bottom: 24px; font-weight: 800; letter-spacing: -0.02em; }
 .text-gradient { 
     background: linear-gradient(135deg, #818cf8 0%, #22d3ee 100%); 
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
 }
-.hello-wrapper { display: inline-block; min-width: 120px; } /* Evita saltos */
+.hello-wrapper { display: inline-block; min-width: 120px; }
 
 .lead-text { font-size: 1.15rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 40px; max-width: 580px; }
 .lead-text b { color: var(--text-main); font-weight: 600; }
@@ -252,7 +253,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
     background: var(--bg-panel); padding: 35px 25px; border-radius: var(--radius-lg); 
     border: 1px solid var(--glass-border); text-align: center; transition: 0.3s;
 }
-.feat-card:hover { transform: translateY(-5px); border-color: var(--glass-border-light); }
+.feat-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
 .feat-card .icon { font-size: 3rem; margin-bottom: 20px; display: inline-block; filter: drop-shadow(0 0 15px rgba(255,255,255,0.1)); }
 .feat-card h4 { font-size: 1.25rem; margin-bottom: 12px; color: white; }
 
@@ -330,7 +331,7 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 `;
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. SEO HEAD HELPER (In-file version for safety)
+   2. SEO HEAD HELPER
    ────────────────────────────────────────────────────────────────────────── */
 function SEOHead({ title, description, canonical }) {
   const location = useLocation();
@@ -619,59 +620,58 @@ export default function Idiomas() {
             <h2 className="text-center" style={{marginBottom:'40px'}}>¿Por qué elegir Lael?</h2>
             <div className="features-grid">
                 <div className="feat-card"><div className="icon">💼</div><h4>Enfoque Laboral</h4><p>Role-plays de entrevistas y emails formales.</p></div>
-                <div className="feat-card"><div className="icon">🌍</div><h4>Internacional</h4><p>Preparación real para certificaciones globales.</p></div>
-                <div className="feat-card"><div className="icon">⚡</div><h4>Plataforma 24/7</h4><p>Accede a grabaciones y material cuando quieras.</p></div>
-                <div className="feat-card"><div className="icon">🤝</div><h4>Tutoría Real</h4><p>Profesores que conocen tu nombre y tu progreso.</p></div>
+                <div className="feat-card"><div className="icon">🌍</div><h4>Internacional</h4><p>Preparación real para certificaciones (IELTS/TOPIK).</p></div>
+                <div className="feat-card"><div className="icon">🤝</div><h4>Comunidad</h4><p>Clubes de conversación y networking entre alumnos.</p></div>
+                <div className="feat-card"><div className="icon">⚡</div><h4>Velocidad</h4><p>Avanza un nivel completo cada 3-4 meses.</p></div>
             </div>
         </div>
       </section>
 
-      {/* TESTIMONIOS */}
+      {/* TESTIMONIALS */}
       <section className="testimonials-section">
         <div className="container">
-          <h2 className="text-center" style={{marginBottom:'40px'}}>Lo que dicen nuestros alumnos</h2>
-          <div className="testi-grid">
-            {TESTIMONIOS.map((t, i) => (
-              <div key={i} className="testi-card">
-                <p>"{t.quote}"</p>
-                <div className="user">
-                  <div className="avatar">{t.name.charAt(0)}</div>
-                  <div><strong>{t.name}</strong><span>{t.note}</span></div>
-                </div>
-              </div>
-            ))}
-          </div>
+            <div className="testi-grid">
+                {TESTIMONIOS.map((t,i) => (
+                    <div className="testi-card" key={i}>
+                        <p>"{t.quote}"</p>
+                        <div className="user">
+                            <div className="avatar">{t.name.charAt(0)}</div>
+                            <div><strong>{t.name}</strong><span>{t.note}</span></div>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
       </section>
 
       {/* FAQ */}
       <section className="faq-section">
         <div className="container">
-          <h2 className="text-center">Preguntas Frecuentes</h2>
-          <div className="faq-wrapper">
-             <details><summary>¿Cómo funcionan los pagos?</summary><p>Pagas una matrícula única de inscripción y luego mensualidades. Sin cláusulas de amarre.</p></details>
-             <details><summary>¿Qué pasa si falto a una clase?</summary><p>Todas las clases en vivo se graban y suben el mismo día a tu aula virtual para que las veas cuando quieras.</p></details>
-             <details><summary>¿Entregan certificado?</summary><p>Sí, al finalizar cada nivel y cumplir con las evaluaciones, recibes un diploma digital verificable con código QR.</p></details>
-          </div>
+            <h2 className="text-center" style={{marginBottom:'40px'}}>Preguntas Frecuentes</h2>
+            <div className="faq-wrapper">
+                <details><summary>¿Las clases quedan grabadas?</summary><p>Sí, absolutamente todas las clases se suben a la plataforma en HD 24hrs después de la sesión en vivo.</p></details>
+                <details><summary>¿Entregan certificado?</summary><p>Sí, al aprobar el examen final de cada nivel recibes un diploma digital con código de verificación QR.</p></details>
+                <details><summary>¿Cómo sé mi nivel?</summary><p>Al inscribirte te agendamos un diagnóstico gratuito de 15 minutos con un coordinador académico.</p></details>
+            </div>
         </div>
       </section>
 
-      {/* STICKY BAR */}
-      <div className={`sticky-bar-wrapper ${selected.length > 0 ? "show" : ""}`}>
+      {/* STICKY BAR (Mobile & Desktop Conversion) */}
+      <div className={`sticky-bar-wrapper ${selected.length > 0 ? 'show' : ''}`}>
         <div className="sticky-bar">
-           <div className="bar-info">
-              <span className="bar-count">{selected.length} Cursos seleccionados</span>
-              <span className="bar-names">
-                 {selected.map(s => s.name + (selectedLevels[s.id] ? ` [${selectedLevels[s.id]}]` : "")).join(" + ")}
-              </span>
-           </div>
-           <div className="bar-pricing">
-              <div className="price-group">
-                 <small>Total Mensual</small>
-                 <span className="price-big">{clp(monthly)}</span>
-              </div>
-              <Link to="/inscripcion" className="btn-glow">Inscribirme</Link>
-           </div>
+            <div className="bar-info">
+                <span className="bar-count">{selected.length} Cursos seleccionados</span>
+                <div className="bar-names">{selected.map(s => s.name).join(" + ")}</div>
+            </div>
+            <div className="bar-pricing">
+                <div className="price-group">
+                    <small>Valor Mensual</small>
+                    <span className="price-big">{clp(monthly)}</span>
+                </div>
+                <a href={`https://wa.me/56964626568?text=${waMsg}`} target="_blank" rel="noreferrer" className="btn-glow">
+                    Inscribirme Ahora
+                </a>
+            </div>
         </div>
       </div>
 

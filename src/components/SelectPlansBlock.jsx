@@ -1,13 +1,13 @@
 // src/components/SelectPlansBlock.jsx
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import {
   PAES_PLANS,
   PAES_SUBJECTS,
-  PER_SUBJECT_MONTHLY,   // precio unitario por ramo/mes
-  ACADEMIC_MONTHS,       // meses del período académico (p.ej., 8)
+  PER_SUBJECT_MONTHLY,
+  ACADEMIC_MONTHS,
 } from "../data/paes.js";
 
-/* CLP helper local (evita dependencias implícitas) */
+/* Helper de moneda */
 const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -15,133 +15,139 @@ const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-/* ---------- Tarjeta de plan ---------- */
+/* --- ÍCONOS SVG INLINE --- */
+const ICONS = {
+  check: <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>,
+  plus: <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>,
+  cart: <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+};
+
+/* ---------- TARJETA DE PLAN (CYBER STYLE) ---------- */
 function PlanCard({ plan, active, onSelect }) {
   return (
     <button
       type="button"
-      className={"plan-card" + (active ? " active" : "")}
+      className={`plan-card ${active ? "active" : ""}`}
       onClick={onSelect}
       aria-pressed={active}
-      title={(active ? "Seleccionado: " : "") + plan.title}
     >
+      {/* Glow de fondo */}
+      <div className="card-glow"></div>
+      
       {plan.badge && <span className="badge">{plan.badge}</span>}
-      <h3 className="title">{plan.title}</h3>
-      {plan.tagline && <p className="sub">{plan.tagline}</p>}
-
-      <div className="price">
-        <div className="k">Mensual</div>
-        <div className="v">{clp(plan.monthly)}</div>
+      
+      <div className="card-header">
+        <h3 className="title">{plan.title}</h3>
+        {plan.tagline && <p className="sub">{plan.tagline}</p>}
       </div>
 
-      <ul className="feat">
+      <div className="price-block">
+        <span className="currency">$</span>
+        <span className="amount">{plan.monthly.toLocaleString("es-CL")}</span>
+        <span className="period">/mes</span>
+      </div>
+
+      <ul className="features">
         {(plan.features || []).slice(0, 5).map((f) => (
-          <li key={f}>{f}</li>
+          <li key={f}>
+            <span className="bullet">▹</span> {f}
+          </li>
         ))}
       </ul>
 
-      <div className="meta">
-        <span>{plan.essaysPerMonth} ensayo(s)/mes</span>
-        <span>Período ref.: {ACADEMIC_MONTHS} meses</span>
+      {/* Indicador de Selección */}
+      <div className="select-indicator">
+        {active ? <span className="txt-active">SELECCIONADO</span> : "ELEGIR PLAN"}
       </div>
-
-      {active && <div className="tick" aria-hidden>✓</div>}
     </button>
   );
 }
 
-/* ---------- Chip de ramo individual ---------- */
+/* ---------- CHIP DE RAMO (POWER-UP STYLE) ---------- */
 function SubjectChip({ s, selected, onToggle }) {
   return (
     <button
       type="button"
-      className={"chip" + (selected ? " on" : "")}
+      className={`chip ${selected ? "on" : ""}`}
       onClick={onToggle}
       aria-pressed={selected}
-      title={(selected ? "Quitar " : "Agregar ") + s.name}
     >
-      <span className="name">{s.name}</span>
-      <span className="price">{clp(PER_SUBJECT_MONTHLY)}</span>
+      <div className="chip-content">
+        <span className="chip-name">{s.name}</span>
+        <span className="chip-price">+{clp(PER_SUBJECT_MONTHLY)}</span>
+      </div>
+      <div className="chip-icon">
+        {selected ? ICONS.check : ICONS.plus}
+      </div>
     </button>
   );
 }
 
-/* ---------- Resumen ---------- */
+/* ---------- RESUMEN ---------- */
 function SelectionSummary({ plan, subjects }) {
   const extrasCount = subjects.length;
-  const monthly =
-    (plan?.monthly || 0) + extrasCount * PER_SUBJECT_MONTHLY;
+  const monthly = (plan?.monthly || 0) + extrasCount * PER_SUBJECT_MONTHLY;
   const annual = monthly * ACADEMIC_MONTHS;
-  const essays = (plan?.essaysPerMonth || 0) + extrasCount; // 1 ensayo por ramo extra
 
-  const empty = !plan && extrasCount === 0;
+  const hasSelection = plan || extrasCount > 0;
 
   return (
-    <aside className="summary">
-      <h4 className="h">Tu selección</h4>
-
-      {empty ? (
-        <p className="muted">Elige un plan y/o agrega ramos individuales.</p>
+    <div className="summary-panel">
+      <h4 className="summary-title">Resumen de Matrícula</h4>
+      
+      {!hasSelection ? (
+        <div className="empty-state">
+          <p>Selecciona un plan o ramos para comenzar tu preparación.</p>
+        </div>
       ) : (
-        <>
+        <div className="summary-details">
           {plan && (
-            <div className="block">
-              <div className="row">
-                <div className="k">Plan</div>
-                <div className="v">{plan.title}</div>
-              </div>
-              <div className="row">
-                <div className="k">Mensual (plan)</div>
-                <div className="v">{clp(plan.monthly)}</div>
-              </div>
+            <div className="line-item">
+              <span>{plan.title}</span>
+              <strong>{clp(plan.monthly)}</strong>
             </div>
           )}
+          
+          {subjects.map(s => (
+            <div className="line-item extra" key={s.id}>
+              <span>+ {s.name}</span>
+              <strong>{clp(PER_SUBJECT_MONTHLY)}</strong>
+            </div>
+          ))}
 
-          {extrasCount > 0 && (
-            <div className="block">
-              <div className="row">
-                <div className="k">Ramos extra</div>
-                <div className="v">{extrasCount}</div>
-              </div>
-              <ul className="list">
-                {subjects.map((s) => (
-                  <li key={s.id}>
-                    {s.name} — <b>{clp(PER_SUBJECT_MONTHLY)}</b>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          <div className="divider"></div>
 
-          <div className="totals block">
-            <div className="row">
-              <div className="k">Total mensual</div>
-              <div className="v strong">{clp(monthly)}</div>
-            </div>
-            <div className="row">
-              <div className="k">Referencial anual ({ACADEMIC_MONTHS} m)</div>
-              <div className="v">{clp(annual)}</div>
-            </div>
-            <div className="row">
-              <div className="k">Ensayos / mes</div>
-              <div className="v">{essays}</div>
-            </div>
+          <div className="total-row">
+            <span>Total Mensual</span>
+            <span className="total-price">{clp(monthly)}</span>
+          </div>
+          
+          <div className="annual-ref">
+            Referencial Anual ({ACADEMIC_MONTHS} meses): {clp(annual)}
           </div>
 
-          <div className="cta">
-            <a className="btn btn-primary" href="/inscripcion">Inscribirme</a>
-            <a className="btn btn-ghost" href="/pagos">Ir a pagos</a>
-          </div>
-        </>
+          <a href="/inscripcion" className="btn-inscripcion">
+            CONFIRMAR INSCRIPCIÓN ➔
+          </a>
+        </div>
       )}
-    </aside>
+    </div>
   );
 }
 
-/* ---------- Componente principal ---------- */
+/* ---------- COMPONENTE PRINCIPAL ---------- */
 export default function SelectPlansBlock() {
   const [selectedPlanId, setSelectedPlanId] = useState(null);
   const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar móvil para mostrar barra flotante
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 980);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const selectedPlan = useMemo(
     () => PAES_PLANS.find((p) => p.id === selectedPlanId) ?? null,
@@ -158,166 +164,248 @@ export default function SelectPlansBlock() {
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
 
+  // Totales para barra móvil
+  const totalMonthly = (selectedPlan?.monthly || 0) + (selectedSubjects.length * PER_SUBJECT_MONTHLY);
+
   return (
-    <section className="plans">
+    <section className="plans-section">
       <style>{css}</style>
 
-      <header className="head">
-        <h2 className="t">Elige tu plan</h2>
-        <p className="d">
-          Puedes combinar un <b>plan</b> con <b>ramos individuales</b>. La matrícula se confirma en <a href="/inscripcion">Inscripción</a>.
-        </p>
-      </header>
+      <div className="container">
+        <header className="section-header">
+          <h2 className="main-title">Diseña tu Estrategia <span className="highlight">PAES</span></h2>
+          <p className="subtitle">
+            Elige un plan base y poténcialo con ramos extra si lo necesitas.
+          </p>
+        </header>
 
-      <div className="grid">
-        <div className="col col-plans">
-          <div className="plan-grid">
-            {PAES_PLANS.map((p) => (
-              <PlanCard
-                key={p.id}
-                plan={p}
-                active={selectedPlanId === p.id}
-                onSelect={() =>
-                  setSelectedPlanId((prev) => (prev === p.id ? null : p.id))
-                }
-              />
-            ))}
-          </div>
-
-          <div className="subjects">
-            <h3 className="subs-title">Ramos individuales</h3>
-            <div className="chips">
-              {PAES_SUBJECTS.map((s) => (
-                <SubjectChip
-                  key={s.id}
-                  s={s}
-                  selected={selectedSubjectIds.includes(s.id)}
-                  onToggle={() => toggleSubject(s.id)}
+        <div className="layout-grid">
+          {/* COLUMNA IZQUIERDA: PLANES Y RAMOS */}
+          <div className="main-col">
+            <div className="plans-grid">
+              {PAES_PLANS.map((p) => (
+                <PlanCard
+                  key={p.id}
+                  plan={p}
+                  active={selectedPlanId === p.id}
+                  onSelect={() => setSelectedPlanId(prev => prev === p.id ? null : p.id)}
                 />
               ))}
             </div>
-            <p className="note">
-              Valor por ramo/mes: <b>{clp(PER_SUBJECT_MONTHLY)}</b>. Cada ramo añade 1 ensayo/mes.
-            </p>
+
+            <div className="extras-section">
+              <h3 className="extras-title">⚡ Potencia tu plan con Ramos Extra</h3>
+              <p className="extras-desc">Cada ramo adicional cuesta <b>{clp(PER_SUBJECT_MONTHLY)}</b> mensual.</p>
+              
+              <div className="chips-grid">
+                {PAES_SUBJECTS.map((s) => (
+                  <SubjectChip
+                    key={s.id}
+                    s={s}
+                    selected={selectedSubjectIds.includes(s.id)}
+                    onToggle={() => toggleSubject(s.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* COLUMNA DERECHA: RESUMEN (DESKTOP) */}
+          <div className="sidebar-col">
+            <SelectionSummary plan={selectedPlan} subjects={selectedSubjects} />
           </div>
         </div>
-
-        <div className="col col-summary">
-          <SelectionSummary plan={selectedPlan} subjects={selectedSubjects} />
-        </div>
       </div>
+
+      {/* BARRA FLOTANTE MÓVIL (Solo si hay selección) */}
+      {(isMobile && (selectedPlan || selectedSubjects.length > 0)) && (
+        <div className="mobile-bar">
+          <div className="mb-info">
+            <span className="mb-label">Total Mensual</span>
+            <span className="mb-total">{clp(totalMonthly)}</span>
+          </div>
+          <a href="/inscripcion" className="mb-btn">Inscribirme</a>
+        </div>
+      )}
     </section>
   );
 }
 
-/* ---------- CSS local ---------- */
+/* ---------- CSS ---------- */
 const css = `
-:root{
-  --bg:#0b1220; --card:#0e1424; --soft:#0d1528; --bd:#1f2a44;
-  --ink:#ffffff; --ink2:#cfe0ff;
-  --indigo:#5850EC; --cyan:#22d3ee; --amber:#f59e0b;
-}
+  /* VARIABLES LOCALES */
+  .plans-section {
+    --bg-dark: #0b1221;
+    --card-bg: #111827;
+    --border: #1f2937;
+    --primary: #6366f1; /* Indigo */
+    --accent: #ec4899; /* Pink/Rose Neon */
+    --text-main: #f3f4f6;
+    --text-muted: #9ca3af;
+    
+    background: var(--bg-dark);
+    padding: 60px 20px 100px; /* Padding extra abajo para barra móvil */
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+  }
 
-.plans{ color:var(--ink); background:linear-gradient(180deg,var(--bg),var(--card)); padding:16px 0; }
-.head{ max-width:1100px; margin:0 auto 6px; padding:0 22px; }
-.t{ margin:.4rem 0 .2rem; font-size:1.3rem }
-.d{ color:var(--ink2) }
+  .container { max-width: 1200px; margin: 0 auto; }
 
-.grid{
-  max-width:1100px; margin:0 auto; padding:0 22px 18px;
-  display:grid; gap:16px; grid-template-columns: 1.7fr .9fr;
-}
-@media (max-width: 980px){
-  .grid{ grid-template-columns:1fr; }
-}
+  /* HEADER */
+  .section-header { text-align: center; margin-bottom: 40px; }
+  .main-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -1px; }
+  .highlight { color: var(--accent); text-shadow: 0 0 20px rgba(236, 72, 153, 0.4); }
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
 
-.col-plans{ display:flex; flex-direction:column; gap:16px; }
+  /* LAYOUT */
+  .layout-grid {
+    display: grid; grid-template-columns: 1fr 340px; gap: 30px;
+    align-items: start;
+  }
+  @media (max-width: 980px) { .layout-grid { grid-template-columns: 1fr; } }
 
-/* Cards de planes */
-.plan-grid{
-  display:grid; gap:14px; grid-template-columns: repeat(3, minmax(0,1fr));
-}
-@media (max-width: 980px){
-  .plan-grid{ grid-template-columns: 1fr; }
-}
+  /* PLAN CARDS */
+  .plans-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;
+    margin-bottom: 40px;
+  }
 
-.plan-card{
-  position:relative; text-align:left;
-  border:1px solid var(--bd); border-radius:16px; padding:14px;
-  background:linear-gradient(180deg,#0f172a,#0b1220);
-  color:#fff; cursor:pointer;
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-}
-.plan-card:hover{ transform: translateY(-2px); box-shadow:0 18px 36px rgba(2,6,23,.26); }
-.plan-card.active{ border-color:#3b82f6; box-shadow:0 18px 44px rgba(59,130,246,.22); }
+  .plan-card {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: left;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    cursor: pointer;
+    display: flex; flex-direction: column;
+    height: 100%;
+  }
 
-.badge{
-  display:inline-block; padding:.18rem .5rem; border-radius:999px;
-  background:#fde047; color:#111827; font-weight:900; font-size:.72rem;
-}
+  .plan-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+  
+  .plan-card.active {
+    border-color: var(--accent);
+    background: linear-gradient(145deg, rgba(17, 24, 39, 1), rgba(236, 72, 153, 0.1));
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.15);
+  }
 
-.title{ margin:.35rem 0 .1rem; font-size:1.02rem; font-weight:900 }
-.sub{ margin:0 0 .4rem; color:#cbd5e1; font-size:.92rem }
+  .badge {
+    position: absolute; top: 12px; right: 12px;
+    background: var(--accent); color: #fff;
+    font-size: 0.7rem; font-weight: 800; padding: 4px 8px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
 
-.price{ display:flex; align-items:baseline; gap:8px; margin:.1rem 0 .35rem; }
-.price .k{ color:#9fb3c8; font-size:.9rem }
-.price .v{ font-weight:1000; font-size:1.18rem }
+  .title { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; color: #fff; }
+  .sub { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px; }
 
-.feat{ margin:.35rem 0 .5rem; padding-left:18px; color:#eaf2ff; }
-.feat li{ margin:.25rem 0 }
+  .price-block { margin-bottom: 20px; display: flex; align-items: baseline; }
+  .currency { font-size: 1.2rem; font-weight: 600; color: var(--text-muted); }
+  .amount { font-size: 2.2rem; font-weight: 900; color: #fff; margin: 0 4px; letter-spacing: -1px; }
+  .period { font-size: 0.9rem; color: var(--text-muted); }
 
-.meta{ display:flex; gap:8px; flex-wrap:wrap; color:#9fb3c8; font-size:.86rem }
-.tick{
-  position:absolute; top:10px; right:10px; width:26px; height:26px;
-  display:grid; place-items:center; border-radius:50%;
-  background:#3b82f6; color:#fff; font-weight:900;
-}
+  .features { list-style: none; padding: 0; margin: 0 0 20px 0; flex-grow: 1; }
+  .features li { margin-bottom: 8px; font-size: 0.95rem; color: #d1d5db; display: flex; gap: 8px; }
+  .bullet { color: var(--accent); }
 
-/* Ramos individuales */
-.subjects{ border:1px solid var(--bd); border-radius:16px; padding:14px; background:linear-gradient(180deg,#0f172a,#0b1220); }
-.subs-title{ margin:0 0 8px; font-size:1rem }
-.chips{ display:flex; flex-wrap:wrap; gap:8px; }
-.chip{
-  display:inline-flex; align-items:center; gap:8px;
-  padding:.42rem .7rem; border-radius:999px;
-  background:#0f172a; border:1px solid #2b375c; color:#eaf2ff;
-  transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
-}
-.chip:hover{ transform: translateY(-1px); box-shadow:0 10px 18px rgba(2,6,23,.28); }
-.chip.on{ background:#111b39; border-color:#3b82f6; }
-.chip .name{ font-weight:700; }
-.chip .price{ color:#34d399; font-weight:900; }
+  .select-indicator {
+    margin-top: auto;
+    width: 100%; padding: 10px;
+    border-radius: 8px;
+    font-weight: 700; text-align: center; font-size: 0.9rem;
+    background: rgba(255,255,255,0.05); color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .plan-card.active .select-indicator {
+    background: var(--accent); color: #fff;
+    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+  }
 
-.note{ margin-top:8px; color:#9fb3c8; font-size:.92rem }
+  /* EXTRAS SECTION */
+  .extras-section {
+    background: rgba(255,255,255,0.02); border: 1px dashed var(--border);
+    border-radius: 16px; padding: 24px;
+  }
+  .extras-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 5px; color: #fff; }
+  .extras-desc { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 20px; }
 
-/* Summary */
-.col-summary{ position:relative; }
-.summary{
-  position:sticky; top:84px;
-  border:1px solid var(--bd); border-radius:16px; padding:16px;
-  background:linear-gradient(180deg,#0f172a,#0b1220);
-  box-shadow:0 18px 36px rgba(2,6,23,.26);
-}
-@media (max-width:980px){ .summary{ position:static; } }
+  .chips-grid { display: flex; flex-wrap: wrap; gap: 10px; }
 
-.h{ margin:0 0 8px; font-size:1.02rem }
-.block{ border-top:1px solid #22304d; padding-top:10px; margin-top:10px; }
-.block:first-of-type{ border-top:0; padding-top:0; margin-top:0; }
+  .chip {
+    background: var(--card-bg); border: 1px solid var(--border);
+    padding: 10px 16px; border-radius: 12px;
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; transition: all 0.2s;
+    min-width: 140px; justify-content: space-between;
+  }
+  .chip:hover { border-color: var(--primary); }
+  .chip.on {
+    background: rgba(99, 102, 241, 0.15); border-color: var(--primary);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+  }
 
-.row{ display:flex; align-items:baseline; gap:10px; justify-content:space-between; margin:.2rem 0; }
-.row .k{ color:#9fb3c8 }
-.row .v{ color:#eaf2ff }
-.row .v.strong{ font-weight:1000; }
+  .chip-name { font-weight: 600; font-size: 0.9rem; color: #fff; }
+  .chip-price { font-size: 0.8rem; color: var(--primary); font-weight: 700; display: block; }
+  .chip.on .chip-price { color: #a5b4fc; }
 
-.list{ margin:.2rem 0 .5rem; padding-left:18px; }
-.list li{ margin:.2rem 0 }
+  .chip-icon {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(255,255,255,0.1); color: var(--text-muted);
+    display: grid; place-items: center;
+  }
+  .chip.on .chip-icon { background: var(--primary); color: #fff; }
 
-.cta{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-.btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  padding:.6rem 1rem; border-radius:12px; border:1px solid #2f3341; text-decoration:none; font-weight:900;
-}
-.btn-primary{ background:#5850EC; color:#fff; border-color:#5850EC; }
-.btn-ghost{ background:transparent; color:#eaf2ff; }
-.btn:hover{ transform: translateY(-1px); box-shadow:0 10px 24px rgba(2,6,23,.26); }
+  /* SIDEBAR SUMMARY (DESKTOP) */
+  .summary-panel {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 16px; padding: 24px;
+    position: sticky; top: 100px;
+    box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+  }
+  @media (max-width: 980px) { .sidebar-col { display: none; } } /* Oculto en móvil */
+
+  .summary-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+
+  .line-item { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
+  .line-item.extra { color: var(--primary); }
+  .divider { height: 1px; background: var(--border); margin: 15px 0; }
+
+  .total-row { display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; font-weight: 700; color: #fff; }
+  .total-price { font-size: 1.5rem; color: var(--accent); }
+  
+  .annual-ref { font-size: 0.8rem; color: var(--text-muted); text-align: right; margin-top: 5px; margin-bottom: 20px; }
+
+  .btn-inscripcion {
+    display: block; width: 100%; padding: 14px;
+    background: var(--primary); color: #fff;
+    text-align: center; border-radius: 10px; font-weight: 800; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-inscripcion:hover { background: #4f46e5; }
+
+  /* MOBILE FLOATING BAR */
+  .mobile-bar {
+    position: fixed; bottom: 20px; left: 20px; right: 20px;
+    background: rgba(17, 24, 39, 0.9); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 12px 20px; border-radius: 50px;
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 100;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes slideUp { from { transform: translateY(100px); } to { transform: translateY(0); } }
+
+  .mb-info { display: flex; flex-direction: column; }
+  .mb-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); }
+  .mb-total { font-size: 1.2rem; font-weight: 900; color: #fff; }
+  
+  .mb-btn {
+    background: var(--accent); color: #fff;
+    padding: 8px 20px; border-radius: 30px;
+    text-decoration: none; font-weight: 700; font-size: 0.9rem;
+  }
 `;

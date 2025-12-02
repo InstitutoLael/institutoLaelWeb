@@ -1,7 +1,7 @@
 // src/data/nivelacion.js
-// === Programa Caminos: Nivelación de Estudios ===
+// === Programa Caminos: Nivelación de Estudios (2x1) ===
+// "Nunca es tarde para cumplir la promesa que te hiciste."
 
-// Formateador de dinero
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -9,10 +9,19 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-/* ESTRATEGIA SOLIDARIA 1x1
-  - Plan Semilla: Beca 100% (Financiado por Padrinos/Empresas)
-  - Plan Oficio: Precio justo para el trabajador.
-  - Plan Padrino: Paga un poco más para subsidiar a otros.
+// 🧾 Matrícula Simbólica (Compromiso)
+export const REGISTRATION_FEE = 5000; 
+
+// 🌟 MANIFIESTO DEL PROGRAMA (Para usar en el UI)
+export const CAMINOS_MANIFESTO = {
+  title: "Honor y Dignidad",
+  text: "Este programa existe para honrar a nuestros padres y abuelos que no tuvieron la oportunidad. No te vamos a juzgar por lo que no sabes; te vamos a celebrar por atreverte a aprender hoy.",
+};
+
+/* ESTRATEGIA SOLIDARIA 1x1 (El corazón de Lael)
+   ------------------------------------------------
+   El modelo se basa en la solidaridad. Quienes pueden pagar un poco más, 
+   ayudan a sostener a quienes hoy no tienen nada más que sus ganas.
 */
 
 export const PLANS = [
@@ -22,68 +31,90 @@ export const PLANS = [
     title: "Beca Semilla",
     price: 0,
     frequency: "mes",
-    desc: "Para quienes tienen ganas pero hoy no tienen recursos. Postulación con asistente social.",
+    desc: "Tu pago es tu esfuerzo. Para quienes tienen el coraje de terminar pero hoy no cuentan con los recursos.",
     features: [
       "Clases en vivo y grabadas",
-      "Material digital gratuito",
-      "Tutoría grupal",
+      "Material de estudio PDF",
+      "Comunidad de apoyo",
       "Certificado de alumno regular",
     ],
     cta: "Postular a Beca",
-    color: "#a8a29e", // Gris piedra (Dignidad austera)
-    wapp: "Hola, necesito terminar mis estudios y quisiera postular a la Beca Semilla.",
+    color: "#78716c", // Stone (Solidez y Humildad)
+    wapp: "Hola, tengo muchas ganas de terminar mis estudios y quisiera postular a la Beca Semilla.",
+    isPopular: false
   },
   {
-    id: "trabajador",
-    tag: "Recomendado",
-    title: "Plan Oficio",
-    price: 15000,
+    id: "caminos",
+    tag: "Precio Justo",
+    title: "Plan Caminos",
+    price: 16990, // Un precio digno, accesible pero que valida el servicio
     frequency: "mes",
-    desc: "Tarifa justa para trabajadores. Tu pago cubre tus costos operativos.",
+    desc: "Para el trabajador que quiere progresar. Tu aporte cubre los costos de los profesores y plataforma.",
     features: [
       "Todo lo incluido en la Beca",
-      "Horarios flexibles noche/fines de semana",
-      "Trámite de inscripción a exámenes",
-      "Acceso prioritario a dudas",
+      "Horarios flexibles (Noche/Sábados)",
+      "Tramitación de inscripción Mineduc",
+      "Ensayo de examen real",
     ],
     cta: "Inscribirme",
-    color: "#fbbf24", // Dorado (El estándar)
-    wapp: "Hola, trabajo y quiero terminar mis estudios con el Plan Oficio.",
+    color: "#0ea5e9", // Sky Blue (Esperanza y Claridad)
+    wapp: "Hola, soy trabajador y quiero terminar mis estudios con el Plan Caminos.",
+    isPopular: true
   },
   {
-    id: "padrino",
-    tag: "Héroe Solidario",
-    title: "Plan Padrino",
-    price: 25000,
+    id: "legado",
+    tag: "Héroe Educativo",
+    title: "Plan Legado",
+    price: 29990, // Sube un poco para subsidiar realmente
     frequency: "mes",
-    desc: "Tu mensualidad paga tus estudios y financia el 50% de una Beca Semilla.",
+    desc: "Estudias tú y apadrinas a otro. Tu mensualidad financia el 50% de una Beca Semilla.",
     features: [
       "Todos los beneficios académicos",
       "Diploma de 'Padrino Educativo'",
-      "Reporte de impacto social",
-      "Ayudas a cambiar una vida",
+      "Acceso directo a dudas con profes",
+      "Ayudas a cambiar una historia",
     ],
     cta: "Ser Padrino",
-    color: "#f59e0b", // Ámbar intenso (Generosidad)
-    wapp: "Hola, quiero estudiar y además apadrinar a alguien con el Plan Padrino.",
+    color: "#f59e0b", // Ámbar (Luz y Generosidad)
+    wapp: "Hola, quiero estudiar y además dejar un legado apadrinando a alguien.",
+    isPopular: false
   },
+];
+
+// 🧠 EL MÉTODO "SIN MIEDO" (Argumentos de venta)
+export const METHODOLOGY = [
+  {
+    icon: "shield", // Icono de escudo/protección
+    title: "Espacio Seguro",
+    text: "Aquí nadie se ríe. Todos somos adultos con el mismo sueño. Si te cuesta, te explicamos de nuevo."
+  },
+  {
+    icon: "clock", 
+    title: "A tu Ritmo",
+    text: "Las clases quedan grabadas. Si tuviste turno extra o se enfermó un hijo, no pierdes la materia."
+  },
+  {
+    icon: "target", 
+    title: "Enfoque Práctico",
+    text: "No te llenamos de materia innecesaria. Te enseñamos exactamente lo que preguntan en el examen."
+  }
 ];
 
 export const FAQS = [
   {
-    q: "¿Esto es válido por el Ministerio (Mineduc)?",
-    a: "¡Sí! Nosotros te preparamos para rendir los 'Exámenes Libres'. Al aprobar, recibes el Certificado Oficial del Ministerio de Educación, válido para trabajar, estudiar en la U o trámites.",
+    q: "¿Mi licencia sirve igual que la de un colegio normal?",
+    a: "¡Absolutamente! El certificado lo entrega el Ministerio de Educación (Mineduc). Es 100% válido para trabajar, subir de sueldo, entrar a la Universidad o estudiar una carrera técnica.",
   },
   {
-    q: "¿Qué pasa si dejé de estudiar hace 20 años?",
-    a: "No importa. Nuestro método 'Desde Cero' está hecho para adultos que han olvidado materia. Vamos paso a paso, con paciencia y respeto.",
+    q: "Me da vergüenza, hace 20 años que no estudio...",
+    a: "Ese miedo es normal, pero se pasa en la primera clase. Nuestro método 'Andragogía' está diseñado para adultos. No enseñamos como a niños; enseñamos con respeto a tu experiencia de vida.",
   },
   {
-    q: "¿Tengo que ir presencial?",
-    a: "No. Todo es 100% online. Puedes ver las clases desde tu celular, en tu casa o en el trabajo. Si no puedes conectarte en vivo, ves la grabación cuando puedas.",
+    q: "¿Cómo funciona el 2x1?",
+    a: "El sistema de Exámenes Libres permite rendir dos cursos en un solo año. Por ejemplo: 1º y 2º Medio juntos, o 3º y 4º Medio juntos. En un año puedes avanzar lo que antes tomaba dos.",
   },
   {
-    q: "¿Qué cursos puedo hacer?",
-    a: "Hacemos nivelación de Enseñanza Básica (3º y 4º, 5º y 6º, 7º y 8º) y Enseñanza Media (1º y 2º, 3º y 4º). Puedes sacar dos cursos en un año (2x1).",
+    q: "¿Qué necesito para matricularme?",
+    a: "Solo tu certificado de notas del último curso aprobado (lo puedes sacar gratis en la web del Mineduc con tu RUT) y tus ganas de superarte.",
   },
 ];

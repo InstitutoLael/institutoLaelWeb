@@ -1,5 +1,5 @@
 // src/data/lsch.js
-// === Lengua de Señas Chilena — Instituto Lael ===
+// === Lengua de Señas Chilena (LSCh) — Estrategia 2025 ===
 
 // 🔢 Formateador CLP
 export const clp = (n) =>
@@ -9,101 +9,118 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// 🧾 Matrícula única
-export const LSCH_ENROLLMENT_FEE = 12990;
+// 🧾 "Starter Pack" (Ex-Matrícula)
+// Estrategia: Le damos nombre de producto para aumentar valor percibido.
+export const ENROLLMENT_FEE = 12990;
+export const ENROLLMENT_LABEL = "Starter Pack Digital (Plataforma + Grabaciones)";
 
-// 📢 Slogan
-export const LSCH_TAGLINE = "Rompe la barrera del sonido. Conecta sin límites.";
+// 📢 Slogan Aspirational
+export const LSCH_TAGLINE = "Tus manos tienen voz. Rompe la barrera del sonido.";
 
 /**
- * 🎓 ESTRUCTURA ACADÉMICA
+ * 🎓 ESTRUCTURA ACADÉMICA (Mejorada)
+ * Nombres más atractivos que "Nivel 1".
  */
 export const LSCH_MODULES = [
   {
     id: "nivel-1",
-    code: "N1",
-    name: "Fundamentos Visuales",
-    tag: "A1 · Inicial",
-    summary: "Domina la dactilología y la estructura gramatical básica. Pierde el miedo a usar tu cuerpo como herramienta.",
-    bullets: ["Alfabeto y Dactilología", "Expresión facial", "Cultura Sorda"],
+    code: "A1",
+    name: "Iniciación Visual",
+    color: "#2dd4bf", // Teal
+    summary: "El despertar de tus manos. Aprende a presentarte, el alfabeto y la estructura básica para dejar de depender de tu voz.",
+    bullets: ["Alfabeto y Dactilología", "Saludos y Cortesía", "Romper el hielo"],
   },
   {
     id: "nivel-2",
-    code: "N2",
-    name: "Gramática Espacial",
-    tag: "A2 · Básico",
-    summary: "Deja de pensar en español y empieza a pensar en imágenes. Aprende clasificadores y verbos direccionales.",
-    bullets: ["Verbos y Tiempos", "Clasificadores", "Role-play real"],
+    code: "A2",
+    name: "Construcción Espacial",
+    color: "#3b82f6", // Blue
+    summary: "Deja de traducir español a señas. Aprende la gramática propia de la LSCh, el uso del espacio y los clasificadores.",
+    bullets: ["Verbos Direccionales", "Tiempos (Pasado/Futuro)", "Narración visual"],
   },
   {
     id: "nivel-3",
-    code: "N3",
-    name: "Fluidez y Contexto",
-    tag: "B1 · Intermedio",
-    summary: "Para contextos laborales. Ideal para profesionales de la salud, educación y atención al cliente.",
-    bullets: ["Vocabulario técnico", "Narración", "Interpretación básica"],
+    code: "B1",
+    name: "Fluidez & Contexto",
+    color: "#8b5cf6", // Violet
+    summary: "Enfoque profesional. Prepárate para situaciones reales en salud, educación y atención al cliente. Velocidad y precisión.",
+    bullets: ["Vocabulario Técnico", "Interpretación básica", "Atención de público"],
   },
   {
     id: "club-adv",
     code: "PRO",
-    name: "Club Avanzado",
-    tag: "B1+ · Experto",
-    summary: "Mantenimiento de nivel. 100% inmersión visual sin voz. Análisis de videos nativos.",
-    bullets: ["Debates y actualidad", "Velocidad de respuesta", "Sin voz"],
+    name: "Inmersión Total",
+    color: "#f43f5e", // Rose
+    summary: "Solo para valientes. Clases 100% en silencio (sin voz). Debates, cultura sorda profunda y perfeccionamiento.",
+    bullets: ["Cultura Sorda", "Modismos avanzados", "Velocidad nativa"],
   },
 ];
 
-// 💡 Planes Grupales
+/**
+ * 💡 PLANES GRUPALES (Estrategia de Precios)
+ * Objetivo: Empujar a la gente al Plan Trimestral (Cashflow asegurado).
+ */
 export const LSCH_GROUP_PLANS = [
   { 
     id: "g-month", 
     title: "Plan Mensual", 
-    monthly: 19990, 
-    badge: "Flexible",
-    desc: "Pago mes a mes. Sin ataduras."
+    monthly: 19990, // Subimos un poco para que el trimestral se vea barato
+    enrollment: true, // Paga matrícula
+    badge: null,
+    features: ["Pago mes a mes", "Acceso a clases en vivo", "Grabaciones HD"],
+    cta: "Elegir Mensual"
   },
   { 
     id: "g-quarter", 
     title: "Plan Trimestral", 
-    monthly: 16990, 
-    save: "Ahorras $9.000",
-    badge: "Más Vendido",
-    desc: "El compromiso ideal para ver resultados."
-  },
-  { 
-    id: "g-semester", 
-    title: "Plan Semestral", 
-    monthly: 14990, 
-    save: "Ahorras $30.000",
-    badge: "Mejor Valor",
-    desc: "Opción inteligente a largo plazo."
+    monthly: 16990, // Precio gancho (cercano al antiguo)
+    enrollment: false, // MATRÍCULA GRATIS (El gran incentivo)
+    save: "Ahorras matrícula + dcto.",
+    badge: "Recomendado",
+    features: ["Matrícula GRATIS ($0)", "Certificado al finalizar", "Acceso a Club de Práctica"],
+    cta: "Ahorrar con Trimestral"
   },
 ];
 
-// 🙌 Convenio Iglesias
+// 🙌 CONVENIO IGLESIAS / MINISTERIOS
+// Mantenemos el precio histórico como beneficio exclusivo.
 export const CHURCH_CONVENIO = {
   enabled: true,
-  monthlyFlat: 12990, 
-  label: "Convenio Iglesias / Ministerios",
+  price: 12990, 
+  label: "Beca Ministerio",
+  desc: "Precio especial para líderes de iglesias, intérpretes de culto y fundaciones.",
+  req: "Requiere validación simple",
 };
 
-// 🧑‍🏫 Planes 1:1
-export const LSCH_ONE2ONE_PLANS = [
-  { id: "o-light", title: "Pack Refuerzo", monthly: 45000 },
-  { id: "o-standard", title: "Pack Estándar", monthly: 80000 },
-  { id: "o-intensive", title: "Pack Intensivo", monthly: 110000 },
-];
-
-// 🏢 IMPORTANTE: Esta es la variable nueva que seguro faltaba
+/**
+ * 🏢 CORPORATIVO (B2B - Ley de Inclusión)
+ * Argumentos de venta para empresas.
+ */
 export const CORPORATE_WHY = [
-  { title: "Ley de Inclusión 21.015", desc: "Cumple con la normativa capacitando a tu equipo." },
-  { title: "Responsabilidad Social", desc: "Genera un ambiente laboral empático y accesible." },
-  { title: "Atención al Cliente", desc: "Marca la diferencia atendiendo en su idioma." },
+  { 
+    icon: "⚖️", 
+    title: "Ley 21.015 (Inclusión)", 
+    desc: "Capacitar a tu equipo es la forma más genuina de cumplir con la normativa de gestor de inclusión." 
+  },
+  { 
+    icon: "❤️", 
+    title: "Experiencia de Cliente", 
+    desc: "Que una persona sorda sea atendida en su idioma fideliza y marca una diferencia humana enorme." 
+  },
+  { 
+    icon: "🤝", 
+    title: "Clima Laboral", 
+    desc: "Aprender LSCh desarrolla empatía y comunicación no verbal en tus equipos de trabajo." 
+  },
 ];
 
-// Helper
-export function priceForGroupPlan(plan, { church = false } = {}) {
+// Helper para calcular precio final en el componente
+export function calculateTotal(planId, isChurch) {
+  const plan = LSCH_GROUP_PLANS.find(p => p.id === planId);
   if (!plan) return 0;
-  if (church && CHURCH_CONVENIO.enabled) return CHURCH_CONVENIO.monthlyFlat;
+
+  // Si es iglesia, el precio mensual es fijo y reducido
+  if (isChurch) return CHURCH_CONVENIO.price;
+
   return plan.monthly;
 }

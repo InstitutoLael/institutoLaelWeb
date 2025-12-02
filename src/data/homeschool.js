@@ -1,4 +1,5 @@
-// === Lael Academy: Hub de Entrenamiento Académico ===
+// src/data/homeschool.js
+// === Lael Academy: Hub de Entrenamiento Académico & Homeschool ===
 
 // 🔢 Helper de Moneda
 export const clp = (n) =>
@@ -8,79 +9,138 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// 🧾 Matrícula (Gestión de ingreso)
-export const ENROLLMENT_FEE = 15000;
+// 🧾 Matrícula
+// ESTRATEGIA: Matrícula baja para validar compromiso, gratis en packs grandes.
+export const ENROLLMENT_FEE = 15000; 
 
-// 🤝 ALIANZA ESTRATÉGICA (Validación Legal)
+// 🤝 ALIANZA ESTRATÉGICA (El gran diferenciador)
 export const ALLIANCE = {
   name: "Los Olivos Homeschool",
   role: "Colegio Paraguas Partner",
-  desc: "Validación de estudios y certificados Mineduc a través de nuestra alianza exclusiva.",
+  desc: "Nuestros alumnos pueden validar sus estudios y obtener certificados oficiales Mineduc (Exámenes Libres) gracias a nuestra alianza exclusiva.",
+  benefits: ["Certificado Anual", "Tramitación Mineduc", "Pauta de Contenidos"],
 };
 
-// 📚 Materias (Con colores para el diseño Bento)
+// 📚 MATERIAS (Expandidas con Enfoque de Habilidades)
 export const SUBJECTS = [
-  { id: 'mat', name: 'Matemáticas', icon: '📐', color: '#06b6d4', desc: 'Álgebra, Cálculo, PAES M1/M2.' },
-  { id: 'len', name: 'Lenguaje', icon: '📚', color: '#f97316', desc: 'Lectura crítica y redacción.' },
-  { id: 'cie', name: 'Ciencias', icon: '🧬', color: '#84cc16', desc: 'Biología, Física, Química.' },
-  { id: 'his', name: 'Historia', icon: '🏛️', color: '#a855f7', desc: 'Historia y Cs. Sociales.' },
-  { id: 'ing', name: 'Inglés', icon: '🇬🇧', color: '#3b82f6', desc: 'Refuerzo escolar bilingüe.' },
+  { 
+    id: 'mat', 
+    name: 'Matemáticas', 
+    icon: '📐', 
+    color: '#06b6d4', // Cyan
+    desc: 'Desde aritmética básica hasta Cálculo y PAES M1/M2.' 
+  },
+  { 
+    id: 'len', 
+    name: 'Lenguaje', 
+    icon: '📚', 
+    color: '#f97316', // Orange
+    desc: 'Comprensión lectora, redacción y vocabulario crítico.' 
+  },
+  { 
+    id: 'cie', 
+    name: 'Ciencias', 
+    icon: '🧬', 
+    color: '#84cc16', // Lime
+    desc: 'Física, Química y Biología con enfoque experimental.' 
+  },
+  { 
+    id: 'his', 
+    name: 'Historia', 
+    icon: '🏛️', 
+    color: '#a855f7', // Purple
+    desc: 'Formación ciudadana, Historia de Chile y Universal.' 
+  },
+  { 
+    id: 'ing', 
+    name: 'Inglés Escolar', 
+    icon: '🇬🇧', 
+    color: '#3b82f6', // Blue
+    desc: 'Refuerzo del currículum escolar y pronunciación.' 
+  },
+  { 
+    id: 'hab', 
+    name: 'Hábito de Estudio', // NUEVO: Muy demandado por padres
+    icon: '🧠', 
+    color: '#ec4899', // Pink
+    desc: 'Organización, gestión del tiempo y técnicas de aprendizaje.' 
+  },
 ];
 
-// 🎓 Niveles
+// 🎓 NIVELES
 export const LEVELS = [
   { id: 'basica', label: 'Ed. Básica', desc: '1º a 8º Básico' },
   { id: 'media', label: 'Ed. Media', desc: 'Iº a IVº Medio' },
   { id: 'paes', label: 'Prep. PAES', desc: 'Intensivo U' },
-  { id: 'exam', label: 'Ex. Libres', desc: 'Apoyo temario' },
+  { id: 'adultos', label: 'Adultos', desc: 'Nivelación 2x1' }, // Coherencia con tu otro programa
 ];
 
-// 📦 PACKS DE HORAS (B2C)
+// 📦 PACKS DE HORAS (B2C - Estrategia de Precio Volumen)
+// Precios ajustados para ser competitivos ($16k - $18k hora)
 export const PACKS = [
   { 
     id: 'p4', 
     hours: 4, 
-    title: 'Pack Mantenimiento', 
-    price: 79990, 
+    title: 'Pack Rescate', 
+    subtitle: 'Para salvar la prueba',
+    price: 75000, // $18.750/hr
     badge: null,
-    desc: "1 hora semanal. Ideal para resolver dudas puntuales."
+    features: [
+      "1 hora semanal",
+      "Resolución de dudas puntuales",
+      "Grabación de la clase"
+    ]
   },
   { 
     id: 'p8', 
     hours: 8, 
-    title: 'Pack Progreso', 
-    price: 149990, 
+    title: 'Pack Hábito', 
+    subtitle: 'Constancia y mejora real',
+    price: 139000, // ~$17.300/hr (Precio psicológico atractivo)
     badge: 'Más Popular',
-    desc: "2 horas semanales. El estándar para subir notas."
+    features: [
+      "2 horas semanales",
+      "Reporte mensual a apoderados",
+      "Material de ejercitación PDF"
+    ]
   },
   { 
     id: 'p12', 
     hours: 12, 
-    title: 'Pack Intensivo', 
-    price: 209990, 
+    title: 'Pack Excelencia', 
+    subtitle: 'Transformación académica',
+    price: 199000, // ~$16.500/hr (Gran oferta por volumen)
     badge: 'Mejor Valor',
-    desc: "3 horas semanales. Preparación de exámenes importantes."
+    features: [
+      "3 horas semanales",
+      "Matrícula BONIFICADA (Gratis)",
+      "Contacto directo con profesor",
+      "Simulacros de examen"
+    ]
   },
 ];
 
-// 🏫 SERVICIOS COLEGIOS (B2B)
+// 🏫 SERVICIOS COLEGIOS (B2B - Con precios referencia "Desde")
 export const SCHOOL_SERVICES = [
   {
     id: 'ensayos',
-    title: 'Corrección PAES',
-    desc: 'Externaliza la corrección de ensayos. Entregamos data y analítica por alumno.',
-    icon: '📊'
+    title: 'Corrección Externa PAES',
+    desc: 'Nos envías los ensayos, nosotros devolvemos data. Evita la ceguera de taller.',
+    icon: '📊',
+    priceRef: 'Desde $2.500 por alumno'
   },
   {
-    id: 'nivelacion',
-    title: 'Reforzamiento B2B',
-    desc: 'Programas de nivelación intensiva para cursos con rezago académico.',
-    icon: '🚀'
+    id: 'talleres',
+    title: 'Talleres Extra-programáticos',
+    desc: 'Robótica, Lengua de Señas o Refuerzo PAES en tu colegio.',
+    icon: '🚀',
+    priceRef: 'Cotizar por semestre'
   },
   {
     id: 'reemplazo',
-    title: 'Staff Docente',
-    desc: 'Profesores expertos disponibles para cubrir licencias o talleres.',
-    icon: '👨‍🏫'
+    title: 'Banco de Suplentes',
+    desc: '¿Profesor con licencia? Enviamos un experto Lael para cubrir la clase online o híbrida.',
+    icon: '👨‍🏫',
+    priceRef: 'Valor hora colegio'
   }
 ];

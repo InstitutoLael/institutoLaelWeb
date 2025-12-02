@@ -1,14 +1,16 @@
 // src/data/paes.js
 /* ──────────────────────────────────────────────────────────────────────────
-   PAES — Única fuente de verdad (2026) - ESTRATEGIA EQUILIBRIO (Volumen + Sueldo Profe)
+   PAES 2026 — ESTRATEGIA FINANCIERA "SUELDO DIGNO + CAJA"
    
-   Estrategia de Precios:
-   - Base: $6.990 (Permite pagar $2.000/alumno al profe y deja margen)
-   - Pack 5 Ramos: Queda en aprox $26.000 (Súper competitivo vs competencia)
-   - Matrícula: Baja ($4.990) para reducir fricción de entrada.
+   Objetivo: Pagar $3.000 por alumno/ramo al docente y mantener rentabilidad.
+   
+   Matemática del Negocio (Ejemplo Pack Full 5 Ramos):
+   - Precio Venta: ~$26.200
+   - Costo Docente: $15.000 (5 ramos x $3.000)
+   - Margen Bruto: ~$11.200 por alumno (43% de margen). ¡Esto es sano!
    ────────────────────────────────────────────────────────────────────────── */
 
-// 🔢 CLP formatter (reutilizable en componentes)
+// 🔢 Helper de Moneda
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -16,50 +18,51 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// 📅 Parámetros de anualidad académica (mar–oct: 8 meses)
-export const ACADEMIC_MONTHS = 8; 
-export const ACADEMIC_PERIOD_LABEL = "marzo a octubre"; 
+// 📅 Calendario Académico 2026
+export const ACADEMIC_MONTHS = 8; // Abril - Noviembre (aprox)
+export const ACADEMIC_PERIOD_LABEL = "temporada 2026"; 
 
-// 🧾 Matrícula obligatoria (pago único)
-// BAJADA A $4.990 para eliminar barrera de entrada
-export const ENROLLMENT_FEE = 4990;
+// 🧾 Matrícula (Mantenemos tu precio oferta histórico)
+// Es baja para que entren rápido, pero obligatoria para filtrar compromiso.
+export const ENROLLMENT_FEE = 5990;
 
 /**
- * 💵 Precio base por ramo/mes
- * ANTES: 8.990 (Muy caro, espanta alumnos)
- * AHORA: 6.990 (Equilibrio perfecto para pagar $2.000 al profe)
+ * 💵 PRECIO BASE POR RAMO INDIVIDUAL
+ * Subimos a $6.990.
+ * ¿Por qué? Porque si cobras $3.990 y pagas $3.000 al profe, te quedan $900 pesos. 
+ * Con $6.990, pagas $3.000 y te quedan $3.990. Es un negocio viable.
  */
 export const PER_SUBJECT_MONTHLY = 6990;
 
 /**
- * 🔻 Descuentos por cantidad de ramos (graduales)
- * Aumentados para premiar el Pack Full y asegurar volumen
+ * 🔻 ESCALA DE DESCUENTOS POR VOLUMEN
+ * Incentivamos que lleven más ramos bajando el precio unitario, 
+ * pero cuidando que nunca baje del costo del profesor.
  */
 export const DISCOUNTS_BY_COUNT = [
-  { min: 5, rate: 0.25 }, // 25% OFF (El Pack de 5 queda muy atractivo)
-  { min: 4, rate: 0.20 }, // 20% OFF 
-  { min: 3, rate: 0.15 }, // 15% OFF
-  { min: 2, rate: 0.10 }, // 10% OFF
+  { min: 5, rate: 0.25 }, // 5+ Ramos: 25% OFF
+  { min: 4, rate: 0.20 }, // 4 Ramos: 20% OFF
+  { min: 3, rate: 0.15 }, // 3 Ramos: 15% OFF
+  { min: 2, rate: 0.10 }, // 2 Ramos: 10% OFF
 ];
 
-// 📝 Ensayos: 1 por ramo / mes (regla global)
+// 📝 Ensayos incluidos por ramo
 export const ESSAYS_PER_SUBJECT_PER_MONTH = 1;
 
-// 🎯 Redondeos amigables a decenas (más “marketinero”)
+// 🎯 Redondeo a decenas para precios limpios (ej: 12.580 en vez de 12.582)
 const friendlyRound10 = (n) => Math.round(n / 10) * 10;
 
-// 📉 Descuento aplicable según cantidad
+/* --- MOTORES DE CÁLCULO --- */
+
 function discountFor(count) {
   return DISCOUNTS_BY_COUNT.find((x) => count >= x.min)?.rate ?? 0;
 }
 
-// ✅ Normaliza cantidad (1…7)
 function clampCount(n) {
-  const v = Math.max(1, Math.min(7, Number(n || 0)));
-  return v;
+  return Math.max(1, Math.min(7, Number(n || 0)));
 }
 
-// 💰 Precio mensual para N ramos (con redondeo)
+// 💰 Precio Mensual Final
 export function priceForCount(count) {
   const c = clampCount(count);
   const d = discountFor(c);
@@ -67,167 +70,113 @@ export function priceForCount(count) {
   return friendlyRound10(Math.round(base * (1 - d)));
 }
 
-// 🧪 Ensayos/mes para N ramos
 export function essaysForCount(count) {
   return clampCount(count) * ESSAYS_PER_SUBJECT_PER_MONTH;
 }
 
-// 🧮 Precio mensual según lista de asignaturas
 export function priceForSubjects(subjectIds = []) {
   return priceForCount((subjectIds || []).length);
 }
 
-/* 💼 Helpers de ANUALIDAD (mar–oct/nov) */
-// Total anual para N ramos (por defecto 8 meses)
 export function priceAnnual(count, months = ACADEMIC_MONTHS) {
   return priceForCount(count) * Math.max(1, Number(months || ACADEMIC_MONTHS));
 }
 
-// Total anual según lista de asignaturas
 export function priceAnnualForSubjects(subjectIds = [], months = ACADEMIC_MONTHS) {
   return priceAnnual((subjectIds || []).length, months);
 }
 
-// Resumen útil para UI (mensual + anual + ensayos)
-export function planBreakdown(subjectIds = [], months = ACADEMIC_MONTHS) {
-  const count = clampCount((subjectIds || []).length);
-  const monthly = priceForCount(count);
-  return {
-    count,
-    monthly,
-    annual: priceAnnual(count, months),
-    essaysPerMonth: essaysForCount(count),
-    months,
-    periodLabel: ACADEMIC_PERIOD_LABEL,
-  };
-}
-
-/* 📊 Tabla rápida para UI (ej. “ver cómo baja el valor al sumar ramos”) */
-export function buildMonthlyTable(max = 7) {
-  const rows = [];
-  for (let i = 1; i <= Math.max(1, Math.min(7, max)); i++) {
-    rows.push({
-      subjects: i,
-      monthly: priceForCount(i),
-      essaysPerMonth: essaysForCount(i),
-      discountRate: discountFor(i), // 0..0.2
-    });
-  }
-  return rows;
-}
-
-/* ───────── Ramos disponibles ───────── */
+/* ──────────────────────────────────────────────────────────────────────────
+   CATÁLOGO DE RAMOS
+   ────────────────────────────────────────────────────────────────────────── */
 export const PAES_SUBJECTS = [
-  { id: "m1",  name: "Matemáticas M1" },
-  { id: "m2",  name: "Matemáticas M2" },
-  { id: "len", name: "Lenguaje" },
-  { id: "his", name: "Historia" },
-  { id: "bio", name: "Biología" },
-  { id: "fis", name: "Física" },
-  { id: "qui", name: "Química" },
+  { id: "m1",  name: "Matemática M1", icon: "📐" },
+  { id: "m2",  name: "Matemática M2", icon: "🚀" },
+  { id: "len", name: "Comprensión Lectora", icon: "📚" },
+  { id: "his", name: "Historia", icon: "🏛️" },
+  { id: "bio", name: "Biología", icon: "🧬" },
+  { id: "fis", name: "Física", icon: "⚡" },
+  { id: "qui", name: "Química", icon: "🧪" },
 ];
 
-/* ───────── Planes por asignatura (1 ramo) ─────────
-   Copy breve y consistente para tarjetas individuales
-*/
-export const PAES_PLANS = PAES_SUBJECTS.map((s) => ({
-  id: `plan-${s.id}`,
-  title: s.name,
-  tagline: "Ramo Individual",
-  subjectsIncluded: 1,
-  subjects: [s.id],
-  monthly: priceForCount(1),
-  annual: priceAnnual(1),
-  essaysPerMonth: essaysForCount(1),
-  features: [
-    "Clases en vivo + cápsulas",
-    "1 ensayo/mes",
-    "Material descargable",
-    "Soporte por WhatsApp",
-  ],
-  // toques visuales suaves (opcionales en UI)
-  badge: s.id === "m1" ? "Base Fundamental" : undefined,
-  color: "slate", 
-}));
-
-/* ───────── Combos estratégicos (SIMPLIFICADOS Y OPTIMIZADOS) ───────── 
-   Menos opciones = Más ventas.
-*/
+/* ──────────────────────────────────────────────────────────────────────────
+   PACKS ESTRATÉGICOS (COMBOS 2026)
+   ────────────────────────────────────────────────────────────────────────── */
 export const PAES_COMBOS = [
-  // 1. EL GANCHO ECONÓMICO (Humanista)
+  // 1. EL PACK BÁSICO (Humanista)
   {
     id: "hum-duo",
     title: "Pack Humanista",
     tagline: "Lenguaje + Historia",
     subjects: ["len", "his"],
-    monthly: priceForSubjects(["len", "his"]), // ~$12.580 (Súper pagable)
+    // Precio: ~$12.580 (Muy similar a tu Plan 2 antiguo de $11.990)
+    // Margen: Pagas $6.000 a profes, te quedan ~$6.500. ¡Sano!
+    monthly: priceForSubjects(["len", "his"]), 
     annual: priceAnnualForSubjects(["len", "his"]),
     essaysPerMonth: essaysForCount(2),
-    features: ["2 ramos", "Clases en vivo + cápsulas", "2 ensayos/mes"],
+    features: ["Clases en vivo", "2 Ensayos al mes", "Material PDF"],
     badge: "Económico",
     color: "amber",
   },
 
-  // 2. EL CIENTÍFICO BÁSICO
+  // 2. EL PACK CIENCIAS
   {
     id: "stem-basico",
     title: "Pack Ciencias",
-    tagline: "M1 + Biología (o Física/Química)",
-    subjects: ["m1", "bio"],
+    tagline: "M1 + 1 Ciencia a elección",
+    subjects: ["m1", "bio"], // El usuario puede cambiar bio por fis/qui
     monthly: priceForSubjects(["m1", "bio"]),
     annual: priceAnnualForSubjects(["m1", "bio"]),
     essaysPerMonth: essaysForCount(2),
-    features: ["2 ramos", "2 ensayos/mes", "Material descargable"],
+    features: ["Enfoque práctico", "Resolución de guías", "Grabaciones HD"],
     color: "green",
   },
 
-  // 3. EL RECOMENDADO (3 Ramos)
+  // 3. EL PACK FUNDAMENTAL (3 Ramos)
   {
     id: "trio-fundamental",
     title: "Trío Fundamental",
-    tagline: "M1 + Lenguaje + Historia",
+    tagline: "M1 + Lenguaje + Historia (o Ciencia)",
     subjects: ["len", "his", "m1"],
-    monthly: priceForSubjects(["len", "his", "m1"]), // ~$17.800
+    // Precio: ~$17.800
+    // Margen: Pagas $9.000 a profes, te quedan ~$8.800.
+    monthly: priceForSubjects(["len", "his", "m1"]),
     annual: priceAnnualForSubjects(["len", "his", "m1"]),
     essaysPerMonth: essaysForCount(3),
-    features: ["3 ramos", "Tutoría mensual", "3 ensayos/mes"],
-    badge: "Recomendado",
+    features: ["Los 3 obligatorios", "Tutoría grupal", "3 Ensayos al mes"],
+    badge: "Equilibrado",
     color: "indigo",
   },
 
-  // 4. LA ESTRELLA: FULL 5 RAMOS
+  // 4. EL PLAN ESTRELLA (Full 5 Ramos)
+  // Este reemplaza a tu "Plan 1" antiguo de $18.990.
+  // Sube a ~$26.200, pero sigue siendo BARATÍSIMO (la competencia cobra 100k).
   {
     id: "full-5",
-    title: "Full 5 Ramos",
-    tagline: "Lenguaje + M1 + Historia + 2 de Ciencias",
-    subjects: ["len", "m1", "his", "bio", "qui"], // Ejemplo configurable
-    monthly: priceForSubjects(["len", "m1", "his", "bio", "qui"]), // ~$26.200
+    title: "Pack Full 5",
+    tagline: "Prepara la prueba completa sin estrés",
+    subjects: ["len", "m1", "his", "bio", "qui"], 
+    // Precio: ~$26.200
+    // Margen: Pagas $15.000 a profes, te quedan ~$11.200.
+    monthly: priceForSubjects(["len", "m1", "his", "bio", "qui"]), 
     annual: priceAnnualForSubjects(["len", "m1", "his", "bio", "qui"]),
     essaysPerMonth: essaysForCount(5),
-    features: ["5 ramos", "Tutoría avanzada", "5 ensayos/mes", "Soporte 24/7"],
-    badge: "Mejor Precio/Valor",
+    features: ["5 Ramos a elección", "Orientación Vocacional", "Ensayo Masivo Mensual", "Soporte 24/7"],
+    badge: "Recomendado 2026",
     color: "rose",
   },
 
-  // 5. PARA EL QUE QUIERE TODO (7 Ramos)
+  // 5. EL PLAN MAESTRO (7 Ramos)
   {
     id: "completo-7",
-    title: "Plan Maestro (7 Ramos)",
-    tagline: "Todos los ramos PAES",
+    title: "Plan Medicina (7)",
+    tagline: "Para puntajes nacionales",
     subjects: ["m1", "m2", "len", "his", "bio", "fis", "qui"],
-    monthly: priceForSubjects(["m1", "m2", "len", "his", "bio", "fis", "qui"]),
+    monthly: priceForSubjects(["m1", "m2", "len", "his", "bio", "fis", "qui"]), // ~$36.700
     annual: priceAnnualForSubjects(["m1", "m2", "len", "his", "bio", "fis", "qui"]),
     essaysPerMonth: essaysForCount(7),
-    features: ["7 ramos", "Tutoría avanzada", "7 ensayos/mes", "Soporte premium"],
-    badge: "Máxima cobertura",
+    features: ["Todo incluido", "Tutoría M2 Exclusiva", "Feedback personalizado"],
+    badge: "Máxima Exigencia",
     color: "violet",
   },
-];
-
-/* ───────── Sugerencias rápidas (para selector simple) ───────── */
-export const RECOMMENDED_BUNDLES = [
-  { id: "his-len",  name: "Historia + Lenguaje", subjects: ["his", "len"] },
-  { id: "his-m1",   name: "Historia + M1",       subjects: ["his", "m1"] },
-  { id: "stem-fis", name: "M2 + Física",         subjects: ["m2", "fis"] },
-  { id: "salud",    name: "Biología + Química",  subjects: ["bio", "qui"] },
 ];

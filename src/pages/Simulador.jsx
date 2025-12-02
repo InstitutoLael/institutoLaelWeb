@@ -1,298 +1,342 @@
 // src/pages/Simulador.jsx
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import SEOHead from "../components/SEOHead.jsx";
 
-// Importamos la base de datos gigante que creaste
+// Importamos la base de datos (Asumo que existe y tiene formato correcto)
 import { DB_CARRERAS } from "../data/simulador.js";
 
+/* --- ÍCONOS SVG NATIVOS --- */
+const ICONS = {
+  search: <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>,
+  check: <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>,
+  warning: <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+};
+
 export default function Simulador() {
-  // Estado de los puntajes del alumno
+  // Estado de puntajes con persistencia (LocalStorage opcional, aquí simple)
   const [scores, setScores] = useState({
     nem: 650, ranking: 650, cl: 700, m1: 700, m2: 0, cien: 600, hist: 0
   });
 
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  // Manejador de Inputs
+  // Debounce para que no busque en cada tecla, sino al terminar de escribir
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
   const handleScore = (e) => {
     let val = Number(e.target.value);
-    if (val > 1000) val = 1000; 
+    if (val > 1000) val = 1000;
+    if (val < 0) val = 0;
     setScores({ ...scores, [e.target.name]: val });
   };
 
-  // 🧠 CÁLCULO INTELIGENTE
+  // 🧠 MOTOR DE CÁLCULO
   const results = useMemo(() => {
-    // Si no ha escrito nada o hay menos de 3 letras, no mostramos nada para no saturar
-    if (!search || search.length < 3) return [];
+    if (!debouncedSearch || debouncedSearch.length < 2) return [];
 
-    // 1. Filtrar base de datos (Búsqueda rápida)
-    // Limitamos a 20 resultados para que no se cuelgue si busca "Ingeniería" (que hay miles)
+    const lowerQ = debouncedSearch.toLowerCase();
+    
+    // 1. Filtrado Inteligente (Nombre, U, Sede)
     const filtered = DB_CARRERAS.filter(c => 
-      (c.carrera && c.carrera.toLowerCase().includes(search.toLowerCase())) || 
-      (c.u && c.u.toLowerCase().includes(search.toLowerCase()))
-    ).slice(0, 20);
+      c.carrera.toLowerCase().includes(lowerQ) || 
+      c.u.toLowerCase().includes(lowerQ) ||
+      (c.sede && c.sede.toLowerCase().includes(lowerQ))
+    ).slice(0, 30); // Max 30 para rendimiento
 
-    // 2. Calcular ponderación para cada coincidencia
+    // 2. Cálculo Ponderado
     return filtered.map(c => {
-      // Determinar cuál electiva usar (la mejor entre Ciencias e Historia)
-      // Asumimos que la base de datos tiene un campo 'cien' o 'hist' para la ponderación
-      // Si la carrera pide Historia específicamente, el Excel suele ponerlo en una columna específica.
-      // Para este simulador universal, usaremos el mayor puntaje del alumno contra el % de electiva.
-      
-      const puntajeElectiva = Math.max(scores.cien, scores.hist); 
-      
-      // Validación de seguridad por si algún dato viene null
-      const p = c.p || { nem: 0, rank: 0, m1: 0, m2: 0, cl: 0, cien: 0, hist: 0 };
+      // Mejor electiva automática
+      const bestElectiva = Math.max(scores.cien, scores.hist);
+      const p = c.p || {}; // Ponderaciones
 
-      // Cálculo del puntaje ponderado
-      // Nota: Multiplicamos puntaje * porcentaje.
-      const sumaPonderada = 
+      const rawSum = 
         (scores.nem * (p.nem || 0)) + 
         (scores.ranking * (p.rank || 0)) + 
         (scores.m1 * (p.m1 || 0)) + 
         (scores.m2 * (p.m2 || 0)) + 
         (scores.cl * (p.cl || 0)) + 
-        (puntajeElectiva * (p.cien || p.hist || 0)); // Usamos electiva genérica
+        (bestElectiva * (p.cien || p.hist || 0));
 
-      // Ajuste de escala: Si los porcentajes suman 100 (ej: 10, 20), dividimos por 100.
-      // Si suman 1 (ej: 0.1, 0.2), no dividimos.
-      // Detectamos esto sumando los porcentajes brutos.
-      const sumaPorcentajes = (p.nem||0) + (p.rank||0) + (p.m1||0) + (p.m2||0) + (p.cl||0) + (p.cien||0);
-      
-      let finalScore = sumaPonderada;
-      if (sumaPorcentajes > 1.5) { // Si suma más de 1.5, es escala 100
-        finalScore = Math.round(sumaPonderada / 100);
-      } else {
-        finalScore = Math.round(sumaPonderada);
-      }
+      // Detección automática de escala (si suma ~100 o ~1)
+      const totalPerc = Object.values(p).reduce((a, b) => a + b, 0);
+      const finalScore = totalPerc > 1.5 ? Math.round(rawSum / 100) : Math.round(rawSum);
 
-      // Cálculo de Diferencia y Estado
-      const corte = c.corte || 0; // Si no hay corte, asumimos 0
+      // Estado vs Corte
+      const corte = c.corte || 0;
       const diff = finalScore - corte;
+      let status = { label: "LEJANO", color: "#ef4444", bg: "rgba(239,68,68,0.1)", icon: "⛔" };
 
-      let status = { label: "LEJANO", color: "#EF4444", text: "Estás bajo el corte" };
-      
       if (corte === 0) {
-        status = { label: "SIN REF", color: "#94a3b8", text: "Carrera nueva o sin corte previo" };
-      } else if (diff >= 30) {
-        status = { label: "SEGURO", color: "#10B981", text: "Muy probable (Sobradísimo)" };
-      } else if (diff >= 0) {
-        status = { label: "ADMISIBLE", color: "#3B82F6", text: "Dentro del corte (Justo)" };
-      } else if (diff >= -20) {
-        status = { label: "RIESGO", color: "#F59E0B", text: "Faltan pocos puntos" };
+        status = { label: "NUEVA / S/I", color: "#94a3b8", bg: "rgba(148,163,184,0.1)", icon: "⚪" };
+      } else if (diff >= 40) {
+        status = { label: "ASEGURADO", color: "#10b981", bg: "rgba(16,185,129,0.15)", icon: "🚀" };
+      } else if (diff >= 10) {
+        status = { label: "ADMISIBLE", color: "#3b82f6", bg: "rgba(59,130,246,0.15)", icon: "✅" };
+      } else if (diff >= -15) {
+        status = { label: "AJUSTADO", color: "#f59e0b", bg: "rgba(245,158,11,0.15)", icon: "⚠️" };
       }
 
       return { ...c, finalScore, diff, status, corteReal: corte };
     });
-  }, [search, scores]);
+  }, [debouncedSearch, scores]);
 
   return (
     <div className="sim-page">
-      <SEOHead title="Simulador Universal PAES | Instituto Lael" />
+      <SEOHead 
+        title="Simulador de Puntajes PAES | Instituto Lael" 
+        description="Calcula tu ponderación en tiempo real para todas las universidades de Chile. Motor actualizado Admisión 2026."
+      />
       <style>{css}</style>
 
-      <div className="container">
+      <div className="sim-container">
         
         {/* HEADER */}
-        <div className="sim-head">
-          <span className="badge">Motor de IA 2026</span>
-          <h1>Simulador Universal</h1>
-          <p>Tus puntajes vs. Toda la oferta académica de Chile.</p>
-        </div>
+        <header className="sim-header">
+          <div className="ai-badge">
+            <span className="dot"></span> Motor IA 2026 Active
+          </div>
+          <h1>Simulador de Postulación</h1>
+          <p>La herramienta más potente para proyectar tu futuro académico.</p>
+        </header>
 
-        {/* INPUTS DE PUNTAJES (Sticky en Desktop) */}
-        <div className="scores-bar glass-card">
-          <div className="score-input">
-            <label>NEM</label>
-            <input type="number" name="nem" value={scores.nem} onChange={handleScore} />
-          </div>
-          <div className="score-input">
-            <label>Ranking</label>
-            <input type="number" name="ranking" value={scores.ranking} onChange={handleScore} />
-          </div>
-          <div className="score-input">
-            <label>Comp. Lectora</label>
-            <input type="number" name="cl" value={scores.cl} onChange={handleScore} />
-          </div>
-          <div className="score-input">
-            <label>Mate 1</label>
-            <input type="number" name="m1" value={scores.m1} onChange={handleScore} />
-          </div>
-          <div className="score-input">
-            <label>Mate 2</label>
-            <input type="number" name="m2" value={scores.m2} onChange={handleScore} />
-          </div>
-          <div className="score-input">
-            <label>Ciencias</label>
-            <input type="number" name="cien" value={scores.cien} onChange={handleScore} />
-          </div>
-          <div className="score-input">
-            <label>Historia</label>
-            <input type="number" name="hist" value={scores.hist} onChange={handleScore} />
+        {/* INPUTS DASHBOARD (Sticky) */}
+        <div className="dashboard-panel">
+          <div className="inputs-scroll">
+            {[
+              { k: 'nem', l: 'NEM' }, { k: 'ranking', l: 'RANK' }, 
+              { k: 'cl', l: 'LENGUAJE' }, { k: 'm1', l: 'MATE 1' }, 
+              { k: 'm2', l: 'MATE 2' }, { k: 'cien', l: 'CIENCIAS' }, 
+              { k: 'hist', l: 'HISTORIA' }
+            ].map((field) => (
+              <div key={field.k} className="input-group">
+                <label>{field.l}</label>
+                <input 
+                  type="number" 
+                  name={field.k} 
+                  value={scores[field.k]} 
+                  onChange={handleScore}
+                  placeholder="0"
+                  onFocus={(e) => e.target.select()} // Auto-seleccionar al tocar
+                />
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* BUSCADOR */}
-        <div className="search-section">
-          <div className="search-box">
-            <span className="search-icon">🔍</span>
+        {/* BUSCADOR FLOATING */}
+        <div className="search-floater">
+          <div className="search-wrapper">
+            <span className="s-icon">{ICONS.search}</span>
             <input 
               type="text" 
-              placeholder="Escribe una carrera o universidad (Ej: Medicina Chile, Derecho, UC)..." 
+              placeholder="Busca carrera o universidad (ej: Medicina Chile, Derecho UC)..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              autoFocus
             />
+            {results.length > 0 && <span className="results-count">{results.length} res.</span>}
           </div>
         </div>
 
-        {/* RESULTADOS */}
-        <div className="results-grid">
-          {search.length < 3 ? (
+        {/* GRID DE RESULTADOS */}
+        <div className="results-area">
+          {search.length < 2 ? (
             <div className="empty-state">
-              <span className="empty-icon">👆</span>
-              <h3>Empieza a escribir para simular</h3>
-              <p>Busca entre miles de carreras y ve tu ponderación al instante.</p>
+              <div className="empty-graphic">⚛️</div>
+              <h3>Ingresa tus puntajes arriba y busca una carrera</h3>
+              <p>El sistema calculará automáticamente tu ponderación exacta.</p>
             </div>
           ) : results.length === 0 ? (
             <div className="empty-state">
-              <span className="empty-icon">🤷‍♂️</span>
+              <div className="empty-graphic">🔭</div>
               <h3>No encontramos coincidencias</h3>
-              <p>Intenta con otro nombre de carrera.</p>
+              <p>Prueba con palabras más generales (ej: "Ingeniería" en vez de "Ingeniería Civil...")</p>
             </div>
           ) : (
-            results.map((r) => (
-              <div key={r.id} className="res-card glass-card">
-                <div className="res-header">
-                  <div className="uni-info">
-                    <h4>{r.carrera}</h4>
-                    <span>{r.u} · {r.sede}</span>
+            <div className="cards-stack">
+              {results.map((r, i) => (
+                <div 
+                  key={i} 
+                  className="sim-card" 
+                  style={{ animationDelay: `${i * 50}ms`, borderColor: r.status.color }}
+                >
+                  <div className="card-left">
+                    <div className="uni-badge">{r.u}</div>
+                    <h3 className="career-name">{r.carrera}</h3>
+                    <div className="location-row">📍 {r.sede || "Casa Central"}</div>
                   </div>
-                  <div className="status-pill" style={{background: `${r.status.color}20`, color: r.status.color}}>
-                    {r.status.label}
-                  </div>
-                </div>
 
-                <div className="res-body">
-                  <div className="score-row">
-                    <span>Tu Ponderación</span>
-                    <strong style={{color: r.status.color}}>{r.finalScore}</strong>
-                  </div>
-                  <div className="score-row small">
-                    <span>Corte 2025</span>
-                    <span className="muted">{r.corteReal > 0 ? `${r.corteReal} pts` : "N/A"}</span>
-                  </div>
-                  
-                  {/* Barra de progreso visual */}
-                  <div className="progress-bg">
-                    <div 
-                      className="progress-fill" 
-                      style={{ 
-                        width: `${Math.min((r.finalScore / 1000) * 100, 100)}%`,
-                        background: r.status.color 
-                      }} 
-                    />
-                    {r.corteReal > 0 && (
+                  <div className="card-right">
+                    <div className="status-badge" style={{ background: r.status.bg, color: r.status.color }}>
+                      {r.status.icon} {r.status.label}
+                    </div>
+                    
+                    <div className="score-display">
+                      <span className="my-score" style={{ color: r.status.color }}>
+                        {r.finalScore}
+                      </span>
+                      <span className="label-score">TU PONDERADO</span>
+                    </div>
+
+                    <div className="cut-info">
+                      <div className="cut-bar-bg">
                         <div 
-                        className="cut-marker" 
-                        style={{ left: `${(r.corteReal / 1000) * 100}%` }}
-                        title={`Corte: ${r.corteReal}`}
-                        />
-                    )}
+                          className="cut-bar-fill" 
+                          style={{ 
+                            width: `${Math.min((r.finalScore / 1000) * 100, 100)}%`,
+                            background: r.status.color
+                          }}
+                        ></div>
+                        {r.corteReal > 0 && (
+                          <div 
+                            className="cut-line" 
+                            style={{ left: `${(r.corteReal / 1000) * 100}%` }}
+                            title={`Corte: ${r.corteReal}`}
+                          ></div>
+                        )}
+                      </div>
+                      <div className="cut-text">
+                        Corte ref: <strong>{r.corteReal || "N/A"}</strong>
+                      </div>
+                    </div>
                   </div>
-                  
-                  <p className="status-msg">{r.status.text}</p>
                 </div>
-              </div>
-            ))
+              ))}
+            </div>
           )}
         </div>
-
       </div>
     </div>
   );
 }
 
-/* ================= CSS (DASHBOARD STYLE) ================= */
+/* ================= CSS "QUANTUM UI" ================= */
 const css = `
 :root {
-  --bg-deep: #050505;
-  --panel: #121212;
-  --border: #333;
-  --text: #F8FAFC;
-  --muted: #94A3B8;
-  --primary: #6366F1;
+  --bg: #050505;
+  --panel: #0f1115;
+  --border: #222;
+  --text: #fff;
+  --muted: #888;
+  --accent: #6366f1;
 }
 
-.sim-page { background: var(--bg-deep); color: var(--text); min-height: 100vh; padding-bottom: 80px; font-family: 'Inter', sans-serif; }
-.container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+.sim-page {
+  background: var(--bg); color: var(--text); min-height: 100vh;
+  font-family: 'Inter', sans-serif; padding-bottom: 100px;
+}
+.sim-container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
 
 /* HEADER */
-.sim-head { text-align: center; padding: 60px 0 40px; }
-.badge { background: rgba(99,102,241,0.15); color: #818cf8; padding: 6px 12px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; border: 1px solid rgba(99,102,241,0.3); }
-h1 { font-size: 2.5rem; margin: 20px 0 10px; font-weight: 800; }
-.sim-head p { color: var(--muted); font-size: 1.1rem; }
-
-/* SCORE BAR (INPUTS) */
-.scores-bar {
-  display: flex; gap: 10px; overflow-x: auto; padding: 20px; border-radius: 16px;
-  background: var(--panel); border: 1px solid var(--border); margin-bottom: 40px;
-  /* Scrollbar oculta */
-  scrollbar-width: none; -ms-overflow-style: none;
+.sim-header { text-align: center; padding: 60px 0 40px; }
+.ai-badge { 
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(16, 185, 129, 0.1); color: #10b981; 
+  padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; 
+  border: 1px solid rgba(16, 185, 129, 0.2); margin-bottom: 15px;
 }
-.scores-bar::-webkit-scrollbar { display: none; }
+.dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
+.sim-header h1 { font-size: 2.5rem; font-weight: 800; margin: 0 0 10px; letter-spacing: -1px; }
+.sim-header p { color: var(--muted); font-size: 1.1rem; }
 
-.score-input { min-width: 80px; flex: 1; }
-.score-input label { display: block; font-size: 0.75rem; color: var(--muted); margin-bottom: 5px; font-weight: 600; white-space: nowrap; }
-.score-input input {
-  width: 100%; background: #000; border: 1px solid var(--border); color: #fff;
-  padding: 10px; border-radius: 8px; text-align: center; font-weight: 700; font-size: 1rem;
-  transition: .2s; outline: none;
+/* DASHBOARD INPUTS */
+.dashboard-panel {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 20px; padding: 20px; margin-bottom: 30px;
+  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
 }
-.score-input input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(99,102,241,0.2); }
+.inputs-scroll {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); 
+  gap: 15px;
+}
+.input-group label {
+  display: block; font-size: 0.7rem; color: var(--muted); font-weight: 700;
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.input-group input {
+  width: 100%; background: #000; border: 1px solid var(--border);
+  color: #fff; padding: 12px 5px; text-align: center; border-radius: 10px;
+  font-size: 1.1rem; font-weight: 700; transition: all 0.2s;
+}
+.input-group input:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  transform: translateY(-2px);
+}
 
-/* SEARCH */
-.search-section { position: sticky; top: 90px; z-index: 50; margin-bottom: 30px; }
-.search-box { position: relative; }
-.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; opacity: 0.5; }
-.search-box input {
-  width: 100%; padding: 18px 20px 18px 50px; border-radius: 50px;
+/* SEARCH FLOATER */
+.search-floater { position: sticky; top: 20px; z-index: 100; margin-bottom: 40px; }
+.search-wrapper {
+  position: relative; max-width: 600px; margin: 0 auto;
   background: rgba(30, 30, 30, 0.8); backdrop-filter: blur(12px);
-  border: 1px solid var(--primary); color: #fff; font-size: 1.1rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5); outline: none; transition: .2s;
+  border: 1px solid var(--accent); border-radius: 50px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+  display: flex; align-items: center;
 }
-.search-box input:focus { background: #1e1e1e; box-shadow: 0 10px 40px rgba(99,102,241,0.2); }
-
-/* RESULTS */
-.results-grid { display: flex; flex-direction: column; gap: 15px; }
-
-.res-card {
-  background: var(--panel); border: 1px solid var(--border); padding: 20px; border-radius: 16px;
-  display: grid; grid-template-columns: 1fr 1.2fr; gap: 20px; align-items: center;
-  transition: .2s;
+.s-icon { padding-left: 20px; color: var(--muted); display: flex; }
+.search-wrapper input {
+  flex: 1; background: transparent; border: none; outline: none;
+  padding: 16px 15px; color: #fff; font-size: 1.1rem;
 }
-@media (max-width: 600px) { .res-card { grid-template-columns: 1fr; } }
-
-.uni-info h4 { font-size: 1.2rem; margin: 0 0 5px; font-weight: 700; color: #fff; }
-.uni-info span { font-size: 0.9rem; color: var(--muted); }
-
-.res-body { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid var(--border); }
-
-.score-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-.score-row strong { font-size: 1.5rem; font-weight: 800; }
-.score-row.small { font-size: 0.85rem; margin-bottom: 15px; opacity: 0.8; }
-
-/* BARRA PROGRESO */
-.progress-bg { height: 8px; background: #333; border-radius: 4px; position: relative; overflow: visible; margin-bottom: 10px; }
-.progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
-.cut-marker {
-  position: absolute; top: -4px; width: 2px; height: 16px; background: #fff;
-  box-shadow: 0 0 10px #fff; z-index: 2;
+.results-count {
+  font-size: 0.8rem; color: var(--muted); padding-right: 20px; font-weight: 600;
 }
 
-.status-msg { font-size: 0.85rem; text-align: right; margin: 0; color: var(--muted); font-style: italic; }
-.status-pill { font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; justify-self: start; display: inline-block; margin-top: 10px; }
+/* CARDS RESULTADOS */
+.cards-stack { display: flex; flex-direction: column; gap: 16px; }
+
+.sim-card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px;
+  display: grid; grid-template-columns: 1fr 200px; gap: 20px;
+  animation: slideIn 0.4s ease forwards; opacity: 0; transform: translateY(10px);
+  transition: transform 0.2s;
+  border-left: 4px solid transparent; /* Color dinámico via inline style */
+}
+@media (max-width: 700px) { .sim-card { grid-template-columns: 1fr; } }
+
+.sim-card:hover { transform: translateX(5px); background: #13151a; }
+
+.uni-badge { 
+  font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; 
+  margin-bottom: 5px; 
+}
+.career-name { font-size: 1.4rem; font-weight: 800; margin: 0 0 10px; line-height: 1.2; }
+.location-row { font-size: 0.9rem; color: var(--muted); }
+
+.card-right { 
+  display: flex; flex-direction: column; justify-content: center; 
+  background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px;
+}
+
+.status-badge {
+  align-self: flex-end; font-size: 0.7rem; font-weight: 800; 
+  padding: 4px 8px; border-radius: 6px; text-transform: uppercase; margin-bottom: 10px;
+}
+
+.score-display { text-align: right; margin-bottom: 10px; }
+.my-score { font-size: 2rem; font-weight: 900; line-height: 1; display: block; }
+.label-score { font-size: 0.65rem; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
+
+.cut-info { margin-top: 5px; }
+.cut-bar-bg { 
+  height: 6px; background: #333; border-radius: 3px; position: relative; margin-bottom: 6px;
+}
+.cut-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease-out; }
+.cut-line { 
+  position: absolute; top: -3px; width: 2px; height: 12px; 
+  background: #fff; box-shadow: 0 0 5px white; z-index: 2;
+}
+.cut-text { font-size: 0.75rem; color: var(--muted); text-align: right; }
+.cut-text strong { color: #fff; }
 
 /* EMPTY STATES */
 .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
-.empty-icon { font-size: 4rem; display: block; margin-bottom: 20px; opacity: 0.5; }
+.empty-graphic { font-size: 4rem; margin-bottom: 20px; opacity: 0.5; animation: float 3s infinite ease-in-out; }
+
+@keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 `;

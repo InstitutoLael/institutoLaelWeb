@@ -2,7 +2,17 @@
 import { useMemo, useState } from "react";
 import { copy as copyData } from "../data/copy.js";
 
-/* Normaliza URL del sitio si viene sin protocolo */
+// --- ÍCONOS SVG NATIVOS (Sin librerías) ---
+const ICONS = {
+  card: <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>,
+  copy: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>,
+  check: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#4ade80"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>,
+  user: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>,
+  mail: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>,
+  globe: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-9 3-9m-1 18c-1.657 0-3-9-3-9m-9 9a9 9 0 019-9" /></svg>,
+  hash: <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg>
+};
+
 function normSite(urlish = "") {
   const s = String(urlish || "").trim();
   if (!s) return "";
@@ -11,169 +21,183 @@ function normSite(urlish = "") {
 }
 
 export default function PaymentsInfo() {
-  const [msg, setMsg] = useState("");
+  // Estado para saber QUÉ campo se copió específicamente
+  const [copiedKey, setCopiedKey] = useState(null);
+  
   const p = useMemo(() => copyData?.payments ?? {}, []);
+  const hasAny = Object.values(p).some(Boolean);
 
-  const hasAny =
-    p.businessName || p.rut || p.accountType || p.accountNumber || p.email || p.site || p.note;
-
-  async function copyToClipboard(label, text) {
+  const copyToClipboard = async (key, text) => {
     if (!text) return;
     try {
       await navigator.clipboard.writeText(String(text));
-      setMsg(`${label} copiado ✓`);
-    } catch {
-      setMsg("No se pudo copiar");
-    } finally {
-      setTimeout(() => setMsg(""), 1400);
+      setCopiedKey(key);
+      setTimeout(() => setCopiedKey(null), 2000);
+    } catch (err) {
+      console.error("Error al copiar", err);
     }
-  }
+  };
 
-  if (!hasAny) {
-    return (
-      <section className="payinfo">
-        <style>{css}</style>
-        <div className="panel muted">
-          No hay datos de pago configurados. Completa <code>copy.payments</code> en{" "}
-          <code>src/data/copy.js</code>.
-        </div>
-      </section>
-    );
-  }
+  if (!hasAny) return null; // Si no hay datos, mejor no renderizar nada o un skeleton
 
+  // Configuración de filas con sus íconos
   const rows = [
-    p.businessName && { k: "Nombre", v: p.businessName, copyLabel: "Nombre" },
-    p.rut && { k: "RUT", v: p.rut, copyLabel: "RUT" },
-    p.accountType && { k: "Tipo de cuenta", v: p.accountType },
-    p.accountNumber && { k: "N° de cuenta", v: p.accountNumber, mono: true, copyLabel: "N° de cuenta" },
-    p.email && {
-      k: "Correo comprobantes",
-      v: p.email,
-      isLink: `mailto:${p.email}`,
-      copyLabel: "Correo",
-    },
-    p.site && {
-      k: "Sitio web",
-      v: p.site,
-      isLink: normSite(p.site),
-      copyLabel: "Sitio web",
-    },
+    p.businessName && { k: "name", label: "Beneficiario", val: p.businessName, icon: ICONS.user },
+    p.rut && { k: "rut", label: "RUT", val: p.rut, icon: ICONS.card },
+    p.accountType && { k: "type", label: "Tipo de Cuenta", val: p.accountType, icon: ICONS.hash },
+    p.accountNumber && { k: "number", label: "N° Cuenta", val: p.accountNumber, icon: ICONS.card, mono: true, highlight: true },
+    p.email && { k: "email", label: "Correo", val: p.email, icon: ICONS.mail, link: `mailto:${p.email}` },
+    p.site && { k: "site", label: "Web", val: p.site, icon: ICONS.globe, link: normSite(p.site) },
   ].filter(Boolean);
 
+  const css = `
+    .pay-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      /* Glassmorphism Dark Theme */
+      background: rgba(15, 23, 42, 0.6); 
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+      padding: 24px;
+      color: #e2e8f0;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Brillo superior tipo tarjeta */
+    .pay-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    }
+
+    .pay-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding-bottom: 15px;
+    }
+    .pay-title { font-size: 1.1rem; font-weight: 700; color: #fff; letter-spacing: -0.5px; }
+    .pay-badge { 
+      font-size: 0.75rem; background: rgba(99, 102, 241, 0.2); 
+      color: #a5b4fc; padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .pay-grid {
+      display: grid; gap: 12px;
+    }
+
+    .pay-row {
+      display: grid;
+      grid-template-columns: 24px 130px 1fr auto;
+      align-items: center;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+    
+    .pay-row:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
+      transform: translateX(4px);
+    }
+
+    /* Versión móvil */
+    @media (max-width: 500px) {
+      .pay-row { 
+        grid-template-columns: 24px 1fr auto; 
+        gap: 4px;
+      }
+      .pay-label { display: none; } /* Ocultamos etiqueta en móvil si es muy estrecho */
+    }
+
+    .pay-icon { color: #94a3b8; display: flex; }
+    .pay-label { font-size: 0.85rem; color: #64748b; font-weight: 600; }
+    
+    .pay-val { 
+      color: #f1f5f9; font-weight: 500; font-size: 0.95rem; 
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      margin-right: 10px;
+    }
+    
+    .pay-val.mono { 
+      font-family: 'SF Mono', 'Roboto Mono', Menlo, monospace; 
+      letter-spacing: 0.5px; 
+      font-size: 1.05rem;
+    }
+    .pay-val.highlight { color: #38bdf8; font-weight: 700; }
+
+    .pay-val a { color: #818cf8; text-decoration: none; border-bottom: 1px dashed #818cf8; }
+    
+    .pay-btn {
+      background: transparent; border: none; cursor: pointer;
+      color: #64748b; padding: 6px; border-radius: 6px;
+      transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+    }
+    .pay-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .pay-btn.copied { color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+
+    .pay-note {
+      margin-top: 15px; padding: 12px;
+      background: rgba(251, 191, 36, 0.05); /* Amarillo sutil */
+      border: 1px dashed rgba(251, 191, 36, 0.3);
+      border-radius: 8px; font-size: 0.85rem; color: #fcd34d;
+      line-height: 1.5; text-align: center;
+    }
+  `;
+
   return (
-    <section className="payinfo" aria-labelledby="payinfo-title">
+    <section className="pay-card" aria-label="Datos bancarios">
       <style>{css}</style>
+      
+      <div className="pay-header">
+        <span className="pay-icon" style={{color: '#a5b4fc'}}>{ICONS.card}</span>
+        <h3 className="pay-title">Datos de Transferencia</h3>
+        <span className="pay-badge">Cuenta Vista/Corriente</span>
+      </div>
 
-      <h3 id="payinfo-title" className="title">
-        <span role="img" aria-label="pago" className="ico">💳</span>
-        Datos de pago
-      </h3>
-
-      <div className="panel">
-        <div className="grid">
-          {rows.map((r) => (
-            <div className="row" key={r.k}>
-              <div className="k">{r.k}</div>
-              <div className={`v ${r.mono ? "mono" : ""}`}>
-                {r.isLink ? (
-                  <a href={r.isLink} target={r.isLink.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
-                    {r.v}
-                  </a>
-                ) : (
-                  r.v
-                )}
-              </div>
-              {r.copyLabel && (
-                <button
-                  type="button"
-                  className="copy"
-                  onClick={() => copyToClipboard(r.copyLabel, r.v)}
-                  aria-label={`Copiar ${r.copyLabel}`}
-                >
-                  Copiar
-                </button>
+      <div className="pay-grid">
+        {rows.map((r) => (
+          <div className="pay-row" key={r.k}>
+            {/* 1. Icono */}
+            <div className="pay-icon" aria-hidden="true">{r.icon}</div>
+            
+            {/* 2. Etiqueta (Ej: RUT) */}
+            <div className="pay-label">{r.label}</div>
+            
+            {/* 3. Valor */}
+            <div className={`pay-val ${r.mono ? 'mono' : ''} ${r.highlight ? 'highlight' : ''}`}>
+              {r.link ? (
+                <a href={r.link} target="_blank" rel="noreferrer">{r.val}</a>
+              ) : (
+                r.val
               )}
             </div>
-          ))}
 
-          {p.note && (
-            <div className="note">
-              {p.note}
-            </div>
-          )}
-        </div>
-
-        {/* feedback accesible */}
-        <div className="sr" role="status" aria-live="polite">
-          {msg}
-        </div>
-        {msg && <div className="toast">{msg}</div>}
+            {/* 4. Botón Copiar */}
+            {!r.link && (
+              <button
+                type="button"
+                className={`pay-btn ${copiedKey === r.k ? 'copied' : ''}`}
+                onClick={() => copyToClipboard(r.k, r.val)}
+                aria-label={`Copiar ${r.label}`}
+                title="Copiar al portapapeles"
+              >
+                {copiedKey === r.k ? ICONS.check : ICONS.copy}
+              </button>
+            )}
+          </div>
+        ))}
       </div>
+
+      {p.note && (
+        <div className="pay-note">
+          ⚠️ {p.note}
+        </div>
+      )}
     </section>
   );
 }
-
-/* ───────────── CSS local, sin Bootstrap ───────────── */
-const css = `
-:root{
-  --bg:#0b1220; --panel:#0e1424; --bd:#1f2a44;
-  --ink:#ffffff; --muted:#cfe0ff; --accent:#5850EC;
-}
-.payinfo{ color:var(--ink); }
-.title{
-  display:flex; align-items:center; gap:8px; margin:0 0 10px; font-size:1rem; font-weight:900;
-}
-.title .ico{ font-size:1.1rem }
-
-.panel{
-  border:1px solid var(--bd);
-  background:linear-gradient(180deg,#0f172a,#0b1220);
-  border-radius:16px; padding:14px;
-  box-shadow:0 12px 28px rgba(2,6,23,.30);
-}
-.panel.muted{
-  color:#cbd5e1; background:linear-gradient(180deg,#0f172a,#0b1220);
-}
-
-.grid{
-  display:grid; gap:10px;
-  grid-template-columns: 1fr; /* 1 col en móvil */
-}
-@media (min-width: 760px){
-  .grid{ grid-template-columns: 1fr 1fr; } /* 2 col en pantallas medianas+ */
-}
-
-/* Cada fila es auto-ajuste, no se aplasta */
-.row{
-  display:grid; gap:8px; align-items:center;
-  grid-template-columns: 160px 1fr auto;
-  padding:10px; border:1px solid #22304f; border-radius:12px;
-  background:#0e1424;
-}
-.k{ color:#9fb3c8; font-weight:700; }
-.v{ color:#fff; word-break:break-word; }
-.v a{ color:#eaf2ff; text-decoration:underline; text-underline-offset:2px; }
-.mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-
-.copy{
-  padding:.44rem .7rem; border-radius:10px; border:1px solid #2b3656; background:#0f172a; color:#eaf2ff;
-}
-.copy:hover{ transform:translateY(-1px); box-shadow:0 10px 20px rgba(2,6,23,.28); }
-
-/* Nota grande ocupa toda la fila */
-.note{
-  grid-column: 1 / -1;
-  border:1px dashed #2b3b61; background:#0f172a; color:#eaf2ff;
-  padding:.7rem .9rem; border-radius:12px; margin-top:2px;
-}
-
-/* Toast breve */
-.toast{
-  margin-top:10px; display:inline-block;
-  background:#0f172a; color:#b9f8cc; border:1px solid #1d6a3d;
-  padding:.35rem .6rem; border-radius:8px; font-weight:800;
-}
-
-/* Screen reader only */
-.sr{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-`;

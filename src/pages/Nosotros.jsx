@@ -1,31 +1,28 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-// --- IMÁGENES (Placeholder - Reemplazar con foto real tuya enseñando o sonriendo) ---
-const FounderImg = "https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=1000&auto=format&fit=crop"; 
-
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG (Estilo Fino)
+   1. ICONOS SVG (Minimalistas y Elegantes)
    ────────────────────────────────────────────────────────────────────────── */
 const Icons = {
-  Heart: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>,
-  Users: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-  Star: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
-  Hand: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 19a4 4 0 0 0 8 0v-6a4 4 0 0 0-8 0v6Z"/><path d="M11 13V9a4 4 0 0 0-8 0v4"/><path d="M7 13v6a4 4 0 0 0 4 4"/></svg>
+  Quote: () => <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" style={{opacity:0.2}}><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V5H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM5.0166 21L5.0166 18C5.0166 16.8954 5.91203 16 7.0166 16H10.0166C10.5689 16 11.0166 15.5523 11.0166 15V9C11.0166 8.44772 10.5689 8 10.0166 8H6.0166C5.46432 8 5.0166 8.44772 5.0166 9V11C5.0166 11.5523 4.56889 12 4.0166 12H3.0166V5H13.0166V15C13.0166 18.3137 10.3303 21 7.0166 21H5.0166Z" /></svg>,
+  Heart: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>,
+  Star: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
+  Hand: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 19a4 4 0 0 0 8 0v-6a4 4 0 0 0-8 0v6Z"/><path d="M11 13V9a4 4 0 0 0-8 0v4"/><path d="M7 13v6a4 4 0 0 0 4 4"/></svg>
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. ESTILOS CSS - "THE LEGACY"
+   2. ESTILOS CSS
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
   --bg-deep: #0B1120;
-  --bg-card: #151e32;
+  --bg-panel: #111827;
   --gold: #F59E0B;
-  --gold-glow: rgba(245, 158, 11, 0.4);
+  --gold-dim: rgba(245, 158, 11, 0.1);
   --text-main: #F8FAFC;
   --text-muted: #94A3B8;
-  --border: rgba(255,255,255,0.08);
+  --border: rgba(255,255,255,0.06);
   --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 }
 
@@ -33,98 +30,126 @@ const css = `
   background-color: var(--bg-deep); color: var(--text-main); font-family: var(--font-sans);
   min-height: 100vh; overflow-x: hidden;
 }
-.container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+.container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
 
-/* MANIFESTO HERO */
+/* HERO */
 .manifesto-section {
-  padding: 140px 0 80px; text-align: center; position: relative;
-  background: radial-gradient(circle at 50% 30%, rgba(30, 41, 59, 0.4), var(--bg-deep));
+  padding: 140px 0 60px; text-align: center;
+  background: radial-gradient(circle at 50% 0%, rgba(30, 41, 59, 0.5), transparent 70%);
 }
 .manifesto-label {
-  display: inline-block; font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 20px; font-weight: 700;
+  font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); 
+  font-weight: 700; display: block; margin-bottom: 20px;
 }
 .manifesto-title {
-  font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 800; margin-bottom: 30px; letter-spacing: -0.02em; line-height: 1.1;
+  font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; margin-bottom: 25px; 
+  line-height: 1.1; letter-spacing: -0.02em;
 }
 .manifesto-text {
-  font-size: 1.25rem; color: var(--text-muted); line-height: 1.8; max-width: 750px; margin: 0 auto 60px;
+  font-size: 1.2rem; color: var(--text-muted); line-height: 1.7; 
+  max-width: 680px; margin: 0 auto;
 }
-.scroll-line { width: 1px; height: 80px; background: linear-gradient(to bottom, var(--gold), transparent); margin: 0 auto; opacity: 0.5; }
 
-/* TIMELINE STORY */
-.timeline-section { padding: 80px 0; position: relative; }
-.timeline-container { 
-  max-width: 800px; margin: 0 auto; position: relative; padding-left: 40px; 
-  border-left: 1px solid rgba(255,255,255,0.1);
+/* SECTION: EL SIGNIFICADO DE LAEL */
+.meaning-card {
+  margin: 40px auto 80px; max-width: 600px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
+  border: 1px solid var(--border); border-top: 1px solid rgba(255,255,255,0.15);
+  border-radius: 24px; padding: 40px; text-align: center;
+  position: relative; overflow: hidden;
 }
-.timeline-event { margin-bottom: 60px; position: relative; }
-.timeline-dot {
-  position: absolute; left: -46px; top: 6px; width: 12px; height: 12px;
-  background: var(--bg-deep); border: 2px solid var(--text-muted); border-radius: 50%; transition: 0.3s;
+.hebrew { 
+  font-family: serif; font-size: 3.5rem; color: var(--text-main); line-height: 1; margin-bottom: 5px; 
 }
-.timeline-event:hover .timeline-dot { border-color: var(--gold); background: var(--gold); box-shadow: 0 0 15px var(--gold-glow); }
+.phonetic { 
+  font-family: monospace; color: var(--gold); font-size: 0.9rem; margin-bottom: 20px; display: block; 
+}
+.definition { 
+  font-size: 1.1rem; color: var(--text-muted); font-style: italic; 
+}
+.definition strong { color: white; font-weight: 600; font-style: normal; }
 
-.event-year { 
-  font-size: 0.85rem; font-weight: 700; color: var(--gold); margin-bottom: 8px; 
-  text-transform: uppercase; letter-spacing: 1px; display: block;
-}
-.event-title { font-size: 1.8rem; margin-bottom: 15px; color: white; font-weight: 700; }
-.event-desc { font-size: 1.05rem; color: var(--text-muted); line-height: 1.6; }
+/* TIMELINE COMPACTO */
+.timeline-section { padding: 40px 0 80px; }
+.timeline-header { text-align: center; margin-bottom: 50px; }
+.timeline-header h2 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
 
-/* Highlight Card for "The Origin" */
-.origin-card {
-  background: linear-gradient(135deg, rgba(245,158,11,0.08), transparent);
-  border: 1px solid rgba(245,158,11,0.2); padding: 35px; border-radius: 20px;
-  margin-bottom: 40px; position: relative;
+.timeline-list {
+  border-left: 2px solid var(--border); margin-left: 20px; padding-bottom: 20px;
 }
-.quote-mark { font-size: 4rem; color: var(--gold); opacity: 0.2; position: absolute; top: 10px; left: 20px; line-height: 0; font-family: serif; }
+.t-item {
+  position: relative; padding-left: 40px; margin-bottom: 50px;
+}
+.t-item:last-child { margin-bottom: 0; }
+.t-dot {
+  position: absolute; left: -9px; top: 0; width: 16px; height: 16px;
+  background: var(--bg-deep); border: 2px solid var(--text-muted); border-radius: 50%;
+  transition: .3s;
+}
+.t-item:hover .t-dot { border-color: var(--gold); background: var(--gold); box-shadow: 0 0 10px var(--gold); }
 
-/* VALUES GRID */
-.values-section { padding: 80px 0; background: #0F1623; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-.value-card {
-  background: var(--bg-card); padding: 35px 30px; border-radius: 16px; border: 1px solid var(--border); transition: 0.3s;
+.t-year { 
+  font-size: 0.85rem; font-weight: 800; color: var(--gold); margin-bottom: 5px; 
+  text-transform: uppercase; letter-spacing: 1px; display: inline-block;
 }
-.value-card:hover { transform: translateY(-5px); border-color: var(--gold); }
-.v-icon { color: var(--gold); margin-bottom: 20px; }
-.value-card h3 { font-size: 1.3rem; margin-bottom: 10px; font-weight: 700; }
-.value-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+.t-content h3 { font-size: 1.4rem; color: white; margin: 5px 0 10px; font-weight: 700; }
+.t-content p { font-size: 1rem; color: var(--text-muted); line-height: 1.6; }
 
-/* FOUNDER SECTION */
-.founder-section { padding: 100px 0; }
-.founder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-.founder-img { 
-  width: 100%; border-radius: 20px; filter: grayscale(100%); transition: 0.5s; 
-  box-shadow: 20px 20px 0px rgba(255,255,255,0.05); object-fit: cover; aspect-ratio: 4/5;
+/* Highlight Box para el origen */
+.origin-box {
+  background: var(--gold-dim); border: 1px solid rgba(245, 158, 11, 0.2);
+  padding: 25px; border-radius: 12px; margin-top: 15px;
 }
-.founder-img:hover { filter: grayscale(0%); transform: translate(-5px, -5px); box-shadow: 20px 20px 0px var(--gold); }
-.founder-quote { 
-  font-style: italic; font-size: 1.25rem; color: #e2e8f0; 
-  border-left: 3px solid var(--gold); padding-left: 20px; margin: 30px 0; line-height: 1.6;
+
+/* VALORES */
+.values-grid { 
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+  gap: 20px; padding: 80px 0; border-top: 1px solid var(--border); 
 }
+.val-card {
+  padding: 25px; background: var(--bg-panel); border-radius: 16px; border: 1px solid var(--border);
+}
+.val-card h3 { font-size: 1.1rem; font-weight: 700; margin: 15px 0 10px; display: flex; align-items: center; gap: 10px; }
+.val-icon { color: var(--gold); }
+.val-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+
+/* CARTA DEL DIRECTOR (SIN FOTO) */
+.letter-section { 
+  padding: 80px 0; background: linear-gradient(180deg, var(--bg-deep) 0%, #0d121c 100%);
+  border-top: 1px solid var(--border);
+}
+.letter-container {
+  max-width: 700px; margin: 0 auto; text-align: center;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  padding: 60px 40px; border-radius: 24px; position: relative;
+}
+.letter-quote { 
+  font-size: 1.4rem; font-style: italic; line-height: 1.6; color: var(--text-main); margin-bottom: 30px; 
+}
+.letter-sign { 
+  border-top: 1px solid var(--border); display: inline-block; padding-top: 20px; margin-top: 20px; 
+}
+.letter-name { display: block; font-size: 1.1rem; font-weight: 800; color: white; }
+.letter-role { font-size: 0.85rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
 
 /* CTA */
-.cta-section { padding: 100px 0; text-align: center; }
-.cta-title { font-size: 2.5rem; margin-bottom: 20px; font-weight: 800; }
+.cta-box { text-align: center; padding: 80px 0; }
 .cta-btn {
-  display: inline-block; background: var(--text-main); color: var(--bg-deep);
-  padding: 16px 36px; border-radius: 50px; font-weight: 700; font-size: 1.1rem;
-  transition: 0.3s; text-decoration: none;
+  background: var(--text-main); color: var(--bg-deep); padding: 14px 32px; border-radius: 50px;
+  font-weight: 700; text-decoration: none; transition: .3s; display: inline-block; margin-top: 30px;
 }
-.cta-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+.cta-btn:hover { transform: scale(1.05); }
 
-@media (max-width: 900px) {
-  .founder-grid { grid-template-columns: 1fr; }
-  .timeline-container { border-left: none; padding-left: 0; }
-  .timeline-dot { display: none; }
-  .timeline-event { padding-left: 20px; border-left: 2px solid var(--border); margin-left: 10px; }
-  .manifesto-title { font-size: 2.5rem; }
+@media (max-width: 600px) {
+  .manifesto-title { font-size: 2.2rem; }
+  .hebrew { font-size: 2.5rem; }
+  .letter-container { padding: 40px 20px; }
+  .letter-quote { font-size: 1.1rem; }
 }
 `;
 
 const SEOHead = () => {
-  useEffect(() => { document.title = "Nuestra Historia | Instituto Lael"; }, []);
+  useEffect(() => { document.title = "Nuestra Esencia | Instituto Lael"; }, []);
   return null;
 };
 
@@ -148,134 +173,127 @@ export default function Nosotros() {
             </h1>
             <p className="manifesto-text">
                 En medio de la incertidumbre, decidimos que el conocimiento no podía detenerse. 
-                Lo que empezó en una habitación pequeña hoy es una comunidad que transforma vidas.
+                Lo que empezó como un servicio en pandemia, hoy es una misión de vida.
             </p>
-            <div className="scroll-line"></div>
         </div>
       </header>
 
-      {/* --- TIMELINE --- */}
+      {/* --- SECCIÓN: EL SIGNIFICADO DE LAEL (NUEVO) --- */}
+      <section className="container">
+        <div className="meaning-card">
+            <div className="hebrew">לָאֵל</div>
+            <span className="phonetic">/la·el/ • Hebreo</span>
+            <p className="definition">
+                Significa <strong>"Perteneciente a Dios"</strong>. <br/>
+                Es un recordatorio constante de que este proyecto tiene un dueño y un propósito superior: servir con excelencia.
+            </p>
+        </div>
+      </section>
+
+      {/* --- TIMELINE COMPACTO (LOGBOOK) --- */}
       <section className="timeline-section">
         <div className="container">
-            <div className="timeline-container">
+            <div className="timeline-header">
+                <h2>El Camino Recorrido</h2>
+            </div>
+            
+            <div className="timeline-list">
                 
-                {/* 2020: EL ORIGEN */}
-                <div className="timeline-event">
-                    <div className="timeline-dot" style={{background:'var(--gold)', borderColor:'var(--gold)'}}></div>
-                    <span className="event-year">2020 • La Semilla</span>
-                    <div className="origin-card">
-                        <span className="quote-mark">“</span>
-                        <h3 className="event-title" style={{color:'var(--gold)'}}>Diego Chaparro: Retribuir lo recibido</h3>
-                        <p className="event-desc">
-                            En plena pandemia, el mundo se detuvo, pero las necesidades no. 
-                            Yo había sido bendecido por Dios en mi formación y sentí un llamado fuerte: 
-                            <strong>retribuir esa gracia</strong>. 
-                            <br/><br/>
-                            Comencé a dar clases particulares gratuitas y de bajo costo a quienes no tenían recursos 
-                            o se sentían perdidos con el formato online. No era un negocio, era un servicio. 
-                            Ahí entendí que enseñar no es solo transmitir datos, es devolver la esperanza.
+                {/* 2020 */}
+                <div className="t-item">
+                    <div className="t-dot"></div>
+                    <span className="t-year">2020</span>
+                    <div className="t-content">
+                        <h3>La Semilla: Retribuir lo recibido</h3>
+                        <div className="origin-box">
+                            <p>
+                                <strong>Diego Chaparro:</strong> "En plena pandemia, sentí el llamado de retribuir la gracia que Dios me había dado en mis estudios. Comencé a dar clases particulares gratuitas y accesibles. No era un negocio, era pura gratitud convertida en servicio."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 2021 */}
+                <div className="t-item">
+                    <div className="t-dot"></div>
+                    <span className="t-year">2021</span>
+                    <div className="t-content">
+                        <h3>Nace Preu Lael</h3>
+                        <p>
+                            La comunidad creció orgánicamente. Formalizamos el proyecto bajo el nombre <strong>Lael</strong>, creando nuestro primer programa preuniversitario enfocado no solo en puntajes, sino en vencer el miedo al futuro.
                         </p>
                     </div>
                 </div>
 
-                {/* 2023 */}
-                <div className="timeline-event">
-                    <div className="timeline-dot"></div>
-                    <span className="event-year">2021 • Nace Preu Lael</span>
-                    <h3 className="event-title">Formalizando el Sueño</h3>
-                    <p className="event-desc">
-                        La demanda creció. Esos primeros alumnos trajeron a sus amigos, y sus amigos a otros. 
-                        Decidimos estructurar todo bajo el nombre <strong>Lael</strong> ("Perteneciente a Dios"), 
-                        para nunca olvidar quién es el dueño de este proyecto. Nace nuestro Preuniversitario con enfoque humano.
-                    </p>
-                </div>
-
                 {/* 2024 */}
-                <div className="timeline-event">
-                    <div className="timeline-dot"></div>
-                    <span className="event-year">2024 • Expansión</span>
-                    <h3 className="event-title">Rompiendo Barreras</h3>
-                    <p className="event-desc">
-                        Nos dimos cuenta de que la PAES no era la única barrera. 
-                        Abrimos cursos de <strong>Idiomas</strong> y <strong>Lengua de Señas (LSCh)</strong>, 
-                        porque la inclusión y la comunicación global son herramientas de justicia social.
-                    </p>
+                <div className="t-item">
+                    <div className="t-dot"></div>
+                    <span className="t-year">2024</span>
+                    <div className="t-content">
+                        <h3>Expansión: Idiomas e Inclusión</h3>
+                        <p>
+                            Derribamos más barreras. Integramos las escuelas de <strong>Idiomas</strong> y <strong>Lengua de Señas (LSCh)</strong>, entendiendo que la comunicación es la llave maestra para las oportunidades laborales modernas.
+                        </p>
+                    </div>
                 </div>
 
                 {/* 2025 */}
-                <div className="timeline-event">
-                    <div className="timeline-dot"></div>
-                    <span className="event-year">2025 • Futuro</span>
-                    <h3 className="event-title">La Promesa Cumplida</h3>
-                    <p className="event-desc">
-                        Lanzamos la <strong>Escuela de Adultos</strong>. Honrando a las generaciones pasadas 
-                        (como nuestros abuelos) que no pudieron terminar sus estudios. 
-                        Ahora, Lael es un ecosistema educativo completo.
-                    </p>
+                <div className="t-item">
+                    <div className="t-dot"></div>
+                    <span className="t-year">2025</span>
+                    <div className="t-content">
+                        <h3>Escuela de Adultos</h3>
+                        <p>
+                            Lanzamos nuestro programa de nivelación de estudios, cerrando el círculo educativo y honrando a quienes buscan una segunda oportunidad académica.
+                        </p>
+                    </div>
                 </div>
 
             </div>
         </div>
       </section>
 
-      {/* --- VALORES --- */}
-      <section className="values-section">
+      {/* --- CARTA DEL DIRECTOR (SOLO TEXTO) --- */}
+      <section className="letter-section">
         <div className="container">
-            <div style={{textAlign:'center', marginBottom:'60px'}}>
-                <h2 style={{fontSize:'2.5rem', marginBottom:'15px', fontWeight:'800'}}>Nuestros Pilares</h2>
-                <p style={{color:'#94a3b8'}}>La roca sobre la que construimos.</p>
-            </div>
-            
-            <div className="values-grid">
-                <div className="value-card">
-                    <div className="v-icon"><Icons.Hand/></div>
-                    <h3>Servicio Genuino</h3>
-                    <p>No enseñamos para lucrar, lucramos para seguir sirviendo. El alumno es una persona, no un cliente.</p>
-                </div>
-                <div className="value-card">
-                    <div className="v-icon"><Icons.Heart/></div>
-                    <h3>Gratitud Activa</h3>
-                    <p>Todo lo que tenemos lo hemos recibido. Nuestra forma de dar gracias es dando lo mejor en cada clase.</p>
-                </div>
-                <div className="value-card">
-                    <div className="v-icon"><Icons.Star/></div>
-                    <h3>Excelencia Digna</h3>
-                    <p>Creemos que los recursos limitados no deben significar educación mediocre. Damos calidad premium a precio justo.</p>
-                </div>
-            </div>
-        </div>
-      </section>
-
-      {/* --- MENSAJE DEL FUNDADOR --- */}
-      <section className="founder-section">
-        <div className="container founder-grid">
-            <div className="founder-image-box">
-                {/* FOTO TUYA AQUÍ */}
-                <img src={FounderImg} alt="Diego Chaparro" className="founder-img" />
-            </div>
-            <div className="founder-text">
-                <span style={{color:'var(--gold)', fontWeight:'700', textTransform:'uppercase', letterSpacing:'1px'}}>Palabras del Director</span>
-                <h2 style={{fontWeight:'800', lineHeight:'1.1'}}>Diego Chaparro</h2>
-                <div className="founder-quote">
+            <div className="letter-container">
+                <div style={{marginBottom:'20px'}}><Icons.Quote/></div>
+                <p className="letter-quote">
                     "Lael no es solo un instituto, es mi forma de decir 'Gracias'. 
                     Ver a alguien superar el miedo a las matemáticas o aprender a comunicarse con señas 
                     me recuerda por qué empezamos en esa habitación en 2020. 
-                    Aquí nadie es un número."
-                </div>
-                <p style={{color:'#94a3b8'}}>
-                    Fundador & Director Ejecutivo
+                    Aquí nadie es un número, todos tienen un propósito."
                 </p>
+                <div className="letter-sign">
+                    <span className="letter-name">Diego Chaparro</span>
+                    <span className="letter-role">Fundador & Director</span>
+                </div>
             </div>
         </div>
       </section>
 
-      {/* --- CTA --- */}
-      <section className="cta-section">
+      {/* --- VALORES COMPACTOS --- */}
+      <section className="container">
+        <div className="values-grid">
+            <div className="val-card">
+                <h3><span className="val-icon"><Icons.Hand/></span> Servicio Genuino</h3>
+                <p>No enseñamos para lucrar, lucramos para seguir sirviendo. El alumno es el centro.</p>
+            </div>
+            <div className="val-card">
+                <h3><span className="val-icon"><Icons.Heart/></span> Gratitud Activa</h3>
+                <p>Damos lo mejor en cada clase porque valoramos la oportunidad de enseñar.</p>
+            </div>
+            <div className="val-card">
+                <h3><span className="val-icon"><Icons.Star/></span> Excelencia</h3>
+                <p>Recursos accesibles no significan calidad mediocre. Aspiramos siempre a lo mejor.</p>
+            </div>
+        </div>
+      </section>
+
+      {/* --- CTA FINAL --- */}
+      <section className="cta-box">
         <div className="container">
-            <h2 className="cta-title">¿Listo para aprender diferente?</h2>
-            <p className="cta-desc" style={{maxWidth:'600px', margin:'0 auto 40px'}}>
-                Si buscas un lugar donde te exijan pero te cuiden, donde te enseñen pero te valoren... bienvenido a casa.
-            </p>
+            <h2>¿Listo para ser parte de nuestra historia?</h2>
             <Link to="/contacto" className="cta-btn">
                 Unirme a Lael
             </Link>

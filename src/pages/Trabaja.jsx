@@ -1,46 +1,8 @@
 import { useState, useEffect } from "react";
 import SEOHead from "../components/SEOHead.jsx";
 
-// --- DATOS (Puedes moverlos a data/jobs.js después) ---
-const HR_EMAIL = "talento@institutolael.cl";
-const HR_WAPP = "56964626568";
-
-const PERKS = [
-  { icon: "🏠", title: "100% Remoto", desc: "Olvídate del taco. Trabaja desde tu casa o viajando." },
-  { icon: "📅", title: "Horario Flexible", desc: "Tú gestionas tus bloques. Valoramos resultados, no horas silla." },
-  { icon: "🚀", title: "Crecimiento", desc: "Acceso gratuito a nuestros cursos de idiomas para ti." },
-  { icon: "💰", title: "Pagos Puntuales", desc: "Honorarios claros y transferencias en fecha exacta." }
-];
-
-const OPENINGS = [
-  {
-    id: 1,
-    title: "Profesor(a) de Matemáticas PAES",
-    type: "Part-time",
-    tags: ["Remoto", "Noches/Sábados"],
-    salary: "$15.000 - $25.000 / hora",
-    desc: "Buscamos a alguien que ame los números y sepa explicar 'en fácil'. No queremos fórmulas de memoria, queremos lógica.",
-    requirements: ["Experiencia en PAES M1/M2", "Manejo de Zoom/OBS", "Tablet gráfica (Deseable)"]
-  },
-  {
-    id: 2,
-    title: "Docente de Inglés (Speaking Focus)",
-    type: "Part-time",
-    tags: ["Remoto", "Adultos"],
-    salary: "$12.000 - $18.000 / hora",
-    desc: "Necesitamos dinamismo puro. Si tus clases son solo grammar drills, esto no es para ti. Buscamos conversación y role-plays.",
-    requirements: ["Certificación C1/C2", "Experiencia con adultos", "Energía alta"]
-  },
-  {
-    id: 3,
-    title: "Creador de Contenido (TikTok/Reels)",
-    type: "Freelance",
-    tags: ["Proyectos", "Creativo"],
-    salary: "Por proyecto / Video",
-    desc: "El genio detrás de la cámara. Ayúdanos a mostrar la cultura Lael al mundo con videos cortos y virales.",
-    requirements: ["Portafolio de Reels", "Edición en CapCut/Premiere", "Buena ortografía"]
-  }
-];
+// 👇 AQUÍ IMPORTAMOS LOS DATOS
+import { PERKS, OPENINGS, HR_EMAIL, HR_WAPP } from "../data/jobs.js";
 
 /* ──────────────────────────────────────────────────────────────────────────
    1. ICONOS SVG (Minimalistas)

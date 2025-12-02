@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-// Asegúrate de tener react-icons instalado: npm install react-icons
-import { FaWhatsapp, FaTimes } from "react-icons/fa";
+// Asegúrate de tener: npm install react-icons
+import { FaWhatsapp, FaTimes, FaPaperPlane } from "react-icons/fa";
+import { BsCheckAll } from "react-icons/bs"; // Para el doble check azul
 
 export default function FloatingWhatsApp({
   phone = "56964626568",
-  greetingMessage = "Hola 👋, vengo de la web y quisiera información.",
   questions = [
     "🎓 ¿Qué cursos tienen disponibles?",
     "💰 Quiero cotizar un plan",
@@ -12,24 +12,44 @@ export default function FloatingWhatsApp({
     "📍 ¿Dónde están ubicados?",
   ],
   tooltipText = "¡Hablemos!",
-  color = "#25D366", // El verde oficial de WA
 }) {
   const [open, setOpen] = useState(false);
   const [hover, setHover] = useState(false);
   const [showBadge, setShowBadge] = useState(false);
+  const [isTyping, setIsTyping] = useState(true); // Estado para animación de escritura
+  
   const panelRef = useRef(null);
   const btnRef = useRef(null);
 
-  // Formatear número
+  // 1. Limpiar número
   const phoneClean = useMemo(() => String(phone).replace(/\D/g, ""), [phone]);
 
-  // Badge aparece a los 3s
+  // 2. Saludo según hora del día
+  const timeGreeting = useMemo(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "¡Buenos días!";
+    if (hour < 20) return "¡Buenas tardes!";
+    return "¡Buenas noches!";
+  }, []);
+
+  // 3. Efecto Badge (Notificación)
   useEffect(() => {
     const t = setTimeout(() => setShowBadge(true), 3000);
     return () => clearTimeout(t);
   }, []);
 
-  // Click outside cerrar
+  // 4. Efecto "Escribiendo..." al abrir
+  useEffect(() => {
+    if (open) {
+      setIsTyping(true);
+      const t = setTimeout(() => setIsTyping(false), 1200); // 1.2 seg de "escribiendo"
+      return () => clearTimeout(t);
+    } else {
+      setIsTyping(true); // Reset para la próxima
+    }
+  }, [open]);
+
+  // 5. Cerrar al hacer clic fuera
   useEffect(() => {
     if (!open) return;
     const onDoc = (e) => {
@@ -42,7 +62,7 @@ export default function FloatingWhatsApp({
   }, [open]);
 
   const openWhatsApp = (msg) => {
-    const url = `https://wa.me/${phoneClean}?text=${encodeURIComponent(msg)}`;
+    const url = `https://wa.me/${phoneClean}?text=${encodeURIComponent(msg || "Hola, vengo de la web.")}`;
     window.open(url, "_blank", "noopener,noreferrer");
     setOpen(false);
     setShowBadge(false);
@@ -58,15 +78,13 @@ export default function FloatingWhatsApp({
     <>
       <div className="wa-wrapper">
         
-        {/* PANEL DE CHAT (Glassmorphism) */}
-        <div 
-          ref={panelRef} 
-          className={`wa-panel ${open ? "open" : ""}`}
-        >
+        {/* PANEL DE CHAT */}
+        <div ref={panelRef} className={`wa-panel ${open ? "open" : ""}`}>
+          
           {/* Header */}
           <div className="wa-header">
-            <div className="wa-avatar">
-              <FaWhatsapp />
+            <div className="wa-avatar-box">
+              <FaWhatsapp className="wa-avatar-icon" />
             </div>
             <div className="wa-info">
               <span className="wa-name">Equipo Lael</span>
@@ -79,31 +97,47 @@ export default function FloatingWhatsApp({
             </button>
           </div>
 
-          {/* Body */}
+          {/* Body (Chat) */}
           <div className="wa-body">
-            {/* Mensaje de bienvenida (simulado) */}
-            <div className="wa-msg in">
-              <span className="wa-msg-name">Asistente Virtual</span>
-              <p>¡Hola! 👋 Bienvenido a Instituto Lael. ¿En qué te podemos ayudar hoy?</p>
-              <span className="wa-time">{new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-            </div>
+            
+            {/* Mensaje o Typing */}
+            {isTyping ? (
+              <div className="wa-typing">
+                <span className="typing-dot"></span>
+                <span className="typing-dot"></span>
+                <span className="typing-dot"></span>
+              </div>
+            ) : (
+              <div className="wa-msg in">
+                <span className="wa-msg-name">Asistente Virtual</span>
+                <p>{timeGreeting} 👋 Bienvenido a Instituto Lael. ¿En qué te podemos ayudar hoy?</p>
+                <div className="wa-meta">
+                  <span className="wa-time">
+                    {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                  </span>
+                  <BsCheckAll className="wa-read-icon" />
+                </div>
+              </div>
+            )}
 
-            {/* Preguntas Frecuentes */}
-            <div className="wa-options">
-              {questions.map((q, i) => (
-                <button key={i} className="wa-chip" onClick={() => openWhatsApp(q)}>
-                  {q}
-                </button>
-              ))}
-            </div>
+            {/* Chips de Preguntas (Solo aparecen si no está escribiendo) */}
+            {!isTyping && (
+              <div className="wa-options">
+                {questions.map((q, i) => (
+                  <button key={i} className="wa-chip" onClick={() => openWhatsApp(q)}>
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Footer (Input simulado) */}
-          <div className="wa-footer" onClick={() => openWhatsApp(greetingMessage)}>
+          {/* Footer */}
+          <div className="wa-footer" onClick={() => openWhatsApp("Hola, tengo una duda...")}>
             <div className="wa-input-fake">Escribe un mensaje...</div>
-            <div className="wa-send-btn">
-              <FaWhatsapp />
-            </div>
+            <button className="wa-send-btn">
+              <FaPaperPlane />
+            </button>
           </div>
         </div>
 
@@ -115,251 +149,154 @@ export default function FloatingWhatsApp({
           onMouseLeave={() => setHover(false)}
           onClick={toggle}
         >
-          {/* Tooltip */}
           <div className={`wa-tooltip ${hover && !open ? "visible" : ""}`}>
             {tooltipText}
           </div>
 
-          {/* Badge */}
           {showBadge && !open && <span className="wa-badge">1</span>}
 
-          {/* Botón Circular */}
-          <button className={`wa-float-btn ${open ? "active" : ""}`} aria-label="Chat WhatsApp">
+          <button className={`wa-float-btn ${open ? "active" : ""}`} aria-label="Abrir WhatsApp">
             {open ? <FaTimes /> : <FaWhatsapp />}
           </button>
         </div>
 
       </div>
 
-      {/* ESTILOS INYECTADOS */}
       <style>{css}</style>
     </>
   );
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   CSS (DARK MODE INTEGRADO)
+   CSS (PULIDO Y ANIMADO)
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
-/* Wrapper fijo en la esquina */
 .wa-wrapper {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  z-index: 9999;
-  font-family: 'Inter', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  position: fixed; bottom: 30px; right: 30px; z-index: 9999;
+  font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: flex-end;
 }
 
-/* --- BOTÓN FLOTANTE --- */
+/* --- BOTÓN --- */
 .wa-float-btn {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: #25D366; /* Verde WA */
-  color: white;
-  border: none;
-  font-size: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  z-index: 20;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: #25D366; color: white; border: none; font-size: 32px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative; z-index: 20;
 }
+.wa-float-btn:hover { transform: scale(1.1); box-shadow: 0 10px 30px rgba(37, 211, 102, 0.6); }
+.wa-float-btn.active { background: #1f2937; transform: rotate(180deg); }
 
-.wa-float-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.6);
-}
-
-.wa-float-btn.active {
-  background: #1f2937; /* Gris oscuro al abrir */
-  transform: rotate(90deg);
-}
-
-/* Badge Notificación */
+/* Badge */
 .wa-badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: #ef4444;
-  color: white;
-  font-size: 11px;
-  font-weight: 800;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #000; /* Borde negro para separar */
-  z-index: 25;
-  animation: bounce 1s infinite;
+  position: absolute; top: 0; right: 0;
+  background: #ef4444; color: white; font-size: 11px; font-weight: 800;
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid #000; z-index: 25;
+  animation: wa-bounce 1s infinite;
 }
 
 /* Tooltip */
 .wa-tooltip {
-  position: absolute;
-  right: 80px;
-  top: 50%;
-  transform: translateY(-50%) translateX(10px);
-  background: #1f2937;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.2s;
-  pointer-events: none;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  position: absolute; right: 75px; top: 50%; transform: translateY(-50%) translateX(10px);
+  background: #111827; color: white; padding: 6px 12px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; white-space: nowrap; opacity: 0; visibility: hidden;
+  transition: 0.2s; pointer-events: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
-.wa-tooltip.visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(-50%) translateX(0);
-}
+.wa-tooltip.visible { opacity: 1; visibility: visible; transform: translateY(-50%) translateX(0); }
 
-/* --- PANEL DE CHAT (Glassmorphism Dark) --- */
+/* --- PANEL --- */
 .wa-panel {
-  position: absolute;
-  bottom: 80px;
-  right: 0;
-  width: 350px;
-  max-width: calc(100vw - 40px);
-  height: 450px;
-  background: #0f1115; /* Fondo muy oscuro */
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transform-origin: bottom right;
-  transform: scale(0);
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  position: absolute; bottom: 80px; right: 0;
+  width: 360px; height: 480px; max-width: calc(100vw - 40px);
+  background: #0f1115; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.7);
+  display: flex; flex-direction: column; overflow: hidden;
+  transform-origin: bottom right; transform: scale(0.8); opacity: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   visibility: hidden;
 }
-
-.wa-panel.open {
-  transform: scale(1);
-  opacity: 1;
-  visibility: visible;
-}
+.wa-panel.open { transform: scale(1); opacity: 1; visibility: visible; }
 
 /* Header */
 .wa-header {
-  background: #064e3b; /* Verde oscuro elegante */
-  padding: 15px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: #005c4b; /* Verde Oscuro WhatsApp */
+  padding: 16px 20px; display: flex; align-items: center; gap: 12px;
 }
-.wa-avatar {
-  width: 40px;
-  height: 40px;
-  background: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #25D366;
-  font-size: 24px;
+.wa-avatar-box {
+  width: 42px; height: 42px; background: white; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
 }
+.wa-avatar-icon { color: #25D366; font-size: 26px; }
 .wa-info { flex-grow: 1; }
-.wa-name { display: block; color: white; font-weight: 700; font-size: 15px; }
-.wa-status { display: block; color: rgba(255,255,255,0.8); font-size: 12px; display: flex; align-items: center; gap: 5px; }
-.dot { width: 8px; height: 8px; background: #25D366; border-radius: 50%; }
-.wa-close { background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 14px; }
+.wa-name { display: block; color: white; font-weight: 700; font-size: 16px; }
+.wa-status { display: flex; align-items: center; gap: 5px; color: rgba(255,255,255,0.85); font-size: 12px; }
+.dot { width: 6px; height: 6px; background: #25D366; border-radius: 50%; box-shadow: 0 0 5px #25D366; }
+.wa-close { color: rgba(255,255,255,0.7); font-size: 16px; }
 
 /* Body */
 .wa-body {
-  flex-grow: 1;
-  padding: 20px;
-  background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png"); /* Fondo clásico WA Dark */
+  flex-grow: 1; padding: 20px;
   background-color: #0b141a;
-  background-blend-mode: soft-light;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+  background-image: url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png");
+  background-blend-mode: overlay; opacity: 0.95;
+  overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
 }
 
-/* Mensaje Entrante */
+/* Mensaje */
 .wa-msg {
-  background: #1f2c34; /* Gris oscuro WA */
-  color: #e9edef;
-  padding: 10px 12px;
-  border-radius: 0 12px 12px 12px;
-  max-width: 85%;
-  align-self: flex-start;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  position: relative;
-  animation: slideIn 0.3s ease-out;
+  background: #202c33; color: #e9edef; padding: 10px 14px;
+  border-radius: 0 12px 12px 12px; max-width: 85%; align-self: flex-start;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); position: relative; animation: wa-slide 0.3s ease-out;
 }
-.wa-msg-name { font-size: 11px; color: #25D366; font-weight: 700; display: block; margin-bottom: 4px; }
-.wa-msg p { margin: 0; font-size: 14px; line-height: 1.4; }
-.wa-time { font-size: 10px; color: rgba(255,255,255,0.5); display: block; text-align: right; margin-top: 4px; }
+.wa-msg-name { font-size: 12px; color: #25D366; font-weight: 700; display: block; margin-bottom: 4px; }
+.wa-msg p { margin: 0; font-size: 14.5px; line-height: 1.45; }
+.wa-meta { display: flex; justify-content: flex-end; align-items: center; gap: 4px; margin-top: 4px; }
+.wa-time { font-size: 10px; color: rgba(255,255,255,0.5); }
+.wa-read-icon { color: #53bdeb; font-size: 14px; }
 
-/* Chips de Preguntas */
-.wa-options { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin-top: auto; }
+/* Typing Effect */
+.wa-typing {
+  background: #202c33; padding: 12px 16px; border-radius: 0 12px 12px 12px;
+  align-self: flex-start; display: flex; gap: 4px; align-items: center; width: fit-content;
+}
+.typing-dot {
+  width: 6px; height: 6px; background: #8696a0; border-radius: 50%;
+  animation: wa-typing 1.4s infinite ease-in-out both;
+}
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+/* Chips */
+.wa-options { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin-top: auto; padding-top: 20px; }
 .wa-chip {
-  background: rgba(37, 211, 102, 0.15); /* Verde translúcido */
-  border: 1px solid rgba(37, 211, 102, 0.3);
-  color: #25D366;
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  cursor: pointer;
-  transition: 0.2s;
-  text-align: right;
-  max-width: 90%;
+  background: rgba(37, 211, 102, 0.1); border: 1px solid rgba(37, 211, 102, 0.3);
+  color: #25D366; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: 0.2s; text-align: right; max-width: 90%; animation: wa-fade 0.4s ease;
 }
-.wa-chip:hover { background: rgba(37, 211, 102, 0.3); color: white; transform: translateX(-5px); }
+.wa-chip:hover { background: rgba(37, 211, 102, 0.2); transform: translateX(-3px); }
 
-/* Footer (Input Fake) */
+/* Footer */
 .wa-footer {
-  padding: 10px;
-  background: #1f2c34;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
+  padding: 10px 15px; background: #202c33; border-top: 1px solid rgba(255,255,255,0.05);
+  display: flex; align-items: center; gap: 10px; cursor: pointer;
 }
 .wa-input-fake {
-  flex-grow: 1;
-  background: #2a3942;
-  color: rgba(255,255,255,0.5);
-  padding: 10px 15px;
-  border-radius: 20px;
-  font-size: 14px;
+  flex-grow: 1; background: #2a3942; color: #8696a0; padding: 10px 16px;
+  border-radius: 24px; font-size: 14px;
 }
 .wa-send-btn {
-  width: 40px;
-  height: 40px;
-  background: #25D366;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-size: 18px;
+  width: 40px; height: 40px; background: #005c4b; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; border:none;
 }
 
-@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-@keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes wa-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes wa-slide { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes wa-fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes wa-typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
-/* Mobile adjustments */
 @media (max-width: 480px) {
   .wa-panel { bottom: 0; right: 0; width: 100%; height: 100%; max-width: none; border-radius: 0; }
   .wa-wrapper { bottom: 20px; right: 20px; }

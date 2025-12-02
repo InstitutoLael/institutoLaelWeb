@@ -3,14 +3,8 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import SEOHead from "../components/SEOHead.jsx";
 import { FaHome, FaSearch, FaWhatsapp, FaLink } from "react-icons/fa";
 
-/* --- LOGO SVG (Estilizado para 404) --- */
-const LaelLogoGhost = () => (
-  <svg viewBox="0 0 40 40" className="logo-icon" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10 8C10 8 4 20 4 26C4 31 8 35 13 35C18 35 22 31 22 26C22 20 16 8 16 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    <path d="M13 35V23" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-    <path d="M13 23L19 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-  </svg>
-);
+// 👇 AQUÍ ESTÁ EL CAMBIO: Usamos tu logo real
+import logo from "../assets/img/Logos/lael-inst-blanco.png"; 
 
 export default function NotFound() {
   const nav = useNavigate();
@@ -49,7 +43,9 @@ export default function NotFound() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (q.trim()) nav(`/?search=${encodeURIComponent(q.trim())}`); // Redirige al home (o donde quieras)
+    // Redirige al home pasando la búsqueda (si implementas búsqueda global)
+    // O simplemente redirige a los programas
+    if (q.trim()) nav(`/paes`); 
   };
 
   const copyUrl = () => {
@@ -63,7 +59,7 @@ export default function NotFound() {
       <SEOHead title="404 — Extraviado | Instituto Lael" description="Página no encontrada." robots="noindex" />
       <style>{css}</style>
 
-      {/* Luces de Fondo (Coherencia Visual) */}
+      {/* Luces de Fondo */}
       <div className="bg-glow top-left"></div>
       <div className="bg-glow bottom-right"></div>
       <Particles />
@@ -73,8 +69,8 @@ export default function NotFound() {
         {/* Navbar Flotante */}
         <nav className="nf-nav">
             <Link to="/" className="nav-logo">
-                <LaelLogoGhost />
-                <span>INSTITUTO <strong>LAEL</strong></span>
+                {/* Logo Real */}
+                <img src={logo} alt="Instituto Lael" className="logo-img" />
             </Link>
         </nav>
 
@@ -93,7 +89,7 @@ export default function NotFound() {
                 </p>
             </div>
 
-            {/* Sugerencia Inteligente (UX Magic) */}
+            {/* Sugerencia Inteligente */}
             {suggestions.length > 0 && (
                 <div className="smart-suggestion">
                     <span className="bulb">💡</span>
@@ -193,10 +189,10 @@ const css = `
     display: flex; justify-content: center; z-index: 20;
 }
 .nav-logo {
-    display: flex; align-items: center; gap: 10px; text-decoration: none; color: white; opacity: 0.7; transition: .2s;
+    display: block; opacity: 0.8; transition: .2s;
 }
-.nav-logo:hover { opacity: 1; }
-.logo-icon { width: 24px; height: 24px; color: var(--primary); }
+.nav-logo:hover { opacity: 1; transform: scale(1.05); }
+.logo-img { height: 40px; width: auto; display: block; }
 
 /* Card */
 .nf-card {
@@ -222,7 +218,7 @@ const css = `
     text-transform: uppercase; letter-spacing: 1px;
 }
 
-.text-content { margin-bottom: 30px; height: 70px; }
+.text-content { margin-bottom: 30px; min-height: 70px; }
 .rotating-text { font-size: 1.1rem; color: white; font-weight: 500; margin-bottom: 5px; animation: fadeIn .5s ease; }
 .sub-text { font-size: 0.85rem; color: var(--muted); }
 .url-badge {

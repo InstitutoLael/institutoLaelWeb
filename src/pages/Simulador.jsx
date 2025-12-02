@@ -1,126 +1,177 @@
-import { useState, useMemo, useEffect } from "react";
-import SEOHead from "../components/SEOHead.jsx";
+import { useState, useMemo } from "react";
 
-// 🛑 IMPORTANTE: Eliminamos la importación de la base de datos grande.
-// En su lugar, usamos una pequeña lista de ejemplo (5 carreras) para demostrar la lógica.
+/* --- LÓGICA DE CÁLCULO PAES INTEGRADA --- */
 
-const SAMPLE_CARRERAS = [
-    { id: 100, u: "P. Univ. Católica de Chile", carrera: "Medicina", sede: "Casa Central", corte: 815, vacantes: 100, arancel: 10000000, p: { nem: 20, rank: 20, cl: 15, m1: 25, m2: 0, cien: 20 } },
-    { id: 101, u: "Universidad de Chile", carrera: "Ingeniería Civil Industrial", sede: "Beauchef", corte: 780, vacantes: 250, arancel: 8500000, p: { nem: 10, rank: 30, cl: 15, m1: 30, m2: 0, cien: 15 } },
-    { id: 102, u: "Universidad de Concepción", carrera: "Derecho", sede: "Concepción", corte: 745, vacantes: 180, arancel: 7000000, p: { nem: 20, rank: 20, cl: 35, m1: 5, m2: 0, hist: 20 } },
-    { id: 103, u: "Universidad Adolfo Ibáñez", carrera: "Diseño", sede: "Peñalolén", corte: 690, vacantes: 120, arancel: 9500000, p: { nem: 40, rank: 20, cl: 20, m1: 20, m2: 0, cien: 0, hist: 0 } },
-    { id: 104, u: "Univ. Técnica Federico Santa María", carrera: "Técnico en Informática", sede: "Valparaíso", corte: 550, vacantes: 80, arancel: 4000000, p: { nem: 30, rank: 30, cl: 10, m1: 30, m2: 0, cien: 0, hist: 0 } }
-];
+const MIN_PUNTAJE = 100;
+const MAX_PUNTAJE = 1000;
+const MIN_PROM_OBLIGATORIAS = 458; // Regla: (CL + M1)/2 >= 458
 
-/* --- ÍCONOS SVG NATIVOS --- */
-const ICONS = {
-  search: <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>,
-  check: <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>,
-  warning: <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+const isValidScore = (n) => {
+  if (typeof n !== "number" || isNaN(n)) return false;
+  return (n >= MIN_PUNTAJE && n <= MAX_PUNTAJE) || n === 0;
 };
 
-export default function Simulador() {
-  // Estado de puntajes con persistencia (LocalStorage opcional, aquí simple)
+const round2 = (n) => Math.round(n * 100) / 100;
+
+// 1. Verifica si el estudiante cumple el requisito mínimo del DEMRE.
+function esAdmisible({ CL, M1 }) {
+  if (!isValidScore(CL) || !isValidScore(M1)) return false;
+  if (CL === 0 || M1 === 0) return false; 
+  
+  const promedio = (CL + M1) / 2;
+  return promedio >= MIN_PROM_OBLIGATORIAS;
+}
+
+// 2. Calcula el Puntaje Ponderado Postulación (PPP).
+function calcularPPP(pond, puntajes) {
+  const { CL = 0, M1 = 0, M2 = 0, CIEN = 0, HIS = 0, NEM = 0, RANK = 0 } = puntajes;
+
+  // Normaliza ponderación: si viene "20", lo transforma a "0.2"
+  const p = (val) => {
+    const v = Number(val || 0);
+    return v > 1 ? v / 100 : v;
+  };
+
+  // Lógica de MEJOR ELECTIVA: si la carrera pide CIEN o HIS (o ambas), toma la mejor nota del alumno.
+  let scoreElectiva = 0;
+  
+  if (p(pond.CIEN) > 0 || p(pond.HIS) > 0) {
+    scoreElectiva = Math.max(isValidScore(CIEN) ? CIEN : 0, isValidScore(HIS) ? HIS : 0);
+  }
+
+  // CÁLCULO FINAL: Asume que la ponderación usada para la electiva es la mayor entre CIEN e HIS.
+  const puntajeFinal = 
+    (p(pond.NEM) * NEM) +
+    (p(pond.RANK) * RANK) +
+    (p(pond.CL) * CL) +
+    (p(pond.M1) * M1) +
+    (p(pond.M2) * (isValidScore(M2) ? M2 : 0)) +
+    (Math.max(p(pond.CIEN), p(pond.HIS)) * scoreElectiva);
+
+  return round2(puntajeFinal);
+}
+
+// 3. Etiqueta el "semáforo" de probabilidad.
+function etiquetaChance(ppp, corte) {
+  if (!ppp || !corte) return { text: "Cálculo pendiente", color: "gray", icon: "⚪️" };
+
+  const diff = ppp - corte;
+
+  if (diff >= 40) return { text: "ASEGURADO", color: "emerald", icon: "🚀" };
+  if (diff >= 15) return { text: "MUY PROBABLE", color: "green", icon: "✅" };
+  if (diff >= 0)  return { text: "COMPETITIVO", color: "blue", icon: "🔹" };
+  if (diff >= -15) return { text: "AJUSTADO", color: "yellow", icon: "⚠️" };
+  if (diff >= -40) return { text: "RIESGOSO", color: "orange", icon: "🔸" };
+  return { text: "MUY DIFÍCIL", color: "red", icon: "🔻" };
+}
+
+/* --- COMPONENTE PLACEHOLDER (Para evitar error de importación) --- */
+const SEOHead = () => null; 
+
+/* --- MAPEO DE COLORES PARA LA LÓGICA --- */
+const colorMap = {
+    emerald: "#10b981", green: "#3b82f6", blue: "#3b82f6", 
+    yellow: "#f59e0b", orange: "#f97316", red: "#ef4444", gray: "#94a3b8"
+};
+const colorMapBg = {
+    emerald: "rgba(16,185,129,0.15)", green: "rgba(59,130,246,0.15)", blue: "rgba(59,130,246,0.15)", 
+    yellow: "rgba(245,158,11,0.15)", orange: "rgba(249,115,22,0.15)", red: "rgba(239,68,68,0.1)", gray: "rgba(148,163,184,0.1)"
+};
+
+/* --- COMPONENTE PRINCIPAL --- */
+export default function SimuladorPonderacion() {
+  // 1. Estado de Puntajes del Alumno (similares a los del formulario anterior)
   const [scores, setScores] = useState({
     nem: 650, ranking: 650, cl: 700, m1: 700, m2: 0, cien: 600, hist: 0
   });
 
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  // 2. Estado de Ponderaciones de la Carrera (ingresadas por el usuario, en %)
+  const [ponderations, setPonderations] = useState({
+    nem: 20, rank: 20, cl: 30, m1: 30, m2: 0, cien: 0, hist: 0 // Ejemplo: Ingeniería U. Chile
+  });
+  
+  // 3. Estado del Puntaje de Corte de Referencia
+  const [corteTarget, setCorteTarget] = useState(700);
+  
+  // 4. Input para el nombre de la carrera (solo estético)
+  const [careerName, setCareerName] = useState("Ingeniería Civil U. de Chile");
+  const [uniName, setUniName] = useState("Universidad de Chile");
 
-  // Debounce para que no busque en cada tecla, sino al terminar de escribir
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(search), 300);
-    return () => clearTimeout(timer);
-  }, [search]);
 
+  // Manejadores de Inputs
   const handleScore = (e) => {
     let val = Number(e.target.value);
     if (val > 1000) val = 1000;
     if (val < 0) val = 0;
     setScores({ ...scores, [e.target.name]: val });
   };
+  
+  const handlePonderation = (e) => {
+    let val = Number(e.target.value);
+    if (val > 100) val = 100;
+    if (val < 0) val = 0;
+    setPonderations({ ...ponderations, [e.target.name]: val });
+  };
+  
+  const handleCorte = (e) => {
+    let val = Number(e.target.value);
+    if (val > 1000) val = 1000;
+    if (val < 0) val = 0;
+    setCorteTarget(val);
+  };
 
   // 🧠 MOTOR DE CÁLCULO
-  const results = useMemo(() => {
-    // 1. Filtrado Inteligente (Nombre, U, Sede)
-    const lowerQ = debouncedSearch.toLowerCase();
+  const calculationResult = useMemo(() => {
+    // Mapeo de keys para la lógica
+    const studentScores = {
+      NEM: scores.nem, RANK: scores.ranking, CL: scores.cl, 
+      M1: scores.m1, M2: scores.m2, CIEN: scores.cien, HIS: scores.hist 
+    };
     
-    // Usamos el SAMPLE_CARRERAS y filtramos por búsqueda
-    const filtered = SAMPLE_CARRERAS.filter(c => 
-        c.carrera.toLowerCase().includes(lowerQ) || 
-        c.u.toLowerCase().includes(lowerQ) ||
-        (c.sede && c.sede.toLowerCase().includes(lowerQ))
-    );
+    const careerPond = {
+        NEM: ponderations.nem, RANK: ponderations.rank, CL: ponderations.cl, 
+        M1: ponderations.m1, M2: ponderations.m2, CIEN: ponderations.cien, HIS: ponderations.hist
+    };
 
-    // Si la búsqueda es muy corta y no muestra nada, muestra todo el sample
-    const careersToAnalyze = (debouncedSearch.length < 2 && filtered.length === 0) 
-        ? SAMPLE_CARRERAS 
-        : filtered;
+    // 1. Verificar admisibilidad (Paso DEMRE)
+    const isAdmissible = esAdmisible(studentScores);
+    if (!isAdmissible) {
+        return { 
+            finalScore: 0, 
+            diff: 0, 
+            status: { label: "NO ADMISIBLE (Promedio < 458)", color: "#ef4444", bg: "rgba(239,68,68,0.1)", icon: "⛔" },
+            admissible: false
+        };
+    }
     
-    // 2. Cálculo Ponderado
-    return careersToAnalyze.map(c => {
-      // Mejor electiva automática
-      const electivaCien = scores.cien * (c.p.cien || 0);
-      const electivaHist = scores.hist * (c.p.hist || 0);
-      
-      let bestElectivaScore = 0;
-      let electivaPonderation = 0;
+    // 2. Calcular Puntaje Ponderado Postulación (PPP)
+    const ppp = calcularPPP(careerPond, studentScores);
+    
+    // 3. Etiquetar chance vs. Corte Objetivo
+    const chance = etiquetaChance(ppp, corteTarget);
 
-      // Si la carrera pide CIENCIAS y/o HISTORIA, toma el puntaje más alto del alumno
-      if (c.p.cien > 0 && c.p.hist > 0) {
-          // Si piden ambas, el alumno puede elegir el mayor puntaje (o lo que la U permita)
-          bestElectivaScore = Math.max(scores.cien, scores.hist);
-          electivaPonderation = c.p.cien > 0 ? c.p.cien : c.p.hist; // Asume que la U usará la ponderación más alta si da a elegir
-      } else {
-          // Si solo pide una (ej. solo CIEN), usa ese puntaje y su ponderación.
-          bestElectivaScore = (c.p.cien > 0) ? scores.cien : scores.hist;
-          electivaPonderation = (c.p.cien > 0) ? c.p.cien : c.p.hist;
-      }
-      
-      const p = c.p || {}; // Ponderaciones
+    return {
+        finalScore: Math.round(ppp),
+        diff: Math.round(ppp - corteTarget),
+        status: { 
+            label: chance.text, 
+            color: colorMap[chance.color], 
+            bg: colorMapBg[chance.color], 
+            icon: chance.icon 
+        },
+        admissible: true
+    };
+  }, [scores, ponderations, corteTarget]);
+  
+  // Suma total de ponderaciones
+  const totalPonderations = Object.values(ponderations).reduce((sum, p) => sum + p, 0);
 
-      const rawSum = 
-        (scores.nem * (p.nem || 0)) + 
-        (scores.ranking * (p.rank || 0)) + 
-        (scores.m1 * (p.m1 || 0)) + 
-        (scores.m2 * (p.m2 || 0)) + 
-        (scores.cl * (p.cl || 0)) + 
-        (bestElectivaScore * electivaPonderation);
-
-
-      // Detección automática de escala (si suma ~100 o ~1)
-      const totalPerc = Object.values(p).reduce((a, b) => a + b, 0);
-      
-      // La suma total de ponderaciones DEBE ser 100 para que la división sea correcta
-      const divisor = totalPerc > 90 && totalPerc < 110 ? 100 : 1; 
-      
-      const finalScore = Math.round(rawSum / divisor);
-
-      // Estado vs Corte
-      const corte = c.corte || 0;
-      const diff = finalScore - corte;
-      let status = { label: "LEJANO", color: "#ef4444", bg: "rgba(239,68,68,0.1)", icon: "⛔" };
-
-      if (corte === 0) {
-        status = { label: "NUEVA / S/I", color: "#94a3b8", bg: "rgba(148,163,184,0.1)", icon: "⚪" };
-      } else if (diff >= 40) {
-        status = { label: "ASEGURADO", color: "#10b981", bg: "rgba(16,185,129,0.15)", icon: "🚀" };
-      } else if (diff >= 10) {
-        status = { label: "ADMISIBLE", color: "#3b82f6", bg: "rgba(59,130,246,0.15)", icon: "✅" };
-      } else if (diff >= -15) {
-        status = { label: "AJUSTADO", color: "#f59e0b", bg: "rgba(245,158,11,0.15)", icon: "⚠️" };
-      }
-
-      return { ...c, finalScore, diff, status, corteReal: corte };
-    });
-  }, [debouncedSearch, scores]);
 
   return (
     <div className="sim-page">
       <SEOHead 
-        title="Simulador de Puntajes PAES | Instituto Lael" 
-        description="Calcula tu ponderación en tiempo real para todas las universidades de Chile. Motor actualizado Admisión 2026."
+        title="Calculadora de Ponderación PAES" 
+        description="Calcula tu puntaje ponderado con cualquier perfil de carrera y puntaje de corte."
       />
       <style>{css}</style>
 
@@ -128,20 +179,18 @@ export default function Simulador() {
         
         {/* HEADER */}
         <header className="sim-header">
-          <div className="ai-badge">
-            <span className="dot"></span> Motor PAES 2026 Ready
-          </div>
-          <h1>Simulador de Postulación (Demo)</h1>
-          <p>La herramienta más potente para proyectar tu futuro académico.</p>
+          <h1>Calculadora de Ponderación por Perfil</h1>
+          <p>Introduce tus puntajes y el perfil de ponderación de la carrera que te interesa para proyectar tu postulación.</p>
         </header>
-
-        {/* INPUTS DASHBOARD (Sticky) */}
+        
+        {/* DASHBOARD DE PUNTAJES DEL ALUMNO */}
+        <h2 className="section-title">1. Tus Puntajes PAES</h2>
         <div className="dashboard-panel">
           <div className="inputs-scroll">
             {[
               { k: 'nem', l: 'NEM' }, { k: 'ranking', l: 'RANK' }, 
-              { k: 'cl', l: 'LENGUAJE' }, { k: 'm1', l: 'MATE 1' }, 
-              { k: 'm2', l: 'MATE 2' }, { k: 'cien', l: 'CIENCIAS' }, 
+              { k: 'cl', l: 'LENGUAJE' }, { k: 'm1', l: 'MATE 1 (M1)' }, 
+              { k: 'm2', l: 'MATE 2 (M2)' }, { k: 'cien', l: 'CIENCIAS' }, 
               { k: 'hist', l: 'HISTORIA' }
             ].map((field) => (
               <div key={field.k} className="input-group">
@@ -152,103 +201,162 @@ export default function Simulador() {
                   value={scores[field.k]} 
                   onChange={handleScore}
                   placeholder="0"
-                  onFocus={(e) => e.target.select()} // Auto-seleccionar al tocar
                 />
               </div>
             ))}
           </div>
         </div>
 
-        {/* BUSCADOR FLOATING */}
-        <div className="search-floater">
-          <div className="search-wrapper">
-            <span className="s-icon">{ICONS.search}</span>
-            <input 
-              type="text" 
-              placeholder="Busca carrera o universidad (ej: Medicina Chile, Derecho UC)..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              autoFocus
-            />
-            {results.length > 0 && <span className="results-count">{results.length} res.</span>}
+        {/* PERFIL DE PONDERACIÓN DE CARRERA */}
+        <h2 className="section-title mt-10">2. Perfil de Ponderación y Corte Objetivo</h2>
+        
+        {/* Datos de la Carrera (Editable) */}
+        <div className="dashboard-panel mb-5">
+            <div className="inputs-scroll !grid-cols-2 md:!grid-cols-4 gap-4">
+                <div className="input-group col-span-2 md:col-span-2">
+                    <label>Universidad / Institución</label>
+                    <input type="text" value={uniName} onChange={(e) => setUniName(e.target.value)} />
+                </div>
+                 <div className="input-group col-span-2 md:col-span-2">
+                    <label>Nombre de la Carrera</label>
+                    <input type="text" value={careerName} onChange={(e) => setCareerName(e.target.value)} />
+                </div>
+            </div>
+            <div className="input-group mt-4">
+                <label>Puntaje de Corte Referencia (Ej: 700)</label>
+                <input 
+                  type="number" 
+                  value={corteTarget} 
+                  onChange={handleCorte} 
+                  placeholder="Puntaje de Corte" 
+                  className="!text-3xl !py-4"
+                />
+            </div>
+        </div>
+
+
+        {/* PONDERACIONES */}
+        <div className="dashboard-panel">
+          <p className="text-sm text-yellow-400 mb-3">
+              *Ingresa los porcentajes de ponderación (ej: 20 para 20%). Deben sumar 100%.
+          </p>
+          <div className="inputs-scroll">
+            {[
+              { k: 'nem', l: 'NEM (%)' }, { k: 'rank', l: 'RANK (%)' }, 
+              { k: 'cl', l: 'LENGUAJE (%)' }, { k: 'm1', l: 'MATE 1 (%)' }, 
+              { k: 'm2', l: 'MATE 2 (%)' }, { k: 'cien', l: 'CIENCIAS (%)' }, 
+              { k: 'hist', l: 'HISTORIA (%)' }
+            ].map((field) => (
+              <div key={field.k} className="input-group">
+                <label>{field.l}</label>
+                <input 
+                  type="number" 
+                  name={field.k} 
+                  value={ponderations[field.k]} 
+                  onChange={handlePonderation}
+                  placeholder="0"
+                />
+              </div>
+            ))}
+          </div>
+          
+          <div className="mt-5 text-right font-bold text-sm">
+            <span className={totalPonderations === 100 ? 'text-green-500' : 'text-red-500'}>
+              Suma Total de Ponderaciones: {totalPonderations}% {totalPonderations !== 100 && "(¡Ajustar!)"}
+            </span>
           </div>
         </div>
 
-        {/* GRID DE RESULTADOS */}
-        <div className="results-area">
-          {results.length === 0 && debouncedSearch.length < 2 ? (
-            <div className="empty-state">
-              <div className="empty-graphic">🧪</div>
-              <h3>Modifica tus puntajes arriba</h3>
-              <p>Esta es una versión demo con 5 carreras de ejemplo. El cálculo es real.</p>
-              <p className="mt-4 text-xs text-yellow-500">
-                Para usar las 25,000 carreras, se requeriría una base de datos externa (ej: Firestore) para evitar que la página colapse.
-              </p>
-            </div>
-          ) : results.length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-graphic">🔭</div>
-              <h3>No encontramos coincidencias</h3>
-              <p>Esta es una demo. Prueba buscando: "Medicina", "Ingeniería" o "Derecho".</p>
-            </div>
-          ) : (
-            <div className="cards-stack">
-              {results.map((r, i) => (
-                <div 
-                  key={i} 
-                  className="sim-card" 
-                  style={{ animationDelay: `${i * 50}ms`, borderColor: r.status.color }}
-                >
-                  <div className="card-left">
-                    <div className="uni-badge">{r.u}</div>
-                    <h3 className="career-name">{r.carrera}</h3>
-                    <div className="location-row">📍 {r.sede || "Casa Central"}</div>
-                    <div className="arancel-info">💰 Arancel: ${r.arancel ? r.arancel.toLocaleString('es-CL') : 'N/A'}</div>
-                  </div>
 
-                  <div className="card-right">
-                    <div className="status-badge" style={{ background: r.status.bg, color: r.status.color }}>
-                      {r.status.icon} {r.status.label}
-                    </div>
-                    
-                    <div className="score-display">
-                      <span className="my-score" style={{ color: r.status.color }}>
-                        {r.finalScore}
-                      </span>
-                      <span className="label-score">TU PONDERADO</span>
-                    </div>
-
-                    <div className="cut-info">
-                      <div className="cut-bar-bg">
-                        <div 
-                          className="cut-bar-fill" 
-                          style={{ 
-                            width: `${Math.min((r.finalScore / 1000) * 100, 100)}%`,
-                            background: r.status.color
-                          }}
-                        ></div>
-                        {r.corteReal > 0 && (
-                          <div 
-                            className="cut-line" 
-                            style={{ left: `${(r.corteReal / 1000) * 100}%` }}
-                            title={`Corte: ${r.corteReal}`}
-                          ></div>
-                        )}
-                      </div>
-                      <div className="cut-text">
-                        Corte ref: <strong>{r.corteReal || "N/A"}</strong>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+        {/* RESULTADO ÚNICO */}
+        <h2 className="section-title mt-10">3. Resultado del Cálculo</h2>
+        <div className="result-card-container">
+            <ResultCard 
+                result={calculationResult} 
+                corte={corteTarget}
+                career={careerName}
+                uni={uniName}
+            />
+        </div>
+        
+        {/* Leyenda Electiva */}
+        <div className="mt-10 p-4 border border-blue-900 bg-blue-900/20 rounded-xl text-sm text-blue-200 mx-auto max-w-lg">
+            <strong>Nota sobre Electiva (CIENCIAS/HISTORIA):</strong> La calculadora utiliza **automáticamente tu mejor puntaje** entre CIENCIAS o HISTORIA, si la carrera pondera al menos una de ellas.
         </div>
       </div>
     </div>
   );
 }
+
+/* --- COMPONENTE DE TARJETA DE RESULTADO ÚNICO --- */
+const ResultCard = ({ result, corte, career, uni }) => {
+    const { finalScore, diff, status, admissible } = result;
+
+    const baseStyle = { 
+        borderColor: status.color, 
+        borderLeft: `4px solid ${status.color}`
+    };
+
+    return (
+        <div className="sim-card-single" style={baseStyle}>
+            <div className="card-left">
+                <div className="uni-badge">{uni}</div>
+                <h3 className="career-name text-2xl">{career}</h3>
+                <div className="text-sm text-gray-400 mt-2">
+                    Puntaje de Corte de Referencia: <strong className="text-white">{corte}</strong>
+                </div>
+                
+                {!admissible && (
+                    <div className="mt-4 p-3 bg-red-900/50 rounded-lg text-red-300 font-bold flex items-center gap-2">
+                        {status.icon} NO ADMISIBLE: No cumples el mínimo DEMRE (Promedio Ponderado Lenguaje + M1 debe ser 458 o más).
+                    </div>
+                )}
+            </div>
+
+            <div className="card-right-single">
+                <div className="status-badge" style={{ background: status.bg, color: status.color }}>
+                    {status.icon} {status.label}
+                </div>
+                
+                <div className="score-display">
+                    <span className="my-score" style={{ color: status.color }}>
+                        {finalScore}
+                    </span>
+                    <span className="label-score">TU PUNTAJE PONDERADO</span>
+                </div>
+
+                <div className="diff-info" style={{ color: diff >= 0 ? colorMap.emerald : colorMap.red }}>
+                    Diferencia con el Corte: 
+                    <strong className="ml-1">
+                        {diff > 0 ? `+${diff}` : diff} puntos
+                    </strong>
+                </div>
+
+                <div className="cut-info-single">
+                    <div className="cut-bar-bg">
+                        <div 
+                          className="cut-bar-fill" 
+                          style={{ 
+                            width: `${Math.min((finalScore / 1000) * 100, 100)}%`,
+                            background: status.color
+                          }}
+                        ></div>
+                        <div 
+                            className="cut-line" 
+                            style={{ left: `${(corte / 1000) * 100}%` }}
+                            title={`Corte Objetivo: ${corte}`}
+                        ></div>
+                    </div>
+                    <div className="cut-text">
+                        <span className="text-left">0</span>
+                        <span className="text-right">1000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 
 /* ================= CSS "QUANTUM UI" ================= */
 const css = `
@@ -269,26 +377,24 @@ const css = `
 
 /* HEADER */
 .sim-header { text-align: center; padding: 60px 0 40px; }
-.ai-badge { 
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(16, 185, 129, 0.1); color: #10b981; 
-  padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; 
-  border: 1px solid rgba(16, 185, 129, 0.2); margin-bottom: 15px;
-}
-.dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981; }
 .sim-header h1 { font-size: 2.5rem; font-weight: 800; margin: 0 0 10px; letter-spacing: -1px; }
 .sim-header p { color: var(--muted); font-size: 1.1rem; }
 
-/* DASHBOARD INPUTS */
+.section-title { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+
+/* DASHBOARD INPUTS (Mismo estilo para Puntajes y Ponderaciones) */
 .dashboard-panel {
   background: var(--panel); border: 1px solid var(--border);
-  border-radius: 20px; padding: 20px; margin-bottom: 30px;
-  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+  border-radius: 20px; padding: 20px;
+  box-shadow: 0 10px 30px -5px rgba(0,0,0,0.5);
 }
 .inputs-scroll {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); 
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); 
   gap: 15px;
 }
+@media (max-width: 700px) { .inputs-scroll { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); } }
+
+
 .input-group label {
   display: block; font-size: 0.7rem; color: var(--muted); font-weight: 700;
   margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;
@@ -302,79 +408,52 @@ const css = `
   border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
   transform: translateY(-2px);
 }
+.input-group input[type="text"] { text-align: left; padding: 12px; font-size: 1rem; font-weight: normal; }
 
-/* SEARCH FLOATER */
-.search-floater { position: sticky; top: 20px; z-index: 100; margin-bottom: 40px; }
-.search-wrapper {
-  position: relative; max-width: 600px; margin: 0 auto;
-  background: rgba(30, 30, 30, 0.8); backdrop-filter: blur(12px);
-  border: 1px solid var(--accent); border-radius: 50px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-  display: flex; align-items: center;
-}
-.s-icon { padding-left: 20px; color: var(--muted); display: flex; }
-.search-wrapper input {
-  flex: 1; background: transparent; border: none; outline: none;
-  padding: 16px 15px; color: #fff; font-size: 1.1rem;
-}
-.results-count {
-  font-size: 0.8rem; color: var(--muted); padding-right: 20px; font-weight: 600;
-}
 
-/* CARDS RESULTADOS */
-.cards-stack { display: flex; flex-direction: column; gap: 16px; }
+/* RESULTADO ÚNICO */
+.result-card-container { display: flex; justify-content: center; }
 
-.sim-card {
+.sim-card-single {
   background: var(--panel); border: 1px solid var(--border);
-  border-radius: 16px; padding: 24px;
-  display: grid; grid-template-columns: 1fr 200px; gap: 20px;
-  animation: slideIn 0.4s ease forwards; opacity: 0; transform: translateY(10px);
-  transition: transform 0.2s;
-  border-left: 4px solid transparent; /* Color dinámico via inline style */
+  border-radius: 16px; padding: 30px; width: 100%; max-width: 600px;
+  display: grid; grid-template-columns: 1fr 240px; gap: 30px;
+  box-shadow: 0 10px 40px rgba(99, 102, 241, 0.2);
+  border-left: 4px solid transparent; 
 }
-@media (max-width: 700px) { .sim-card { grid-template-columns: 1fr; } }
-
-.sim-card:hover { transform: translateX(5px); background: #13151a; }
+@media (max-width: 700px) { .sim-card-single { grid-template-columns: 1fr; } }
 
 .uni-badge { 
   font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; 
   margin-bottom: 5px; 
 }
-.career-name { font-size: 1.4rem; font-weight: 800; margin: 0 0 10px; line-height: 1.2; }
-.location-row { font-size: 0.9rem; color: var(--muted); }
-.arancel-info { font-size: 0.85rem; color: #10b981; font-weight: 600; margin-top: 10px; }
+.career-name { font-weight: 800; margin: 0; line-height: 1.2; }
 
 
-.card-right { 
+.card-right-single { 
   display: flex; flex-direction: column; justify-content: center; 
-  background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px;
+  background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px;
 }
 
 .status-badge {
   align-self: flex-end; font-size: 0.7rem; font-weight: 800; 
-  padding: 4px 8px; border-radius: 6px; text-transform: uppercase; margin-bottom: 10px;
+  padding: 6px 10px; border-radius: 8px; text-transform: uppercase; margin-bottom: 15px;
 }
 
-.score-display { text-align: right; margin-bottom: 10px; }
-.my-score { font-size: 2rem; font-weight: 900; line-height: 1; display: block; }
-.label-score { font-size: 0.65rem; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
+.score-display { text-align: center; margin-bottom: 15px; }
+.my-score { font-size: 2.8rem; font-weight: 900; line-height: 1; display: block; }
+.label-score { font-size: 0.7rem; color: var(--muted); font-weight: 700; letter-spacing: 1px; }
 
-.cut-info { margin-top: 5px; }
+.diff-info { text-align: center; font-size: 0.9rem; margin-bottom: 20px; }
+
+.cut-info-single { margin-top: 10px; }
 .cut-bar-bg { 
-  height: 6px; background: #333; border-radius: 3px; position: relative; margin-bottom: 6px;
+  height: 8px; background: #333; border-radius: 4px; position: relative; margin-bottom: 8px;
 }
-.cut-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease-out; }
+.cut-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease-out; }
 .cut-line { 
-  position: absolute; top: -3px; width: 2px; height: 12px; 
-  background: #fff; box-shadow: 0 0 5px white; z-index: 2;
+  position: absolute; top: -6px; width: 3px; height: 20px; 
+  background: #fff; box-shadow: 0 0 10px white; z-index: 2; border-radius: 3px;
 }
-.cut-text { font-size: 0.75rem; color: var(--muted); text-align: right; }
-.cut-text strong { color: #fff; }
-
-/* EMPTY STATES */
-.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
-.empty-graphic { font-size: 4rem; margin-bottom: 20px; opacity: 0.5; animation: float 3s infinite ease-in-out; }
-
-@keyframes slideIn { to { opacity: 1; transform: translateY(0); } }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.cut-text { font-size: 0.75rem; color: var(--muted); display: flex; justify-content: space-between; padding: 0 5px; }
 `;

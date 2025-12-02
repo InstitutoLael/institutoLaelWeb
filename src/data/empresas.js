@@ -1,114 +1,112 @@
 // src/data/empresas.js
-// === Lael Corporate: Soluciones B2B ===
+// === Lael Corporate: Soluciones B2B (Estrategia Market Entry) ===
 
 export const WAPP_INTL = "56964626568";
 
 /**
  * 📊 LÍNEAS DE SERVICIO
- * Valores orientativos para el calculador.
+ * Precios ajustados para penetración de mercado (competitivos para PYMEs).
+ * Objetivo: Cerrar los primeros 10 contratos.
  */
 export const SERVICE_LINES = [
   {
     id: "ingles",
-    label: "Inglés de Negocios",
-    publicPphOnline: 12000,
-    publicPphOnsite: 15500,
-    instructorBasePphOnline: 26000,
-    instructorBasePphOnsite: 32000,
-    instructorVarPerStudentPphOnline: 200,
-    instructorVarPerStudentPphOnsite: 260,
-    cohortMax: 20,
+    label: "Inglés Corporativo",
+    // Bajamos de 12.000 a 6.500 la hora/persona base.
+    // Esto deja el mensual aprox en $85.000 pp (muy vendible).
+    publicPphOnline: 6500, 
+    publicPphOnsite: 9500,
+    cohortMax: 15, // Grupos más manejables
     brandColor: "#6366f1", // Indigo
+    icon: "🌍"
   },
   {
     id: "lsch",
-    label: "Lengua de Señas & Inclusión",
-    publicPphOnline: 14500,
-    publicPphOnsite: 18500,
-    instructorBasePphOnline: 32000,
-    instructorBasePphOnsite: 38000,
-    instructorVarPerStudentPphOnline: 260,
-    instructorVarPerStudentPphOnsite: 340,
-    cohortMax: 18,
+    label: "Lengua de Señas (Ley 21.015)",
+    // Estratégico: Precio gancho para cumplimiento normativo.
+    publicPphOnline: 7500,
+    publicPphOnsite: 10500,
+    cohortMax: 20,
     brandColor: "#14b8a6", // Teal
+    icon: "🤟"
   },
   {
     id: "soft",
-    label: "Liderazgo & Habilidades Blandas",
-    publicPphOnline: 13500,
-    publicPphOnsite: 16800,
-    instructorBasePphOnline: 30000,
-    instructorBasePphOnsite: 35000,
-    instructorVarPerStudentPphOnline: 220,
-    instructorVarPerStudentPphOnsite: 300,
-    cohortMax: 22,
+    label: "Liderazgo & Habilidades",
+    // Talleres prácticos
+    publicPphOnline: 8000,
+    publicPphOnsite: 12000,
+    cohortMax: 25,
     brandColor: "#f59e0b", // Amber
+    icon: "⚡"
   },
   {
-    id: "empleo",
-    label: "Outplacement & Marca Personal",
-    publicPphOnline: 15000,
-    publicPphOnsite: 19000,
-    instructorBasePphOnline: 33000,
-    instructorBasePphOnsite: 39000,
-    instructorVarPerStudentPphOnline: 240,
-    instructorVarPerStudentPphOnsite: 320,
-    cohortMax: 20,
-    brandColor: "#0ea5e9", // Sky
+    id: "beneficio-hijos",
+    label: "Beneficio Hijos (Preu PAES)",
+    // ESTO ES ORO: Vender cupos del Preu a empresas.
+    // Precio volumen muy agresivo.
+    publicPphOnline: 4500, // Simbólico, se cobra por cupo mensual
+    publicPphOnsite: 0, // No aplica
+    cohortMax: 100,
+    brandColor: "#ec4899", // Pink
+    icon: "🎓"
   },
   {
     id: "coaching",
-    label: "Coaching Ejecutivo",
-    publicPphOnline: 22000,
-    publicPphOnsite: 26000,
-    instructorBasePphOnline: 45000,
-    instructorBasePphOnsite: 52000,
-    instructorVarPerStudentPphOnline: 320,
-    instructorVarPerStudentPphOnsite: 380,
-    cohortMax: 12,
+    label: "Coaching 1 a 1",
+    // Servicio Premium para Gerentes (se mantiene más alto)
+    publicPphOnline: 25000,
+    publicPphOnsite: 35000,
+    cohortMax: 1,
     brandColor: "#ef4444", // Red
+    icon: "🎯"
   },
 ];
 
 /**
- * 📦 PACKS PRE-ARMADOS (Para venta rápida)
+ * 📦 PACKS "GANCHO" (Low Cost / High Impact)
+ * Diseñados para que prueben el servicio sin miedo.
  */
 export const EMP_PACKS = [
   {
-    id: "pack-ingles",
+    id: "pack-starter",
     line: "ingles",
-    title: "English for Teams",
-    subtitle: "Nivelación rápida para equipos que necesitan hablar ya.",
-    bullets: ["Vocabulario técnico", "Simulación de reuniones", "Corrección de emails"],
-    baseAudience: 10,
+    title: "Pack 'Meeting Ready'",
+    subtitle: "Taller intensivo de 1 mes para perder el miedo a hablar.",
+    bullets: ["4 Sesiones de Roleplay", "Vocabulario de Reuniones", "Corrección de Pronunciación"],
+    baseAudience: 5,
+    priceLabel: "Desde $250.000 total" // Gancho visual
   },
   {
-    id: "pack-lsch",
+    id: "pack-inclusion",
     line: "lsch",
-    title: "Atención Inclusiva (Ley 21.015)",
-    subtitle: "Cumple la normativa y mejora la experiencia de tus clientes.",
-    bullets: ["Protocolos de atención", "Vocabulario de servicio", "Cultura Sorda"],
-    baseAudience: 15,
+    title: "Charla Ley de Inclusión",
+    subtitle: "Cumple con la normativa y sensibiliza a tu equipo en 1 jornada.",
+    bullets: ["Contexto Ley 21.015", "Mitos de la Sordera", "Señas de Cortesía"],
+    baseAudience: 20,
+    priceLabel: "UF 5 por sesión" // Precio cerrado atractivo
   },
   {
-    id: "pack-liderazgo",
-    line: "soft",
-    title: "Liderazgo Ágil",
-    subtitle: "Herramientas de comunicación para jefaturas modernas.",
-    bullets: ["Feedback efectivo", "Gestión del tiempo", "Resolución de conflictos"],
-    baseAudience: 8,
+    id: "pack-bienestar",
+    line: "beneficio-hijos",
+    title: "Pack Futuro (Hijos)",
+    subtitle: "Apoya a las familias de tus colaboradores con Preuniversitario.",
+    bullets: ["Acceso a Plataforma PAES", "Ensayos Mensuales", "Reporte de Asistencia a RRHH"],
+    baseAudience: 10,
+    priceLabel: "$35.000 por hijo/mes" // Muy barato para empresa, alto valor percibido
   },
 ];
 
 export const UI_OPTIONS = {
-  weeksPerMonth: 4.33,
+  weeksPerMonth: 4, // Simplificamos a 4 semanas para números redondos
 };
 
 export const PRICING = {
   volumeDiscounts: [
-    { min: 10, off: 0.05 },
-    { min: 20, off: 0.10 },
-    { min: 50, off: 0.15 },
+    { min: 5, off: 0.0 },   // Base
+    { min: 10, off: 0.10 }, // 10%
+    { min: 20, off: 0.15 }, // 15%
+    { min: 50, off: 0.25 }, // 25% (Agresivo para grandes volúmenes)
   ],
 };
 
@@ -135,16 +133,39 @@ export function calcQuote(opts) {
 
   const line = SERVICE_LINES.find((l) => l.id === lineId) || SERVICE_LINES[0];
   
-  const headcount = clamp(_hc, 5, 200);
+  // Limites lógicos
+  const headcount = clamp(_hc, 1, 500);
   const durationMonths = clamp(_dm, 1, 12);
   
-  // Supuestos base para cálculo rápido
-  const sessionsPerWeek = 2; 
-  const hoursPerSession = 1.5;
-  const weeksTotal = durationMonths * UI_OPTIONS.weeksPerMonth;
-  const hoursTotal = weeksTotal * sessionsPerWeek * hoursPerSession;
+  // LÓGICA ESPECIAL PARA PREU (Beneficio Hijos)
+  if (line.id === "beneficio-hijos") {
+      // Precio fijo por alumno mensual (ej: $45.000 base)
+      const baseMonthlyPrice = 45000; 
+      
+      // Descuento por volumen
+      const discount = PRICING.volumeDiscounts
+        .sort((a, b) => b.min - a.min)
+        .find((x) => headcount >= x.min)?.off || 0;
 
-  // Precio Base
+      const monthlyTotal = baseMonthlyPrice * headcount * (1 - discount);
+      const total = monthlyTotal * durationMonths;
+
+      return {
+        line, headcount, durationMonths, modality,
+        total,
+        perPerson: Math.round(total / headcount),
+        perPersonMonth: Math.round(monthlyTotal / headcount),
+        discountPercent: discount * 100,
+        isSpecial: true
+      };
+  }
+
+  // LÓGICA ESTÁNDAR (Cursos de Idiomas/Skills)
+  // Supuesto: 8 horas mensuales por persona (2 horas semanales)
+  const hoursPerMonth = 8; 
+  const totalHoursProject = hoursPerMonth * durationMonths;
+
+  // Precio Base PPH
   let pph = modality === "onsite" ? line.publicPphOnsite : line.publicPphOnline;
 
   // Descuento por Volumen
@@ -152,7 +173,8 @@ export function calcQuote(opts) {
     .sort((a, b) => b.min - a.min)
     .find((x) => headcount >= x.min)?.off || 0;
 
-  const grossTotal = pph * hoursTotal * headcount;
+  // Cálculo: (Precio Hora * Horas Totales * Personas) * Descuento
+  const grossTotal = pph * totalHoursProject * headcount;
   const total = Math.round(grossTotal * (1 - discount));
   
   const perPerson = Math.round(total / headcount);
@@ -166,6 +188,7 @@ export function calcQuote(opts) {
     total,
     perPerson,
     perPersonMonth,
-    discountPercent: discount * 100
+    discountPercent: discount * 100,
+    isSpecial: false
   };
 }

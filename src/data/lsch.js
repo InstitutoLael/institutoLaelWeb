@@ -10,7 +10,6 @@ export const clp = (n) =>
   });
 
 // 🧾 "Starter Pack" (Ex-Matrícula)
-// Estrategia: Le damos nombre de producto para aumentar valor percibido.
 export const ENROLLMENT_FEE = 12990;
 export const ENROLLMENT_LABEL = "Starter Pack Digital (Plataforma + Grabaciones)";
 
@@ -18,8 +17,7 @@ export const ENROLLMENT_LABEL = "Starter Pack Digital (Plataforma + Grabaciones)
 export const LSCH_TAGLINE = "Tus manos tienen voz. Rompe la barrera del sonido.";
 
 /**
- * 🎓 ESTRUCTURA ACADÉMICA (Mejorada)
- * Nombres más atractivos que "Nivel 1".
+ * 🎓 ESTRUCTURA ACADÉMICA
  */
 export const LSCH_MODULES = [
   {
@@ -57,15 +55,14 @@ export const LSCH_MODULES = [
 ];
 
 /**
- * 💡 PLANES GRUPALES (Estrategia de Precios)
- * Objetivo: Empujar a la gente al Plan Trimestral (Cashflow asegurado).
+ * 💡 PLANES GRUPALES
  */
 export const LSCH_GROUP_PLANS = [
   { 
     id: "g-month", 
     title: "Plan Mensual", 
-    monthly: 19990, // Subimos un poco para que el trimestral se vea barato
-    enrollment: true, // Paga matrícula
+    monthly: 19990, 
+    enrollment: true,
     badge: null,
     features: ["Pago mes a mes", "Acceso a clases en vivo", "Grabaciones HD"],
     cta: "Elegir Mensual"
@@ -73,8 +70,8 @@ export const LSCH_GROUP_PLANS = [
   { 
     id: "g-quarter", 
     title: "Plan Trimestral", 
-    monthly: 16990, // Precio gancho (cercano al antiguo)
-    enrollment: false, // MATRÍCULA GRATIS (El gran incentivo)
+    monthly: 16990, 
+    enrollment: false, // MATRÍCULA GRATIS
     save: "Ahorras matrícula + dcto.",
     badge: "Recomendado",
     features: ["Matrícula GRATIS ($0)", "Certificado al finalizar", "Acceso a Club de Práctica"],
@@ -82,45 +79,66 @@ export const LSCH_GROUP_PLANS = [
   },
 ];
 
-// 🙌 CONVENIO IGLESIAS / MINISTERIOS
-// Mantenemos el precio histórico como beneficio exclusivo.
+// 🙌 CONVENIO IGLESIAS
 export const CHURCH_CONVENIO = {
   enabled: true,
-  price: 12990, 
+  price: 12990, // Precio histórico mantenido
   label: "Beca Ministerio",
   desc: "Precio especial para líderes de iglesias, intérpretes de culto y fundaciones.",
   req: "Requiere validación simple",
 };
 
 /**
- * 🏢 CORPORATIVO (B2B - Ley de Inclusión)
- * Argumentos de venta para empresas.
+ * 🧑‍🏫 PLANES 1 A 1 (Personalizados)
+ * ESTO ES LO QUE FALTABA Y ROMPÍA EL BUILD
+ */
+export const LSCH_ONE2ONE_PLANS = [
+  { 
+    id: "o-light", 
+    title: "Pack Refuerzo", 
+    monthly: 55000,
+    desc: "4 sesiones al mes. Ideal para corregir dudas específicas o preparar un examen." 
+  },
+  { 
+    id: "o-standard", 
+    title: "Pack Estándar", 
+    monthly: 95000,
+    desc: "8 sesiones al mes. Avance rápido y personalizado a tu ritmo." 
+  },
+  { 
+    id: "o-intensive", 
+    title: "Pack Intensivo", 
+    monthly: 135000,
+    desc: "12 sesiones al mes. Inmersión total para aprender en tiempo récord." 
+  },
+];
+
+/**
+ * 🏢 CORPORATIVO (B2B)
  */
 export const CORPORATE_WHY = [
   { 
     icon: "⚖️", 
-    title: "Ley 21.015 (Inclusión)", 
-    desc: "Capacitar a tu equipo es la forma más genuina de cumplir con la normativa de gestor de inclusión." 
+    title: "Ley 21.015", 
+    desc: "Capacita a tu equipo para cumplir con la normativa de inclusión laboral." 
   },
   { 
     icon: "❤️", 
-    title: "Experiencia de Cliente", 
-    desc: "Que una persona sorda sea atendida en su idioma fideliza y marca una diferencia humana enorme." 
+    title: "Experiencia Cliente", 
+    desc: "Atender a una persona sorda en su idioma fideliza y marca la diferencia." 
   },
   { 
     icon: "🤝", 
     title: "Clima Laboral", 
-    desc: "Aprender LSCh desarrolla empatía y comunicación no verbal en tus equipos de trabajo." 
+    desc: "Desarrolla empatía y comunicación no verbal en tus equipos." 
   },
 ];
 
-// Helper para calcular precio final en el componente
-export function calculateTotal(planId, isChurch) {
-  const plan = LSCH_GROUP_PLANS.find(p => p.id === planId);
+// Helper para calcular precio (Renombrado para compatibilidad con tu página actual)
+export function priceForGroupPlan(plan, { church = false } = {}) {
   if (!plan) return 0;
-
-  // Si es iglesia, el precio mensual es fijo y reducido
-  if (isChurch) return CHURCH_CONVENIO.price;
-
+  // Si es iglesia y el plan es compatible, devolvemos precio iglesia
+  if (church && CHURCH_CONVENIO.enabled) return CHURCH_CONVENIO.price;
+  // Si no, precio normal del plan
   return plan.monthly;
 }

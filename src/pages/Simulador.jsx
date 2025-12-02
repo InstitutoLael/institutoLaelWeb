@@ -1,25 +1,6 @@
 import { useState, useMemo } from "react";
-
-/* --- LOGO INSTITUTO LAEL (SVG Component) --- */
-const LaelLogo = () => (
-  <svg viewBox="0 0 200 60" className="h-12 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Hoja / Isotipo abstracto */}
-    <path d="M25 10C25 10 15 30 15 40C15 48.2843 21.7157 55 30 55C38.2843 55 45 48.2843 45 40C45 30 35 10 35 10" stroke="url(#paint0_linear)" strokeWidth="3" strokeLinecap="round"/>
-    <path d="M30 55V35" stroke="url(#paint0_linear)" strokeWidth="3" strokeLinecap="round"/>
-    <path d="M30 35L40 25" stroke="url(#paint0_linear)" strokeWidth="3" strokeLinecap="round"/>
-    
-    {/* Texto "INSTITUTO LAEL" estilizado */}
-    <text x="60" y="38" fill="#fff" fontFamily="sans-serif" fontWeight="800" fontSize="24" letterSpacing="1">INSTITUTO</text>
-    <text x="60" y="52" fill="#A5B4FC" fontFamily="sans-serif" fontWeight="600" fontSize="10" letterSpacing="4">LAEL • EDUCACIÓN</text>
-
-    <defs>
-      <linearGradient id="paint0_linear" x1="15" y1="55" x2="45" y2="10" gradientUnits="userSpaceOnUse">
-        <stop stopColor="#6366F1"/>
-        <stop offset="1" stopColor="#A855F7"/>
-      </linearGradient>
-    </defs>
-  </svg>
-);
+// Importamos tu logo real (ajusta la ruta si tu archivo no está en 'src/pages')
+import logoLael from "../assets/img/Logos/lael-inst-rosa.png";
 
 /* --- LÓGICA DE CÁLCULO (Intacta para precisión) --- */
 const MIN_PUNTAJE = 100;
@@ -129,7 +110,9 @@ export default function SimuladorLael() {
       {/* NAVBAR */}
       <nav className="lael-nav">
         <div className="nav-container">
-            <LaelLogo />
+            {/* LOGO REAL AQUÍ */}
+            <img src={logoLael} alt="Instituto Lael" className="nav-logo-img" />
+            
             <button className="btn-secondary mobile-hide">Ir al Sitio Web</button>
         </div>
       </nav>
@@ -337,11 +320,22 @@ body, html { margin: 0; padding: 0; background: var(--bg-dark); font-family: 'Pl
 
 /* NAVBAR */
 .lael-nav {
-    display: flex; justify-content: center; padding: 20px 0;
+    display: flex; justify-content: center; padding: 15px 0;
     backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border);
     position: sticky; top: 0; z-index: 100; background: rgba(9,9,11,0.8);
 }
 .nav-container { width: 100%; max-width: 1100px; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+
+/* LOGO IMAGE STYLE */
+.nav-logo-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    /* Efecto hover opcional para el logo */
+    transition: transform 0.3s ease;
+}
+.nav-logo-img:hover { transform: scale(1.05); }
+
 .btn-secondary {
     background: transparent; border: 1px solid var(--glass-border); color: var(--text-main);
     padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: 600;

@@ -12,7 +12,6 @@ const Empresas = lazy(() => import("./pages/Empresas.jsx"));
 const Homeschool = lazy(() => import("./pages/Homeschool.jsx")); 
 // Nota: Verifica si tu archivo es 'EscuelaAdultos.jsx' o 'Nivelacion.jsx' (según lo que creaste antes)
 const EscuelaAdultos = lazy(() => import("./pages/EscuelaAdultos.jsx")); 
-const Simulador = lazy(() => import("./pages/Simulador.jsx"));
 
 /* --- Institucional --- */
 const Nosotros = lazy(() => import("./pages/Nosotros.jsx"));
@@ -79,7 +78,7 @@ export default function App() {
             <Route path="/lsch" element={<LSCh />} />
             <Route path="/homeschool" element={<Homeschool />} />
             <Route path="/escuela-adultos" element={<EscuelaAdultos />} />
-            <Route path="/simulador" element={<Simulador />} />
+
             
             {/* Institucional */}
             <Route path="/empresas" element={<Empresas />} />

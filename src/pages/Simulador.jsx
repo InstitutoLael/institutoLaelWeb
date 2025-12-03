@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 // Importamos tus datos y logo
-import carrerasData from "../data/carreras-bd.json"; 
+import { listaCarreras as carrerasData } from "../data/carreras-bd.js";
 import logoLael from "../assets/img/Logos/lael-inst-rosa.png";
 
 /* --- LÓGICA DE CÁLCULO --- */

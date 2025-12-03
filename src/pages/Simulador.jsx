@@ -1,20 +1,23 @@
-import { useState, useMemo, useEffect } from "react";
-// 1. IMPORTAMOS TUS DATOS (Asegúrate de tener el archivo JSON que creamos)
+import { useState, useMemo } from "react";
+// --- IMPORTACIONES (Rutas ajustadas a tu estructura) ---
 import carrerasData from "../data/carreras-bd.json"; 
 import logoLael from "../assets/img/Logos/lael-inst-rosa.png";
 
-/* --- LÓGICA MATEMÁTICA (No la tocamos, es perfecta) --- */
+/* --- LÓGICA MATEMÁTICA (Motor de cálculo) --- */
 const MIN_PUNTAJE = 100;
 const MAX_PUNTAJE = 1000;
 const MIN_PROM_OBLIGATORIAS = 458; 
 
+// Validador simple
 const isValidScore = (n) => {
   if (typeof n !== "number" || isNaN(n)) return false;
   return (n >= MIN_PUNTAJE && n <= MAX_PUNTAJE) || n === 0;
 };
 
+// Redondear decimales
 const round2 = (n) => Math.round(n * 100) / 100;
 
+// Verificar si cumple requisito mínimo DEMRE
 function esAdmisible({ CL, M1 }) {
   if (!isValidScore(CL) || !isValidScore(M1)) return false;
   if (CL === 0 || M1 === 0) return false; 
@@ -22,17 +25,17 @@ function esAdmisible({ CL, M1 }) {
   return promedio >= MIN_PROM_OBLIGATORIAS;
 }
 
+// Cálculo de Ponderación
 function calcularPPP(pond, puntajes) {
   const { CL = 0, M1 = 0, M2 = 0, CIEN = 0, HIS = 0, NEM = 0, RANK = 0 } = puntajes;
   
-  // Función para normalizar porcentajes (si viene 20 es 0.2, si viene 0.2 se queda 0.2)
+  // Normalizar porcentaje (ej: 20 -> 0.2)
   const p = (val) => { const v = Number(val || 0); return v > 1 ? v / 100 : v; };
 
-  // Elegir la mejor electiva automáticamente
+  // Elegir mejor electiva (Historia vs Ciencias)
   let scoreElectiva = 0;
-  let pondElectiva = Math.max(p(pond.CIEN), p(pond.HIS)); // Usamos la ponderación más alta disponible
+  let pondElectiva = Math.max(p(pond.CIEN), p(pond.HIS)); 
 
-  // Si la carrera pide ciencias o historia, usamos el mejor puntaje del alumno
   if (pondElectiva > 0) {
     scoreElectiva = Math.max(isValidScore(CIEN) ? CIEN : 0, isValidScore(HIS) ? HIS : 0);
   }
@@ -40,17 +43,17 @@ function calcularPPP(pond, puntajes) {
   const puntajeFinal = 
     (p(pond.NEM) * NEM) + 
     (p(pond.RANK) * RANK) + 
-    (p(pond.CL) * CL) +
+    (p(pond.CL) * CL) + 
     (p(pond.M1) * M1) + 
     (p(pond.M2) * (isValidScore(M2) ? M2 : 0)) +
-    (pondElectiva * scoreElectiva); // Usa la mejor electiva
+    (pondElectiva * scoreElectiva); 
 
   return round2(puntajeFinal);
 }
 
+// Generador de etiquetas (Probabilidad)
 function etiquetaChance(ppp, corte) {
   if (!ppp) return { text: "...", color: "gray", icon: "⚪️", advice: "Ingresa datos" };
-  // Si no hay corte (es 0), asumimos que es una simulación libre
   if (!corte || corte === 0) return { text: "SIMULADO", color: "blue", icon: "🔹", advice: "Puntaje calculado con éxito." };
 
   const diff = ppp - corte;
@@ -70,37 +73,38 @@ const colorMap = {
 };
 
 /* --- COMPONENTE PRINCIPAL --- */
-export default function SimuladorLael() {
-  // Estado de Puntajes del Alumno
+export default function Simulador() {
+  // Estados
   const [scores, setScores] = useState({ nem: 650, ranking: 650, cl: 700, m1: 700, m2: 0, cien: 600, hist: 0 });
-  
-  // Estado del Buscador Inteligente
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCareer, setSelectedCareer] = useState(null);
-  
-  // Estado de Ponderaciones (Se llena solo al seleccionar carrera)
   const [ponderations, setPonderations] = useState({ nem: 20, rank: 20, cl: 30, m1: 30, m2: 0, cien: 0, hist: 0 });
-  
-  // Estado de Corte (Manual, porque la BD oficial a veces no trae corte del año anterior)
   const [corteTarget, setCorteTarget] = useState(0);
 
-  // --- BUSCADOR INTELIGENTE ---
+  // --- BUSCADOR BLINDADO (Anti-Crash) ---
   const filteredCarreras = useMemo(() => {
-      if (searchTerm.length < 3) return []; // Esperar a que escriba 3 letras
+      // Si no hay datos, retornar vacío para no romper
+      if (!carrerasData || !Array.isArray(carrerasData)) return [];
+      
+      if (searchTerm.length < 3) return []; 
       const term = searchTerm.toLowerCase();
-      // Buscamos en los 2000 datos
-      return carrerasData.filter(c => 
-          c["Nombre Carrera"]?.toLowerCase().includes(term) || 
-          c["Nombre IES"]?.toLowerCase().includes(term)
-      ).slice(0, 10); // Limitamos a 10 resultados para no saturar
+
+      return carrerasData.filter(c => {
+          if (!c) return false; // Fila vacía
+          // Convertimos a String por seguridad
+          const nombre = c["Nombre Carrera"] ? String(c["Nombre Carrera"]).toLowerCase() : "";
+          const u = c["Nombre IES"] ? String(c["Nombre IES"]).toLowerCase() : "";
+          
+          return nombre.includes(term) || u.includes(term);
+      }).slice(0, 10); 
   }, [searchTerm]);
 
-  // --- CUANDO ELIGES UNA CARRERA ---
+  // Selección de carrera
   const selectCareer = (carrera) => {
       setSelectedCareer(carrera);
-      setSearchTerm(""); // Limpiar buscador para cerrar lista
+      setSearchTerm(""); 
       
-      // AUTO-RELLENAR PONDERACIONES DESDE LA BD
+      // Cargar ponderaciones desde el JSON
       setPonderations({
           nem: carrera["Ponderación Notas"] || 0,
           rank: carrera["Ponderación Ranking Notas"] || 0,
@@ -110,9 +114,6 @@ export default function SimuladorLael() {
           cien: carrera["Ponderación Ciencias"] || 0,
           hist: carrera["Ponderación Historia"] || 0
       });
-
-      // Si tu BD tuviera "Puntaje Corte", lo pondríamos aquí.
-      // Como no siempre está, lo dejamos en 0 o sugerimos uno.
       setCorteTarget(0); 
   };
 
@@ -122,6 +123,7 @@ export default function SimuladorLael() {
     setScores({ ...scores, [e.target.name]: val });
   };
 
+  // Cálculo en tiempo real
   const calculationResult = useMemo(() => {
     const s = { NEM: scores.nem, RANK: scores.ranking, CL: scores.cl, M1: scores.m1, M2: scores.m2, CIEN: scores.cien, HIS: scores.hist };
     const p = { NEM: ponderations.nem, RANK: ponderations.rank, CL: ponderations.cl, M1: ponderations.m1, M2: ponderations.m2, CIEN: ponderations.cien, HIS: ponderations.hist };
@@ -140,8 +142,13 @@ export default function SimuladorLael() {
     };
   }, [scores, ponderations, corteTarget]);
   
-  // Precio formateado
-  const precioFormat = selectedCareer ? new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(selectedCareer["Arancel Anual"]) : "$0";
+  // Formato de Dinero Seguro
+  const precioFormat = useMemo(() => {
+      if (!selectedCareer) return "$0";
+      const valor = selectedCareer["Arancel Anual"];
+      if (typeof valor !== 'number') return "No informado"; 
+      return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(valor);
+  }, [selectedCareer]);
 
   return (
     <div className="lael-page">
@@ -163,10 +170,10 @@ export default function SimuladorLael() {
 
         <div className="grid-layout">
             
-            {/* --- COLUMNA IZQUIERDA: DATOS --- */}
+            {/* --- COLUMNA IZQUIERDA --- */}
             <div className="left-col">
                 
-                {/* 1. TUS PUNTAJES */}
+                {/* 1. INPUTS */}
                 <div className="glass-panel">
                     <div className="panel-header">
                         <div className="step-badge">1</div>
@@ -183,14 +190,13 @@ export default function SimuladorLael() {
                     </div>
                 </div>
 
-                {/* 2. BUSCADOR DE CARRERA (LA MAGIA) */}
+                {/* 2. BUSCADOR */}
                 <div className="glass-panel search-panel">
                     <div className="panel-header">
                         <div className="step-badge">2</div>
                         <h3>¿Qué quieres estudiar?</h3>
                     </div>
                     
-                    {/* Buscador y Filtros Rápidos */}
                     <div className="search-wrapper">
                         <input 
                             type="text" 
@@ -199,7 +205,7 @@ export default function SimuladorLael() {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
-                        {/* Lista desplegable de resultados */}
+                        {/* Dropdown de Resultados */}
                         {filteredCarreras.length > 0 && (
                             <div className="results-dropdown">
                                 {filteredCarreras.map((c, i) => (
@@ -212,7 +218,6 @@ export default function SimuladorLael() {
                         )}
                     </div>
 
-                    {/* Botones de Área de Interés (Filtros rápidos) */}
                     <div className="quick-tags">
                         <span>Filtro Rápido:</span>
                         <button onClick={() => setSearchTerm("Ingeniería")}>👷‍♂️ Ingeniería</button>
@@ -235,7 +240,6 @@ export default function SimuladorLael() {
                                 </div>
                             </div>
                             
-                            {/* Mostramos las ponderaciones solo como lectura */}
                             <div className="mini-ponds">
                                 <span title="NEM">NEM: {ponderations.nem}%</span>
                                 <span title="Ranking">RK: {ponderations.rank}%</span>
@@ -247,7 +251,6 @@ export default function SimuladorLael() {
                         </div>
                     )}
 
-                    {/* Input manual de corte (opcional) */}
                     {selectedCareer && (
                         <div className="corte-wrapper mt-4">
                             <label>Puntaje Corte (Referencia)</label>
@@ -264,7 +267,7 @@ export default function SimuladorLael() {
                 </div>
             </div>
 
-            {/* --- COLUMNA DERECHA: RESULTADOS (STICKY) --- */}
+            {/* --- COLUMNA DERECHA (STICKY) --- */}
             <div className="right-col">
                 <ResultCard 
                     result={calculationResult} 
@@ -273,7 +276,6 @@ export default function SimuladorLael() {
                     uni={selectedCareer ? selectedCareer["Nombre IES"] : "---"}
                 />
                 
-                {/* ENGANCHE COMERCIAL */}
                 <div className="hook-card">
                     <h4>{calculationResult.finalScore < corteTarget ? "¿Te faltan puntos?" : "¿Quieres asegurar?"}</h4>
                     <p>En <strong>Instituto Lael</strong> subimos tu puntaje promedio en +150 puntos. Matrículas 2026 abiertas.</p>

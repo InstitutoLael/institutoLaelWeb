@@ -1,5 +1,6 @@
-{
-    "Hoja 1 - Oferta_Academica_2025_": [
+// src/data/carreras-bd.js
+
+export const listaCarreras = [
         {
             "Código Único": "I673S3C2J1V1",
             "Nombre IES": "ESCUELA DE INVESTIGACIONES POLICIALES",
@@ -29765,4 +29766,3 @@
             "Arancel Anual": "3170000"
         }
     ]
-}

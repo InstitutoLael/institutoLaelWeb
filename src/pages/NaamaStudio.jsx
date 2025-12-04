@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 // Importamos el logo rectangular que subiste
 import logoNaama from '../assets/img/Partners/naama-studio.png'; 
-// Si tienes el logo rectangular negro, asegúrate que la ruta coincida con el nombre del archivo
-// import logoNaama from '../assets/img/Partners/Logo Naamá Negro Rectangular.png.png'; 
 
 export default function NaamaStudio() {
   const [activeCategory, setActiveCategory] = useState('manos');
@@ -19,7 +17,7 @@ export default function NaamaStudio() {
                 <img src={logoNaama} alt="Naamá Studio" className="main-logo" />
             </div>
             
-            <div className="nav-links">
+            <div className="nav-links mobile-hide">
                 <a href="#servicios">Servicios</a>
                 <a href="#marcas">Marcas</a>
                 <a href="#contacto" className="btn-nav">Reservar</a>
@@ -55,9 +53,6 @@ export default function NaamaStudio() {
                     alt="Salón de Belleza" 
                     className="hero-img-main"
                 />
-                <div className="floating-card">
-                    <span>✨ Resultados Reales</span>
-                </div>
             </div>
         </div>
       </header>
@@ -73,35 +68,37 @@ export default function NaamaStudio() {
         </div>
       </section>
 
-      {/* --- CARTA DE SERVICIOS --- */}
+      {/* --- CARTA DE SERVICIOS (PRECIOS MEJORADOS) --- */}
       <section id="servicios" className="ns-menu">
         <div className="menu-header">
             <h2>Carta de Servicios</h2>
             <p>Calidad, técnica y dedicación en cada detalle.</p>
         </div>
 
-        {/* Categorías (Botones grandes) */}
-        <div className="cat-selector">
-            {categories.map(cat => (
-                <button 
-                    key={cat.id} 
-                    className={`cat-btn ${activeCategory === cat.id ? 'active' : ''}`}
-                    onClick={() => setActiveCategory(cat.id)}
-                >
-                    {cat.label}
-                </button>
-            ))}
+        {/* Categorías (NUEVO DISEÑO: TABS ELEGANTES) */}
+        <div className="cat-selector-wrapper">
+            <div className="cat-selector">
+                {categories.map(cat => (
+                    <button 
+                        key={cat.id} 
+                        className={`cat-tab ${activeCategory === cat.id ? 'active' : ''}`}
+                        onClick={() => setActiveCategory(cat.id)}
+                    >
+                        {cat.label}
+                    </button>
+                ))}
+            </div>
         </div>
 
-        {/* Lista de Precios */}
-        <div className="service-list fade-in" key={activeCategory}>
+        {/* Lista de Precios (NUEVO DISEÑO: MENÚ DE LUJO) */}
+        <div className="service-list-container fade-in" key={activeCategory}>
             {servicesData[activeCategory].map((item, index) => (
-                <div key={index} className="service-row">
-                    <div className="service-info">
-                        <span className="s-name">{item.name}</span>
-                        {item.desc && <span className="s-desc">{item.desc}</span>}
+                <div key={index} className="service-row-elegant">
+                    <div className="service-info-elegant">
+                        <span className="s-name-elegant">{item.name}</span>
+                        {item.desc && <span className="s-desc-elegant">{item.desc}</span>}
                     </div>
-                    <div className="service-price">
+                    <div className="service-price-elegant">
                         ${item.price}
                     </div>
                 </div>
@@ -148,7 +145,7 @@ export default function NaamaStudio() {
   );
 }
 
-/* --- DATOS DE SERVICIOS --- */
+/* --- DATOS (Tus precios) --- */
 const categories = [
     { id: 'manos', label: 'Manicure & Pedicure' },
     { id: 'pelo', label: 'Peluquería' },
@@ -210,15 +207,14 @@ const servicesData = {
     ]
 };
 
-/* --- CSS SALÓN PRO (Gordito, Elegante, Cálido) --- */
+/* --- CSS SALÓN PRO MEJORADO --- */
 const css = `
-/* Usamos Playfair Display (Serifa Gordita) y Lato (Texto limpio) */
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@600;800&display=swap');
 
 :root {
-    --ns-bg: #FDFBF7;        /* Crema muy suave */
-    --ns-dark: #231F20;      /* Negro suave (Casi el del logo) */
-    --ns-gold: #C6A87C;      /* Dorado sobrio */
+    --ns-bg: #FDFBF7;
+    --ns-dark: #231F20;
+    --ns-gold: #C6A87C;
     --ns-contrast: #FFFFFF;
 }
 
@@ -229,223 +225,74 @@ const css = `
     overflow-x: hidden;
 }
 
-/* TIPOGRAFÍA */
-h1, h2, h3, h4, .brand-name {
+h1, h2, h3, h4, .s-name-elegant, .service-price-elegant {
     font-family: 'Playfair Display', serif;
-    font-weight: 800; /* Letra GORDITA como pediste */
+    font-weight: 700;
 }
 
 /* NAVBAR */
-.ns-nav {
-    background: var(--ns-bg);
-    padding: 15px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
-}
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.logo-wrapper { flex: 1; }
-.main-logo { height: 50px; object-fit: contain; } /* Ajusta altura según tu logo */
-
+.ns-nav { background: var(--ns-bg); padding: 15px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
+.nav-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+.logo-wrapper { flex: 1; display: flex; justify-content: flex-start; }
+.main-logo { height: 60px; object-fit: contain; } 
 .nav-links { display: flex; gap: 30px; align-items: center; }
-.nav-links a {
-    text-decoration: none;
-    color: var(--ns-dark);
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-}
-.btn-nav {
-    background: var(--ns-dark);
-    color: white !important;
-    padding: 10px 20px;
-    border-radius: 4px;
-    transition: 0.3s;
-}
+.nav-links a { text-decoration: none; color: var(--ns-dark); font-weight: 700; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; transition: 0.3s; }
+.nav-links a:not(.btn-nav):hover { color: var(--ns-gold); }
+.btn-nav { background: var(--ns-dark); color: white !important; padding: 10px 20px; border-radius: 4px; transition: 0.3s; }
 .btn-nav:hover { background: var(--ns-gold); }
 
 /* HERO */
-.ns-hero {
-    max-width: 1200px;
-    margin: 40px auto 80px;
-    padding: 0 20px;
-}
-.hero-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-}
-.badge-salon {
-    display: inline-block;
-    background: #EAE6DF;
-    padding: 6px 12px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-}
-.ns-hero h1 {
-    font-size: 3.8rem;
-    line-height: 1.1;
-    margin-bottom: 25px;
-    color: var(--ns-dark);
-}
+.ns-hero { max-width: 1200px; margin: 40px auto 80px; padding: 0 20px; }
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.badge-salon { display: inline-block; background: #EAE6DF; padding: 6px 12px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 20px; }
+.ns-hero h1 { font-size: 3.8rem; line-height: 1.1; margin-bottom: 25px; color: var(--ns-dark); }
 .highlight { color: var(--ns-gold); font-style: italic; }
-.ns-hero p {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #555;
-    margin-bottom: 35px;
-    max-width: 450px;
-}
+.ns-hero p { font-size: 1.1rem; line-height: 1.6; color: #555; margin-bottom: 35px; max-width: 450px; }
 .cta-group { display: flex; gap: 15px; }
-.btn-solid {
-    background: var(--ns-dark);
-    color: white;
-    padding: 15px 35px;
-    text-decoration: none;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border: 2px solid var(--ns-dark);
-    transition: 0.3s;
-}
+.btn-solid { background: var(--ns-dark); color: white; padding: 15px 35px; text-decoration: none; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border: 2px solid var(--ns-dark); transition: 0.3s; }
 .btn-solid:hover { background: transparent; color: var(--ns-dark); }
-.btn-outline {
-    background: transparent;
-    color: var(--ns-dark);
-    padding: 15px 35px;
-    text-decoration: none;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border: 2px solid #DDD;
-    transition: 0.3s;
-}
+.btn-outline { background: transparent; color: var(--ns-dark); padding: 15px 35px; text-decoration: none; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border: 2px solid #DDD; transition: 0.3s; }
 .btn-outline:hover { border-color: var(--ns-dark); }
-
-.hero-visual { position: relative; }
-.hero-img-main {
-    width: 100%;
-    height: 550px;
-    object-fit: cover;
-    border-radius: 10px; /* Bordes sutilmente redondeados, no redondos completos */
-}
-.floating-card {
-    position: absolute;
-    bottom: 30px;
-    left: -30px;
-    background: white;
-    padding: 15px 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    font-size: 1.1rem;
-}
+.hero-img-main { width: 100%; height: 550px; object-fit: cover; border-radius: 12px; box-shadow: 10px 10px 30px rgba(0,0,0,0.1); }
 
 /* MARCAS */
-.ns-brands {
-    background: white;
-    padding: 50px 20px;
-    text-align: center;
-    border-top: 1px solid #EEE;
-    border-bottom: 1px solid #EEE;
-}
+.ns-brands { background: white; padding: 50px 20px; text-align: center; border-top: 1px solid #EEE; border-bottom: 1px solid #EEE; }
 .brands-title { font-size: 0.8rem; letter-spacing: 2px; color: #999; margin-bottom: 30px; font-weight: 700; }
-.brands-row {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    flex-wrap: wrap;
-}
-.brand-name {
-    font-size: 2rem;
-    color: #DDD;
-    text-transform: uppercase;
-    transition: 0.3s;
-    cursor: default;
-}
+.brands-row { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+.brand-name { font-size: 2rem; color: #DDD; text-transform: uppercase; cursor: default; transition: 0.3s; }
 .brand-name:hover { color: var(--ns-gold); }
 
-/* CARTA DE SERVICIOS */
+/* CARTA DE SERVICIOS (MEJORADA) */
 .ns-menu { max-width: 900px; margin: 80px auto; padding: 0 20px; }
 .menu-header { text-align: center; margin-bottom: 50px; }
-.menu-header h2 { font-size: 3rem; margin-bottom: 10px; }
+.menu-header h2 { font-size: 3rem; margin-bottom: 10px; color: var(--ns-dark); }
 
-.cat-selector {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 50px;
-}
-.cat-btn {
-    background: transparent;
-    border: 2px solid #EEE;
-    padding: 12px 25px;
-    font-family: 'Lato', sans-serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: #888;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.cat-btn.active {
-    border-color: var(--ns-dark);
-    background: var(--ns-dark);
-    color: white;
-}
-.cat-btn:hover { border-color: var(--ns-dark); color: var(--ns-dark); }
-.cat-btn.active:hover { color: white; }
+/* Nuevas Pestañas de Categoría */
+.cat-selector-wrapper { overflow-x: auto; padding-bottom: 10px; margin-bottom: 40px; -webkit-overflow-scrolling: touch; }
+.cat-selector { display: flex; justify-content: center; gap: 20px; min-width: max-content; }
+.cat-tab { background: transparent; border: none; padding: 10px 5px; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1rem; color: #999; cursor: pointer; transition: 0.3s; position: relative; }
+.cat-tab::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--ns-gold); transition: 0.3s; }
+.cat-tab.active { color: var(--ns-dark); }
+.cat-tab.active::after { width: 100%; }
+.cat-tab:hover { color: var(--ns-dark); }
 
-.service-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid #EEE;
-}
-.s-name { font-weight: 700; font-size: 1.1rem; display: block; }
-.s-desc { font-size: 0.85rem; color: #888; display: block; margin-top: 4px; }
-.service-price { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.3rem; color: var(--ns-gold); }
+/* Nueva Lista de Servicios Elegante */
+.service-list-container { max-width: 800px; margin: 0 auto; }
+.service-row-elegant { display: flex; justify-content: space-between; align-items: center; padding: 25px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.service-info-elegant { display: flex; flex-direction: column; gap: 5px; }
+.s-name-elegant { font-size: 1.3rem; color: var(--ns-dark); }
+.s-desc-elegant { font-size: 0.9rem; color: #888; font-weight: 400; font-style: italic; }
+.service-price-elegant { font-size: 1.5rem; color: var(--ns-gold); white-space: nowrap; }
 
 /* BANNER */
-.ns-banner {
-    background-image: url('https://images.unsplash.com/photo-1620331313123-dd4639722b43?q=80&w=2070&auto=format&fit=crop');
-    height: 400px;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    position: relative;
-    color: white;
-}
+.ns-banner { background-image: url('https://images.unsplash.com/photo-1620331313123-dd4639722b43?q=80&w=2070&auto=format&fit=crop'); height: 400px; background-size: cover; background-position: center; background-attachment: fixed; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; color: white; }
 .ns-banner::before { content:''; position: absolute; inset: 0; background: rgba(0,0,0,0.5); }
 .banner-content { position: relative; z-index: 2; padding: 20px; }
 .banner-content h2 { font-size: 3rem; font-style: italic; margin-bottom: 10px; }
 
 /* FOOTER */
 .ns-footer { background: var(--ns-dark); color: white; padding: 80px 20px 30px; }
-.footer-grid {
-    max-width: 1100px;
-    margin: 0 auto 60px;
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr;
-    gap: 40px;
-}
+.footer-grid { max-width: 1100px; margin: 0 auto 60px; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; }
 .footer-logo { height: 60px; filter: invert(1); opacity: 0.9; }
 .f-col h4 { font-size: 1.2rem; margin-bottom: 20px; color: var(--ns-gold); }
 .f-col p, .f-col a { color: #BBB; font-size: 0.95rem; text-decoration: none; display: block; margin-bottom: 10px; transition: 0.3s; }
@@ -453,14 +300,7 @@ h1, h2, h3, h4, .brand-name {
 .copyright { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; font-size: 0.8rem; color: #666; }
 
 /* WHATSAPP FLOAT */
-.wsp-float {
-    position: fixed; bottom: 30px; right: 30px;
-    background: #25D366; color: white;
-    width: 60px; height: 60px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    z-index: 999; transition: 0.3s;
-}
+.wsp-float { position: fixed; bottom: 30px; right: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 999; transition: 0.3s; }
 .wsp-float:hover { transform: scale(1.1); }
 
 /* ANIMACIONES */
@@ -472,13 +312,15 @@ h1, h2, h3, h4, .brand-name {
 /* RESPONSIVE */
 @media(max-width: 900px) {
     .ns-hero { margin-top: 20px; }
-    .hero-grid { grid-template-columns: 1fr; text-align: center; }
-    .hero-img-main { height: 350px; }
+    .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 30px; }
+    .hero-img-main { height: 350px; order: -1; }
     .cta-group { justify-content: center; }
-    .nav-links { display: none; } /* En móvil simplificamos */
-    .floating-card { display: none; }
+    .mobile-hide { display: none; }
+    .logo-wrapper { justify-content: center; }
     .ns-hero h1 { font-size: 2.8rem; }
+    .cat-selector { justify-content: flex-start; } /* Scroll horizontal en móvil */
     .footer-grid { grid-template-columns: 1fr; text-align: center; gap: 30px; }
     .logo-col { display: flex; justify-content: center; }
+    .service-price-elegant { font-size: 1.3rem; }
 }
 `;

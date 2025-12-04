@@ -71,7 +71,7 @@ export default function NaamaStudioLuxury() {
             </div>
             <div className="split-text">
                 <span className="section-tag">NUESTRA ESENCIA</span>
-                <h2>Más que un salón,<br/>un ritual para ti.</h2>
+                <h2>Más que un salón,<br/>un lugar para ti.</h2>
                 <p>
                     <strong>Naamá</strong> nace del deseo de transformar la visita al salón en una experiencia sensorial completa. No solo cuidamos tu cabello o tus manos; cuidamos de ti.
                 </p>
@@ -96,10 +96,10 @@ export default function NaamaStudioLuxury() {
       <div className="lux-brands-strip">
         <p>TRABAJAMOS CON LOS MEJORES</p>
         <div className="brands-flex">
-            <span>L'ORÉAL PRO</span>
+            <span>TIGI</span>
             <span>KERASTASE</span>
-            <span>OPI</span>
-            <span>REDKEN</span>
+            <span>BOFFEL</span>
+            <span>SOW</span>
             <span>OLAPLEX</span>
         </div>
       </div>
@@ -170,14 +170,14 @@ export default function NaamaStudioLuxury() {
             
             <div className="f-block">
                 <h5>Visítanos</h5>
-                <p className="flex-icon"><MapPin size={16}/> Av. Las Condes 1234, Oficina 505</p>
+                <p className="flex-icon"><MapPin size={16}/> ARCADIA 1297, SAN MIGUEL</p>
                 <p className="flex-icon"><Clock size={16}/> Lun - Sab: 10:00 - 19:30</p>
             </div>
 
             <div className="f-block">
                 <h5>Contacto</h5>
-                <a href="tel:+56912345678">+56 9 1234 5678</a>
-                <a href="mailto:contacto@naamastudio.cl">contacto@naamastudio.cl</a>
+                <a href="tel:+56912345678">+56 9 7952 0623</a>
+                <a href="mailto:contacto@naamastudio.cl">naamastudiospa@gmail.com</a>
             </div>
         </div>
         <div className="footer-bottom">

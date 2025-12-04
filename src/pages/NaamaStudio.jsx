@@ -1,176 +1,195 @@
 import React, { useState } from 'react';
-// Importamos tu logo (ajusta la ruta si es necesario)
+// Asegúrate de que la ruta a tu logo sea correcta
 import logoNaama from '../assets/img/Partners/naama-studio.png'; 
 
 export default function NaamaStudio() {
   const [activeCategory, setActiveCategory] = useState('manos');
 
   return (
-    <div className="naama-page">
+    <div className="naama-rebrand-page">
       <style>{css}</style>
 
       {/* --- NAVBAR FLOTANTE --- */}
-      <nav className="n-nav">
+      <nav className="nr-nav glass-effect">
         <div className="nav-content">
-            {/* Si la imagen no carga, muestra texto */}
-            <img src={logoNaama} alt="Naamá Studio" className="nav-logo" onError={(e) => e.target.style.display='none'} />
-            <span className="nav-text-logo">NAAMÁ STUDIO</span>
-            
-            <a href="https://www.instagram.com/naamastudio_/" target="_blank" rel="noreferrer" className="social-btn">
-                Instagram
-            </a>
+            <img src={logoNaama} alt="Naamá Studio" className="nav-logo" />
         </div>
       </nav>
 
       {/* --- HERO SECTION (Portada) --- */}
-      <header className="n-hero">
-        <div className="hero-text fade-up">
-            <span className="overhead">ESTÉTICA & BIENESTAR</span>
-            <h1>Tu mejor versión,<br/> <span className="italic">empieza aquí.</span></h1>
-            <p>Especialistas en colorimetría, cuidado capilar, manicure y estética integral.</p>
-            <div className="hero-buttons">
-                <a href="https://wa.me/56912345678" className="btn-primary">Agendar Hora</a>
-                <button className="btn-secondary" onClick={() => document.getElementById('menu-precios').scrollIntoView({behavior: 'smooth'})}>
-                    Ver Precios
-                </button>
+      <header className="nr-hero">
+        <div className="hero-content fade-up">
+            <span className="slogan-badge">BELLEZA, BIENESTAR & ARMONÍA</span>
+            <h1>
+                Donde la gracia antigua<br/>
+                encuentra el <span className="text-accent">cuidado moderno.</span>
+            </h1>
+            <p className="hero-description">
+                Un espacio sagrado dedicado a resaltar tu belleza natural a través de servicios de estética integral con productos de alta gama.
+            </p>
+            <div className="hero-actions">
+                <a href="https://wa.me/56912345678" target="_blank" rel="noreferrer" className="btn-gold">
+                    Agendar Cita
+                </a>
             </div>
         </div>
-        <div className="hero-img fade-in"></div>
+        <div className="hero-image-container fade-in">
+            {/* Imagen de stock cálida y elegante */}
+            <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=2070&auto=format&fit=crop" alt="Naamá Vibe" className="hero-img" />
+        </div>
       </header>
 
-      {/* --- MARCAS (Productos) --- */}
-      <div className="brands-ticker">
-        <p>TRABAJAMOS Y VENDEMOS LAS MEJORES MARCAS</p>
-        <div className="brands-grid">
-            <span>SOW</span>
-            <span className="separator">•</span>
-            <span>BOFFEL</span>
-            <span className="separator">•</span>
-            <span>AMETHYSTE</span>
-            <span className="separator">•</span>
-            <span>TIGI</span>
+      {/* --- SECCIÓN FILOSOFÍA (Significado) --- */}
+      <section className="nr-philosophy">
+        <div className="philosophy-text fade-up">
+            <h2>La Esencia Naamá</h2>
+            <p>
+                De raíz bíblica, Naamá evoca dulzura, hermosura y gracia. 
+                Nuestro estudio nace para honrar ese significado, creando un refugio 
+                donde cada detalle está pensado para devolverte a un estado de 
+                <strong>armonía y bienestar absoluto</strong>.
+            </p>
+            <div className="decorative-line"></div>
         </div>
-      </div>
-
-      {/* --- MENÚ DE PRECIOS INTERACTIVO --- */}
-      <section id="menu-precios" className="pricing-section">
-        <div className="section-header">
-            <h2>Nuestros Servicios</h2>
-            <p>Selecciona una categoría para ver los valores</p>
-        </div>
-
-        {/* Selector de Categorías */}
-        <div className="category-scroll">
-            <div className="category-list">
-                {categories.map(cat => (
-                    <button 
-                        key={cat.id} 
-                        className={`cat-btn ${activeCategory === cat.id ? 'active' : ''}`}
-                        onClick={() => setActiveCategory(cat.id)}
-                    >
-                        {cat.label}
-                    </button>
-                ))}
-            </div>
-        </div>
-
-        {/* Lista de Precios */}
-        <div className="price-container fade-in" key={activeCategory}>
-            <div className="price-grid">
-                {servicesData[activeCategory].map((item, index) => (
-                    <div key={index} className="price-item">
-                        <div className="item-info">
-                            <span className="item-name">{item.name}</span>
-                            {item.desc && <span className="item-desc">{item.desc}</span>}
-                        </div>
-                        <div className="item-price">
-                            {item.price === "Consultar" ? "Consultar" : `$${item.price}`}
-                        </div>
-                    </div>
-                ))}
-            </div>
+        <div className="philosophy-grid">
+             <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop" alt="Textura" className="grid-img img-1" />
+             <img src="https://images.unsplash.com/photo-1600334129128-685c5582fd35?q=80&w=2070&auto=format&fit=crop" alt="Detalle" className="grid-img img-2" />
         </div>
       </section>
 
-      {/* --- FOOTER / CTA FINAL --- */}
-      <footer className="n-footer">
+       {/* --- MARCAS (Ticker elegante) --- */}
+       <div className="nr-brands-ticker">
+        <span>TRABAJAMOS CON EXCELENCIA:</span>
+        <div className="brands-list">
+            <span>SOW</span> · <span>BOFFEL</span> · <span>AMETHYSTE</span> · <span>TIGI</span>
+        </div>
+      </div>
+
+      {/* --- MENÚ DE SERVICIOS (Rediseñado) --- */}
+      <section id="servicios" className="nr-services">
+        <div className="section-header">
+            <span className="sub-title">NUESTRA CARTA</span>
+            <h2>Rituales de Belleza</h2>
+        </div>
+
+        {/* Selector de Categorías (Pills más gorditas) */}
+        <div className="category-pills-container">
+            {categories.map(cat => (
+                <button 
+                    key={cat.id} 
+                    className={`cat-pill ${activeCategory === cat.id ? 'active' : ''}`}
+                    onClick={() => setActiveCategory(cat.id)}
+                >
+                    {cat.label}
+                </button>
+            ))}
+        </div>
+
+        {/* Lista de Precios (Estilo Menú Restaurante) */}
+        <div className="price-menu-container fade-in" key={activeCategory}>
+            {servicesData[activeCategory].map((item, index) => (
+                <div key={index} className="menu-item">
+                    <div className="menu-item-header">
+                        <span className="item-name">{item.name}</span>
+                        <span className="dotted-line"></span>
+                        <span className="item-price">${item.price}</span>
+                    </div>
+                    {item.desc && <p className="item-desc">{item.desc}</p>}
+                </div>
+            ))}
+        </div>
+      </section>
+
+        {/* --- IMAGEN DE QUIEBRE (Visual Break) --- */}
+      <section className="nr-visual-break parallax">
+        <div className="break-content">
+            <h2>"La belleza exterior es el reflejo de la armonía interior."</h2>
+        </div>
+      </section>
+
+      {/* --- FOOTER CÁLIDO --- */}
+      <footer className="nr-footer">
         <div className="footer-content">
-            <h3>¿Lista para un cambio?</h3>
-            <p>Reserva tu cita fácilmente a través de nuestro WhatsApp o Instagram.</p>
-            <a href="https://wa.me/56912345678" className="btn-primary invert">Ir a WhatsApp</a>
+            <img src={logoNaama} alt="Naamá Logo" className="footer-logo" />
+            <h3>Vive la experiencia.</h3>
+            <p>Reserva tu momento de conexión y cuidado personal.</p>
             
-            <div className="footer-links">
+            <div className="footer-actions">
+                <a href="https://wa.me/56912345678" className="btn-gold outline">WhatsApp</a>
+                <a href="https://www.instagram.com/naamastudio_/" className="btn-gold outline">Instagram</a>
+            </div>
+
+            <div className="footer-info">
                 <span>Santiago, Chile</span>
-                <a href="https://www.instagram.com/naamastudio_/">@naamastudio_</a>
+                <span>© 2026 Naamá Studio</span>
             </div>
         </div>
       </footer>
 
-      {/* BOTÓN FLOTANTE WHATSAPP */}
-      <a href="https://wa.me/56912345678" className="whatsapp-float" target="_blank" rel="noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+      {/* Botón WhatsApp Flotante (Dorado) */}
+      <a href="https://wa.me/56912345678" className="whatsapp-float-gold" target="_blank" rel="noreferrer">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
       </a>
     </div>
   );
 }
 
-/* --- DATOS ORGANIZADOS (Tu base de datos limpia) --- */
+/* --- DATOS (Tus precios organizados) --- */
 const categories = [
     { id: 'manos', label: 'Manos & Pies' },
-    { id: 'pelo', label: 'Peluquería' },
+    { id: 'pelo', label: 'Peluquería & Color' },
     { id: 'tratamientos', label: 'Tratamientos Capilares' },
-    { id: 'depila_mujer', label: 'Depilación Mujer' },
-    { id: 'depila_hombre', label: 'Depilación Hombre' },
     { id: 'mirada', label: 'Cejas & Pestañas' },
+    { id: 'depila_mujer', label: 'Depilación Dama' },
+    { id: 'depila_hombre', label: 'Depilación Varón' },
     { id: 'estetica', label: 'Estética & Masajes' },
 ];
 
 const servicesData = {
     manos: [
         { name: "Esmaltado Permanente", price: "20.990" },
-        { name: "Degradado o Francesa", price: "21.990", desc: "Permanente" },
+        { name: "Degradado o Francesa", price: "21.990" },
         { name: "Capping de Rubber", price: "25.990" },
         { name: "Baño de PolyGel", price: "31.990" },
         { name: "Extensión Soft Gel", price: "35.990", desc: "Desde" },
         { name: "Retiro Esmalte Permanente", price: "3.990" },
         { name: "Retiro Acrílico/Poly/Soft", price: "12.990" },
-        { name: "Diseño mano alzada", price: "1.490" },
+        { name: "Diseño mano alzada", price: "1.490", desc: "Por uña" },
         { name: "Pedicure Permanente", price: "24.990" },
         { name: "Pedicure Spa", price: "17.990" },
         { name: "Pedicure Tradicional", price: "14.990" },
     ],
     pelo: [
         { name: "Corte de Dama", price: "15.990" },
-        { name: "Corte de Varón", price: "12.990" },
         { name: "Corte + Bordado", price: "25.990" },
-        { name: "Brushing", price: "15.990" },
+        { name: "Brushing", price: "15.990", desc: "Adicional a servicios $5.990" },
         { name: "Baño de Color", price: "35.990", desc: "Desde" },
         { name: "Color Global Tinte", price: "40.990", desc: "Desde" },
         { name: "Retoque Crecimiento", price: "25.990" },
-        { name: "Babylights (Sin Crecimiento)", price: "75.990", desc: "Desde" },
+        { name: "Babylights (Sin Crec.)", price: "75.990", desc: "Desde" },
         { name: "Balayage Tradicional", price: "70.990", desc: "Desde" },
         { name: "Botox Capilar", price: "35.990", desc: "Desde" },
-        { name: "Alisado Profesional Corto", price: "50.990" },
-        { name: "Alisado Profesional Largo", price: "70.990" },
+        { name: "Alisado Profesional", price: "50.990", desc: "Desde (según largo)" },
+        { name: "Corte de Varón", price: "12.990" },
     ],
     tratamientos: [
         { name: "Masaje Capilar TIGI", price: "22.990" },
         { name: "Masaje Capilar SOW", price: "35.990" },
         { name: "Masaje Sebastian Penetraitt", price: "31.990" },
-        { name: "Masaje Green Zoho (Ondulado)", price: "27.990" },
+        { name: "Masaje Green Zoho", price: "27.990", desc: "Para cabello ondulado" },
         { name: "Lavado Nutritivo + Secado", price: "13.990" },
         { name: "Ampolla", price: "12.990" },
     ],
     depila_mujer: [
         { name: "Rostro Completo", price: "10.990" },
         { name: "Perfilado de Cejas", price: "5.990" },
-        { name: "Bozo / Mentón / Patillas", price: "2.990", desc: "c/u" },
+        { name: "Bozo / Mentón / Patillas", price: "2.990", desc: "Precio por zona" },
         { name: "Axilas", price: "4.990" },
         { name: "Brazos Completos", price: "13.990" },
         { name: "Piernas Completas", price: "15.990" },
         { name: "Rebaje Completo", price: "16.990" },
         { name: "Rebaje Bikini", price: "6.990" },
-        { name: "Espalda (Alta o Baja)", price: "6.990", desc: "c/u" },
+        { name: "Espalda (Alta o Baja)", price: "6.990", desc: "Precio por zona" },
     ],
     depila_hombre: [
         { name: "Rostro", price: "18.990" },
@@ -198,191 +217,243 @@ const servicesData = {
     ]
 };
 
-/* --- ESTILOS CSS (Estética Minimalista "Pinterest") --- */
+/* --- NUEVOS ESTILOS CSS (Rebranding: Cálido, Grueso y Lujoso) --- */
 const css = `
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
+/* Importamos fuentes con más peso y carácter */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Manrope:wght@400;500;700&display=swap');
 
 :root {
-    --n-bg: #FDFBF8; /* Crema muy suave */
-    --n-text: #2C2C2C; /* Gris casi negro */
-    --n-accent: #C4A484; /* Tono Nude/Tierra */
-    --n-light: #F2EFE9;
+    /* Nueva Paleta Cálida */
+    --nr-bg: #F9F6F0; /* Crema cálido */
+    --nr-text: #3A3228; /* Marrón oscuro intenso (no negro) */
+    --nr-accent: #B88A68; /* Terracota/Arcilla */
+    --nr-gold: #D4AF37; /* Dorado envejecido para botones */
+    --nr-light-gold: #F1E5D1;
 }
 
-.naama-page {
-    background-color: var(--n-bg);
-    color: var(--n-text);
-    font-family: 'Montserrat', sans-serif;
+.naama-rebrand-page {
+    background-color: var(--nr-bg);
+    color: var(--nr-text);
+    font-family: 'Manrope', sans-serif; /* Fuente de texto más gordita */
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* TYPOGRAPHY */
-h1, h2, h3, .overhead, .cat-btn { font-family: 'Cormorant Garamond', serif; }
-.italic { font-style: italic; font-weight: 400; }
+/* TIPOGRAFÍA CON CARÁCTER */
+h1, h2, h3, .slogan-badge, .sub-title, .item-price, .cat-pill {
+    font-family: 'Fraunces', serif; /* Fuente con serifa gruesa */
+    font-weight: 700; /* Peso bold */
+}
 
-/* NAVBAR */
-.n-nav {
-    padding: 20px 0;
+/* NAVBAR GLASS */
+.nr-nav {
+    padding: 15px 0;
     position: sticky;
     top: 0;
-    background: rgba(253, 251, 248, 0.95);
-    backdrop-filter: blur(5px);
     z-index: 100;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+.glass-effect {
+    background: rgba(249, 246, 240, 0.85); /* Fondo crema semitransparente */
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(184, 138, 104, 0.2);
 }
 .nav-content {
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
     padding: 0 20px;
 }
-.nav-logo { height: 40px; }
-.nav-text-logo { font-family: 'Cormorant Garamond', serif; letter-spacing: 2px; font-weight: 600; font-size: 1.2rem; display: none; }
-/* Si no hay logo imagen, mostramos texto */
-.nav-logo[style*="display: none"] + .nav-text-logo { display: block; }
+.nav-logo { height: 60px; /* Logo más grande */ filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1)); }
 
-.social-btn {
-    text-decoration: none;
-    color: var(--n-text);
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-bottom: 1px solid var(--n-text);
-}
-
-/* HERO */
-.n-hero {
+/* HERO SECTION */
+.nr-hero {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    min-height: 85vh;
+    min-height: 90vh;
     max-width: 1200px;
     margin: 0 auto;
     align-items: center;
-    padding: 0 20px;
+    padding: 40px 20px;
+    gap: 40px;
 }
-.hero-text { padding-right: 40px; }
-.overhead { font-size: 0.9rem; letter-spacing: 2px; color: var(--n-accent); text-transform: uppercase; display: block; margin-bottom: 15px; }
-.n-hero h1 { font-size: 4.5rem; line-height: 1; font-weight: 400; margin: 0 0 25px 0; }
-.n-hero p { font-size: 1.1rem; color: #666; margin-bottom: 35px; max-width: 400px; font-weight: 300; }
+.slogan-badge {
+    display: inline-block;
+    background: var(--nr-light-gold);
+    color: var(--nr-text);
+    padding: 8px 16px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+}
+.nr-hero h1 {
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 25px;
+    color: var(--nr-text);
+}
+.text-accent { color: var(--nr-accent); font-style: italic; }
+.hero-description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    color: #6B5D52; /* Marrón medio */
+    margin-bottom: 40px;
+    max-width: 450px;
+    font-weight: 500;
+}
+.hero-image-container {
+    position: relative;
+    height: 650px;
+}
+.hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 150px 150px 20px 20px; /* Arco más pronunciado */
+    box-shadow: 10px 10px 30px rgba(184, 138, 104, 0.2);
+}
 
-.hero-buttons { display: flex; gap: 15px; }
-.btn-primary {
-    background: var(--n-text);
+/* BOTONES DORADOS (Más gorditos) */
+.btn-gold {
+    background: var(--nr-gold);
     color: white;
-    padding: 15px 30px;
+    padding: 18px 40px;
     text-decoration: none;
-    font-size: 0.9rem;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
+    border-radius: 50px;
+    display: inline-block;
     transition: 0.3s;
-    border: 1px solid var(--n-text);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    border: 2px solid var(--nr-gold);
 }
-.btn-primary:hover { background: transparent; color: var(--n-text); }
-.btn-secondary {
-    background: transparent;
-    color: var(--n-text);
-    padding: 15px 30px;
-    border: 1px solid var(--n-text);
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
+.btn-gold:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4); }
+.btn-gold.outline { background: transparent; color: var(--nr-gold); box-shadow: none; }
+.btn-gold.outline:hover { background: var(--nr-gold); color: white; }
+
+/* FILOSOFÍA */
+.nr-philosophy {
+    max-width: 1000px;
+    margin: 100px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+.philosophy-text h2 { font-size: 2.5rem; margin-bottom: 30px; }
+.philosophy-text p { font-size: 1.1rem; line-height: 1.7; color: #6B5D52; font-weight: 500; }
+.philosophy-text strong { color: var(--nr-accent); font-weight: 700; }
+.decorative-line { width: 80px; height: 4px; background: var(--nr-accent); margin-top: 30px; }
+.philosophy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-img { width: 100%; height: 300px; object-fit: cover; border-radius: 12px; }
+.img-1 { transform: translateY(20px); } /* Efecto escalonado */
+
+/* MARCAS TICKER */
+.nr-brands-ticker {
+    background: var(--nr-light-gold);
+    padding: 30px 20px;
+    text-align: center;
+    margin-bottom: 80px;
+}
+.nr-brands-ticker span:first-child { display: block; font-size: 0.8rem; letter-spacing: 2px; margin-bottom: 10px; font-weight: 700; color: var(--nr-accent); }
+.brands-list { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; color: var(--nr-text); }
+
+/* SERVICIOS */
+.nr-services { max-width: 900px; margin: 0 auto 100px; padding: 0 20px; }
+.section-header { text-align: center; margin-bottom: 50px; }
+.sub-title { color: var(--nr-accent); letter-spacing: 2px; font-size: 0.9rem; }
+.section-header h2 { font-size: 3rem; margin-top: 10px; }
+
+/* Pills de Categoría (Más gorditas y modernas) */
+.category-pills-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 50px;
+}
+.cat-pill {
+    background: white;
+    border: 2px solid #EEE;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 1rem;
+    color: #999;
     cursor: pointer;
     transition: 0.3s;
+    font-weight: 600;
 }
-.btn-secondary:hover { background: var(--n-light); border-color: var(--n-light); }
+.cat-pill.active { background: var(--nr-accent); border-color: var(--nr-accent); color: white; box-shadow: 0 4px 10px rgba(184, 138, 104, 0.3); }
 
-.hero-img {
-    height: 600px;
-    background-image: url('https://images.unsplash.com/photo-1633681926022-84c23e8cb22a?q=80&w=2070&auto=format&fit=crop'); /* Imagen estética de uñas/belleza */
+/* Lista de Precios Estilo Menú */
+.menu-item { margin-bottom: 25px; }
+.menu-item-header { display: flex; justify-content: space-between; align-items: baseline; }
+.item-name { font-size: 1.2rem; font-weight: 700; }
+.dotted-line { flex: 1; border-bottom: 2px dotted #CCC; margin: 0 15px; position: relative; top: -5px; }
+.item-price { font-size: 1.3rem; color: var(--nr-accent); }
+.item-desc { font-size: 0.9rem; color: #888; margin-top: 5px; font-weight: 500; }
+
+/* VISUAL BREAK (Parallax) */
+.nr-visual-break {
+    height: 400px;
+    background-image: url('https://images.unsplash.com/photo-1596121457970-f982fb26421d?q=80&w=2070&auto=format&fit=crop'); /* Imagen textura cálida */
     background-size: cover;
     background-position: center;
-    border-radius: 200px 200px 0 0;
-}
-
-/* MARCAS */
-.brands-ticker { text-align: center; padding: 60px 20px; border-bottom: 1px solid #eee; }
-.brands-ticker p { font-size: 0.7rem; letter-spacing: 2px; color: #999; margin-bottom: 20px; }
-.brands-grid { display: flex; justify-content: center; gap: 20px; font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--n-accent); }
-.separator { color: #ddd; }
-
-/* PRECIOS */
-.pricing-section { max-width: 900px; margin: 80px auto; padding: 0 20px; }
-.section-header { text-align: center; margin-bottom: 40px; }
-.section-header h2 { font-size: 3rem; margin: 0; font-weight: 400; }
-.section-header p { color: #888; font-weight: 300; }
-
-.category-scroll { overflow-x: auto; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: center; }
-.category-list { display: flex; gap: 10px; }
-.cat-btn {
-    background: transparent;
-    border: none;
-    font-size: 1.2rem;
-    padding: 10px 20px;
-    cursor: pointer;
-    color: #999;
-    border-bottom: 2px solid transparent;
-    transition: 0.3s;
-    white-space: nowrap;
-}
-.cat-btn.active { color: var(--n-text); border-color: var(--n-accent); }
-
-.price-grid { display: grid; grid-template-columns: 1fr; gap: 0; border-top: 1px solid #eee; }
-.price-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    padding: 20px 0;
-    border-bottom: 1px solid #eee;
-}
-.item-info { display: flex; flex-direction: column; }
-.item-name { font-size: 1.1rem; font-weight: 500; }
-.item-desc { font-size: 0.8rem; color: #888; margin-top: 4px; }
-.item-price { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; color: var(--n-text); }
-
-/* FOOTER */
-.n-footer { background: var(--n-text); color: white; padding: 80px 20px; text-align: center; margin-top: 80px; }
-.footer-content h3 { font-size: 3rem; margin: 0 0 20px 0; font-weight: 400; color: white; }
-.footer-content p { color: #aaa; margin-bottom: 40px; font-weight: 300; }
-.btn-primary.invert { background: white; color: var(--n-text); border-color: white; }
-.btn-primary.invert:hover { background: transparent; color: white; }
-.footer-links { margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; display: flex; justify-content: center; gap: 30px; font-size: 0.8rem; letter-spacing: 1px; opacity: 0.6; }
-.footer-links a { color: white; text-decoration: none; }
-
-/* FLOATING WHATSAPP */
-.whatsapp-float {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #25d366;
-    color: white;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
+    background-attachment: fixed; /* Efecto Parallax */
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    z-index: 1000;
-    transition: transform 0.3s;
+    text-align: center;
+    position: relative;
 }
-.whatsapp-float:hover { transform: scale(1.1); }
+.nr-visual-break::before { content: ''; position: absolute; inset: 0; background: rgba(58, 50, 40, 0.4); } /* Overlay oscuro cálido */
+.break-content h2 { position: relative; color: white; font-size: 2.5rem; max-width: 700px; padding: 20px; font-style: italic; }
+
+/* FOOTER */
+.nr-footer {
+    background: #2A241D; /* Marrón muy oscuro */
+    color: var(--nr-bg);
+    padding: 100px 20px 50px;
+    text-align: center;
+}
+.footer-logo { height: 80px; margin-bottom: 30px; filter: brightness(0) invert(1); /* Logo blanco */ }
+.nr-footer h3 { font-size: 2.5rem; margin-bottom: 15px; color: var(--nr-gold); }
+.nr-footer p { font-size: 1.1rem; margin-bottom: 40px; opacity: 0.8; }
+.footer-actions { display: flex; justify-content: center; gap: 20px; margin-bottom: 60px; }
+.footer-info { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; display: flex; justify-content: center; gap: 40px; font-size: 0.9rem; opacity: 0.5; }
+
+/* WHATSAPP FLOTANTE DORADO */
+.whatsapp-float-gold {
+    position: fixed; bottom: 30px; right: 30px;
+    background: var(--nr-gold); color: white;
+    width: 65px; height: 65px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    z-index: 1000; transition: 0.3s;
+    border: 2px solid white;
+}
+.whatsapp-float-gold:hover { transform: scale(1.1); }
 
 /* ANIMACIONES */
-.fade-up { animation: fadeUp 1s ease forwards; opacity: 0; transform: translateY(20px); }
+.fade-up { animation: fadeUp 1s ease forwards; opacity: 0; transform: translateY(30px); }
 .fade-in { animation: fadeIn 1.5s ease forwards; opacity: 0; }
 @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeIn { to { opacity: 1; } }
 
 /* RESPONSIVE */
-@media(max-width: 768px) {
-    .n-hero { grid-template-columns: 1fr; text-align: center; min-height: auto; padding-top: 40px; }
-    .hero-text { padding-right: 0; margin-bottom: 40px; }
-    .hero-buttons { justify-content: center; }
-    .n-hero h1 { font-size: 3rem; }
-    .hero-img { height: 400px; border-radius: 100px 100px 0 0; }
-    .category-scroll { justify-content: flex-start; }
-    .brands-grid { flex-wrap: wrap; }
+@media(max-width: 900px) {
+    .nr-hero { grid-template-columns: 1fr; text-align: center; min-height: auto; padding-top: 60px; }
+    .hero-image-container { height: 450px; order: -1; margin-bottom: 30px; }
+    .hero-img { border-radius: 100px 100px 20px 20px; }
+    .nr-hero h1 { font-size: 3rem; }
+    .nr-philosophy { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+    .decorative-line { margin: 30px auto 0; }
+    .img-1 { transform: none; }
+    .break-content h2 { font-size: 1.8rem; }
 }
 `;

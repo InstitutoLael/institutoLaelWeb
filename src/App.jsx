@@ -26,6 +26,7 @@ const Inscripcion = lazy(() => import("./pages/Inscripcion.jsx"));
 const Terminos = lazy(() => import("./pages/Terminos.jsx"));
 const Privacidad = lazy(() => import("./pages/Privacidad.jsx"));
 // const Pagos = lazy(() => import("./pages/Pagos.jsx")); // Portal de pagos general
+const NaamaStudio = lazy(() => import("./pages/NaamaStudio.jsx"));
 
 /* --- Utilidades --- */
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
@@ -36,6 +37,7 @@ import Footer from "./components/Footer.jsx";
 import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx"; // ¡Importante!
 import SearchOverlay from "./components/SearchOverlay.jsx"; // ¡El Buscador!
+import NaamaStudio from "./pages/NaamaStudio.jsx";
 
 export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -93,6 +95,7 @@ export default function App() {
             {/* Legal */}
             <Route path="/terminos" element={<Terminos />} />
             <Route path="/privacidad" element={<Privacidad />} />
+            <Route path="/naama" element={<NaamaStudio />} />
 
             {/* 404 - Ruta comodín al final */}
             <Route path="*" element={<NotFound />} />

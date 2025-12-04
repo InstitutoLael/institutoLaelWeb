@@ -95,7 +95,7 @@ export default function App() {
             {/* Legal */}
             <Route path="/terminos" element={<Terminos />} />
             <Route path="/privacidad" element={<Privacidad />} />
-            <Route path="/naama" element={<NaamaStudio />} />
+            <Route path="/naama-studio" element={<NaamaStudio />} />
 
             {/* 404 - Ruta comodín al final */}
             <Route path="*" element={<NotFound />} />

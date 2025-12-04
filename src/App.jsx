@@ -10,7 +10,7 @@ const Idiomas = lazy(() => import("./pages/Idiomas.jsx"));
 const Empresas = lazy(() => import("./pages/Empresas.jsx"));
 // Nota: Verifica que el archivo se llame 'Homeschool.jsx' o 'LaelAcademy.jsx'
 const Homeschool = lazy(() => import("./pages/Homeschool.jsx")); 
-// Nota: Verifica si tu archivo es 'EscuelaAdultos.jsx' o 'Nivelacion.jsx' (según lo que creaste antes)
+// Nota: Verifica si tu archivo es 'EscuelaAdultos.jsx' o 'Nivelacion.jsx'
 const EscuelaAdultos = lazy(() => import("./pages/EscuelaAdultos.jsx")); 
 
 /* --- Institucional --- */
@@ -18,14 +18,16 @@ const Nosotros = lazy(() => import("./pages/Nosotros.jsx"));
 const Convenios = lazy(() => import("./pages/Convenios.jsx"));
 const Trabaja = lazy(() => import("./pages/Trabaja.jsx"));
 const Contacto = lazy(() => import("./pages/Contacto.jsx"));
-// const Docentes = lazy(() => import("./pages/Docentes.jsx")); // Opcional si aun no la tienes
+// const Docentes = lazy(() => import("./pages/Docentes.jsx")); 
 
 /* --- Conversión y Legal --- */
 const Inscripcion = lazy(() => import("./pages/Inscripcion.jsx"));
-// const Gracias = lazy(() => import("./pages/Gracias.jsx")); // Página post-pago
+// const Gracias = lazy(() => import("./pages/Gracias.jsx")); 
 const Terminos = lazy(() => import("./pages/Terminos.jsx"));
 const Privacidad = lazy(() => import("./pages/Privacidad.jsx"));
-// const Pagos = lazy(() => import("./pages/Pagos.jsx")); // Portal de pagos general
+// const Pagos = lazy(() => import("./pages/Pagos.jsx"));
+
+/* --- Naamá Studio (Ruta Oculta/Prueba) --- */
 const NaamaStudio = lazy(() => import("./pages/NaamaStudio.jsx"));
 
 /* --- Utilidades --- */
@@ -35,9 +37,8 @@ const NotFound = lazy(() => import("./pages/NotFound.jsx"));
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
-import ScrollToTop from "./components/ScrollToTop.jsx"; // ¡Importante!
-import SearchOverlay from "./components/SearchOverlay.jsx"; // ¡El Buscador!
-import NaamaStudio from "./pages/NaamaStudio.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx"; 
+import SearchOverlay from "./components/SearchOverlay.jsx"; 
 
 export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
@@ -81,7 +82,6 @@ export default function App() {
             <Route path="/homeschool" element={<Homeschool />} />
             <Route path="/escuela-adultos" element={<EscuelaAdultos />} />
 
-            
             {/* Institucional */}
             <Route path="/empresas" element={<Empresas />} />
             <Route path="/nosotros" element={<Nosotros />} />
@@ -95,6 +95,8 @@ export default function App() {
             {/* Legal */}
             <Route path="/terminos" element={<Terminos />} />
             <Route path="/privacidad" element={<Privacidad />} />
+            
+            {/* Landing Naamá Studio */}
             <Route path="/naama-studio" element={<NaamaStudio />} />
 
             {/* 404 - Ruta comodín al final */}

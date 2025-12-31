@@ -690,7 +690,7 @@ const NaamaStudio = () => {
 
     // PELUQUERÍA AVANZADA
     // PELUQUERÍA Y COLOR DESGLOSADO (CAMI, VALERIA, VIVY)
-
+   
     // --- ALISADOS ---
     { 
       name: "Alisado Profesional (Corto o poco cabello)", 
@@ -1520,3 +1520,35 @@ const NaamaStudio = () => {
 };
 
 export default NaamaStudio;
+
+
+
+<div class="container">
+  <header class="header">
+    <h1>Naamá Studio</h1>
+    <p>Estética & Peluquería Profesional</p>
+  </header>
+
+  <div class="category-section">
+    <div class="category-title">
+      <h2>Peluquería</h2>
+    </div>
+    
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-header">
+          <span class="service-name">Alisado Profesional (Largo)</span>
+          <span class="service-time">3 horas</span>
+        </div>
+        <p class="service-desc">Tratamiento de alisado de alto impacto con sellado de cutícula y eliminación total del frizz.</p>
+        
+        <div class="price-container">
+          <span class="old-price">70.990</span>
+          <span class="new-price">75.000</span>
+        </div>
+        
+        <p class="service-why">"Uso de fórmulas sin formol que cuidan tu salud capilar."</p>
+      </div>
+      </div>
+  </div>
+</div>

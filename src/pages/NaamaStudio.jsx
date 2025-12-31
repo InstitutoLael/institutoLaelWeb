@@ -1382,11 +1382,19 @@ const NaamaStudio = () => {
 // 3. CATEGORÍAS Y FILTRADO (Dentro de la función)
   const categories = ['Todas', 'Peluquería', 'Manicure', 'Pedicure', 'Estetica', 'Depilación', 'Masaje', 'Tratamiento Capilar', 'Podología', 'Adicional'];
 
-  const filteredServices = useMemo(() => {
+const filteredServices = useMemo(() => {
     return servicesData.filter(s => {
-      const matchesSearch = s.name.toLowerCase().includes(searchTerm.toLowerCase());
+      // 1. Buscamos coincidencia en el nombre del servicio
+      const nameMatch = s.name.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      // 2. Buscamos coincidencia en el nombre del profesional (NUEVO)
+      const workerMatch = s.worker.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      // 3. Verificamos la categoría
       const matchesTab = activeTab === 'Todas' || s.cat === activeTab;
-      return matchesSearch && matchesTab;
+
+      // Retornamos si coincide el nombre O el trabajador, Y que además cumpla la categoría
+      return (nameMatch || workerMatch) && matchesTab;
     });
   }, [searchTerm, activeTab, servicesData]);
 

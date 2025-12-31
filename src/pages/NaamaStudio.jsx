@@ -1,9 +1,13 @@
-import React, { useState, useMemo } from 'react';
-import { Search, Clock, User, Info, CheckCircle, Scissors, Sparkles, Heart } from 'lucide-react';
+import React, { useState } from 'react';
 
+const NaamaStudio = () => {
+  const [activeFilter, setActiveFilter] = useState('Todas');
 const NaamaStudio = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('Todas');
+
+
+  
 
   // DATA COMPLETA BASADA EN TU LISTA
   const servicesData = [

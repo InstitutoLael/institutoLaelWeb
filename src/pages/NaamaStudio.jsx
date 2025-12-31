@@ -1523,7 +1523,7 @@ const NaamaStudio = () => {
   );
 };
 
-export default NaamaStudio;
+
 
 
 
@@ -1556,3 +1556,217 @@ export default NaamaStudio;
       </div>
   </div>
 </div>
+
+
+const categories = ['Todas', ...new Set(servicesData.map(s => s.cat))];
+
+  const filteredServices = activeFilter === 'Todas' 
+    ? servicesData 
+    : servicesData.filter(s => s.cat === activeFilter);
+
+  return (
+    <div className="naama-wrapper">
+      {/* CSS INTEGRADO DENTRO DEL JSX */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .naama-wrapper {
+          background-color: #000000;
+          color: #ffffff;
+          font-family: 'Inter', -apple-system, sans-serif;
+          min-height: 100vh;
+          padding: 40px 20px;
+        }
+
+        .tarifario-header {
+          margin-bottom: 40px;
+        }
+
+        .tarifario-header h1 {
+          font-size: 32px;
+          font-weight: 800;
+          margin: 0 0 15px 0;
+          letter-spacing: -1px;
+        }
+
+        .tarifario-header p {
+          font-size: 14px;
+          color: #e0e0e0;
+          line-height: 1.6;
+          max-width: 800px;
+        }
+
+        .tarifario-header strong {
+          color: #fff;
+          font-weight: 600;
+        }
+
+        /* Buscador de Categorías (Pills) */
+        .filter-container {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          margin-bottom: 50px;
+        }
+
+        .filter-pill {
+          background-color: #ffffff;
+          color: #000000;
+          border: none;
+          padding: 6px 16px;
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: transform 0.2s, opacity 0.2s;
+          text-transform: capitalize;
+        }
+
+        .filter-pill:hover {
+          transform: scale(1.05);
+        }
+
+        .filter-pill.active {
+          background-color: #d4af37; /* Dorado para resaltar la activa si deseas */
+          color: #fff;
+        }
+
+        /* Bloques de Servicio */
+        .service-entry {
+          margin-bottom: 60px;
+          max-width: 700px;
+        }
+
+        .cat-tag {
+          color: #888;
+          font-size: 14px;
+          font-weight: 400;
+          display: block;
+          margin-bottom: 5px;
+        }
+
+        .service-name {
+          font-size: 24px;
+          font-weight: 800;
+          margin: 0 0 15px 0;
+          display: block;
+        }
+
+        .meta-info {
+          font-size: 14px;
+          color: #fff;
+          margin-bottom: 20px;
+        }
+
+        .meta-info span {
+          display: block;
+          margin-bottom: 4px;
+        }
+
+        /* Precios */
+        .price-section {
+          margin-bottom: 25px;
+        }
+
+        .price-old {
+          display: block;
+          color: #ffffff;
+          font-size: 16px;
+          margin-bottom: 2px;
+        }
+
+        .price-current {
+          display: block;
+          font-size: 20px;
+          font-weight: 800;
+        }
+
+        /* Textos de Valor */
+        .desc-block {
+          margin-top: 25px;
+        }
+
+        .desc-title {
+          font-size: 14px;
+          font-weight: 700;
+          display: block;
+          margin-bottom: 8px;
+        }
+
+        .desc-content {
+          font-size: 14px;
+          color: #bbbbbb;
+          line-height: 1.5;
+          display: block;
+          margin-bottom: 25px;
+        }
+
+        /* WhatsApp Button */
+        .wa-button {
+          position: fixed;
+          bottom: 30px;
+          right: 30px;
+          background-color: #25d366;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+      `}} />
+
+      <header className="tarifario-header">
+        <h1>Tarifario de Valor 2025</h1>
+        <p>
+          Nuestra actualización de precios refleja el compromiso con el uso de <strong>insumos premium internacionales</strong>, tecnología de vanguardia y la constante <strong>especialización de nuestro equipo</strong>.
+        </p>
+      </header>
+
+      <div className="filter-container">
+        {categories.map(cat => (
+          <button 
+            key={cat} 
+            className={`filter-pill ${activeFilter === cat ? 'active' : ''}`}
+            onClick={() => setActiveFilter(cat)}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <main>
+        {filteredServices.map((service, index) => (
+          <div key={index} className="service-entry">
+            <span className="cat-tag">{service.cat}</span>
+            <span className="service-name">{service.name}</span>
+
+            <div className="meta-info">
+              <span>👤 {service.worker}</span>
+              <span>🕒 {service.time}</span>
+            </div>
+
+            <div className="price-section">
+              {service.old !== "---" && <span className="price-old">${service.old}</span>}
+              <span className="price-current">${service.price}</span>
+            </div>
+
+            <div className="desc-block">
+              <span className="desc-title">¿De qué trata?</span>
+              <span className="desc-content">{service.desc}</span>
+
+              <span className="desc-title">Valor Naamá:</span>
+              <span className="desc-content">{service.why}</span>
+            </div>
+          </div>
+        ))}
+      </main>
+
+      <a href="https://wa.me/tu-numero" className="wa-button" target="_blank" rel="noopener noreferrer">
+        <span style={{fontSize: '24px'}}>💬</span>
+      </a>
+    </div>
+  );
+};
+
+export default NaamaStudio;

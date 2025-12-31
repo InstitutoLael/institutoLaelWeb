@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { Search, User, Clock, Info, CheckCircle, Sparkles, Scissors, Heart } from 'lucide-react';
 
 const NaamaStudio = () => {
-  // Solo un estado para filtrar categorías
-  const [activeFilter, setActiveFilter] = useState('Todas');
+  // 1. ESTADOS
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('Todas');
 
-
-  // DATA COMPLETA BASADA EN TU LISTA
+  // 2. DATA (Asegúrate de que TODOS los servicios tengan este formato)
   const servicesData = [
-    // ADICIONALES Y PELUQUERÍA
-    { 
+    {
+    // ADICIONALES Y PELUQUERÍA (CAMI, VALERIA, ALLISON)
       name: "Adicional Maquillaje", 
       worker: "Allison", 
       cat: "Adicional", 
@@ -688,7 +689,6 @@ const NaamaStudio = () => {
       why: "Crea una película oclusiva que obliga a los nutrientes a penetrar en la piel, sanando grietas y resequedad." 
     },
 
-    // PELUQUERÍA AVANZADA
     // PELUQUERÍA Y COLOR DESGLOSADO (CAMI, VALERIA, VIVY)
    
     // --- ALISADOS ---
@@ -1378,7 +1378,9 @@ const NaamaStudio = () => {
       why: "Perfecto como adicional para sellar cutículas y dar un extra de suavidad después de cualquier servicio." 
     },
 
-const categories = ['Todas', 'Peluquería', 'Manicure', 'Pedicure', 'Estetica', 'Depilación', 'Masaje', 'Tratamiento Capilar', 'Podología', 'Adicional'];
+];
+// 3. CATEGORÍAS Y FILTRADO (Dentro de la función)
+  const categories = ['Todas', 'Peluquería', 'Manicure', 'Pedicure', 'Estetica', 'Depilación', 'Masaje', 'Tratamiento Capilar', 'Podología', 'Adicional'];
 
   const filteredServices = useMemo(() => {
     return servicesData.filter(s => {
@@ -1390,50 +1392,46 @@ const categories = ['Todas', 'Peluquería', 'Manicure', 'Pedicure', 'Estetica', 
 
   return (
     <div className="naama-dark-theme">
-      {/* CSS INTEGRADO PARA ESTILO BLACK STUDIO */}
       <style dangerouslySetInnerHTML={{ __html: `
         .naama-dark-theme { background-color: #000; color: #fff; min-height: 100vh; font-family: 'Inter', sans-serif; padding-bottom: 40px; }
         .hero-section { padding: 60px 20px; text-align: center; border-bottom: 1px solid #1a1a1a; }
         .hero-section h1 { font-family: serif; font-size: 3rem; font-style: italic; margin-bottom: 10px; color: #fff; }
         .hero-section p { color: #888; max-width: 600px; margin: 0 auto; font-size: 0.9rem; }
         
-        .sticky-bar { position: sticky; top: 0; z-index: 50; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); padding: 20px; border-bottom: 1px solid #1a1a1a; }
+        .sticky-bar { position: sticky; top: 0; z-index: 50; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); padding: 20px; border-bottom: 1px solid #1a1a1a; }
         .search-wrapper { max-width: 800px; margin: 0 auto 15px; position: relative; }
-        .search-input { w-full: 100%; width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px 12px 12px 45px; border-radius: 12px; outline: none; }
+        .search-input { width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px 12px 12px 45px; border-radius: 12px; outline: none; }
         .search-input:focus { border-color: #d4af37; }
         
-        .filter-scroll { display: flex; gap: 10px; overflow-x: auto; max-width: 800px; margin: 0 auto; padding-bottom: 5px; }
+        .filter-scroll { display: flex; gap: 10px; overflow-x: auto; max-width: 800px; margin: 0 auto; padding-bottom: 5px; scrollbar-width: none; }
         .filter-scroll::-webkit-scrollbar { display: none; }
-        .pill-btn { background: #fff; color: #000; border: none; padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; text-transform: uppercase; }
+        .pill-btn { background: #fff; color: #000; border: none; padding: 8px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; text-transform: uppercase; }
         .pill-btn.active { background: #d4af37; color: #fff; }
 
-        .services-grid { max-width: 1000px; margin: 40px auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; padding: 0 20px; }
-        .card { background: #050505; border: 1px solid #1a1a1a; padding: 25px; border-radius: 15px; transition: 0.3s; }
-        .card:hover { border-color: #333; }
+        .services-grid { max-width: 1100px; margin: 40px auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; padding: 0 20px; }
+        .card { background: #080808; border: 1px solid #1a1a1a; padding: 25px; border-radius: 15px; display: flex; flex-direction: column; justify-content: space-between; }
         
         .cat-label { color: #d4af37; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
-        .service-name { font-family: serif; font-size: 1.5rem; font-style: italic; margin: 10px 0; display: block; }
-        .meta { display: flex; gap: 15px; color: #666; font-size: 11px; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; }
+        .service-name { font-family: serif; font-size: 1.4rem; font-style: italic; margin: 10px 0; display: block; color: #fff; }
+        .meta { display: flex; gap: 15px; color: #666; font-size: 11px; margin-bottom: 20px; font-weight: 600; }
         
         .price-tag { margin-bottom: 25px; }
-        .old-p { text-decoration: line-through; color: #444; font-size: 14px; display: block; }
+        .old-p { text-decoration: line-through; color: #444; font-size: 13px; display: block; }
         .new-p { font-size: 22px; font-weight: 800; color: #fff; }
 
-        .info-title { font-size: 12px; font-weight: 700; color: #fff; display: block; margin-bottom: 5px; }
+        .info-title { font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; display: block; margin-bottom: 5px; }
         .info-body { color: #888; font-size: 13px; line-height: 1.5; margin-bottom: 20px; display: block; }
         .naama-value { background: #111; padding: 15px; border-radius: 10px; border-left: 3px solid #d4af37; }
         .naama-value span { color: #d4af37; font-weight: 800; font-size: 10px; text-transform: uppercase; display: block; margin-bottom: 5px; }
-        .naama-value p { font-size: 12px; color: #eee; margin: 0; }
+        .naama-value p { font-size: 12px; color: #eee; margin: 0; line-height: 1.4; }
       `}} />
 
-      {/* HEADER HERO */}
       <header className="hero-section">
-        <h2 style={{ color: '#d4af37', letterSpacing: '5px', fontSize: '12px', fontWeight: 'bold' }}>NAAMÁ STUDIO SPA</h2>
+        <h2 style={{ color: '#d4af37', letterSpacing: '5px', fontSize: '12px', fontWeight: '900' }}>NAAMÁ STUDIO SPA</h2>
         <h1>Tarifario de Valor 2025</h1>
-        <p>Insumos premium internacionales y especialización técnica para resultados de alto impacto.</p>
+        <p>Insumos premium internacionales y especialización técnica.</p>
       </header>
 
-      {/* SEARCH & FILTERS */}
       <div className="sticky-bar">
         <div className="search-wrapper">
           <Search style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: '#444' }} size={18} />
@@ -1457,26 +1455,23 @@ const categories = ['Todas', 'Peluquería', 'Manicure', 'Pedicure', 'Estetica', 
         </div>
       </div>
 
-      {/* LISTADO */}
       <main className="services-grid">
         {filteredServices.map((s, i) => (
           <div key={i} className="card">
-            <span className="cat-label">{s.cat}</span>
-            <span className="service-name">{s.name}</span>
-            
-            <div className="meta">
-              <span>👤 {s.worker}</span>
-              <span>🕒 {s.time}</span>
+            <div>
+              <span className="cat-label">{s.cat}</span>
+              <span className="service-name">{s.name}</span>
+              <div className="meta">
+                <span>👤 {s.worker}</span>
+                <span>🕒 {s.time}</span>
+              </div>
+              <div className="price-tag">
+                {s.old !== "---" && <span className="old-p">${s.old}</span>}
+                <span className="new-p">${s.price}</span>
+              </div>
+              <span className="info-title">Descripción</span>
+              <span className="info-body">{s.desc}</span>
             </div>
-
-            <div className="price-tag">
-              {s.old !== "---" && <span className="old-p">${s.old}</span>}
-              <span className="new-p">${s.price}</span>
-            </div>
-
-            <span className="info-title">¿De qué trata?</span>
-            <span className="info-body">{s.desc}</span>
-
             <div className="naama-value">
               <span>Valor Naamá</span>
               <p>{s.why}</p>
@@ -1485,10 +1480,9 @@ const categories = ['Todas', 'Peluquería', 'Manicure', 'Pedicure', 'Estetica', 
         ))}
       </main>
 
-      {/* FOOTER */}
-      <footer style={{ backgroundColor: '#0a0a0a', padding: '60px 20px', borderTop: '1px solid #1a1a1a', textAlign: 'center' }}>
+      <footer style={{ backgroundColor: '#0a0a0a', padding: '60px 20px', borderTop: '1px solid #1a1a1a', textAlign: 'center', marginTop: '60px' }}>
         <div style={{ maxWidth: '800px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px' }}>
-          <div><h4 style={{ color: '#d4af37' }}>Garantía Naamá</h4><p style={{ fontSize: '11px', color: '#666' }}>Diagnóstico personalizado en cada servicio.</p></div>
+          <div><h4 style={{ color: '#d4af37' }}>Garantía Naamá</h4><p style={{ fontSize: '11px', color: '#666' }}>Diagnóstico personalizado profesional.</p></div>
           <div><h4 style={{ color: '#d4af37' }}>Higiene Clínica</h4><p style={{ fontSize: '11px', color: '#666' }}>Esterilización de grado médico.</p></div>
           <div><h4 style={{ color: '#d4af37' }}>Puntualidad</h4><p style={{ fontSize: '11px', color: '#666' }}>Bloques de atención exclusivos.</p></div>
         </div>

@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 
 const NaamaStudio = () => {
+  // Solo un estado para filtrar categorías
   const [activeFilter, setActiveFilter] = useState('Todas');
-const NaamaStudio = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState('Todas');
 
-
-  
 
   // DATA COMPLETA BASADA EN TU LISTA
   const servicesData = [
@@ -1382,9 +1378,7 @@ const NaamaStudio = () => {
       why: "Perfecto como adicional para sellar cutículas y dar un extra de suavidad después de cualquier servicio." 
     },
 
-  ];
-
-  const categories = ['Todas', 'Peluquería', 'Manicure', 'Pedicure', 'Estetica', 'Depilación', 'Masaje', 'Tratamiento Capilar', 'Podología', 'Adicional'];
+const categories = ['Todas', 'Peluquería', 'Manicure', 'Pedicure', 'Estetica', 'Depilación', 'Masaje', 'Tratamiento Capilar', 'Podología', 'Adicional'];
 
   const filteredServices = useMemo(() => {
     return servicesData.filter(s => {
@@ -1392,379 +1386,113 @@ const NaamaStudio = () => {
       const matchesTab = activeTab === 'Todas' || s.cat === activeTab;
       return matchesSearch && matchesTab;
     });
-  }, [searchTerm, activeTab]);
+  }, [searchTerm, activeTab, servicesData]);
 
   return (
-    <div className="bg-[#fcfaf7] min-h-screen font-sans text-gray-800 antialiased">
+    <div className="naama-dark-theme">
+      {/* CSS INTEGRADO PARA ESTILO BLACK STUDIO */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        .naama-dark-theme { background-color: #000; color: #fff; min-height: 100vh; font-family: 'Inter', sans-serif; padding-bottom: 40px; }
+        .hero-section { padding: 60px 20px; text-align: center; border-bottom: 1px solid #1a1a1a; }
+        .hero-section h1 { font-family: serif; font-size: 3rem; font-style: italic; margin-bottom: 10px; color: #fff; }
+        .hero-section p { color: #888; max-width: 600px; margin: 0 auto; font-size: 0.9rem; }
+        
+        .sticky-bar { position: sticky; top: 0; z-index: 50; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); padding: 20px; border-bottom: 1px solid #1a1a1a; }
+        .search-wrapper { max-width: 800px; margin: 0 auto 15px; position: relative; }
+        .search-input { w-full: 100%; width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 12px 12px 12px 45px; border-radius: 12px; outline: none; }
+        .search-input:focus { border-color: #d4af37; }
+        
+        .filter-scroll { display: flex; gap: 10px; overflow-x: auto; max-width: 800px; margin: 0 auto; padding-bottom: 5px; }
+        .filter-scroll::-webkit-scrollbar { display: none; }
+        .pill-btn { background: #fff; color: #000; border: none; padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; text-transform: uppercase; }
+        .pill-btn.active { background: #d4af37; color: #fff; }
+
+        .services-grid { max-width: 1000px; margin: 40px auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; padding: 0 20px; }
+        .card { background: #050505; border: 1px solid #1a1a1a; padding: 25px; border-radius: 15px; transition: 0.3s; }
+        .card:hover { border-color: #333; }
+        
+        .cat-label { color: #d4af37; font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+        .service-name { font-family: serif; font-size: 1.5rem; font-style: italic; margin: 10px 0; display: block; }
+        .meta { display: flex; gap: 15px; color: #666; font-size: 11px; margin-bottom: 20px; font-weight: 600; text-transform: uppercase; }
+        
+        .price-tag { margin-bottom: 25px; }
+        .old-p { text-decoration: line-through; color: #444; font-size: 14px; display: block; }
+        .new-p { font-size: 22px; font-weight: 800; color: #fff; }
+
+        .info-title { font-size: 12px; font-weight: 700; color: #fff; display: block; margin-bottom: 5px; }
+        .info-body { color: #888; font-size: 13px; line-height: 1.5; margin-bottom: 20px; display: block; }
+        .naama-value { background: #111; padding: 15px; border-radius: 10px; border-left: 3px solid #d4af37; }
+        .naama-value span { color: #d4af37; font-weight: 800; font-size: 10px; text-transform: uppercase; display: block; margin-bottom: 5px; }
+        .naama-value p { font-size: 12px; color: #eee; margin: 0; }
+      `}} />
+
       {/* HEADER HERO */}
-      <header className="py-16 px-6 max-w-5xl mx-auto text-center border-b border-stone-200">
-        <h2 className="text-[#8e734b] font-bold tracking-[0.4em] text-xs mb-3 uppercase">Naamá Studio Spa</h2>
-        <h1 className="text-5xl md:text-7xl font-serif italic mb-6 text-stone-900">Tarifario de Valor 2025</h1>
-        <p className="text-stone-500 max-w-2xl mx-auto font-light leading-relaxed">
-          Nuestra actualización de precios refleja el compromiso con el uso de <b>insumos premium internacionales</b>, 
-          tecnología de vanguardia y la constante <b>especialización de nuestro equipo</b>.
-        </p>
+      <header className="hero-section">
+        <h2 style={{ color: '#d4af37', letterSpacing: '5px', fontSize: '12px', fontWeight: 'bold' }}>NAAMÁ STUDIO SPA</h2>
+        <h1>Tarifario de Valor 2025</h1>
+        <p>Insumos premium internacionales y especialización técnica para resultados de alto impacto.</p>
       </header>
 
       {/* SEARCH & FILTERS */}
-      <div className="sticky top-0 z-50 bg-[#fcfaf7]/95 backdrop-blur-md py-6 border-b border-stone-100 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 space-y-4">
-          <div className="relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-[#8e734b]" size={18} />
-            <input 
-              type="text" 
-              placeholder="¿Qué servicio buscas hoy? (ej: Balayage, Limpieza...)"
-              className="w-full pl-12 pr-6 py-4 bg-white border border-stone-200 rounded-2xl outline-none focus:ring-2 focus:ring-[#8e734b]/20 focus:border-[#8e734b] transition-all"
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          
-          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveTab(cat)}
-                className={`px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all whitespace-nowrap ${
-                  activeTab === cat 
-                  ? 'bg-stone-900 text-white shadow-md' 
-                  : 'bg-white text-stone-400 border border-stone-100 hover:border-stone-300'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+      <div className="sticky-bar">
+        <div className="search-wrapper">
+          <Search style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: '#444' }} size={18} />
+          <input 
+            type="text" 
+            placeholder="Buscar servicio..." 
+            className="search-input"
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-      </div>
-
-      {/* SERVICES LIST */}
-      <main className="max-w-5xl mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredServices.map((s, i) => (
-            <div key={i} className="group bg-white p-6 rounded-3xl border border-stone-100 hover:border-[#8e734b]/30 hover:shadow-xl hover:shadow-stone-200/50 transition-all duration-300 flex flex-col justify-between">
-              <div>
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex-1">
-                    <span className="text-[9px] font-black text-[#8e734b] uppercase tracking-widest block mb-1">{s.cat}</span>
-                    <h3 className="text-xl font-serif font-bold text-stone-800 leading-tight group-hover:text-stone-900 transition-colors italic">{s.name}</h3>
-                    <div className="flex items-center gap-4 mt-2">
-                      <div className="flex items-center gap-1 text-[10px] text-stone-400 font-semibold uppercase">
-                        <User size={12} className="text-[#8e734b]" /> {s.worker}
-                      </div>
-                      <div className="flex items-center gap-1 text-[10px] text-stone-400 font-semibold uppercase">
-                        <Clock size={12} className="text-[#8e734b]" /> {s.time}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    {s.old !== "---" && <div className="text-[10px] text-stone-300 line-through font-bold mb-0.5">${s.old}</div>}
-                    <div className="text-2xl font-serif font-bold text-stone-900">${s.price}</div>
-                  </div>
-                </div>
-
-                <div className="space-y-4 pt-4 border-t border-stone-50">
-                  <div className="flex gap-3">
-                    <div className="w-5 h-5 bg-stone-50 rounded-full flex items-center justify-center shrink-0">
-                      <Info size={12} className="text-stone-400" />
-                    </div>
-                    <p className="text-xs text-stone-500 leading-relaxed italic"><span className="font-bold text-stone-700 not-italic uppercase text-[9px]">¿De qué trata?</span> {s.desc}</p>
-                  </div>
-                  
-                  <div className="flex gap-3 bg-[#fdfbf9] p-3 rounded-2xl border border-stone-100">
-                    <div className="w-5 h-5 bg-[#8e734b]/10 rounded-full flex items-center justify-center shrink-0">
-                      <CheckCircle size={12} className="text-[#8e734b]" />
-                    </div>
-                    <p className="text-[11px] text-[#8e734b] leading-relaxed"><span className="font-bold uppercase text-[9px]">Valor Naamá:</span> {s.why}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="filter-scroll">
+          {categories.map(cat => (
+            <button 
+              key={cat} 
+              className={`pill-btn ${activeTab === cat ? 'active' : ''}`}
+              onClick={() => setActiveTab(cat)}
+            >
+              {cat}
+            </button>
           ))}
         </div>
+      </div>
 
-        {filteredServices.length === 0 && (
-          <div className="text-center py-20">
-            <Sparkles className="mx-auto text-stone-200 mb-4" size={48} />
-            <p className="text-stone-400 italic">No encontramos ese servicio. Intenta con otra categoría.</p>
+      {/* LISTADO */}
+      <main className="services-grid">
+        {filteredServices.map((s, i) => (
+          <div key={i} className="card">
+            <span className="cat-label">{s.cat}</span>
+            <span className="service-name">{s.name}</span>
+            
+            <div className="meta">
+              <span>👤 {s.worker}</span>
+              <span>🕒 {s.time}</span>
+            </div>
+
+            <div className="price-tag">
+              {s.old !== "---" && <span className="old-p">${s.old}</span>}
+              <span className="new-p">${s.price}</span>
+            </div>
+
+            <span className="info-title">¿De qué trata?</span>
+            <span className="info-body">{s.desc}</span>
+
+            <div className="naama-value">
+              <span>Valor Naamá</span>
+              <p>{s.why}</p>
+            </div>
           </div>
-        )}
+        ))}
       </main>
 
-      {/* FOOTER INFO */}
-      <footer className="bg-stone-900 text-white py-20 px-6">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
-          <div>
-            <Scissors className="text-[#8e734b] mb-4 mx-auto md:mx-0" size={32} />
-            <h4 className="font-serif text-2xl italic mb-4">Garantía Naamá</h4>
-            <p className="text-stone-400 text-sm font-light leading-relaxed uppercase tracking-wider">
-              Cada servicio incluye diagnóstico personalizado y productos de sellado técnico para prolongar los resultados en casa.
-            </p>
-          </div>
-          <div>
-             <Heart className="text-[#8e734b] mb-4 mx-auto md:mx-0" size={32} />
-             <h4 className="font-serif text-2xl italic mb-4">Higiene Clínica</h4>
-             <p className="text-stone-400 text-sm font-light leading-relaxed uppercase tracking-wider">
-               Todos nuestros implementos de manicure y pedicure pasan por esterilización de grado médico para tu total seguridad.
-             </p>
-          </div>
-          <div>
-             <Sparkles className="text-[#8e734b] mb-4 mx-auto md:mx-0" size={32} />
-             <h4 className="font-serif text-2xl italic mb-4">Puntualidad</h4>
-             <p className="text-stone-400 text-sm font-light leading-relaxed uppercase tracking-wider">
-               Tu tiempo es oro. Agendamos bloques exclusivos para que no tengas que esperar y recibas atención 100% dedicada.
-             </p>
-          </div>
-        </div>
-        <div className="mt-20 pt-8 border-t border-stone-800 text-center">
-          <p className="text-[9px] text-stone-500 uppercase tracking-[0.5em]">San Miguel • Arcadia 1297 • Naamá Studio Spa 2025</p>
+      {/* FOOTER */}
+      <footer style={{ backgroundColor: '#0a0a0a', padding: '60px 20px', borderTop: '1px solid #1a1a1a', textAlign: 'center' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px' }}>
+          <div><h4 style={{ color: '#d4af37' }}>Garantía Naamá</h4><p style={{ fontSize: '11px', color: '#666' }}>Diagnóstico personalizado en cada servicio.</p></div>
+          <div><h4 style={{ color: '#d4af37' }}>Higiene Clínica</h4><p style={{ fontSize: '11px', color: '#666' }}>Esterilización de grado médico.</p></div>
+          <div><h4 style={{ color: '#d4af37' }}>Puntualidad</h4><p style={{ fontSize: '11px', color: '#666' }}>Bloques de atención exclusivos.</p></div>
         </div>
       </footer>
-    </div>
-  );
-};
-
-
-
-
-
-<div class="container">
-  <header class="header">
-    <h1>Naamá Studio</h1>
-    <p>Estética & Peluquería Profesional</p>
-  </header>
-
-  <div class="category-section">
-    <div class="category-title">
-      <h2>Peluquería</h2>
-    </div>
-    
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-header">
-          <span class="service-name">Alisado Profesional (Largo)</span>
-          <span class="service-time">3 horas</span>
-        </div>
-        <p class="service-desc">Tratamiento de alisado de alto impacto con sellado de cutícula y eliminación total del frizz.</p>
-        
-        <div class="price-container">
-          <span class="old-price">70.990</span>
-          <span class="new-price">75.000</span>
-        </div>
-        
-        <p class="service-why">"Uso de fórmulas sin formol que cuidan tu salud capilar."</p>
-      </div>
-      </div>
-  </div>
-</div>
-
-
-const categories = ['Todas', ...new Set(servicesData.map(s => s.cat))];
-
-  const filteredServices = activeFilter === 'Todas' 
-    ? servicesData 
-    : servicesData.filter(s => s.cat === activeFilter);
-
-  return (
-    <div className="naama-wrapper">
-      {/* CSS INTEGRADO DENTRO DEL JSX */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        .naama-wrapper {
-          background-color: #000000;
-          color: #ffffff;
-          font-family: 'Inter', -apple-system, sans-serif;
-          min-height: 100vh;
-          padding: 40px 20px;
-        }
-
-        .tarifario-header {
-          margin-bottom: 40px;
-        }
-
-        .tarifario-header h1 {
-          font-size: 32px;
-          font-weight: 800;
-          margin: 0 0 15px 0;
-          letter-spacing: -1px;
-        }
-
-        .tarifario-header p {
-          font-size: 14px;
-          color: #e0e0e0;
-          line-height: 1.6;
-          max-width: 800px;
-        }
-
-        .tarifario-header strong {
-          color: #fff;
-          font-weight: 600;
-        }
-
-        /* Buscador de Categorías (Pills) */
-        .filter-container {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-          margin-bottom: 50px;
-        }
-
-        .filter-pill {
-          background-color: #ffffff;
-          color: #000000;
-          border: none;
-          padding: 6px 16px;
-          border-radius: 20px;
-          font-size: 12px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: transform 0.2s, opacity 0.2s;
-          text-transform: capitalize;
-        }
-
-        .filter-pill:hover {
-          transform: scale(1.05);
-        }
-
-        .filter-pill.active {
-          background-color: #d4af37; /* Dorado para resaltar la activa si deseas */
-          color: #fff;
-        }
-
-        /* Bloques de Servicio */
-        .service-entry {
-          margin-bottom: 60px;
-          max-width: 700px;
-        }
-
-        .cat-tag {
-          color: #888;
-          font-size: 14px;
-          font-weight: 400;
-          display: block;
-          margin-bottom: 5px;
-        }
-
-        .service-name {
-          font-size: 24px;
-          font-weight: 800;
-          margin: 0 0 15px 0;
-          display: block;
-        }
-
-        .meta-info {
-          font-size: 14px;
-          color: #fff;
-          margin-bottom: 20px;
-        }
-
-        .meta-info span {
-          display: block;
-          margin-bottom: 4px;
-        }
-
-        /* Precios */
-        .price-section {
-          margin-bottom: 25px;
-        }
-
-        .price-old {
-          display: block;
-          color: #ffffff;
-          font-size: 16px;
-          margin-bottom: 2px;
-        }
-
-        .price-current {
-          display: block;
-          font-size: 20px;
-          font-weight: 800;
-        }
-
-        /* Textos de Valor */
-        .desc-block {
-          margin-top: 25px;
-        }
-
-        .desc-title {
-          font-size: 14px;
-          font-weight: 700;
-          display: block;
-          margin-bottom: 8px;
-        }
-
-        .desc-content {
-          font-size: 14px;
-          color: #bbbbbb;
-          line-height: 1.5;
-          display: block;
-          margin-bottom: 25px;
-        }
-
-        /* WhatsApp Button */
-        .wa-button {
-          position: fixed;
-          bottom: 30px;
-          right: 30px;
-          background-color: #25d366;
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-      `}} />
-
-      <header className="tarifario-header">
-        <h1>Tarifario de Valor 2025</h1>
-        <p>
-          Nuestra actualización de precios refleja el compromiso con el uso de <strong>insumos premium internacionales</strong>, tecnología de vanguardia y la constante <strong>especialización de nuestro equipo</strong>.
-        </p>
-      </header>
-
-      <div className="filter-container">
-        {categories.map(cat => (
-          <button 
-            key={cat} 
-            className={`filter-pill ${activeFilter === cat ? 'active' : ''}`}
-            onClick={() => setActiveFilter(cat)}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
-      <main>
-        {filteredServices.map((service, index) => (
-          <div key={index} className="service-entry">
-            <span className="cat-tag">{service.cat}</span>
-            <span className="service-name">{service.name}</span>
-
-            <div className="meta-info">
-              <span>👤 {service.worker}</span>
-              <span>🕒 {service.time}</span>
-            </div>
-
-            <div className="price-section">
-              {service.old !== "---" && <span className="price-old">${service.old}</span>}
-              <span className="price-current">${service.price}</span>
-            </div>
-
-            <div className="desc-block">
-              <span className="desc-title">¿De qué trata?</span>
-              <span className="desc-content">{service.desc}</span>
-
-              <span className="desc-title">Valor Naamá:</span>
-              <span className="desc-content">{service.why}</span>
-            </div>
-          </div>
-        ))}
-      </main>
-
-      <a href="https://wa.me/tu-numero" className="wa-button" target="_blank" rel="noopener noreferrer">
-        <span style={{fontSize: '24px'}}>💬</span>
-      </a>
     </div>
   );
 };

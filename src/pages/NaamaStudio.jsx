@@ -130,18 +130,35 @@ export default function NaamaStudioLuxury() {
 
             {/* Lista de Precios */}
             <div className="services-grid fade-in" key={activeCategory}>
-                {servicesData[activeCategory].map((item, index) => (
-                    <div key={index} className="service-card">
-                        <div className="s-info">
-                            <h4 className="s-name">{item.name}</h4>
-                            {item.desc && <p className="s-desc">{item.desc}</p>}
-                        </div>
-                        <div className="s-price">
-                            {item.price}
-                        </div>
-                    </div>
-                ))}
+    {servicesData[activeCategory].map((item, index) => (
+        <div key={index} className="service-card-lux">
+            <div className="s-main-info">
+                <div className="s-header-row">
+                    <h4 className="s-name">
+                        {item.name}
+                        {item.tag && <span className="s-badge">{item.tag}</span>}
+                    </h4>
+                    <span className="s-price">{item.price}</span>
+                </div>
+                
+                {item.desc && <p className="s-desc">{item.desc}</p>}
+                
+                <div className="s-meta">
+                    {item.worker && (
+                        <span className="s-worker">
+                            <Star size={12} className="icon-gold" /> {item.worker}
+                        </span>
+                    )}
+                    {item.time && (
+                        <span className="s-time">
+                            <Clock size={12} /> {item.time}
+                        </span>
+                    )}
+                </div>
             </div>
+        </div>
+    ))}
+</div>
 
             <div className="book-cta-container">
                 <p className="cta-note">* Precios sujetos a evaluación según largo y volumen del cabello.</p>
@@ -199,120 +216,95 @@ export default function NaamaStudioLuxury() {
 // --- DATA ---
 const categories = [
     { id: 'peluqueria', label: 'Peluquería & Color' },
-    { id: 'tratamientos', label: 'Tratamientos' },
-    { id: 'manos', label: 'Manos & Pies' },
-    { id: 'mirada', label: 'Pestañas & Cejas' },
-    { id: 'depi_mujer', label: 'Depilación Dama' },
-    { id: 'depi_hombre', label: 'Depilación Varón' },
-    { id: 'estetica', label: 'Estética & Masajes' },
+    { id: 'tratamientos', label: 'Tratamientos Capilares' },
+    { id: 'manos_pies', label: 'Manicura & Pedicura' },
+    { id: 'estetica_masajes', label: 'Estética & Masajes' },
+    { id: 'depilacion', label: 'Depilación Dama' },
+    { id: 'podologia', label: 'Podología Clínica' },
+    { id: 'adicionales', label: 'Adicionales & Estilo' },
 ];
 
 const servicesData = {
     peluqueria: [
-        { name: "Corte de Dama", price: "$15.990", desc: "Asesoría y styling" },
-        { name: "Corte de Varón", price: "$12.990" },
-        { name: "Corte + Bordado", price: "$25.990", desc: "Eliminación de horquillas" },
-        { name: "Brushing", price: "$15.990" },
-        { name: "Brushing Adicional", price: "$5.990", desc: "Al realizar otro servicio" },
-        { name: "Plancha Adicional", price: "$3.990" },
-        { name: "Balayage Tradicional", price: "$70.990 - $85.990", desc: "Según largo. Sin crecimiento." },
-        { name: "Babylights", price: "$75.990 - $90.990", desc: "Según largo. Sin crecimiento." },
-        { name: "Mecha Tradicional (Papel)", price: "$70.990 - $85.990", desc: "Según largo. Sin crecimiento." },
-        { name: "Mechas con Gorro", price: "$65.990 - $80.990", desc: "Según largo. Sin crecimiento." },
-        { name: "Color Global (Tinte)", price: "$40.990 - $55.990", desc: "Según largo" },
-        { name: "Baño de Color", price: "$35.990 - $45.990", desc: "Para revivir el tono" },
-        { name: "Crecimiento (Raíz)", price: "$25.990" },
-        { name: "Baño de Color + Crecimiento", price: "$49.990" },
-        { name: "Fondo para Mechas", price: "$44.990" },
-        { name: "Alisado Prof. Corto", price: "$50.990", desc: "Poco cabello" },
-        { name: "Alisado Prof. Medio", price: "$60.990", desc: "Hasta broche sostén" },
-        { name: "Alisado Prof. Largo", price: "$70.990" },
-        { name: "Alisado Extra Largo/Volumen", price: "$78.990" },
-        { name: "Botox Capilar", price: "$35.990 - $50.990", desc: "Hidratación profunda, según largo" },
+        { name: "Corte de Dama", price: "$16.000", worker: "Cami, Valeria, Vivy", time: "45 min" },
+        { name: "Corte de Varón", price: "$13.000", worker: "Vivy, Cami", time: "45 min" },
+        { name: "Corte + Bordado", price: "$28.000", worker: "Cami, Valeria", time: "1.5 hr" },
+        { name: "Crecimiento (Raíz)", price: "$30.000", worker: "Cami, Valeria", time: "40 min" },
+        { name: "Color Global Tinte", price: "Desde $45.000", desc: "Desde $45k (Corto) a $72k (X-Largo)", worker: "Cami, Valeria" },
+        { name: "Balayage Tradicional", price: "Desde $85.000", desc: "Técnica de autor. Hasta $100k X-Largo", worker: "Cami, Valeria" },
+        { name: "Babylights Premium", price: "Desde $85.000", desc: "Efecto rubio total. Hasta $100k X-Largo", worker: "Cami, Valeria" },
+        { name: "Mechas Papel", price: "Desde $85.000", desc: "Máxima precisión. Hasta $120k X-Largo", worker: "Cami, Valeria" },
+        { name: "Mechas con Gorro", price: "Desde $75.000", desc: "Desde $75k a $105k X-Largo", worker: "Cami, Valeria" },
+        { name: "Alisado Profesional", price: "Desde $55.990", desc: "Liso espejo. Hasta $85k X-Largo/Volumen", worker: "Cami, Valeria" },
+        { name: "Botox Capilar", price: "Desde $38.000", desc: "Hidratación profunda. Hasta $60k X-Largo", worker: "Cami, Valeria" },
+        { name: "Camuflaje de Canas (Varón)", price: "$18.000", worker: "Vivy, Cami, Valeria" },
+        { name: "Cauterización de Puntas", price: "$15.000", desc: "Sellado térmico sin corte", worker: "Valeria, Cami" },
+        { name: "Omniplex", price: "$10.000", desc: "Protección en procesos de color", worker: "Equipo", tag: "MUST" }
     ],
     tratamientos: [
-        { name: "Lavado Base + Secado", price: "$10.990" },
-        { name: "Lavado Nutritivo", price: "$8.990", desc: "Solo lavado" },
-        { name: "Lavado Nutritivo + Secado", price: "$13.990" },
-        { name: "Tratamiento Capilar TIGI", price: "$22.990" },
-        { name: "Tratamiento Línea SOW", price: "$35.990" },
-        { name: "Tratamiento Sebastian Penetraitt", price: "$31.990", desc: "Reconstrucción profunda" },
-        { name: "Tratamiento Green Zoho", price: "$27.990", desc: "Especial cabello ondulado" },
-        { name: "Ampolla Nutritiva", price: "$12.990" },
+        { name: "Tratamiento SOW", price: "$36.000", desc: "Línea Orgánica Premium", worker: "Equipo", tag: "BEST" },
+        { name: "Tratamiento Sebastian", price: "$27.990", desc: "Reconstrucción Penetraitt", worker: "Equipo" },
+        { name: "Tratamiento Wella", price: "$28.000", worker: "Equipo" },
+        { name: "Tratamiento Green Soho", price: "$27.990", worker: "Equipo" },
+        { name: "Tratamiento TIGI", price: "$22.990", worker: "Equipo" },
+        { name: "Detox Cuero Cabelludo", price: "$15.000", worker: "Equipo" },
+        { name: "Detox + Alta Frecuencia", price: "$22.000", worker: "Equipo", time: "30 min" },
+        { name: "Lavado + Secado", price: "$14.000", worker: "Equipo" },
+        { name: "Nutritivo Express", price: "$10.000", worker: "Equipo" },
+        { name: "Ampolla Rescate", price: "$12.000", worker: "Equipo" }
     ],
-    manos: [
-        { name: "Esmaltado Permanente", price: "$20.990" },
-        { name: "Degradado o Francesa", price: "$21.990", desc: "Permanente" },
-        { name: "Extensión Soft Gel", price: "Desde $35.990" },
-        { name: "Baño de PolyGel", price: "$31.990" },
-        { name: "Capping Rubber", price: "$25.990" },
-        { name: "Retiro Esmalte Permanente", price: "$3.990" },
-        { name: "Retiro Acrílico/SoftGel", price: "$12.990" },
-        { name: "Diseño Mano Alzada", price: "$1.490 c/u" },
-        { name: "Decoraciones", price: "$990 c/u" },
-        { name: "Parche de Uñas", price: "$2.990" },
-        { name: "Exfoliación", price: "$3.990" },
-        { name: "Pedicure Permanente", price: "$24.990" },
-        { name: "Pedicure Spa", price: "$17.990" },
-        { name: "Pedicure Tradicional", price: "$14.990" },
+    manos_pies: [
+        { name: "Esmaltado Permanente", price: "$19.990", worker: "Gaby", time: "1 hr" },
+        { name: "Degradado o Francesa", price: "$25.990", worker: "Gaby", time: "1.1 hr" },
+        { name: "Baño de PolyGel", price: "$34.990", worker: "Gaby", time: "1 hr" },
+        { name: "Capping Rubber", price: "$28.990", worker: "Gaby", time: "1 hr" },
+        { name: "Extensión Soft Gel", price: "$42.990", worker: "Gaby", time: "2 hr" },
+        { name: "Esculpidas Polygel", price: "$39.990", worker: "Gaby", time: "2.5 hr" },
+        { name: "Pedicure Permanente", price: "$27.990", worker: "Gaby", time: "50 min" },
+        { name: "Pedicure Spa", price: "$35.000", worker: "Gaby", time: "1.1 hr" },
+        { name: "Esmaltado de Niñas", price: "$8.000", worker: "Gaby", tag: "MINI" },
+        { name: "Baño Parafina Caliente", price: "$8.000", desc: "Manos o Pies", worker: "Gaby" },
+        { name: "Manicura Express Varón", price: "$12.000", worker: "Gaby" },
+        { name: "Esmaltado Tradicional", price: "$8.000", desc: "Solo cambio color", worker: "Gaby" }
     ],
-    mirada: [
-        { name: "Lifting de Pestañas", price: "$24.990" },
-        { name: "Ondulación de Pestañas", price: "$23.990" },
-        { name: "Lifting de Cejas", price: "$8.990" },
-        { name: "Perfilado de Cejas", price: "$5.990" },
-        { name: "Depilación Entre Ceja", price: "$1.000" },
+    estetica_masajes: [
+        { name: "Limpieza Facial Profunda", price: "$36.000", worker: "Vivy", time: "1 hr" },
+        { name: "Limpieza Facial Media", price: "$30.000", worker: "Vivy", time: "45 min" },
+        { name: "Limpieza Facial Básica", price: "$20.000", worker: "Vivy", time: "35 min" },
+        { name: "BB Glow", price: "$39.000", worker: "Vivy", time: "1 hr" },
+        { name: "BB Lips", price: "$28.000", worker: "Vivy", time: "45 min" },
+        { name: "Fibroblast", price: "$28.000", desc: "Desde según zona", worker: "Vivy" },
+        { name: "Masaje Descontracturante", price: "$26.000", worker: "Vivy", time: "55 min" },
+        { name: "Masaje de Relajación", price: "$26.000", worker: "Vivy", time: "55 min" },
+        { name: "Masaje Reductivo", price: "$45.000", worker: "Vivy", time: "1.2 hr" },
+        { name: "Pack 6 Sesiones Reductivo", price: "$195.000", worker: "Vivy" },
+        { name: "Reflexología", price: "$30.000", worker: "Vivy", time: "35 min" },
+        { name: "Masaje Mandíbula (Bruxismo)", price: "$12.000", worker: "Vivy" },
+        { name: "Masaje Craneal y Cuello", price: "$10.000", worker: "Vivy" },
+        { name: "Inyección de Bienestar", price: "$80.000", worker: "Vivy", tag: "VIP" }
     ],
-    depi_mujer: [
-        { name: "Rostro Completo", price: "$10.990", desc: "Frente, mentón, mejillas, bozo" },
-        { name: "Bozo", price: "$2.990" },
-        { name: "Mentón", price: "$2.990" },
-        { name: "Patillas", price: "$2.990" },
-        { name: "Cuello", price: "$2.990" },
-        { name: "Axilas", price: "$4.990" },
-        { name: "Brazos Completos", price: "$13.990" },
-        { name: "Medios Brazos", price: "$5.990" },
-        { name: "Piernas Completas", price: "$15.990" },
-        { name: "Medias Piernas", price: "$6.990" },
-        { name: "Rebaje Completo", price: "$16.990" },
-        { name: "Rebaje Largo", price: "$8.990" },
-        { name: "Rebaje Bikini", price: "$6.990" },
-        { name: "Abdomen Completo", price: "$7.990" },
-        { name: "Abdomen Bajo", price: "$5.990" },
-        { name: "Espalda Alta o Baja", price: "$6.990 c/u" },
-        { name: "Glúteos", price: "$5.990" },
-        { name: "Hombros", price: "$5.990" },
-        { name: "Tira Interglútea", price: "$1.990" },
-        { name: "Tapón Nariz/Orejas", price: "$1.990 c/u" },
+    depilacion: [
+        { name: "Piernas Completas", price: "$19.000", worker: "Gaby", time: "25 min" },
+        { name: "Rebaje Completo", price: "$20.000", worker: "Gaby", time: "25 min" },
+        { name: "Rostro Completo", price: "$14.000", worker: "Gaby", time: "15 min" },
+        { name: "Axilas", price: "$7.000", worker: "Gaby", time: "5 min" },
+        { name: "Brazos Completos", price: "$16.000", worker: "Gaby", time: "10 min" },
+        { name: "Lifting de Pestañas", price: "$26.000", worker: "Gaby", time: "45 min" },
+        { name: "Laminado de Cejas", price: "$15.000", worker: "Gaby" },
+        { name: "Perfilado de Cejas", price: "$9.000", worker: "Gaby" }
     ],
-    depi_hombre: [
-        { name: "Piernas Completas", price: "$18.990" },
-        { name: "Medias Piernas", price: "$9.990" },
-        { name: "Pecho Completo", price: "$10.990" },
-        { name: "Abdomen", price: "$8.990" },
-        { name: "Abdomen Bajo", price: "$6.990" },
-        { name: "Espalda (Varía)", price: "Consultar" },
-        { name: "Rostro", price: "$18.990" },
-        { name: "Axilas", price: "$5.990" },
-        { name: "Orejas", price: "$2.990" },
-        { name: "Rebaje", price: "$23.990" },
+    podologia: [
+        { name: "Podología Clínica Avanzada", price: "$25.000", worker: "Michelle", time: "1.2 hr" },
+        { name: "Podología Clínica Básica", price: "$20.000", worker: "Michelle", time: "40 min" }
     ],
-    estetica: [
-        { name: "Limpieza Facial Profunda", price: "$35.990" },
-        { name: "Limpieza Facial Media", price: "$29.990" },
-        { name: "Limpieza Facial Básica", price: "$19.990" },
-        { name: "BB Glow", price: "$35.990", desc: "Piel de porcelana" },
-        { name: "BB Lips", price: "$19.990", desc: "Hidratación y color labios" },
-        { name: "Fibroblast", price: "$25.990", desc: "Precio depende de zona" },
-        { name: "Hilos de Colágeno", price: "$9.990" },
-        { name: "Pack 6 Masajes Reductivos", price: "$189.990" },
-        { name: "Masaje Reductivo (1 sesión)", price: "$39.990" },
-        { name: "Drenaje Linfático", price: "$25.990" },
-        { name: "Drenaje Linfático + Aparatología", price: "$95.990" },
-        { name: "Masaje Relajación", price: "$25.990" },
-        { name: "Masaje Descontracturante", price: "$25.990" },
-        { name: "Reflexología", price: "$25.990" },
-        { name: "Auriculoterapia", price: "$10.990" },
+    adicionales: [
+        { name: "Maquillaje Profesional", price: "$30.000", worker: "Allison", time: "2 hr" },
+        { name: "Peinado Avanzado", price: "Desde $32.000", worker: "Allison, Cami, Valeria" },
+        { name: "Brushing Largo", price: "$13.000", worker: "Peluquería", time: "25 min" },
+        { name: "Brushing Medio", price: "$10.000", worker: "Peluquería", time: "20 min" },
+        { name: "Brushing Corto", price: "$7.000", worker: "Peluquería", time: "15 min" },
+        { name: "Plancha Adicional", price: "$5.000", worker: "Peluquería", time: "30 min" },
+        { name: "Maquillaje de Cejas", price: "$4.000", worker: "Allison" }
     ]
 };
 
@@ -589,5 +581,48 @@ h1, h2, h3, .hero-subtitle, .section-tag, .quote, .nav-logo {
     .brand-block, .f-block { display: flex; flex-direction: column; align-items: center; }
     .categories-scroll { justify-content: flex-start; }
     .hero-actions { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
+}.service-card-lux {
+    background: rgba(255, 255, 255, 0.03);
+    border-left: 2px solid var(--accent);
+    padding: 20px;
+    transition: all 0.3s ease;
+    border-radius: 0 4px 4px 0;
 }
+
+.service-card-lux:hover {
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateX(10px);
+    box-shadow: -5px 5px 20px rgba(0,0,0,0.2);
+}
+
+.s-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.s-badge {
+    background: var(--accent);
+    color: var(--dark-bg);
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-left: 10px;
+    font-weight: 800;
+    vertical-align: middle;
+}
+
+.s-meta {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.s-worker { display: flex; align-items: center; gap: 5px; color: #bbb; }
+.s-time { display: flex; align-items: center; gap: 5px; }
 `;

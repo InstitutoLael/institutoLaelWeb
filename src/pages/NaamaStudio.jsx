@@ -523,7 +523,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Manicure", 
       old: "31.990", 
-      price: "34.990", 
+      price: "31.000", 
       time: "1 hora", 
       desc: "Capa de refuerzo híbrida sobre la uña natural para aportar máxima dureza y evitar quiebres.", 
       why: "Uso de polímeros de alta resistencia que permiten mantener el largo natural sin riesgo de rupturas por hasta 21 días." 
@@ -533,7 +533,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Manicure", 
       old: "25.990", 
-      price: "28.990", 
+      price: "26.000", 
       time: "1 hora", 
       desc: "Base niveladora flexible que corrige imperfecciones de la uña y aporta una estructura ultra natural.", 
       why: "Técnica de nivelación que protege uñas débiles o escamadas, permitiendo un crecimiento sano y estético." 
@@ -573,7 +573,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Manicure", 
       old: "20.990", 
-      price: "19.990", 
+      price: "21.000", 
       time: "1 hora", 
       desc: "Limpieza profunda de cutículas y color con curado en lámpara LED de larga duración.", 
       why: "Ajuste de tarifa preferencial para nuestras clientas frecuentes, manteniendo el estándar de calidad y brillo." 
@@ -583,7 +583,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Manicure", 
       old: "21.990", 
-      price: "25.990", 
+      price: "23.000", 
       time: "1.2 horas", 
       desc: "Técnica de diseño clásico o transición de color (Ombré) con acabado perfecto.", 
       why: "Requiere mayor tiempo de ejecución técnica para lograr líneas de sonrisa precisas y difuminados sin vetas." 
@@ -613,7 +613,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Manicure", 
       old: "2.990", 
-      price: "3.000", 
+      price: "3.500", 
       time: "10 min", 
       desc: "Reparación técnica de una uña natural fisurada o quebrada.", 
       why: "Uso de seda o gel de reparación para salvar el largo de la uña sin necesidad de cortarla." 
@@ -653,7 +653,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Manicure", 
       old: "---", 
-      price: "8.000", 
+      price: "10.000", 
       time: "30 min", 
       desc: "Limpieza suave y esmaltado con colores vibrantes para las más pequeñas.", 
       why: "Uso de productos amigables y técnica delicada para una experiencia spa divertida y segura." 

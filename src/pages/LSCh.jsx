@@ -1,7 +1,8 @@
 import { useMemo, useRef, useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; // Agregamos useNavigate
+import { useLocation } from "react-router-dom"; 
 
 // --- IMPORTACIÓN DE DATOS ---
+// Asegúrate de que la ruta sea correcta
 import {
   ENROLLMENT_FEE as LSCH_ENROLLMENT_FEE,
   ENROLLMENT_LABEL,
@@ -16,9 +17,6 @@ import {
 // --- ASSETS ---
 import senasImg from "../assets/img/lael/senas.jpg"; 
 
-// SI TIENES UN CONTEXTO DE CARRITO, IMPORTALO AQUÍ:
-// import { useCart } from "../context/CartContext"; 
-
 const CERTIFICATE_FEE = 19990;
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -31,7 +29,7 @@ const Icons = {
   Briefcase: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
   Users: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
   Award: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>,
-  Cart: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+  Whatsapp: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -144,14 +142,14 @@ a { text-decoration: none; color: inherit; transition: 0.2s; }
 .pay-today-box { background: rgba(20, 184, 166, 0.1); border: 1px solid var(--primary); border-radius: 12px; padding: 15px; text-align: center; margin: 20px 0; }
 .pay-today-box span { font-size: 0.8rem; text-transform: uppercase; color: var(--primary); font-weight: 700; }
 .pay-today-box strong { display: block; font-size: 1.4rem; color: white; margin-top: 5px; }
-.btn-checkout { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; background: var(--primary); color: #000; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; transition: 0.3s; }
+.btn-checkout { text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; background: var(--primary); color: #000; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; transition: 0.3s; }
 .btn-checkout:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(20, 184, 166, 0.4); }
 
 /* Mobile */
 .mobile-bar { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; background: rgba(2, 4, 10, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
 .mb-info small { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; }
 .mb-info strong { font-size: 1.3rem; color: white; }
-.btn-mb { background: var(--primary); color: #000; font-weight: 800; padding: 10px 24px; border-radius: 50px; font-size: 0.9rem; }
+.btn-mb { text-decoration: none; background: var(--primary); color: #000; font-weight: 800; padding: 10px 24px; border-radius: 50px; font-size: 0.9rem; }
 
 @media (max-width: 968px) {
   .hero-grid { grid-template-columns: 1fr; text-align: center; }
@@ -166,30 +164,17 @@ a { text-decoration: none; color: inherit; transition: 0.2s; }
 `;
 
 /* ──────────────────────────────────────────────────────────────────────────
-   3. COMPONENTES HELPER
-   ────────────────────────────────────────────────────────────────────────── */
-function SEOHead({ title, description }) {
-  useEffect(() => {
-    document.title = title;
-  }, [title]);
-  return null;
-}
-
-/* ──────────────────────────────────────────────────────────────────────────
-   4. LOGICA PRINCIPAL
+   3. LOGICA PRINCIPAL
    ────────────────────────────────────────────────────────────────────────── */
 export default function LSCh() {
   const [church, setChurch] = useState(false);
-  const [selectedGroupId, setSelectedGroupId] = useState("g-quarter"); // Default a trimestral (Matrícula Gratis)
+  const [selectedGroupId, setSelectedGroupId] = useState("g-quarter"); 
   const [selectedOneId, setSelectedOneId] = useState(null);
   const [selectedModules, setSelectedModules] = useState(["nivel-1"]);
   const [certSelected, setCertSelected] = useState(false);
-  const [isAdding, setIsAdding] = useState(false); // Estado para feedback visual del botón
   
   const pricingRef = useRef(null);
   const location = useLocation();
-  const navigate = useNavigate();
-  // const { addItem } = useCart(); // DESCOMENTAR SI USAS CART CONTEXT
 
   useEffect(() => { window.scrollTo(0, 0); }, [location.pathname]);
 
@@ -215,50 +200,38 @@ export default function LSCh() {
 
   const toggleModule = (id) => {
     setSelectedModules(prev => {
-      // Evitar deseleccionar el último módulo (UX Safety)
       if(prev.includes(id) && prev.length === 1) return prev; 
       return prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
     });
   };
 
   /* ──────────────────────────────────────────────────────────────────────────
-     LÓGICA DE AGREGAR AL CARRITO / INSCRIPCIÓN
+     LÓGICA DE WHATSAPP
      ────────────────────────────────────────────────────────────────────────── */
-  const handleAddToCart = () => {
-    setIsAdding(true);
+  const generateWaLink = () => {
+    const planName = groupPlan.title;
+    const profile = church ? "Convenio Iglesia/Min" : "Estudiante General";
+    
+    // Crear lista de extras
+    let extrasText = "";
+    if (certSelected) extrasText += "• Certificación Oficial%0A";
+    if (onePlan) extrasText += `• Refuerzo 1:1 (${onePlan.title})%0A`;
+    if (!certSelected && !onePlan) extrasText = "• Ninguno%0A";
 
-    // 1. Estructuramos el producto para que tu Carrito/Checkout lo entienda
-    const productData = {
-        id: `lsch-${groupPlan.id}-${church ? 'church' : 'std'}`, // ID Único
-        name: `Curso Profesional LSCh - ${groupPlan.title}`,
-        price: totalFirstPayment, // Precio que pagará hoy
-        recurrence: 'monthly', // Para indicar que es suscripción (si aplica)
-        recurringPrice: totalMonthly, // Precio recurrente
-        image: senasImg,
-        details: {
-            planId: groupPlan.id,
-            isChurch: church,
-            modules: selectedModules,
-            certification: certSelected ? CERTIFICATE_FEE : 0,
-            oneOnOneId: selectedOneId,
-            enrollmentWaived: isEnrollmentWaived
-        }
-    };
-
-    console.log("🛒 Agregando al carrito:", productData);
-
-    // 2. Simulamos un pequeño delay y navegación (Aquí iría tu `addItem(productData)`)
-    setTimeout(() => {
-        // addItem(productData); // <--- DESCOMENTAR ESTO CUANDO TENGAS EL CONTEXTO
-        setIsAdding(false);
-        // Redirigir al Checkout o Carrito
-        navigate('/checkout'); 
-    }, 600);
+    // Mensaje formateado
+    const msg = `Hola! 👋 Me gustaría inscribirme en el *Curso de LSCh*:%0A%0A` +
+                `• Plan: ${planName}%0A` +
+                `• Perfil: ${profile}%0A` +
+                `• Extras:%0A${extrasText}%0A` +
+                `Total a pagar hoy: ${clp(totalFirstPayment)}%0A` +
+                `(Incluye matrícula: ${isEnrollmentWaived ? 'GRATIS' : clp(enrollmentCost)})%0A%0A` +
+                `¿Me indican los pasos para finalizar?`;
+    
+    return `https://wa.me/56964626568?text=${msg}`;
   };
 
   return (
     <div className="lsch-page">
-      <SEOHead title="Curso Profesional de LSCh | Instituto Lael" description="Lengua de Señas Chilena con docentes sordas." />
       <style>{css}</style>
 
       {/* Luces de Fondo */}
@@ -292,7 +265,6 @@ export default function LSCh() {
 
             <div className="hero-visual">
                 <div className="image-frame">
-                    {/* Fallback por si la imagen no carga */}
                     {senasImg ? (
                         <img src={senasImg} alt="Clase LSCh" width="600" height="400" loading="eager" />
                     ) : (
@@ -444,16 +416,10 @@ export default function LSCh() {
                     </small>
                 </div>
 
-                {/* BOTON DE ACCIÓN REAL */}
-                <button onClick={handleAddToCart} disabled={isAdding} className="btn-checkout">
-                    {isAdding ? (
-                        "Procesando..."
-                    ) : (
-                        <>
-                            Inscribirme Ahora <Icons.Cart/>
-                        </>
-                    )}
-                </button>
+                {/* BOTON DE ACCIÓN - WHATSAPP DIRECTO */}
+                <a href={generateWaLink()} target="_blank" rel="noreferrer" className="btn-checkout">
+                    Inscribirme Ahora <Icons.Whatsapp/>
+                </a>
             </div>
         </div>
 
@@ -465,9 +431,9 @@ export default function LSCh() {
              <small>Primer pago hoy</small>
              <strong>{clp(totalFirstPayment)}</strong>
          </div>
-         <button onClick={handleAddToCart} disabled={isAdding} className="btn-mb">
-            {isAdding ? "..." : "Inscribirme"}
-         </button>
+         <a href={generateWaLink()} target="_blank" rel="noreferrer" className="btn-mb">
+            Inscribirme
+         </a>
       </div>
 
     </div>

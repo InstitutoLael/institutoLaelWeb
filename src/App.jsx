@@ -2,10 +2,12 @@
 import { useEffect, useState, Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 
+// 1. IMPORTAR EL PROVEEDOR DEL CARRITO (¡ESTO FALTABA!)
+import { CartProvider } from "./context/CartContext";
+
 /* ---------- Páginas (Lazy Loading) ---------- */
-// Asegúrate de que los nombres de archivo coincidan exactamente (mayúsculas/minúsculas)
 const Home = lazy(() => import("./pages/Home.jsx"));
-const PAES = lazy(() => import("./pages/PAES.jsx")); // O Paes.jsx
+const PAES = lazy(() => import("./pages/PAES.jsx")); 
 const LSCh = lazy(() => import("./pages/LSCh.jsx"));
 const Idiomas = lazy(() => import("./pages/Idiomas.jsx"));
 const Empresas = lazy(() => import("./pages/Empresas.jsx"));
@@ -21,7 +23,6 @@ const Docentes = lazy(() => import("./pages/Docentes.jsx"));
 const Aula = lazy(() => import("./pages/Aula.jsx"));
 
 /* --- Conversión y Legal --- */
-// NOTA: Si tu archivo se llama "Inscripciones.jsx", ajusta la línea de abajo:
 const Inscripcion = lazy(() => import("./pages/Inscripcion.jsx")); 
 const Gracias = lazy(() => import("./pages/Gracias.jsx")); 
 const Terminos = lazy(() => import("./pages/Terminos.jsx"));
@@ -40,7 +41,6 @@ import Footer from "./components/Footer.jsx";
 import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx"; 
 import SearchOverlay from "./components/SearchOverlay.jsx"; 
-// 1. Importamos el Botón del Carrito
 import CartButton from "./components/CartButton.jsx";
 
 export default function App() {
@@ -59,7 +59,9 @@ export default function App() {
   }, []);
 
   return (
-    <>
+    // 2.ENVOLVEMOS TODO CON EL CARTPROVIDER (¡ESTO FALTABA!)
+    <CartProvider>
+      
       {/* Inyectamos estilos globales */}
       <style>{globalCss}</style>
 
@@ -116,13 +118,10 @@ export default function App() {
       <Footer />
       
       {/* --- ELEMENTOS FLOTANTES --- */}
-      
-      {/* 2. AQUÍ AGREGAMOS EL BOTÓN DEL CARRITO */}
       <CartButton />
-      
-      {/* Botón WhatsApp */}
       <FloatingWhatsApp />
-    </>
+
+    </CartProvider> 
   );
 }
 

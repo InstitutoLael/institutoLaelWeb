@@ -27,7 +27,7 @@ import senasImg from "../assets/img/lael/senas.jpg";
 const CERTIFICATE_FEE = 19990;
 
 /* ==========================================================================
-   1. ESTILOS CSS (DARK MODE PREMIUM)
+   ESTILOS CSS (DARK MODE PREMIUM + MODAL FIX)
    ========================================================================== */
 const css = `
 :root {
@@ -51,7 +51,7 @@ const css = `
   min-height: 100vh;
   padding-bottom: 140px;
   overflow-x: hidden;
-  position: relative; /* Contexto relativo base */
+  position: relative;
 }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
@@ -59,6 +59,24 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
 
 /* ANIMACIONES */
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* --- NUEVO: ESTILOS DEL MODAL OVERLAY --- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.75); /* Fondo oscuro transparente */
+  backdrop-filter: blur(8px); /* Efecto Blur */
+  z-index: 10000; /* Encima de TODO */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
 
 /* HERO SECTION */
 .hero {
@@ -66,7 +84,6 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
   padding: 140px 0 80px;
   border-bottom: 1px solid var(--border);
   background: radial-gradient(circle at top right, #112a38 0%, transparent 40%);
-  z-index: 1;
 }
 .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
 
@@ -103,7 +120,6 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
   position: relative; padding: 15px; border-radius: 30px;
   background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
   box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-  z-index: 2;
 }
 .img-wrapper img {
   width: 100%; border-radius: 20px; display: block;
@@ -119,7 +135,7 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
 }
 
 /* STEPS & BUILDER */
-.builder-section { padding: 80px 0; position: relative; z-index: 5; }
+.builder-section { padding: 80px 0; }
 .builder-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
 
 .step-box {
@@ -166,7 +182,6 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
   background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(20px);
   border: 1px solid var(--border); border-radius: var(--radius); padding: 32px;
   box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-  z-index: 40; /* Nivel medio, bajo el modal */
 }
 .sum-row { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 0.95rem; color: var(--text-muted); }
 .sum-row strong { color: white; }
@@ -188,8 +203,7 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
 /* MOBILE BAR */
 .mobile-sticky {
   position: fixed; bottom: 0; left: 0; width: 100%; background: #0f172a;
-  border-top: 1px solid var(--border); padding: 16px 24px; 
-  z-index: 90; /* IMPORTANTE: Menos que el modal (que suele ser 100+) */
+  border-top: 1px solid var(--border); padding: 16px 24px; z-index: 100;
   display: flex; justify-content: space-between; align-items: center;
   box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
 }
@@ -233,14 +247,11 @@ export default function LSCh() {
   const monthlyOne = onePlan?.monthly || 0;
   const totalMonthly = monthlyGroup + monthlyOne;
   
-  // Lógica: Matrícula es gratis si paga trimestral o es Iglesia
   const isEnrollmentWaived = groupPlan.id === "g-quarter" || church;
   const enrollmentCost = isEnrollmentWaived ? 0 : LSCH_ENROLLMENT_FEE;
   
-  // Total a pagar HOY
   const totalFirstPayment = totalMonthly + enrollmentCost + (certSelected ? CERTIFICATE_FEE : 0);
 
-  // Manejador de Módulos (Visual solamente, para dar feedback)
   const toggleModule = (id) => {
     setSelectedModules(prev => prev.includes(id) && prev.length > 1 
       ? prev.filter(x => x !== id) 
@@ -248,15 +259,11 @@ export default function LSCh() {
     );
   };
 
-  // Texto resumen para el form
   const getSelectedDetails = () => {
     let details = `Plan LSCh: ${groupPlan.title} (${church ? "Convenio Iglesia" : "General"})`;
     if (certSelected) details += " + Certificado";
     if (onePlan) details += ` + Refuerzo 1:1 (${onePlan.title})`;
-    
-    // Agregamos el precio mensual futuro para que quede claro en el correo
     details += ` | Pago Hoy: ${clp(totalFirstPayment)} | Mensualidad futura: ${clp(totalMonthly)}`;
-    
     return details;
   };
 
@@ -292,7 +299,6 @@ export default function LSCh() {
 
           <div className="img-wrapper">
              <img src={senasImg} alt="Clase LSCh Online" />
-             {/* Floating Badge */}
              <div className="floating-card">
                 <div style={{background:'rgba(45, 212, 191, 0.2)', padding:10, borderRadius:12, color:'var(--primary)'}}>
                    <Hand size={24} />
@@ -323,20 +329,16 @@ export default function LSCh() {
         </div>
       </div>
 
-      {/* 3. CONFIGURADOR (CORE) */}
+      {/* 3. CONFIGURADOR */}
       <section ref={pricingRef} className="builder-section container">
          <div className="builder-grid">
-            
-            {/* IZQUIERDA: PASOS */}
             <div>
-               
-               {/* STEP 1: PERFIL */}
+               {/* STEP 1 */}
                <div className="step-box">
                   <div className="step-header">
                      <div className="step-num">1</div>
                      <h3>Tu Perfil de Estudiante</h3>
                   </div>
-                  
                   <button className={`option-btn ${!church ? 'active' : ''}`} onClick={() => setChurch(false)}>
                      <div className="option-content">
                         <h4>Estudiante General</h4>
@@ -344,7 +346,6 @@ export default function LSCh() {
                      </div>
                      <div className="toggle-switch"></div>
                   </button>
-
                   <button className={`option-btn ${church ? 'active' : ''}`} onClick={() => setChurch(true)}>
                      <div className="option-content">
                         <h4 style={{display:'flex', alignItems:'center', gap:8}}><Heart size={16} fill="#fbbf24" color="#fbbf24"/> Convenio Iglesia / Fundación</h4>
@@ -354,7 +355,7 @@ export default function LSCh() {
                   </button>
                </div>
 
-               {/* STEP 2: MÓDULOS (VISUAL) */}
+               {/* STEP 2 */}
                <div className="step-box">
                   <div className="step-header">
                      <div className="step-num">2</div>
@@ -392,7 +393,7 @@ export default function LSCh() {
                   </div>
                </div>
 
-               {/* STEP 3: PLAN DE PAGO */}
+               {/* STEP 3 */}
                <div className="step-box">
                   <div className="step-header">
                      <div className="step-num">3</div>
@@ -434,14 +435,12 @@ export default function LSCh() {
                   </div>
                </div>
 
-               {/* STEP 4: EXTRAS */}
+               {/* STEP 4 */}
                <div className="step-box">
                   <div className="step-header">
                      <div className="step-num">4</div>
                      <h3>Opcionales</h3>
                   </div>
-                  
-                  {/* Certificado */}
                   <button className={`option-btn ${certSelected ? 'active' : ''}`} onClick={() => setCertSelected(!certSelected)}>
                      <div className="option-content" style={{display:'flex', gap:12, alignItems:'center'}}>
                         <Award size={24} className={certSelected ? "text-yellow-400" : "text-gray-500"} />
@@ -452,8 +451,6 @@ export default function LSCh() {
                      </div>
                      <span style={{color:'var(--primary)', fontWeight:700}}>+{clp(CERTIFICATE_FEE)}</span>
                   </button>
-
-                  {/* 1:1 Coaching */}
                   <div style={{marginTop:20, padding:20, background:'rgba(0,0,0,0.2)', borderRadius:16}}>
                      <h4 style={{color:'white', marginBottom:10, fontSize:'0.95rem', display:'flex', gap:8, alignItems:'center'}}>
                         <Zap size={16} color="#38bdf8"/> Refuerzo Personalizado 1:1
@@ -481,7 +478,6 @@ export default function LSCh() {
                      </div>
                   </div>
                </div>
-
             </div>
 
             {/* DERECHA: RESUMEN STICKY */}
@@ -493,67 +489,22 @@ export default function LSCh() {
                   </div>
                </div>
 
-               <div className="sum-row">
-                  <span>Plan Seleccionado</span>
-                  <strong>{groupPlan.title}</strong>
-               </div>
-               
-               <div className="sum-row">
-                  <span>Mensualidad Base</span>
-                  <strong>{clp(monthlyGroup)}</strong>
-               </div>
-
-               {church && (
-                  <div className="sum-row" style={{color:'var(--gold)'}}>
-                     <span><Heart size={12} style={{display:'inline'}}/> Beneficio Iglesia</span>
-                     <strong>Aplicado</strong>
-                  </div>
-               )}
-
-               {selectedOneId && (
-                  <div className="sum-row" style={{color:'var(--accent)'}}>
-                     <span>Refuerzo 1:1</span>
-                     <strong>+{clp(monthlyOne)}</strong>
-                  </div>
-               )}
-
+               <div className="sum-row"><span>Plan Seleccionado</span><strong>{groupPlan.title}</strong></div>
+               <div className="sum-row"><span>Mensualidad Base</span><strong>{clp(monthlyGroup)}</strong></div>
+               {church && <div className="sum-row" style={{color:'var(--gold)'}}><span><Heart size={12} style={{display:'inline'}}/> Beneficio Iglesia</span><strong>Aplicado</strong></div>}
+               {selectedOneId && <div className="sum-row" style={{color:'var(--accent)'}}><span>Refuerzo 1:1</span><strong>+{clp(monthlyOne)}</strong></div>}
                <div className="sum-divider"></div>
-
-               <div className="sum-row">
-                  <span>Matrícula 2026</span>
-                  {isEnrollmentWaived ? (
-                     <strong style={{color:'var(--primary)'}}>GRATIS ($0)</strong>
-                  ) : (
-                     <strong>{clp(LSCH_ENROLLMENT_FEE)}</strong>
-                  )}
-               </div>
-
-               {certSelected && (
-                  <div className="sum-row">
-                     <span>Certificado</span>
-                     <strong>{clp(CERTIFICATE_FEE)}</strong>
-                  </div>
-               )}
+               <div className="sum-row"><span>Matrícula 2026</span>{isEnrollmentWaived ? <strong style={{color:'var(--primary)'}}>GRATIS ($0)</strong> : <strong>{clp(LSCH_ENROLLMENT_FEE)}</strong>}</div>
+               {certSelected && <div className="sum-row"><span>Certificado</span><strong>{clp(CERTIFICATE_FEE)}</strong></div>}
 
                <div className="price-box" style={{marginTop:30}}>
                   <div className="lbl">Total a pagar hoy</div>
                   <div className="val">{clp(totalFirstPayment)}</div>
-                  <div className="detail">
-                     {monthlyOne > 0 
-                        ? `Luego ${clp(monthlyGroup + monthlyOne)} mensualmente` 
-                        : `Luego ${clp(monthlyGroup)} mensualmente`}
-                  </div>
+                  <div className="detail">{monthlyOne > 0 ? `Luego ${clp(monthlyGroup + monthlyOne)} mensualmente` : `Luego ${clp(monthlyGroup)} mensualmente`}</div>
                </div>
-
-               <button onClick={() => setShowModal(true)} className="main-btn">
-                  Inscribirme Ahora <CreditCard size={20}/>
-               </button>
-
-               <p style={{textAlign:'center', fontSize:'0.75rem', color:'var(--text-muted)', marginTop:15, lineHeight:1.4}}>
-                  Acceso inmediato al aula virtual tras la confirmación.
-               </p>
+               <button onClick={() => setShowModal(true)} className="main-btn">Inscribirme Ahora <CreditCard size={20}/></button>
+               <p style={{textAlign:'center', fontSize:'0.75rem', color:'var(--text-muted)', marginTop:15, lineHeight:1.4}}>Acceso inmediato al aula virtual tras la confirmación.</p>
             </div>
-
          </div>
       </section>
 
@@ -563,14 +514,13 @@ export default function LSCh() {
             <div style={{fontSize:'0.7rem', textTransform:'uppercase', color:'var(--text-muted)'}}>Total Hoy</div>
             <div style={{fontSize:'1.4rem', fontWeight:800, color:'white'}}>{clp(totalFirstPayment)}</div>
          </div>
-         <button onClick={() => setShowModal(true)} className="main-btn" style={{width:'auto', padding:'10px 24px', fontSize:'0.9rem'}}>
-            Inscribirme
-         </button>
+         <button onClick={() => setShowModal(true)} className="main-btn" style={{width:'auto', padding:'10px 24px', fontSize:'0.9rem'}}>Inscribirme</button>
       </div>
 
-      {/* MODAL FORMULARIO - AL FINAL DE TODO PARA EVITAR SUPERPOSICIONES */}
+      {/* MODAL CON OVERLAY CORREGIDO */}
       {showModal && (
-        <div style={{position: 'relative', zIndex: 9999}}>
+        <div className="modal-overlay">
+          {/* El overlay se encarga de centrarlo y poner el fondo blur */}
           <EnrollmentForm 
             planTitle={`LSCh: ${groupPlan.title}`}
             price={clp(totalFirstPayment)}

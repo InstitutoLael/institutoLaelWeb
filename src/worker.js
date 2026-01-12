@@ -1,7 +1,7 @@
 // src/worker.js
 
 // 🔴 TU GOOGLE SHEET (La URL que me pasaste)
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxWm7ny3UL0eu2vnly4SmNN8M2N3JMbadj1Sw-vHXgHqB3opwNNoj8AdXB2JtwatmcK/exec";
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxtpSpOLYlNvkhSa86EohNUWYLtJ0fY6-FqkwGe1lwjH9Q372DTRmdgD45YtX0juQiw8g/exec";
 
 // Configuración CORS (Para que React no reclame)
 const corsHeaders = {

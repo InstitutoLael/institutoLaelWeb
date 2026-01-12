@@ -3,16 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx"; 
 import SEOHead from "../components/SEOHead.jsx"; 
 
-// 📸 IMAGEN DE FONDO (Asegúrate de tener esta ruta o cambia la imagen)
+// 📸 IMAGEN DE FONDO
 import studyOnline from "../assets/img/lael/study-online.jpg"; 
 
-// 📦 ICONOS (Lucide React)
-// Si no tienes 'lucide-react' instalado, avísame. 
-// He incluido una versión SVG manual abajo para que funcione SIN instalar nada extra.
+// 📦 ICONOS
 import { 
   X, User, Mail, Phone, CreditCard, 
   CheckCircle, Loader2, ArrowRight, ShieldCheck, FileText, 
-  Book, Star, Check
+  Book, Star, Check, Zap, PlayCircle, Award
 } from 'lucide-react';
 
 // 📊 DATOS
@@ -20,15 +18,138 @@ import {
   ENROLLMENT_FEE,
   PAES_SUBJECTS,
   priceForSubjects,
-  priceForCount,
   clp,
 } from "../data/paes.js";
 
 /* ==========================================================================
-   FORMULARIO DE INSCRIPCIÓN (MODAL)
-   Integrado aquí mismo para que reciba las props directamente
+   1. ESTILOS CSS (DISEÑO MEJORADO)
    ========================================================================== */
-const API_URL = "https://instituto-lael-web.contacto-c10.workers.dev"; // 🔴 TU CLOUDFLARE
+const css = `
+:root {
+  --bg-deep: #020617;
+  --bg-card: #0f172a;
+  --primary: #6366f1;
+  --primary-glow: rgba(99, 102, 241, 0.5);
+  --accent: #f43f5e;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --radius: 20px;
+}
+
+/* BASE */
+.paes-page { 
+  background: var(--bg-deep); 
+  color: var(--text-main); 
+  font-family: 'Plus Jakarta Sans', sans-serif; 
+  min-height: 100vh; 
+  padding-bottom: 120px;
+  background-image: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08), transparent 25%), radial-gradient(circle at 85% 30%, rgba(244, 63, 94, 0.08), transparent 25%);
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 800; letter-spacing: -0.02em; }
+
+/* TEXT GRADIENTS */
+.text-gradient { background: linear-gradient(to right, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.text-rose-grad { background: linear-gradient(to right, #fb7185, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+/* BOTONES */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 32px; border-radius: 50px; font-weight: 700; transition: all 0.3s ease; cursor: pointer; border: none; font-size: 1rem; }
+.btn-primary { 
+  background: linear-gradient(135deg, var(--primary), #4f46e5); 
+  color: white; 
+  box-shadow: 0 10px 30px -10px var(--primary-glow);
+}
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -10px var(--primary-glow); }
+
+.btn-ghost { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); }
+.btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+
+/* HERO */
+.hero { padding: 140px 0 80px; position: relative; overflow: hidden; }
+.hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
+.hero-title { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 24px; }
+.hero-desc { font-size: 1.125rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 40px; max-width: 540px; }
+
+/* BENEFIT CARDS (NUEVO) */
+.benefits-section { margin-bottom: 80px; }
+.benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 40px; }
+.benefit-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 30px; border-radius: 20px; transition: 0.3s; }
+.benefit-card:hover { background: rgba(255,255,255,0.06); transform: translateY(-5px); border-color: rgba(255,255,255,0.1); }
+.benefit-icon { width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); color: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+
+/* BUILDER LAYOUT */
+.builder-section { padding: 60px 0; }
+.builder-container { display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; align-items: start; }
+
+/* TARJETAS DE RAMOS (VISUAL FIX) */
+.subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; margin-top: 20px; }
+
+.subject-card {
+  position: relative;
+  background: rgba(30, 41, 59, 0.6); 
+  border: 1px solid rgba(255,255,255,0.08); 
+  border-radius: 16px;
+  padding: 24px 16px; 
+  cursor: pointer; 
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  overflow: hidden;
+}
+
+/* Categorías de Colores */
+.subject-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom right, var(--card-color), transparent); opacity: 0; transition: 0.3s; z-index: 0; }
+.subject-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
+.subject-card:hover::before { opacity: 0.1; }
+
+.subject-card.active { border-color: var(--card-color); background: rgba(15, 23, 42, 0.9); box-shadow: 0 0 20px -5px var(--card-color-glow); }
+.subject-card.active::before { opacity: 0.15; }
+
+/* Iconos y Texto en Tarjetas */
+.s-icon { font-size: 2rem; z-index: 1; filter: grayscale(1); transition: 0.3s; }
+.subject-card.active .s-icon, .subject-card:hover .s-icon { filter: grayscale(0); transform: scale(1.1); }
+.s-name { font-weight: 700; font-size: 0.95rem; z-index: 1; color: var(--text-muted); transition: 0.3s; }
+.subject-card.active .s-name { color: white; }
+.s-check { position: absolute; top: 10px; right: 10px; color: var(--card-color); opacity: 0; transform: scale(0); transition: 0.3s; z-index: 2; }
+.subject-card.active .s-check { opacity: 1; transform: scale(1); }
+
+/* SUMMARY PANEL (TICKET DE COMPRA) */
+.summary-panel { 
+  background: #0f172a; 
+  border: 1px solid rgba(255,255,255,0.1); 
+  border-radius: 24px; 
+  padding: 32px; 
+  position: sticky; top: 40px; 
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+.ticket-header { border-bottom: 2px dashed rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px; }
+.ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; color: #cbd5e1; }
+.ticket-total { margin-top: 20px; padding-top: 20px; border-top: 2px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+.big-price { font-size: 2rem; font-weight: 800; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.9); backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal-content { background: #0f172a; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 480px; border-radius: 24px; padding: 32px; color: white; box-shadow: 0 0 50px rgba(0,0,0,0.5); animation: popIn 0.3s ease-out; }
+@keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 12px; color: white; margin-bottom: 16px; outline: none; transition: 0.3s; }
+.modal-input:focus { border-color: var(--primary); background: rgba(99, 102, 241, 0.1); }
+.close-btn { position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: #64748b; cursor: pointer; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hero-grid, .builder-container { grid-template-columns: 1fr; }
+  .summary-panel { order: -1; margin-bottom: 40px; }
+  .hero { padding-top: 100px; text-align: center; }
+  .hero-grid img { display: none; }
+  .hero-desc { margin: 0 auto 40px; }
+}
+`;
+
+/* ==========================================================================
+   FORMULARIO DE INSCRIPCIÓN (MODAL OSCURO)
+   ========================================================================== */
+const API_URL = "https://instituto-lael-web.contacto-c10.workers.dev"; 
 
 function EnrollmentForm({ planTitle, price, selectedDetails, onClose }) {
   const [status, setStatus] = useState("idle"); 
@@ -39,436 +160,248 @@ function EnrollmentForm({ planTitle, price, selectedDetails, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("loading");
-
-    const payload = {
-      ...formData,
-      program: planTitle,
-      comments: `Detalle: ${selectedDetails} | Monto Inicial: ${price}`
-    };
-
     try {
-      const response = await fetch(`${API_URL}/inscribir`, {
+      await fetch(`${API_URL}/inscribir`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...formData,
+          program: planTitle,
+          comments: `Detalle: ${selectedDetails} | Monto Inicial: ${price}`
+        }),
       });
-      if (response.ok) setStatus("success");
-      else throw new Error("Error en el servidor");
-    } catch (error) {
-      console.error(error);
-      setStatus("error");
-    }
+      setStatus("success");
+    } catch { setStatus("error"); }
   };
 
-  // --- VISTA DE ÉXITO ---
-  if (status === "success") {
-    return (
-      <div className="modal-overlay">
-        <div className="modal-content success-animate">
-          <div className="success-header">
-            <div className="success-icon"><CheckCircle size={40} /></div>
-            <h2>¡Cupo Reservado!</h2>
-            <p>Ya estás a un paso de comenzar.</p>
-          </div>
-          <div className="modal-body">
-            <div className="summary-box">
-              <div className="sb-row"><span>Plan</span> <strong>{planTitle}</strong></div>
-              <div className="sb-row total"><span>Total Hoy</span> <strong className="text-rose">{price}</strong></div>
-            </div>
-            <div className="action-buttons">
-              <a href="#" className="btn-modal-primary"><CreditCard size={20}/> Pagar Ahora (Webpay)</a>
-              <button onClick={onClose} className="btn-modal-secondary">Pagaré más tarde</button>
-            </div>
-            <p className="tiny-text">Te hemos enviado un correo con estos datos.</p>
-          </div>
+  if (status === "success") return (
+    <div className="modal-overlay">
+      <div className="modal-content" style={{textAlign:'center'}}>
+        <div style={{width:80, height:80, background:'#22c55e', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px'}}>
+          <CheckCircle size={40} color="white"/>
         </div>
+        <h2>¡Todo Listo!</h2>
+        <p style={{color:'#94a3b8', marginBottom:20}}>Te hemos enviado los datos de acceso y pago a tu correo.</p>
+        <button onClick={onClose} className="btn btn-primary" style={{width:'100%'}}>Entendido</button>
       </div>
-    );
-  }
+    </div>
+  );
 
-  // --- VISTA FORMULARIO ---
   return (
     <div className="modal-overlay">
-      <div className="modal-content fade-in">
-        <button onClick={onClose} className="close-btn"><X size={24}/></button>
+      <div className="modal-content">
+        <button onClick={onClose} className="close-btn"><X/></button>
+        <h3 style={{marginBottom:20}}>Finalizar Inscripción</h3>
+        <p style={{fontSize:'0.9rem', color:'#94a3b8', marginBottom:24}}>
+          Estás reservando: <strong style={{color:'white'}}>{planTitle}</strong> por <span style={{color:'#fb7185'}}>{price}</span>
+        </p>
         
-        <div className="modal-header">
-          <div className="badge"><ShieldCheck size={14}/> Matrícula Segura 2026</div>
-          <h2>Inscripción en <span className="text-rose">{planTitle}</span></h2>
-        </div>
-
-        <div className="modal-body scrollable">
-          <form onSubmit={handleSubmit} className="form-grid">
-            <div className="input-group">
-              <label>Nombre Completo</label>
-              <div className="input-wrapper">
-                <User className="input-icon" size={18}/>
-                <input required name="fullName" onChange={handleChange} placeholder="Ej: Sofía Valdés" />
-              </div>
-            </div>
-
-            <div className="row-2">
-              <div className="input-group">
-                <label>RUT</label>
-                <div className="input-wrapper">
-                  <FileText className="input-icon" size={18}/>
-                  <input required name="rut" onChange={handleChange} placeholder="12.345.678-9" />
-                </div>
-              </div>
-              <div className="input-group">
-                <label>Teléfono</label>
-                <div className="input-wrapper">
-                  <Phone className="input-icon" size={18}/>
-                  <input required name="phone" type="tel" onChange={handleChange} placeholder="+569..." />
-                </div>
-              </div>
-            </div>
-
-            <div className="input-group">
-              <label>Correo Electrónico</label>
-              <div className="input-wrapper">
-                <Mail className="input-icon" size={18}/>
-                <input required name="email" type="email" onChange={handleChange} placeholder="hola@ejemplo.com" />
-              </div>
-            </div>
-
-            <div className="price-summary">
-              <div>
-                <p className="label">Total a Pagar Hoy</p>
-                <p className="desc">{selectedDetails}</p>
-              </div>
-              <div className="price-big">{price}</div>
-            </div>
-
-            <button type="submit" disabled={status === "loading"} className="btn-submit">
-              {status === "loading" ? <Loader2 className="spin"/> : <>Confirmar Inscripción <ArrowRight size={20}/></>}
-            </button>
-            
-            <p className="tiny-text">Al confirmar, aceptas nuestros términos y condiciones.</p>
-          </form>
-        </div>
+        <form onSubmit={handleSubmit}>
+          <input className="modal-input" name="fullName" placeholder="Nombre Completo" required onChange={handleChange}/>
+          <input className="modal-input" name="rut" placeholder="RUT (12.345.678-9)" required onChange={handleChange}/>
+          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:10}}>
+             <input className="modal-input" name="email" type="email" placeholder="Correo" required onChange={handleChange}/>
+             <input className="modal-input" name="phone" type="tel" placeholder="+569..." required onChange={handleChange}/>
+          </div>
+          <button type="submit" className="btn btn-primary" style={{width:'100%', marginTop:10}} disabled={status === 'loading'}>
+            {status === 'loading' ? <Loader2 className="spin"/> : "Ir a Pagar"} <ArrowRight size={18}/>
+          </button>
+        </form>
       </div>
     </div>
   );
 }
 
 /* ==========================================================================
-   PÁGINA PRINCIPAL PAES
+   COMPONENTE PRINCIPAL
    ========================================================================== */
-
-/* 1. CSS IN-JS (Para asegurar diseño consistente sin config externa) */
-const css = `
-:root {
-  --bg-deep: #050505;
-  --bg-panel: #0F1115;
-  --primary: #6366f1;
-  --rose: #f43f5e;
-  --amber: #f59e0b;
-  --text-main: #ffffff;
-  --text-muted: #94a3b8;
-  --radius-lg: 24px;
-}
-
-/* BASE */
-.paes-page { background: var(--bg-deep); color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; overflow-x: hidden; padding-bottom: 120px; }
-.container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
-h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 800; }
-.text-gradient { background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 50px; font-weight: 700; transition: 0.3s; cursor: pointer; border: none; }
-.btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 25px -5px rgba(99,102,241,0.4); }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 35px -5px rgba(99,102,241,0.5); }
-.btn-ghost { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); }
-.btn-ghost:hover { background: rgba(255,255,255,0.1); }
-
-/* HERO */
-.hero { padding: 160px 0 80px; }
-.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-.hero-title { font-size: clamp(3rem, 5vw, 4.5rem); margin-bottom: 24px; }
-.hero-visual img { width: 100%; border-radius: var(--radius-lg); box-shadow: 0 20px 60px -20px rgba(0,0,0,0.8); }
-
-/* BUILDER */
-.section-builder { padding: 80px 0; }
-.builder-container { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
-.selector-panel { background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-lg); padding: 40px; }
-.subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 30px; }
-
-.subject-card {
-  background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
-  padding: 20px 10px; cursor: pointer; transition: 0.2s; text-align: center;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; height: 120px;
-}
-.subject-card:hover { background: rgba(255,255,255,0.05); }
-.subject-card.active { background: var(--primary); border-color: var(--primary); color: white; }
-
-/* SUMMARY (INVOICE STYLE) */
-.summary-panel { background: #000; border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-lg); padding: 30px; position: sticky; top: 40px; }
-.invoice-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
-.invoice-row.total { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; margin-top: 20px; align-items: flex-end; }
-.total-amount { font-size: 2.2rem; font-weight: 800; color: white; line-height: 1; }
-.enrollment-row { color: var(--amber); }
-
-/* --- ESTILOS DEL MODAL (ENROLLMENT FORM) --- */
-.modal-overlay { position: fixed; inset: 0; background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.modal-content { background: white; width: 100%; max-width: 500px; border-radius: 24px; position: relative; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); color: #1e293b; }
-.fade-in { animation: fadeIn 0.3s ease-out; }
-@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-.close-btn { position: absolute; top: 16px; right: 16px; background: #f1f5f9; border: none; padding: 8px; border-radius: 50%; cursor: pointer; color: #64748b; }
-.close-btn:hover { background: #e2e8f0; color: #0f172a; }
-
-.modal-header { background: #0f172a; color: white; padding: 32px; }
-.badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(244, 63, 94, 0.15); color: #fb7185; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
-.text-rose { color: #f43f5e; }
-
-.modal-body { padding: 32px; max-height: 60vh; overflow-y: auto; }
-.form-grid { display: flex; flex-direction: column; gap: 20px; }
-.input-group label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 6px; }
-.input-wrapper { position: relative; }
-.input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
-.input-wrapper input { width: 100%; padding: 12px 16px 12px 48px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.2s; background: #f8fafc; color: #334155; box-sizing: border-box; }
-.input-wrapper input:focus { background: white; border-color: #f43f5e; box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.1); }
-.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-.price-summary { background: #fff1f2; border: 1px solid #ffe4e6; padding: 16px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
-.price-summary .label { font-size: 0.75rem; font-weight: 700; color: #e11d48; text-transform: uppercase; }
-.price-summary .desc { font-size: 0.85rem; color: #9f1239; margin-top: 4px; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.price-big { font-size: 1.5rem; font-weight: 800; color: #e11d48; }
-
-.btn-submit { width: 100%; background: #0f172a; color: white; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 1.1rem; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.2s; }
-.btn-submit:hover { background: #1e293b; transform: translateY(-2px); }
-.spin { animation: spin 1s linear infinite; }
-@keyframes spin { 100% { transform: rotate(360deg); } }
-
-.tiny-text { font-size: 0.75rem; text-align: center; color: #94a3b8; margin-top: 16px; }
-
-/* Modal Success */
-.success-header { background: #f0fdf4; padding: 40px; text-align: center; border-bottom: 1px solid #dcfce7; }
-.success-icon { width: 80px; height: 80px; background: #dcfce7; color: #16a34a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-.success-header h2 { color: #14532d; font-size: 1.8rem; margin-bottom: 8px; }
-.success-header p { color: #15803d; }
-.summary-box { background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 24px; }
-.sb-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; color: #64748b; }
-.sb-row.total { border-top: 1px solid #e2e8f0; paddingTop: 12px; margin-top: 12px; font-size: 1.1rem; color: #0f172a; }
-.btn-modal-primary { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; padding: 16px; background: #0f172a; color: white; text-decoration: none; border-radius: 12px; font-weight: 700; margin-bottom: 12px; }
-.btn-modal-secondary { width: 100%; padding: 14px; background: white; border: 1px solid #e2e8f0; color: #64748b; border-radius: 12px; font-weight: 600; cursor: pointer; }
-
-@media (max-width: 900px) {
-  .hero-grid, .builder-container { grid-template-columns: 1fr; }
-  .summary-panel { order: -1; position: relative; top: 0; }
-  .row-2 { grid-template-columns: 1fr; }
-}
-`;
-
 export default function PAES() {
   const { addToCart } = useCart();
-  const navigate = useNavigate();
   const builderRef = useRef(null);
-
   const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
-  const [toast, setToast] = useState(null);
-  
-  // ESTADO PARA EL MODAL DE INSCRIPCIÓN
   const [showEnrollment, setShowEnrollment] = useState(false);
 
-  // Cálculos en tiempo real
-  const selectedSubjects = useMemo(
-    () => PAES_SUBJECTS.filter((s) => selectedSubjectIds.includes(s.id)),
-    [selectedSubjectIds]
-  );
+  // Cálculos desde src/data/paes.js
+  const selectedSubjects = useMemo(() => PAES_SUBJECTS.filter((s) => selectedSubjectIds.includes(s.id)), [selectedSubjectIds]);
   const subjectCount = selectedSubjects.length;
   const monthlyPrice = subjectCount ? priceForSubjects(selectedSubjectIds) : 0;
-  
-  // LÓGICA CLAVE: Mensualidad + Matrícula
   const firstPaymentTotal = subjectCount > 0 ? monthlyPrice + ENROLLMENT_FEE : 0;
 
-  useEffect(() => { window.scrollTo(0,0); }, []);
+  // Helpers de color para las tarjetas
+  const getCardColor = (cat) => {
+    if(cat === 'Ciencias') return '#10b981'; // Green
+    if(cat === 'Electivo') return '#f59e0b'; // Amber
+    return '#3b82f6'; // Blue default
+  };
 
   const toggleSubject = (id) => {
-    setSelectedSubjectIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
-    );
-  };
-
-  const scrollToBuilder = (presetIds) => {
-      if(presetIds) setSelectedSubjectIds(presetIds);
-      builderRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  };
-
-  /* --- AÑADIR AL CARRITO (Carrito Web) --- */
-  const handleAddToCart = () => {
-      if(subjectCount === 0) return;
-      
-      addToCart({
-          id: `paes-plan-${Date.now()}`, 
-          nombre: `Plan PAES (${subjectCount} Ramos)`,
-          precio: monthlyPrice,
-          tipo: 'paes_plan',
-          detalles: selectedSubjects.map(s => s.name).join(', ') 
-      });
-
-      addToCart({
-          id: `paes-matricula-2026`, 
-          nombre: 'Matrícula Admisión 2026',
-          precio: ENROLLMENT_FEE,
-          tipo: 'matricula',
-          detalles: 'Pago único anual'
-      });
-      
-      setToast("¡Agregado al Carrito!");
-      setTimeout(() => setToast(null), 3000);
-  };
-
-  /* --- ABRIR MODAL DE PAGO INMEDIATO --- */
-  const handleOpenEnrollment = () => {
-    if(subjectCount === 0) return;
-    setShowEnrollment(true);
+    setSelectedSubjectIds((prev) => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   };
 
   return (
     <div className="paes-page">
       <style>{css}</style>
-      <SEOHead title="Planes PAES 2026 | Instituto Lael" description="Preuniversitario personalizado." />
+      <SEOHead title="Preu PAES 2026 | Lael" description="Arma tu plan a medida." />
 
-      {/* RENDERIZAR MODAL SI ESTÁ ACTIVO */}
+      {/* Modal Form */}
       {showEnrollment && (
         <EnrollmentForm 
-          planTitle={`Plan PAES (${subjectCount} Ramos)`}
-          price={clp(firstPaymentTotal)}
-          selectedDetails={`Incluye: Matrícula + ${selectedSubjects.map(s => s.name).join(', ')}`}
-          onClose={() => setShowEnrollment(false)}
+          planTitle={`Plan Personalizado (${subjectCount} Ramos)`} 
+          price={clp(firstPaymentTotal)} 
+          selectedDetails={selectedSubjects.map(s => s.name).join(', ')}
+          onClose={() => setShowEnrollment(false)} 
         />
       )}
 
-      {toast && (
-        <div style={{position:'fixed', top:20, right:20, background:'#10b981', color:'#000', padding:'12px 24px', borderRadius:50, fontWeight:700, zIndex:99, display:'flex', gap:8, alignItems:'center'}}>
-          <Check size={20}/> {toast}
-        </div>
-      )}
-
-      {/* BACKGROUND ORBS */}
-      <div style={{position:'absolute', width:600, height:600, top:-200, left:-100, background:'#6366f1', filter:'blur(120px)', opacity:0.12, borderRadius:'50%', pointerEvents:'none'}} />
-      <div style={{position:'absolute', width:500, height:500, bottom:'20%', right:-100, background:'#f43f5e', filter:'blur(120px)', opacity:0.08, borderRadius:'50%', pointerEvents:'none'}} />
-
-      {/* HERO SECTION */}
+      {/* 1. HERO SECTION */}
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div style={{display:'inline-block', padding:'6px 16px', background:'rgba(245, 158, 11, 0.15)', color:'#fbbf24', borderRadius:'20px', fontSize:'0.85rem', fontWeight:'700', marginBottom:'20px', border:'1px solid rgba(245, 158, 11, 0.3)'}}>
-              ⚡️ Matrícula {clp(ENROLLMENT_FEE)}
+            <div style={{display:'inline-flex', alignItems:'center', gap:8, padding:'6px 16px', background:'rgba(244, 63, 94, 0.1)', border:'1px solid rgba(244, 63, 94, 0.2)', borderRadius:20, color:'#fb7185', fontSize:'0.85rem', fontWeight:'700', marginBottom:24}}>
+              <span style={{position:'relative', display:'flex', height:8, width:8}}><span style={{animation:'ping 1.5s cubic-bezier(0,0,0.2,1) infinite', position:'absolute', display:'inline-flex', height:'100%', width:'100%', borderRadius:'50%', background:'#fb7185', opacity:0.75}}></span><span style={{position:'relative', display:'inline-flex', borderRadius:'50%', height:8, width:8, background:'#f43f5e'}}></span></span>
+              Admisión 2026 Abierta
             </div>
-            <h1 className="hero-title">Tu puntaje nacional <span className="text-gradient">se construye aquí.</span></h1>
-            <p style={{fontSize:'1.2rem', color:'#cbd5e1', marginBottom:40, maxWidth:540}}>
-              Sin cláusulas abusivas. Educación de alto rendimiento con garantía total.
+            <h1 className="hero-title">
+              No estudies más.<br/>
+              <span className="text-gradient">Estudia Mejor.</span>
+            </h1>
+            <p className="hero-desc">
+              Olvídate de las clases masivas de 100 personas. En Lael personalizamos tu estrategia 
+              para que asegures tu puntaje sin perder la vida en el intento.
             </p>
-            
-            <div style={{display:'flex', gap:'15px', flexWrap:'wrap'}}>
-              <button onClick={() => scrollToBuilder([])} className="btn btn-primary">
-                Configurar mi Plan <ArrowRight size={18}/>
-              </button>
-              <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="btn btn-ghost">
-                Consultar Horarios
-              </a>
+            <div style={{display:'flex', gap:16, flexWrap:'wrap'}}>
+               <button onClick={() => builderRef.current?.scrollIntoView({behavior:'smooth'})} className="btn btn-primary">
+                 Armar mi Horario <ArrowRight size={20}/>
+               </button>
+               <a href="#benefits" className="btn btn-ghost">¿Por qué Lael?</a>
             </div>
           </div>
-          <div className="hero-visual">
-            <img src={studyOnline} alt="Clases Online" />
+          {/* Imagen Hero (Desktop) */}
+          <div style={{position:'relative'}}>
+             <div style={{position:'absolute', inset:0, background:'linear-gradient(to top, var(--bg-deep), transparent)', zIndex:2}}></div>
+             <img src={studyOnline} alt="Estudiantes Lael" style={{width:'100%', borderRadius:24, opacity:0.8, transform:'rotate(2deg)', border:'1px solid rgba(255,255,255,0.1)'}} />
           </div>
         </div>
       </section>
 
-      {/* BUILDER INTERACTIVO */}
-      <section ref={builderRef} className="section-builder">
+      {/* 2. BENEFICIOS (EXPLICACIÓN) */}
+      <section id="benefits" className="container benefits-section">
+        <div style={{textAlign:'center', maxWidth:700, margin:'0 auto'}}>
+          <h2 style={{fontSize:'2rem', marginBottom:16}}>¿Por qué nos eligen?</h2>
+          <p style={{color:'#94a3b8'}}>No somos una fábrica de alumnos. Somos un centro de alto rendimiento.</p>
+        </div>
+        <div className="benefits-grid">
+           <div className="benefit-card">
+              <div className="benefit-icon"><PlayCircle size={24}/></div>
+              <h3>Clases Grabadas 24/7</h3>
+              <p style={{fontSize:'0.9rem', color:'#94a3b8', marginTop:10}}>¿Faltaste? No importa. Todas las clases en vivo quedan en HD en tu aula virtual.</p>
+           </div>
+           <div className="benefit-card">
+              <div className="benefit-icon"><Zap size={24}/></div>
+              <h3>Ensayos Inteligentes</h3>
+              <p style={{fontSize:'0.9rem', color:'#94a3b8', marginTop:10}}>Plataforma que detecta tus vacíos. No ensayes lo que ya sabes, ataca lo que te falta.</p>
+           </div>
+           <div className="benefit-card">
+              <div className="benefit-icon"><Award size={24}/></div>
+              <h3>Garantía de Calidad</h3>
+              <p style={{fontSize:'0.9rem', color:'#94a3b8', marginTop:10}}>Si la metodología no te convence la primera semana, te devolvemos el dinero.</p>
+           </div>
+        </div>
+      </section>
+
+      {/* 3. CONFIGURADOR (BUILDER) */}
+      <section ref={builderRef} className="builder-section">
         <div className="container">
-          <div style={{textAlign:'center', marginBottom:'50px'}}>
-            <h2>Arma tu Plan a Medida</h2>
-            <p style={{color:'#94a3b8'}}>Selecciona las asignaturas. El precio se calcula automáticamente.</p>
-          </div>
+          <h2 style={{fontSize:'2.5rem', marginBottom:10}}>Diseña tu Estrategia</h2>
+          <p style={{color:'#94a3b8', fontSize:'1.1rem', marginBottom:40}}>Elige tus batallas. Paga solo lo que necesitas.</p>
 
           <div className="builder-container">
-            {/* IZQUIERDA: SELECCIÓN */}
-            <div className="selector-panel">
-               <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'20px'}}>
-                 <h3 style={{fontSize:'1.2rem'}}>Asignaturas Disponibles</h3>
-                 {subjectCount > 0 && 
-                    <button onClick={() => setSelectedSubjectIds([])} style={{background:'none', border:'none', color:'#94a3b8', fontSize:'0.9rem', textDecoration:'underline', cursor:'pointer'}}>Limpiar</button>
-                 }
-               </div>
-
+            {/* GRID DE RAMOS */}
+            <div>
                <div className="subjects-grid">
                   {PAES_SUBJECTS.map((s) => {
                     const isActive = selectedSubjectIds.includes(s.id);
+                    const color = getCardColor(s.category);
                     return (
                       <div 
                         key={s.id} 
                         onClick={() => toggleSubject(s.id)} 
                         className={`subject-card ${isActive ? 'active' : ''}`}
+                        style={{'--card-color': color, '--card-color-glow': color}}
                       >
-                         <div style={{fontSize:'1.5rem'}}>{isActive ? <Check /> : <Book />}</div>
-                         <span style={{fontWeight:'700', fontSize:'0.9rem'}}>{s.name}</span>
+                         <div className="s-check"><CheckCircle fill={color} color="white" /></div>
+                         <div className="s-icon">{s.icon}</div>
+                         <span className="s-name">{s.name}</span>
                       </div>
                     )
                   })}
                </div>
                
-               <div style={{marginTop:'30px', padding:'20px', background:'rgba(255,255,255,0.03)', borderRadius:'12px', display:'flex', gap:10}}>
-                  <ShieldCheck size={20} color="#10b981" />
-                  <div>
-                    <h4 style={{marginBottom:'5px', fontSize:'0.95rem'}}>Garantía Lael</h4>
-                    <p style={{fontSize:'0.85rem', color:'#94a3b8', lineHeight:1.4}}>Si no te gusta la metodología durante la primera semana, te devolvemos el 100% de tu mensualidad.</p>
-                  </div>
-               </div>
+               {/* Mensaje de ahorro */}
+               {subjectCount >= 4 && (
+                 <div style={{marginTop:24, padding:16, background:'rgba(16, 185, 129, 0.1)', border:'1px solid rgba(16, 185, 129, 0.2)', borderRadius:16, display:'flex', gap:12, alignItems:'center', color:'#34d399'}}>
+                    <Award size={20}/>
+                    <span><strong>¡Excelente jugada!</strong> Con 4+ ramos activaste la Tarifa Plana. Agrega más sin costo extra.</span>
+                 </div>
+               )}
             </div>
 
-            {/* DERECHA: RESUMEN DE COMPRA */}
+            {/* TICKET DE RESUMEN */}
             <div className="summary-panel">
-               <h3 style={{borderBottom:'1px solid rgba(255,255,255,0.1)', paddingBottom:20, marginBottom:20}}>Resumen de Pago</h3>
+               <div className="ticket-header">
+                 <h3 style={{fontSize:'1.2rem', display:'flex', alignItems:'center', gap:10}}>
+                   <CreditCard size={20} color="#fb7185"/> Resumen de Pago
+                 </h3>
+               </div>
 
                {subjectCount === 0 ? (
-                 <div style={{textAlign:'center', padding:'40px 0', color:'#94a3b8'}}>
-                    <p>Selecciona al menos un ramo para ver el detalle.</p>
+                 <div style={{textAlign:'center', padding:'40px 0', color:'#64748b'}}>
+                    <Book size={40} style={{marginBottom:10, opacity:0.5}}/>
+                    <p>Selecciona asignaturas para calcular tu inversión.</p>
                  </div>
                ) : (
                  <>
-                   {/* Desglose */}
-                   <div className="invoice-row">
+                   <div className="ticket-row">
+                      <span>Matrícula Anual 2026</span>
+                      <span>{clp(ENROLLMENT_FEE)}</span>
+                   </div>
+                   <div className="ticket-row">
                       <span>Plan Mensual ({subjectCount} ramos)</span>
-                      <span style={{fontWeight:'700'}}>{clp(monthlyPrice)}</span>
-                   </div>
-                   <div style={{fontSize:'0.8rem', color:'#94a3b8', marginBottom:'15px', paddingLeft:'10px'}}>
-                      {selectedSubjects.map(s => s.name).join(', ')}
-                   </div>
-
-                   <div className="invoice-row enrollment-row">
-                      <span>+ Matrícula 2026</span>
-                      <span style={{fontWeight:'700'}}>{clp(ENROLLMENT_FEE)}</span>
-                   </div>
-
-                   {/* Total */}
-                   <div className="invoice-row total">
-                      <span style={{textTransform:'uppercase', letterSpacing:1, fontSize:'0.8rem', color:'#94a3b8'}}>Total Primer Pago</span>
-                      <div style={{textAlign:'right'}}>
-                          <div className="total-amount">{clp(firstPaymentTotal)}</div>
-                          <div style={{fontSize:'0.8rem', color:'#94a3b8', marginTop:5}}>Luego {clp(monthlyPrice)} / mes</div>
-                      </div>
-                   </div>
-
-                   {/* Botones de Acción */}
-                   <div style={{display:'grid', gap:'12px', marginTop:'30px'}}>
-                      
-                      {/* ESTE BOTÓN ABRE EL MODAL */}
-                      <button onClick={handleOpenEnrollment} className="btn btn-primary" style={{width:'100%', justifyContent:'center'}}>
-                        Pagar e Inscribirme <ArrowRight size={18}/>
-                      </button>
-
-                      {/* ESTE BOTÓN ES PARA CARRITO (SEGUIR NAVEGANDO) */}
-                      <button onClick={handleAddToCart} className="btn btn-ghost" style={{width:'100%', justifyContent:'center'}}>
-                        Agregar al Carrito
-                      </button>
+                      <span>{clp(monthlyPrice)}</span>
                    </div>
                    
-                   <p style={{textAlign:'center', fontSize:'0.75rem', marginTop:'15px', color:'#94a3b8'}}>
-                     Pagos seguros vía WebPay / MercadoPago
+                   <div style={{margin:'15px 0', fontSize:'0.85rem', color:'#64748b', paddingLeft:10, borderLeft:'2px solid #334155'}}>
+                     {selectedSubjects.map(s => <div key={s.id}>• {s.name}</div>)}
+                   </div>
+
+                   <div className="ticket-total">
+                      <div>
+                        <span style={{display:'block', fontSize:'0.8rem', textTransform:'uppercase', color:'#94a3b8', letterSpacing:1}}>Total a Pagar Hoy</span>
+                        <span className="big-price">{clp(firstPaymentTotal)}</span>
+                      </div>
+                   </div>
+                   <p style={{fontSize:'0.8rem', color:'#64748b', marginTop:5, marginBottom:24}}>
+                     Incluye acceso inmediato a plataforma.
                    </p>
+
+                   <button onClick={() => setShowEnrollment(true)} className="btn btn-primary" style={{width:'100%'}}>
+                     Pagar e Inscribirme <ArrowRight size={20}/>
+                   </button>
+                   
+                   <div style={{textAlign:'center', marginTop:16}}>
+                     <button onClick={() => {
+                        addToCart({
+                          id: `paes-${Date.now()}`,
+                          nombre: `Plan PAES (${subjectCount} Ramos)`,
+                          precio: monthlyPrice,
+                          tipo: 'paes',
+                          detalles: selectedSubjects.map(s=>s.name).join(', ')
+                        });
+                        alert("Agregado al carrito");
+                     }} style={{background:'none', border:'none', color:'#94a3b8', textDecoration:'underline', cursor:'pointer', fontSize:'0.9rem'}}>
+                        Solo agregar al carrito
+                     </button>
+                   </div>
                  </>
                )}
             </div>

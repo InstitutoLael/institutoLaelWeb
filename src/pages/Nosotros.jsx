@@ -2,332 +2,301 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG (Estilo Pluma / Editorial)
+   1. ICONOS SVG (Minimalistas y Elegantes)
    ────────────────────────────────────────────────────────────────────────── */
 const Icons = {
-  QuoteBig: () => (
-    <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor" style={{opacity:0.05, position:'absolute', top:-20, left:20, pointerEvents:'none'}}>
-      <path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V5H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM5.0166 21L5.0166 18C5.0166 16.8954 5.91203 16 7.0166 16H10.0166C10.5689 16 11.0166 15.5523 11.0166 15V9C11.0166 8.44772 10.5689 8 10.0166 8H6.0166C5.46432 8 5.0166 8.44772 5.0166 9V11C5.0166 11.5523 4.56889 12 4.0166 12H3.0166V15C13.0166 18.3137 10.3303 21 7.0166 21H5.0166Z" />
-    </svg>
-  ),
-  Heart: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>,
-  Star: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
-  Hand: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 19a4 4 0 0 0 8 0v-6a4 4 0 0 0-8 0v6Z"/><path d="M11 13V9a4 4 0 0 0-8 0v4"/><path d="M7 13v6a4 4 0 0 0 4 4"/></svg>,
-  Sparkle: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" /></svg>
+  Quote: () => <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" style={{opacity:0.2}}><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19.017C19.5693 16 20.017 15.5523 20.017 15V9C20.017 8.44772 19.5693 8 19.017 8H15.017C14.4647 8 14.017 8.44772 14.017 9V11C14.017 11.5523 13.5693 12 13.017 12H12.017V5H22.017V15C22.017 18.3137 19.3307 21 16.017 21H14.017ZM5.0166 21L5.0166 18C5.0166 16.8954 5.91203 16 7.0166 16H10.0166C10.5689 16 11.0166 15.5523 11.0166 15V9C11.0166 8.44772 10.5689 8 10.0166 8H6.0166C5.46432 8 5.0166 8.44772 5.0166 9V11C5.0166 11.5523 4.56889 12 4.0166 12H3.0166V5H13.0166V15C13.0166 18.3137 10.3303 21 7.0166 21H5.0166Z" /></svg>,
+  Heart: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>,
+  Star: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
+  Hand: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 19a4 4 0 0 0 8 0v-6a4 4 0 0 0-8 0v6Z"/><path d="M11 13V9a4 4 0 0 0-8 0v4"/><path d="M7 13v6a4 4 0 0 0 4 4"/></svg>
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. ESTILOS CSS - "GOLDEN HERITAGE"
+   2. ESTILOS CSS
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
-  --bg-deep: #0f172a;       /* Slate 900 */
-  --bg-panel: #1e293b;      /* Slate 800 */
-  --gold: #fbbf24;          /* Amber 400 */
-  --gold-glow: rgba(251, 191, 36, 0.25);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --border: rgba(255,255,255,0.08);
-  --font-serif: 'Playfair Display', serif; /* Si no carga, usa serif por defecto */
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --bg-deep: #0B1120;
+  --bg-panel: #111827;
+  --gold: #F59E0B;
+  --gold-dim: rgba(245, 158, 11, 0.1);
+  --text-main: #F8FAFC;
+  --text-muted: #94A3B8;
+  --border: rgba(255,255,255,0.06);
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 }
 
 .about-page {
-  background-color: var(--bg-deep);
-  color: var(--text-main);
-  font-family: var(--font-sans);
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
+  background-color: var(--bg-deep); color: var(--text-main); font-family: var(--font-sans);
+  min-height: 100vh; overflow-x: hidden;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+/* HERO */
+.manifesto-section {
+  padding: 140px 0 60px; text-align: center;
+  background: radial-gradient(circle at 50% 0%, rgba(30, 41, 59, 0.5), transparent 70%);
+}
+.manifesto-label {
+  font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); 
+  font-weight: 700; display: block; margin-bottom: 20px;
+}
+.manifesto-title {
+  font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; margin-bottom: 25px; 
+  line-height: 1.1; letter-spacing: -0.02em;
+}
+.manifesto-text {
+  font-size: 1.2rem; color: var(--text-muted); line-height: 1.7; 
+  max-width: 680px; margin: 0 auto;
 }
 
-.container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
-
-/* ORBS BACKGROUND */
-.orb {
-  position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; z-index: 0; pointer-events: none;
-}
-.orb-gold { width: 400px; height: 400px; top: 10%; right: -100px; background: var(--gold); }
-.orb-blue { width: 500px; height: 500px; bottom: 20%; left: -200px; background: #3b82f6; opacity: 0.1; }
-
-/* HERO SECTION */
-.hero-section {
-  padding: 160px 0 80px; text-align: center; position: relative; z-index: 1;
-}
-.label-pill {
-  display: inline-block; padding: 6px 16px; border: 1px solid var(--gold-glow);
-  background: rgba(251, 191, 36, 0.05); color: var(--gold); border-radius: 50px;
-  font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;
-  margin-bottom: 24px;
-}
-.hero-title {
-  font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 24px;
-}
-.text-gold { color: var(--gold); position: relative; display: inline-block; }
-.text-gold::after {
-  content: ''; position: absolute; bottom: 5px; left: 0; width: 100%; height: 8px;
-  background: var(--gold); opacity: 0.2; z-index: -1; transform: skewX(-10deg);
-}
-.hero-desc {
-  font-size: 1.25rem; color: var(--text-muted); max-width: 650px; margin: 0 auto; line-height: 1.6;
-}
-
-/* MEANING CARD */
-.meaning-wrapper { padding: 40px 0 80px; position: relative; z-index: 1; }
+/* SECTION: EL SIGNIFICADO DE LAEL */
 .meaning-card {
-  background: rgba(30, 41, 59, 0.6); backdrop-filter: blur(12px);
+  margin: 40px auto 80px; max-width: 600px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
   border: 1px solid var(--border); border-top: 1px solid rgba(255,255,255,0.15);
-  border-radius: 30px; padding: 60px 40px; text-align: center;
+  border-radius: 24px; padding: 40px; text-align: center;
   position: relative; overflow: hidden;
-  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
-  transition: transform 0.3s;
 }
-.meaning-card:hover { transform: translateY(-5px); border-color: var(--gold-glow); }
-
-.hebrew-text {
-  font-family: 'Times New Roman', serif; font-size: clamp(4rem, 8vw, 6rem);
-  background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  line-height: 1; margin-bottom: 10px; display: block;
+.hebrew { 
+  font-family: serif; font-size: 3.5rem; color: var(--text-main); line-height: 1; margin-bottom: 5px; 
 }
 .phonetic { 
-  font-family: monospace; color: var(--gold); letter-spacing: 2px; font-size: 1rem; opacity: 0.9; 
+  font-family: monospace; color: var(--gold); font-size: 0.9rem; margin-bottom: 20px; display: block; 
 }
-.divider { width: 40px; height: 2px; background: var(--border); margin: 30px auto; }
-.meaning-desc { font-size: 1.2rem; color: var(--text-muted); font-style: italic; max-width: 500px; margin: 0 auto; }
-
-/* TIMELINE */
-.timeline-section { padding: 80px 0; position: relative; z-index: 1; }
-.section-title { font-size: 2rem; text-align: center; margin-bottom: 60px; font-weight: 700; }
-
-.timeline-track {
-  border-left: 2px solid var(--border); margin-left: 50%; transform: translateX(-1px);
-  padding: 20px 0; position: relative;
+.definition { 
+  font-size: 1.1rem; color: var(--text-muted); font-style: italic; 
 }
-@media (max-width: 768px) { .timeline-track { margin-left: 20px; border-left: 2px solid var(--border); } }
+.definition strong { color: white; font-weight: 600; font-style: normal; }
 
-.t-event {
-  position: relative; width: 50%; padding: 0 40px; margin-bottom: 60px;
+/* TIMELINE COMPACTO */
+.timeline-section { padding: 40px 0 80px; }
+.timeline-header { text-align: center; margin-bottom: 50px; }
+.timeline-header h2 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
+
+.timeline-list {
+  border-left: 2px solid var(--border); margin-left: 20px; padding-bottom: 20px;
 }
-.t-event:nth-child(even) { left: 50%; }
-.t-event:nth-child(odd) { left: 0; text-align: right; }
-
-@media (max-width: 768px) {
-  .t-event { width: 100%; left: 0 !important; padding-left: 50px; padding-right: 0; text-align: left !important; }
+.t-item {
+  position: relative; padding-left: 40px; margin-bottom: 50px;
 }
-
+.t-item:last-child { margin-bottom: 0; }
 .t-dot {
-  position: absolute; top: 0; width: 20px; height: 20px; border-radius: 50%;
-  background: var(--bg-deep); border: 2px solid var(--gold);
-  box-shadow: 0 0 15px var(--gold-glow); z-index: 2;
+  position: absolute; left: -9px; top: 0; width: 16px; height: 16px;
+  background: var(--bg-deep); border: 2px solid var(--text-muted); border-radius: 50%;
+  transition: .3s;
 }
-.t-event:nth-child(odd) .t-dot { right: -11px; }
-.t-event:nth-child(even) .t-dot { left: -11px; }
-@media (max-width: 768px) { .t-dot { left: -30px !important; right: auto !important; } }
+.t-item:hover .t-dot { border-color: var(--gold); background: var(--gold); box-shadow: 0 0 10px var(--gold); }
 
-.t-year {
-  font-size: 3rem; font-weight: 800; color: rgba(255,255,255,0.05);
-  position: absolute; top: -30px; line-height: 1; pointer-events: none;
+.t-year { 
+  font-size: 0.85rem; font-weight: 800; color: var(--gold); margin-bottom: 5px; 
+  text-transform: uppercase; letter-spacing: 1px; display: inline-block;
 }
-.t-event:nth-child(odd) .t-year { right: 40px; }
-.t-event:nth-child(even) .t-year { left: 40px; }
-@media (max-width: 768px) { .t-year { left: 50px !important; right: auto !important; } }
+.t-content h3 { font-size: 1.4rem; color: white; margin: 5px 0 10px; font-weight: 700; }
+.t-content p { font-size: 1rem; color: var(--text-muted); line-height: 1.6; }
 
-.t-card {
-  background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 24px;
-  position: relative; transition: 0.3s;
+/* Highlight Box para el origen */
+.origin-box {
+  background: var(--gold-dim); border: 1px solid rgba(245, 158, 11, 0.2);
+  padding: 25px; border-radius: 12px; margin-top: 15px;
 }
-.t-card:hover { border-color: var(--gold); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); }
 
-/* FOUNDER LETTER */
-.founder-section { padding: 100px 0; background: linear-gradient(180deg, rgba(15,23,42,0) 0%, rgba(15,23,42,1) 100%); position: relative; }
-.paper-card {
-  background: #182030; max-width: 750px; margin: 0 auto; padding: 60px;
-  border-radius: 2px; position: relative; border: 1px solid var(--border);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+/* VALORES */
+.values-grid { 
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+  gap: 20px; padding: 80px 0; border-top: 1px solid var(--border); 
 }
-.quote-text {
-  font-family: var(--font-serif); font-size: 1.5rem; line-height: 1.8; color: #e2e8f0; position: relative; z-index: 1;
+.val-card {
+  padding: 25px; background: var(--bg-panel); border-radius: 16px; border: 1px solid var(--border);
 }
-.founder-info {
-  margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);
-  display: flex; justify-content: space-between; align-items: center;
-}
-.signature { font-family: 'Cursive', cursive; font-size: 1.5rem; color: var(--gold); transform: rotate(-5deg); }
+.val-card h3 { font-size: 1.1rem; font-weight: 700; margin: 15px 0 10px; display: flex; align-items: center; gap: 10px; }
+.val-icon { color: var(--gold); }
+.val-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
 
-/* VALUES GRID */
-.values-section { padding: 60px 0 120px; position: relative; z-index: 1; }
-.val-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-.val-box {
-  background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border); padding: 30px; border-radius: 20px;
-  transition: 0.3s; text-align: center;
+/* CARTA DEL DIRECTOR (SIN FOTO) */
+.letter-section { 
+  padding: 80px 0; background: linear-gradient(180deg, var(--bg-deep) 0%, #0d121c 100%);
+  border-top: 1px solid var(--border);
 }
-.val-box:hover { background: rgba(30, 41, 59, 0.8); border-color: var(--text-muted); transform: translateY(-5px); }
-.val-icon-wrap {
-  width: 50px; height: 50px; margin: 0 auto 20px; background: rgba(251, 191, 36, 0.1);
-  color: var(--gold); border-radius: 12px; display: flex; align-items: center; justify-content: center;
+.letter-container {
+  max-width: 700px; margin: 0 auto; text-align: center;
+  background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+  padding: 60px 40px; border-radius: 24px; position: relative;
 }
+.letter-quote { 
+  font-size: 1.4rem; font-style: italic; line-height: 1.6; color: var(--text-main); margin-bottom: 30px; 
+}
+.letter-sign { 
+  border-top: 1px solid var(--border); display: inline-block; padding-top: 20px; margin-top: 20px; 
+}
+.letter-name { display: block; font-size: 1.1rem; font-weight: 800; color: white; }
+.letter-role { font-size: 0.85rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
 
 /* CTA */
-.cta-wrapper { text-align: center; margin-bottom: 80px; }
-.btn-gold {
-  background: var(--gold); color: #0f172a; font-weight: 800; padding: 16px 40px; border-radius: 50px;
-  font-size: 1.1rem; box-shadow: 0 0 20px var(--gold-glow); transition: 0.3s; display: inline-block;
+.cta-box { text-align: center; padding: 80px 0; }
+.cta-btn {
+  background: var(--text-main); color: var(--bg-deep); padding: 14px 32px; border-radius: 50px;
+  font-weight: 700; text-decoration: none; transition: .3s; display: inline-block; margin-top: 30px;
 }
-.btn-gold:hover { transform: scale(1.05); box-shadow: 0 0 40px var(--gold-glow); background: #fcd34d; }
+.cta-btn:hover { transform: scale(1.05); }
 
 @media (max-width: 600px) {
-  .paper-card { padding: 30px 20px; }
-  .quote-text { font-size: 1.2rem; }
-  .hebrew-text { font-size: 3.5rem; }
+  .manifesto-title { font-size: 2.2rem; }
+  .hebrew { font-size: 2.5rem; }
+  .letter-container { padding: 40px 20px; }
+  .letter-quote { font-size: 1.1rem; }
 }
 `;
 
+const SEOHead = () => {
+  useEffect(() => { document.title = "Nuestra Esencia | Instituto Lael"; }, []);
+  return null;
+};
+
+/* ──────────────────────────────────────────────────────────────────────────
+   4. COMPONENTE PRINCIPAL
+   ────────────────────────────────────────────────────────────────────────── */
 export default function Nosotros() {
   
-  useEffect(() => {
-    document.title = "Nuestra Esencia | Instituto Lael";
-    window.scrollTo(0,0);
-  }, []);
-
   return (
     <div className="about-page">
+      <SEOHead />
       <style>{css}</style>
-      
-      {/* ORBS */}
-      <div className="orb orb-gold" />
-      <div className="orb orb-blue" />
 
-      {/* HERO */}
-      <section className="hero-section">
+      {/* --- HERO --- */}
+      <header className="manifesto-section">
         <div className="container">
-          <span className="label-pill">Nuestra Historia</span>
-          <h1 className="hero-title">
-            Un origen de <br/>
-            <span className="text-gold">Gratitud Pura.</span>
-          </h1>
-          <p className="hero-desc">
-            En tiempos de incertidumbre, elegimos servir. <br/>
-            Lo que comenzó como ayuda gratuita en pandemia, hoy es una misión de vida.
-          </p>
+            <span className="manifesto-label">Nuestra Historia</span>
+            <h1 className="manifesto-title">
+                Todo comenzó con un <br/>
+                acto de <span style={{color:'var(--gold)'}}>gratitud.</span>
+            </h1>
+            <p className="manifesto-text">
+                En medio de la incertidumbre, decidimos que el conocimiento no podía detenerse. 
+                Lo que empezó como un servicio en pandemia, hoy es una misión de vida.
+            </p>
         </div>
-      </section>
+      </header>
 
-      {/* MEANING */}
-      <section className="meaning-wrapper container">
+      {/* --- SECCIÓN: EL SIGNIFICADO DE LAEL (NUEVO) --- */}
+      <section className="container">
         <div className="meaning-card">
-          <span className="hebrew-text">לָאֵל</span>
-          <span className="phonetic">/la·el/</span>
-          <div className="divider" />
-          <p className="meaning-desc">
-            Del hebreo: <strong>"Perteneciente a Dios"</strong>.<br/>
-            Este nombre no es casualidad; es nuestro recordatorio diario de que este proyecto tiene un dueño y un propósito superior: servir con excelencia.
-          </p>
+            <div className="hebrew">לָאֵל</div>
+            <span className="phonetic">/la·el/ • Hebreo</span>
+            <p className="definition">
+                Significa <strong>"Perteneciente a Dios"</strong>. <br/>
+                Es un recordatorio constante de que este proyecto tiene un dueño y un propósito superior: servir con excelencia.
+            </p>
         </div>
       </section>
 
-      {/* TIMELINE (ALTERNADA) */}
+      {/* --- TIMELINE COMPACTO (LOGBOOK) --- */}
       <section className="timeline-section">
         <div className="container">
-          <h2 className="section-title">El Camino Recorrido</h2>
-          
-          <div className="timeline-track">
+            <div className="timeline-header">
+                <h2>El Camino Recorrido</h2>
+            </div>
             
-            <div className="t-event">
-              <div className="t-dot" />
-              <span className="t-year">2020</span>
-              <div className="t-card">
-                <h3 style={{color:'white', marginBottom:'10px', fontSize:'1.3rem'}}>La Semilla</h3>
-                <p style={{color:'var(--text-muted)', fontSize:'0.95rem', lineHeight:'1.6'}}>
-                  <strong>Diego Chaparro</strong> siente el llamado de retribuir. En plena pandemia, comienza a dar clases particulares gratuitas. Sin marca, sin precio, solo con el deseo de ayudar.
-                </p>
-              </div>
-            </div>
+            <div className="timeline-list">
+                
+                {/* 2020 */}
+                <div className="t-item">
+                    <div className="t-dot"></div>
+                    <span className="t-year">2020</span>
+                    <div className="t-content">
+                        <h3>La Semilla: Retribuir lo recibido</h3>
+                        <div className="origin-box">
+                            <p>
+                                <strong>Diego Chaparro:</strong> "En plena pandemia, sentí el llamado de retribuir la gracia que Dios me había dado en mis estudios. Comencé a dar clases particulares gratuitas y accesibles. No era un negocio, era pura gratitud convertida en servicio."
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
-            <div className="t-event">
-              <div className="t-dot" />
-              <span className="t-year">2021</span>
-              <div className="t-card">
-                <h3 style={{color:'white', marginBottom:'10px', fontSize:'1.3rem'}}>Nace Preu Lael</h3>
-                <p style={{color:'var(--text-muted)', fontSize:'0.95rem', lineHeight:'1.6'}}>
-                  La comunidad crece. Se formaliza el proyecto enfocado en vencer el miedo al futuro universitario, no solo en obtener puntajes.
-                </p>
-              </div>
-            </div>
+                {/* 2021 */}
+                <div className="t-item">
+                    <div className="t-dot"></div>
+                    <span className="t-year">2021</span>
+                    <div className="t-content">
+                        <h3>Nace Preu Lael</h3>
+                        <p>
+                            La comunidad creció orgánicamente. Formalizamos el proyecto bajo el nombre <strong>Lael</strong>, creando nuestro primer programa preuniversitario enfocado no solo en puntajes, sino en vencer el miedo al futuro.
+                        </p>
+                    </div>
+                </div>
 
-            <div className="t-event">
-              <div className="t-dot" />
-              <span className="t-year">2024</span>
-              <div className="t-card">
-                <h3 style={{color:'white', marginBottom:'10px', fontSize:'1.3rem'}}>Expansión Total</h3>
-                <p style={{color:'var(--text-muted)', fontSize:'0.95rem', lineHeight:'1.6'}}>
-                  Integramos las escuelas de <strong>Idiomas</strong> y <strong>Lengua de Señas</strong>. Entendemos que la comunicación es la llave maestra de la inclusión.
-                </p>
-              </div>
-            </div>
+                {/* 2024 */}
+                <div className="t-item">
+                    <div className="t-dot"></div>
+                    <span className="t-year">2024</span>
+                    <div className="t-content">
+                        <h3>Expansión: Idiomas e Inclusión</h3>
+                        <p>
+                            Derribamos más barreras. Integramos las escuelas de <strong>Idiomas</strong> y <strong>Lengua de Señas (LSCh)</strong>, entendiendo que la comunicación es la llave maestra para las oportunidades laborales modernas.
+                        </p>
+                    </div>
+                </div>
 
-            <div className="t-event">
-              <div className="t-dot" />
-              <span className="t-year">2025</span>
-              <div className="t-card">
-                <h3 style={{color:'white', marginBottom:'10px', fontSize:'1.3rem'}}>Ciclo Completo</h3>
-                <p style={{color:'var(--text-muted)', fontSize:'0.95rem', lineHeight:'1.6'}}>
-                  Lanzamiento de la nivelación de estudios para adultos. Ahora servimos a todas las etapas de la vida académica.
-                </p>
-              </div>
-            </div>
+                {/* 2025 */}
+                <div className="t-item">
+                    <div className="t-dot"></div>
+                    <span className="t-year">2025</span>
+                    <div className="t-content">
+                        <h3>Escuela de Adultos</h3>
+                        <p>
+                            Lanzamos nuestro programa de nivelación de estudios, cerrando el círculo educativo y honrando a quienes buscan una segunda oportunidad académica.
+                        </p>
+                    </div>
+                </div>
 
-          </div>
+            </div>
         </div>
       </section>
 
-      {/* FOUNDER LETTER */}
-      <section className="founder-section">
+      {/* --- CARTA DEL DIRECTOR (SOLO TEXTO) --- */}
+      <section className="letter-section">
         <div className="container">
-          <div className="paper-card">
-            <Icons.QuoteBig />
-            <p className="quote-text">
-              "Lael no es solo un instituto, es mi forma de decir 'Gracias'. 
-              Ver a alguien superar el miedo a las matemáticas o aprender a comunicarse con señas 
-              me recuerda por qué empezamos en esa habitación en 2020. 
-              Aquí nadie es un número, todos tienen un propósito."
-            </p>
-            <div className="founder-info">
-              <div>
-                <strong style={{display:'block', fontSize:'1.1rem', color:'white'}}>Diego Chaparro</strong>
-                <span style={{fontSize:'0.85rem', color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'1px'}}>Fundador & Director</span>
-              </div>
-              <div className="signature">Diego Ch.</div>
+            <div className="letter-container">
+                <div style={{marginBottom:'20px'}}><Icons.Quote/></div>
+                <p className="letter-quote">
+                    "Lael no es solo un instituto, es mi forma de decir 'Gracias'. 
+                    Ver a alguien superar el miedo a las matemáticas o aprender a comunicarse con señas 
+                    me recuerda por qué empezamos en esa habitación en 2020. 
+                    Aquí nadie es un número, todos tienen un propósito."
+                </p>
+                <div className="letter-sign">
+                    <span className="letter-name">Diego Chaparro</span>
+                    <span className="letter-role">Fundador & Director</span>
+                </div>
             </div>
-          </div>
         </div>
       </section>
 
-      {/* VALUES */}
-      <section className="values-section container">
-        <h2 className="section-title" style={{fontSize:'1.8rem', marginBottom:'40px'}}>Nuestros Pilares</h2>
-        <div className="val-grid">
-          <div className="val-box">
-            <div className="val-icon-wrap"><Icons.Hand /></div>
-            <h3 style={{color:'white', marginBottom:'10px'}}>Servicio Genuino</h3>
-            <p style={{color:'var(--text-muted)', fontSize:'0.9rem'}}>No enseñamos para lucrar, lucramos para seguir sirviendo. El alumno siempre es el centro.</p>
-          </div>
-          <div className="val-box">
-            <div className="val-icon-wrap"><Icons.Sparkle /></div>
-            <h3 style={{color:'white', marginBottom:'10px'}}>Gratitud Activa</h3>
-            <p style={{color:'var(--text-muted)', fontSize:'0.9rem'}}>Damos lo mejor en cada clase porque valoramos profundamente la oportunidad de enseñar.</p>
-          </div>
-          <div className="val-box">
-            <div className="val-icon-wrap"><Icons.Star /></div>
-            <h3 style={{color:'white', marginBottom:'10px'}}>Excelencia</h3>
-            <p style={{color:'var(--text-muted)', fontSize:'0.9rem'}}>Que sea accesible no significa que sea "barato". Aspiramos a la calidad mundial.</p>
-          </div>
+      {/* --- VALORES COMPACTOS --- */}
+      <section className="container">
+        <div className="values-grid">
+            <div className="val-card">
+                <h3><span className="val-icon"><Icons.Hand/></span> Servicio Genuino</h3>
+                <p>No enseñamos para lucrar, lucramos para seguir sirviendo. El alumno es el centro.</p>
+            </div>
+            <div className="val-card">
+                <h3><span className="val-icon"><Icons.Heart/></span> Gratitud Activa</h3>
+                <p>Damos lo mejor en cada clase porque valoramos la oportunidad de enseñar.</p>
+            </div>
+            <div className="val-card">
+                <h3><span className="val-icon"><Icons.Star/></span> Excelencia</h3>
+                <p>Recursos accesibles no significan calidad mediocre. Aspiramos siempre a lo mejor.</p>
+            </div>
         </div>
+      </section>
 
-        <div className="cta-wrapper">
-          <Link to="/contacto" className="btn-gold">
-            Ser parte de Lael →
-          </Link>
+      {/* --- CTA FINAL --- */}
+      <section className="cta-box">
+        <div className="container">
+            <h2>¿Listo para ser parte de nuestra historia?</h2>
+            <Link to="/contacto" className="cta-btn">
+                Unirme a Lael
+            </Link>
         </div>
       </section>
 

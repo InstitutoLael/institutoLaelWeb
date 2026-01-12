@@ -1,8 +1,8 @@
 import { useState, useMemo, useRef } from "react";
-// 👇 IMPORTANTE: Importamos tu formulario de inscripción
+// 👇 Tu formulario que ya funciona (No lo tocamos)
 import EnrollmentForm from "../components/EnrollmentForm"; 
 
-// Importamos la data (Aquí es donde bajarás los precios después)
+// Importamos la data con los NUEVOS PRECIOS BAJOS
 import { 
   ENROLLMENT_FEE, 
   SUBJECTS, 
@@ -18,7 +18,7 @@ const heroImg = "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=
 import losOlivosLogo from "../assets/img/Partners/LosOlivos.png"; 
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG
+   1. ICONOS SVG (Internos para evitar fallos de librerías)
    ────────────────────────────────────────────────────────────────────────── */
 const Icons = {
   Zap: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
@@ -36,41 +36,49 @@ const Icons = {
    ────────────────────────────────────────────────────────────────────────── */
 export default function Homeschool() {
   const [isSchool, setIsSchool] = useState(false); // Toggle B2C / B2B
-  const [selectedSubject, setSelectedSubject] = useState("mat");
-  const [selectedLevel, setSelectedLevel] = useState("media");
-  const [selectedPackId, setSelectedPackId] = useState("p8");
-  const [showModal, setShowModal] = useState(false); // Estado para abrir el formulario
   
+  // ESTADOS INICIALES
+  const [selectedSubject, setSelectedSubject] = useState("mat"); // Matemáticas por defecto
+  const [selectedLevel, setSelectedLevel] = useState("media");   // Media por defecto
+  const [selectedPackId, setSelectedPackId] = useState("p8");    // "Pack Pro" seleccionado (Estrategia)
+  
+  const [showModal, setShowModal] = useState(false); 
   const configRef = useRef(null);
 
   // === LÓGICA DE NEGOCIO ===
   
-  // 1. Encontrar objetos completos basados en ID
+  // 1. Encontrar objetos completos basados en ID (Fallback seguro)
   const activeSubject = SUBJECTS.find(s => s.id === selectedSubject) || SUBJECTS[0];
   const activePack = PACKS.find(p => p.id === selectedPackId) || PACKS[1];
   const activeLevel = LEVELS.find(l => l.id === selectedLevel) || LEVELS[1];
 
   // 2. Calcular Totales
-  const isEnrollmentFree = activePack.id === 'p12'; // Lógica para matrícula gratis
+  // Si elige el pack más grande ('p12'), la matrícula es GRATIS.
+  const isEnrollmentFree = activePack.id === 'p12'; 
   const appliedEnrollment = isEnrollmentFree ? 0 : ENROLLMENT_FEE;
   const total = activePack.price + appliedEnrollment;
 
-  // 3. Objeto para el Formulario de Inscripción
-  // Transformamos la selección actual en el formato que espera EnrollmentForm
+  // 3. Objeto preparado para el Formulario de Inscripción
   const planForCheckout = useMemo(() => ({
     id: `${activeSubject.id}-${activePack.id}`,
-    title: `${activeSubject.name} (${activeLevel.label}) - ${activePack.title}`,
-    subtitle: `${activePack.hours} Horas Cronológicas`,
+    title: `${activeSubject.name} (${activeLevel.label})`,
+    subtitle: `${activePack.title} - ${activePack.hours} Horas`,
     color: activeSubject.color,
-    isScholarship: false, // Es pago normal
     
-    // Precios
+    // Precios Calculados
     mensual: activePack.price,
     pagoHoy: total,
-    detalleHoy: isEnrollmentFree ? "Mes 1 (Matrícula Gratis)" : "Matrícula + Mes 1",
     
-    // Extras para el correo/API
-    features: [`Nivel: ${activeLevel.label}`, `Pack: ${activePack.title}`, activePack.subtitle]
+    // Texto descriptivo para el recibo/whatsapp
+    detalleHoy: isEnrollmentFree 
+      ? "Mes 1 (Matrícula BONIFICADA 🎉)" 
+      : "Matrícula + Mes 1",
+    
+    features: [
+      `Nivel: ${activeLevel.label}`, 
+      `Modalidad: ${activePack.title}`, 
+      activePack.subtitle
+    ]
   }), [activeSubject, activeLevel, activePack, total, isEnrollmentFree]);
 
   const waLinkSchool = `https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, soy de un Colegio y me interesan las soluciones B2B de Lael Academy.")}`;
@@ -79,7 +87,7 @@ export default function Homeschool() {
     <div className="academy-page">
       <style>{css}</style>
       
-      {/* 🔴 MODAL DE INSCRIPCIÓN */}
+      {/* 🔴 MODAL DE INSCRIPCIÓN (Tu componente original) */}
       {showModal && (
         <EnrollmentForm 
           plan={planForCheckout} 
@@ -87,7 +95,7 @@ export default function Homeschool() {
         />
       )}
       
-      <title>Lael Academy | {isSchool ? "Soluciones B2B" : "Reforzamiento de Élite"}</title>
+      <title>Lael Academy | {isSchool ? "Soluciones Colegios" : "Entrenamiento Académico"}</title>
 
       {/* HERO SECTION */}
       <header className="hero-section">
@@ -96,7 +104,7 @@ export default function Homeschool() {
           <div className="hero-content">
             <div className="badge-new">
               <Icons.Zap/> 
-              {isSchool ? "Gestión Académica Externa" : "Inscripciones Abiertas 2026"}
+              {isSchool ? "Gestión Académica Externa" : "Matrículas 2026 Abiertas"}
             </div>
             
             <h1>
@@ -222,7 +230,7 @@ export default function Homeschool() {
                                 <div className="step-num">3</div>
                                 <div>
                                   <h3>Elige tu Intensidad</h3>
-                                  <p className="step-sub">Planes mensuales flexibles.</p>
+                                  <p className="step-sub">Planes mensuales flexibles. Cancela cuando quieras.</p>
                                 </div>
                             </div>
                             
@@ -261,7 +269,7 @@ export default function Homeschool() {
                             </div>
                         </div>
 
-                        {/* Sticky Summary */}
+                        {/* Sticky Summary (RESUMEN DE COMPRA) */}
                         <div className="summary-col">
                             <div className="summary-card" style={{borderColor: activeSubject.color}}>
                                 <div className="sum-title">
@@ -294,14 +302,14 @@ export default function Homeschool() {
                                 </div>
 
                                 <div className="sum-total">
-                                    <span>Total a pagar</span>
+                                    <span>Total a pagar hoy</span>
                                     <div className="total-stack">
                                       <span className="total-price">{clp(total)}</span>
                                       <span className="total-note">{isEnrollmentFree ? 'Mes 1' : 'Matrícula + Mes 1'}</span>
                                     </div>
                                 </div>
 
-                                {/* BOTÓN DE INSCRIPCIÓN INMEDIATA */}
+                                {/* BOTÓN DE INSCRIPCIÓN */}
                                 <button 
                                   onClick={() => setShowModal(true)} 
                                   className="btn-checkout"
@@ -310,7 +318,7 @@ export default function Homeschool() {
                                 </button>
                                 
                                 <div className="guarantee-box">
-                                  <p>✅ <strong>Garantía:</strong> Si la primera clase no te convence, te cambiamos de tutor o te devolvemos el dinero.</p>
+                                  <p>✅ <strong>Garantía:</strong> Si la primera clase no te convence, te cambiamos de tutor o devolvemos el dinero.</p>
                                 </div>
                             </div>
                         </div>
@@ -318,7 +326,7 @@ export default function Homeschool() {
                     </div>
                 </section>
 
-                {/* MOBILE STICKY BAR */}
+                {/* MOBILE STICKY BAR (Para celulares) */}
                 <div className="mobile-bar">
                     <div className="mb-info">
                         <span>Total (Pagar hoy)</span>

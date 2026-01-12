@@ -1,746 +1,480 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useCart } from "../context/CartContext.jsx"; // <--- IMPORTANTE
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../context/CartContext.jsx"; 
 import SEOHead from "../components/SEOHead.jsx"; 
 
-// 📸 IMAGEN DE FONDO (Asegúrate de tenerla o cambia la ruta)
+// 📸 IMAGEN DE FONDO (Asegúrate de tener esta ruta o cambia la imagen)
 import studyOnline from "../assets/img/lael/study-online.jpg"; 
 
-// Lógica de precios (Asumiendo que existe en data/paes.js)
+// 📦 ICONOS (Lucide React)
+// Si no tienes 'lucide-react' instalado, avísame. 
+// He incluido una versión SVG manual abajo para que funcione SIN instalar nada extra.
+import { 
+  X, User, Mail, Phone, CreditCard, 
+  CheckCircle, Loader2, ArrowRight, ShieldCheck, FileText, 
+  Book, Star, Check
+} from 'lucide-react';
+
+// 📊 DATOS
 import {
   ENROLLMENT_FEE,
   PAES_SUBJECTS,
-  PAES_COMBOS,
   priceForSubjects,
   priceForCount,
-  priceAnnual,
-  essaysForCount,
   clp,
 } from "../data/paes.js";
 
-/* --------------------------------------------------------------------------
-   1. ESTILOS CSS - DISEÑO "WORLD CLASS"
-   -------------------------------------------------------------------------- */
-const css = `
-:root {
-  --bg-deep: #050505;
-  --bg-panel: #0F1115;
-  --bg-darker: #000000;
-  
-  --glass: rgba(255, 255, 255, 0.03);
-  --glass-hover: rgba(255, 255, 255, 0.07);
-  --border: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(255, 255, 255, 0.15);
+/* ==========================================================================
+   FORMULARIO DE INSCRIPCIÓN (MODAL)
+   Integrado aquí mismo para que reciba las props directamente
+   ========================================================================== */
+const API_URL = "https://instituto-lael-web.contacto-c10.workers.dev"; // 🔴 TU CLOUDFLARE
 
-  --primary: #6366f1;
-  --primary-glow: rgba(99, 102, 241, 0.5);
-  --rose: #f43f5e;
-  --rose-glow: rgba(244, 63, 94, 0.5);
-  --green: #10b981;
-  --green-glow: rgba(16, 185, 129, 0.5);
-  --amber: #f59e0b;
-  
-  --text-main: #ffffff;
-  --text-muted: #94a3b8;
-  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-  
-  --radius-lg: 24px;
-  --radius-md: 16px;
-  --shadow-float: 0 20px 40px -10px rgba(0,0,0,0.5);
-}
+function EnrollmentForm({ planTitle, price, selectedDetails, onClose }) {
+  const [status, setStatus] = useState("idle"); 
+  const [formData, setFormData] = useState({ fullName: "", rut: "", email: "", phone: "" });
 
-.paes-page {
-  background-color: var(--bg-deep);
-  color: var(--text-main);
-  font-family: var(--font-sans);
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-  padding-bottom: 120px;
-}
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-.container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("loading");
 
-h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; margin: 0; }
-p { line-height: 1.6; color: var(--text-muted); margin: 0; }
-button { cursor: pointer; border: none; background: none; font-family: inherit; -webkit-tap-highlight-color: transparent; }
-a { text-decoration: none; color: inherit; }
+    const payload = {
+      ...formData,
+      program: planTitle,
+      comments: `Detalle: ${selectedDetails} | Monto Inicial: ${price}`
+    };
 
-/* LUCES */
-.ambient-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; pointer-events: none; z-index: 0; }
-.orb-1 { width: 600px; height: 600px; top: -200px; left: -100px; background: var(--primary); }
-.orb-2 { width: 500px; height: 500px; bottom: 20%; right: -100px; background: var(--rose); }
-.orb-3 { width: 400px; height: 400px; top: 40%; left: 20%; background: var(--green); opacity: 0.08; }
+    try {
+      const response = await fetch(`${API_URL}/inscribir`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (response.ok) setStatus("success");
+      else throw new Error("Error en el servidor");
+    } catch (error) {
+      console.error(error);
+      setStatus("error");
+    }
+  };
 
-/* BOTONES */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 1rem;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden;
-}
-.btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 25px -5px var(--primary-glow); }
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px -5px var(--primary-glow); filter: brightness(1.1); }
-.btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
-.btn-ghost:hover { border-color: var(--text-main); color: var(--text-main); background: var(--glass); transform: translateY(-2px); }
-.btn-outline { border: 2px solid var(--primary); color: var(--primary); background: transparent; }
-.btn-outline:hover { background: var(--primary); color: white; }
-
-.btn-full-cta {
-  width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
-  padding: 16px; border-radius: 16px; font-weight: 700; background: var(--primary);
-  color: white; transition: 0.3s; margin-top: auto; text-align: center;
-}
-.btn-full-cta:hover { filter: brightness(1.1); transform: translateY(-2px); }
-
-/* HERO */
-.hero { padding: 140px 0 80px; position: relative; z-index: 1; }
-.hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
-.badge-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3);
-  color: #a5b4fc; padding: 6px 16px; border-radius: 100px;
-  font-size: 0.85rem; font-weight: 700; margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px;
-}
-.hero-title { font-size: clamp(3rem, 6vw, 4.8rem); margin-bottom: 24px; }
-.text-gradient {
-  background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.hero-lead { font-size: 1.25rem; max-width: 580px; margin-bottom: 40px; color: #cbd5e1; }
-.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 50px; }
-.hero-trust { display: flex; gap: 30px; font-size: 0.95rem; color: var(--text-muted); }
-.trust-item { display: flex; align-items: center; gap: 8px; }
-.trust-item svg { color: var(--green); }
-
-.visual-card {
-  position: relative; border-radius: var(--radius-lg); overflow: hidden;
-  box-shadow: var(--shadow-float); border: 1px solid var(--border);
-  animation: float 6s ease-in-out infinite;
-}
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-.hero-img { width: 100%; height: auto; display: block; filter: brightness(0.9); }
-.floating-badge {
-  position: absolute; bottom: 30px; right: 30px;
-  background: rgba(15, 17, 21, 0.85); backdrop-filter: blur(12px);
-  border: 1px solid var(--border-light); padding: 14px 24px;
-  border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
-.stat-num { display: block; font-size: 1.8rem; font-weight: 800; color: var(--green); line-height: 1; }
-.stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-
-@media (max-width: 968px) {
-  .hero { padding-top: 100px; text-align: center; }
-  .hero-grid { grid-template-columns: 1fr; }
-  .hero-content { order: 2; }
-  .hero-visual { order: 1; margin-bottom: 20px; max-width: 500px; margin-inline: auto; }
-  .hero-lead { margin-inline: auto; }
-  .hero-actions, .hero-trust { justify-content: center; }
-}
-
-/* MINI TESTIMONIALS */
-.section-mini-testimonials {
-  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  background: rgba(0,0,0,0.3); padding: 30px 0; margin-bottom: 80px; position: relative; z-index: 1;
-}
-.testimonial-snippet { display: flex; justify-content: center; gap: 40px; align-items: center; flex-wrap: wrap; }
-.snippet-item { text-align: center; }
-.snippet-item strong { display: block; font-size: 1.5rem; color: var(--text-main); }
-.snippet-item span { color: var(--text-muted); font-size: 0.9rem; }
-.snippet-icon { color: var(--amber); font-size: 2rem; }
-.btn-small-link { font-size: 0.9rem; color: var(--primary); font-weight: 700; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; }
-
-/* PRICING */
-.section-pricing { position: relative; z-index: 1; }
-.section-header { text-align: center; margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
-.section-header h2 { font-size: 2.5rem; margin-bottom: 15px; }
-.pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; align-items: stretch; }
-
-.pricing-card {
-  background: var(--bg-panel); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); padding: 35px 30px;
-  display: flex; flex-direction: column; position: relative;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.pricing-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6); border-color: var(--border-light); }
-.pricing-card.accent-rose:hover { border-color: var(--rose); box-shadow: 0 20px 50px -10px var(--rose-glow); }
-.pricing-card.accent-indigo:hover { border-color: var(--primary); box-shadow: 0 20px 50px -10px var(--primary-glow); }
-.pricing-card.accent-green:hover { border-color: var(--green); box-shadow: 0 20px 50px -10px var(--green-glow); }
-.pricing-card.featured {
-  background: linear-gradient(180deg, rgba(244, 63, 94, 0.08), var(--bg-panel) 60%);
-  border: 1px solid rgba(244, 63, 94, 0.4); transform: scale(1.05); z-index: 2;
-}
-.popular-tag {
-  position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
-  background: var(--rose); color: white; padding: 6px 14px; border-radius: 100px;
-  font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-  box-shadow: 0 4px 15px var(--rose-glow); display: flex; align-items: center; gap: 4px;
-}
-.card-badge {
-  position: absolute; top: 20px; right: 20px;
-  background: var(--bg-darker); border: 1px solid var(--border);
-  padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;
-}
-.card-header h3 { font-size: 1.6rem; margin-bottom: 5px; }
-.subtitle { font-size: 0.95rem; color: var(--text-muted); }
-.card-price { margin: 30px 0 5px; display: flex; align-items: flex-end; }
-.currency { font-size: 1.5rem; color: var(--text-muted); margin-bottom: 6px; }
-.amount { font-size: 3.5rem; font-weight: 800; line-height: 1; color: white; }
-.accent-rose .amount { color: var(--rose); }
-.accent-green .amount { color: var(--green); }
-.accent-indigo .amount { color: var(--primary); }
-.period { margin-bottom: 8px; margin-left: 5px; color: var(--text-muted); }
-.annual-ref { font-size: 0.85rem; color: var(--text-muted); opacity: 0.7; margin-bottom: 25px; }
-.divider { height: 1px; background: var(--border); margin-bottom: 25px; }
-.features-list { list-style: none; padding: 0; margin: 0 0 30px 0; display: flex; flex-direction: column; gap: 14px; flex-grow: 1; }
-.features-list li { display: flex; gap: 12px; font-size: 0.95rem; align-items: flex-start; }
-.icon-box { color: var(--green); flex-shrink: 0; margin-top: 2px; }
-
-/* COMBOS */
-.section-combos { padding: 80px 0; overflow: hidden; }
-.combos-scroll {
-  display: flex; gap: 20px; overflow-x: auto; padding: 10px 5px 30px 5px;
-  scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
-}
-.combos-scroll::-webkit-scrollbar { height: 8px; }
-.combos-scroll::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 4px; }
-.combo-card {
-  min-width: 300px; background: var(--bg-panel); border: 1px solid var(--border);
-  border-radius: var(--radius-md); padding: 25px; position: relative;
-  scroll-snap-align: center; transition: 0.3s; display: flex; flex-direction: column;
-}
-.combo-card:hover { transform: translateY(-5px); background: var(--glass-hover); }
-.combo-badge {
-  position: absolute; top: 15px; right: 15px; background: rgba(245, 158, 11, 0.1); color: var(--amber);
-  font-size: 0.7rem; font-weight: 700; padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(245, 158, 11, 0.2);
-}
-.border-rose { border-top: 3px solid var(--rose); }
-.border-indigo { border-top: 3px solid var(--primary); }
-.border-green { border-top: 3px solid var(--green); }
-.border-amber { border-top: 3px solid var(--amber); }
-.combo-content h4 { font-size: 1.3rem; margin-bottom: 5px; }
-.combo-desc { font-size: 0.9rem; margin-bottom: 15px; color: var(--text-muted); flex-grow: 1; }
-.combo-price { font-size: 1.8rem; font-weight: 800; color: white; margin-bottom: 20px; }
-
-/* METHODOLOGY */
-.section-methodology { background: #08090C; border-block: 1px solid var(--border); padding: 100px 0; }
-.methodology-tag { color: var(--amber); font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
-.sec-head-left { max-width: 700px; margin-bottom: 60px; }
-.sec-head-left h2 { font-size: 2.8rem; margin-bottom: 20px; }
-.methodology-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
-.methodology-card {
-  padding: 30px; background: var(--glass); border-radius: var(--radius-lg);
-  border: 1px solid var(--border); transition: 0.3s;
-}
-.methodology-card:hover { background: var(--glass-hover); border-color: var(--primary); transform: translateY(-5px); }
-.icon-wrap {
-  width: 60px; height: 60px; background: rgba(99, 102, 241, 0.1); color: var(--primary);
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem; margin-bottom: 20px; border: 1px solid rgba(99, 102, 241, 0.2);
-}
-
-/* BUILDER */
-.section-builder { position: relative; z-index: 2; padding: 100px 0; }
-.builder-panel {
-  background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-lg);
-  padding: 50px; box-shadow: var(--shadow-float);
-}
-.builder-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; }
-.subjects-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid var(--border); }
-.subject-chip {
-  display: flex; align-items: center; gap: 10px; background: var(--bg-deep);
-  border: 1px solid var(--border); padding: 12px 24px; border-radius: 50px;
-  color: var(--text-muted); font-weight: 600; cursor: pointer; transition: all 0.2s;
-}
-.subject-chip:hover { border-color: var(--text-main); color: white; background: var(--glass); }
-.subject-chip.active {
-  background: var(--primary); border-color: var(--primary); color: white;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); transform: scale(1.05);
-}
-.check-circle {
-  width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3);
-  display: flex; align-items: center; justify-content: center; transition: 0.2s;
-}
-.subject-chip.active .check-circle { background: white; border-color: white; color: var(--primary); }
-
-.builder-summary {
-  display: grid; grid-template-columns: 1fr 350px; gap: 50px; align-items: center;
-  opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease;
-}
-.builder-summary.visible { opacity: 1; max-height: 800px; padding-top: 10px; }
-.summary-count { font-size: 2rem; font-weight: 800; color: var(--primary); margin-bottom: 20px; display: block; }
-.summary-feats li { display: flex; gap: 12px; margin-bottom: 12px; font-size: 1.1rem; }
-.summary-feats li svg { color: var(--green); }
-.summary-price-box {
-  background: var(--bg-darker); border: 1px solid var(--border-light);
-  border-radius: var(--radius-md); padding: 30px; text-align: center;
-}
-.price-big { font-size: 3.5rem; font-weight: 900; color: white; margin: 10px 0; letter-spacing: -2px; line-height: 1; }
-.price-sub { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; }
-.action-row { display: grid; gap: 10px; }
-
-/* FAQ */
-.section-faq { max-width: 800px; margin: 0 auto; padding-top: 0; padding-bottom: 80px; }
-.faq-item { border-bottom: 1px solid var(--border); margin-bottom: 10px; }
-.faq-question {
-  padding: 24px 0; display: flex; justify-content: space-between; align-items: center;
-  font-weight: 700; font-size: 1.1rem; cursor: pointer; color: #e2e8f0;
-}
-.faq-question:hover { color: var(--primary); }
-.chevron { transition: transform 0.3s; }
-.faq-item.open .chevron { transform: rotate(180deg); color: var(--primary); }
-.faq-answer { padding-bottom: 24px; color: var(--text-muted); line-height: 1.7; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-/* STICKY BAR */
-.mobile-sticky-bar {
-  position: fixed; bottom: 0; left: 0; right: 0;
-  background: rgba(15, 17, 21, 0.95); backdrop-filter: blur(15px);
-  border-top: 1px solid var(--border-light); padding: 15px 24px;
-  display: flex; justify-content: space-between; align-items: center;
-  z-index: 100; display: none;
-  animation: slideUp 0.3s ease;
-}
-@media (max-width: 768px) { .mobile-sticky-bar.visible { display: flex; } }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.bar-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
-.bar-price { font-weight: 800; font-size: 1.5rem; color: white; line-height: 1; }
-.btn-sticky { 
-    background: var(--primary); color: white; padding: 10px 24px; 
-    border-radius: 50px; font-weight: 700; font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; gap: 5px;
-}
-
-/* TOAST */
-.toast-msg {
-    position: fixed; top: 100px; right: 20px; background: var(--green); color: black;
-    padding: 15px 25px; border-radius: 50px; font-weight: 700; z-index: 9999;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: slideIn 0.3s ease;
-}
-@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-`;
-
-/* --------------------------------------------------------------------------
-   2. ICONOS
-   -------------------------------------------------------------------------- */
-const Icons = {
-  Check: (props) => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><polyline points="20 6 9 17 4 12"/></svg>,
-  Star: (props) => <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" {...props}><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>,
-  Zap: (props) => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
-  Shield: (props) => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
-  Play: (props) => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><polygon points="5 3 19 12 5 21 5 3"/></svg>,
-  ArrowRight: (props) => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>,
-  ChevronDown: (props) => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><polyline points="6 9 12 15 18 9"/></svg>,
-  Cart: (props) => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" {...props}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-};
-
-/* --------------------------------------------------------------------------
-   3. SUB-COMPONENTES
-   -------------------------------------------------------------------------- */
-function MiniTestimonialsSection() {
+  // --- VISTA DE ÉXITO ---
+  if (status === "success") {
     return (
-        <section className="section-mini-testimonials">
-            <div className="container">
-                <div className="testimonial-snippet">
-                    <div className="snippet-item">
-                        <strong>+900</strong>
-                        <span>Alumnos felices</span>
-                    </div>
-                     <div className="snippet-item">
-                         <Icons.Star className="snippet-icon" style={{color: '#f59e0b'}} />
-                    </div>
-                    <div className="snippet-item">
-                        <strong>850+</strong>
-                        <span>Promedio M1</span>
-                    </div>
-                    <div className="snippet-item">
-                        <strong>4.9/5</strong>
-                        <span>Google Reviews</span>
-                        <Link to="#" className="btn-small-link">Ver opiniones <Icons.ArrowRight size={14} /></Link>
-                    </div>
-                </div>
+      <div className="modal-overlay">
+        <div className="modal-content success-animate">
+          <div className="success-header">
+            <div className="success-icon"><CheckCircle size={40} /></div>
+            <h2>¡Cupo Reservado!</h2>
+            <p>Ya estás a un paso de comenzar.</p>
+          </div>
+          <div className="modal-body">
+            <div className="summary-box">
+              <div className="sb-row"><span>Plan</span> <strong>{planTitle}</strong></div>
+              <div className="sb-row total"><span>Total Hoy</span> <strong className="text-rose">{price}</strong></div>
             </div>
-        </section>
+            <div className="action-buttons">
+              <a href="#" className="btn-modal-primary"><CreditCard size={20}/> Pagar Ahora (Webpay)</a>
+              <button onClick={onClose} className="btn-modal-secondary">Pagaré más tarde</button>
+            </div>
+            <p className="tiny-text">Te hemos enviado un correo con estos datos.</p>
+          </div>
+        </div>
+      </div>
     );
-}
+  }
 
-function MethodologySection() {
-    return (
-        <section className="section section-methodology">
-            <div className="container">
-                <div className="sec-head-left">
-                    <span className="methodology-tag">Nuestra Metodología</span>
-                    <h2>El camino comprobado a la excelencia.</h2>
-                    <p>No solo memorizas, aplicas. Un sistema diseñado para hackear la PAES.</p>
-                </div>
-                <div className="methodology-grid">
-                    <div className="methodology-card">
-                        <div className="icon-wrap"><Icons.Play /></div>
-                        <h3>Clases de Dominio</h3>
-                        <p>Sesiones en vivo enfocadas en la resolución de problemas reales, no teoría aburrida. Grabadas en HD.</p>
-                    </div>
-                    <div className="methodology-card">
-                        <div className="icon-wrap"><Icons.Zap /></div>
-                        <h3>Ensayos Ilimitados</h3>
-                        <p>Plataforma inteligente que simula la presión real. Detecta tus fallas antes de que lo haga el DEMRE.</p>
-                    </div>
-                    <div className="methodology-card">
-                        <div className="icon-wrap"><Icons.Shield /></div>
-                        <h3>Tutoría Personalizada</h3>
-                        <p>No eres un número. Tendrás seguimiento constante para ajustar tu estrategia de estudio.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    )
-}
-
-function PricingCard({ title, subtitle, price, annual, features, accent = "indigo", featured = false, badge, onAction }) {
+  // --- VISTA FORMULARIO ---
   return (
-    <div className={`pricing-card accent-${accent} ${featured ? 'featured' : ''}`}>
-      {badge && <div className="card-badge">{badge}</div>}
-      {featured && <div className="popular-tag"><Icons.Star /> MÁS VENDIDO</div>}
-      
-      <div className="card-header">
-        <h3>{title}</h3>
-        <span className="subtitle">{subtitle}</span>
-      </div>
+    <div className="modal-overlay">
+      <div className="modal-content fade-in">
+        <button onClick={onClose} className="close-btn"><X size={24}/></button>
+        
+        <div className="modal-header">
+          <div className="badge"><ShieldCheck size={14}/> Matrícula Segura 2026</div>
+          <h2>Inscripción en <span className="text-rose">{planTitle}</span></h2>
+        </div>
 
-      <div className="card-price">
-        <span className="currency">$</span>
-        <span className="amount">{clp(price).replace("$", "").replace(/\./g, ".")}</span> 
-        <span className="period">/ mes</span>
-      </div>
-      <div className="annual-ref">Total anual ref: {clp(annual)}</div>
-      <div className="divider"></div>
+        <div className="modal-body scrollable">
+          <form onSubmit={handleSubmit} className="form-grid">
+            <div className="input-group">
+              <label>Nombre Completo</label>
+              <div className="input-wrapper">
+                <User className="input-icon" size={18}/>
+                <input required name="fullName" onChange={handleChange} placeholder="Ej: Sofía Valdés" />
+              </div>
+            </div>
 
-      <ul className="features-list">
-        {features.map((f, i) => (
-          <li key={i}><div className="icon-box"><Icons.Check /></div> {f}</li>
-        ))}
-      </ul>
-      
-      <button onClick={onAction} className="btn-full-cta">
-        Configurar este Plan <Icons.ArrowRight />
-      </button>
+            <div className="row-2">
+              <div className="input-group">
+                <label>RUT</label>
+                <div className="input-wrapper">
+                  <FileText className="input-icon" size={18}/>
+                  <input required name="rut" onChange={handleChange} placeholder="12.345.678-9" />
+                </div>
+              </div>
+              <div className="input-group">
+                <label>Teléfono</label>
+                <div className="input-wrapper">
+                  <Phone className="input-icon" size={18}/>
+                  <input required name="phone" type="tel" onChange={handleChange} placeholder="+569..." />
+                </div>
+              </div>
+            </div>
+
+            <div className="input-group">
+              <label>Correo Electrónico</label>
+              <div className="input-wrapper">
+                <Mail className="input-icon" size={18}/>
+                <input required name="email" type="email" onChange={handleChange} placeholder="hola@ejemplo.com" />
+              </div>
+            </div>
+
+            <div className="price-summary">
+              <div>
+                <p className="label">Total a Pagar Hoy</p>
+                <p className="desc">{selectedDetails}</p>
+              </div>
+              <div className="price-big">{price}</div>
+            </div>
+
+            <button type="submit" disabled={status === "loading"} className="btn-submit">
+              {status === "loading" ? <Loader2 className="spin"/> : <>Confirmar Inscripción <ArrowRight size={20}/></>}
+            </button>
+            
+            <p className="tiny-text">Al confirmar, aceptas nuestros términos y condiciones.</p>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
 
-function ComboCard({ combo, onSelect }) {
-    const count = combo.subjects?.length || 0;
-    const monthly = priceForCount(count);
-    return (
-        <div className={`combo-card border-${combo.color || 'indigo'}`}>
-            {combo.badge && <span className="combo-badge">{combo.badge}</span>}
-            <div className="combo-content">
-                <h4>{combo.title}</h4>
-                <p className="combo-desc">{combo.tagline}</p>
-                <div className="combo-price">{clp(monthly)}</div>
-            </div>
-            <button onClick={onSelect} className="btn btn-ghost btn-sm" style={{width:'100%'}}>
-                Seleccionar
-            </button>
-        </div>
-    )
+/* ==========================================================================
+   PÁGINA PRINCIPAL PAES
+   ========================================================================== */
+
+/* 1. CSS IN-JS (Para asegurar diseño consistente sin config externa) */
+const css = `
+:root {
+  --bg-deep: #050505;
+  --bg-panel: #0F1115;
+  --primary: #6366f1;
+  --rose: #f43f5e;
+  --amber: #f59e0b;
+  --text-main: #ffffff;
+  --text-muted: #94a3b8;
+  --radius-lg: 24px;
 }
 
-function FaqItem({ q, a }) {
-    const [open, setOpen] = useState(false);
-    return (
-        <div className={`faq-item ${open ? 'open' : ''}`} onClick={() => setOpen(!open)}>
-            <div className="faq-question">
-                {q} <span className="chevron"><Icons.ChevronDown /></span>
-            </div>
-            {open && <div className="faq-answer">{a}</div>}
-        </div>
-    )
-}
+/* BASE */
+.paes-page { background: var(--bg-deep); color: var(--text-main); font-family: 'Plus Jakarta Sans', sans-serif; min-height: 100vh; overflow-x: hidden; padding-bottom: 120px; }
+.container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 800; }
+.text-gradient { background: linear-gradient(135deg, #fff 30%, #a5b4fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 50px; font-weight: 700; transition: 0.3s; cursor: pointer; border: none; }
+.btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 25px -5px rgba(99,102,241,0.4); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 35px -5px rgba(99,102,241,0.5); }
+.btn-ghost { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); }
+.btn-ghost:hover { background: rgba(255,255,255,0.1); }
 
-/* --------------------------------------------------------------------------
-   4. COMPONENTE PRINCIPAL (PAGE)
-   -------------------------------------------------------------------------- */
+/* HERO */
+.hero { padding: 160px 0 80px; }
+.hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.hero-title { font-size: clamp(3rem, 5vw, 4.5rem); margin-bottom: 24px; }
+.hero-visual img { width: 100%; border-radius: var(--radius-lg); box-shadow: 0 20px 60px -20px rgba(0,0,0,0.8); }
+
+/* BUILDER */
+.section-builder { padding: 80px 0; }
+.builder-container { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
+.selector-panel { background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-lg); padding: 40px; }
+.subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 30px; }
+
+.subject-card {
+  background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+  padding: 20px 10px; cursor: pointer; transition: 0.2s; text-align: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; height: 120px;
+}
+.subject-card:hover { background: rgba(255,255,255,0.05); }
+.subject-card.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+/* SUMMARY (INVOICE STYLE) */
+.summary-panel { background: #000; border: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-lg); padding: 30px; position: sticky; top: 40px; }
+.invoice-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; }
+.invoice-row.total { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 20px; margin-top: 20px; align-items: flex-end; }
+.total-amount { font-size: 2.2rem; font-weight: 800; color: white; line-height: 1; }
+.enrollment-row { color: var(--amber); }
+
+/* --- ESTILOS DEL MODAL (ENROLLMENT FORM) --- */
+.modal-overlay { position: fixed; inset: 0; background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal-content { background: white; width: 100%; max-width: 500px; border-radius: 24px; position: relative; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); color: #1e293b; }
+.fade-in { animation: fadeIn 0.3s ease-out; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+.close-btn { position: absolute; top: 16px; right: 16px; background: #f1f5f9; border: none; padding: 8px; border-radius: 50%; cursor: pointer; color: #64748b; }
+.close-btn:hover { background: #e2e8f0; color: #0f172a; }
+
+.modal-header { background: #0f172a; color: white; padding: 32px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(244, 63, 94, 0.15); color: #fb7185; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 12px; }
+.text-rose { color: #f43f5e; }
+
+.modal-body { padding: 32px; max-height: 60vh; overflow-y: auto; }
+.form-grid { display: flex; flex-direction: column; gap: 20px; }
+.input-group label { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 6px; }
+.input-wrapper { position: relative; }
+.input-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #94a3b8; }
+.input-wrapper input { width: 100%; padding: 12px 16px 12px 48px; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 1rem; outline: none; transition: 0.2s; background: #f8fafc; color: #334155; box-sizing: border-box; }
+.input-wrapper input:focus { background: white; border-color: #f43f5e; box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.1); }
+.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.price-summary { background: #fff1f2; border: 1px solid #ffe4e6; padding: 16px; border-radius: 16px; display: flex; justify-content: space-between; align-items: center; }
+.price-summary .label { font-size: 0.75rem; font-weight: 700; color: #e11d48; text-transform: uppercase; }
+.price-summary .desc { font-size: 0.85rem; color: #9f1239; margin-top: 4px; max-width: 150px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.price-big { font-size: 1.5rem; font-weight: 800; color: #e11d48; }
+
+.btn-submit { width: 100%; background: #0f172a; color: white; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 1.1rem; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.2s; }
+.btn-submit:hover { background: #1e293b; transform: translateY(-2px); }
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.tiny-text { font-size: 0.75rem; text-align: center; color: #94a3b8; margin-top: 16px; }
+
+/* Modal Success */
+.success-header { background: #f0fdf4; padding: 40px; text-align: center; border-bottom: 1px solid #dcfce7; }
+.success-icon { width: 80px; height: 80px; background: #dcfce7; color: #16a34a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.success-header h2 { color: #14532d; font-size: 1.8rem; margin-bottom: 8px; }
+.success-header p { color: #15803d; }
+.summary-box { background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 24px; }
+.sb-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.9rem; color: #64748b; }
+.sb-row.total { border-top: 1px solid #e2e8f0; paddingTop: 12px; margin-top: 12px; font-size: 1.1rem; color: #0f172a; }
+.btn-modal-primary { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; padding: 16px; background: #0f172a; color: white; text-decoration: none; border-radius: 12px; font-weight: 700; margin-bottom: 12px; }
+.btn-modal-secondary { width: 100%; padding: 14px; background: white; border: 1px solid #e2e8f0; color: #64748b; border-radius: 12px; font-weight: 600; cursor: pointer; }
+
+@media (max-width: 900px) {
+  .hero-grid, .builder-container { grid-template-columns: 1fr; }
+  .summary-panel { order: -1; position: relative; top: 0; }
+  .row-2 { grid-template-columns: 1fr; }
+}
+`;
+
 export default function PAES() {
-  const { addToCart } = useCart(); // Hook del carrito
+  const { addToCart } = useCart();
   const navigate = useNavigate();
-  const location = useLocation();
   const builderRef = useRef(null);
 
   const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
   const [toast, setToast] = useState(null);
+  
+  // ESTADO PARA EL MODAL DE INSCRIPCIÓN
+  const [showEnrollment, setShowEnrollment] = useState(false);
 
-  // Lógica de cálculo
+  // Cálculos en tiempo real
   const selectedSubjects = useMemo(
     () => PAES_SUBJECTS.filter((s) => selectedSubjectIds.includes(s.id)),
     [selectedSubjectIds]
   );
   const subjectCount = selectedSubjects.length;
-  const monthly = subjectCount ? priceForSubjects(selectedSubjectIds) : 0;
-  const annual = subjectCount ? priceAnnual(subjectCount) : 0;
+  const monthlyPrice = subjectCount ? priceForSubjects(selectedSubjectIds) : 0;
+  
+  // LÓGICA CLAVE: Mensualidad + Matrícula
+  const firstPaymentTotal = subjectCount > 0 ? monthlyPrice + ENROLLMENT_FEE : 0;
 
-  useEffect(() => { window.scrollTo(0,0); }, [location.pathname]);
+  useEffect(() => { window.scrollTo(0,0); }, []);
 
-  const toggleSubject = (id) =>
+  const toggleSubject = (id) => {
     setSelectedSubjectIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
+  };
 
   const scrollToBuilder = (presetIds) => {
       if(presetIds) setSelectedSubjectIds(presetIds);
       builderRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
-  // --- ACCIONES DEL CARRITO ---
+  /* --- AÑADIR AL CARRITO (Carrito Web) --- */
   const handleAddToCart = () => {
       if(subjectCount === 0) return;
-      const itemName = `Plan PAES (${subjectCount} Ramos): ${selectedSubjects.map(s => s.name).join(', ')}`;
       
       addToCart({
-          id: `paes-${Date.now()}`, // ID único simple
-          nombre: itemName,
-          precio: monthly,
-          tipo: 'paes'
+          id: `paes-plan-${Date.now()}`, 
+          nombre: `Plan PAES (${subjectCount} Ramos)`,
+          precio: monthlyPrice,
+          tipo: 'paes_plan',
+          detalles: selectedSubjects.map(s => s.name).join(', ') 
+      });
+
+      addToCart({
+          id: `paes-matricula-2026`, 
+          nombre: 'Matrícula Admisión 2026',
+          precio: ENROLLMENT_FEE,
+          tipo: 'matricula',
+          detalles: 'Pago único anual'
       });
       
-      setToast("¡Plan agregado al carrito!");
+      setToast("¡Agregado al Carrito!");
       setTimeout(() => setToast(null), 3000);
-      setSelectedSubjectIds([]); // Limpiar selección opcionalmente
   };
 
-  const handleBuyNow = () => {
+  /* --- ABRIR MODAL DE PAGO INMEDIATO --- */
+  const handleOpenEnrollment = () => {
     if(subjectCount === 0) return;
-    handleAddToCart();
-    navigate('/inscripcion');
+    setShowEnrollment(true);
   };
-
-  // Stats para tarjetas de precio
-  const stats = {
-    p1: { count: 1, m: priceForCount(1), a: priceAnnual(1) },
-    p3: { count: 3, m: priceForCount(3), a: priceAnnual(3) },
-    p5: { count: 5, m: priceForCount(5), a: priceAnnual(5) },
-  };
-  
-  // Combos
-  const COMBOS_TOP = ["hum-duo", "stem-basico", "trio-fundamental", "full-5", "completo-7"];
-  const combos = PAES_COMBOS.filter((c) => COMBOS_TOP.includes(c.id));
-
-  // FAQ Data
-  const faqs = [
-      { q: "¿Cómo funcionan las clases en vivo?", a: "Son vía Zoom/Meet con profesores expertos. Quedan grabadas en tu aula virtual para verlas cuando quieras." },
-      { q: "¿Tengo compromiso de permanencia?", a: "No. Pagas mes a mes. Si necesitas retirarte, solo no renuevas el siguiente mes." },
-      { q: "¿Qué incluye la tutoría?", a: "Seguimiento académico, resolución de dudas vocacionales y estrategia de estudio personalizada." }
-  ];
 
   return (
     <div className="paes-page">
-      <style>{css}</style> 
-      <SEOHead 
-        title="Planes PAES 2026 | Instituto Lael" 
-        description="Preuniversitario PAES 2026. Clases en vivo, ensayos y tutorías. Planes flexibles desde $6.990 mensual." 
-        canonical="https://www.institutolael.cl/paes" 
-      />
+      <style>{css}</style>
+      <SEOHead title="Planes PAES 2026 | Instituto Lael" description="Preuniversitario personalizado." />
 
-      {toast && <div className="toast-msg"><Icons.Check/> {toast}</div>}
+      {/* RENDERIZAR MODAL SI ESTÁ ACTIVO */}
+      {showEnrollment && (
+        <EnrollmentForm 
+          planTitle={`Plan PAES (${subjectCount} Ramos)`}
+          price={clp(firstPaymentTotal)}
+          selectedDetails={`Incluye: Matrícula + ${selectedSubjects.map(s => s.name).join(', ')}`}
+          onClose={() => setShowEnrollment(false)}
+        />
+      )}
 
-      {/* FONDO ANIMADO */}
-      <div className="ambient-orb orb-1" />
-      <div className="ambient-orb orb-2" />
-      <div className="ambient-orb orb-3" />
+      {toast && (
+        <div style={{position:'fixed', top:20, right:20, background:'#10b981', color:'#000', padding:'12px 24px', borderRadius:50, fontWeight:700, zIndex:99, display:'flex', gap:8, alignItems:'center'}}>
+          <Check size={20}/> {toast}
+        </div>
+      )}
 
-      {/* HERO */}
-      <header className="hero">
+      {/* BACKGROUND ORBS */}
+      <div style={{position:'absolute', width:600, height:600, top:-200, left:-100, background:'#6366f1', filter:'blur(120px)', opacity:0.12, borderRadius:'50%', pointerEvents:'none'}} />
+      <div style={{position:'absolute', width:500, height:500, bottom:'20%', right:-100, background:'#f43f5e', filter:'blur(120px)', opacity:0.08, borderRadius:'50%', pointerEvents:'none'}} />
+
+      {/* HERO SECTION */}
+      <section className="hero">
         <div className="container hero-grid">
-          <div className="hero-content">
-            <div className="badge-pill">🚀 Admisión 2026 Abierta</div>
-            <h1 className="hero-title">
-              Tu ingreso a la U <br/>
-              <span className="text-gradient">empieza aquí.</span>
-            </h1>
-            <p className="hero-lead">
-              Sin precios inflados ni contratos que te amarran.
-              Calidad académica premium a un precio justo.
+          <div>
+            <div style={{display:'inline-block', padding:'6px 16px', background:'rgba(245, 158, 11, 0.15)', color:'#fbbf24', borderRadius:'20px', fontSize:'0.85rem', fontWeight:'700', marginBottom:'20px', border:'1px solid rgba(245, 158, 11, 0.3)'}}>
+              ⚡️ Matrícula {clp(ENROLLMENT_FEE)}
+            </div>
+            <h1 className="hero-title">Tu puntaje nacional <span className="text-gradient">se construye aquí.</span></h1>
+            <p style={{fontSize:'1.2rem', color:'#cbd5e1', marginBottom:40, maxWidth:540}}>
+              Sin cláusulas abusivas. Educación de alto rendimiento con garantía total.
             </p>
             
-            <div className="hero-actions">
-              <button onClick={() => scrollToBuilder([])} className="btn btn-primary btn-lg">
-                Armar mi Plan <Icons.ArrowRight />
+            <div style={{display:'flex', gap:'15px', flexWrap:'wrap'}}>
+              <button onClick={() => scrollToBuilder([])} className="btn btn-primary">
+                Configurar mi Plan <ArrowRight size={18}/>
               </button>
-              <a href={`https://wa.me/56964626568?text=${encodeURIComponent("Hola, quiero saber más sobre los planes PAES")}`} target="_blank" rel="noreferrer" className="btn btn-ghost">
-                Hablar por WhatsApp
+              <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="btn btn-ghost">
+                Consultar Horarios
               </a>
             </div>
-
-            <div className="hero-trust">
-              <div className="trust-item"><Icons.Zap /> Clases en vivo + Grabadas</div>
-              <div className="trust-item"><Icons.Shield /> Matrícula única {clp(ENROLLMENT_FEE)}</div>
-            </div>
           </div>
-
           <div className="hero-visual">
-            <div className="visual-card">
-              <img src={studyOnline} alt="Estudiante Lael" className="hero-img" />
-              <div className="floating-badge">
-                <span className="stat-num">100%</span>
-                <span className="stat-label">Compromiso</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-      
-      <MiniTestimonialsSection />
-
-      {/* PRECIOS DESTACADOS */}
-      <section className="section section-pricing">
-        <div className="container">
-          <div className="section-header">
-            <h2>Planes Transparentes</h2>
-            <p>Paga mensual. Cancela cuando quieras. Sin letra chica.</p>
-          </div>
-
-          <div className="pricing-grid">
-            <PricingCard 
-              title="1 Ramo"
-              subtitle="Refuerzo puntual"
-              price={stats.p1.m}
-              annual={stats.p1.a}
-              features={["1 ensayo mensual", "Clases en vivo", "Acceso a grabaciones"]}
-              accent="indigo"
-              onAction={() => scrollToBuilder(['m1'])} // Ejemplo: pre-selecciona m1
-            />
-            
-            <PricingCard 
-              title="3 Ramos"
-              subtitle="Fundamental"
-              price={stats.p3.m}
-              annual={stats.p3.a}
-              features={["3 ensayos mensuales", "Tutoría mensual", "Corrección de ensayos"]}
-              accent="green"
-              badge="Equilibrado"
-              onAction={() => scrollToBuilder(['m1', 'len', 'his'])}
-            />
-
-            <PricingCard 
-              title="Full 5 Ramos"
-              subtitle="Preparación Total"
-              price={stats.p5.m} 
-              annual={stats.p5.a}
-              features={["5 ensayos mensuales", "Tutoría Avanzada", "Prioridad 24/7", "Orientación Vocacional"]}
-              accent="rose"
-              featured={true}
-              onAction={() => scrollToBuilder(['m1', 'm2', 'len', 'his', 'cie'])}
-            />
+            <img src={studyOnline} alt="Clases Online" />
           </div>
         </div>
       </section>
-
-      {/* COMBOS SLIDER */}
-      <section className="section section-combos">
-        <div className="container">
-          <div className="section-header text-left" style={{textAlign: 'left', margin: '0 0 30px'}}>
-            <h3>Combos Populares</h3>
-            <p>Packs pre-armados para carreras específicas.</p>
-          </div>
-          <div className="combos-scroll">
-            {combos.map((combo) => (
-              <ComboCard 
-                key={combo.id} 
-                combo={combo} 
-                onSelect={() => scrollToBuilder(combo.subjects || [])} 
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-      
-      <MethodologySection />
 
       {/* BUILDER INTERACTIVO */}
-      <section ref={builderRef} className="section section-builder">
+      <section ref={builderRef} className="section-builder">
         <div className="container">
-          <div className="builder-panel">
-            <div className="builder-header">
-              <div className="text-content">
-                <h2>Arma tu propio plan</h2>
-                <p>Selecciona los ramos que necesitas. El precio se ajusta en tiempo real.</p>
-              </div>
-              {subjectCount > 0 && (
-                <button className="btn btn-ghost btn-sm" onClick={() => setSelectedSubjectIds([])}>
-                  Limpiar selección
-                </button>
-              )}
+          <div style={{textAlign:'center', marginBottom:'50px'}}>
+            <h2>Arma tu Plan a Medida</h2>
+            <p style={{color:'#94a3b8'}}>Selecciona las asignaturas. El precio se calcula automáticamente.</p>
+          </div>
+
+          <div className="builder-container">
+            {/* IZQUIERDA: SELECCIÓN */}
+            <div className="selector-panel">
+               <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'20px'}}>
+                 <h3 style={{fontSize:'1.2rem'}}>Asignaturas Disponibles</h3>
+                 {subjectCount > 0 && 
+                    <button onClick={() => setSelectedSubjectIds([])} style={{background:'none', border:'none', color:'#94a3b8', fontSize:'0.9rem', textDecoration:'underline', cursor:'pointer'}}>Limpiar</button>
+                 }
+               </div>
+
+               <div className="subjects-grid">
+                  {PAES_SUBJECTS.map((s) => {
+                    const isActive = selectedSubjectIds.includes(s.id);
+                    return (
+                      <div 
+                        key={s.id} 
+                        onClick={() => toggleSubject(s.id)} 
+                        className={`subject-card ${isActive ? 'active' : ''}`}
+                      >
+                         <div style={{fontSize:'1.5rem'}}>{isActive ? <Check /> : <Book />}</div>
+                         <span style={{fontWeight:'700', fontSize:'0.9rem'}}>{s.name}</span>
+                      </div>
+                    )
+                  })}
+               </div>
+               
+               <div style={{marginTop:'30px', padding:'20px', background:'rgba(255,255,255,0.03)', borderRadius:'12px', display:'flex', gap:10}}>
+                  <ShieldCheck size={20} color="#10b981" />
+                  <div>
+                    <h4 style={{marginBottom:'5px', fontSize:'0.95rem'}}>Garantía Lael</h4>
+                    <p style={{fontSize:'0.85rem', color:'#94a3b8', lineHeight:1.4}}>Si no te gusta la metodología durante la primera semana, te devolvemos el 100% de tu mensualidad.</p>
+                  </div>
+               </div>
             </div>
 
-            <div className="subjects-grid">
-              {PAES_SUBJECTS.map((s) => {
-                const isSelected = selectedSubjectIds.includes(s.id);
-                return (
-                  <button
-                    key={s.id}
-                    onClick={() => toggleSubject(s.id)}
-                    className={`subject-chip ${isSelected ? 'active' : ''}`}
-                  >
-                    <div className="check-circle">
-                      {isSelected && <Icons.Check size={14} strokeWidth={4} />}
-                    </div>
-                    <span>{s.name}</span>
-                  </button>
-                );
-              })}
-            </div>
+            {/* DERECHA: RESUMEN DE COMPRA */}
+            <div className="summary-panel">
+               <h3 style={{borderBottom:'1px solid rgba(255,255,255,0.1)', paddingBottom:20, marginBottom:20}}>Resumen de Pago</h3>
 
-            <div className={`builder-summary ${subjectCount > 0 ? 'visible' : ''}`}>
-              <div className="summary-info">
-                <span className="summary-count">
-                    {subjectCount === 0 ? "Selecciona ramos..." : `${subjectCount} ramos seleccionados`}
-                </span>
-                <ul className="summary-feats">
-                    <li><Icons.Play/> Clases en vivo + Grabadas</li>
-                    <li><Icons.Zap/> {essaysForCount(subjectCount)} ensayos al mes</li>
-                    {subjectCount >= 3 && <li><Icons.Star/> Tutoría incluida</li>}
-                </ul>
-              </div>
-              
-              <div className="summary-price-box">
-                <div style={{textTransform:'uppercase', fontSize:'0.75rem', color:'var(--text-muted)', letterSpacing:'1px', marginBottom:'5px'}}>
-                    Valor Mensual
-                </div>
-                <div className="price-big">{clp(monthly)}</div>
-                <div className="price-sub">Matrícula única: {clp(ENROLLMENT_FEE)}</div>
-                
-                <div className="action-row">
-                    <button onClick={handleAddToCart} className="btn btn-outline w-full" style={{width:'100%', justifyContent:'center'}}>
-                         <Icons.Cart/> Agregar al Carrito
-                    </button>
-                    <button onClick={handleBuyNow} className="btn btn-primary w-full" style={{width:'100%', justifyContent:'center'}}>
-                        Inscribirme Ahora
-                    </button>
-                </div>
-              </div>
+               {subjectCount === 0 ? (
+                 <div style={{textAlign:'center', padding:'40px 0', color:'#94a3b8'}}>
+                    <p>Selecciona al menos un ramo para ver el detalle.</p>
+                 </div>
+               ) : (
+                 <>
+                   {/* Desglose */}
+                   <div className="invoice-row">
+                      <span>Plan Mensual ({subjectCount} ramos)</span>
+                      <span style={{fontWeight:'700'}}>{clp(monthlyPrice)}</span>
+                   </div>
+                   <div style={{fontSize:'0.8rem', color:'#94a3b8', marginBottom:'15px', paddingLeft:'10px'}}>
+                      {selectedSubjects.map(s => s.name).join(', ')}
+                   </div>
+
+                   <div className="invoice-row enrollment-row">
+                      <span>+ Matrícula 2026</span>
+                      <span style={{fontWeight:'700'}}>{clp(ENROLLMENT_FEE)}</span>
+                   </div>
+
+                   {/* Total */}
+                   <div className="invoice-row total">
+                      <span style={{textTransform:'uppercase', letterSpacing:1, fontSize:'0.8rem', color:'#94a3b8'}}>Total Primer Pago</span>
+                      <div style={{textAlign:'right'}}>
+                          <div className="total-amount">{clp(firstPaymentTotal)}</div>
+                          <div style={{fontSize:'0.8rem', color:'#94a3b8', marginTop:5}}>Luego {clp(monthlyPrice)} / mes</div>
+                      </div>
+                   </div>
+
+                   {/* Botones de Acción */}
+                   <div style={{display:'grid', gap:'12px', marginTop:'30px'}}>
+                      
+                      {/* ESTE BOTÓN ABRE EL MODAL */}
+                      <button onClick={handleOpenEnrollment} className="btn btn-primary" style={{width:'100%', justifyContent:'center'}}>
+                        Pagar e Inscribirme <ArrowRight size={18}/>
+                      </button>
+
+                      {/* ESTE BOTÓN ES PARA CARRITO (SEGUIR NAVEGANDO) */}
+                      <button onClick={handleAddToCart} className="btn btn-ghost" style={{width:'100%', justifyContent:'center'}}>
+                        Agregar al Carrito
+                      </button>
+                   </div>
+                   
+                   <p style={{textAlign:'center', fontSize:'0.75rem', marginTop:'15px', color:'#94a3b8'}}>
+                     Pagos seguros vía WebPay / MercadoPago
+                   </p>
+                 </>
+               )}
             </div>
           </div>
         </div>
       </section>
-
-      {/* FAQ */}
-      <section className="section section-faq">
-          <div className="container">
-              <div className="section-header">
-                  <h3>Preguntas Frecuentes</h3>
-              </div>
-              {faqs.map((f,i) => <FaqItem key={i} q={f.q} a={f.a} />)}
-          </div>
-      </section>
-
-      {/* STICKY MOBILE BAR */}
-      <div className={`mobile-sticky-bar ${subjectCount > 0 ? 'visible' : ''}`}>
-          <div>
-              <div className="bar-label">{subjectCount} Ramos seleccionados</div>
-              <div className="bar-price">{clp(monthly)}</div>
-          </div>
-          <button onClick={handleBuyNow} className="btn-sticky">
-              Inscribirme <Icons.ArrowRight size={16}/>
-          </button>
-      </div>
-
     </div>
   );
 }

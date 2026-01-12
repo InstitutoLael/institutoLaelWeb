@@ -1,6 +1,9 @@
 // src/worker.js
 
-// Función auxiliar para respuestas JSON (CORS activado para que React no falle)
+// 🔴 TU GOOGLE SHEET (La URL que me pasaste)
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxWm7ny3UL0eu2vnly4SmNN8M2N3JMbadj1Sw-vHXgHqB3opwNNoj8AdXB2JtwatmcK/exec";
+
+// Configuración CORS (Para que React no reclame)
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -28,12 +31,13 @@ export default {
       try {
         const body = await request.json();
         
-        // Validamos que vengan los datos mínimos
+        // Validación básica
         if (!body.fullName || !body.rut || !body.program) {
-           return jsonResponse({ error: "Faltan datos" }, 400);
+           return jsonResponse({ error: "Faltan datos obligatorios" }, 400);
         }
 
-        // INSERTAMOS EN LA TABLA RÁPIDA 'pre_matriculas'
+        // --- A. GUARDAR EN BASE DE DATOS D1 (Seguridad) ---
+        // Esto guarda en Cloudflare (tu base de datos principal)
         const result = await env.DB.prepare(
           `INSERT INTO pre_matriculas (nombre, rut, email, telefono, curso_interes, detalle_pago) 
            VALUES (?1, ?2, ?3, ?4, ?5, ?6)`
@@ -48,16 +52,39 @@ export default {
         )
         .run();
 
-        // Si tienes configurado el Google Sheet, aquí iría el fetch() de respaldo.
+        // --- B. ENVIAR A GOOGLE SHEETS (Respaldo) ---
+        // Esto manda los datos a tu Excel automáticamente
+        try {
+          if (GOOGLE_SHEET_URL) {
+            // Enviamos los datos mapeados (Nombre del campo en React -> Nombre de Columna en Excel)
+            await fetch(GOOGLE_SHEET_URL, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                Nombre: body.fullName,
+                RUT: body.rut,
+                Email: body.email,
+                Telefono: body.phone,
+                Plan: body.program,
+                Detalle: body.comments || ""
+              })
+            });
+          }
+        } catch (sheetError) {
+          // Si falla Google Sheets, solo lo registramos en consola, 
+          // pero NO detenemos el proceso porque ya guardamos en D1.
+          console.log("Aviso: No se pudo enviar al Sheet, pero D1 guardó bien.", sheetError);
+        }
         
+        // Respuesta final de éxito al usuario
         return jsonResponse({ 
           success: true, 
           id: result.meta.last_row_id,
-          message: "Guardado en pre-matrícula" 
+          message: "Inscripción exitosa" 
         });
 
       } catch (err) {
-        return jsonResponse({ error: err.message }, 500);
+        return jsonResponse({ error: "Error en servidor: " + err.message }, 500);
       }
     }
 
@@ -66,6 +93,6 @@ export default {
       return new Response("API Instituto Lael Funcionando 🚀");
     }
 
-    return new Response("Not Found", { status: 404, headers: corsHeaders });
+    return new Response("Ruta no encontrada", { status: 404, headers: corsHeaders });
   },
 };

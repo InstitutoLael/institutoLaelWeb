@@ -1,8 +1,8 @@
 import { useState, useMemo, useRef } from "react";
-// 👇 Tu formulario que ya funciona (No lo tocamos)
+// 👇 Tu formulario existente (no lo tocamos, solo le enviamos los datos más robustos)
 import EnrollmentForm from "../components/EnrollmentForm"; 
 
-// Importamos la data con los NUEVOS PRECIOS BAJOS
+// Importamos la data
 import { 
   ENROLLMENT_FEE, 
   SUBJECTS, 
@@ -18,7 +18,7 @@ const heroImg = "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=
 import losOlivosLogo from "../assets/img/Partners/LosOlivos.png"; 
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG (Internos para evitar fallos de librerías)
+   1. ICONOS SVG
    ────────────────────────────────────────────────────────────────────────── */
 const Icons = {
   Zap: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
@@ -35,50 +35,52 @@ const Icons = {
    2. COMPONENTE PRINCIPAL
    ────────────────────────────────────────────────────────────────────────── */
 export default function Homeschool() {
-  const [isSchool, setIsSchool] = useState(false); // Toggle B2C / B2B
+  const [isSchool, setIsSchool] = useState(false);
   
-  // ESTADOS INICIALES
-  const [selectedSubject, setSelectedSubject] = useState("mat"); // Matemáticas por defecto
-  const [selectedLevel, setSelectedLevel] = useState("media");   // Media por defecto
-  const [selectedPackId, setSelectedPackId] = useState("p8");    // "Pack Pro" seleccionado (Estrategia)
-  
+  // ESTADOS
+  const [selectedSubject, setSelectedSubject] = useState("mat");
+  const [selectedLevel, setSelectedLevel] = useState("media");
+  const [selectedPackId, setSelectedPackId] = useState("p8"); // Pack Pro por defecto
   const [showModal, setShowModal] = useState(false); 
+  
   const configRef = useRef(null);
 
-  // === LÓGICA DE NEGOCIO ===
-  
-  // 1. Encontrar objetos completos basados en ID (Fallback seguro)
+  // === LÓGICA ===
   const activeSubject = SUBJECTS.find(s => s.id === selectedSubject) || SUBJECTS[0];
   const activePack = PACKS.find(p => p.id === selectedPackId) || PACKS[1];
   const activeLevel = LEVELS.find(l => l.id === selectedLevel) || LEVELS[1];
 
-  // 2. Calcular Totales
-  // Si elige el pack más grande ('p12'), la matrícula es GRATIS.
+  // Cálculos
   const isEnrollmentFree = activePack.id === 'p12'; 
   const appliedEnrollment = isEnrollmentFree ? 0 : ENROLLMENT_FEE;
   const total = activePack.price + appliedEnrollment;
 
-  // 3. Objeto preparado para el Formulario de Inscripción
+  // 👇 AQUÍ ESTÁ EL FIX DEL ERROR:
+  // Preparamos el objeto "plan" con TODOS los campos posibles y convertidos a String
+  // para evitar que tu formulario falle al intentar leer algo undefined.
   const planForCheckout = useMemo(() => ({
+    // IDs
     id: `${activeSubject.id}-${activePack.id}`,
+    
+    // Títulos y Nombres (Duplicamos 'name' y 'title' por compatibilidad)
     title: `${activeSubject.name} (${activeLevel.label})`,
+    name: `${activeSubject.name} (${activeLevel.label})`, 
     subtitle: `${activePack.title} - ${activePack.hours} Horas`,
-    color: activeSubject.color,
     
-    // Precios Calculados
-    mensual: activePack.price,
-    pagoHoy: total,
+    // Estilos
+    color: activeSubject.color || "#6366f1", // Fallback por si acaso
     
-    // Texto descriptivo para el recibo/whatsapp
-    detalleHoy: isEnrollmentFree 
-      ? "Mes 1 (Matrícula BONIFICADA 🎉)" 
-      : "Matrícula + Mes 1",
+    // PRECIOS: Formateamos a String con clp() porque el formulario probablemente espera texto
+    price: clp(total),            // Campo 'price' genérico (clave para el error c.split)
+    mensual: clp(activePack.price), 
+    pagoHoy: clp(total),
     
-    features: [
-      `Nivel: ${activeLevel.label}`, 
-      `Modalidad: ${activePack.title}`, 
-      activePack.subtitle
-    ]
+    // Datos crudos por si acaso
+    priceRaw: total, 
+    
+    // Detalles
+    detalleHoy: isEnrollmentFree ? "Mes 1 (Matrícula GRATIS)" : "Matrícula + Mes 1",
+    features: [`Nivel: ${activeLevel.label}`, `Pack: ${activePack.title}`, activePack.subtitle]
   }), [activeSubject, activeLevel, activePack, total, isEnrollmentFree]);
 
   const waLinkSchool = `https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, soy de un Colegio y me interesan las soluciones B2B de Lael Academy.")}`;
@@ -87,15 +89,15 @@ export default function Homeschool() {
     <div className="academy-page">
       <style>{css}</style>
       
-      {/* 🔴 MODAL DE INSCRIPCIÓN (Tu componente original) */}
+      <title>Lael Academy | {isSchool ? "Soluciones Colegios" : "Entrenamiento Académico"}</title>
+
+      {/* 🔴 MODAL DE INSCRIPCIÓN */}
       {showModal && (
         <EnrollmentForm 
           plan={planForCheckout} 
           onClose={() => setShowModal(false)} 
         />
       )}
-      
-      <title>Lael Academy | {isSchool ? "Soluciones Colegios" : "Entrenamiento Académico"}</title>
 
       {/* HERO SECTION */}
       <header className="hero-section">
@@ -121,7 +123,6 @@ export default function Homeschool() {
               }
             </p>
 
-            {/* TOGGLE SWITCH */}
             <div className="toggle-pill">
                 <button 
                   className={`t-btn ${!isSchool ? 'active' : ''}`} 
@@ -140,7 +141,7 @@ export default function Homeschool() {
 
           <div className="visual-bento">
             <div className="bento-card-hero">
-               <img src={heroImg} alt="Estudiantes en Lael Academy" className="hero-img" />
+               <img src={heroImg} alt="Estudiantes" className="hero-img" />
                <div className="gradient-overlay"></div>
             </div>
             
@@ -163,11 +164,11 @@ export default function Homeschool() {
       {/* DYNAMIC CONTENT AREA */}
       <div className="container" id="content-area">
         
-        {/* ================= VISTA: ESTUDIANTES (B2C) ================= */}
+        {/* ================= VISTA B2C ================= */}
         {!isSchool && (
             <div className="animate-fade">
                 
-                {/* STEP 1: MATERIAS */}
+                {/* 1. MATERIAS */}
                 <section className="step-section">
                     <div className="step-header">
                         <div className="step-num">1</div>
@@ -197,7 +198,7 @@ export default function Homeschool() {
                     </div>
                 </section>
 
-                {/* STEP 2: NIVEL */}
+                {/* 2. NIVEL */}
                 <section className="step-section">
                     <div className="step-header">
                         <div className="step-num">2</div>
@@ -220,11 +221,10 @@ export default function Homeschool() {
                     </div>
                 </section>
 
-                {/* STEP 3: PACKS & RESUMEN */}
+                {/* 3. PACKS */}
                 <section className="step-section" ref={configRef}>
                     <div className="config-container">
                         
-                        {/* Packs */}
                         <div className="packs-col">
                             <div className="step-header">
                                 <div className="step-num">3</div>
@@ -269,7 +269,7 @@ export default function Homeschool() {
                             </div>
                         </div>
 
-                        {/* Sticky Summary (RESUMEN DE COMPRA) */}
+                        {/* RESUMEN sticky */}
                         <div className="summary-col">
                             <div className="summary-card" style={{borderColor: activeSubject.color}}>
                                 <div className="sum-title">
@@ -309,7 +309,6 @@ export default function Homeschool() {
                                     </div>
                                 </div>
 
-                                {/* BOTÓN DE INSCRIPCIÓN */}
                                 <button 
                                   onClick={() => setShowModal(true)} 
                                   className="btn-checkout"
@@ -326,7 +325,6 @@ export default function Homeschool() {
                     </div>
                 </section>
 
-                {/* MOBILE STICKY BAR (Para celulares) */}
                 <div className="mobile-bar">
                     <div className="mb-info">
                         <span>Total (Pagar hoy)</span>
@@ -340,7 +338,7 @@ export default function Homeschool() {
             </div>
         )}
 
-        {/* ================= VISTA: COLEGIOS (B2B) ================= */}
+        {/* ================= VISTA B2B ================= */}
         {isSchool && (
             <div className="b2b-container animate-fade">
                 <div className="b2b-header">

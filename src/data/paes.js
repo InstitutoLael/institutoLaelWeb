@@ -1,12 +1,11 @@
 // src/data/paes.js
+// === Preuniversitario 2026: Estrategia de Volumen y Margen ===
 
 /* ──────────────────────────────────────────────────────────────────────────
-   PAES 2026 — ESTRATEGIA FINANCIERA "SUELDO DIGNO + CAJA"
-   
-   Objetivo: Pagar $3.000 por alumno/ramo al docente y mantener rentabilidad.
+   1. CONFIGURACIÓN FINANCIERA
    ────────────────────────────────────────────────────────────────────────── */
 
-// 🔢 Helper de Moneda
+// 🔢 Formateador de Moneda
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -14,151 +13,147 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// 📅 Calendario Académico 2026
-export const ACADEMIC_MONTHS = 8; // Abril - Noviembre (aprox)
-export const ACADEMIC_PERIOD_LABEL = "temporada 2026"; 
+// 🧾 Matrícula Anual (Pago Único)
+export const ENROLLMENT_FEE = 10990; 
 
-// 🧾 Matrícula
-export const ENROLLMENT_FEE = 5990;
+// 📅 Duración del servicio (para cálculos anuales visuales)
+export const ACADEMIC_MONTHS = 8; 
 
-/**
- * 💵 PRECIO BASE POR RAMO INDIVIDUAL
- */
-export const PER_SUBJECT_MONTHLY = 6990;
+/* ──────────────────────────────────────────────────────────────────────────
+   2. CALCULADORA DE PRECIOS (El cerebro del negocio)
+   ────────────────────────────────────────────────────────────────────────── */
 
 /**
- * 🔻 ESCALA DE DESCUENTOS POR VOLUMEN
+ * Calcula el total mensual basado en la cantidad de ramos seleccionados.
+ * Estrategia: "Tarifa Plana" a partir del 4to ramo.
+ * * Costo Docente estimado: $3.000 por alumno/ramo.
+ * Margen Mínimo: Asegurado en todos los tramos.
  */
-export const DISCOUNTS_BY_COUNT = [
-  { min: 5, rate: 0.25 }, // 5+ Ramos: 25% OFF
-  { min: 4, rate: 0.20 }, // 4 Ramos: 20% OFF
-  { min: 3, rate: 0.15 }, // 3 Ramos: 15% OFF
-  { min: 2, rate: 0.10 }, // 2 Ramos: 10% OFF
-];
+export function computePaesPrice(selectedIds = []) {
+  const count = selectedIds.length;
+  
+  // Lista de precios escalonada
+  // 1 Ramo:  $9.990 (Gancho)
+  // 2 Ramos: $18.990
+  // 3 Ramos: $27.990 (Pack Clásico)
+  // 4+ Ramos: $34.990 (TARIFA PLANA - "All you can eat")
+  
+  let total = 0;
+  let label = "Selecciona tus ramos";
+  let savings = null;
 
-// 📝 Ensayos incluidos por ramo
-export const ESSAYS_PER_SUBJECT_PER_MONTH = 1;
+  if (count === 0) {
+    total = 0;
+  } else if (count === 1) {
+    total = 9990;
+    label = "Plan Monoramo";
+  } else if (count === 2) {
+    total = 18990;
+    label = "Plan Dúo";
+  } else if (count === 3) {
+    total = 27990;
+    label = "Plan Trío Fundamental";
+  } else {
+    // 4 o más ramos (Tarifa Plana)
+    total = 34990; 
+    label = "🏆 Plan Full Intensivo (Tarifa Plana)";
+    savings = "Estás ahorrando al máximo";
+  }
 
-// 🎯 Redondeo a decenas
-const friendlyRound10 = (n) => Math.round(n / 10) * 10;
-
-/* --- MOTORES DE CÁLCULO --- */
-
-function discountFor(count) {
-  return DISCOUNTS_BY_COUNT.find((x) => count >= x.min)?.rate ?? 0;
-}
-
-function clampCount(n) {
-  return Math.max(1, Math.min(7, Number(n || 0)));
-}
-
-// 💰 Precio Mensual Final
-export function priceForCount(count) {
-  const c = clampCount(count);
-  const d = discountFor(c);
-  const base = PER_SUBJECT_MONTHLY * c;
-  return friendlyRound10(Math.round(base * (1 - d)));
-}
-
-export function essaysForCount(count) {
-  return clampCount(count) * ESSAYS_PER_SUBJECT_PER_MONTH;
-}
-
-export function priceForSubjects(subjectIds = []) {
-  return priceForCount((subjectIds || []).length);
-}
-
-export function priceAnnual(count, months = ACADEMIC_MONTHS) {
-  return priceForCount(count) * Math.max(1, Number(months || ACADEMIC_MONTHS));
-}
-
-export function priceAnnualForSubjects(subjectIds = [], months = ACADEMIC_MONTHS) {
-  return priceAnnual((subjectIds || []).length, months);
+  return {
+    totalMonthly: total,
+    count: count,
+    label: label,
+    savings: savings,
+    enrollment: ENROLLMENT_FEE
+  };
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   CATÁLOGO DE RAMOS
+   3. CATÁLOGO DE ASIGNATURAS
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_SUBJECTS = [
-  { id: "m1",  name: "Matemática M1", icon: "📐" },
-  { id: "m2",  name: "Matemática M2", icon: "🚀" },
-  { id: "len", name: "Comprensión Lectora", icon: "📚" },
-  { id: "his", name: "Historia", icon: "🏛️" },
-  { id: "bio", name: "Biología", icon: "🧬" },
-  { id: "fis", name: "Física", icon: "⚡" },
-  { id: "qui", name: "Química", icon: "🧪" },
+  { 
+    id: "m1",  
+    name: "Matemática M1", 
+    category: "Obligatorio",
+    icon: "📐", 
+    desc: "Eje Números, Álgebra y Funciones, Geometría, Probabilidades." 
+  },
+  { 
+    id: "len", 
+    name: "Comprensión Lectora", 
+    category: "Obligatorio",
+    icon: "📚",
+    desc: "Estrategias de lectura, rastreo de información y evaluación."
+  },
+  { 
+    id: "m2",  
+    name: "Matemática M2", 
+    category: "Electivo",
+    icon: "🚀",
+    desc: "Profundización para carreras STEM (Ingenierías, Ciencias)."
+  },
+  { 
+    id: "his", 
+    name: "Historia y Cs. Sociales", 
+    category: "Electivo",
+    icon: "🏛️",
+    desc: "Historia de Chile, Formación Ciudadana y Economía."
+  },
+  { 
+    id: "bio", 
+    name: "Ciencias - Biología", 
+    category: "Ciencias",
+    icon: "🧬",
+    desc: "Organización, estructura y actividad celular. Procesos y funciones."
+  },
+  { 
+    id: "fis", 
+    name: "Ciencias - Física", 
+    category: "Ciencias",
+    icon: "⚡",
+    desc: "Mecánica, Energía, Electricidad y Ondas."
+  },
+  { 
+    id: "qui", 
+    name: "Ciencias - Química", 
+    category: "Ciencias",
+    icon: "🧪",
+    desc: "Reacciones, Estequiometría, Química Orgánica."
+  },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   PACKS ESTRATÉGICOS (COMBOS 2026)
+   4. COMBOS PRE-ARMADOS (Marketing Visual)
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_COMBOS = [
-  // 1. EL PACK BÁSICO (Humanista)
   {
-    id: "hum-duo",
+    id: "humanista",
     title: "Pack Humanista",
-    tagline: "Lenguaje + Historia",
-    subjects: ["len", "his"],
-    monthly: priceForSubjects(["len", "his"]), 
-    annual: priceAnnualForSubjects(["len", "his"]),
-    essaysPerMonth: essaysForCount(2),
-    features: ["Clases en vivo", "2 Ensayos al mes", "Material PDF"],
-    badge: "Económico",
-    color: "amber",
+    subtitle: "Para Derecho, Psicología, Periodismo...",
+    subjects: ["len", "his", "m1"], // IDs de los ramos
+    price: 27990,
+    features: ["Lenguaje + Historia + M1", "3 Ensayos Mensuales", "Tutoría Vocacional"],
+    color: "amber"
   },
-
-  // 2. EL PACK CIENCIAS
   {
-    id: "stem-basico",
-    title: "Pack Ciencias",
-    tagline: "M1 + 1 Ciencia a elección",
-    subjects: ["m1", "bio"], 
-    monthly: priceForSubjects(["m1", "bio"]),
-    annual: priceAnnualForSubjects(["m1", "bio"]),
-    essaysPerMonth: essaysForCount(2),
-    features: ["Enfoque práctico", "Resolución de guías", "Grabaciones HD"],
-    color: "green",
+    id: "salud",
+    title: "Pack Salud",
+    subtitle: "Para Medicina, Enfermería, Kine...",
+    subjects: ["len", "m1", "m2", "bio", "qui"], 
+    price: 34990, // Aplica Tarifa Plana
+    features: ["Plan Full (5 Ramos)", "M1 + M2 + Lenguaje", "Biología + Química"],
+    tag: "Más Vendido",
+    color: "teal"
   },
-
-  // 3. EL PACK FUNDAMENTAL (3 Ramos)
   {
-    id: "trio-fundamental",
-    title: "Trío Fundamental",
-    tagline: "M1 + Lenguaje + Historia (o Ciencia)",
-    subjects: ["len", "his", "m1"],
-    monthly: priceForSubjects(["len", "his", "m1"]),
-    annual: priceAnnualForSubjects(["len", "his", "m1"]),
-    essaysPerMonth: essaysForCount(3),
-    features: ["Los 3 obligatorios", "Tutoría grupal", "3 Ensayos al mes"],
-    badge: "Equilibrado",
-    color: "indigo",
-  },
-
-  // 4. EL PLAN ESTRELLA (Full 5 Ramos)
-  {
-    id: "full-5",
-    title: "Pack Full 5",
-    tagline: "Prepara la prueba completa sin estrés",
-    subjects: ["len", "m1", "his", "bio", "qui"], 
-    monthly: priceForSubjects(["len", "m1", "his", "bio", "qui"]), 
-    annual: priceAnnualForSubjects(["len", "m1", "his", "bio", "qui"]),
-    essaysPerMonth: essaysForCount(5),
-    features: ["5 Ramos a elección", "Orientación Vocacional", "Ensayo Masivo Mensual", "Soporte 24/7"],
-    badge: "Recomendado 2026",
-    color: "rose",
-  },
-
-  // 5. EL PLAN MAESTRO (7 Ramos)
-  {
-    id: "completo-7",
-    title: "Plan Medicina (7)",
-    tagline: "Para puntajes nacionales",
-    subjects: ["m1", "m2", "len", "his", "bio", "fis", "qui"],
-    monthly: priceForSubjects(["m1", "m2", "len", "his", "bio", "fis", "qui"]),
-    annual: priceAnnualForSubjects(["m1", "m2", "len", "his", "bio", "fis", "qui"]),
-    essaysPerMonth: essaysForCount(7),
-    features: ["Todo incluido", "Tutoría M2 Exclusiva", "Feedback personalizado"],
-    badge: "Máxima Exigencia",
-    color: "violet",
-  },
+    id: "ingenieria",
+    title: "Pack Ingeniería",
+    subtitle: "Para Civil, Informática, Arquitectura...",
+    subjects: ["len", "m1", "m2", "fis"], 
+    price: 34990, // Aplica Tarifa Plana
+    features: ["Física + M1 + M2", "Lenguaje Intensivo", "Refuerzo Cálculo"],
+    color: "indigo"
+  }
 ];

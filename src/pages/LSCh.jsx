@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom"; // Agregamos useNavigate
 
-// --- IMPORTACIÓN DE DATOS (Asegúrate de que la ruta sea correcta) ---
+// --- IMPORTACIÓN DE DATOS ---
 import {
   ENROLLMENT_FEE as LSCH_ENROLLMENT_FEE,
   ENROLLMENT_LABEL,
@@ -14,13 +14,15 @@ import {
 } from "../data/lsch.js";
 
 // --- ASSETS ---
-// Si la imagen no carga, el código tiene un fallback (fondo gris oscuro)
 import senasImg from "../assets/img/lael/senas.jpg"; 
+
+// SI TIENES UN CONTEXTO DE CARRITO, IMPORTALO AQUÍ:
+// import { useCart } from "../context/CartContext"; 
 
 const CERTIFICATE_FEE = 19990;
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG (Optimizados)
+   1. ICONOS SVG
    ────────────────────────────────────────────────────────────────────────── */
 const Icons = {
   Check: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
@@ -29,6 +31,7 @@ const Icons = {
   Briefcase: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
   Users: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
   Award: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>,
+  Cart: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -141,7 +144,7 @@ a { text-decoration: none; color: inherit; transition: 0.2s; }
 .pay-today-box { background: rgba(20, 184, 166, 0.1); border: 1px solid var(--primary); border-radius: 12px; padding: 15px; text-align: center; margin: 20px 0; }
 .pay-today-box span { font-size: 0.8rem; text-transform: uppercase; color: var(--primary); font-weight: 700; }
 .pay-today-box strong { display: block; font-size: 1.4rem; color: white; margin-top: 5px; }
-.btn-checkout { display: flex; justify-content: center; width: 100%; background: var(--primary); color: #000; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; transition: 0.3s; }
+.btn-checkout { display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; background: var(--primary); color: #000; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; transition: 0.3s; }
 .btn-checkout:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(20, 184, 166, 0.4); }
 
 /* Mobile */
@@ -181,9 +184,12 @@ export default function LSCh() {
   const [selectedOneId, setSelectedOneId] = useState(null);
   const [selectedModules, setSelectedModules] = useState(["nivel-1"]);
   const [certSelected, setCertSelected] = useState(false);
+  const [isAdding, setIsAdding] = useState(false); // Estado para feedback visual del botón
   
   const pricingRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
+  // const { addItem } = useCart(); // DESCOMENTAR SI USAS CART CONTEXT
 
   useEffect(() => { window.scrollTo(0, 0); }, [location.pathname]);
 
@@ -202,11 +208,9 @@ export default function LSCh() {
   const totalMonthly = monthlyGroup + monthlyOne;
   
   // 3. Lógica de "Primer Pago" y Matrícula
-  // Matrícula es $0 si: Es Plan Trimestral ("g-quarter") O si es Iglesia
   const isEnrollmentWaived = groupPlan.id === "g-quarter" || church;
   const enrollmentCost = isEnrollmentWaived ? 0 : LSCH_ENROLLMENT_FEE;
   
-  // El certificado se paga solo una vez al inicio (o se puede modelar como extra mensual, aquí lo sumamos al primer pago)
   const totalFirstPayment = totalMonthly + enrollmentCost + (certSelected ? CERTIFICATE_FEE : 0);
 
   const toggleModule = (id) => {
@@ -217,23 +221,40 @@ export default function LSCh() {
     });
   };
 
-  // 4. Generador de Link de WhatsApp
-  const waLink = useMemo(() => {
-    const text = `Hola 👋, vengo de la web. Quiero inscribirme en el Curso Profesional de LSCh.
-📋 *Mi Configuración:*
-• Perfil: ${church ? 'Convenio Iglesia ✅' : 'Estudiante General'}
-• Plan Base: ${groupPlan.title}
-• Módulos: ${selectedModules.length} seleccionados
-${onePlan ? `• Refuerzo 1:1: ${onePlan.title}` : ''}
-${certSelected ? `• Certificación: SÍ` : ''}
+  /* ──────────────────────────────────────────────────────────────────────────
+     LÓGICA DE AGREGAR AL CARRITO / INSCRIPCIÓN
+     ────────────────────────────────────────────────────────────────────────── */
+  const handleAddToCart = () => {
+    setIsAdding(true);
 
-💰 *Resumen:*
-• Mensualidad: ${clp(totalMonthly)}
-• Primer Pago (aprox): ${clp(totalFirstPayment)} ${isEnrollmentWaived ? '(Matrícula Bonificada)' : ''}
+    // 1. Estructuramos el producto para que tu Carrito/Checkout lo entienda
+    const productData = {
+        id: `lsch-${groupPlan.id}-${church ? 'church' : 'std'}`, // ID Único
+        name: `Curso Profesional LSCh - ${groupPlan.title}`,
+        price: totalFirstPayment, // Precio que pagará hoy
+        recurrence: 'monthly', // Para indicar que es suscripción (si aplica)
+        recurringPrice: totalMonthly, // Precio recurrente
+        image: senasImg,
+        details: {
+            planId: groupPlan.id,
+            isChurch: church,
+            modules: selectedModules,
+            certification: certSelected ? CERTIFICATE_FEE : 0,
+            oneOnOneId: selectedOneId,
+            enrollmentWaived: isEnrollmentWaived
+        }
+    };
 
-¿Me envían los datos de transferencia?`;
-    return `https://wa.me/56964626568?text=${encodeURIComponent(text)}`;
-  }, [church, groupPlan, selectedModules, onePlan, certSelected, totalMonthly, totalFirstPayment, isEnrollmentWaived]);
+    console.log("🛒 Agregando al carrito:", productData);
+
+    // 2. Simulamos un pequeño delay y navegación (Aquí iría tu `addItem(productData)`)
+    setTimeout(() => {
+        // addItem(productData); // <--- DESCOMENTAR ESTO CUANDO TENGAS EL CONTEXTO
+        setIsAdding(false);
+        // Redirigir al Checkout o Carrito
+        navigate('/checkout'); 
+    }, 600);
+  };
 
   return (
     <div className="lsch-page">
@@ -423,9 +444,16 @@ ${certSelected ? `• Certificación: SÍ` : ''}
                     </small>
                 </div>
 
-                <a href={waLink} target="_blank" rel="noreferrer" className="btn-checkout">
-                    Finalizar Inscripción
-                </a>
+                {/* BOTON DE ACCIÓN REAL */}
+                <button onClick={handleAddToCart} disabled={isAdding} className="btn-checkout">
+                    {isAdding ? (
+                        "Procesando..."
+                    ) : (
+                        <>
+                            Inscribirme Ahora <Icons.Cart/>
+                        </>
+                    )}
+                </button>
             </div>
         </div>
 
@@ -437,7 +465,9 @@ ${certSelected ? `• Certificación: SÍ` : ''}
              <small>Primer pago hoy</small>
              <strong>{clp(totalFirstPayment)}</strong>
          </div>
-         <a href={waLink} target="_blank" rel="noreferrer" className="btn-mb">Inscribirme</a>
+         <button onClick={handleAddToCart} disabled={isAdding} className="btn-mb">
+            {isAdding ? "..." : "Inscribirme"}
+         </button>
       </div>
 
     </div>

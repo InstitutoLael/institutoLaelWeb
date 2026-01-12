@@ -1,14 +1,18 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-// Usamos el logo blanco para mejor contraste en el header oscuro
 import logo from "../assets/img/Logos/lael-inst-blanco.png";
 
-/* ─── 1. ICONOS SVG (Sistema Optimizado) ─── */
+/* ─── 1. ICONOS SVG (Sistema Optimizado + E-COMMERCE) ─── */
 const Icons = {
   ChevronDown: () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>,
   Menu: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>,
   X: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>,
   WhatsApp: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.08-.13-.27-.2-.57-.35M12.05 21.78h-.01A9.87 9.87 0 017.01 20.4l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26C2.16 6.49 6.6 2.05 12.05 2.05c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.89 6.99c-.01 5.45-4.44 9.84-9.88 9.84" /></svg>,
+  
+  // Iconos Nuevos (E-commerce & User)
+  User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+  Bag: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>,
+
   // Iconos Programas
   Grad: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>,
   World: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>,
@@ -24,10 +28,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-  // Cerrar menú al cambiar de ruta
+  // Estado del carrito (Pronto vendrá de la DB)
+  const cartCount = 0; // Cambiará dinámicamente
+
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
-  // Bloquear scroll del body al abrir menú
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
@@ -37,7 +42,6 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  // Efecto glass al hacer scroll
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -76,20 +80,35 @@ export default function Navbar() {
 
           <NavLink to="/empresas" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>Empresas</NavLink>
           <NavLink to="/nosotros" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>Nosotros</NavLink>
-          <NavLink to="/convenios" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>Convenios</NavLink>
+          {/* <NavLink to="/convenios" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>Convenios</NavLink> */}
           <NavLink to="/trabaja" className={({isActive}) => `nav-link ${isActive ? 'active' : ''}`}>Trabaja</NavLink>
         </nav>
 
         {/* ACCIONES Y BOTÓN MÓVIL */}
         <div className="nav-actions">
-          <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="action-btn wa" aria-label="Hablar por WhatsApp">
+          
+          {/* Carrito de Compras (Siempre visible) */}
+          <button className="action-btn icon-only" aria-label="Carrito de compras">
+            <Icons.Bag />
+            {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+          </button>
+
+          {/* Login / Aula Virtual (Escritorio) */}
+          <Link to="/aula" className="action-btn icon-only mobile-hide-btn" aria-label="Aula Virtual" title="Ingresar al Aula">
+            <Icons.User />
+          </Link>
+
+          {/* WhatsApp */}
+          <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="action-btn wa mobile-hide-btn" aria-label="Hablar por WhatsApp">
             <Icons.WhatsApp />
           </a>
+
+          {/* Botón Principal */}
           <Link to="/inscripcion" className="action-btn primary mobile-hide-btn">
             Inscripción
           </Link>
           
-          {/* BOTÓN HAMBURGUESA / X (Controlador Maestro) */}
+          {/* BOTÓN HAMBURGUESA / X */}
           <button 
             className="burger-btn"
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -106,12 +125,22 @@ export default function Navbar() {
 
       {/* MENÚ MÓVIL (PANEL DESLIZANTE) */}
       <div className={`mobile-overlay ${mobileOpen ? 'open' : ''}`}>
-        {/* Fondo oscuro clickeable para cerrar */}
         <div className="mobile-backdrop" onClick={() => setMobileOpen(false)}></div>
         
         <div className="mobile-panel">
           <div className="mp-body">
-            <span className="mp-label">Navegación</span>
+            
+            {/* Login destacado en móvil */}
+            <Link to="/aula" className="mob-user-card" onClick={() => setMobileOpen(false)}>
+                <div className="muc-icon"><Icons.User /></div>
+                <div className="muc-info">
+                    <strong>Aula Virtual</strong>
+                    <span>Iniciar Sesión</span>
+                </div>
+                <Icons.ArrowR />
+            </Link>
+
+            <span className="mp-label mt-4">Navegación</span>
             <MobileLink to="/">Inicio</MobileLink>
             
             <span className="mp-label mt-4">Nuestros Programas</span>
@@ -129,9 +158,12 @@ export default function Navbar() {
           </div>
 
           <div className="mp-footer">
-            <Link to="/inscripcion" className="mp-btn-primary">
+            <Link to="/inscripcion" className="mp-btn-primary" onClick={() => setMobileOpen(false)}>
                 🚀 Inscribirme Ahora
             </Link>
+            <div className="mp-socials">
+                <a href="https://wa.me/56964626568" className="mp-soc-link"><Icons.WhatsApp /> Soporte WhatsApp</a>
+            </div>
           </div>
         </div>
       </div>
@@ -168,13 +200,13 @@ function MobileLink({ to, children, icon, color }) {
 /* ─── 3. ESTILOS CSS ─── */
 const css = `
 :root {
-  --nav-height: 70px;
+  --nav-height: 80px; /* Un poco más alto para elegancia */
   --bg-dark: #050505;
   --glass-bg: rgba(5, 5, 5, 0.85);
   --glass-border: rgba(255, 255, 255, 0.08);
   --text: #f8fafc;
   --text-muted: #94a3b8;
-  --primary: #3b82f6;
+  --primary: #6366F1;
   --accent: #f59e0b;
 }
 
@@ -198,7 +230,7 @@ const css = `
 
 /* LOGO */
 .brand-link { display: flex; align-items: center; }
-.logo-img { height: 34px; width: auto; transition: transform 0.2s; }
+.logo-img { height: 38px; width: auto; transition: transform 0.2s; }
 .brand-link:hover .logo-img { transform: scale(1.05); }
 
 /* DESKTOP NAV */
@@ -211,7 +243,7 @@ const css = `
   font-family: inherit; display: flex; align-items: center; gap: 6px;
 }
 .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.05); }
-.nav-link.active { color: var(--accent); background: rgba(245, 158, 11, 0.1); font-weight: 600; }
+.nav-link.active { color: var(--primary); background: rgba(99, 102, 241, 0.1); font-weight: 600; }
 
 /* DROPDOWN */
 .dropdown-wrapper { position: relative; height: 100%; display: flex; align-items: center; }
@@ -237,17 +269,29 @@ const css = `
 .mi-info span { display: block; color: var(--text-muted); font-size: 0.8rem; }
 
 /* ACTIONS */
-.nav-actions { display: flex; gap: 12px; align-items: center; }
-.action-btn { display: flex; align-items: center; justify-content: center; font-weight: 600; text-decoration: none; transition: 0.2s; }
-.action-btn.wa { width: 40px; height: 40px; border-radius: 50%; background: rgba(37, 211, 102, 0.1); color: #25D366; border: 1px solid rgba(37, 211, 102, 0.2); }
-.action-btn.wa:hover { background: #25D366; color: black; transform: scale(1.05); }
-.action-btn.primary { padding: 9px 22px; border-radius: 50px; font-size: 0.9rem; background: var(--accent); color: black; box-shadow: 0 0 15px rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.5); }
-.action-btn.primary:hover { background: #fbbf24; transform: translateY(-1px); box-shadow: 0 5px 20px rgba(245, 158, 11, 0.3); }
+.nav-actions { display: flex; gap: 10px; align-items: center; }
+.action-btn { display: flex; align-items: center; justify-content: center; font-weight: 600; text-decoration: none; transition: 0.2s; cursor: pointer; border: none; background: transparent; color: var(--text); }
+
+/* Botones Icono (Carrito, User, WA) */
+.action-btn.icon-only { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); position: relative; }
+.action-btn.icon-only:hover { background: rgba(255,255,255,0.1); color: var(--text); border-color: rgba(255,255,255,0.3); }
+
+/* WhatsApp Style */
+.action-btn.wa { color: #25D366; border-color: rgba(37, 211, 102, 0.2); background: rgba(37, 211, 102, 0.05); }
+.action-btn.wa:hover { background: #25D366; color: black; border-color: #25D366; transform: scale(1.05); }
+
+/* Primary Button */
+.action-btn.primary { padding: 10px 24px; border-radius: 50px; font-size: 0.9rem; background: var(--text); color: black; border: 1px solid white; margin-left: 4px; }
+.action-btn.primary:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
+
+/* Cart Badge */
+.cart-badge { position: absolute; top: -2px; right: -2px; background: var(--accent); color: black; font-size: 0.65rem; font-weight: 800; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--bg-dark); }
 
 /* BURGER */
-.burger-btn { width: 40px; height: 40px; color: var(--text); background: transparent; display: none; align-items: center; justify-content: center; border: none; cursor: pointer; }
+.burger-btn { width: 40px; height: 40px; color: var(--text); background: transparent; display: none; align-items: center; justify-content: center; border: none; cursor: pointer; z-index: 10003; }
 .icon-transition { display: flex; transition: transform 0.3s ease; }
 .icon-transition.rotate { transform: rotate(90deg); color: var(--accent); }
+
 @media (max-width: 1024px) { 
     .burger-btn { display: flex; } 
     .mobile-hide-btn { display: none; }
@@ -256,8 +300,8 @@ const css = `
 /* MOBILE MENU */
 .mobile-overlay { 
   position: fixed; 
-  top: var(--nav-height); 
-  left: 0; width: 100%; height: calc(100vh - var(--nav-height));
+  top: 0; /* Full Screen */
+  left: 0; width: 100%; height: 100vh;
   z-index: 10001;
   visibility: hidden; 
   overflow: hidden;
@@ -273,24 +317,41 @@ const css = `
 
 .mobile-panel {
   position: absolute; top: 0; right: 0; bottom: 0; 
-  width: 100%; max-width: 320px;
+  width: 100%; max-width: 300px;
   background: #0b0d11; border-left: 1px solid var(--glass-border);
   transform: translateX(100%); transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex; flex-direction: column; 
   box-shadow: -10px 0 40px rgba(0,0,0,0.8);
+  padding-top: var(--nav-height); /* Espacio para no tapar el header */
 }
 .mobile-overlay.open .mobile-panel { transform: translateX(0); }
 
-.mp-body { flex: 1; overflow-y: auto; padding: 25px; -webkit-overflow-scrolling: touch; }
-.mp-label { display: block; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; font-weight: 700; letter-spacing: 1px; opacity: 0.6; }
+.mp-body { flex: 1; overflow-y: auto; padding: 20px; }
+
+/* Mobile User Card */
+.mob-user-card {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px;
+    text-decoration: none; color: white; border: 1px solid var(--glass-border);
+    margin-bottom: 20px; transition: 0.2s;
+}
+.mob-user-card:active { background: rgba(255,255,255,0.1); transform: scale(0.98); }
+.muc-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; }
+.muc-info { flex: 1; }
+.muc-info strong { display: block; font-size: 0.95rem; }
+.muc-info span { font-size: 0.8rem; color: var(--text-muted); }
+
+.mp-label { display: block; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; font-weight: 700; letter-spacing: 1px; opacity: 0.6; }
 .mp-label.mt-4 { margin-top: 25px; }
 
-.mob-link { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: var(--text); font-size: 1rem; transition: 0.2s; }
+.mob-link { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.03); text-decoration: none; color: var(--text); font-size: 0.95rem; transition: 0.2s; }
 .mob-link:last-of-type { border-bottom: none; }
-.mob-link.active { color: var(--accent); padding-left: 10px; border-left: 2px solid var(--accent); }
+.mob-link.active { color: var(--primary); padding-left: 10px; border-left: 2px solid var(--primary); }
 .mob-content { display: flex; align-items: center; gap: 12px; }
 .mob-icon { color: var(--mob-color); font-size: 1.1rem; display: flex; }
 
-.mp-footer { padding: 20px; border-top: 1px solid var(--glass-border); background: rgba(255,255,255,0.02); }
-.mp-btn-primary { display: block; text-align: center; padding: 16px; background: linear-gradient(135deg, var(--accent), #eab308); color: black; font-weight: 800; border-radius: 12px; text-decoration: none; font-size: 1.1rem; box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3); }
+.mp-footer { padding: 20px; border-top: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); }
+.mp-btn-primary { display: block; text-align: center; padding: 14px; background: var(--text); color: black; font-weight: 800; border-radius: 10px; text-decoration: none; font-size: 1rem; box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1); margin-bottom: 15px; }
+.mp-socials { text-align: center; }
+.mp-soc-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; }
 `;

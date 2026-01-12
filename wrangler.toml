@@ -1,10 +1,9 @@
-# wrangler.toml
-
-name = "instituto-lael-platform"
+name = "instituto-lael-web"
+main = "src/worker.js"   # <--- ESTO ES LO QUE CONECTA TU ARCHIVO NUEVO
 compatibility_date = "2024-01-01"
 
-# Configuración de la Base de Datos D1
+# Configuración de la base de datos (D1)
 [[d1_databases]]
-binding = "DB" # Así la llamaremos en el código: env.DB
-database_name = "lael-db" # El nombre que le diste en Cloudflare
-database_id = "c3a83b23-7dcb-4dfb-b1c5-27e0bda4458e" # Tu ID real
+binding = "DB"
+database_name = "lael-db" # <--- Reemplaza con el nombre REAL de tu base de datos en Cloudflare
+database_id = "tu-id-de-base-de-datos" # <--- Copia el ID desde tu panel de Cloudflare

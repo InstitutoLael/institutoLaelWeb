@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import SEOHead from "../components/SEOHead.jsx"; 
 
-// IMPORTANTE: Asegúrate de tener la imagen en esta ruta
+// 📸 ASEGÚRATE DE QUE ESTA RUTA EXISTA O CÁMBIALA
 import studyOnline from "../assets/img/lael/study-online.jpg"; 
 
 // Importamos tu lógica de precios
@@ -98,6 +98,7 @@ a { text-decoration: none; color: inherit; }
   width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
   padding: 16px; border-radius: 16px; font-weight: 700; background: var(--primary);
   color: white; transition: 0.3s; margin-top: auto;
+  text-align: center;
 }
 .btn-full-cta:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
@@ -330,11 +331,17 @@ a { text-decoration: none; color: inherit; }
   border-top: 1px solid var(--border-light); padding: 15px 24px;
   display: flex; justify-content: space-between; align-items: center;
   z-index: 100; display: none;
+  animation: slideUp 0.3s ease;
 }
 @media (max-width: 768px) { .mobile-sticky-bar { display: flex; } }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
 .bar-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
 .bar-price { font-weight: 800; font-size: 1.5rem; color: white; line-height: 1; }
-.btn-sticky { background: var(--primary); color: white; padding: 10px 24px; border-radius: 50px; font-weight: 700; font-size: 0.9rem; }
+.btn-sticky { 
+    background: var(--primary); color: white; padding: 10px 24px; 
+    border-radius: 50px; font-weight: 700; font-size: 0.9rem; text-decoration: none;
+}
 `;
 
 /* --------------------------------------------------------------------------
@@ -690,16 +697,16 @@ export default function PAES() {
                     {clp(monthly).replace("$", "")}
                     <span style={{fontSize:'1rem', color:'var(--text-muted)', fontWeight:400}}>/mes</span>
                 </div>
+                
+                {/* 👇 AQUÍ FUE DONDE SE CORTÓ TU CÓDIGO ANTERIOR 👇 */}
                 <div className="price-sub">
-                    Matrícula única: {clp(ENROLLMENT_FEE)} <br/>
-                    Total anual ref: {clp(annual)}
+                    + {clp(ENROLLMENT_FEE)} matrícula única anual
                 </div>
-                <a
-                    href={`https://wa.me/56964626568?text=${waMsg}`}
-                    target="_blank"
-                    rel="noreferrer"
+                <a 
+                    href={`https://wa.me/56964626568?text=${waMsg}`} 
+                    target="_blank" 
+                    rel="noreferrer" 
                     className="btn-full-cta"
-                    style={{marginTop:0}}
                 >
                     Inscribir este Plan <Icons.ArrowRight />
                 </a>
@@ -709,31 +716,52 @@ export default function PAES() {
         </div>
       </section>
 
-      {/* --- PREGUNTAS FRECUENTES (FAQ) --- */}
-      <section className="section section-faq">
-        <div className="container">
-            <div className="section-header">
-                <h2>Preguntas Frecuentes</h2>
-            </div>
-            <FaqItem q="¿Las clases quedan grabadas?" a="Sí, todas las clases se suben a la plataforma en menos de 24 horas para que puedas repasar cuando quieras." />
-            <FaqItem q="¿Cómo pago la mensualidad?" a="Puedes pagar vía Webpay (Débito/Crédito) o transferencia bancaria. El pago es mensual y sin contratos amarrados." />
-            <FaqItem q="¿Puedo cambiar mis ramos después?" a="¡Claro! Puedes agregar o quitar ramos mes a mes según lo que necesites reforzar." />
-            <FaqItem q="¿Qué incluye la matrícula?" a={`La matrícula es un pago único de ${clp(ENROLLMENT_FEE)} que cubre tus accesos a la plataforma, materiales digitales y gestión administrativa anual.`} />
-        </div>
+      {/* FAQ SECTION (Agregada para resolver dudas) */}
+      <section className="section-faq">
+          <div className="container">
+              <div className="section-header">
+                  <h2>Preguntas Frecuentes</h2>
+              </div>
+              <FaqItem 
+                q="¿Qué pasa si no puedo asistir a una clase en vivo?" 
+                a="¡No te preocupes! Todas las clases se graban en HD y se suben a tu aula virtual el mismo día. Podrás verlas las veces que quieras, a tu propio ritmo." 
+              />
+              <FaqItem 
+                q="¿Cómo funcionan los métodos de pago?" 
+                a="Puedes pagar mensualmente mediante transferencia bancaria o WebPay. No exigimos tarjetas de crédito ni cheques. La matrícula se paga una única vez al año." 
+              />
+              <FaqItem 
+                q="¿Existe algún contrato de permanencia?" 
+                a="No. En Instituto Lael creemos en la libertad. Pagas mes a mes y puedes retirarte cuando lo necesites sin multas ni letras chicas. Solo pedimos aviso con 15 días de anticipación." 
+              />
+              <FaqItem 
+                q="¿Puedo cambiar mis ramos después de inscribirme?" 
+                a="Sí, nuestro sistema es flexible. Si te das cuenta de que necesitas reforzar otra área, puedes contactar a secretaría académica y ajustar tu carga académica para el mes siguiente." 
+              />
+          </div>
       </section>
 
-      {/* --- STICKY MOBILE BAR (Para conversión) --- */}
-      {subjectCount > 0 && (
-          <div className="mobile-sticky-bar">
-              <div>
-                  <div className="bar-label">{subjectCount} Ramos seleccionados</div>
-                  <div className="bar-price">{clp(monthly)}<span style={{fontSize:'0.8rem', fontWeight:400}}>/mes</span></div>
+      {/* STICKY BAR PARA MÓVILES (Aumenta conversión) */}
+      <div className="mobile-sticky-bar">
+          <div>
+              <div className="bar-label">Valor Mensual</div>
+              <div className="bar-price">
+                  {subjectCount > 0 ? clp(monthly) : "Desde $6.990"}
               </div>
-              <a href={`https://wa.me/56964626568?text=${waMsg}`} className="btn-sticky">
-                  Inscribir
-              </a>
           </div>
-      )}
+          <a 
+            href={subjectCount > 0 ? `https://wa.me/56964626568?text=${waMsg}` : "#"} 
+            onClick={(e) => {
+                if(subjectCount === 0) {
+                    e.preventDefault();
+                    builderRef.current?.scrollIntoView({ behavior: 'smooth' });
+                }
+            }}
+            className="btn-sticky"
+          >
+              {subjectCount > 0 ? "Inscribir" : "Armar Plan"}
+          </a>
+      </div>
 
     </div>
   );

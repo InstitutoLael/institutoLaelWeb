@@ -1,8 +1,16 @@
-import { useMemo, useRef, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom"; 
-import EnrollmentForm from "../components/EnrollmentForm"; // <--- IMPORTANTE: Importamos el formulario
+import React, { useState, useMemo, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import EnrollmentForm from "../components/EnrollmentForm";
+import SEOHead from "../components/SEOHead"; // Opcional, si tienes componente SEO
 
-// --- IMPORTACIÓN DE DATOS ---
+// --- ICONOS (Lucide React) ---
+import { 
+  Check, Hand, Lock, Briefcase, Users, Award, 
+  CreditCard, ChevronRight, Star, Heart, Zap, 
+  PlayCircle, ShieldCheck, X, GraduationCap 
+} from "lucide-react";
+
+// --- DATOS ---
 import {
   ENROLLMENT_FEE as LSCH_ENROLLMENT_FEE,
   ENROLLMENT_LABEL,
@@ -15,171 +23,200 @@ import {
 } from "../data/lsch.js";
 
 // --- ASSETS ---
-import senasImg from "../assets/img/lael/senas.jpg"; 
+import senasImg from "../assets/img/lael/senas.jpg"; // Asegúrate que la ruta sea correcta
 
 const CERTIFICATE_FEE = 19990;
 
-/* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG
-   ────────────────────────────────────────────────────────────────────────── */
-const Icons = {
-  Check: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
-  Hand: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>,
-  Lock: () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
-  Briefcase: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
-  Users: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-  Award: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>,
-  CreditCard: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-};
-
-/* ──────────────────────────────────────────────────────────────────────────
-   2. ESTILOS CSS - "KINETIC TEAL"
-   ────────────────────────────────────────────────────────────────────────── */
+/* ==========================================================================
+   1. ESTILOS CSS (DARK MODE PREMIUM)
+   ========================================================================== */
 const css = `
 :root {
-  --bg-deep: #02040a;       
-  --bg-panel: #0d1216;      
-  --primary: #14b8a6;       /* Teal 500 */
-  --primary-hover: #0d9488;
-  --accent: #06b6d4;        /* Cyan 500 */
-  --gold: #f59e0b;          
-  --text-main: #f0fdfa;
-  --text-muted: #94a3b8;
-  --border: rgba(20, 184, 166, 0.15);
-  --font-sans: 'Inter', system-ui, sans-serif;
+  --bg-deep: #0f172a;       /* Slate 900 */
+  --bg-panel: #1e293b;      /* Slate 800 */
+  --primary: #2dd4bf;       /* Teal 400 (Neon) */
+  --primary-dark: #14b8a6;  /* Teal 500 */
+  --accent: #38bdf8;        /* Sky 400 */
+  --text-main: #f1f5f9;     /* Slate 100 */
+  --text-muted: #94a3b8;    /* Slate 400 */
+  --gold: #fbbf24;
+  --border: rgba(255, 255, 255, 0.1);
+  --shadow-glow: 0 0 40px -10px rgba(45, 212, 191, 0.3);
+  --radius: 20px;
 }
 
-.lsch-page { background-color: var(--bg-deep); color: var(--text-main); font-family: var(--font-sans); min-height: 100vh; padding-bottom: 120px; overflow-x: hidden; position: relative; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-button { cursor: pointer; border: none; font-family: inherit; -webkit-tap-highlight-color: transparent; }
-a { text-decoration: none; color: inherit; transition: 0.2s; }
+.lsch-page {
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  min-height: 100vh;
+  padding-bottom: 140px;
+  overflow-x: hidden;
+}
 
-/* Effects */
-.ambient-glow { position: absolute; border-radius: 50%; filter: blur(150px); opacity: 0.1; pointer-events: none; z-index: 0; }
-.glow-teal { width: 600px; height: 600px; top: -200px; right: -100px; background: var(--primary); }
-.glow-cyan { width: 500px; height: 500px; top: 40%; left: -200px; background: var(--accent); opacity: 0.08; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+button { all: unset; cursor: pointer; box-sizing: border-box; }
 
-/* Hero */
-.hero { padding: 120px 0 80px; position: relative; z-index: 1; }
-.hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
-.status-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(20, 184, 166, 0.1); border: 1px solid rgba(20, 184, 166, 0.3); color: var(--primary); padding: 8px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 24px; letter-spacing: 1px; }
-.status-badge::before { content: ''; width: 8px; height: 8px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
-.hero-title { font-size: clamp(3rem, 6vw, 4.5rem); margin: 0 0 24px; font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
-.text-gradient { background: linear-gradient(135deg, #fff 20%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hero-subtitle { font-size: 1.2rem; color: var(--text-muted); line-height: 1.6; max-width: 550px; margin-bottom: 40px; }
-.hero-stats { display: flex; gap: 30px; margin-bottom: 40px; border-left: 2px solid var(--border); padding-left: 24px; }
-.stat .val { display: block; font-size: 1.8rem; font-weight: 800; color: white; line-height: 1; }
-.stat .lbl { font-size: 0.8rem; color: var(--accent); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
-.btn-hero { background: var(--primary); color: #000; padding: 16px 36px; border-radius: 50px; font-weight: 800; font-size: 1.1rem; box-shadow: 0 0 25px rgba(20, 184, 166, 0.3); transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px; }
-.btn-hero:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 0 40px rgba(20, 184, 166, 0.6); background: #2dd4bf; }
-
-/* Visual Hero */
-.image-frame { position: relative; border-radius: 30px; padding: 10px; background: linear-gradient(135deg, rgba(20,184,166,0.2), transparent 50%); border: 1px solid var(--border); box-shadow: 0 30px 60px -20px rgba(0,0,0,0.8); }
-.image-frame img { display: block; width: 100%; border-radius: 20px; filter: grayscale(0.2) contrast(1.1); }
-.float-card { position: absolute; bottom: 30px; right: -20px; background: rgba(15, 20, 25, 0.95); backdrop-filter: blur(12px); border: 1px solid var(--primary); padding: 16px 24px; border-radius: 16px; display: flex; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: float 6s ease-in-out infinite; }
+/* ANIMACIONES */
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 20px rgba(45, 212, 191, 0.2); } 50% { box-shadow: 0 0 40px rgba(45, 212, 191, 0.5); } }
 
-/* Corporate Bar */
-.corp-bar { border-block: 1px solid var(--border); background: rgba(20, 184, 166, 0.03); padding: 60px 0; margin-bottom: 80px; }
-.corp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-.corp-item { display: flex; gap: 15px; align-items: flex-start; }
-.c-icon-box { background: rgba(6, 182, 212, 0.1); color: var(--accent); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.c-text h4 { margin: 0 0 5px; font-size: 1.1rem; color: white; font-weight: 800; }
-.c-text p { margin: 0; font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
-
-/* Configurator */
-.config-container { position: relative; z-index: 2; display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 50px; align-items: start; }
-.step-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 20px; padding: 30px; margin-bottom: 30px; }
-.step-title { display: flex; align-items: center; gap: 12px; margin-bottom: 25px; }
-.step-num { background: var(--primary); color: #000; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; }
-.step-title h3 { font-size: 1.3rem; margin: 0; font-weight: 800; }
-
-/* UI Elements */
-.identity-btn { background: #000; border: 1px solid var(--border); border-radius: 16px; padding: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.3s; }
-.identity-btn:hover { border-color: var(--primary); }
-.identity-btn.active { background: rgba(20, 184, 166, 0.1); border-color: var(--primary); }
-.id-content h4 { margin: 0 0 4px; font-size: 1rem; font-weight: 700; }
-.id-content p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
-.toggle-track { width: 44px; height: 24px; background: #333; border-radius: 50px; position: relative; transition: 0.3s; }
-.toggle-thumb { width: 20px; height: 20px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: 0.3s; }
-.identity-btn.active .toggle-track { background: var(--primary); }
-.identity-btn.active .toggle-thumb { transform: translateX(20px); }
-
-.timeline { position: relative; padding-left: 20px; border-left: 2px solid rgba(255,255,255,0.1); margin-left: 10px; }
-.timeline-item { position: relative; margin-bottom: 15px; cursor: pointer; }
-.t-dot { position: absolute; left: -27px; top: 20px; width: 12px; height: 12px; background: var(--bg-deep); border: 2px solid var(--text-muted); border-radius: 50%; transition: 0.3s; }
-.t-card { background: #050a0e; border: 1px solid var(--border); padding: 20px; border-radius: 12px; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
-.timeline-item:hover .t-card { border-color: var(--primary); }
-.timeline-item.selected .t-dot { background: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
-.timeline-item.selected .t-card { background: rgba(20, 184, 166, 0.08); border-color: var(--primary); }
-.t-tag { font-size: 0.7rem; font-weight: 700; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 4px; }
-.t-check { color: var(--primary); opacity: 0; transform: scale(0); transition: 0.2s; }
-.timeline-item.selected .t-check { opacity: 1; transform: scale(1); }
-
-.plan-item { display: flex; justify-content: space-between; align-items: center; background: #050a0e; border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-bottom: 12px; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; }
-.plan-item:hover { border-color: var(--text-muted); }
-.plan-item.selected { border-color: var(--primary); background: rgba(20, 184, 166, 0.05); box-shadow: inset 0 0 0 1px var(--primary); }
-.plan-badge { position: absolute; top: 0; right: 0; background: var(--gold); color: black; font-size: 0.65rem; font-weight: 800; padding: 2px 8px; border-bottom-left-radius: 8px; }
-.plan-price { font-size: 1.2rem; font-weight: 800; color: white; }
-
-.extra-row { display: flex; justify-content: space-between; align-items: center; background: #050a0e; border: 1px solid var(--border); padding: 16px; border-radius: 12px; cursor: pointer; transition: 0.2s; margin-bottom: 15px; }
-.extra-row.active { border-color: var(--primary); background: rgba(20, 184, 166, 0.1); }
-.extra-btn-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.extra-btn { background: var(--bg-deep); border: 1px solid var(--border); padding: 10px; border-radius: 10px; text-align: center; font-size: 0.8rem; transition: 0.2s; cursor: pointer; color: var(--text-muted); }
-.extra-btn:hover { border-color: var(--text-muted); }
-.extra-btn.active { background: var(--accent); color: black; border-color: var(--accent); font-weight: 700; }
-
-/* Sticky Summary */
-.summary-col { position: relative; }
-.sticky-card { position: sticky; top: 30px; background: var(--bg-panel); border: 1px solid var(--border); border-radius: 20px; padding: 30px; box-shadow: 0 20px 50px -10px rgba(0,0,0,0.6); backdrop-filter: blur(10px); }
-.sum-header { display: flex; justify-content: space-between; padding-bottom: 15px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-.sum-header h3 { margin: 0; font-weight: 800; }
-.secure-tag { font-size: 0.8rem; color: var(--primary); display: flex; align-items: center; gap: 5px; }
-.sum-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; color: var(--text-muted); }
-.sum-row strong { color: white; }
-.sum-total { margin-top: 20px; padding-top: 15px; border-top: 1px dashed var(--border); display: flex; justify-content: space-between; align-items: center; }
-.big-price { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
-.pay-today-box { background: rgba(20, 184, 166, 0.1); border: 1px solid var(--primary); border-radius: 12px; padding: 15px; text-align: center; margin: 20px 0; }
-.pay-today-box span { font-size: 0.8rem; text-transform: uppercase; color: var(--primary); font-weight: 700; }
-.pay-today-box strong { display: block; font-size: 1.4rem; color: white; margin-top: 5px; }
-.btn-checkout { text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; width: 100%; background: var(--primary); color: #000; padding: 16px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; transition: 0.3s; }
-.btn-checkout:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(20, 184, 166, 0.4); }
-
-/* Mobile */
-.mobile-bar { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; background: rgba(2, 4, 10, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
-.mb-info small { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; }
-.mb-info strong { font-size: 1.3rem; color: white; }
-.btn-mb { text-decoration: none; background: var(--primary); color: #000; font-weight: 800; padding: 10px 24px; border-radius: 50px; font-size: 0.9rem; }
-
-@media (max-width: 968px) {
-  .hero-grid { grid-template-columns: 1fr; text-align: center; }
-  .hero-subtitle, .hero-stats { margin-left: auto; margin-right: auto; }
-  .hero-stats { justify-content: center; border-left: none; border-top: 1px solid var(--border); padding-top: 20px; padding-left: 0; }
-  .hero-visual { margin-top: 40px; }
-  .float-card { right: 50%; transform: translateX(50%); bottom: -20px; width: max-content; }
-  .config-container { grid-template-columns: 1fr; }
-  .sticky-card { display: none; }
+/* HERO SECTION */
+.hero {
+  position: relative;
+  padding: 140px 0 80px;
+  border-bottom: 1px solid var(--border);
+  background: radial-gradient(circle at top right, #112a38 0%, transparent 40%);
 }
-@media (min-width: 969px) { .mobile-bar { display: none; } }
+.hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
+
+.badge-glow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(45, 212, 191, 0.1); border: 1px solid rgba(45, 212, 191, 0.3);
+  color: var(--primary); padding: 8px 16px; border-radius: 50px;
+  font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1; margin-bottom: 24px; font-weight: 800;
+}
+.text-gradient {
+  background: linear-gradient(to right, #fff, var(--primary));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  font-size: 1.15rem; color: var(--text-muted); line-height: 1.7;
+  max-width: 540px; margin-bottom: 40px;
+}
+
+.hero-stats {
+  display: flex; gap: 40px; padding: 20px 0; border-top: 1px solid var(--border);
+}
+.stat-item strong { display: block; font-size: 1.8rem; color: white; font-weight: 800; }
+.stat-item span { font-size: 0.85rem; color: var(--primary); text-transform: uppercase; font-weight: 700; }
+
+/* HERO IMAGE */
+.img-wrapper {
+  position: relative; padding: 15px; border-radius: 30px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+}
+.img-wrapper img {
+  width: 100%; border-radius: 20px; display: block;
+  filter: grayscale(0.2) contrast(1.1);
+}
+.floating-card {
+  position: absolute; bottom: 30px; left: -20px;
+  background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px);
+  border: 1px solid var(--border); padding: 16px 24px; border-radius: 16px;
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  animation: float 6s ease-in-out infinite;
+}
+
+/* STEPS & BUILDER */
+.builder-section { padding: 80px 0; }
+.builder-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
+
+.step-box {
+  background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px; margin-bottom: 24px;
+}
+.step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.step-num {
+  background: var(--primary); color: #000; width: 32px; height: 32px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 1rem;
+}
+.step-header h3 { font-size: 1.25rem; font-weight: 700; margin: 0; color: white; }
+
+/* UI COMPONENTS */
+.option-btn {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 20px; border: 2px solid var(--border); border-radius: 16px;
+  background: rgba(0,0,0,0.2); transition: all 0.2s; margin-bottom: 12px;
+}
+.option-btn:hover { border-color: var(--text-muted); background: rgba(255,255,255,0.03); }
+.option-btn.active {
+  border-color: var(--primary); background: rgba(45, 212, 191, 0.05);
+  box-shadow: 0 0 20px rgba(45, 212, 191, 0.1);
+}
+.option-content h4 { margin: 0; font-size: 1rem; color: white; }
+.option-content p { margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted); }
+
+/* Switch Toggle Visual */
+.toggle-switch {
+  width: 48px; height: 26px; background: #334155; border-radius: 50px;
+  position: relative; transition: 0.3s;
+}
+.toggle-switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
+  background: white; border-radius: 50%; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.option-btn.active .toggle-switch { background: var(--primary); }
+.option-btn.active .toggle-switch::after { transform: translateX(22px); }
+
+/* STICKY SUMMARY */
+.summary-panel {
+  position: sticky; top: 30px;
+  background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(20px);
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 32px;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+}
+.sum-row { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 0.95rem; color: var(--text-muted); }
+.sum-row strong { color: white; }
+.sum-divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+.price-box { text-align: right; margin-bottom: 24px; }
+.price-box .lbl { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; }
+.price-box .val { font-size: 2.5rem; font-weight: 800; color: white; line-height: 1; }
+.price-box .detail { font-size: 0.9rem; color: var(--primary); margin-top: 5px; }
+
+.main-btn {
+  background: var(--primary); color: #0f172a; width: 100%;
+  padding: 18px; border-radius: 14px; font-weight: 800; font-size: 1.1rem;
+  display: flex; justify-content: center; align-items: center; gap: 10px;
+  transition: 0.3s; box-shadow: 0 10px 20px -5px rgba(45, 212, 191, 0.4);
+}
+.main-btn:hover { background: #5eead4; transform: translateY(-2px); box-shadow: 0 15px 30px -5px rgba(45, 212, 191, 0.6); }
+
+/* MOBILE BAR */
+.mobile-sticky {
+  position: fixed; bottom: 0; left: 0; width: 100%; background: #0f172a;
+  border-top: 1px solid var(--border); padding: 16px 24px; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 900px) {
+  .hero-grid, .builder-grid { grid-template-columns: 1fr; }
+  .img-wrapper { display: none; }
+  .summary-panel { display: none; } /* Se usa la barra móvil */
+  .hero { text-align: center; padding-top: 120px; }
+  .hero-stats { justify-content: center; }
+  .hero p { margin: 0 auto 40px; }
+}
+@media (min-width: 901px) { .mobile-sticky { display: none; } }
 `;
 
-/* ──────────────────────────────────────────────────────────────────────────
-   3. LOGICA PRINCIPAL
-   ────────────────────────────────────────────────────────────────────────── */
 export default function LSCh() {
   const [church, setChurch] = useState(false);
   const [selectedGroupId, setSelectedGroupId] = useState("g-quarter"); 
   const [selectedOneId, setSelectedOneId] = useState(null);
   const [selectedModules, setSelectedModules] = useState(["nivel-1"]);
   const [certSelected, setCertSelected] = useState(false);
-  const [showModal, setShowModal] = useState(false); // <--- ESTADO DEL FORM
+  const [showModal, setShowModal] = useState(false);
   
   const pricingRef = useRef(null);
   const location = useLocation();
 
+  // Scroll top al montar
   useEffect(() => { window.scrollTo(0, 0); }, [location.pathname]);
 
-  // 1. Encontrar Planes Seleccionados
+  // --- LÓGICA DE NEGOCIO ---
   const groupPlan = useMemo(() => 
     LSCH_GROUP_PLANS.find(p => p.id === selectedGroupId) || LSCH_GROUP_PLANS[0], 
   [selectedGroupId]);
@@ -188,248 +225,352 @@ export default function LSCh() {
     LSCH_ONE2ONE_PLANS.find(p => p.id === selectedOneId), 
   [selectedOneId]);
   
-  // 2. Calcular Mensualidad
+  // Calcular precios
   const monthlyGroup = priceForGroupPlan(groupPlan, { church });
   const monthlyOne = onePlan?.monthly || 0;
   const totalMonthly = monthlyGroup + monthlyOne;
   
-  // 3. Lógica de "Primer Pago" y Matrícula
+  // Lógica: Matrícula es gratis si paga trimestral o es Iglesia
   const isEnrollmentWaived = groupPlan.id === "g-quarter" || church;
   const enrollmentCost = isEnrollmentWaived ? 0 : LSCH_ENROLLMENT_FEE;
   
+  // Total a pagar HOY
   const totalFirstPayment = totalMonthly + enrollmentCost + (certSelected ? CERTIFICATE_FEE : 0);
 
+  // Manejador de Módulos (Visual solamente, para dar feedback)
   const toggleModule = (id) => {
-    setSelectedModules(prev => {
-      if(prev.includes(id) && prev.length === 1) return prev; 
-      return prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
-    });
+    setSelectedModules(prev => prev.includes(id) && prev.length > 1 
+      ? prev.filter(x => x !== id) 
+      : [...prev, id].includes(id) ? prev : [...prev, id]
+    );
   };
 
-  // 4. Generar detalles para el Formulario
+  // Texto resumen para el form
   const getSelectedDetails = () => {
-    let details = `Plan: ${groupPlan.title}, Perfil: ${church ? "Convenio Iglesia" : "General"}`;
-    if (certSelected) details += ", con Certificación Oficial";
-    if (onePlan) details += `, con Refuerzo 1:1 (${onePlan.title})`;
-    details += `. Pago Inicial calculado: ${clp(totalFirstPayment)}`;
+    let details = `Plan LSCh: ${groupPlan.title} (${church ? "Convenio Iglesia" : "General"})`;
+    if (certSelected) details += " + Certificado";
+    if (onePlan) details += ` + Refuerzo 1:1 (${onePlan.title})`;
+    details += `. Primer Pago: ${clp(totalFirstPayment)}. Mensualidad futura: ${clp(totalMonthly)}`;
     return details;
   };
 
   return (
     <div className="lsch-page">
       <style>{css}</style>
+      <SEOHead title="Curso LSCh | Lenguaje de Señas Chileno" description="Aprende con docentes sordas nativas. Clases en vivo 100% prácticas." />
 
-      {/* Luces de Fondo */}
-      <div className="ambient-glow glow-teal" />
-      <div className="ambient-glow glow-cyan" />
-
-      {/* HERO SECTION */}
-      <header className="hero">
-        <div className="container hero-grid">
-            <div className="hero-content">
-                <div className="status-badge">Inscripciones 2025 Abiertas</div>
-                <h1 className="hero-title">
-                    Domina el Silencio. <br/>
-                    <span className="text-gradient">Conecta sin Límites.</span>
-                </h1>
-                <p className="hero-subtitle">
-                    Fórmate con docentes sordas nativas en un programa diseñado para la comunicación real.
-                    Certificación profesional y validez curricular.
-                </p>
-                
-                <div className="hero-stats">
-                    <div className="stat"><span className="val">100%</span><span className="lbl">En Vivo</span></div>
-                    <div className="stat"><span className="val">A1-B1</span><span className="lbl">Niveles</span></div>
-                    <div className="stat"><span className="val">24/7</span><span className="lbl">Aula Virtual</span></div>
-                </div>
-
-                <button onClick={() => pricingRef.current?.scrollIntoView({behavior:'smooth'})} className="btn-hero">
-                    Ver Planes y Precios
-                </button>
-            </div>
-
-            <div className="hero-visual">
-                <div className="image-frame">
-                    {senasImg ? (
-                        <img src={senasImg} alt="Clase LSCh" width="600" height="400" loading="eager" />
-                    ) : (
-                        <div style={{width:'100%', height:'300px', background:'#1a202c', display:'flex', alignItems:'center', justifyContent:'center', color:'#4a5568'}}>Imagen no encontrada</div>
-                    )}
-                    <div className="float-card">
-                        <Icons.Hand />
-                        <div>
-                            <strong style={{color:'white', display:'block', fontSize:'0.9rem'}}>Docentes Nativas</strong>
-                            <small style={{color:'var(--primary)', fontSize:'0.7rem', textTransform:'uppercase'}}>Cultura Sorda Real</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </header>
-
-      {/* CORPORATE BAR */}
-      <div className="corp-bar">
-        <div className="container corp-grid">
-            {(CORPORATE_WHY || []).map((item, i) => (
-                <div className="corp-item" key={i}>
-                    <div className="c-icon-box">
-                       {i === 0 ? <Icons.Briefcase/> : i === 1 ? <Icons.Users/> : <Icons.Award/>}
-                    </div>
-                    <div className="c-text">
-                        <h4>{item.title}</h4>
-                        <p>{item.desc}</p>
-                    </div>
-                </div>
-            ))}
-        </div>
-      </div>
-
-      {/* CONFIGURATOR */}
-      <section ref={pricingRef} className="config-container container">
-        
-        <div className="config-panel">
-            {/* 1. Identity */}
-            <div className="step-card">
-                <div className="step-title"><div className="step-num">1</div><h3>Tu Perfil de Estudiante</h3></div>
-                <div className={`identity-btn ${church ? 'active' : ''}`} onClick={() => setChurch(!church)}>
-                    <div className="id-content">
-                        <h4>{church ? '⛪ Convenio Iglesia / Ministerio' : '🎓 Estudiante General'}</h4>
-                        <p>{church ? 'Tarifas preferenciales + Matrícula Gratis.' : 'Acceso completo al programa certificado.'}</p>
-                    </div>
-                    <div className="toggle-track"><div className="toggle-thumb"></div></div>
-                </div>
-            </div>
-
-            {/* 2. Modules */}
-            <div className="step-card">
-                <div className="step-title"><div className="step-num">2</div><h3>Selecciona tus Módulos</h3></div>
-                <div className="timeline">
-                    {LSCH_MODULES.map(m => (
-                        <div key={m.id} className={`timeline-item ${selectedModules.includes(m.id) ? 'selected' : ''}`} onClick={() => toggleModule(m.id)}>
-                            <div className="t-dot"></div>
-                            <div className="t-card">
-                                <div>
-                                    <span className="t-tag">{m.tag}</span>
-                                    <h4 style={{margin:'5px 0 0', color:'white'}}>{m.name}</h4>
-                                    <p style={{margin:'5px 0 0', fontSize:'0.85rem', color:'var(--text-muted)'}}>{m.summary}</p>
-                                </div>
-                                <div className="t-check"><Icons.Check/></div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* 3. Plans */}
-            <div className="step-card">
-                <div className="step-title"><div className="step-num">3</div><h3>Plan de Pago</h3></div>
-                {LSCH_GROUP_PLANS.map(p => {
-                    const price = priceForGroupPlan(p, { church });
-                    const isSelected = selectedGroupId === p.id;
-                    return (
-                        <div key={p.id} className={`plan-item ${isSelected ? 'selected' : ''}`} onClick={() => setSelectedGroupId(p.id)}>
-                            {p.badge && <span className="plan-badge">{p.badge}</span>}
-                            <div>
-                                <strong style={{color:'white', display:'block'}}>{p.title}</strong>
-                                <small style={{color:'gray'}}>{p.desc}</small>
-                            </div>
-                            <div className="plan-price">{clp(price)}</div>
-                        </div>
-                    )
-                })}
-            </div>
-
-            {/* 4. Extras */}
-            <div className="step-card">
-                <div className="step-title"><div className="step-num">4</div><h3>Extras (Opcional)</h3></div>
-                
-                <div className={`extra-row ${certSelected ? 'active' : ''}`} onClick={() => setCertSelected(!certSelected)}>
-                    <div style={{display:'flex', gap:'15px', alignItems:'center'}}>
-                        <div style={{color:'var(--gold)'}}><Icons.Award/></div>
-                        <div>
-                            <strong style={{color:'white', display:'block', fontSize:'0.95rem'}}>Certificación Oficial</strong>
-                            <small style={{color:'gray'}}>Diploma digital verificable</small>
-                        </div>
-                    </div>
-                    <div style={{fontWeight:'700', color:'var(--primary)'}}>+{clp(CERTIFICATE_FEE)}</div>
-                </div>
-
-                <div className="t-card" style={{marginTop:'20px', display:'block'}}>
-                    <div style={{marginBottom:'15px', display:'flex', gap:'10px', alignItems:'center'}}>
-                         <div style={{color:'var(--accent)'}}><Icons.Users/></div>
-                         <strong style={{color:'white'}}>Pack Refuerzo 1:1</strong>
-                    </div>
-                    <div className="extra-btn-grid">
-                        {LSCH_ONE2ONE_PLANS.map(p => (
-                            <div key={p.id} className={`extra-btn ${selectedOneId === p.id ? 'active' : ''}`} onClick={() => setSelectedOneId(selectedOneId === p.id ? null : p.id)}>
-                                {p.title}
-                                <div style={{fontSize:'0.7rem', marginTop:'4px'}}>+{clp(p.monthly)}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {/* STICKY SUMMARY (Desktop) */}
-        <div className="summary-col">
-            <div className="sticky-card">
-                <div className="sum-header">
-                    <h3>Resumen</h3>
-                    <div className="secure-tag"><Icons.Lock/> Seguro</div>
-                </div>
-                
-                <div className="sum-row">
-                    <span>Plan {groupPlan.title}</span>
-                    <strong>{clp(monthlyGroup)}/mes</strong>
-                </div>
-                {certSelected && <div className="sum-row"><span>Certificado (Pago Único)</span><strong>{clp(CERTIFICATE_FEE)}</strong></div>}
-                {onePlan && <div className="sum-row"><span>Refuerzo 1:1</span><strong>+{clp(monthlyOne)}/mes</strong></div>}
-                
-                <div className="sum-total">
-                    <span>Total Mensual</span>
-                    <span className="big-price">{clp(totalMonthly)}</span>
-                </div>
-
-                <div className="pay-today-box">
-                    <span>Tu Primer Pago Hoy</span>
-                    <strong>{clp(totalFirstPayment)}</strong>
-                    <small style={{display:'block', fontSize:'0.75rem', color:'var(--text-muted)', marginTop:'8px'}}>
-                        {isEnrollmentWaived
-                            ? "✨ ¡Matrícula BONIFICADA ($0)!" 
-                            : `(Incluye ${ENROLLMENT_LABEL} de ${clp(LSCH_ENROLLMENT_FEE)})`}
-                    </small>
-                </div>
-
-                {/* BOTON DE ACCIÓN - AHORA ABRE MODAL */}
-                <button onClick={() => setShowModal(true)} className="btn-checkout">
-                    Inscribirme Ahora <Icons.CreditCard/>
-                </button>
-            </div>
-        </div>
-
-      </section>
-
-      {/* MOBILE BAR */}
-      <div className="mobile-bar">
-         <div className="mb-info">
-             <small>Primer pago hoy</small>
-             <strong>{clp(totalFirstPayment)}</strong>
-         </div>
-         <button onClick={() => setShowModal(true)} className="btn-mb">
-            Inscribirme
-         </button>
-      </div>
-
-      {/* --- MODAL DEL FORMULARIO --- */}
+      {/* MODAL FORMULARIO */}
       {showModal && (
         <EnrollmentForm 
-          planTitle={`LSCh: ${groupPlan.title} ${church ? '(Convenio)' : ''}`}
-          price={clp(totalMonthly)} // Enviamos la mensualidad como referencia principal
+          planTitle={`LSCh: ${groupPlan.title}`}
+          price={clp(totalFirstPayment)}
           selectedDetails={getSelectedDetails()}
           onClose={() => setShowModal(false)}
         />
       )}
+
+      {/* 1. HERO SECTION */}
+      <section className="hero">
+        <div className="container hero-grid">
+          <div>
+            <div className="badge-glow"><Star size={14} fill="currentColor"/> Admisión 2026</div>
+            <h1>
+              Rompe el Silencio.<br/>
+              <span className="text-gradient">Conecta sin Límites.</span>
+            </h1>
+            <p>
+              Aprende Lengua de Señas Chilena (LSCh) con <strong>docentes sordas nativas</strong>. 
+              Un programa inmersivo, cultural y certificado diseñado para la comunicación real.
+            </p>
+            
+            <div className="hero-stats">
+              <div className="stat-item"><strong>100%</strong><span>En Vivo</span></div>
+              <div className="stat-item"><strong>A1-B1</strong><span>Niveles</span></div>
+              <div className="stat-item"><strong>24/7</strong><span>Aula Virtual</span></div>
+            </div>
+
+            <button onClick={() => pricingRef.current?.scrollIntoView({behavior:'smooth'})} className="main-btn" style={{width:'auto', padding:'16px 40px'}}>
+               Ver Planes y Precios <ChevronRight size={20}/>
+            </button>
+          </div>
+
+          <div className="img-wrapper">
+             <img src={senasImg} alt="Clase LSCh Online" />
+             {/* Floating Badge */}
+             <div className="floating-card">
+                <div style={{background:'rgba(45, 212, 191, 0.2)', padding:10, borderRadius:12, color:'var(--primary)'}}>
+                   <Hand size={24} />
+                </div>
+                <div>
+                   <strong style={{color:'white', display:'block'}}>Docentes Nativas</strong>
+                   <span style={{color:'var(--text-muted)', fontSize:'0.8rem'}}>Inmersión Cultural Real</span>
+                </div>
+             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. CORPORATE TRUST BAR */}
+      <div className="container" style={{marginTop:'-40px', position:'relative', zIndex:5, marginBottom:60}}>
+        <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:20}}>
+            {(CORPORATE_WHY || []).map((item, i) => (
+               <div key={i} style={{background:'#1e293b', border:'1px solid var(--border)', padding:24, borderRadius:16, display:'flex', gap:15}}>
+                  <div style={{color:'var(--primary)'}}>
+                     {i === 0 ? <Briefcase/> : i === 1 ? <Users/> : <Award/>}
+                  </div>
+                  <div>
+                     <h4 style={{color:'white', margin:'0 0 5px', fontSize:'1rem'}}>{item.title}</h4>
+                     <p style={{color:'var(--text-muted)', margin:0, fontSize:'0.85rem', lineHeight:1.4}}>{item.desc}</p>
+                  </div>
+               </div>
+            ))}
+        </div>
+      </div>
+
+      {/* 3. CONFIGURADOR (CORE) */}
+      <section ref={pricingRef} className="builder-section container">
+         <div className="builder-grid">
+            
+            {/* IZQUIERDA: PASOS */}
+            <div>
+               
+               {/* STEP 1: PERFIL */}
+               <div className="step-box">
+                  <div className="step-header">
+                     <div className="step-num">1</div>
+                     <h3>Tu Perfil de Estudiante</h3>
+                  </div>
+                  
+                  <button className={`option-btn ${!church ? 'active' : ''}`} onClick={() => setChurch(false)}>
+                     <div className="option-content">
+                        <h4>Estudiante General</h4>
+                        <p>Para profesionales, salud, educación y público general.</p>
+                     </div>
+                     <div className="toggle-switch"></div>
+                  </button>
+
+                  <button className={`option-btn ${church ? 'active' : ''}`} onClick={() => setChurch(true)}>
+                     <div className="option-content">
+                        <h4 style={{display:'flex', alignItems:'center', gap:8}}><Heart size={16} fill="#fbbf24" color="#fbbf24"/> Convenio Iglesia / Fundación</h4>
+                        <p>Tarifas preferenciales para voluntariado y ministerios.</p>
+                     </div>
+                     <div className="toggle-switch"></div>
+                  </button>
+               </div>
+
+               {/* STEP 2: MÓDULOS (VISUAL) */}
+               <div className="step-box">
+                  <div className="step-header">
+                     <div className="step-num">2</div>
+                     <h3>Ruta de Aprendizaje</h3>
+                  </div>
+                  <div style={{display:'flex', flexDirection:'column', gap:10}}>
+                     {LSCH_MODULES.map((m) => {
+                        const active = selectedModules.includes(m.id);
+                        return (
+                           <button 
+                              key={m.id} 
+                              onClick={() => toggleModule(m.id)}
+                              style={{
+                                 display:'flex', gap:15, padding:15, borderRadius:12,
+                                 background: active ? 'rgba(45, 212, 191, 0.05)' : 'transparent',
+                                 border: active ? '1px solid var(--primary)' : '1px solid transparent',
+                                 transition: '0.2s'
+                              }}
+                           >
+                              <div style={{
+                                 width:24, height:24, borderRadius:'50%', border:'2px solid var(--text-muted)',
+                                 background: active ? 'var(--primary)' : 'transparent',
+                                 borderColor: active ? 'var(--primary)' : 'var(--text-muted)',
+                                 display:'flex', alignItems:'center', justifyContent:'center'
+                              }}>
+                                 {active && <Check size={14} color="#000" strokeWidth={4}/>}
+                              </div>
+                              <div style={{textAlign:'left'}}>
+                                 <strong style={{color: active ? 'white' : 'var(--text-muted)', display:'block'}}>{m.name}</strong>
+                                 <span style={{fontSize:'0.8rem', color:'var(--text-muted)'}}>{m.summary}</span>
+                              </div>
+                           </button>
+                        )
+                     })}
+                  </div>
+               </div>
+
+               {/* STEP 3: PLAN DE PAGO */}
+               <div className="step-box">
+                  <div className="step-header">
+                     <div className="step-num">3</div>
+                     <h3>Plan de Pago</h3>
+                  </div>
+                  <div style={{display:'grid', gap:12}}>
+                     {LSCH_GROUP_PLANS.map(p => {
+                        const isSelected = selectedGroupId === p.id;
+                        const price = priceForGroupPlan(p, { church });
+                        return (
+                           <button 
+                              key={p.id}
+                              onClick={() => setSelectedGroupId(p.id)}
+                              className={`option-btn ${isSelected ? 'active' : ''}`}
+                              style={{display:'block', position:'relative', overflow:'hidden'}}
+                           >
+                              {p.badge && (
+                                 <div style={{
+                                    position:'absolute', top:0, right:0, background:'var(--gold)', 
+                                    color:'black', fontSize:'0.7rem', fontWeight:800, padding:'4px 8px',
+                                    borderBottomLeftRadius:8
+                                 }}>
+                                    {p.badge}
+                                 </div>
+                              )}
+                              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                                 <div className="option-content">
+                                    <h4>{p.title}</h4>
+                                    <p>{p.desc}</p>
+                                 </div>
+                                 <div style={{textAlign:'right'}}>
+                                    <span style={{fontSize:'1.2rem', fontWeight:800, color:'white'}}>{clp(price)}</span>
+                                    <span style={{display:'block', fontSize:'0.75rem', color:'var(--text-muted)'}}>/mes</span>
+                                 </div>
+                              </div>
+                           </button>
+                        )
+                     })}
+                  </div>
+               </div>
+
+               {/* STEP 4: EXTRAS */}
+               <div className="step-box">
+                  <div className="step-header">
+                     <div className="step-num">4</div>
+                     <h3>Opcionales</h3>
+                  </div>
+                  
+                  {/* Certificado */}
+                  <button className={`option-btn ${certSelected ? 'active' : ''}`} onClick={() => setCertSelected(!certSelected)}>
+                     <div className="option-content" style={{display:'flex', gap:12, alignItems:'center'}}>
+                        <Award size={24} className={certSelected ? "text-yellow-400" : "text-gray-500"} />
+                        <div>
+                           <h4>Certificación Digital</h4>
+                           <p>Diploma verificable al finalizar y aprobar.</p>
+                        </div>
+                     </div>
+                     <span style={{color:'var(--primary)', fontWeight:700}}>+{clp(CERTIFICATE_FEE)}</span>
+                  </button>
+
+                  {/* 1:1 Coaching */}
+                  <div style={{marginTop:20, padding:20, background:'rgba(0,0,0,0.2)', borderRadius:16}}>
+                     <h4 style={{color:'white', marginBottom:10, fontSize:'0.95rem', display:'flex', gap:8, alignItems:'center'}}>
+                        <Zap size={16} color="#38bdf8"/> Refuerzo Personalizado 1:1
+                     </h4>
+                     <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:10}}>
+                        {LSCH_ONE2ONE_PLANS.map(p => {
+                           const isActive = selectedOneId === p.id;
+                           return (
+                              <button 
+                                 key={p.id}
+                                 onClick={() => setSelectedOneId(isActive ? null : p.id)}
+                                 style={{
+                                    padding:12, border:'1px solid', borderRadius:10, textAlign:'center',
+                                    borderColor: isActive ? 'var(--accent)' : 'var(--border)',
+                                    background: isActive ? 'rgba(56, 189, 248, 0.1)' : 'transparent',
+                                    color: isActive ? 'white' : 'var(--text-muted)',
+                                    transition: '0.2s'
+                                 }}
+                              >
+                                 <div style={{fontSize:'0.85rem', fontWeight:700}}>{p.title}</div>
+                                 <div style={{fontSize:'0.75rem'}}>+{clp(p.monthly)}/mes</div>
+                              </button>
+                           )
+                        })}
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+
+            {/* DERECHA: RESUMEN STICKY */}
+            <div className="summary-panel">
+               <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20}}>
+                  <h3 style={{margin:0, color:'white', fontWeight:800}}>Resumen</h3>
+                  <div style={{display:'flex', gap:5, alignItems:'center', fontSize:'0.8rem', color:'var(--primary)'}}>
+                     <ShieldCheck size={14}/> Garantía
+                  </div>
+               </div>
+
+               <div className="sum-row">
+                  <span>Plan Seleccionado</span>
+                  <strong>{groupPlan.title}</strong>
+               </div>
+               
+               <div className="sum-row">
+                  <span>Mensualidad Base</span>
+                  <strong>{clp(monthlyGroup)}</strong>
+               </div>
+
+               {church && (
+                  <div className="sum-row" style={{color:'var(--gold)'}}>
+                     <span><Heart size={12} style={{display:'inline'}}/> Beneficio Iglesia</span>
+                     <strong>Aplicado</strong>
+                  </div>
+               )}
+
+               {selectedOneId && (
+                  <div className="sum-row" style={{color:'var(--accent)'}}>
+                     <span>Refuerzo 1:1</span>
+                     <strong>+{clp(monthlyOne)}</strong>
+                  </div>
+               )}
+
+               <div className="sum-divider"></div>
+
+               <div className="sum-row">
+                  <span>Matrícula 2026</span>
+                  {isEnrollmentWaived ? (
+                     <strong style={{color:'var(--primary)'}}>GRATIS ($0)</strong>
+                  ) : (
+                     <strong>{clp(LSCH_ENROLLMENT_FEE)}</strong>
+                  )}
+               </div>
+
+               {certSelected && (
+                  <div className="sum-row">
+                     <span>Certificado</span>
+                     <strong>{clp(CERTIFICATE_FEE)}</strong>
+                  </div>
+               )}
+
+               <div className="price-box" style={{marginTop:30}}>
+                  <div className="lbl">Total a pagar hoy</div>
+                  <div className="val">{clp(totalFirstPayment)}</div>
+                  <div className="detail">
+                     {monthlyOne > 0 
+                        ? `Luego ${clp(monthlyGroup + monthlyOne)} mensualmente` 
+                        : `Luego ${clp(monthlyGroup)} mensualmente`}
+                  </div>
+               </div>
+
+               <button onClick={() => setShowModal(true)} className="main-btn">
+                  Inscribirme Ahora <CreditCard size={20}/>
+               </button>
+
+               <p style={{textAlign:'center', fontSize:'0.75rem', color:'var(--text-muted)', marginTop:15, lineHeight:1.4}}>
+                  Acceso inmediato al aula virtual tras la confirmación.
+               </p>
+            </div>
+
+         </div>
+      </section>
+
+      {/* MOBILE STICKY BAR */}
+      <div className="mobile-sticky">
+         <div>
+            <div style={{fontSize:'0.7rem', textTransform:'uppercase', color:'var(--text-muted)'}}>Total Hoy</div>
+            <div style={{fontSize:'1.4rem', fontWeight:800, color:'white'}}>{clp(totalFirstPayment)}</div>
+         </div>
+         <button onClick={() => setShowModal(true)} className="main-btn" style={{width:'auto', padding:'10px 24px', fontSize:'0.9rem'}}>
+            Inscribirme
+         </button>
+      </div>
 
     </div>
   );

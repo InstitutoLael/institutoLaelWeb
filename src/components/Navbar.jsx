@@ -31,7 +31,7 @@ export default function Navbar() {
   
   // CONEXIÓN AL CARRITO REAL
   const { cart } = useCart(); 
-  const cartCount = cart.length;
+ const cartCount = cart ? cart.length : 0;
 
   // Cierra el menú móvil al cambiar de página
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);

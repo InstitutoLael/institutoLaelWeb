@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useCart } from "../context/CartContext.jsx"; // <--- IMPORTANTE
 import SEOHead from "../components/SEOHead.jsx"; 
 
-// 📸 ASEGÚRATE DE QUE ESTA RUTA EXISTA O CÁMBIALA
+// 📸 IMAGEN DE FONDO (Asegúrate de tenerla o cambia la ruta)
 import studyOnline from "../assets/img/lael/study-online.jpg"; 
 
-// Importamos tu lógica de precios
+// Lógica de precios (Asumiendo que existe en data/paes.js)
 import {
   ENROLLMENT_FEE,
   PAES_SUBJECTS,
@@ -22,24 +23,22 @@ import {
    -------------------------------------------------------------------------- */
 const css = `
 :root {
-  /* --- PALETA DE COLORES VIBRANTES --- */
-  --bg-deep: #050505;       /* Fondo Infinito */
-  --bg-panel: #0F1115;      /* Paneles */
-  --bg-darker: #000000;     /* Contraste */
+  --bg-deep: #050505;
+  --bg-panel: #0F1115;
+  --bg-darker: #000000;
   
   --glass: rgba(255, 255, 255, 0.03);
   --glass-hover: rgba(255, 255, 255, 0.07);
   --border: rgba(255, 255, 255, 0.08);
   --border-light: rgba(255, 255, 255, 0.15);
 
-  /* Colores de Marca */
-  --primary: #6366f1;       /* Indigo/Azul */
+  --primary: #6366f1;
   --primary-glow: rgba(99, 102, 241, 0.5);
-  --rose: #f43f5e;          /* Rosa */
+  --rose: #f43f5e;
   --rose-glow: rgba(244, 63, 94, 0.5);
-  --green: #10b981;         /* Verde */
+  --green: #10b981;
   --green-glow: rgba(16, 185, 129, 0.5);
-  --amber: #f59e0b;         /* Amarillo */
+  --amber: #f59e0b;
   
   --text-main: #ffffff;
   --text-muted: #94a3b8;
@@ -50,7 +49,6 @@ const css = `
   --shadow-float: 0 20px 40px -10px rgba(0,0,0,0.5);
 }
 
-/* --- RESET & BASE --- */
 .paes-page {
   background-color: var(--bg-deep);
   color: var(--text-main);
@@ -58,7 +56,7 @@ const css = `
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  padding-bottom: 120px; /* Espacio extra para sticky bar */
+  padding-bottom: 120px;
 }
 
 .container { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
@@ -68,44 +66,35 @@ p { line-height: 1.6; color: var(--text-muted); margin: 0; }
 button { cursor: pointer; border: none; background: none; font-family: inherit; -webkit-tap-highlight-color: transparent; }
 a { text-decoration: none; color: inherit; }
 
-/* --- LUCES AMBIENTALES --- */
-.ambient-orb {
-  position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; pointer-events: none; z-index: 0;
-}
+/* LUCES */
+.ambient-orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.15; pointer-events: none; z-index: 0; }
 .orb-1 { width: 600px; height: 600px; top: -200px; left: -100px; background: var(--primary); }
 .orb-2 { width: 500px; height: 500px; bottom: 20%; right: -100px; background: var(--rose); }
 .orb-3 { width: 400px; height: 400px; top: 40%; left: 20%; background: var(--green); opacity: 0.08; }
 
-/* --- BOTONES --- */
+/* BOTONES */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   padding: 14px 32px; border-radius: 50px; font-weight: 700; font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden;
 }
-.btn-primary {
-  background: var(--primary); color: white; box-shadow: 0 8px 25px -5px var(--primary-glow);
-}
-.btn-primary:hover {
-  transform: translateY(-3px); box-shadow: 0 15px 35px -5px var(--primary-glow); filter: brightness(1.1);
-}
-.btn-ghost {
-  background: transparent; color: var(--text-muted); border: 1px solid var(--border);
-}
-.btn-ghost:hover {
-  border-color: var(--text-main); color: var(--text-main); background: var(--glass); transform: translateY(-2px);
-}
+.btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 25px -5px var(--primary-glow); }
+.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 35px -5px var(--primary-glow); filter: brightness(1.1); }
+.btn-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--text-main); color: var(--text-main); background: var(--glass); transform: translateY(-2px); }
+.btn-outline { border: 2px solid var(--primary); color: var(--primary); background: transparent; }
+.btn-outline:hover { background: var(--primary); color: white; }
+
 .btn-full-cta {
   width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;
   padding: 16px; border-radius: 16px; font-weight: 700; background: var(--primary);
-  color: white; transition: 0.3s; margin-top: auto;
-  text-align: center;
+  color: white; transition: 0.3s; margin-top: auto; text-align: center;
 }
 .btn-full-cta:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
-/* --- HERO SECTION --- */
+/* HERO */
 .hero { padding: 140px 0 80px; position: relative; z-index: 1; }
 .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
-
 .badge-pill {
   display: inline-flex; align-items: center; gap: 6px;
   background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3);
@@ -123,7 +112,6 @@ a { text-decoration: none; color: inherit; }
 .trust-item { display: flex; align-items: center; gap: 8px; }
 .trust-item svg { color: var(--green); }
 
-/* Hero Visual */
 .visual-card {
   position: relative; border-radius: var(--radius-lg); overflow: hidden;
   box-shadow: var(--shadow-float); border: 1px solid var(--border);
@@ -149,7 +137,7 @@ a { text-decoration: none; color: inherit; }
   .hero-actions, .hero-trust { justify-content: center; }
 }
 
-/* --- MINI TESTIMONIALS --- */
+/* MINI TESTIMONIALS */
 .section-mini-testimonials {
   border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
   background: rgba(0,0,0,0.3); padding: 30px 0; margin-bottom: 80px; position: relative; z-index: 1;
@@ -161,7 +149,7 @@ a { text-decoration: none; color: inherit; }
 .snippet-icon { color: var(--amber); font-size: 2rem; }
 .btn-small-link { font-size: 0.9rem; color: var(--primary); font-weight: 700; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; }
 
-/* --- PRICING SECTION --- */
+/* PRICING */
 .section-pricing { position: relative; z-index: 1; }
 .section-header { text-align: center; margin-bottom: 60px; max-width: 600px; margin-left: auto; margin-right: auto; }
 .section-header h2 { font-size: 2.5rem; margin-bottom: 15px; }
@@ -174,18 +162,13 @@ a { text-decoration: none; color: inherit; }
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .pricing-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.6); border-color: var(--border-light); }
-
 .pricing-card.accent-rose:hover { border-color: var(--rose); box-shadow: 0 20px 50px -10px var(--rose-glow); }
 .pricing-card.accent-indigo:hover { border-color: var(--primary); box-shadow: 0 20px 50px -10px var(--primary-glow); }
 .pricing-card.accent-green:hover { border-color: var(--green); box-shadow: 0 20px 50px -10px var(--green-glow); }
-
 .pricing-card.featured {
   background: linear-gradient(180deg, rgba(244, 63, 94, 0.08), var(--bg-panel) 60%);
   border: 1px solid rgba(244, 63, 94, 0.4); transform: scale(1.05); z-index: 2;
 }
-.pricing-card.featured:hover { transform: scale(1.05) translateY(-10px); }
-@media(max-width: 900px) { .pricing-card.featured { transform: scale(1); } }
-
 .popular-tag {
   position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
   background: var(--rose); color: white; padding: 6px 14px; border-radius: 100px;
@@ -197,10 +180,8 @@ a { text-decoration: none; color: inherit; }
   background: var(--bg-darker); border: 1px solid var(--border);
   padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;
 }
-
 .card-header h3 { font-size: 1.6rem; margin-bottom: 5px; }
 .subtitle { font-size: 0.95rem; color: var(--text-muted); }
-
 .card-price { margin: 30px 0 5px; display: flex; align-items: flex-end; }
 .currency { font-size: 1.5rem; color: var(--text-muted); margin-bottom: 6px; }
 .amount { font-size: 3.5rem; font-weight: 800; line-height: 1; color: white; }
@@ -208,15 +189,13 @@ a { text-decoration: none; color: inherit; }
 .accent-green .amount { color: var(--green); }
 .accent-indigo .amount { color: var(--primary); }
 .period { margin-bottom: 8px; margin-left: 5px; color: var(--text-muted); }
-
 .annual-ref { font-size: 0.85rem; color: var(--text-muted); opacity: 0.7; margin-bottom: 25px; }
 .divider { height: 1px; background: var(--border); margin-bottom: 25px; }
 .features-list { list-style: none; padding: 0; margin: 0 0 30px 0; display: flex; flex-direction: column; gap: 14px; flex-grow: 1; }
 .features-list li { display: flex; gap: 12px; font-size: 0.95rem; align-items: flex-start; }
 .icon-box { color: var(--green); flex-shrink: 0; margin-top: 2px; }
-.accent-rose .icon-box { color: var(--rose); }
 
-/* --- COMBOS SECTION --- */
+/* COMBOS */
 .section-combos { padding: 80px 0; overflow: hidden; }
 .combos-scroll {
   display: flex; gap: 20px; overflow-x: auto; padding: 10px 5px 30px 5px;
@@ -238,12 +217,11 @@ a { text-decoration: none; color: inherit; }
 .border-indigo { border-top: 3px solid var(--primary); }
 .border-green { border-top: 3px solid var(--green); }
 .border-amber { border-top: 3px solid var(--amber); }
-
 .combo-content h4 { font-size: 1.3rem; margin-bottom: 5px; }
 .combo-desc { font-size: 0.9rem; margin-bottom: 15px; color: var(--text-muted); flex-grow: 1; }
 .combo-price { font-size: 1.8rem; font-weight: 800; color: white; margin-bottom: 20px; }
 
-/* --- METHODOLOGY --- */
+/* METHODOLOGY */
 .section-methodology { background: #08090C; border-block: 1px solid var(--border); padding: 100px 0; }
 .methodology-tag { color: var(--amber); font-weight: 700; font-size: 0.9rem; display: block; margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
 .sec-head-left { max-width: 700px; margin-bottom: 60px; }
@@ -259,9 +237,8 @@ a { text-decoration: none; color: inherit; }
   border-radius: 50%; display: flex; align-items: center; justify-content: center;
   font-size: 1.8rem; margin-bottom: 20px; border: 1px solid rgba(99, 102, 241, 0.2);
 }
-.methodology-card h3 { margin-bottom: 12px; font-size: 1.4rem; }
 
-/* --- BUILDER (ARMADOR) --- */
+/* BUILDER */
 .section-builder { position: relative; z-index: 2; padding: 100px 0; }
 .builder-panel {
   background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-lg);
@@ -269,7 +246,6 @@ a { text-decoration: none; color: inherit; }
 }
 .builder-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; }
 .subjects-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid var(--border); }
-
 .subject-chip {
   display: flex; align-items: center; gap: 10px; background: var(--bg-deep);
   border: 1px solid var(--border); padding: 12px 24px; border-radius: 50px;
@@ -290,25 +266,19 @@ a { text-decoration: none; color: inherit; }
   display: grid; grid-template-columns: 1fr 350px; gap: 50px; align-items: center;
   opacity: 0; max-height: 0; overflow: hidden; transition: all 0.5s ease;
 }
-.builder-summary.visible { opacity: 1; max-height: 600px; padding-top: 10px; }
+.builder-summary.visible { opacity: 1; max-height: 800px; padding-top: 10px; }
 .summary-count { font-size: 2rem; font-weight: 800; color: var(--primary); margin-bottom: 20px; display: block; }
 .summary-feats li { display: flex; gap: 12px; margin-bottom: 12px; font-size: 1.1rem; }
 .summary-feats li svg { color: var(--green); }
-
 .summary-price-box {
   background: var(--bg-darker); border: 1px solid var(--border-light);
   border-radius: var(--radius-md); padding: 30px; text-align: center;
 }
 .price-big { font-size: 3.5rem; font-weight: 900; color: white; margin: 10px 0; letter-spacing: -2px; line-height: 1; }
 .price-sub { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; }
+.action-row { display: grid; gap: 10px; }
 
-@media (max-width: 800px) {
-  .builder-panel { padding: 30px 20px; }
-  .builder-summary { grid-template-columns: 1fr; }
-  .summary-price-box { order: -1; }
-}
-
-/* --- FAQ --- */
+/* FAQ */
 .section-faq { max-width: 800px; margin: 0 auto; padding-top: 0; padding-bottom: 80px; }
 .faq-item { border-bottom: 1px solid var(--border); margin-bottom: 10px; }
 .faq-question {
@@ -318,34 +288,38 @@ a { text-decoration: none; color: inherit; }
 .faq-question:hover { color: var(--primary); }
 .chevron { transition: transform 0.3s; }
 .faq-item.open .chevron { transform: rotate(180deg); color: var(--primary); }
-.faq-answer {
-  padding-bottom: 24px; color: var(--text-muted); line-height: 1.7;
-  animation: fadeIn 0.3s ease;
-}
+.faq-answer { padding-bottom: 24px; color: var(--text-muted); line-height: 1.7; animation: fadeIn 0.3s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-/* --- STICKY MOBILE --- */
+/* STICKY BAR */
 .mobile-sticky-bar {
   position: fixed; bottom: 0; left: 0; right: 0;
-  background: rgba(15, 17, 21, 0.9); backdrop-filter: blur(15px);
+  background: rgba(15, 17, 21, 0.95); backdrop-filter: blur(15px);
   border-top: 1px solid var(--border-light); padding: 15px 24px;
   display: flex; justify-content: space-between; align-items: center;
   z-index: 100; display: none;
   animation: slideUp 0.3s ease;
 }
-@media (max-width: 768px) { .mobile-sticky-bar { display: flex; } }
+@media (max-width: 768px) { .mobile-sticky-bar.visible { display: flex; } }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
 .bar-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
 .bar-price { font-weight: 800; font-size: 1.5rem; color: white; line-height: 1; }
 .btn-sticky { 
     background: var(--primary); color: white; padding: 10px 24px; 
-    border-radius: 50px; font-weight: 700; font-size: 0.9rem; text-decoration: none;
+    border-radius: 50px; font-weight: 700; font-size: 0.9rem; text-decoration: none; display: flex; align-items: center; gap: 5px;
 }
+
+/* TOAST */
+.toast-msg {
+    position: fixed; top: 100px; right: 20px; background: var(--green); color: black;
+    padding: 15px 25px; border-radius: 50px; font-weight: 700; z-index: 9999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); animation: slideIn 0.3s ease;
+}
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 `;
 
 /* --------------------------------------------------------------------------
-   2. ICONOS (SVG PUROS)
+   2. ICONOS
    -------------------------------------------------------------------------- */
 const Icons = {
   Check: (props) => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><polyline points="20 6 9 17 4 12"/></svg>,
@@ -354,11 +328,12 @@ const Icons = {
   Shield: (props) => <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
   Play: (props) => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><polygon points="5 3 19 12 5 21 5 3"/></svg>,
   ArrowRight: (props) => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>,
-  ChevronDown: (props) => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><polyline points="6 9 12 15 18 9"/></svg>
+  ChevronDown: (props) => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" {...props}><polyline points="6 9 12 15 18 9"/></svg>,
+  Cart: (props) => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" {...props}><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
 };
 
 /* --------------------------------------------------------------------------
-   3. SUB-COMPONENTES VISUALES
+   3. SUB-COMPONENTES
    -------------------------------------------------------------------------- */
 function MiniTestimonialsSection() {
     return (
@@ -418,7 +393,7 @@ function MethodologySection() {
     )
 }
 
-function PricingCard({ title, subtitle, price, annual, features, accent = "indigo", featured = false, badge }) {
+function PricingCard({ title, subtitle, price, annual, features, accent = "indigo", featured = false, badge, onAction }) {
   return (
     <div className={`pricing-card accent-${accent} ${featured ? 'featured' : ''}`}>
       {badge && <div className="card-badge">{badge}</div>}
@@ -443,9 +418,9 @@ function PricingCard({ title, subtitle, price, annual, features, accent = "indig
         ))}
       </ul>
       
-      <Link to="/inscripcion" className="btn-full-cta">
-        Inscribirme <Icons.ArrowRight />
-      </Link>
+      <button onClick={onAction} className="btn-full-cta">
+        Configurar este Plan <Icons.ArrowRight />
+      </button>
     </div>
   );
 }
@@ -461,7 +436,7 @@ function ComboCard({ combo, onSelect }) {
                 <p className="combo-desc">{combo.tagline}</p>
                 <div className="combo-price">{clp(monthly)}</div>
             </div>
-            <button onClick={onSelect} className="btn btn-ghost btn-sm w-full" style={{width:'100%'}}>
+            <button onClick={onSelect} className="btn btn-ghost btn-sm" style={{width:'100%'}}>
                 Seleccionar
             </button>
         </div>
@@ -484,11 +459,15 @@ function FaqItem({ q, a }) {
    4. COMPONENTE PRINCIPAL (PAGE)
    -------------------------------------------------------------------------- */
 export default function PAES() {
-  const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
-  const builderRef = useRef(null);
+  const { addToCart } = useCart(); // Hook del carrito
+  const navigate = useNavigate();
   const location = useLocation();
+  const builderRef = useRef(null);
 
-  // --- LÓGICA DE NEGOCIO ---
+  const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
+  const [toast, setToast] = useState(null);
+
+  // Lógica de cálculo
   const selectedSubjects = useMemo(
     () => PAES_SUBJECTS.filter((s) => selectedSubjectIds.includes(s.id)),
     [selectedSubjectIds]
@@ -497,32 +476,58 @@ export default function PAES() {
   const monthly = subjectCount ? priceForSubjects(selectedSubjectIds) : 0;
   const annual = subjectCount ? priceAnnual(subjectCount) : 0;
 
+  useEffect(() => { window.scrollTo(0,0); }, [location.pathname]);
+
   const toggleSubject = (id) =>
     setSelectedSubjectIds((prev) =>
       prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
 
-  const chooseCombo = (ids) => {
-    setSelectedSubjectIds([...ids]);
-    setTimeout(() => {
-        builderRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 100);
+  const scrollToBuilder = (presetIds) => {
+      if(presetIds) setSelectedSubjectIds(presetIds);
+      builderRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
-  const waMsg = encodeURIComponent(
-    `Hola 👋, vengo de la web. Me interesa el plan PAES con: ${selectedSubjects.map((s) => s.name).join(", ") || "Ver opciones"}. Mensual estimado: ${subjectCount ? clp(monthly) : "—"}.`
-  );
+  // --- ACCIONES DEL CARRITO ---
+  const handleAddToCart = () => {
+      if(subjectCount === 0) return;
+      const itemName = `Plan PAES (${subjectCount} Ramos): ${selectedSubjects.map(s => s.name).join(', ')}`;
+      
+      addToCart({
+          id: `paes-${Date.now()}`, // ID único simple
+          nombre: itemName,
+          precio: monthly,
+          tipo: 'paes'
+      });
+      
+      setToast("¡Plan agregado al carrito!");
+      setTimeout(() => setToast(null), 3000);
+      setSelectedSubjectIds([]); // Limpiar selección opcionalmente
+  };
 
-  const COMBOS_TOP = ["hum-duo", "stem-basico", "trio-fundamental", "full-5", "completo-7"];
-  const combos = PAES_COMBOS.filter((c) => COMBOS_TOP.includes(c.id));
+  const handleBuyNow = () => {
+    if(subjectCount === 0) return;
+    handleAddToCart();
+    navigate('/inscripcion');
+  };
 
+  // Stats para tarjetas de precio
   const stats = {
     p1: { count: 1, m: priceForCount(1), a: priceAnnual(1) },
     p3: { count: 3, m: priceForCount(3), a: priceAnnual(3) },
     p5: { count: 5, m: priceForCount(5), a: priceAnnual(5) },
   };
+  
+  // Combos
+  const COMBOS_TOP = ["hum-duo", "stem-basico", "trio-fundamental", "full-5", "completo-7"];
+  const combos = PAES_COMBOS.filter((c) => COMBOS_TOP.includes(c.id));
 
-  useEffect(() => { window.scrollTo(0,0); }, [location.pathname]);
+  // FAQ Data
+  const faqs = [
+      { q: "¿Cómo funcionan las clases en vivo?", a: "Son vía Zoom/Meet con profesores expertos. Quedan grabadas en tu aula virtual para verlas cuando quieras." },
+      { q: "¿Tengo compromiso de permanencia?", a: "No. Pagas mes a mes. Si necesitas retirarte, solo no renuevas el siguiente mes." },
+      { q: "¿Qué incluye la tutoría?", a: "Seguimiento académico, resolución de dudas vocacionales y estrategia de estudio personalizada." }
+  ];
 
   return (
     <div className="paes-page">
@@ -532,6 +537,8 @@ export default function PAES() {
         description="Preuniversitario PAES 2026. Clases en vivo, ensayos y tutorías. Planes flexibles desde $6.990 mensual." 
         canonical="https://www.institutolael.cl/paes" 
       />
+
+      {toast && <div className="toast-msg"><Icons.Check/> {toast}</div>}
 
       {/* FONDO ANIMADO */}
       <div className="ambient-orb orb-1" />
@@ -553,7 +560,7 @@ export default function PAES() {
             </p>
             
             <div className="hero-actions">
-              <button onClick={() => builderRef.current?.scrollIntoView({ behavior: 'smooth' })} className="btn btn-primary btn-lg">
+              <button onClick={() => scrollToBuilder([])} className="btn btn-primary btn-lg">
                 Armar mi Plan <Icons.ArrowRight />
               </button>
               <a href={`https://wa.me/56964626568?text=${encodeURIComponent("Hola, quiero saber más sobre los planes PAES")}`} target="_blank" rel="noreferrer" className="btn btn-ghost">
@@ -597,6 +604,7 @@ export default function PAES() {
               annual={stats.p1.a}
               features={["1 ensayo mensual", "Clases en vivo", "Acceso a grabaciones"]}
               accent="indigo"
+              onAction={() => scrollToBuilder(['m1'])} // Ejemplo: pre-selecciona m1
             />
             
             <PricingCard 
@@ -607,6 +615,7 @@ export default function PAES() {
               features={["3 ensayos mensuales", "Tutoría mensual", "Corrección de ensayos"]}
               accent="green"
               badge="Equilibrado"
+              onAction={() => scrollToBuilder(['m1', 'len', 'his'])}
             />
 
             <PricingCard 
@@ -617,6 +626,7 @@ export default function PAES() {
               features={["5 ensayos mensuales", "Tutoría Avanzada", "Prioridad 24/7", "Orientación Vocacional"]}
               accent="rose"
               featured={true}
+              onAction={() => scrollToBuilder(['m1', 'm2', 'len', 'his', 'cie'])}
             />
           </div>
         </div>
@@ -634,7 +644,7 @@ export default function PAES() {
               <ComboCard 
                 key={combo.id} 
                 combo={combo} 
-                onSelect={() => chooseCombo(combo.subjects || [])} 
+                onSelect={() => scrollToBuilder(combo.subjects || [])} 
               />
             ))}
           </div>
@@ -693,74 +703,42 @@ export default function PAES() {
                 <div style={{textTransform:'uppercase', fontSize:'0.75rem', color:'var(--text-muted)', letterSpacing:'1px', marginBottom:'5px'}}>
                     Valor Mensual
                 </div>
-                <div className="price-big">
-                    {clp(monthly).replace("$", "")}
-                    <span style={{fontSize:'1rem', color:'var(--text-muted)', fontWeight:400}}>/mes</span>
-                </div>
+                <div className="price-big">{clp(monthly)}</div>
+                <div className="price-sub">Matrícula única: {clp(ENROLLMENT_FEE)}</div>
                 
-                {/* 👇 AQUÍ FUE DONDE SE CORTÓ TU CÓDIGO ANTERIOR 👇 */}
-                <div className="price-sub">
-                    + {clp(ENROLLMENT_FEE)} matrícula única anual
+                <div className="action-row">
+                    <button onClick={handleAddToCart} className="btn btn-outline w-full" style={{width:'100%', justifyContent:'center'}}>
+                         <Icons.Cart/> Agregar al Carrito
+                    </button>
+                    <button onClick={handleBuyNow} className="btn btn-primary w-full" style={{width:'100%', justifyContent:'center'}}>
+                        Inscribirme Ahora
+                    </button>
                 </div>
-                <a 
-                    href={`https://wa.me/56964626568?text=${waMsg}`} 
-                    target="_blank" 
-                    rel="noreferrer" 
-                    className="btn-full-cta"
-                >
-                    Inscribir este Plan <Icons.ArrowRight />
-                </a>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* FAQ SECTION (Agregada para resolver dudas) */}
-      <section className="section-faq">
+      {/* FAQ */}
+      <section className="section section-faq">
           <div className="container">
               <div className="section-header">
-                  <h2>Preguntas Frecuentes</h2>
+                  <h3>Preguntas Frecuentes</h3>
               </div>
-              <FaqItem 
-                q="¿Qué pasa si no puedo asistir a una clase en vivo?" 
-                a="¡No te preocupes! Todas las clases se graban en HD y se suben a tu aula virtual el mismo día. Podrás verlas las veces que quieras, a tu propio ritmo." 
-              />
-              <FaqItem 
-                q="¿Cómo funcionan los métodos de pago?" 
-                a="Puedes pagar mensualmente mediante transferencia bancaria o WebPay. No exigimos tarjetas de crédito ni cheques. La matrícula se paga una única vez al año." 
-              />
-              <FaqItem 
-                q="¿Existe algún contrato de permanencia?" 
-                a="No. En Instituto Lael creemos en la libertad. Pagas mes a mes y puedes retirarte cuando lo necesites sin multas ni letras chicas. Solo pedimos aviso con 15 días de anticipación." 
-              />
-              <FaqItem 
-                q="¿Puedo cambiar mis ramos después de inscribirme?" 
-                a="Sí, nuestro sistema es flexible. Si te das cuenta de que necesitas reforzar otra área, puedes contactar a secretaría académica y ajustar tu carga académica para el mes siguiente." 
-              />
+              {faqs.map((f,i) => <FaqItem key={i} q={f.q} a={f.a} />)}
           </div>
       </section>
 
-      {/* STICKY BAR PARA MÓVILES (Aumenta conversión) */}
-      <div className="mobile-sticky-bar">
+      {/* STICKY MOBILE BAR */}
+      <div className={`mobile-sticky-bar ${subjectCount > 0 ? 'visible' : ''}`}>
           <div>
-              <div className="bar-label">Valor Mensual</div>
-              <div className="bar-price">
-                  {subjectCount > 0 ? clp(monthly) : "Desde $6.990"}
-              </div>
+              <div className="bar-label">{subjectCount} Ramos seleccionados</div>
+              <div className="bar-price">{clp(monthly)}</div>
           </div>
-          <a 
-            href={subjectCount > 0 ? `https://wa.me/56964626568?text=${waMsg}` : "#"} 
-            onClick={(e) => {
-                if(subjectCount === 0) {
-                    e.preventDefault();
-                    builderRef.current?.scrollIntoView({ behavior: 'smooth' });
-                }
-            }}
-            className="btn-sticky"
-          >
-              {subjectCount > 0 ? "Inscribir" : "Armar Plan"}
-          </a>
+          <button onClick={handleBuyNow} className="btn-sticky">
+              Inscribirme <Icons.ArrowRight size={16}/>
+          </button>
       </div>
 
     </div>

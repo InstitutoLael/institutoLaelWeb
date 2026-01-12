@@ -48,7 +48,6 @@ function BankCard({ onCopy }) {
     <div className="bank-card">
       <div className="bank-header">
         <span className="bank-title">Datos Transferencia</span>
-        {/* Simulación Chip Tarjeta */}
         <div className="chip-sim"></div> 
       </div>
       <div className="bank-body">
@@ -72,13 +71,12 @@ function BankCard({ onCopy }) {
    3. PÁGINA PRINCIPAL DE INSCRIPCIÓN
    ────────────────────────────────────────────────────────────────────────── */
 export default function Inscripciones() {
-  const { items: cart, totals, clear } = useCart(); // Usamos 'items' y 'totals' del contexto
-  const totalPagar = totals?.total || 0;
+  // 🔽 AQUÍ ESTABA EL ERROR: Ahora usamos los nombres correctos de tu Contexto
+  const { cart, totalPagar } = useCart(); 
 
   const [toastMsg, setToastMsg] = useState("");
-  const [status, setStatus] = useState("idle"); // idle, loading, success, error
+  const [status, setStatus] = useState("idle"); 
   
-  // Estado del Formulario
   const [form, setForm] = useState({
     fullName: "",
     rut: "",
@@ -90,12 +88,12 @@ export default function Inscripciones() {
 
   // EFECTO: Si hay carrito, pre-cargamos el programa
   useEffect(() => {
-    if (cart.length > 0) {
-      // Creamos un string legible con el contenido del carrito
-      const resumenCursos = cart.map(item => item.name).join(" + ");
+    if (cart && cart.length > 0) {
+      // 🔽 CORREGIDO: item.name -> item.nombre
+      const resumenCursos = cart.map(item => item.nombre).join(" + ");
       setForm(prev => ({
         ...prev,
-        program: resumenCursos, // Esto se guarda en el estado pero no se edita visualmente
+        program: resumenCursos,
         comments: prev.comments || `Resumen Carrito: ${resumenCursos}. Total Web: $${totalPagar}`
       }));
     }
@@ -117,9 +115,10 @@ export default function Inscripciones() {
     setStatus("loading");
 
     const finalTotal = cart.length > 0 ? totalPagar : "Por cotizar";
-    // Si hay carrito, forzamos que el programa sea el contenido del carrito
+    
+    // 🔽 CORREGIDO: item.name -> item.nombre, item.price -> item.precio
     const finalProgram = cart.length > 0 
-        ? cart.map(item => `${item.name} ($${item.price})`).join(" + ")
+        ? cart.map(item => `${item.nombre} ($${item.precio})`).join(" + ")
         : form.program;
 
     const payload = {
@@ -137,7 +136,6 @@ export default function Inscripciones() {
     console.log("Enviando:", payload);
 
     try {
-      // mode: 'no-cors' es obligatorio para enviar a Google Apps Script desde frontend sin proxy
       await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         mode: "no-cors", 
@@ -145,9 +143,9 @@ export default function Inscripciones() {
         body: JSON.stringify(payload),
       });
       
-      // Como 'no-cors' no retorna respuesta legible, asumimos éxito si no hay error de red
       setStatus("success");
-      if(cart.length > 0) clear(); // Opcional: Limpiar carrito al enviar
+      // Nota: Si agregas la función 'clear' a tu Contexto en el futuro, puedes descomentar esto:
+      // clear(); 
 
     } catch (error) {
       console.error(error);
@@ -158,7 +156,6 @@ export default function Inscripciones() {
 
   // --- VISTA DE ÉXITO (POST-ENVÍO) ---
   if (status === "success") {
-    // Texto predefinido para WhatsApp
     const totalMsg = cart.length > 0 ? `$${totalPagar?.toLocaleString("es-CL")}` : "lo acordado";
     const textWsp = `Hola Admisión Lael! Soy *${form.fullName}*.\nYa envié mi ficha web.\n\nAdjunto mi comprobante de transferencia por ${totalMsg} para finalizar mi matrícula.\n(RUT: ${form.rut})`;
     const linkWsp = `https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(textWsp)}`;
@@ -255,17 +252,18 @@ export default function Inscripciones() {
                 />
               </div>
 
-              {/* LÓGICA DE PROGRAMA: Si hay carrito (MODO COMPRA) vs Select (MODO CONSULTA) */}
+              {/* LÓGICA DE PROGRAMA */}
               <div className="form-group">
                 <label>Programa Académico <span className="req">*</span></label>
                 
-                {cart.length > 0 ? (
+                {cart && cart.length > 0 ? (
                     // MODO CARRITO: Lectura solamente
                     <div className="cart-summary-locked">
                         <div className="csl-header"><Icons.Cart/> Estás inscribiéndote en:</div>
                         <ul>
                             {cart.map((item, i) => (
-                                <li key={i}>• {item.name} <small>(${parseInt(item.price).toLocaleString('es-CL')})</small></li>
+                                // 🔽 CORREGIDO: item.name -> item.nombre, item.price -> item.precio
+                                <li key={i}>• {item.nombre} <small>(${parseInt(item.precio || 0).toLocaleString('es-CL')})</small></li>
                             ))}
                         </ul>
                         <div className="csl-total">
@@ -278,20 +276,20 @@ export default function Inscripciones() {
                       <option value="">-- Selecciona el curso --</option>
                       
                       <optgroup label="🎓 Preuniversitario PAES">
-                        <option value="PAES Anual - Plan Completo">Plan Anual Completo</option>
-                        <option value="PAES Anual - Personalizado">Plan Personalizado (Por Ramos)</option>
-                        <option value="PAES Intensivo">Plan Intensivo</option>
+                        <option value="PAES Anual - Plan Completo">PAES - Plan Completo</option>
+                        <option value="PAES Anual - Personalizado">PAES - Personalizado</option>
+                        <option value="PAES Intensivo">PAES - Intensivo</option>
                       </optgroup>
 
                       <optgroup label="📚 Escuela y Nivelación">
-                        <option value="Escuela Adultos 2x1">Escuela para Adultos (2x1)</option>
+                        <option value="Escuela Adultos 2x1">Escuela Adultos (2x1)</option>
                         <option value="Homeschool">Homeschool / Exámenes Libres</option>
                       </optgroup>
 
                       <optgroup label="🌍 Idiomas">
-                        <option value="Ingles">Inglés Comunicativo</option>
-                        <option value="Coreano">Idioma Coreano</option>
-                        <option value="Japones">Idioma Japonés</option>
+                        <option value="Ingles">Inglés</option>
+                        <option value="Coreano">Coreano</option>
+                        <option value="Japones">Japonés</option>
                       </optgroup>
                     </select>
                 )}
@@ -349,7 +347,7 @@ export default function Inscripciones() {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   4. ESTILOS CSS (Estética Lael V2)
+   4. ESTILOS CSS
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
@@ -376,7 +374,7 @@ const css = `
 .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
 /* HEADER */
-.page-header { text-align: center; padding: 120px 0 50px; /* Padding top extra por navbar fija */ }
+.page-header { text-align: center; padding: 120px 0 50px; }
 .secure-badge { 
   display: inline-flex; align-items: center; gap: 6px; 
   background: rgba(99, 102, 241, 0.1); color: #a5b4fc; 
@@ -392,7 +390,7 @@ h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 12px; font-weight: 800; l
 }
 @media (max-width: 900px) { .layout-grid { grid-template-columns: 1fr; } }
 
-/* FORMULARIO NATIVO */
+/* FORMULARIO */
 .native-form {
   background: var(--bg-panel); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 32px;
@@ -438,7 +436,6 @@ option { background: var(--bg-panel); color: white; padding: 10px; }
 .csl-total { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; font-weight: 700; display: flex; justify-content: space-between; }
 .csl-total span { color: #fbbf24; font-size: 1.1rem; }
 
-
 /* BOTONES */
 .form-actions { margin-top: 30px; }
 .submit-btn { width: 100%; justify-content: center; height: 50px; font-size: 1rem; }
@@ -448,28 +445,21 @@ option { background: var(--bg-panel); color: white; padding: 10px; }
 .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
 
 .legal-text { font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 15px; }
-
-/* SPINNER */
 .spinner-mini { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* SIDEBAR WIDGETS */
+/* SIDEBAR & BANK */
 .sticky-content { position: sticky; top: 120px; }
 .sidebar-widget { margin-bottom: 30px; }
 .sidebar-widget h3 { font-size: 1.1rem; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-weight: 700; }
 .widget-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px; }
 
-/* BANK CARD */
 .bank-card {
   background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
   border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden;
-  position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; position: relative;
 }
-.chip-sim {
-    width: 35px; height: 25px; background: linear-gradient(135deg, #fcd34d 0%, #d97706 100%);
-    border-radius: 4px; opacity: 0.8;
-}
+.chip-sim { width: 35px; height: 25px; background: linear-gradient(135deg, #fcd34d 0%, #d97706 100%); border-radius: 4px; opacity: 0.8; }
 .bank-header { display: flex; justify-content: space-between; align-items:center; margin-bottom: 15px; }
 .bank-title { font-size: 0.7rem; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 700; }
 .bank-type { font-size: 0.85rem; color: rgba(255,255,255,0.9); margin-bottom: 12px; }
@@ -486,7 +476,6 @@ option { background: var(--bg-panel); color: white; padding: 10px; }
 .bf-label { font-size: 0.65rem; text-transform: uppercase; color: rgba(255,255,255,0.5); display: block; }
 .bf-val { font-size: 0.8rem; font-weight: 600; }
 
-/* QUICK HELP */
 .quick-help { background: var(--bg-panel); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center; }
 .quick-help h4 { font-size: 1rem; margin-bottom: 10px; }
 .btn-qh { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
@@ -505,27 +494,13 @@ option { background: var(--bg-panel); color: white; padding: 10px; }
 .next-steps-card ol { padding-left: 20px; color: #cbd5e1; line-height: 1.6; margin-bottom: 24px; }
 .next-steps-card li { margin-bottom: 10px; }
 .next-steps-card li strong { color: #fbbf24; }
+.bank-mini-details { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-family: monospace; color: #94a3b8; font-size: 0.9rem; }
 
-.bank-mini-details { 
-    background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; 
-    text-align: center; margin-bottom: 20px; font-family: monospace; color: #94a3b8; font-size: 0.9rem;
-}
-
-.btn-whatsapp-lg {
-    background: #25D366; color: #000; width: 100%; justify-content: center; 
-    font-size: 1.1rem; padding: 16px; margin-bottom: 15px;
-}
+.btn-whatsapp-lg { background: #25D366; color: #000; width: 100%; justify-content: center; font-size: 1.1rem; padding: 16px; margin-bottom: 15px; }
 .btn-whatsapp-lg:hover { filter: brightness(1.1); transform: scale(1.02); }
-
 .link-back { display: block; text-align: center; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
 .link-back:hover { color: white; text-decoration: underline; }
 
-/* TOAST */
-.toast-notification {
-  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-  background: var(--accent); color: #000; padding: 12px 24px; border-radius: 50px;
-  font-weight: 700; z-index: 9999; display: flex; align-items: center; gap: 8px;
-  animation: popUp 0.4s ease;
-}
+.toast-notification { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--accent); color: #000; padding: 12px 24px; border-radius: 50px; font-weight: 700; z-index: 9999; display: flex; align-items: center; gap: 8px; animation: popUp 0.4s ease; }
 @keyframes popUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 `;

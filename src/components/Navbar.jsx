@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext"; // <--- IMPORTAMOS EL CONTEXTO
-import logo from "../assets/img/logos/lael-inst-blanco.png"; // Asegúrate de que la ruta sea correcta
+import logo from "/Users/diegochaparro/Documents/Pagina web/institutoLaelWeb/src/assets/img/Logos/lael-inst-blanco.png"; // Asegúrate de que la ruta sea correcta
 
 /* ─── 1. ICONOS SVG (Sistema Optimizado) ─── */
 const Icons = {

@@ -72,18 +72,17 @@ export const LEVELS = [
   { id: 'basica', label: 'Ed. Básica', desc: '1º a 8º Básico' },
   { id: 'media', label: 'Ed. Media', desc: 'Iº a IVº Medio' },
   { id: 'paes', label: 'Prep. PAES', desc: 'Intensivo U' },
-  { id: 'adultos', label: 'Adultos', desc: 'Nivelación 2x1' }, // Coherencia con tu otro programa
+  { id: 'adultos', label: 'Adultos', desc: 'Nivelación 2x1' }, 
 ];
 
 // 📦 PACKS DE HORAS (B2C - Estrategia de Precio Volumen)
-// Precios ajustados para ser competitivos ($16k - $18k hora)
 export const PACKS = [
   { 
     id: 'p4', 
     hours: 4, 
     title: 'Pack Rescate', 
     subtitle: 'Para salvar la prueba',
-    price: 75000, // $18.750/hr
+    price: 75000, 
     badge: null,
     features: [
       "1 hora semanal",
@@ -96,7 +95,7 @@ export const PACKS = [
     hours: 8, 
     title: 'Pack Hábito', 
     subtitle: 'Constancia y mejora real',
-    price: 139000, // ~$17.300/hr (Precio psicológico atractivo)
+    price: 139000, 
     badge: 'Más Popular',
     features: [
       "2 horas semanales",
@@ -109,7 +108,7 @@ export const PACKS = [
     hours: 12, 
     title: 'Pack Excelencia', 
     subtitle: 'Transformación académica',
-    price: 199000, // ~$16.500/hr (Gran oferta por volumen)
+    price: 199000, 
     badge: 'Mejor Valor',
     features: [
       "3 horas semanales",

@@ -18,6 +18,7 @@ const Convenios = lazy(() => import("./pages/Convenios.jsx"));
 const Trabaja = lazy(() => import("./pages/Trabaja.jsx"));
 const Contacto = lazy(() => import("./pages/Contacto.jsx"));
 const Docentes = lazy(() => import("./pages/Docentes.jsx")); 
+cons Aula = lazy(() => import("./pages/Aula.jsx"));
 
 /* --- Conversión y Legal --- */
 // NOTA: Si tu archivo se llama "Inscripciones.jsx", ajusta la línea de abajo:

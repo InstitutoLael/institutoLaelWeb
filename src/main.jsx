@@ -2,24 +2,26 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-// 1. IMPORTANTE: Importamos el proveedor de SEO
-import { HelmetProvider } from "react-helmet-async";
+import { HelmetProvider } from "react-helmet-async"; // SEO
 
-// Estilos globales (Asegúrate de que este archivo tenga tu CSS base/reset)
+// Tus estilos globales
 import "./styles/styles.css"; 
 
+// Tu aplicación principal
 import App from "./App.jsx";
 
-// Contexto del Carrito (Lo mantenemos si lo estás usando)
+// Tu contexto del Carrito
 import { CartProvider } from "./context/CartContext.jsx"; 
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {/* 2. Envolvemos TODO con HelmetProvider para el SEO */}
+    {/* 1. Capa de SEO */}
     <HelmetProvider>
+      {/* 2. Capa de Navegación */}
       <BrowserRouter>
-        {/* 3. Provider de datos (Carrito) */}
+        {/* 3. Capa de Datos (Carrito Global) */}
         <CartProvider>
+          {/* 4. Tu App Visual */}
           <App />
         </CartProvider>
       </BrowserRouter>

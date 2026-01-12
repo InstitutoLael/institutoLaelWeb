@@ -1,7 +1,10 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useCart } from "../context/CartContext"; // <--- IMPORTAMOS EL CONTEXTO
-import logo from "/Users/diegochaparro/Documents/Pagina web/institutoLaelWeb/src/assets/img/Logos/lael-inst-blanco.png"; // Asegúrate de que la ruta sea correcta
+import { useCart } from "../context/CartContext"; 
+
+// --- CORRECCIÓN AQUÍ ---
+// Usamos ruta relativa (../) en lugar de la ruta absoluta de tu disco duro
+import logo from "../assets/img/Logos/lael-inst-blanco.png"; 
 
 /* ─── 1. ICONOS SVG (Sistema Optimizado) ─── */
 const Icons = {

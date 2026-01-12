@@ -1,29 +1,29 @@
 // src/pages/Inscripciones.jsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../context/CartContext.jsx"; // <--- IMPORTANTE: Tu contexto
 import SEOHead from "../components/SEOHead.jsx";
 
-// --- ASSETS ---
+// --- CONFIGURACIÓN ---
+// Tu URL de Google Apps Script (La que me pasaste)
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG26Civ9DJm5Fvr-jq7NSb7xEobqRJSa-VJLeil_3pTgqVBdWJiT4W5XyvsX9gq1JKPg/exec";
+const WAPP_INTL = "56964626568"; // Tu número para soporte y comprobantes
+
+// --- ASSETS (Asegúrate de tener esta imagen o borra la línea si no) ---
 import mpLogo from "../assets/img/Partners/u1.png"; 
 
-// ⚙️ CONFIGURACIÓN DE TU API CLOUDFLARE
-// Aquí debes poner la URL de tu Worker. Si estás en local: "http://localhost:8787/api/enroll"
-// En producción será algo como: "https://api.institutolael.cl/enroll"
-const API_URL = "https://tu-worker-url.workers.dev/api/enroll"; 
-const WAPP_INTL = "56964626568";
-
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG
+   1. ICONOS SVG (Sistema de Iconos Ultraligeros)
    ────────────────────────────────────────────────────────────────────────── */
 const Icons = {
   Copy: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>,
   Check: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>,
   Whatsapp: () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>,
-  Mail: () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>,
   Lock: () => <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
   CreditCard: () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>,
   Send: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>,
-  User: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  User: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+  Cart: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -54,7 +54,8 @@ function BankCard({ onCopy }) {
       <div className="bank-header">
         <span className="bank-title">Datos Transferencia</span>
         <div className="bank-logo-box">
-            <img src={mpLogo} alt="Mercado Pago" className="mp-img" onError={(e) => e.target.style.display='none'} />
+            {/* Si no tienes logo, borra el tag img */}
+            <img src={mpLogo} alt="Banco" className="mp-img" onError={(e) => e.target.style.display='none'} />
         </div>
       </div>
       <div className="bank-body">
@@ -78,6 +79,9 @@ function BankCard({ onCopy }) {
    3. PÁGINA PRINCIPAL
    ────────────────────────────────────────────────────────────────────────── */
 export default function Inscripciones() {
+  // Contexto del Carrito (Para saber qué quiere comprar)
+  const { cart, totalPagar } = useCart();
+  
   const [toastMsg, setToastMsg] = useState("");
   const [status, setStatus] = useState("idle"); // idle, loading, success, error
   
@@ -87,9 +91,21 @@ export default function Inscripciones() {
     rut: "",
     email: "",
     phone: "",
-    program: "",
+    program: "", // Si viene del carrito, lo llenamos auto
     comments: ""
   });
+
+  // EFECTO: Si hay cosas en el carrito, pre-llenar el formulario
+  useEffect(() => {
+    if (cart.length > 0) {
+      const resumenCursos = cart.map(item => item.nombre).join(" + ");
+      setForm(prev => ({
+        ...prev,
+        program: `🛒 PACK WEB: ${resumenCursos}`,
+        comments: `Detalle Carrito: ${resumenCursos}. Total calculado: $${totalPagar}`
+      }));
+    }
+  }, [cart, totalPagar]);
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
@@ -101,62 +117,84 @@ export default function Inscripciones() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // --- LOGICA DE ENVÍO A CLOUDFLARE ---
+  // --- LÓGICA DE ENVÍO A GOOGLE SHEETS ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("loading");
 
+    // Preparamos datos finales (asegurando el monto si no viene del carrito)
+    const finalTotal = cart.length > 0 ? totalPagar : "Por cotizar/Definir";
+    const finalProgram = form.program || "Consulta General";
+
+    const payload = {
+      fecha: new Date().toISOString(),
+      nombre: form.fullName,
+      rut: form.rut,
+      telefono: form.phone,
+      email: form.email,
+      program: finalProgram,
+      total: finalTotal,
+      comments: form.comments
+    };
+
     try {
-      // 1. Simular envío (borrar esto cuando tengas la API real)
-      // await new Promise(r => setTimeout(r, 1500)); 
-      
-      // 2. Envío Real (Descomentar cuando conectes el Worker)
-      /*
-      const res = await fetch(API_URL, {
+      // Fetch con mode: 'no-cors' es vital para Google Apps Script
+      await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
+        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        body: JSON.stringify(payload),
       });
-      if (!res.ok) throw new Error("Error en el servidor");
-      */
       
-      // Simulación de éxito por ahora
-      setTimeout(() => setStatus("success"), 1500);
+      // Google en 'no-cors' no devuelve estado 200 legible, así que asumimos éxito si no explota.
+      setStatus("success");
 
     } catch (error) {
       console.error(error);
       setStatus("error");
-      setToastMsg("Hubo un error. Intenta por WhatsApp.");
+      setToastMsg("Error de conexión. Contáctanos por WhatsApp.");
     }
   };
 
-  // VISTA: Éxito
+  // --- VISTA: ÉXITO ---
   if (status === "success") {
+    // Generar link de WhatsApp pre-escrito
+    const totalMsg = cart.length > 0 ? `$${totalPagar?.toLocaleString("es-CL")}` : "lo acordado";
+    const textWsp = `Hola! Soy *${form.fullName}*. Acabo de llenar mi ficha de inscripción web para: ${form.program}. \n\nAdjunto mi comprobante por transferencia de ${totalMsg}. \nQuedo atento/a.`;
+    const linkWsp = `https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(textWsp)}`;
+
     return (
       <div className="enroll-page success-view">
         <style>{css}</style>
         <div className="container success-container">
           <div className="success-icon"><Icons.Check /></div>
-          <h1>¡Inscripción Recibida!</h1>
-          <p>Tus datos han sido guardados correctamente en nuestro sistema.</p>
+          <h1>¡Ficha Recibida!</h1>
+          <p>Tus datos ya están seguros en nuestro sistema académico.</p>
+          
           <div className="next-steps-card">
-            <h3>Siguientes Pasos</h3>
+            <h3>Último paso: Confirmar Matrícula</h3>
+            <p className="steps-intro">Para activar tu cupo inmediatamente:</p>
             <ol>
-              <li>Realiza el <strong>pago de matrícula</strong> usando los datos a la derecha (o abajo).</li>
-              <li>Envía el comprobante a <strong>pagos@institutolael.cl</strong>.</li>
-              <li>Te confirmaremos el alta en menos de 24 horas.</li>
+              <li>Realiza la transferencia del total <strong>({cart.length > 0 ? `$${totalPagar?.toLocaleString("es-CL")}` : "indicado"})</strong>.</li>
+              <li>Envía el comprobante directamente a nuestro WhatsApp de Admisión.</li>
             </ol>
-            <div className="btn-row-center">
-                <Link to="/" className="btn btn-outline">Volver al Inicio</Link>
-                <a href={`https://wa.me/${WAPP_INTL}`} className="btn btn-primary">Tengo dudas</a>
+
+            <div className="bank-mini-details">
+                <small>Cuenta Vista | 1088183168 | 78.084.019-6 | pagos@institutolael.cl</small>
             </div>
+
+            <a href={linkWsp} target="_blank" rel="noreferrer" className="btn btn-whatsapp-lg">
+               <Icons.Whatsapp /> Enviar Comprobante y Finalizar
+            </a>
+            
+            <Link to="/" className="link-back">Volver al inicio</Link>
           </div>
         </div>
       </div>
     );
   }
 
-  // VISTA: Formulario
+  // --- VISTA: FORMULARIO ---
   return (
     <div className="enroll-page">
       <style>{css}</style>
@@ -167,18 +205,18 @@ export default function Inscripciones() {
         
         {/* HEADER */}
         <header className="page-header">
-          <div className="secure-badge"><Icons.Lock/> Datos encriptados</div>
+          <div className="secure-badge"><Icons.Lock/> Inscripción Oficial 2026</div>
           <h1>Ficha de Matrícula</h1>
-          <p>Ingresa tus datos para registrarte en la base de datos de Admisión 2025.</p>
+          <p>Completa tus datos para reservar tu vacante.</p>
         </header>
 
         <div className="layout-grid">
           
-          {/* COLUMNA IZQUIERDA: FORMULARIO NATIVO */}
+          {/* COLUMNA IZQUIERDA: FORMULARIO */}
           <main className="main-col">
             <form className="native-form" onSubmit={handleSubmit}>
               
-              <h2 className="form-title">Datos del Estudiante</h2>
+              <h2 className="form-title">Datos del Alumno</h2>
               
               <div className="form-group">
                 <label>Nombre Completo <span className="req">*</span></label>
@@ -216,60 +254,89 @@ export default function Inscripciones() {
                 />
               </div>
 
+              {/* LÓGICA DE PROGRAMA: Si hay carrito, muestra resumen. Si no, muestra Select */}
               <div className="form-group">
-                <label>Programa de Interés <span className="req">*</span></label>
-                <select name="program" className="inp select" required value={form.program} onChange={handleChange}>
-                  <option value="">-- Selecciona una opción --</option>
-                  <option value="paes_anual">PAES Anual</option>
-                  <option value="paes_intensivo">PAES Intensivo</option>
-                  <option value="ingles">Cursos de Inglés</option>
-                  <option value="lsch">Lengua de Señas (LSCh)</option>
-                  <option value="reforzamiento">Reforzamiento Escolar</option>
-                  <option value="otro">Otro</option>
-                </select>
+                <label>Programa Académico <span className="req">*</span></label>
+                
+                {cart.length > 0 ? (
+                    // MODO CARRITO: Read Only
+                    <div className="cart-summary-locked">
+                        <div className="csl-header"><Icons.Cart/> Resumen de Inscripción:</div>
+                        <ul>
+                            {cart.map((item, i) => (
+                                <li key={i}>• {item.nombre}</li>
+                            ))}
+                        </ul>
+                        <div className="csl-total">
+                            Total a Pagar: <span>${totalPagar?.toLocaleString('es-CL')}</span>
+                        </div>
+                        <input type="hidden" name="program" value={form.program} />
+                    </div>
+                ) : (
+                    // MODO DIRECTO: Select Completo
+                    <select name="program" className="inp select" required value={form.program} onChange={handleChange}>
+                      <option value="">-- Selecciona lo que buscas --</option>
+                      
+                      <optgroup label="🎓 Preuniversitario PAES">
+                        <option value="PAES Anual - Plan Completo">Plan Anual Completo</option>
+                        <option value="PAES Anual - Personalizado">Plan Personalizado (Por Ramos)</option>
+                        <option value="PAES Intensivo">Plan Intensivo (2do Semestre)</option>
+                      </optgroup>
+
+                      <optgroup label="📚 Escuela y Nivelación">
+                        <option value="Escuela Adultos 2x1">Escuela para Adultos (2x1)</option>
+                        <option value="Homeschool">Homeschool (Exámenes Libres)</option>
+                        <option value="Reforzamiento Escolar">Reforzamiento Escolar</option>
+                      </optgroup>
+
+                      <optgroup label="🌍 Idiomas">
+                        <option value="Ingles Comunicativo">Inglés Comunicativo</option>
+                        <option value="Coreano">Idioma Coreano</option>
+                        <option value="Japones">Idioma Japonés</option>
+                        <option value="LSCh">Lengua de Señas Chilena</option>
+                      </optgroup>
+                    </select>
+                )}
               </div>
 
               <div className="form-group">
                 <label>Comentarios adicionales</label>
                 <textarea 
                   name="comments" className="inp ta" rows="3" 
-                  placeholder="¿Alguna duda o requerimiento especial?"
+                  placeholder="¿Alguna duda, horario de preferencia o necesidad educativa especial?"
                   value={form.comments} onChange={handleChange}
                 ></textarea>
               </div>
 
               <div className="form-actions">
                 <button type="submit" className={`btn btn-primary submit-btn ${status === 'loading' ? 'loading' : ''}`} disabled={status === 'loading'}>
-                  {status === 'loading' ? <span className="spinner-mini"></span> : <><Icons.Send /> Enviar Inscripción</>}
+                  {status === 'loading' ? <span className="spinner-mini"></span> : <><Icons.Send /> Confirmar Inscripción</>}
                 </button>
                 <p className="legal-text">
-                  Al enviar, aceptas registrar tus datos en nuestro sistema académico privado.
+                  Al enviar, tus datos serán procesados internamente para generar tu matrícula.
                 </p>
               </div>
 
             </form>
           </main>
 
-          {/* COLUMNA DERECHA: SIDEBAR */}
+          {/* COLUMNA DERECHA: PAGO */}
           <aside className="sidebar-col">
             <div className="sticky-content">
               
               <div className="sidebar-widget">
-                <h3><Icons.CreditCard/> Pago de Matrícula</h3>
+                <h3><Icons.CreditCard/> Datos de Transferencia</h3>
                 <p className="widget-desc">
-                  Para validar tu inscripción, recuerda transferir el valor de la matrícula:
+                  Utiliza estos datos para pagar tu matrícula o mensualidad:
                 </p>
                 <BankCard onCopy={handleCopy} />
-                <div className="payment-note">
-                  <strong>Nota:</strong> No olvides enviar tu comprobante tras realizar el pago.
-                </div>
               </div>
 
               <div className="quick-help">
-                <h4>¿Necesitas ayuda?</h4>
+                <h4>¿Tienes dudas antes de pagar?</h4>
                 <div className="qh-actions">
                     <a href={`https://wa.me/${WAPP_INTL}`} target="_blank" rel="noreferrer" className="btn-qh whatsapp">
-                    <Icons.Whatsapp/> Chat Soporte
+                    <Icons.Whatsapp/> Hablar con Admisión
                     </a>
                 </div>
               </div>
@@ -284,7 +351,7 @@ export default function Inscripciones() {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   4. ESTILOS CSS - (Dark Mode Nativo)
+   4. ESTILOS CSS - (Diseño Lael Universe V2)
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
@@ -337,7 +404,7 @@ h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 12px; font-weight: 800; l
 
 .form-group { margin-bottom: 20px; }
 .form-group label { display: block; font-size: 0.9rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
-.req { color: var(--accent); }
+.req { color: var(--primary); }
 
 .inp {
   width: 100%; background: var(--bg-input); border: 1px solid var(--border);
@@ -353,7 +420,24 @@ h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 12px; font-weight: 800; l
 @media (max-width: 600px) { .row-2 { grid-template-columns: 1fr; } }
 
 .ta { min-height: 100px; resize: vertical; }
-.select { appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
+.select { 
+    appearance: none; 
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e"); 
+    background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; 
+}
+optgroup { color: var(--text-muted); background: #000; font-style: normal; }
+option { background: var(--bg-panel); color: white; padding: 10px; }
+
+/* CART SUMMARY LOCKED */
+.cart-summary-locked {
+    background: rgba(99, 102, 241, 0.1); border: 1px dashed var(--primary);
+    padding: 15px; border-radius: 10px; color: #e0e7ff;
+}
+.csl-header { display: flex; align-items: center; gap: 8px; font-weight: 700; margin-bottom: 10px; color: var(--primary); }
+.cart-summary-locked ul { list-style: none; padding: 0; margin: 0 0 10px 0; font-size: 0.9rem; }
+.csl-total { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; font-weight: 700; display: flex; justify-content: space-between; }
+.csl-total span { color: #fbbf24; font-size: 1.1rem; }
+
 
 /* BOTONES */
 .form-actions { margin-top: 30px; }
@@ -361,8 +445,7 @@ h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 12px; font-weight: 800; l
 .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; transition: 0.2s; text-decoration: none; }
 .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(99,102,241,0.3); }
 .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
-.btn-outline { background: transparent; border: 1px solid var(--border); color: white; }
-.btn-outline:hover { border-color: white; }
+.btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
 
 .legal-text { font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 15px; }
 
@@ -398,7 +481,6 @@ h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 12px; font-weight: 800; l
 .bank-footer { margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; display: flex; justify-content: space-between; }
 .bf-label { font-size: 0.65rem; text-transform: uppercase; color: rgba(255,255,255,0.5); display: block; }
 .bf-val { font-size: 0.8rem; font-weight: 600; }
-.payment-note { font-size: 0.85rem; color: var(--text-muted); margin-top: 15px; background: var(--bg-panel); padding: 12px; border-radius: 8px; border: 1px solid var(--border); }
 
 /* QUICK HELP */
 .quick-help { background: var(--bg-panel); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center; }
@@ -408,14 +490,31 @@ h1 { font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 12px; font-weight: 800; l
 .btn-qh.whatsapp:hover { filter: brightness(1.1); }
 
 /* SUCCESS VIEW */
-.success-view { display: flex; align-items: center; justify-content: center; text-align: center; }
-.success-container { max-width: 600px; animation: popUp 0.5s ease; }
-.success-icon { width: 80px; height: 80px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: #000; }
+.success-view { display: flex; align-items: center; justify-content: center; text-align: center; padding-top: 50px; }
+.success-container { max-width: 600px; animation: popUp 0.5s ease; width: 100%; }
+.success-icon { width: 80px; height: 80px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: #000; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
 .success-icon svg { width: 40px; height: 40px; }
+
 .next-steps-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 30px; margin-top: 30px; text-align: left; }
-.next-steps-card ol { padding-left: 20px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
+.next-steps-card h3 { color: var(--text-main); margin-bottom: 10px; }
+.steps-intro { color: var(--text-muted); margin-bottom: 20px; }
+.next-steps-card ol { padding-left: 20px; color: #cbd5e1; line-height: 1.6; margin-bottom: 24px; }
 .next-steps-card li { margin-bottom: 10px; }
-.btn-row-center { display: flex; gap: 10px; justify-content: center; }
+.next-steps-card li strong { color: #fbbf24; }
+
+.bank-mini-details { 
+    background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; 
+    text-align: center; margin-bottom: 20px; font-family: monospace; color: #94a3b8;
+}
+
+.btn-whatsapp-lg {
+    background: #25D366; color: #000; width: 100%; justify-content: center; 
+    font-size: 1.1rem; padding: 16px; margin-bottom: 15px;
+}
+.btn-whatsapp-lg:hover { filter: brightness(1.1); transform: scale(1.02); }
+
+.link-back { display: block; text-align: center; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
+.link-back:hover { color: white; text-decoration: underline; }
 
 /* TOAST */
 .toast-notification {

@@ -1,19 +1,18 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import EnrollmentForm from "../components/EnrollmentForm";
-import SEOHead from "../components/SEOHead"; // Opcional, si tienes componente SEO
+import SEOHead from "../components/SEOHead"; 
 
 // --- ICONOS (Lucide React) ---
 import { 
-  Check, Hand, Lock, Briefcase, Users, Award, 
+  Check, Hand, Briefcase, Users, Award, 
   CreditCard, ChevronRight, Star, Heart, Zap, 
-  PlayCircle, ShieldCheck, X, GraduationCap 
+  ShieldCheck 
 } from "lucide-react";
 
 // --- DATOS ---
 import {
   ENROLLMENT_FEE as LSCH_ENROLLMENT_FEE,
-  ENROLLMENT_LABEL,
   LSCH_MODULES,
   LSCH_GROUP_PLANS,
   LSCH_ONE2ONE_PLANS,
@@ -23,7 +22,7 @@ import {
 } from "../data/lsch.js";
 
 // --- ASSETS ---
-import senasImg from "../assets/img/lael/senas.jpg"; // Asegúrate que la ruta sea correcta
+import senasImg from "../assets/img/lael/senas.jpg"; 
 
 const CERTIFICATE_FEE = 19990;
 
@@ -32,13 +31,13 @@ const CERTIFICATE_FEE = 19990;
    ========================================================================== */
 const css = `
 :root {
-  --bg-deep: #0f172a;       /* Slate 900 */
-  --bg-panel: #1e293b;      /* Slate 800 */
-  --primary: #2dd4bf;       /* Teal 400 (Neon) */
-  --primary-dark: #14b8a6;  /* Teal 500 */
-  --accent: #38bdf8;        /* Sky 400 */
-  --text-main: #f1f5f9;     /* Slate 100 */
-  --text-muted: #94a3b8;    /* Slate 400 */
+  --bg-deep: #0f172a;       
+  --bg-panel: #1e293b;      
+  --primary: #2dd4bf;       
+  --primary-dark: #14b8a6;  
+  --accent: #38bdf8;        
+  --text-main: #f1f5f9;     
+  --text-muted: #94a3b8;    
   --gold: #fbbf24;
   --border: rgba(255, 255, 255, 0.1);
   --shadow-glow: 0 0 40px -10px rgba(45, 212, 191, 0.3);
@@ -52,6 +51,7 @@ const css = `
   min-height: 100vh;
   padding-bottom: 140px;
   overflow-x: hidden;
+  position: relative; /* Contexto relativo base */
 }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
@@ -59,7 +59,6 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
 
 /* ANIMACIONES */
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-@keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 20px rgba(45, 212, 191, 0.2); } 50% { box-shadow: 0 0 40px rgba(45, 212, 191, 0.5); } }
 
 /* HERO SECTION */
 .hero {
@@ -67,6 +66,7 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
   padding: 140px 0 80px;
   border-bottom: 1px solid var(--border);
   background: radial-gradient(circle at top right, #112a38 0%, transparent 40%);
+  z-index: 1;
 }
 .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
 
@@ -103,6 +103,7 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
   position: relative; padding: 15px; border-radius: 30px;
   background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
   box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+  z-index: 2;
 }
 .img-wrapper img {
   width: 100%; border-radius: 20px; display: block;
@@ -118,7 +119,7 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
 }
 
 /* STEPS & BUILDER */
-.builder-section { padding: 80px 0; }
+.builder-section { padding: 80px 0; position: relative; z-index: 5; }
 .builder-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
 
 .step-box {
@@ -165,6 +166,7 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
   background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(20px);
   border: 1px solid var(--border); border-radius: var(--radius); padding: 32px;
   box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+  z-index: 40; /* Nivel medio, bajo el modal */
 }
 .sum-row { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 0.95rem; color: var(--text-muted); }
 .sum-row strong { color: white; }
@@ -186,7 +188,8 @@ button { all: unset; cursor: pointer; box-sizing: border-box; }
 /* MOBILE BAR */
 .mobile-sticky {
   position: fixed; bottom: 0; left: 0; width: 100%; background: #0f172a;
-  border-top: 1px solid var(--border); padding: 16px 24px; z-index: 100;
+  border-top: 1px solid var(--border); padding: 16px 24px; 
+  z-index: 90; /* IMPORTANTE: Menos que el modal (que suele ser 100+) */
   display: flex; justify-content: space-between; align-items: center;
   box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
 }
@@ -250,7 +253,10 @@ export default function LSCh() {
     let details = `Plan LSCh: ${groupPlan.title} (${church ? "Convenio Iglesia" : "General"})`;
     if (certSelected) details += " + Certificado";
     if (onePlan) details += ` + Refuerzo 1:1 (${onePlan.title})`;
-    details += `. Primer Pago: ${clp(totalFirstPayment)}. Mensualidad futura: ${clp(totalMonthly)}`;
+    
+    // Agregamos el precio mensual futuro para que quede claro en el correo
+    details += ` | Pago Hoy: ${clp(totalFirstPayment)} | Mensualidad futura: ${clp(totalMonthly)}`;
+    
     return details;
   };
 
@@ -258,16 +264,6 @@ export default function LSCh() {
     <div className="lsch-page">
       <style>{css}</style>
       <SEOHead title="Curso LSCh | Lenguaje de Señas Chileno" description="Aprende con docentes sordas nativas. Clases en vivo 100% prácticas." />
-
-      {/* MODAL FORMULARIO */}
-      {showModal && (
-        <EnrollmentForm 
-          planTitle={`LSCh: ${groupPlan.title}`}
-          price={clp(totalFirstPayment)}
-          selectedDetails={getSelectedDetails()}
-          onClose={() => setShowModal(false)}
-        />
-      )}
 
       {/* 1. HERO SECTION */}
       <section className="hero">
@@ -571,6 +567,18 @@ export default function LSCh() {
             Inscribirme
          </button>
       </div>
+
+      {/* MODAL FORMULARIO - AL FINAL DE TODO PARA EVITAR SUPERPOSICIONES */}
+      {showModal && (
+        <div style={{position: 'relative', zIndex: 9999}}>
+          <EnrollmentForm 
+            planTitle={`LSCh: ${groupPlan.title}`}
+            price={clp(totalFirstPayment)}
+            selectedDetails={getSelectedDetails()}
+            onClose={() => setShowModal(false)}
+          />
+        </div>
+      )}
 
     </div>
   );

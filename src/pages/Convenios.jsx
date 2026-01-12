@@ -1,322 +1,323 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import SEOHead from "../components/SEOHead"; // Asegúrate de tener este componente o quítalo si no lo usas
+import { FaHandshake, FaBuilding, FaUserGraduate, FaChartLine, FaArrowRight, FaCheck } from "react-icons/fa";
+import { BiWorld } from "react-icons/bi";
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ASSETS & DATA INTERNA (Para que funcione de inmediato)
+   DATA: PARTNERS Y BENEFICIOS
    ────────────────────────────────────────────────────────────────────────── */
-// Imagen de fondo inspiradora (Networking / Apretón de manos moderno)
-const NetworkImg = "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop";
-
-// Logos de Partners (Placeholder para que veas el efecto, reemplázalos con los tuyos)
-// Aquí deberías poner el de "Los Olivos" y otros que tengas.
 const PARTNERS = [
-  { name: "Los Olivos", type: "Homeschool" },
-  { name: "Muni. Santiago", type: "Municipalidad" }, 
-  { name: "Caja Los Andes", type: "Bienestar" },
-  { name: "Fundación X", type: "ONG" },
+  { name: "Los Olivos", type: "Homeschool", color: "#84cc16" }, // Lime
+  { name: "Muni. Santiago", type: "Alianza Pública", color: "#3b82f6" }, // Blue
+  { name: "Caja Los Andes", type: "Bienestar", color: "#f97316" }, // Orange
+  { name: "Fundación Futuro", type: "ONG Educativa", color: "#ec4899" }, // Pink
 ];
 
 const BENEFITS = [
   {
-    icon: "💎",
-    title: "Descuentos Exclusivos",
-    desc: "Tus colaboradores o alumnos acceden a aranceles preferenciales en todos nuestros programas (Idiomas, PAES, Nivelación)."
+    icon: <FaUserGraduate />,
+    title: "Aranceles Preferenciales",
+    desc: "Descuentos exclusivos para alumnos, colaboradores y sus cargas familiares en todos nuestros programas."
   },
   {
-    icon: "🚀",
+    icon: <BiWorld />,
     title: "Valor Agregado",
-    desc: "Suma beneficios educativos a tu oferta sin costo operativo para tu organización. Nosotros gestionamos todo."
+    desc: "Suma beneficios educativos a tu oferta sin costo operativo. Nosotros gestionamos matrícula y soporte."
   },
   {
-    icon: "📊",
+    icon: <FaChartLine />,
     title: "Reportes de Impacto",
-    desc: "Si becas a un grupo, te entregamos informes detallados de asistencia y rendimiento académico."
+    desc: "Si becas a un grupo, entregamos informes de asistencia y rendimiento para tu rendición de cuentas."
   },
   {
-    icon: "🤝",
+    icon: <FaHandshake />,
     title: "Co-Branding",
-    desc: "Aparece en nuestra web como Partner Oficial y realicemos webinars o talleres conjuntos."
+    desc: "Aparece en nuestra web como Partner Oficial y realicemos charlas o webinars conjuntos."
   }
 ];
 
 const TARGETS = [
   {
     id: "colegios",
-    title: "Colegios y Homeschools",
-    desc: "Externaliza el reforzamiento académico o brinda opciones de preuniversitario premium a tus alumnos.",
-    tags: ["Ensayos PAES", "Nivelación", "Talleres Extraprogramáticos"]
+    title: "Colegios y Homeschool",
+    subtitle: "Potencia tu rendimiento PAES",
+    desc: "Externaliza el reforzamiento académico o brinda un Preuniversitario de calidad a tus licenciados.",
+    features: ["Ensayos Masivos", "Charlas Vocacionales", "Nivelación M1"],
+    accent: "indigo"
   },
   {
     id: "empresas",
-    title: "Bienestar Corporativo",
-    desc: "El mejor beneficio para tus empleados y sus familias. Educación de calidad a un clic.",
-    tags: ["Descuento por Planilla", "Beneficio Extensible", "Idiomas"]
+    title: "Empresas y Bienestar",
+    subtitle: "El mejor beneficio familiar",
+    desc: "Apoya a tus colaboradores donde más les importa: el futuro de sus hijos. Educación de calidad a un clic.",
+    features: ["Descuento por Planilla", "Inglés Corporativo", "Soft Skills"],
+    accent: "amber"
   },
   {
     id: "publico",
     title: "Municipios y ONGs",
-    desc: "Llevemos oportunidades reales de nivelación de estudios y oficios a su comuna.",
-    tags: ["Becas Sociales", "Programa Caminos", "Reinserción"]
+    subtitle: "Impacto Social Real",
+    desc: "Llevemos oportunidades de nivelación de estudios y preparación universitaria a su comuna.",
+    features: ["Becas Sociales", "Programa 2x1", "Reinserción"],
+    accent: "emerald"
   }
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. ICONOS SVG
-   ────────────────────────────────────────────────────────────────────────── */
-const Icons = {
-  Handshake: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg>,
-  ArrowRight: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>,
-  Check: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-};
-
-/* ──────────────────────────────────────────────────────────────────────────
-   3. ESTILOS CSS - "NETWORK HUB"
-   ────────────────────────────────────────────────────────────────────────── */
-const css = `
-:root {
-  --bg-deep: #0f0518; /* Dark Violet Tone */
-  --bg-card: #1a0b2e;
-  --primary: #a855f7; /* Purple 500 */
-  --accent: #22d3ee;  /* Cyan 400 */
-  --text-main: #faf5ff;
-  --text-muted: #d8b4fe;
-  --border: rgba(168, 85, 247, 0.2);
-  --radius: 20px;
-}
-
-.partners-page {
-  background-color: var(--bg-deep);
-  color: var(--text-main);
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-}
-
-.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-a { text-decoration: none; color: inherit; transition: 0.2s; }
-
-/* BACKGROUND GRID EFFECT */
-.bg-grid {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background-image: 
-    linear-gradient(rgba(168, 85, 247, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(168, 85, 247, 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none; z-index: 0;
-  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-}
-
-/* HERO */
-.hero-partners { padding: 120px 0 80px; position: relative; z-index: 1; text-align: center; }
-.hero-pill {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(168, 85, 247, 0.1); border: 1px solid var(--border);
-  color: var(--accent); padding: 8px 16px; border-radius: 50px;
-  font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
-  margin-bottom: 30px;
-}
-
-h1 { 
-  font-size: clamp(3rem, 6vw, 5rem); line-height: 1.1; font-weight: 800; margin-bottom: 24px; 
-  background: linear-gradient(135deg, #fff 30%, var(--primary) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-
-.lead { font-size: 1.25rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 50px; line-height: 1.6; }
-
-.cta-group { display: flex; gap: 20px; justify-content: center; }
-.btn-main {
-  background: var(--primary); color: white; padding: 16px 36px; border-radius: 50px;
-  font-weight: 700; font-size: 1.1rem; box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
-}
-.btn-main:hover { transform: translateY(-3px); background: #9333ea; }
-
-/* PARTNER SLIDER (Visual) */
-.partner-strip { margin: 60px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.3); padding: 40px 0; }
-.strip-title { text-align: center; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; margin-bottom: 30px; font-weight: 700; }
-.logo-grid { 
-  display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; opacity: 0.7; 
-}
-.partner-logo { 
-  font-size: 1.5rem; font-weight: 800; color: white; display: flex; align-items: center; gap: 10px; 
-  background: rgba(255,255,255,0.05); padding: 15px 30px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-}
-
-/* BENEFITS SECTION */
-.benefits-section { padding: 100px 0; }
-.grid-benefits { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-.benefit-card {
-  background: var(--bg-card); padding: 35px; border-radius: var(--radius); border: 1px solid var(--border);
-  transition: 0.3s; position: relative; overflow: hidden;
-}
-.benefit-card:hover { border-color: var(--accent); transform: translateY(-5px); }
-.benefit-card::before {
-  content:''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--primary), var(--accent));
-  opacity: 0; transition: 0.3s;
-}
-.benefit-card:hover::before { opacity: 1; }
-
-.b-icon { font-size: 2.5rem; margin-bottom: 20px; display: block; }
-.benefit-card h3 { font-size: 1.4rem; margin-bottom: 10px; color: white; }
-.benefit-card p { color: var(--text-muted); line-height: 1.6; }
-
-/* SEGMENTS */
-.segments-section { padding: 80px 0; background: #0b0214; }
-.seg-title { text-align: center; font-size: 2.5rem; margin-bottom: 60px; font-weight: 800; }
-.seg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
-
-.seg-card {
-  border: 1px solid var(--border); border-radius: 24px; padding: 40px;
-  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(26, 11, 46, 0) 100%);
-}
-.seg-card h3 { font-size: 1.8rem; margin-bottom: 15px; color: var(--accent); }
-.seg-card p { font-size: 1.1rem; color: #e9d5ff; margin-bottom: 30px; height: 60px; }
-.tags-list { display: flex; flex-wrap: wrap; gap: 10px; }
-.tag { 
-  background: rgba(255,255,255,0.05); color: var(--text-muted); padding: 6px 12px; 
-  border-radius: 20px; font-size: 0.8rem; border: 1px solid rgba(255,255,255,0.1); 
-}
-
-/* CTA BOX */
-.cta-box-section { padding: 100px 0; }
-.cta-box {
-  background: linear-gradient(135deg, var(--primary), #4c1d95);
-  border-radius: 30px; padding: 60px; text-align: center; position: relative; overflow: hidden;
-  box-shadow: 0 20px 60px rgba(168, 85, 247, 0.3);
-}
-.cta-box h2 { font-size: 2.5rem; color: white; margin-bottom: 20px; position: relative; z-index: 2; }
-.cta-box p { font-size: 1.2rem; color: rgba(255,255,255,0.9); margin-bottom: 40px; max-width: 600px; margin-inline: auto; position: relative; z-index: 2; }
-.btn-white {
-  background: white; color: var(--primary); padding: 16px 40px; border-radius: 50px;
-  font-weight: 800; font-size: 1.1rem; position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 10px;
-}
-.btn-white:hover { transform: scale(1.05); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-
-/* Decoration */
-.glow-circle {
-  position: absolute; width: 400px; height: 400px; background: white; opacity: 0.1;
-  border-radius: 50%; filter: blur(80px);
-}
-.gc-1 { top: -200px; left: -100px; }
-.gc-2 { bottom: -200px; right: -100px; }
-
-@media (max-width: 768px) {
-  .hero-partners { padding-top: 100px; }
-  .cta-group { flex-direction: column; }
-  .cta-box { padding: 40px 20px; }
-}
-`;
-
-/* ──────────────────────────────────────────────────────────────────────────
-   4. SEO COMPONENT
-   ────────────────────────────────────────────────────────────────────────── */
-const SEOHead = () => {
-  useEffect(() => { document.title = "Red de Convenios y Alianzas | Instituto Lael"; }, []);
-  return null;
-};
-
-/* ──────────────────────────────────────────────────────────────────────────
-   5. COMPONENTE PRINCIPAL
+   COMPONENTE PRINCIPAL
    ────────────────────────────────────────────────────────────────────────── */
 export default function Convenios() {
-  
-  // Link directo a WhatsApp de "Partners"
-  const waPartnerLink = `https://wa.me/56964626568?text=${encodeURIComponent("Hola, me interesa generar un convenio o alianza con Instituto Lael.")}`;
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  // Link directo a WhatsApp B2B
+  const waPartnerLink = `https://wa.me/56964626568?text=${encodeURIComponent("Hola, soy representante de una institución y me interesa generar un convenio.")}`;
 
   return (
     <div className="partners-page">
-      <SEOHead />
+      {/* <SEOHead title="Convenios y Alianzas | Instituto Lael" description="Generamos alianzas con colegios y empresas." /> */}
       <style>{css}</style>
-      
-      {/* Fondo Decorativo */}
-      <div className="bg-grid"></div>
 
-      {/* HERO */}
-      <header className="hero-partners">
-        <div className="container">
-          <div className="hero-pill"><Icons.Handshake/> Red de Impacto Lael</div>
-          <h1>
-            Crezcamos Juntos. <br/>
-            Crea valor para <span style={{color:'var(--accent)'}}>tu comunidad.</span>
+      {/* FONDO AMBIENTAL (Igual a Contacto para consistencia) */}
+      <div className="ambient-orb c1"></div>
+      <div className="ambient-orb c2"></div>
+
+      <div className="container relative-z">
+        
+        {/* HERO */}
+        <header className="hero-partners">
+          <div className="hero-pill">
+            <span className="pill-icon"><FaHandshake/></span> Red de Impacto Lael
+          </div>
+          <h1 className="hero-title">
+            Crezcamos <span className="highlight">Juntos.</span>
           </h1>
-          <p className="lead">
-            Generamos alianzas estratégicas con colegios, empresas y fundaciones para democratizar el acceso a educación de excelencia.
-            <strong> Sin letra chica. Sin costos ocultos.</strong>
+          <p className="hero-desc">
+            Establecemos alianzas estratégicas con colegios, empresas y fundaciones para democratizar el acceso a la educación. 
+            <strong> Sin costos ocultos para tu organización.</strong>
           </p>
           <div className="cta-group">
             <a href={waPartnerLink} target="_blank" rel="noreferrer" className="btn-main">
-              Quiero ser Partner
+              Quiero ser Partner <FaArrowRight />
             </a>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* PARTNER STRIP */}
-      <div className="partner-strip">
-        <div className="container">
-          <div className="strip-title">Confían en nosotros</div>
+        {/* LOGO STRIP (Diseño Tipográfico Profesional) */}
+        <div className="partner-strip">
+          <p className="strip-label">ORGANIZACIONES QUE CONFÍAN EN NOSOTROS</p>
           <div className="logo-grid">
-            {/* Si tienes las imágenes, usa <img>. Si no, este diseño de texto se ve muy pro */}
             {PARTNERS.map((p, i) => (
-              <div key={i} className="partner-logo">
-                {p.name} <span style={{fontSize:'0.7rem', color:'var(--accent)', textTransform:'uppercase', opacity:0.8}}>{p.type}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* BENEFITS */}
-      <section className="benefits-section">
-        <div className="container">
-          <div className="grid-benefits">
-            {BENEFITS.map((b, i) => (
-              <div key={i} className="benefit-card">
-                <span className="b-icon">{b.icon}</span>
-                <h3>{b.title}</h3>
-                <p>{b.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SEGMENTS */}
-      <section className="segments-section">
-        <div className="container">
-          <h2 className="seg-title">¿Cómo podemos colaborar?</h2>
-          <div className="seg-grid">
-            {TARGETS.map((t) => (
-              <div key={t.id} className="seg-card">
-                <h3>{t.title}</h3>
-                <p>{t.desc}</p>
-                <div className="tags-list">
-                  {t.tags.map((tag, i) => (
-                    <span key={i} className="tag"><Icons.Check/> {tag}</span>
-                  ))}
+              <div key={i} className="partner-badge" style={{'--p-color': p.color}}>
+                <span className="p-dot"></span>
+                <div className="p-info">
+                  <span className="p-name">{p.name}</span>
+                  <span className="p-type">{p.type}</span>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* CTA BOX */}
-      <section className="cta-box-section">
-        <div className="container">
-          <div className="cta-box">
-            <div className="glow-circle gc-1"></div>
-            <div className="glow-circle gc-2"></div>
-            <h2>¿Listo para formalizar una alianza?</h2>
-            <p>Hablemos hoy mismo. La gestión es rápida, digital y enfocada en el beneficio mutuo.</p>
-            <a href={waPartnerLink} target="_blank" rel="noreferrer" className="btn-white">
-              Agendar Reunión de Alianza <Icons.ArrowRight/>
-            </a>
+        {/* BENEFICIOS */}
+        <section className="benefits-section">
+          <div className="section-header">
+            <h2>¿Por qué aliarse con Lael?</h2>
           </div>
-        </div>
-      </section>
+          <div className="grid-benefits">
+            {BENEFITS.map((b, i) => (
+              <div key={i} className="benefit-card">
+                <div className="b-icon-box">{b.icon}</div>
+                <h3>{b.title}</h3>
+                <p>{b.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
+        {/* SEGMENTOS */}
+        <section className="segments-section">
+          <div className="section-header">
+            <h2>Modelos de Colaboración</h2>
+            <p>Adaptamos nuestra propuesta a la naturaleza de tu institución.</p>
+          </div>
+          
+          <div className="seg-grid">
+            {TARGETS.map((t) => (
+              <div key={t.id} className={`seg-card border-${t.accent}`}>
+                <div className={`seg-header bg-${t.accent}-dim`}>
+                   <span className="seg-subtitle">{t.subtitle}</span>
+                   <h3>{t.title}</h3>
+                </div>
+                <div className="seg-body">
+                  <p>{t.desc}</p>
+                  <ul className="features-list">
+                    {t.features.map((f, i) => (
+                      <li key={i}><FaCheck className={`check-${t.accent}`}/> {f}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA FINAL */}
+        <section className="cta-box-section">
+          <div className="cta-box">
+            <div className="glow-overlay"></div>
+            <div className="cta-content">
+              <h2>¿Listo para formalizar una alianza?</h2>
+              <p>La gestión es rápida, 100% digital y enfocada en el beneficio mutuo. Hablemos hoy mismo.</p>
+              <a href={waPartnerLink} target="_blank" rel="noreferrer" className="btn-white">
+                <FaBuilding /> Agendar Reunión
+              </a>
+            </div>
+          </div>
+        </section>
+
+      </div>
     </div>
   );
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CSS SCOPED (DARK PREMIUM)
+   ────────────────────────────────────────────────────────────────────────── */
+const css = `
+:root {
+  --bg-deep: #050505;
+  --bg-card: #0F1115;
+  --primary: #6366f1; /* Indigo */
+  --accent: #fbbf24;  /* Amber */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: rgba(255,255,255,0.08);
+}
+
+.partners-page {
+  background-color: var(--bg-deep); color: var(--text-main);
+  min-height: 100vh; font-family: 'Inter', sans-serif;
+  padding-top: 120px; position: relative; overflow-x: hidden;
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+.relative-z { position: relative; z-index: 10; }
+
+/* AMBIENT LIGHTS */
+.ambient-orb { position: absolute; width: 60vw; height: 60vw; border-radius: 50%; filter: blur(120px); opacity: 0.1; pointer-events: none; }
+.c1 { top: -20%; left: -20%; background: var(--primary); }
+.c2 { bottom: -10%; right: -20%; background: var(--accent); }
+
+/* HERO */
+.hero-partners { text-align: center; margin-bottom: 80px; }
+.hero-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  padding: 6px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600;
+  color: #cbd5e1; margin-bottom: 25px;
+}
+.pill-icon { color: var(--accent); }
+
+.hero-title { 
+  font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: 1.1; font-weight: 800; margin-bottom: 20px; 
+}
+.highlight { 
+  background: linear-gradient(to right, var(--primary), #a855f7); 
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+}
+.hero-desc { color: var(--text-muted); font-size: 1.2rem; max-width: 700px; margin: 0 auto 40px; line-height: 1.6; }
+
+.btn-main {
+  background: var(--primary); color: white; padding: 15px 35px; border-radius: 50px;
+  font-weight: 700; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 10px;
+  transition: 0.3s; text-decoration: none; box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.4);
+}
+.btn-main:hover { transform: translateY(-3px); background: #4f46e5; }
+
+/* LOGO STRIP */
+.partner-strip { margin-bottom: 100px; text-align: center; }
+.strip-label { font-size: 0.75rem; letter-spacing: 2px; color: #64748b; margin-bottom: 30px; font-weight: 700; }
+.logo-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+
+.partner-badge {
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  padding: 12px 20px; border-radius: 12px; display: flex; align-items: center; gap: 12px;
+  transition: 0.3s; cursor: default;
+}
+.partner-badge:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+.p-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--p-color); box-shadow: 0 0 10px var(--p-color); }
+.p-info { display: flex; flex-direction: column; text-align: left; }
+.p-name { font-weight: 700; font-size: 0.95rem; line-height: 1.2; }
+.p-type { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+
+/* BENEFITS */
+.benefits-section { margin-bottom: 100px; }
+.section-header { text-align: center; margin-bottom: 50px; }
+.section-header h2 { font-size: 2rem; margin-bottom: 10px; }
+.section-header p { color: var(--text-muted); font-size: 1.1rem; }
+
+.grid-benefits { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 25px; }
+.benefit-card {
+  background: var(--bg-card); padding: 30px; border-radius: 20px; border: 1px solid var(--border);
+  transition: 0.3s;
+}
+.benefit-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+.b-icon-box { 
+  font-size: 2rem; color: var(--primary); margin-bottom: 20px; 
+  background: rgba(99, 102, 241, 0.1); width: 60px; height: 60px; 
+  display: flex; align-items: center; justify-content: center; border-radius: 14px;
+}
+.benefit-card h3 { font-size: 1.2rem; margin-bottom: 10px; }
+.benefit-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
+
+/* SEGMENTS */
+.segments-section { margin-bottom: 100px; }
+.seg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+
+.seg-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; overflow: hidden;
+  display: flex; flex-direction: column; transition: 0.3s;
+}
+.seg-card:hover { transform: translateY(-5px); }
+.seg-header { padding: 30px; border-bottom: 1px solid var(--border); }
+.seg-subtitle { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; opacity: 0.8; }
+.seg-header h3 { margin: 10px 0 0 0; font-size: 1.6rem; }
+.seg-body { padding: 30px; flex: 1; display: flex; flex-direction: column; }
+.seg-body p { color: var(--text-muted); margin-bottom: 25px; flex: 1; line-height: 1.5; }
+
+.features-list { list-style: none; padding: 0; margin: 0; }
+.features-list li { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 0.9rem; }
+
+/* Colors for Segments */
+.border-indigo:hover { border-color: #6366f1; } .bg-indigo-dim { background: rgba(99, 102, 241, 0.1); color: #818cf8; } .check-indigo { color: #6366f1; }
+.border-amber:hover { border-color: #f59e0b; } .bg-amber-dim { background: rgba(245, 158, 11, 0.1); color: #fbbf24; } .check-amber { color: #f59e0b; }
+.border-emerald:hover { border-color: #10b981; } .bg-emerald-dim { background: rgba(16, 185, 129, 0.1); color: #34d399; } .check-emerald { color: #10b981; }
+
+/* CTA BOX */
+.cta-box {
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  border-radius: 30px; padding: 60px; text-align: center; position: relative; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.glow-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.4), transparent 70%);
+}
+.cta-content { position: relative; z-index: 2; }
+.cta-content h2 { font-size: 2.2rem; margin-bottom: 15px; }
+.cta-content p { font-size: 1.1rem; color: #c7d2fe; margin-bottom: 30px; max-width: 600px; margin-inline: auto; }
+
+.btn-white {
+  background: white; color: #1e1b4b; padding: 16px 40px; border-radius: 50px;
+  font-weight: 800; font-size: 1rem; display: inline-flex; align-items: center; gap: 10px;
+  text-decoration: none; transition: 0.3s;
+}
+.btn-white:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,255,255,0.3); }
+
+@media (max-width: 768px) {
+  .hero-partners { padding-top: 20px; }
+  .logo-grid { gap: 10px; }
+  .partner-badge { width: 100%; justify-content: center; }
+  .cta-box { padding: 40px 20px; }
+}
+`;

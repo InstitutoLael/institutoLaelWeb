@@ -2,52 +2,13 @@
 import { useEffect } from "react";
 import { FaLinkedin, FaInstagram, FaEnvelope } from "react-icons/fa"; 
 import SEOHead from "../components/SEOHead.jsx";
-
-// --- DATA DEL EQUIPO REAL ---
-const TEAM = [
-  {
-    id: "diego",
-    name: "Diego Chaparro",
-    role: "Director & Profe Matemáticas",
-    bio: "Fundador de Instituto Lael. Comenzó enseñando matemáticas con una pizarra y hoy lidera la visión educativa. Cree firmemente que los números no son difíciles, solo están mal explicados.",
-    tags: ["Liderazgo", "Matemáticas", "Estrategia"],
-    color: "#F59E0B", // Gold
-    img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=F59E0B&color=fff&size=200", // Cambiar por foto real cuando puedas
-    social: { linkedin: "#", instagram: "#" }
-  },
-  {
-    id: "camila",
-    name: "Camila Acuña",
-    role: "Coordinadora Académica",
-    bio: "El corazón operativo de Lael. Se encarga de que cada alumno tenga su material a tiempo, los horarios cuadren y que la experiencia educativa sea impecable.",
-    tags: ["Coordinación", "Gestión", "Planificación"],
-    color: "#F43F5E", // Rose
-    img: "https://ui-avatars.com/api/?name=Camila+Acuna&background=F43F5E&color=fff&size=200",
-    social: { linkedin: "#" }
-  },
-  {
-    id: "fernanda",
-    name: "Fernanda",
-    role: "Educadora & Facilitadora LSCh",
-    bio: "Nuestra profesora nativa (Sorda) y Educadora de Párvulos profesional. Combina la cultura sorda con una pedagogía experta, paciente y estructurada.",
-    tags: ["Sorda Nativa", "Educ. Párvulos", "LSCh"],
-    color: "#10B981", // Emerald
-    img: "https://ui-avatars.com/api/?name=Fernanda+LSCh&background=10B981&color=fff&size=200",
-    social: { instagram: "#" }
-  },
-  {
-    id: "martin",
-    name: "Martín",
-    role: "Profe de Ciencias",
-    bio: "Especialista en Biología y Química. Transforma materias complejas en clases dinámicas, enfocándose en que entiendas el 'por qué' de los fenómenos científicos.",
-    tags: ["Biología", "Química", "PAES Ciencias"],
-    color: "#3B82F6", // Blue
-    img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=3B82F6&color=fff&size=200",
-    social: {}
-  }
-];
+import { teachers } from "../data/teachers"; // <--- AQUÍ ESTÁ LA CONEXIÓN
 
 export default function Docentes() {
+  
+  // Scroll al inicio al cargar la página
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
   return (
     <div className="team-page">
       <SEOHead 
@@ -59,7 +20,7 @@ export default function Docentes() {
       {/* --- LUCES AMBIENTALES --- */}
       <div className="glow-spot top-center"></div>
 
-      <div className="container">
+      <div className="container relative-z">
         
         {/* HEADER */}
         <header className="team-header">
@@ -73,27 +34,41 @@ export default function Docentes() {
 
         {/* GRID DEL EQUIPO */}
         <div className="team-grid">
-          {TEAM.map((member) => (
+          {teachers.map((member) => (
             <div 
               key={member.id} 
-              className={`team-card ${member.id === 'diego' ? 'featured' : ''}`}
-              style={{ '--accent': member.color }}
+              className={`team-card ${member.featured ? 'featured' : ''}`}
+              style={{ '--accent': member.accent }}
             >
               <div className="card-bg-glow"></div>
               
               <div className="member-visual">
                 <img src={member.img} alt={member.name} className="member-img" />
+                
+                {/* Redes Sociales Dinámicas */}
                 <div className="member-social">
-                  {member.social.linkedin && <a href={member.social.linkedin} target="_blank" rel="noreferrer"><FaLinkedin/></a>}
-                  {member.social.instagram && <a href={member.social.instagram} target="_blank" rel="noreferrer"><FaInstagram/></a>}
-                  <a href={`mailto:contacto@institutolael.cl`}><FaEnvelope/></a>
+                  {member.social?.linkedin && (
+                    <a href={member.social.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                      <FaLinkedin/>
+                    </a>
+                  )}
+                  {member.social?.instagram && (
+                    <a href={member.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
+                      <FaInstagram/>
+                    </a>
+                  )}
+                  <a href={`mailto:contacto@institutolael.cl`} aria-label="Correo">
+                    <FaEnvelope/>
+                  </a>
                 </div>
               </div>
 
               <div className="member-info">
-                <span className="member-role" style={{ color: member.color }}>{member.role}</span>
+                <span className="member-role" style={{ color: member.accent }}>
+                  {member.role}
+                </span>
                 <h3>{member.name}</h3>
-                <p>{member.bio}</p>
+                <p className="member-bio">{member.bio}</p>
                 
                 <div className="tags-row">
                   {member.tags.map(tag => (
@@ -138,6 +113,7 @@ const css = `
 }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.relative-z { position: relative; z-index: 2; }
 
 /* AMBIENT LIGHT */
 .glow-spot {
@@ -177,7 +153,7 @@ const css = `
 .card-bg-glow {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   background: radial-gradient(circle at top, var(--accent), transparent 70%);
-  opacity: 0; transition: .5s; z-index: 0;
+  opacity: 0; transition: .5s; z-index: 0; pointer-events: none;
 }
 .team-card:hover .card-bg-glow { opacity: 0.1; }
 
@@ -201,13 +177,13 @@ const css = `
 .member-social a:hover { color: var(--accent); }
 
 /* Info */
-.member-info { position: relative; z-index: 2; }
+.member-info { position: relative; z-index: 2; width: 100%; }
 .member-role {
   font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
   display: block; margin-bottom: 8px;
 }
 .team-card h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 700; color: #fff; }
-.team-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
+.member-bio { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
 
 /* Tags */
 .tags-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
@@ -218,7 +194,7 @@ const css = `
 
 /* DESTACADO (Director) */
 .team-card.featured {
-  grid-column: 1 / -1; /* Ocupa todo el ancho en desktop si quieres, o déjalo igual */
+  grid-column: 1 / -1; 
   background: linear-gradient(180deg, #161209, #0F1115);
   border-color: #F59E0B;
 }
@@ -228,6 +204,7 @@ const css = `
   }
   .team-card.featured .member-img { width: 160px; height: 160px; }
   .team-card.featured .member-social { bottom: 20px; transform: translateX(-50%); } 
+  .team-card.featured .tags-row { justify-content: flex-start; }
 }
 
 /* JOIN CTA */

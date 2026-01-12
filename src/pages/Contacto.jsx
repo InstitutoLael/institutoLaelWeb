@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
 import SEOHead from "../components/SEOHead.jsx";
-// Usamos las mismas librerias de iconos para consistencia
-import { FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaPaperPlane, FaInstagram, FaClock, FaCheckCircle } from "react-icons/fa";
+import { FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaPaperPlane, FaInstagram, FaClock, FaArrowRight } from "react-icons/fa";
 
 export default function Contacto() {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
-  // Estado del formulario
   const [form, setForm] = useState({ name: "", email: "", subject: "general", message: "" });
+  const [isSending, setIsSending] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,134 +15,161 @@ export default function Contacto() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Redirección inteligente a WhatsApp
-    const text = `Hola 👋, soy ${form.name}.\nMotivo: ${form.subject.toUpperCase()}\n\nMensaje: ${form.message}\n(Contacto: ${form.email})`;
-    const url = `https://wa.me/56964626568?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
+    setIsSending(true);
+
+    // Simular un pequeño delay para feedback visual
+    setTimeout(() => {
+      const text = `Hola 👋, soy *${form.name}*.\n\n📌 Motivo: ${form.subject.toUpperCase()}\n📝 Mensaje: ${form.message}\n\n(📧 Mi contacto: ${form.email})`;
+      const url = `https://wa.me/56964626568?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+      setIsSending(false);
+      // Opcional: limpiar formulario
+      // setForm({ name: "", email: "", subject: "general", message: "" }); 
+    }, 800);
   };
 
   return (
     <div className="contact-page">
-      <SEOHead title="Centro de Ayuda | Instituto Lael" description="Contáctanos vía WhatsApp, Correo o Redes Sociales." />
+      <SEOHead title="Contacto | Instituto Lael" description="Hablemos. Estamos aquí para resolver tus dudas académicas y administrativas." />
       <style>{css}</style>
 
-      {/* Luces Ambientales (El toque mágico) */}
+      {/* Luces Ambientales (Más suaves) */}
       <div className="ambient-orb c1"></div>
       <div className="ambient-orb c2"></div>
 
-      <div className="container">
+      <div className="container relative-z">
         
-        {/* HERO */}
+        {/* HERO SECTION */}
         <header className="contact-hero">
-          <span className="badge-pill">Soporte 24/7</span>
-          <h1>Estamos aquí para <span className="highlight">ti.</span></h1>
+          <div className="badge-pill">
+            <span className="dot-pulse"></span> Soporte Activo
+          </div>
+          <h1 className="hero-title">Conversemos sobre tu <span className="highlight">futuro.</span></h1>
           <p className="hero-desc">
-            ¿Dudas con tu matrícula? ¿Consultas académicas? 
-            Elige el canal que prefieras y conversemos.
+            No somos un bot. Detrás de cada mensaje hay un equipo real listo para orientarte en tu proceso educativo.
           </p>
         </header>
 
-        {/* CANALES RÁPIDOS */}
+        {/* TARJETAS DE CANALES */}
         <div className="channels-grid">
-          <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="channel-card">
-            <div className="icon-box wa"><FaWhatsapp/></div>
-            <div>
+          <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="channel-card wa-card">
+            <div className="icon-box"><FaWhatsapp/></div>
+            <div className="card-txt">
               <strong>WhatsApp Admisión</strong>
-              <p>Respuesta inmediata</p>
+              <p>Respuesta rápida (Humanos)</p>
             </div>
+            <FaArrowRight className="arrow-icon"/>
           </a>
-          <a href="mailto:contacto@institutolael.cl" className="channel-card">
-            <div className="icon-box mail"><FaEnvelope/></div>
-            <div>
-              <strong>Correo Electrónico</strong>
-              <p>Para consultas formales</p>
+
+          <a href="mailto:contacto@institutolael.cl" className="channel-card mail-card">
+            <div className="icon-box"><FaEnvelope/></div>
+            <div className="card-txt">
+              <strong>Correo Oficial</strong>
+              <p>contacto@institutolael.cl</p>
             </div>
+            <FaArrowRight className="arrow-icon"/>
           </a>
-          <a href="https://instagram.com/institutolael" target="_blank" rel="noreferrer" className="channel-card">
-            <div className="icon-box ig"><FaInstagram/></div>
-            <div>
+
+          <a href="https://instagram.com/institutolael" target="_blank" rel="noreferrer" className="channel-card ig-card">
+            <div className="icon-box"><FaInstagram/></div>
+            <div className="card-txt">
               <strong>Instagram</strong>
-              <p>Novedades y comunidad</p>
+              <p>Vida estudiantil y avisos</p>
             </div>
+            <FaArrowRight className="arrow-icon"/>
           </a>
         </div>
 
-        {/* SECCIÓN PRINCIPAL (FORM + MAPA) */}
+        {/* LAYOUT PRINCIPAL */}
         <div className="split-layout">
           
-          {/* COLUMNA 1: FORMULARIO */}
+          {/* IZQUIERDA: FORMULARIO */}
           <div className="form-panel">
             <div className="panel-header">
-              <h3>Envíanos un mensaje</h3>
-              <p>Te responderemos directo a tu WhatsApp.</p>
+              <h3>Envíanos un mensaje directo</h3>
+              <p>Esto abrirá tu WhatsApp con el mensaje listo.</p>
             </div>
             
             <form onSubmit={handleSubmit}>
               <div className="form-row">
                 <div className="input-group">
-                  <label>Nombre</label>
-                  <input type="text" name="name" placeholder="Tu nombre" required onChange={handleChange} />
+                  <label htmlFor="name">Nombre Completo</label>
+                  <input 
+                    id="name" type="text" name="name" 
+                    placeholder="Ej: Juan Pérez" required 
+                    value={form.name} onChange={handleChange} 
+                  />
                 </div>
                 <div className="input-group">
-                  <label>Correo</label>
-                  <input type="email" name="email" placeholder="tucorreo@gmail.com" required onChange={handleChange} />
+                  <label htmlFor="email">Correo Electrónico</label>
+                  <input 
+                    id="email" type="email" name="email" 
+                    placeholder="juan@gmail.com" required 
+                    value={form.email} onChange={handleChange} 
+                  />
                 </div>
               </div>
 
               <div className="input-group">
-                <label>Asunto</label>
-                <select name="subject" onChange={handleChange}>
-                  <option value="general">Consulta General</option>
-                  <option value="matricula">Problemas con Matrícula</option>
-                  <option value="pagos">Pagos y Finanzas</option>
-                  <option value="academico">Dudas Académicas</option>
-                  <option value="empresas">Propuesta Empresas</option>
-                </select>
+                <label htmlFor="subject">Asunto</label>
+                <div className="select-wrapper">
+                  <select id="subject" name="subject" value={form.subject} onChange={handleChange}>
+                    <option value="general">🔍 Consulta General</option>
+                    <option value="matricula">📝 Problemas con Matrícula</option>
+                    <option value="pagos">💰 Pagos y Mensualidades</option>
+                    <option value="academico">📚 Dudas Académicas</option>
+                    <option value="empresas">🤝 Convenios Empresas</option>
+                  </select>
+                </div>
               </div>
 
               <div className="input-group">
-                <label>Mensaje</label>
-                <textarea name="message" rows="4" placeholder="¿En qué te podemos ayudar hoy?" required onChange={handleChange}></textarea>
+                <label htmlFor="message">¿En qué te ayudamos?</label>
+                <textarea 
+                  id="message" name="message" rows="4" 
+                  placeholder="Cuéntanos tu duda..." required 
+                  value={form.message} onChange={handleChange}
+                ></textarea>
               </div>
 
-              <button type="submit" className="btn-send">
-                <FaPaperPlane /> Enviar Mensaje
+              <button type="submit" className={`btn-send ${isSending ? 'sending' : ''}`} disabled={isSending}>
+                {isSending ? 'Abriendo WhatsApp...' : <><FaPaperPlane /> Iniciar Chat</>}
               </button>
             </form>
           </div>
 
-          {/* COLUMNA 2: INFO & MAPA */}
+          {/* DERECHA: INFO Y MAPA */}
           <div className="info-panel">
-            <div className="info-list">
+            <div className="info-card">
               <div className="i-item">
-                <FaClock className="i-icon"/>
+                <FaClock className="i-icon accent"/>
                 <div>
                   <strong>Horario de Atención</strong>
-                  <span>Lun - Vie: 09:00 a 19:00 hrs</span>
-                  <span>Sábados: 10:00 a 14:00 hrs</span>
+                  <span>Lunes a Viernes: 09:00 - 19:00</span>
+                  <span>Sábados: 10:00 - 14:00</span>
                 </div>
               </div>
               <div className="i-item">
-                <FaMapMarkerAlt className="i-icon"/>
+                <FaMapMarkerAlt className="i-icon accent"/>
                 <div>
-                  <strong>Oficina Administrativa</strong>
-                  <span>San Joaquín, Santiago.</span>
-                  <span className="small-note">*Atención presencial solo con cita.</span>
+                  <strong>Sede Administrativa</strong>
+                  <span>San Joaquín, Región Metropolitana</span>
+                  <span className="tiny-note">Visitas solo con agendamiento previo.</span>
                 </div>
               </div>
             </div>
 
-            {/* MAPA REAL (Embed de San Joaquín) */}
+            {/* MAPA OSCURO */}
             <div className="map-wrapper">
               <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d26602.44976771337!2d-70.64069811802316!3d-33.50424608359416!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662dae267232231%3A0x6296720700d603e9!2sSan%20Joaqu%C3%ADn%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1709665432123!5m2!1ses!2scl" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3327.538562304944!2d-70.630000!3d-33.490000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662d00885141205%3A0x6e8a3c8e5473489!2sSan%20Joaqu%C3%ADn%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1700000000000!5m2!1ses!2scl"
                 width="100%" 
                 height="100%" 
-                style={{border:0, filter: 'invert(90%) hue-rotate(180deg)'}} 
+                style={{border:0, filter: 'grayscale(100%) invert(92%) contrast(83%)'}} 
                 allowFullScreen="" 
                 loading="lazy" 
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Mapa Lael"
+                title="Mapa Ubicación Lael"
               ></iframe>
             </div>
           </div>
@@ -155,102 +181,117 @@ export default function Contacto() {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   CSS - DARK PREMIUM
+   CSS SCOPED
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
   --bg-deep: #050505;
   --bg-card: #0F1115;
   --bg-input: #18181b;
-  --primary: #6366f1;
-  --accent: #f59e0b;
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
-  --border: rgba(255,255,255,0.1);
+  --primary: #6366f1; /* Indigo */
+  --accent: #fbbf24; /* Amber */
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: rgba(255,255,255,0.08);
 }
 
 .contact-page {
   background-color: var(--bg-deep); color: var(--text-main);
   min-height: 100vh; font-family: 'Inter', sans-serif;
-  padding: 140px 0 100px; position: relative; overflow: hidden;
+  padding: 120px 0 80px; position: relative; overflow-x: hidden;
 }
 
-/* Lights */
-.ambient-orb { position: absolute; width: 600px; height: 600px; border-radius: 50%; filter: blur(120px); opacity: 0.15; pointer-events: none; }
-.c1 { top: -200px; left: -100px; background: var(--primary); }
-.c2 { bottom: 0; right: -100px; background: var(--accent); }
+/* EFECTOS AMBIENTALES */
+.ambient-orb { position: absolute; width: 50vw; height: 50vw; border-radius: 50%; filter: blur(120px); opacity: 0.12; pointer-events: none; }
+.c1 { top: -20%; left: -10%; background: var(--primary); }
+.c2 { bottom: -20%; right: -10%; background: var(--accent); }
+.relative-z { position: relative; z-index: 10; }
 
-.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 2; }
+.container { max-width: 1050px; margin: 0 auto; padding: 0 20px; }
 
 /* HERO */
-.contact-hero { text-align: center; margin-bottom: 60px; }
+.contact-hero { text-align: center; margin-bottom: 50px; }
 .badge-pill { 
-  display: inline-block; background: rgba(99,102,241,0.1); color: #818cf8; 
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(99,102,241,0.1); color: #818cf8; 
   padding: 6px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; 
-  text-transform: uppercase; margin-bottom: 20px; border: 1px solid rgba(99,102,241,0.3);
+  border: 1px solid rgba(99,102,241,0.2); margin-bottom: 20px;
 }
-.contact-hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; margin-bottom: 15px; line-height: 1.1; }
-.highlight { background: linear-gradient(to right, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hero-desc { color: var(--text-muted); font-size: 1.2rem; max-width: 600px; margin: 0 auto; }
+.dot-pulse { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; }
+.hero-title { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 15px; letter-spacing: -1px; }
+.highlight { color: #818cf8; }
+.hero-desc { color: var(--text-muted); font-size: 1.1rem; max-width: 550px; margin: 0 auto; line-height: 1.6; }
 
 /* CHANNELS */
-.channels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 60px; }
+.channels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-bottom: 50px; }
 .channel-card {
   background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px;
-  padding: 20px; display: flex; align-items: center; gap: 15px; transition: 0.3s;
+  padding: 20px; display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit;
+  transition: all 0.2s ease;
 }
-.channel-card:hover { background: rgba(255,255,255,0.06); border-color: var(--primary); transform: translateY(-5px); }
+.channel-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.06); }
+.wa-card:hover { border-color: #22c55e; } .mail-card:hover { border-color: #6366f1; } .ig-card:hover { border-color: #e1306c; }
+
 .icon-box { 
-  width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0;
+  width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; background: rgba(255,255,255,0.05);
 }
-.wa { background: rgba(37,211,102,0.1); color: #25D366; }
-.mail { background: rgba(99,102,241,0.1); color: #6366f1; }
-.ig { background: rgba(225,48,108,0.1); color: #E1306C; }
+.wa-card .icon-box { color: #22c55e; } .mail-card .icon-box { color: #6366f1; } .ig-card .icon-box { color: #e1306c; }
+.card-txt { flex: 1; }
+.card-txt strong { display: block; font-size: 0.95rem; }
+.card-txt p { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+.arrow-icon { color: var(--border); transition: 0.2s; }
+.channel-card:hover .arrow-icon { color: #fff; transform: translateX(3px); }
 
-.channel-card strong { display: block; font-size: 1rem; margin-bottom: 2px; }
-.channel-card p { color: var(--text-muted); font-size: 0.85rem; margin: 0; }
+/* FORM LAYOUT */
+.split-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 40px; }
+@media (max-width: 850px) { .split-layout { grid-template-columns: 1fr; } }
 
-/* SPLIT LAYOUT */
-.split-layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 50px; align-items: start; }
-@media (max-width: 900px) { .split-layout { grid-template-columns: 1fr; } }
-
-/* FORM */
 .form-panel {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 40px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 35px;
+  box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5);
 }
-.panel-header { margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
-.panel-header h3 { font-size: 1.5rem; margin-bottom: 5px; }
-.panel-header p { color: var(--text-muted); font-size: 0.95rem; }
+.panel-header h3 { margin: 0 0 5px 0; font-size: 1.3rem; }
+.panel-header p { margin: 0 0 25px 0; color: var(--text-muted); font-size: 0.9rem; }
 
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.input-group { margin-bottom: 18px; }
+.input-group label { display: block; font-size: 0.8rem; color: #cbd5e1; margin-bottom: 8px; font-weight: 600; }
 
-.input-group { margin-bottom: 20px; }
-.input-group label { display: block; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
-.input-group input, .input-group select, .input-group textarea {
-  width: 100%; background: var(--bg-input); border: 1px solid var(--border); color: white;
-  padding: 12px 16px; border-radius: 10px; font-size: 1rem; font-family: inherit; transition: 0.2s; outline: none;
+.input-group input, .input-group textarea, .input-group select {
+  width: 100%; background: var(--bg-input); border: 1px solid #334155; 
+  color: white; padding: 12px 15px; border-radius: 10px; font-size: 0.95rem;
+  transition: 0.2s; outline: none; font-family: inherit;
+  color-scheme: dark; /* HACE QUE LOS SELECT SE VEAN BIEN EN DARK MODE */
 }
-.input-group input:focus, .input-group select:focus, .input-group textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(99,102,241,0.2); }
+.input-group input:focus, .input-group textarea:focus, .input-group select:focus {
+  border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
 
 .btn-send {
-  width: 100%; background: var(--primary); color: white; padding: 16px; border-radius: 50px;
-  font-weight: 700; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: 0.3s;
+  width: 100%; background: var(--primary); color: white; padding: 14px; border-radius: 10px;
+  font-weight: 700; font-size: 1rem; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: 0.2s; margin-top: 10px;
 }
-.btn-send:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(99,102,241,0.4); }
+.btn-send:hover { background: #4f46e5; transform: translateY(-2px); }
+.btn-send.sending { opacity: 0.7; cursor: wait; }
 
-/* INFO & MAP */
-.info-list { display: flex; flex-direction: column; gap: 25px; margin-bottom: 30px; }
+/* INFO CARD & MAP */
+.info-card { 
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; 
+  padding: 25px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 20px;
+}
 .i-item { display: flex; gap: 15px; }
-.i-icon { font-size: 1.5rem; color: var(--accent); margin-top: 3px; }
-.i-item strong { display: block; font-size: 1.1rem; margin-bottom: 5px; }
-.i-item span { display: block; color: var(--text-muted); font-size: 0.95rem; }
-.small-note { font-size: 0.8rem; opacity: 0.6; margin-top: 4px; display: block; }
+.i-icon { font-size: 1.3rem; margin-top: 2px; }
+.i-icon.accent { color: var(--accent); }
+.i-item strong { display: block; font-size: 0.95rem; margin-bottom: 2px; }
+.i-item span { display: block; color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; }
+.tiny-note { font-size: 0.75rem; color: #64748b; font-style: italic; margin-top: 5px; }
 
 .map-wrapper {
-  height: 300px; border-radius: 20px; overflow: hidden; border: 1px solid var(--border);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  height: 280px; border-radius: 16px; overflow: hidden; border: 1px solid var(--border);
+  position: relative;
 }
+/* Truco CSS para que el mapa de Google se vea oscuro */
+.map-wrapper iframe { filter: invert(90%) hue-rotate(180deg) brightness(95%); }
 `;

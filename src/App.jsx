@@ -18,7 +18,7 @@ const Convenios = lazy(() => import("./pages/Convenios.jsx"));
 const Trabaja = lazy(() => import("./pages/Trabaja.jsx"));
 const Contacto = lazy(() => import("./pages/Contacto.jsx"));
 const Docentes = lazy(() => import("./pages/Docentes.jsx")); 
-cons Aula = lazy(() => import("./pages/Aula.jsx"));
+const Aula = lazy(() => import("./pages/Aula.jsx"));
 
 /* --- Conversión y Legal --- */
 // NOTA: Si tu archivo se llama "Inscripciones.jsx", ajusta la línea de abajo:
@@ -92,6 +92,9 @@ export default function App() {
             <Route path="/convenios" element={<Convenios />} />
             <Route path="/trabaja" element={<Trabaja />} />
             <Route path="/contacto" element={<Contacto />} />
+            <Route path="/docentes" element={<Docentes />} />
+            <Route path="/aula" element={<Aula />} />
+            <Route path="/pagos" element={<Pagos />} />
             
             {/* Conversión y Flujo */}
             <Route path="/inscripcion" element={<Inscripcion />} />

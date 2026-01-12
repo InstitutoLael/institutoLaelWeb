@@ -1,13 +1,12 @@
 import { useMemo, useRef, useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; // Agregamos useNavigate
 import MultiHello from "../components/MultiHello.jsx"; 
 import flags from "../assets/img/lael/flags.png"; 
 
-// IMPORTANTE: Tus datos reales
+// Asegúrate de que esta ruta sea correcta según tu estructura
 import { LANGUAGES, ENROLLMENT_FEE, computeLangBundle, clp } from "../data/idiomas.js";
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. DATOS ESTÁTICOS
+   1. DATOS ESTÁTICOS 
    ────────────────────────────────────────────────────────────────────────── */
 const STATS_DATA = [
   { val: 92, suffix: "%", label: "Logra su meta" },
@@ -41,10 +40,8 @@ const css = `
   --primary: #6366f1;
   --primary-glow: rgba(99, 102, 241, 0.5);
   --accent: #06b6d4;
-  --accent-glow: rgba(6, 182, 212, 0.5);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --glass: rgba(30, 41, 59, 0.4);
   --glass-border: rgba(255, 255, 255, 0.08);
   --radius-lg: 24px;
   --font-sans: 'Inter', system-ui, sans-serif;
@@ -73,39 +70,24 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 .btn-ghost { color: var(--text-muted); border: 1px solid var(--glass-border); }
 .btn-ghost:hover { border-color: var(--text-main); color: var(--text-main); }
 
-/* Visuals */
-.image-card { position: relative; animation: float 6s ease-in-out infinite; }
-.image-card img { width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--glass-border); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); filter: brightness(0.9) contrast(1.1); }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-.float-card { position: absolute; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px); padding: 12px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-.float-1 { bottom: 30px; left: -30px; }
-.float-2 { top: 40px; right: -30px; }
-.emoji-box { font-size: 1.6rem; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; }
-
-/* Stats */
+/* Stats & Visuals */
 .stats-section { margin-top: 60px; border-block: 1px solid var(--glass-border); background: rgba(15,23,42,0.4); }
 .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; padding: 40px 0; max-width: 1000px; margin: 0 auto; }
 .stat-number { font-size: 2.5rem; font-weight: 800; color: white; display: block; }
 .stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-/* Pathway */
-.highlight-section { padding: 100px 0; }
-.highlight-grid { display: grid; grid-template-columns: 1fr 0.8fr; gap: 60px; align-items: center; }
-.path-card { background: var(--bg-card); padding: 40px; border-radius: var(--radius-lg); border: 1px solid var(--glass-border); }
-.timeline { display: flex; flex-direction: column; gap: 24px; border-left: 2px solid var(--glass-border); padding-left: 24px; margin-left: 10px; }
-.step .circle { position: absolute; left: -41px; width: 32px; height: 32px; background: var(--bg-deep); border: 2px solid var(--text-muted); border-radius: 50%; color: var(--text-muted); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem; }
-.step.active .circle { border-color: var(--accent); color: var(--bg-deep); background: var(--accent); box-shadow: 0 0 15px var(--accent-glow); transform: scale(1.1); }
-.step { position: relative; }
+.image-card { position: relative; animation: float 6s ease-in-out infinite; }
+.image-card img { width: 100%; border-radius: var(--radius-lg); border: 1px solid var(--glass-border); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); filter: brightness(0.9) contrast(1.1); }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-/* Builder */
+/* Cards & Builder */
 .builder-section { padding: 60px 0; }
 .courses-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin-top: 40px; }
 .course-card { background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 30px; transition: all 0.3s; position: relative; display: flex; flex-direction: column; }
 .course-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.2); }
 .course-card.is-selected { border-color: var(--primary); background: linear-gradient(180deg, rgba(99,102,241,0.08), var(--bg-card)); box-shadow: 0 0 0 1px var(--primary); }
 .course-card.is-soon { opacity: 0.7; filter: grayscale(1); border-style: dashed; }
-.card-top { display: flex; justify-content: space-between; margin-bottom: 20px; }
-.card-emoji { font-size: 3rem; }
+
 .check-indicator { width: 28px; height: 28px; border: 2px solid var(--glass-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: .2s; }
 .is-selected .check-indicator { background: var(--primary); border-color: var(--primary); }
 .is-selected .check-indicator::after { content: '✓'; color: white; font-weight: 800; }
@@ -119,30 +101,17 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 .btn-select { width: 100%; padding: 14px; border-radius: 12px; font-weight: 700; margin-top: auto; background: var(--bg-panel); color: white; border: 1px solid var(--glass-border); }
 .is-selected .btn-select { background: var(--primary); border-color: var(--primary); }
 
-/* Features & FAQ */
-.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 40px; }
-.feat-card { background: var(--bg-panel); padding: 30px; border-radius: var(--radius-lg); border: 1px solid var(--glass-border); text-align: center; }
-.feat-icon { font-size: 2.5rem; margin-bottom: 15px; display: block; }
-.faq-wrapper details { border: 1px solid var(--glass-border); border-radius: 12px; margin-bottom: 12px; background: var(--bg-card); }
-.faq-wrapper summary { padding: 20px; font-weight: 700; cursor: pointer; color: #e2e8f0; }
-.faq-wrapper details[open] summary { color: var(--primary); }
-.faq-wrapper p { padding: 0 20px 20px; color: var(--text-muted); line-height: 1.6; }
-
 /* Sticky Bar */
 .sticky-bar-wrapper { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 100; transform: translateY(110%); transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1); }
 .sticky-bar-wrapper.show { transform: translateY(0); }
 .sticky-bar { max-width: 900px; margin: 0 auto; padding: 16px 30px; display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-bottom: none; box-shadow: 0 -10px 40px rgba(0,0,0,0.5); border-radius: 24px 24px 0 0; }
-.btn-glow { background: var(--primary); color: white; padding: 12px 28px; border-radius: 50px; font-weight: 700; box-shadow: 0 0 20px rgba(99,102,241,0.5); transition: 0.3s; display: flex; align-items: center; gap: 8px; }
+.btn-glow { background: var(--primary); color: white; padding: 12px 28px; border-radius: 50px; font-weight: 700; box-shadow: 0 0 20px rgba(99,102,241,0.5); transition: 0.3s; text-decoration: none; display: flex; align-items: center; gap: 8px; }
 .btn-glow:hover { transform: scale(1.05); }
-.btn-glow:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
 @media (max-width: 900px) {
-    .hero-grid, .highlight-grid { grid-template-columns: 1fr; text-align: center; }
-    .hero-actions { justify-content: center; }
-    .image-card { max-width: 500px; margin: 40px auto 0; }
-    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .hero-grid { grid-template-columns: 1fr; text-align: center; }
     .sticky-bar { flex-direction: column; gap: 15px; text-align: center; border-radius: 0; }
-    .sticky-bar .bar-info { display: none; } /* Ahorrar espacio en móvil */
+    .sticky-bar .bar-info { display: none; }
 }
 `;
 
@@ -152,24 +121,27 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 export default function Idiomas() {
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectedLevels, setSelectedLevels] = useState({});
-  const [isAdding, setIsAdding] = useState(false);
-  
   const builderRef = useRef(null);
-  const navigate = useNavigate();
 
-  // 1. Calcular Precios
-  const selectedCourses = useMemo(() => LANGUAGES.filter(l => selectedIds.includes(l.id)), [selectedIds]);
+  // Asegurarnos de que LANGUAGES existe para evitar el error "undefined is not an object"
+  const safeLanguages = LANGUAGES || [];
+
+  // 1. Calcular Precios en tiempo real
+  const selectedCourses = useMemo(() => {
+    return safeLanguages.filter(l => selectedIds.includes(l.id));
+  }, [selectedIds, safeLanguages]);
+
   const pricing = computeLangBundle(selectedCourses.length);
   
-  // Total a pagar hoy: Matrícula (solo se cobra 1 vez) + Primera Mensualidad
+  // Total a pagar hoy: Matrícula + Mensualidad
   const totalFirstPayment = pricing.totalMonthly + (selectedIds.length > 0 ? ENROLLMENT_FEE : 0);
 
-  // 2. Handlers de Selección
+  // 2. Handlers
   const toggleCourse = (id, comingSoon) => {
     if (comingSoon) return;
     setSelectedIds(prev => {
         const newState = prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id];
-        // Si seleccionamos y no hay nivel, seteamos A1 por defecto
+        // Si seleccionamos y no hay nivel, seteamos A1 por defecto para evitar errores
         if (!prev.includes(id) && !selectedLevels[id]) {
             setLevel(id, "A1");
         }
@@ -178,47 +150,24 @@ export default function Idiomas() {
   };
 
   const setLevel = (langId, level) => {
-    // Si cambio nivel de un curso no seleccionado, lo selecciono
     if (!selectedIds.includes(langId)) {
         setSelectedIds(prev => [...prev, langId]);
     }
     setSelectedLevels(prev => ({ ...prev, [langId]: level }));
   };
 
-  // 3. Lógica de Checkout (Igual que LSCh)
-  const handleAddToCart = () => {
-    if(selectedIds.length === 0) return;
-    setIsAdding(true);
+  // 3. Generar Link de WhatsApp
+  const generateWaLink = () => {
+    const coursesText = selectedCourses.map(c => 
+        `• ${c.name} (${selectedLevels[c.id] || "A1"})`
+    ).join('%0A'); // %0A es salto de línea en URL
 
-    // Crear el objeto del producto/carrito
-    const productData = {
-        id: `pack-${selectedIds.sort().join('-')}`, // ID único basado en combinación
-        name: `Pack Idiomas: ${selectedCourses.map(c => c.name).join(' + ')}`,
-        price: totalFirstPayment,
-        recurrence: 'monthly',
-        recurringPrice: pricing.totalMonthly,
-        image: flags, // Imagen genérica del pack
-        details: {
-            type: 'languages',
-            courses: selectedCourses.map(c => ({
-                id: c.id,
-                name: c.name,
-                level: selectedLevels[c.id] || "A1"
-            })),
-            enrollmentFee: ENROLLMENT_FEE
-        }
-    };
-
-    console.log("🛒 Agregando Idiomas:", productData);
-
-    // Simular delay y navegar
-    setTimeout(() => {
-        setIsAdding(false);
-        navigate('/checkout'); // Redirige a la página de pago
-    }, 600);
+    const msg = `Hola! 👋 Me gustaría inscribirme en los siguientes idiomas:%0A%0A${coursesText}%0A%0APrecio Mensual: ${clp(pricing.totalMonthly)}%0AMatrícula: ${clp(ENROLLMENT_FEE)}%0A%0A¿Cómo puedo finalizar mi matrícula?`;
+    
+    return `https://wa.me/56964626568?text=${msg}`;
   };
 
-  // 4. Efecto de contador para números
+  // 4. Efecto de contador visual
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -244,11 +193,11 @@ export default function Idiomas() {
     <div className="idiomas-page">
       <style>{css}</style>
 
-      {/* Luces Ambientales */}
+      {/* Fondo y Efectos */}
       <div className="ambient-orb orb-1" />
       <div className="ambient-orb orb-2" />
 
-      {/* --- HERO SECTION --- */}
+      {/* --- HERO --- */}
       <section className="hero">
         <div className="container hero-grid">
           <div className="hero-content">
@@ -265,34 +214,18 @@ export default function Idiomas() {
               <button onClick={() => builderRef.current?.scrollIntoView({behavior:'smooth'})} className="btn-lg btn-primary">
                 Ver precios y horarios
               </button>
-              <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="btn-lg btn-ghost">
-                Hablar con asesor
-              </a>
-            </div>
-            <div style={{display:'flex', gap:'15px', color:'var(--text-muted)', fontSize:'0.9rem'}}>
-              <span>✓ Inglés A1–C1</span>
-              <span>✓ IELTS / TOEFL</span>
-              <span>✓ Coreano TOPIK</span>
             </div>
           </div>
 
           <div className="hero-visual">
             <div className="image-card">
               <img src={flags} alt="Banderas Lael" />
-              <div className="float-card float-1">
-                <div className="emoji-box">🎓</div>
-                <div><strong>Certificado</strong><small style={{display:'block', color:'#94a3b8'}}>Al aprobar nivel</small></div>
-              </div>
-              <div className="float-card float-2">
-                <div className="emoji-box">📹</div>
-                <div><strong>Grabaciones</strong><small style={{display:'block', color:'#94a3b8'}}>Full HD 24/7</small></div>
-              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* --- STATS SECTION --- */}
+      {/* --- STATS --- */}
       <section className="stats-section">
         <div className="container stats-grid">
           {STATS_DATA.map((s, i) => (
@@ -306,48 +239,20 @@ export default function Idiomas() {
         </div>
       </section>
 
-      {/* --- ROADMAP SECTION --- */}
-      <section className="highlight-section">
-        <div className="container highlight-grid">
-          <div>
-            <span style={{color:'var(--accent)', fontWeight:700, letterSpacing:'1px', textTransform:'uppercase'}}>Programa Estrella</span>
-            <h2 style={{fontSize:'2.5rem', margin:'10px 0 20px'}}>De Cero a Bilingüe</h2>
-            <p style={{color:'var(--text-muted)', marginBottom:'30px', fontSize:'1.1rem', lineHeight:'1.6'}}>
-              Nuestro sistema híbrido combina la flexibilidad del estudio online con la presión positiva de las clases en vivo.
-            </p>
-            <ul style={{display:'grid', gap:'15px', marginBottom:'30px'}}>
-                <li>✅ <b>2 Clases en vivo/semana</b> + Cápsulas</li>
-                <li>✅ <b>Diagnóstico de nivel</b> gratuito</li>
-                <li>✅ <b>Simulacros IELTS/TOEFL</b> con feedback</li>
-            </ul>
-          </div>
-          
-          <div className="path-card">
-            <h3 style={{marginBottom:'20px', borderBottom:'1px solid rgba(255,255,255,0.1)', paddingBottom:'10px'}}>Tu Ruta de Aprendizaje</h3>
-            <div className="timeline">
-              <div className="step done"><span className="circle">A1</span><div style={{color:'white'}}><strong>Inicial:</strong> Bases sólidas</div></div>
-              <div className="step done"><span className="circle">A2</span><div style={{color:'white'}}><strong>Básico:</strong> Frases cotidianas</div></div>
-              <div className="step active"><span className="circle">B1</span><div style={{color:'white'}}><strong>Intermedio:</strong> Fluidez laboral</div></div>
-              <div className="step"><span className="circle">B2</span><div style={{color:'white'}}><strong>Avanzado:</strong> Certificación</div></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* --- BUILDER (SELECTOR DINÁMICO) --- */}
+      {/* --- SELECTOR DE CURSOS --- */}
       <section ref={builderRef} className="builder-section">
         <div className="container">
           <div className="text-center" style={{maxWidth:'700px', margin:'0 auto'}}>
             <h2 style={{fontSize:'2.5rem', marginBottom:'15px'}}>Arma tu Plan a Medida</h2>
             <p style={{color:'var(--text-muted)'}}>
-              Elige los idiomas que quieres dominar. Si seleccionas más de uno, aplicamos descuento automático.
+              Elige los idiomas que quieres dominar.
             </p>
           </div>
 
           <div className="courses-grid">
-            {LANGUAGES.map((l) => {
+            {safeLanguages.map((l) => {
               const isActive = selectedIds.includes(l.id);
-              const currentLvl = selectedLevels[l.id] || "A1"; // Visual fallback
+              const currentLvl = selectedLevels[l.id] || "A1"; 
               const displayLevels = l.levels || ["A1", "A2", "B1", "B2"];
 
               return (
@@ -390,7 +295,6 @@ export default function Idiomas() {
 
       {/* --- FEATURES GRID --- */}
       <section className="container" style={{padding:'80px 24px'}}>
-         <h2 className="text-center" style={{marginBottom:'40px'}}>Metodología Lael</h2>
          <div className="features-grid">
             {FEATURES_DATA.map((f, i) => (
                 <div key={i} className="feat-card">
@@ -415,7 +319,7 @@ export default function Idiomas() {
         </div>
       </section>
 
-      {/* --- STICKY BAR (FUNCIONAL) --- */}
+      {/* --- STICKY BAR (FLOTANTE) --- */}
       <div className={`sticky-bar-wrapper ${selectedIds.length > 0 ? 'show' : ''}`}>
         <div className="sticky-bar">
             <div className="bar-info">
@@ -427,22 +331,20 @@ export default function Idiomas() {
 
             <div style={{display:'flex', alignItems:'center', gap:'30px', flexWrap:'wrap', justifyContent:'center'}}>
                 <div style={{textAlign:'right'}}>
-                    <small style={{display:'block', color:'var(--text-muted)', textTransform:'uppercase', fontSize:'0.75rem'}}>Primer pago (Mensual + Matrícula)</small>
+                    <small style={{display:'block', color:'var(--text-muted)', textTransform:'uppercase', fontSize:'0.75rem'}}>Total Primer Mes (+ Matrícula)</small>
                     <span style={{color:'white', fontWeight:800, fontSize:'1.8rem'}}>{clp(totalFirstPayment)}</span>
                 </div>
                 
-                {/* BOTÓN DE CHECKOUT */}
-                <button 
-                  onClick={handleAddToCart}
-                  disabled={isAdding}
+                {/* BOTÓN WHATSAPP */}
+                <a 
+                  href={generateWaLink()}
+                  target="_blank" 
+                  rel="noreferrer"
                   className="btn-glow"
                 >
-                  {isAdding ? 'Procesando...' : (
-                    <>
-                        Inscribirme Ahora <span style={{fontSize:'1.2rem'}}>→</span>
-                    </>
-                  )}
-                </button>
+                  <span>Inscribirme Ahora</span>
+                  <span style={{fontSize:'1.2rem'}}>→</span>
+                </a>
             </div>
         </div>
       </div>

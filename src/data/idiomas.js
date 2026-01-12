@@ -7,6 +7,9 @@
 // 🧾 Matrícula Anual (Pago único al inscribirse)
 export const ENROLLMENT_FEE = 10990;
 
+// 📅 Duración referencial (para cálculos anuales si la web los pide)
+export const ACADEMIC_MONTHS = 9; 
+
 // 🔢 Helper para formatear dinero a Peso Chileno (CLP)
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
@@ -47,16 +50,33 @@ export function computeLangBundle(n) {
   }
 
   // IMPORTANTE: Devolvemos un objeto con la propiedad totalMonthly
-  // para que Idiomas.jsx lo pueda leer correctamente.
   return {
     totalMonthly: total, 
     label: label,
-    count: count
+    count: count,
+    enrollment: ENROLLMENT_FEE
   };
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. CATÁLOGO DE CURSOS (DATA)
+   2. ADAPTADORES DE SEGURIDAD (Para que no falle la compilación)
+   --------------------------------------------------------------------------
+   Estas funciones conectan tu nueva lógica con lo que espera el archivo Idiomas.jsx
+   ────────────────────────────────────────────────────────────────────────── */
+
+// La página a veces pide solo el número (precio) directo
+export const priceForCount = (n) => {
+  return computeLangBundle(n).totalMonthly;
+};
+
+// Por si la página quiere mostrar el total anual tachado
+export const priceAnnual = (n) => {
+  return priceForCount(n) * ACADEMIC_MONTHS;
+};
+
+
+/* ──────────────────────────────────────────────────────────────────────────
+   3. CATÁLOGO DE CURSOS (DATA)
    ────────────────────────────────────────────────────────────────────────── */
 export const LANGUAGES = [
   // 1. INGLÉS

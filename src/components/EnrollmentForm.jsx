@@ -5,7 +5,7 @@ import {
 } from 'lucide-react';
 
 // 🔴 TU URL DE CLOUDFLARE (Reemplázala cuando hagas deploy)
-const API_URL = "https://tu-worker-lael.workers.dev"; 
+const API_URL = "https://instituto-lael-web.contacto-c10.workers.dev"; 
 
 export default function EnrollmentForm({ planTitle, price, selectedDetails, onClose }) {
   const [status, setStatus] = useState("idle"); // idle | loading | success | error

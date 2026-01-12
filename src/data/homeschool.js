@@ -10,10 +10,10 @@ export const clp = (n) =>
   });
 
 // 🧾 Matrícula
-// ESTRATEGIA: Matrícula baja para validar compromiso, gratis en packs grandes.
-export const ENROLLMENT_FEE = 15000; 
+// Bajamos a 10.000 para que la barrera de entrada sea casi nula.
+export const ENROLLMENT_FEE = 10000; 
 
-// 🤝 ALIANZA ESTRATÉGICA (El gran diferenciador)
+// 🤝 ALIANZA ESTRATÉGICA
 export const ALLIANCE = {
   name: "Los Olivos Homeschool",
   role: "Colegio Paraguas Partner",
@@ -21,7 +21,7 @@ export const ALLIANCE = {
   benefits: ["Certificado Anual", "Tramitación Mineduc", "Pauta de Contenidos"],
 };
 
-// 📚 MATERIAS (Expandidas con Enfoque de Habilidades)
+// 📚 MATERIAS
 export const SUBJECTS = [
   { 
     id: 'mat', 
@@ -60,7 +60,7 @@ export const SUBJECTS = [
   },
   { 
     id: 'hab', 
-    name: 'Hábito de Estudio', // NUEVO: Muy demandado por padres
+    name: 'Hábito de Estudio',
     icon: '🧠', 
     color: '#ec4899', // Pink
     desc: 'Organización, gestión del tiempo y técnicas de aprendizaje.' 
@@ -75,51 +75,59 @@ export const LEVELS = [
   { id: 'adultos', label: 'Adultos', desc: 'Nivelación 2x1' }, 
 ];
 
-// 📦 PACKS DE HORAS (B2C - Estrategia de Precio Volumen)
+// 📦 PACKS DE HORAS (Precios ajustados estratégicamente)
+// Idea: "Más barato que un profe particular promedio, pero con calidad de academia"
 export const PACKS = [
   { 
     id: 'p4', 
     hours: 4, 
     title: 'Pack Rescate', 
-    subtitle: 'Para salvar la prueba',
-    price: 75000, 
+    subtitle: 'Apoyo puntual',
+    // Antes 75.000 -> Ahora 52.000 ($13k/hora)
+    price: 52000, 
     badge: null,
     features: [
-      "1 hora semanal",
+      "1 hora semanal por ramo",
       "Resolución de dudas puntuales",
-      "Grabación de la clase"
+      "Grabación de la clase",
+      "Acceso a material básico"
     ]
   },
   { 
     id: 'p8', 
     hours: 8, 
-    title: 'Pack Hábito', 
-    subtitle: 'Constancia y mejora real',
-    price: 139000, 
+    title: 'Pack Pro', 
+    subtitle: 'Aprendizaje real',
+    // Antes 139.000 -> Ahora 96.000 ($12k/hora)
+    // *Rompe la barrera psicológica de los 100mil pesos*
+    price: 96000, 
     badge: 'Más Popular',
     features: [
-      "2 horas semanales",
-      "Reporte mensual a apoderados",
-      "Material de ejercitación PDF"
+      "2 horas semanales por ramo",
+      "Seguimiento de notas",
+      "Guías de ejercicios PDF",
+      "Reporte de avance mensual"
     ]
   },
   { 
     id: 'p12', 
     hours: 12, 
-    title: 'Pack Excelencia', 
-    subtitle: 'Transformación académica',
-    price: 199000, 
+    title: 'Pack Intensivo', 
+    subtitle: 'Dominio total',
+    // Antes 199.000 -> Ahora 138.000 ($11.5k/hora)
+    // *Mucho valor por hora, ideal para PAES o nivelación crítica*
+    price: 138000, 
     badge: 'Mejor Valor',
     features: [
-      "3 horas semanales",
-      "Matrícula BONIFICADA (Gratis)",
-      "Contacto directo con profesor",
-      "Simulacros de examen"
+      "3 horas semanales por ramo",
+      "Matrícula GRATIS",
+      "Simulacros de examen",
+      "Contacto directo con profesor"
     ]
   },
 ];
 
-// 🏫 SERVICIOS COLEGIOS (B2B - Con precios referencia "Desde")
+// 🏫 SERVICIOS COLEGIOS
 export const SCHOOL_SERVICES = [
   {
     id: 'ensayos',

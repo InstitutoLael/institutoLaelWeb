@@ -1,12 +1,11 @@
-// src/data/empresas.js
-// === Lael Corporate: Soluciones B2B ===
+// src/data/lsch.js
+// === Lengua de Señas Chilena (LSCh) — Datos y Precios Oficiales ===
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. CONFIGURACIÓN Y FORMATO
+   1. CONFIGURACIÓN BASE Y FORMATEADORES
    ────────────────────────────────────────────────────────────────────────── */
-export const WAPP_INTL = "56964626568"; // Tu número para cerrar ventas
 
-// 🔢 Helper de Moneda
+// 🔢 Formateador de Moneda (CLP)
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -14,158 +13,128 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
+// 🧾 Matrícula (Costo de incorporación)
+export const ENROLLMENT_FEE = 15000; 
+export const ENROLLMENT_LABEL = "Matrícula Anual y Plataforma";
+
+// 📢 Slogan para WhatsApp
+export const LSCH_TAGLINE = "Rompe la barrera del sonido.";
+
 /* ──────────────────────────────────────────────────────────────────────────
-   2. LÍNEAS DE SERVICIO (CATÁLOGO)
+   2. ESTRUCTURA ACADÉMICA (Módulos)
    ────────────────────────────────────────────────────────────────────────── */
-export const SERVICE_LINES = [
+export const LSCH_MODULES = [
   {
-    id: "ingles",
-    label: "Inglés de Negocios",
-    // Precio por hora/persona. 
-    // Si son 10 personas a $6.000 c/u = $60.000 la hora ingreso. 
-    // Pagas $25.000 al profe y te quedan $35.000. Negocio redondo.
-    pricePerHourOnline: 6000, 
-    pricePerHourOnsite: 9000,
-    hoursPerMonth: 8, // 2 veces por semana
-    minPeople: 3,
-    icon: "🌍",
-    desc: "Equipos que hablan, venden y negocian en inglés."
+    id: "nivel-1",
+    tag: "A1 • Básico",
+    name: "Iniciación Visual",
+    desc: "Aprende el alfabeto, saludos, familia y estructura básica. Deja de usar la voz y activa tus manos.", // Cambié summary por desc para compatibilidad
   },
   {
-    id: "lsch",
-    label: "Lengua de Señas (Ley 21.015)",
-    // Un poco más caro por ser especialidad
-    pricePerHourOnline: 7000,
-    pricePerHourOnsite: 10000,
-    hoursPerMonth: 4, // 1 vez por semana (Taller)
-    minPeople: 5,
-    icon: "🤟",
-    desc: "Cumplimiento normativo y cultura inclusiva real."
+    id: "nivel-2",
+    tag: "A2 • Intermedio",
+    name: "Gramática Espacial",
+    desc: "Verbos direccionales, clasificadores y tiempos verbales. Construye oraciones complejas sin traducir del español.",
   },
   {
-    id: "coaching",
-    label: "Coaching Ejecutivo 1 a 1",
-    // Producto Premium (High Ticket)
-    pricePerHourOnline: 35000,
-    pricePerHourOnsite: 45000,
-    hoursPerMonth: 4,
-    minPeople: 1,
-    icon: "🎯",
-    desc: "Liderazgo y oratoria para Gerentes y Jefaturas."
-  },
-  {
-    id: "preu",
-    label: "Beneficio Hijos (Preu PAES)",
-    // Tarifa plana mensual por alumno (Muy barata para volumen)
-    priceFixedMonthly: 35000, 
-    hoursPerMonth: 0, // No aplica cálculo por hora
-    minPeople: 5,
-    icon: "🎓",
-    desc: "El beneficio más valorado por los colaboradores padres."
+    id: "nivel-3",
+    tag: "B1 • Avanzado",
+    name: "Contexto Profesional",
+    desc: "Vocabulario técnico para salud, educación y atención al cliente. Interpretación y fluidez conversacional.",
   },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   3. PACKS DE MARKETING (Ganchos Visuales)
+   3. PLANES GRUPALES (Lógica de Suscripción)
    ────────────────────────────────────────────────────────────────────────── */
-export const EMP_PACKS = [
-  {
-    id: "meeting-ready",
-    title: "Pack 'Meeting Ready'",
-    lineId: "ingles",
-    subtitle: "Taller intensivo de 1 mes para perder el miedo a hablar.",
-    features: ["Vocabulario de Reuniones", "Roleplay de Negociación", "Corrección de acento"],
-    priceDisplay: "Desde $180.000 / equipo"
+export const LSCH_GROUP_PLANS = [
+  { 
+    id: "g-month", 
+    title: "Plan Mensual Flexible", 
+    desc: "Sin compromiso de permanencia.",
+    price: 24990, // Usamos 'price' estándar para evitar errores
+    monthly: 24990, 
+    enrollmentWaived: false,
+    features: [ // Agregado para que se vea la lista en la tarjeta
+      "8 Clases en vivo por Zoom",
+      "Acceso a grabaciones",
+      "Certificado de asistencia",
+      "Pago mes a mes"
+    ],
+    highlight: false,
   },
-  {
-    id: "law-21015",
-    title: "Charla Ley Inclusión",
-    lineId: "lsch",
-    subtitle: "Sensibilización rápida para cumplir la normativa.",
-    features: ["Contexto Legal", "Mitos de la Sordera", "Señas de Cortesía"],
-    priceDisplay: "Valor fijo por sesión"
+  { 
+    id: "g-quarter", 
+    title: "Plan Trimestral", 
+    desc: "El favorito de los estudiantes.",
+    price: 19990, // Precio visual referencia
+    monthly: 19990,
+    enrollmentWaived: true, 
+    features: [
+      "Todo lo del plan mensual",
+      "🔥 Matrícula GRATIS",
+      "Ahorras $15.000",
+      "Diploma físico al aprobar"
+    ],
+    highlight: true, // Destaca la tarjeta
+    tag: "Mejor Opción",
   },
-  {
-    id: "family-pack",
-    title: "Pack Futuro (Hijos)",
-    lineId: "preu",
-    subtitle: "Preuniversitario completo para hijos de colaboradores.",
-    features: ["Plataforma 24/7", "Ensayos Mensuales", "Reporte de Asistencia"],
-    priceDisplay: "$35.000 / alumno mes"
+];
+
+// 🙌 CONVENIO IGLESIAS (Tarifa Plana Especial)
+export const CHURCH_PRICE = 14990; 
+
+/* ──────────────────────────────────────────────────────────────────────────
+   4. CLASES PARTICULARES (Refuerzo 1 a 1)
+   ────────────────────────────────────────────────────────────────────────── */
+export const LSCH_ONE2ONE_PLANS = [
+  { 
+    id: "o-light", 
+    title: "Pack 4 Sesiones", 
+    price: 60000,
+    monthly: 60000, 
+    features: ["Horario Flexible", "Enfoque personalizado", "Material PDF"],
+  },
+  { 
+    id: "o-standard", 
+    title: "Pack 8 Sesiones", 
+    price: 110000,
+    monthly: 110000, 
+    features: ["Ideal para nivelación", "Feedback intensivo", "Soporte WhatsApp"],
   },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   4. CALCULADORA DE COTIZACIÓN (El Cerebro)
+   5. RAZONES CORPORATIVAS
    ────────────────────────────────────────────────────────────────────────── */
-
-// Descuentos por volumen de personas
-const VOLUME_DISCOUNTS = [
-  { min: 20, rate: 0.20 }, // 20% OFF si traen a 20+ personas
-  { min: 10, rate: 0.10 }, // 10% OFF si traen a 10+ personas
-  { min: 5,  rate: 0.05 }, // 5% OFF
+export const CORPORATE_WHY = [
+  { 
+    title: "Ley de Inclusión 21.015", 
+    desc: "Capacita a tu equipo y cumple con la normativa laboral vigente en Chile." 
+  },
+  { 
+    title: "Experiencia de Cliente", 
+    desc: "Atender a una persona sorda en su idioma marca una diferencia competitiva." 
+  },
+  { 
+    title: "Habilidad Blanda", 
+    desc: "Desarrolla la empatía, expresión corporal y comunicación no verbal del equipo." 
+  },
 ];
 
-function getDiscount(count) {
-  return VOLUME_DISCOUNTS.find(d => count >= d.min)?.rate || 0;
-}
+/* ──────────────────────────────────────────────────────────────────────────
+   6. CALCULADORA DE PRECIOS (La Lógica Maestra)
+   ────────────────────────────────────────────────────────────────────────── */
+export function priceForGroupPlan(plan, options = {}) {
+  const { church } = options;
 
-export function calcQuote(options) {
-  const {
-    lineId = "ingles",
-    headcount = 10, // Cantidad de personas
-    durationMonths = 3,
-    modality = "online" // 'online' | 'onsite'
-  } = options || {};
+  if (!plan) return 0;
 
-  // 1. Buscar el servicio
-  const service = SERVICE_LINES.find(s => s.id === lineId) || SERVICE_LINES[0];
-
-  // 2. Validar mínimos
-  const count = Math.max(1, Number(headcount));
-  const months = Math.max(1, Number(durationMonths));
-
-  let monthlyTotal = 0;
-  let totalProject = 0;
-  let label = "";
-
-  // 3. Lógica según tipo de servicio
-  if (service.id === "preu") {
-    // === CASO ESPECIAL: PREU (Cobro fijo por cabeza) ===
-    const basePrice = service.priceFixedMonthly;
-    const discount = getDiscount(count); // Aplica descuento por volumen
-    
-    const pricePerStudent = basePrice * (1 - discount);
-    
-    monthlyTotal = pricePerStudent * count;
-    totalProject = monthlyTotal * months;
-    label = `Plan Empresa PAES (${count} cupos)`;
-
-  } else {
-    // === CASO ESTÁNDAR: IDIOMAS / SKILLS (Cobro por Hora/Persona) ===
-    const pricePerHour = modality === "onsite" ? service.pricePerHourOnsite : service.pricePerHourOnline;
-    const hours = service.hoursPerMonth;
-    
-    // Cálculo Base: PrecioHora * HorasMes * Personas
-    const baseMonthly = pricePerHour * hours * count;
-    
-    // Aplicar Descuento
-    const discount = getDiscount(count);
-    monthlyTotal = baseMonthly * (1 - discount);
-    totalProject = monthlyTotal * months;
-
-    label = `${service.label} (${modality === "onsite" ? "Presencial" : "Online"})`;
+  // Si marcó "Soy Iglesia/Ministerio", precio fijo congelado
+  if (church) {
+    return CHURCH_PRICE;
   }
 
-  // 4. Retornar Objeto Formateado
-  return {
-    serviceName: service.label,
-    monthlyTotal: Math.round(monthlyTotal),
-    totalProject: Math.round(totalProject),
-    perPersonMonthly: Math.round(monthlyTotal / count),
-    headcount: count,
-    duration: months,
-    label: label,
-    hasDiscount: getDiscount(count) > 0
-  };
+  // Retornamos price o monthly (seguridad por si la variable cambia)
+  return plan.price || plan.monthly;
 }

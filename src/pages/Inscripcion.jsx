@@ -1,23 +1,18 @@
-// src/pages/Inscripciones.jsx
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext.jsx"; // <--- IMPORTANTE: Tu contexto
+import { useCart } from "../context/CartContext.jsx"; 
 import SEOHead from "../components/SEOHead.jsx";
 
 // --- CONFIGURACIÓN ---
-// Tu URL de Google Apps Script (La que me pasaste)
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG26Civ9DJm5Fvr-jq7NSb7xEobqRJSa-VJLeil_3pTgqVBdWJiT4W5XyvsX9gq1JKPg/exec";
-const WAPP_INTL = "56964626568"; // Tu número para soporte y comprobantes
-
-// --- ASSETS (Asegúrate de tener esta imagen o borra la línea si no) ---
-import mpLogo from "../assets/img/Partners/u1.png"; 
+const WAPP_INTL = "56964626568"; 
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG (Sistema de Iconos Ultraligeros)
+   1. ICONOS SVG (Ultraligeros)
    ────────────────────────────────────────────────────────────────────────── */
 const Icons = {
   Copy: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>,
-  Check: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>,
+  Check: () => <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>,
   Whatsapp: () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>,
   Lock: () => <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
   CreditCard: () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>,
@@ -53,10 +48,8 @@ function BankCard({ onCopy }) {
     <div className="bank-card">
       <div className="bank-header">
         <span className="bank-title">Datos Transferencia</span>
-        <div className="bank-logo-box">
-            {/* Si no tienes logo, borra el tag img */}
-            <img src={mpLogo} alt="Banco" className="mp-img" onError={(e) => e.target.style.display='none'} />
-        </div>
+        {/* Simulación Chip Tarjeta */}
+        <div className="chip-sim"></div> 
       </div>
       <div className="bank-body">
         <p className="bank-type">Cuenta Vista / Chequera</p>
@@ -76,12 +69,12 @@ function BankCard({ onCopy }) {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   3. PÁGINA PRINCIPAL
+   3. PÁGINA PRINCIPAL DE INSCRIPCIÓN
    ────────────────────────────────────────────────────────────────────────── */
 export default function Inscripciones() {
-  // Contexto del Carrito (Para saber qué quiere comprar)
-  const { cart, totalPagar } = useCart();
-  
+  const { items: cart, totals, clear } = useCart(); // Usamos 'items' y 'totals' del contexto
+  const totalPagar = totals?.total || 0;
+
   const [toastMsg, setToastMsg] = useState("");
   const [status, setStatus] = useState("idle"); // idle, loading, success, error
   
@@ -91,18 +84,19 @@ export default function Inscripciones() {
     rut: "",
     email: "",
     phone: "",
-    program: "", // Si viene del carrito, lo llenamos auto
+    program: "", 
     comments: ""
   });
 
-  // EFECTO: Si hay cosas en el carrito, pre-llenar el formulario
+  // EFECTO: Si hay carrito, pre-cargamos el programa
   useEffect(() => {
     if (cart.length > 0) {
-      const resumenCursos = cart.map(item => item.nombre).join(" + ");
+      // Creamos un string legible con el contenido del carrito
+      const resumenCursos = cart.map(item => item.name).join(" + ");
       setForm(prev => ({
         ...prev,
-        program: `🛒 PACK WEB: ${resumenCursos}`,
-        comments: `Detalle Carrito: ${resumenCursos}. Total calculado: $${totalPagar}`
+        program: resumenCursos, // Esto se guarda en el estado pero no se edita visualmente
+        comments: prev.comments || `Resumen Carrito: ${resumenCursos}. Total Web: $${totalPagar}`
       }));
     }
   }, [cart, totalPagar]);
@@ -117,50 +111,56 @@ export default function Inscripciones() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // --- LÓGICA DE ENVÍO A GOOGLE SHEETS ---
+  // --- ENVÍO A GOOGLE SHEETS ---
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("loading");
 
-    // Preparamos datos finales (asegurando el monto si no viene del carrito)
-    const finalTotal = cart.length > 0 ? totalPagar : "Por cotizar/Definir";
-    const finalProgram = form.program || "Consulta General";
+    const finalTotal = cart.length > 0 ? totalPagar : "Por cotizar";
+    // Si hay carrito, forzamos que el programa sea el contenido del carrito
+    const finalProgram = cart.length > 0 
+        ? cart.map(item => `${item.name} ($${item.price})`).join(" + ")
+        : form.program;
 
     const payload = {
-      fecha: new Date().toISOString(),
+      fecha: new Date().toLocaleString("es-CL"),
       nombre: form.fullName,
       rut: form.rut,
       telefono: form.phone,
       email: form.email,
-      program: finalProgram,
-      total: finalTotal,
-      comments: form.comments
+      programa: finalProgram,
+      total_pagar: finalTotal,
+      comentario: form.comments,
+      estado_pago: "Pendiente Comprobante"
     };
 
+    console.log("Enviando:", payload);
+
     try {
-      // Fetch con mode: 'no-cors' es vital para Google Apps Script
+      // mode: 'no-cors' es obligatorio para enviar a Google Apps Script desde frontend sin proxy
       await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors",
+        mode: "no-cors", 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       
-      // Google en 'no-cors' no devuelve estado 200 legible, así que asumimos éxito si no explota.
+      // Como 'no-cors' no retorna respuesta legible, asumimos éxito si no hay error de red
       setStatus("success");
+      if(cart.length > 0) clear(); // Opcional: Limpiar carrito al enviar
 
     } catch (error) {
       console.error(error);
       setStatus("error");
-      setToastMsg("Error de conexión. Contáctanos por WhatsApp.");
+      setToastMsg("Error al enviar. Intenta por WhatsApp.");
     }
   };
 
-  // --- VISTA: ÉXITO ---
+  // --- VISTA DE ÉXITO (POST-ENVÍO) ---
   if (status === "success") {
-    // Generar link de WhatsApp pre-escrito
+    // Texto predefinido para WhatsApp
     const totalMsg = cart.length > 0 ? `$${totalPagar?.toLocaleString("es-CL")}` : "lo acordado";
-    const textWsp = `Hola! Soy *${form.fullName}*. Acabo de llenar mi ficha de inscripción web para: ${form.program}. \n\nAdjunto mi comprobante por transferencia de ${totalMsg}. \nQuedo atento/a.`;
+    const textWsp = `Hola Admisión Lael! Soy *${form.fullName}*.\nYa envié mi ficha web.\n\nAdjunto mi comprobante de transferencia por ${totalMsg} para finalizar mi matrícula.\n(RUT: ${form.rut})`;
     const linkWsp = `https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(textWsp)}`;
 
     return (
@@ -169,22 +169,23 @@ export default function Inscripciones() {
         <div className="container success-container">
           <div className="success-icon"><Icons.Check /></div>
           <h1>¡Ficha Recibida!</h1>
-          <p>Tus datos ya están seguros en nuestro sistema académico.</p>
+          <p>Tus datos han sido registrados correctamente en el sistema.</p>
           
           <div className="next-steps-card">
-            <h3>Último paso: Confirmar Matrícula</h3>
-            <p className="steps-intro">Para activar tu cupo inmediatamente:</p>
+            <h3>Último paso: Activar Matrícula</h3>
+            <p className="steps-intro">Tu cupo se reserva al confirmar el pago:</p>
+            
             <ol>
-              <li>Realiza la transferencia del total <strong>({cart.length > 0 ? `$${totalPagar?.toLocaleString("es-CL")}` : "indicado"})</strong>.</li>
-              <li>Envía el comprobante directamente a nuestro WhatsApp de Admisión.</li>
+              <li>Realiza la transferencia de <strong>{totalMsg}</strong> a la cuenta indicada abajo.</li>
+              <li>Envía el comprobante a nuestro WhatsApp haciendo clic en el botón verde.</li>
             </ol>
 
             <div className="bank-mini-details">
-                <small>Cuenta Vista | 1088183168 | 78.084.019-6 | pagos@institutolael.cl</small>
+                Cuenta Vista | 1088183168 | 78.084.019-6 <br/> pagos@institutolael.cl
             </div>
 
             <a href={linkWsp} target="_blank" rel="noreferrer" className="btn btn-whatsapp-lg">
-               <Icons.Whatsapp /> Enviar Comprobante y Finalizar
+               <Icons.Whatsapp /> Enviar Comprobante Ahora
             </a>
             
             <Link to="/" className="link-back">Volver al inicio</Link>
@@ -194,7 +195,7 @@ export default function Inscripciones() {
     );
   }
 
-  // --- VISTA: FORMULARIO ---
+  // --- VISTA DE FORMULARIO ---
   return (
     <div className="enroll-page">
       <style>{css}</style>
@@ -205,9 +206,9 @@ export default function Inscripciones() {
         
         {/* HEADER */}
         <header className="page-header">
-          <div className="secure-badge"><Icons.Lock/> Inscripción Oficial 2026</div>
+          <div className="secure-badge"><Icons.Lock/> Inscripción Segura SSL</div>
           <h1>Ficha de Matrícula</h1>
-          <p>Completa tus datos para reservar tu vacante.</p>
+          <p>Completa tus datos académicos y personales.</p>
         </header>
 
         <div className="layout-grid">
@@ -223,7 +224,7 @@ export default function Inscripciones() {
                 <div className="inp-wrapper">
                     <span className="inp-icon"><Icons.User/></span>
                     <input 
-                      type="text" name="fullName" className="inp" placeholder="Ej: Andrea Pérez" 
+                      type="text" name="fullName" className="inp" placeholder="Ej: Diego Chaparro" 
                       required value={form.fullName} onChange={handleChange}
                     />
                 </div>
@@ -231,7 +232,7 @@ export default function Inscripciones() {
 
               <div className="row-2">
                 <div className="form-group">
-                  <label>RUT (con puntos y guion) <span className="req">*</span></label>
+                  <label>RUT Alumno <span className="req">*</span></label>
                   <input 
                     type="text" name="rut" className="inp" placeholder="12.345.678-9" 
                     required value={form.rut} onChange={handleChange}
@@ -254,46 +255,43 @@ export default function Inscripciones() {
                 />
               </div>
 
-              {/* LÓGICA DE PROGRAMA: Si hay carrito, muestra resumen. Si no, muestra Select */}
+              {/* LÓGICA DE PROGRAMA: Si hay carrito (MODO COMPRA) vs Select (MODO CONSULTA) */}
               <div className="form-group">
                 <label>Programa Académico <span className="req">*</span></label>
                 
                 {cart.length > 0 ? (
-                    // MODO CARRITO: Read Only
+                    // MODO CARRITO: Lectura solamente
                     <div className="cart-summary-locked">
-                        <div className="csl-header"><Icons.Cart/> Resumen de Inscripción:</div>
+                        <div className="csl-header"><Icons.Cart/> Estás inscribiéndote en:</div>
                         <ul>
                             {cart.map((item, i) => (
-                                <li key={i}>• {item.nombre}</li>
+                                <li key={i}>• {item.name} <small>(${parseInt(item.price).toLocaleString('es-CL')})</small></li>
                             ))}
                         </ul>
                         <div className="csl-total">
                             Total a Pagar: <span>${totalPagar?.toLocaleString('es-CL')}</span>
                         </div>
-                        <input type="hidden" name="program" value={form.program} />
                     </div>
                 ) : (
-                    // MODO DIRECTO: Select Completo
+                    // MODO MANUAL: Select
                     <select name="program" className="inp select" required value={form.program} onChange={handleChange}>
-                      <option value="">-- Selecciona lo que buscas --</option>
+                      <option value="">-- Selecciona el curso --</option>
                       
                       <optgroup label="🎓 Preuniversitario PAES">
                         <option value="PAES Anual - Plan Completo">Plan Anual Completo</option>
                         <option value="PAES Anual - Personalizado">Plan Personalizado (Por Ramos)</option>
-                        <option value="PAES Intensivo">Plan Intensivo (2do Semestre)</option>
+                        <option value="PAES Intensivo">Plan Intensivo</option>
                       </optgroup>
 
                       <optgroup label="📚 Escuela y Nivelación">
                         <option value="Escuela Adultos 2x1">Escuela para Adultos (2x1)</option>
-                        <option value="Homeschool">Homeschool (Exámenes Libres)</option>
-                        <option value="Reforzamiento Escolar">Reforzamiento Escolar</option>
+                        <option value="Homeschool">Homeschool / Exámenes Libres</option>
                       </optgroup>
 
                       <optgroup label="🌍 Idiomas">
-                        <option value="Ingles Comunicativo">Inglés Comunicativo</option>
+                        <option value="Ingles">Inglés Comunicativo</option>
                         <option value="Coreano">Idioma Coreano</option>
                         <option value="Japones">Idioma Japonés</option>
-                        <option value="LSCh">Lengua de Señas Chilena</option>
                       </optgroup>
                     </select>
                 )}
@@ -303,40 +301,40 @@ export default function Inscripciones() {
                 <label>Comentarios adicionales</label>
                 <textarea 
                   name="comments" className="inp ta" rows="3" 
-                  placeholder="¿Alguna duda, horario de preferencia o necesidad educativa especial?"
+                  placeholder="¿Alguna necesidad educativa especial, horario preferente o duda?"
                   value={form.comments} onChange={handleChange}
                 ></textarea>
               </div>
 
               <div className="form-actions">
                 <button type="submit" className={`btn btn-primary submit-btn ${status === 'loading' ? 'loading' : ''}`} disabled={status === 'loading'}>
-                  {status === 'loading' ? <span className="spinner-mini"></span> : <><Icons.Send /> Confirmar Inscripción</>}
+                  {status === 'loading' ? <span className="spinner-mini"></span> : <><Icons.Send /> Confirmar Matrícula</>}
                 </button>
                 <p className="legal-text">
-                  Al enviar, tus datos serán procesados internamente para generar tu matrícula.
+                  Al enviar, tus datos serán procesados para generar tu contrato de matrícula.
                 </p>
               </div>
 
             </form>
           </main>
 
-          {/* COLUMNA DERECHA: PAGO */}
+          {/* COLUMNA DERECHA: DATOS BANCARIOS */}
           <aside className="sidebar-col">
             <div className="sticky-content">
               
               <div className="sidebar-widget">
-                <h3><Icons.CreditCard/> Datos de Transferencia</h3>
+                <h3><Icons.CreditCard/> Información de Pago</h3>
                 <p className="widget-desc">
-                  Utiliza estos datos para pagar tu matrícula o mensualidad:
+                  Utiliza estos datos para pagar tu matrícula o mensualidad vía transferencia:
                 </p>
                 <BankCard onCopy={handleCopy} />
               </div>
 
               <div className="quick-help">
-                <h4>¿Tienes dudas antes de pagar?</h4>
+                <h4>¿Problemas con el formulario?</h4>
                 <div className="qh-actions">
                     <a href={`https://wa.me/${WAPP_INTL}`} target="_blank" rel="noreferrer" className="btn-qh whatsapp">
-                    <Icons.Whatsapp/> Hablar con Admisión
+                    <Icons.Whatsapp/> Hablar con Humano
                     </a>
                 </div>
               </div>
@@ -351,7 +349,7 @@ export default function Inscripciones() {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   4. ESTILOS CSS - (Diseño Lael Universe V2)
+   4. ESTILOS CSS (Estética Lael V2)
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
@@ -378,7 +376,7 @@ const css = `
 .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
 
 /* HEADER */
-.page-header { text-align: center; padding: 60px 0 50px; }
+.page-header { text-align: center; padding: 120px 0 50px; /* Padding top extra por navbar fija */ }
 .secure-badge { 
   display: inline-flex; align-items: center; gap: 6px; 
   background: rgba(99, 102, 241, 0.1); color: #a5b4fc; 
@@ -435,6 +433,8 @@ option { background: var(--bg-panel); color: white; padding: 10px; }
 }
 .csl-header { display: flex; align-items: center; gap: 8px; font-weight: 700; margin-bottom: 10px; color: var(--primary); }
 .cart-summary-locked ul { list-style: none; padding: 0; margin: 0 0 10px 0; font-size: 0.9rem; }
+.cart-summary-locked li { margin-bottom: 4px; }
+.cart-summary-locked li small { color: #9ca3af; margin-left: 5px; }
 .csl-total { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; font-weight: 700; display: flex; justify-content: space-between; }
 .csl-total span { color: #fbbf24; font-size: 1.1rem; }
 
@@ -454,7 +454,7 @@ option { background: var(--bg-panel); color: white; padding: 10px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* SIDEBAR WIDGETS */
-.sticky-content { position: sticky; top: 20px; }
+.sticky-content { position: sticky; top: 120px; }
 .sidebar-widget { margin-bottom: 30px; }
 .sidebar-widget h3 { font-size: 1.1rem; display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-weight: 700; }
 .widget-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 15px; }
@@ -464,10 +464,14 @@ option { background: var(--bg-panel); color: white; padding: 10px; }
   background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
   border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden;
+  position: relative;
 }
-.bank-header { display: flex; justify-content: space-between; margin-bottom: 15px; }
+.chip-sim {
+    width: 35px; height: 25px; background: linear-gradient(135deg, #fcd34d 0%, #d97706 100%);
+    border-radius: 4px; opacity: 0.8;
+}
+.bank-header { display: flex; justify-content: space-between; align-items:center; margin-bottom: 15px; }
 .bank-title { font-size: 0.7rem; text-transform: uppercase; color: rgba(255,255,255,0.6); font-weight: 700; }
-.mp-img { height: 24px; filter: brightness(0) invert(1); opacity: 0.9; }
 .bank-type { font-size: 0.85rem; color: rgba(255,255,255,0.9); margin-bottom: 12px; }
 
 .copy-row {
@@ -490,7 +494,7 @@ option { background: var(--bg-panel); color: white; padding: 10px; }
 .btn-qh.whatsapp:hover { filter: brightness(1.1); }
 
 /* SUCCESS VIEW */
-.success-view { display: flex; align-items: center; justify-content: center; text-align: center; padding-top: 50px; }
+.success-view { display: flex; align-items: center; justify-content: center; text-align: center; padding-top: 120px; }
 .success-container { max-width: 600px; animation: popUp 0.5s ease; width: 100%; }
 .success-icon { width: 80px; height: 80px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: #000; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
 .success-icon svg { width: 40px; height: 40px; }
@@ -504,7 +508,7 @@ option { background: var(--bg-panel); color: white; padding: 10px; }
 
 .bank-mini-details { 
     background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; 
-    text-align: center; margin-bottom: 20px; font-family: monospace; color: #94a3b8;
+    text-align: center; margin-bottom: 20px; font-family: monospace; color: #94a3b8; font-size: 0.9rem;
 }
 
 .btn-whatsapp-lg {
@@ -520,7 +524,7 @@ option { background: var(--bg-panel); color: white; padding: 10px; }
 .toast-notification {
   position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
   background: var(--accent); color: #000; padding: 12px 24px; border-radius: 50px;
-  font-weight: 700; z-index: 100; display: flex; align-items: center; gap: 8px;
+  font-weight: 700; z-index: 9999; display: flex; align-items: center; gap: 8px;
   animation: popUp 0.4s ease;
 }
 @keyframes popUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }

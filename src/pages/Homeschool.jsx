@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef } from "react";
-// 👇 Tu formulario existente (no lo tocamos, solo le enviamos los datos más robustos)
+
+// 👇 Importamos tu formulario (que NO modificamos)
 import EnrollmentForm from "../components/EnrollmentForm"; 
 
 // Importamos la data
@@ -32,7 +33,7 @@ const Icons = {
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. COMPONENTE PRINCIPAL
+   2. COMPONENTE PRINCIPAL (Homeschool)
    ────────────────────────────────────────────────────────────────────────── */
 export default function Homeschool() {
   const [isSchool, setIsSchool] = useState(false);
@@ -45,42 +46,22 @@ export default function Homeschool() {
   
   const configRef = useRef(null);
 
-  // === LÓGICA ===
+  // === LÓGICA DE DATOS ===
   const activeSubject = SUBJECTS.find(s => s.id === selectedSubject) || SUBJECTS[0];
   const activePack = PACKS.find(p => p.id === selectedPackId) || PACKS[1];
   const activeLevel = LEVELS.find(l => l.id === selectedLevel) || LEVELS[1];
 
-  // Cálculos
+  // Cálculos de dinero
   const isEnrollmentFree = activePack.id === 'p12'; 
   const appliedEnrollment = isEnrollmentFree ? 0 : ENROLLMENT_FEE;
   const total = activePack.price + appliedEnrollment;
 
-  // 👇 AQUÍ ESTÁ EL FIX DEL ERROR:
-  // Preparamos el objeto "plan" con TODOS los campos posibles y convertidos a String
-  // para evitar que tu formulario falle al intentar leer algo undefined.
+  // Preparamos los datos para pasar al formulario
   const planForCheckout = useMemo(() => ({
-    // IDs
-    id: `${activeSubject.id}-${activePack.id}`,
-    
-    // Títulos y Nombres (Duplicamos 'name' y 'title' por compatibilidad)
-    title: `${activeSubject.name} (${activeLevel.label})`,
-    name: `${activeSubject.name} (${activeLevel.label})`, 
-    subtitle: `${activePack.title} - ${activePack.hours} Horas`,
-    
-    // Estilos
-    color: activeSubject.color || "#6366f1", // Fallback por si acaso
-    
-    // PRECIOS: Formateamos a String con clp() porque el formulario probablemente espera texto
-    price: clp(total),            // Campo 'price' genérico (clave para el error c.split)
-    mensual: clp(activePack.price), 
-    pagoHoy: clp(total),
-    
-    // Datos crudos por si acaso
-    priceRaw: total, 
-    
-    // Detalles
-    detalleHoy: isEnrollmentFree ? "Mes 1 (Matrícula GRATIS)" : "Matrícula + Mes 1",
-    features: [`Nivel: ${activeLevel.label}`, `Pack: ${activePack.title}`, activePack.subtitle]
+    title: `${activeSubject.name} - ${activePack.title} (${activeLevel.label})`,
+    price: clp(total), // Convertido a string "$120.000"
+    // IMPORTANTE: Este es el texto que tu formulario va a intentar hacer .split('.')
+    detalleHoy: isEnrollmentFree ? "Mes 1 (Matrícula GRATIS)." : "Matrícula + Mes 1." 
   }), [activeSubject, activeLevel, activePack, total, isEnrollmentFree]);
 
   const waLinkSchool = `https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, soy de un Colegio y me interesan las soluciones B2B de Lael Academy.")}`;
@@ -91,10 +72,13 @@ export default function Homeschool() {
       
       <title>Lael Academy | {isSchool ? "Soluciones Colegios" : "Entrenamiento Académico"}</title>
 
-      {/* 🔴 MODAL DE INSCRIPCIÓN */}
+      {/* 🔴 AQUÍ ESTÁ EL CAMBIO IMPORTANTE 🔴 */}
+      {/* Pasamos las props individuales para que el formulario no falle */}
       {showModal && (
         <EnrollmentForm 
-          plan={planForCheckout} 
+          planTitle={planForCheckout.title}
+          price={planForCheckout.price}
+          selectedDetails={planForCheckout.detalleHoy} // <--- Esto evita el error .split
           onClose={() => setShowModal(false)} 
         />
       )}

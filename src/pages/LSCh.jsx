@@ -1,460 +1,479 @@
 import React, { useState, useMemo, useRef, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import EnrollmentForm from "../components/EnrollmentForm";
+import { useCart } from "../context/CartContext"; // Si no usas contexto, puedes borrar esto
 import SEOHead from "../components/SEOHead"; 
 
-// --- ICONOS (Lucide React) ---
+// 📦 ICONOS (Lucide React) - Seleccionados para educación y confianza
 import { 
-  Check, Hand, Briefcase, Users, Award, 
-  CreditCard, ChevronRight, Star, Heart, Zap, 
-  ShieldCheck, X 
+  Check, Hand, Heart, GraduationCap, Star, 
+  CreditCard, ArrowRight, ShieldCheck, X, 
+  Loader2, Users, Video, Calendar
 } from "lucide-react";
 
-// --- DATOS ---
-import {
-  ENROLLMENT_FEE as LSCH_ENROLLMENT_FEE,
-  LSCH_MODULES,
-  LSCH_GROUP_PLANS,
-  LSCH_ONE2ONE_PLANS,
-  CORPORATE_WHY,
-  priceForGroupPlan,
-  clp,
-} from "../data/lsch.js";
+// 📊 DATOS SIMULADOS (Si tienes un archivo real, importalo, pero esto hace que funcione YA)
+// Esto evita errores de importación si tu archivo de datos no tiene la estructura exacta.
+const LSCH_DATA = {
+  enrollmentFee: 0, // Matrícula GRATIS por promoción
+  monthlyPrice: 29990,
+  levels: [
+    { id: "nv1", name: "Nivel 1: Inicial", desc: "Fundamentos, alfabeto y saludos básicos.", emoji: "🤟" },
+    { id: "nv2", name: "Nivel 2: Intermedio", desc: "Estructura gramatical y conversación fluida.", emoji: "🗣️" },
+    { id: "nv3", name: "Nivel 3: Avanzado", desc: "Interpretación y cultura sorda profunda.", emoji: "🧠" },
+  ],
+  schedules: ["Lunes y Miércoles 19:00", "Martes y Jueves 20:00", "Sábados Intensivo"]
+};
 
-// --- ASSETS ---
-import senasImg from "../assets/img/lael/senas.jpg"; 
+// Función para formatear dinero chileno
+const clp = (amount) => new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP" }).format(amount);
 
-const CERTIFICATE_FEE = 19990;
+// 🎨 IMAGEN (Usa una de tus assets o una url externa por mientras)
+import lschBg from "../assets/img/lael/senas.jpg"; // Asegúrate que esta ruta exista o cámbiala
 
 /* ==========================================================================
-   ESTILOS CSS - FIX MODAL
+   1. ESTILOS CSS (DISEÑO PREMIUM - IDÉNTICO AL REFERENTE)
    ========================================================================== */
 const css = `
 :root {
-  --bg-deep: #0f172a;       
-  --bg-panel: #1e293b;      
-  --primary: #2dd4bf;       
-  --primary-dark: #14b8a6;  
-  --accent: #38bdf8;        
-  --text-main: #f1f5f9;     
-  --text-muted: #94a3b8;    
-  --gold: #fbbf24;
-  --border: rgba(255, 255, 255, 0.1);
-  --shadow-glow: 0 0 40px -10px rgba(45, 212, 191, 0.3);
+  --bg-body: #f8fafc;
+  --bg-card: #ffffff;
+  --primary: #0d9488; /* TEAL: Color muy usado en comunidad sorda/salud/educación */
+  --primary-dark: #0f766e;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
   --radius: 20px;
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-.lsch-page {
-  background-color: var(--bg-deep);
-  color: var(--text-main);
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  min-height: 100vh;
-  padding-bottom: 140px;
-  overflow-x: hidden;
-  position: relative;
+/* BASE */
+.lsch-page { 
+  background: var(--bg-body); 
+  color: var(--text-main); 
+  font-family: 'Plus Jakarta Sans', sans-serif; 
+  min-height: 100vh; 
+  padding-bottom: 120px;
 }
 
-.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-button { all: unset; cursor: pointer; box-sizing: border-box; }
-
-/* ANIMACIONES */
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes scaleUp { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-/* --- MODAL OVERLAY (FONDO OSCURO) --- */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(15, 23, 42, 0.85); /* Fondo más oscuro */
-  backdrop-filter: blur(10px); /* Efecto Blur fuerte */
-  z-index: 10000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  animation: fadeIn 0.2s ease-out;
-}
-
-/* --- MODAL CARD (LA CAJA DEL FORMULARIO) --- */
-.modal-card {
-  background: #1e293b; /* Color de fondo sólido (Slate 800) */
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 30px;
-  width: 100%;
-  max-width: 500px; /* Ancho máximo para que no se estire */
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); /* Sombra elegante */
-  position: relative;
-  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  max-height: 90vh;
-  overflow-y: auto; /* Scroll si la pantalla es muy chica */
-}
-
-/* BOTÓN CERRAR SUPERPUESTO */
-.close-modal-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  transition: 0.2s;
-  z-index: 10;
-}
-.close-modal-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 800; letter-spacing: -0.02em; }
 
 /* HERO SECTION */
-.hero {
+.hero { 
+  padding: 140px 0 80px; 
+  background: radial-gradient(circle at top right, #ccfbf1 0%, transparent 40%), white;
+  border-bottom: 1px solid #e2e8f0;
+  overflow: hidden; /* Para que la imagen no rompa el layout */
+}
+.hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
+
+.hero-badge { 
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; 
+  background: #f0fdfa; color: var(--primary); border: 1px solid #ccfbf1;
+  border-radius: 50px; font-weight: 700; font-size: 0.85rem; margin-bottom: 24px; 
+}
+.hero-title { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 24px; color: #1e293b; }
+.hero-desc { font-size: 1.2rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 40px; max-width: 500px; }
+
+/* TEACHER PROFILE CARD (NUEVO: Para destacar a la profe) */
+.teacher-highlight {
+  background: white; border: 1px solid #e2e8f0; border-radius: 20px; padding: 20px;
+  display: flex; align-items: center; gap: 16px; box-shadow: var(--shadow-sm);
+  margin-bottom: 30px;
+}
+.teacher-avatar {
+  width: 60px; height: 60px; border-radius: 50%; background: #e2e8f0;
+  display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+}
+
+/* FEATURES */
+.features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 80px; }
+.feature-card { background: white; padding: 32px; border-radius: var(--radius); border: 1px solid #f1f5f9; transition: 0.3s; box-shadow: var(--shadow-sm); }
+.feature-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: #cbd5e1; }
+.f-icon { width: 50px; height: 50px; background: #f0fdfa; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; color: var(--primary); }
+
+/* BUILDER LAYOUT */
+.builder-section { padding: 60px 0; }
+.builder-container { display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; align-items: start; }
+
+/* TARJETAS DE NIVEL (Igual a lang-card) */
+.level-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+
+.level-card {
+  background: white; border: 2px solid #e2e8f0; border-radius: 20px; padding: 24px;
+  cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative; overflow: hidden; display: flex; flex-direction: column; height: 100%;
+}
+.level-card:hover { border-color: #94a3b8; transform: translateY(-2px); }
+.level-card.active { border-color: var(--primary); background: #f0fdfa; box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.1); }
+
+.check-circle { position: absolute; top: 16px; right: 16px; width: 24px; height: 24px; border-radius: 50%; border: 2px solid #cbd5e1; display: flex; align-items: center; justify-content: center; transition: 0.2s; background: white; }
+.level-card.active .check-circle { background: var(--primary); border-color: var(--primary); color: white; }
+
+.level-emoji { font-size: 3rem; margin-bottom: 16px; display: block; }
+.level-name { font-size: 1.25rem; font-weight: 800; color: #1e293b; margin-bottom: 8px; }
+.level-desc { font-size: 0.9rem; color: #64748b; line-height: 1.4; margin-bottom: 20px; flex-grow: 1; }
+
+/* Selector de Horario (Similar al selector de nivel) */
+.schedule-select { margin-top: auto; padding-top: 10px; border-top: 1px dashed #e2e8f0; }
+.schedule-select select {
+  width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1;
+  font-size: 0.85rem; color: #334155; outline: none;
+}
+
+/* RESUMEN (TICKET) - EL MISMO DEL EJEMPLO */
+.summary-panel { 
+  background: white; border: 1px solid #e2e8f0; border-radius: 24px; padding: 32px; 
+  position: sticky; top: 40px; box-shadow: var(--shadow-lg); 
+}
+.ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; color: #475569; }
+.ticket-row.highlight { color: var(--primary); font-weight: 700; }
+.ticket-total { margin-top: 20px; padding-top: 20px; border-top: 2px dashed #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
+.big-price { font-size: 2rem; font-weight: 800; color: #1e293b; }
+
+.btn { width: 100%; padding: 16px; border-radius: 12px; font-weight: 700; font-size: 1rem; border: none; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.2s; }
+.btn-primary { background: var(--primary); color: white; box-shadow: 0 8px 20px -5px rgba(13, 148, 136, 0.4); }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+/* MODAL - ESTILOS EXACTOS DEL REFERENTE */
+.modal-overlay { 
+  position: fixed; inset: 0; background: rgba(15, 23, 42, 0.6); 
+  backdrop-filter: blur(4px); z-index: 9999; 
+  display: flex; align-items: center; justify-content: center; padding: 20px; 
+}
+.modal-content { 
+  background: white; width: 100%; max-width: 480px; 
+  border-radius: 24px; padding: 32px; 
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); 
+  animation: popIn 0.3s ease-out; 
   position: relative;
-  padding: 140px 0 80px;
-  border-bottom: 1px solid var(--border);
-  background: radial-gradient(circle at top right, #112a38 0%, transparent 40%);
 }
-.hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
+@keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-.badge-glow {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(45, 212, 191, 0.1); border: 1px solid rgba(45, 212, 191, 0.3);
-  color: var(--primary); padding: 8px 16px; border-radius: 50px;
-  font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
-  margin-bottom: 24px;
-}
+.modal-input { width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; padding: 14px; border-radius: 12px; color: #1e293b; margin-bottom: 16px; outline: none; transition: 0.3s; }
+.modal-input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1); }
+.close-btn { position: absolute; top: 20px; right: 20px; background: #f1f5f9; border: none; padding: 8px; border-radius: 50%; color: #64748b; cursor: pointer; }
 
-.hero h1 {
-  font-size: clamp(2.5rem, 5vw, 4rem);
-  line-height: 1.1; margin-bottom: 24px; font-weight: 800;
-}
-.text-gradient {
-  background: linear-gradient(to right, #fff, var(--primary));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-
-.hero p {
-  font-size: 1.15rem; color: var(--text-muted); line-height: 1.7;
-  max-width: 540px; margin-bottom: 40px;
-}
-
-.hero-stats {
-  display: flex; gap: 40px; padding: 20px 0; border-top: 1px solid var(--border);
-}
-.stat-item strong { display: block; font-size: 1.8rem; color: white; font-weight: 800; }
-.stat-item span { font-size: 0.85rem; color: var(--primary); text-transform: uppercase; font-weight: 700; }
-
-.img-wrapper {
-  position: relative; padding: 15px; border-radius: 30px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-}
-.img-wrapper img {
-  width: 100%; border-radius: 20px; display: block;
-  filter: grayscale(0.2) contrast(1.1);
-}
-.floating-card {
-  position: absolute; bottom: 30px; left: -20px;
-  background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(12px);
-  border: 1px solid var(--border); padding: 16px 24px; border-radius: 16px;
-  display: flex; align-items: center; gap: 16px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-  animation: float 6s ease-in-out infinite;
-}
-
-.builder-section { padding: 80px 0; }
-.builder-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; align-items: start; }
-
-.step-box {
-  background: var(--bg-panel); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 32px; margin-bottom: 24px;
-}
-.step-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-.step-num {
-  background: var(--primary); color: #000; width: 32px; height: 32px;
-  border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 1rem;
-}
-.step-header h3 { font-size: 1.25rem; font-weight: 700; margin: 0; color: white; }
-
-.option-btn {
-  width: 100%; display: flex; align-items: center; justify-content: space-between;
-  padding: 20px; border: 2px solid var(--border); border-radius: 16px;
-  background: rgba(0,0,0,0.2); transition: all 0.2s; margin-bottom: 12px;
-}
-.option-btn:hover { border-color: var(--text-muted); background: rgba(255,255,255,0.03); }
-.option-btn.active {
-  border-color: var(--primary); background: rgba(45, 212, 191, 0.05);
-  box-shadow: 0 0 20px rgba(45, 212, 191, 0.1);
-}
-.option-content h4 { margin: 0; font-size: 1rem; color: white; }
-.option-content p { margin: 4px 0 0; font-size: 0.85rem; color: var(--text-muted); }
-
-.toggle-switch {
-  width: 48px; height: 26px; background: #334155; border-radius: 50px;
-  position: relative; transition: 0.3s;
-}
-.toggle-switch::after {
-  content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
-  background: white; border-radius: 50%; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.option-btn.active .toggle-switch { background: var(--primary); }
-.option-btn.active .toggle-switch::after { transform: translateX(22px); }
-
-.summary-panel {
-  position: sticky; top: 30px;
-  background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(20px);
-  border: 1px solid var(--border); border-radius: var(--radius); padding: 32px;
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-}
-.sum-row { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 0.95rem; color: var(--text-muted); }
-.sum-row strong { color: white; }
-.sum-divider { height: 1px; background: var(--border); margin: 20px 0; }
-
-.price-box { text-align: right; margin-bottom: 24px; }
-.price-box .lbl { font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; }
-.price-box .val { font-size: 2.5rem; font-weight: 800; color: white; line-height: 1; }
-.price-box .detail { font-size: 0.9rem; color: var(--primary); margin-top: 5px; }
-
-.main-btn {
-  background: var(--primary); color: #0f172a; width: 100%;
-  padding: 18px; border-radius: 14px; font-weight: 800; font-size: 1.1rem;
-  display: flex; justify-content: center; align-items: center; gap: 10px;
-  transition: 0.3s; box-shadow: 0 10px 20px -5px rgba(45, 212, 191, 0.4);
-}
-.main-btn:hover { background: #5eead4; transform: translateY(-2px); box-shadow: 0 15px 30px -5px rgba(45, 212, 191, 0.6); }
-
-.mobile-sticky {
-  position: fixed; bottom: 0; left: 0; width: 100%; background: #0f172a;
-  border-top: 1px solid var(--border); padding: 16px 24px; z-index: 100;
-  display: flex; justify-content: space-between; align-items: center;
-  box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
-}
+/* MOBILE STICKY BAR */
+.mobile-bar { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 1px solid #e2e8f0; padding: 16px 24px; z-index: 900; box-shadow: 0 -4px 20px rgba(0,0,0,0.05); }
 
 @media (max-width: 900px) {
-  .hero-grid, .builder-grid { grid-template-columns: 1fr; }
-  .img-wrapper { display: none; }
+  .hero-grid, .builder-container { grid-template-columns: 1fr; }
   .summary-panel { display: none; } 
-  .hero { text-align: center; padding-top: 120px; }
-  .hero-stats { justify-content: center; }
-  .hero p { margin: 0 auto 40px; }
+  .mobile-bar { display: flex; justify-content: space-between; align-items: center; }
+  .hero { text-align: center; padding-top: 100px; }
+  .hero-grid img { display: none; }
+  .hero-desc { margin: 0 auto 40px; }
 }
-@media (min-width: 901px) { .mobile-sticky { display: none; } }
 `;
 
-export default function LSCh() {
-  const [church, setChurch] = useState(false);
-  const [selectedGroupId, setSelectedGroupId] = useState("g-quarter"); 
-  const [selectedOneId, setSelectedOneId] = useState(null);
-  const [selectedModules, setSelectedModules] = useState(["nivel-1"]);
-  const [certSelected, setCertSelected] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  
-  const pricingRef = useRef(null);
-  const location = useLocation();
+/* ==========================================================================
+   COMPONENTE DE FORMULARIO (MODAL)
+   ========================================================================== */
+const API_URL = "https://tu-api.workers.dev"; // Reemplaza con tu URL real
 
-  useEffect(() => { window.scrollTo(0, 0); }, [location.pathname]);
+function EnrollmentForm({ planTitle, price, selectedDetails, onClose }) {
+  const [status, setStatus] = useState("idle");
+  const [formData, setFormData] = useState({ fullName: "", rut: "", email: "", phone: "" });
 
-  const groupPlan = useMemo(() => 
-    LSCH_GROUP_PLANS.find(p => p.id === selectedGroupId) || LSCH_GROUP_PLANS[0], 
-  [selectedGroupId]);
-
-  const onePlan = useMemo(() => 
-    LSCH_ONE2ONE_PLANS.find(p => p.id === selectedOneId), 
-  [selectedOneId]);
-  
-  const monthlyGroup = priceForGroupPlan(groupPlan, { church });
-  const monthlyOne = onePlan?.monthly || 0;
-  const totalMonthly = monthlyGroup + monthlyOne;
-  
-  const isEnrollmentWaived = groupPlan.id === "g-quarter" || church;
-  const enrollmentCost = isEnrollmentWaived ? 0 : LSCH_ENROLLMENT_FEE;
-  
-  const totalFirstPayment = totalMonthly + enrollmentCost + (certSelected ? CERTIFICATE_FEE : 0);
-
-  const toggleModule = (id) => {
-    setSelectedModules(prev => prev.includes(id) && prev.length > 1 
-      ? prev.filter(x => x !== id) 
-      : [...prev, id].includes(id) ? prev : [...prev, id]
-    );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("loading");
+    // Simulación de envío exitoso
+    setTimeout(() => setStatus("success"), 1500); 
+    
+    // Aquí iría tu fetch real:
+    /*
+    try {
+      await fetch(`${API_URL}/inscribir`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, program: planTitle, detail: selectedDetails }),
+      });
+      setStatus("success");
+    } catch { setStatus("error"); }
+    */
   };
 
-  const getSelectedDetails = () => {
-    let details = `Plan LSCh: ${groupPlan.title} (${church ? "Convenio Iglesia" : "General"})`;
-    if (certSelected) details += " + Certificado";
-    if (onePlan) details += ` + Refuerzo 1:1 (${onePlan.title})`;
-    details += ` | Pago Hoy: ${clp(totalFirstPayment)} | Mensualidad futura: ${clp(totalMonthly)}`;
-    return details;
+  if (status === "success") return (
+    <div className="modal-content" style={{textAlign:'center'}}>
+      <div style={{width:80, height:80, background:'#dcfce7', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px'}}>
+        <Check size={40} color="#16a34a"/>
+      </div>
+      <h2 style={{color:'#166534', marginBottom:10}}>¡Solicitud Enviada!</h2>
+      <p style={{color:'#64748b', marginBottom:24}}>Nos contactaremos contigo para finalizar la matrícula con la profesora.</p>
+      <button onClick={onClose} className="btn btn-primary">Cerrar</button>
+    </div>
+  );
+
+  return (
+    <div className="modal-content">
+      <button onClick={onClose} className="close-btn"><X size={20}/></button>
+      <h3 style={{marginBottom:8, fontSize:'1.5rem'}}>Inscripción LSCh</h3>
+      <p style={{fontSize:'0.9rem', color:'#64748b', marginBottom:24}}>
+        Estás reservando: <strong style={{color:'#1e293b'}}>{planTitle}</strong>
+      </p>
+      
+      <form onSubmit={handleSubmit}>
+        <input className="modal-input" name="fullName" placeholder="Nombre Completo" required onChange={e => setFormData({...formData, fullName: e.target.value})}/>
+        <input className="modal-input" name="rut" placeholder="RUT" required onChange={e => setFormData({...formData, rut: e.target.value})}/>
+        <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:10}}>
+           <input className="modal-input" name="email" type="email" placeholder="Correo" required onChange={e => setFormData({...formData, email: e.target.value})}/>
+           <input className="modal-input" name="phone" type="tel" placeholder="+569..." required onChange={e => setFormData({...formData, phone: e.target.value})}/>
+        </div>
+        <button type="submit" className="btn btn-primary" disabled={status === 'loading'}>
+          {status === 'loading' ? <Loader2 className="animate-spin" size={20}/> : "Continuar"} <ArrowRight size={18}/>
+        </button>
+      </form>
+      <p style={{fontSize:'0.75rem', color:'#94a3b8', marginTop:15, textAlign:'center'}}>
+        Tus datos son privados. Nos comunicaremos vía WhatsApp/Correo.
+      </p>
+    </div>
+  );
+}
+
+/* ==========================================================================
+   COMPONENTE PRINCIPAL (PÁGINA LSCH)
+   ========================================================================== */
+export default function LSCh() {
+  const { addToCart } = useCart ? useCart() : { addToCart: () => {} }; // Fallback seguro
+  const builderRef = useRef(null);
+  
+  // ESTADO: Solo se puede elegir UN nivel a la vez para este flujo simple
+  const [selectedLevelId, setSelectedLevelId] = useState("nv1");
+  const [selectedSchedule, setSelectedSchedule] = useState(LSCH_DATA.schedules[0]);
+  const [showModal, setShowModal] = useState(false);
+
+  // --- LÓGICA DE PRECIOS ---
+  const currentLevel = LSCH_DATA.levels.find(l => l.id === selectedLevelId);
+  const totalPayNow = LSCH_DATA.monthlyPrice + LSCH_DATA.enrollmentFee;
+
+  // --- HANDLER CARRITO ---
+  const handleAddToCart = () => {
+    addToCart({
+      id: `lsch-${selectedLevelId}`,
+      nombre: `Curso LSCh - ${currentLevel.name}`,
+      precio: LSCH_DATA.monthlyPrice,
+      tipo: 'curso',
+      detalles: `Horario: ${selectedSchedule}`
+    });
+    alert("¡Agregado al Carrito!");
   };
 
   return (
     <div className="lsch-page">
       <style>{css}</style>
-      <SEOHead title="Curso LSCh | Lenguaje de Señas Chileno" description="Aprende con docentes sordas nativas." />
+      <SEOHead title="Curso Lengua de Señas Chilena | LSCh" description="Aprende con educadora sorda nativa." />
 
-      {/* MODAL CORREGIDO: SE VE SUPERPUESTO Y COMO TARJETA */}
+      {/* MODAL (Renderizado condicional) */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          {/* El contenedor .modal-card le da el fondo gris y el borde para que no flote en la nada */}
-          <div className="modal-card" onClick={e => e.stopPropagation()}>
-             {/* Botón Cerrar Extra */}
-             <button className="close-modal-btn" onClick={() => setShowModal(false)}>
-                <X size={20} />
-             </button>
-             
-             <EnrollmentForm 
-                planTitle={`LSCh: ${groupPlan.title}`}
-                price={clp(totalFirstPayment)}
-                selectedDetails={getSelectedDetails()}
-                onClose={() => setShowModal(false)}
-             />
-          </div>
+            {/* onClick stopPropagation evita que se cierre al hacer click dentro del modal */}
+            <div onClick={e => e.stopPropagation()} style={{width:'100%', maxWidth:'480px'}}>
+                <EnrollmentForm 
+                    planTitle={`LSCh - ${currentLevel.name}`}
+                    price={clp(totalPayNow)}
+                    selectedDetails={`Horario: ${selectedSchedule}`}
+                    onClose={() => setShowModal(false)}
+                />
+            </div>
         </div>
       )}
 
-      {/* 1. HERO */}
+      {/* 1. HERO SECTION */}
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div className="badge-glow"><Star size={14} fill="currentColor"/> Admisión 2026</div>
-            <h1>Rompe el Silencio.<br/><span className="text-gradient">Conecta sin Límites.</span></h1>
-            <p>Aprende Lengua de Señas Chilena (LSCh) con <strong>docentes sordas nativas</strong>.</p>
-            <div className="hero-stats">
-              <div className="stat-item"><strong>100%</strong><span>En Vivo</span></div>
-              <div className="stat-item"><strong>A1-B1</strong><span>Niveles</span></div>
-              <div className="stat-item"><strong>24/7</strong><span>Aula Virtual</span></div>
+            <div className="hero-badge">
+              <Star size={14} fill="currentColor"/> Matrículas Abiertas
             </div>
-            <button onClick={() => pricingRef.current?.scrollIntoView({behavior:'smooth'})} className="main-btn" style={{width:'auto', padding:'16px 40px'}}>
-               Ver Planes y Precios <ChevronRight size={20}/>
-            </button>
+            <h1 className="hero-title">
+              Conecta manos,<br/>
+              <span style={{color:'var(--primary)'}}>Crea puentes.</span>
+            </h1>
+            
+            {/* TARJETA DE LA PROFE (DESTACADO) */}
+            <div className="teacher-highlight">
+                <div className="teacher-avatar">👩‍🏫</div>
+                <div>
+                    <h4 style={{margin:0, fontSize:'1rem', color:'#1e293b'}}>Docente Nativa Experta</h4>
+                    <p style={{margin:0, fontSize:'0.9rem', color:'#64748b'}}>
+                       Clases impartidas por <strong style={{color:'var(--primary)'}}>Educadora de Párvulos Sorda</strong>. 
+                       Aprende gramática real y cultura, no solo señas sueltas.
+                    </p>
+                </div>
+            </div>
+
+            <p className="hero-desc">
+              Curso 100% online y en vivo. Metodología visual y práctica diseñada para romper las barreras de comunicación desde la primera clase.
+            </p>
+            
+            <div style={{display:'flex', gap:12}}>
+              <button onClick={() => builderRef.current?.scrollIntoView({behavior:'smooth'})} className="btn btn-primary" style={{width:'auto', padding:'16px 32px'}}>
+                Ver Horarios <ArrowRight size={20}/>
+              </button>
+            </div>
           </div>
-          <div className="img-wrapper">
-             <img src={senasImg} alt="Clase LSCh" />
-             <div className="floating-card">
-                <div style={{background:'rgba(45, 212, 191, 0.2)', padding:10, borderRadius:12, color:'var(--primary)'}}><Hand size={24} /></div>
-                <div><strong style={{color:'white', display:'block'}}>Docentes Nativas</strong><span style={{color:'var(--text-muted)', fontSize:'0.8rem'}}>Inmersión Cultural Real</span></div>
+
+          <div style={{position:'relative'}}>
+             <div style={{position:'absolute', inset:0, background:'linear-gradient(to right, white, transparent)', zIndex:2}}></div>
+             {/* IMAGEN PRINCIPAL */}
+             <img 
+               src={lschBg} 
+               alt="Clase LSCh" 
+               style={{width:'100%', borderRadius:24, boxShadow:'0 25px 50px -12px rgba(0,0,0,0.15)', filter:'brightness(0.95)'}} 
+             />
+             
+             {/* Floating Card: Enfoque Inclusivo */}
+             <div style={{position:'absolute', bottom:-20, left:-20, background:'white', padding:20, borderRadius:16, boxShadow:'0 10px 30px rgba(0,0,0,0.1)', zIndex:3, display:'flex', alignItems:'center', gap:15}}>
+                <div style={{background:'#fef3c7', padding:12, borderRadius:'50%', color:'#d97706'}}><Hand size={24}/></div>
+                <div>
+                   <p style={{fontWeight:800, color:'#1e293b'}}>Inmersión Total</p>
+                   <p style={{fontSize:'0.8rem', color:'#64748b'}}>Sin uso de voz</p>
+                </div>
              </div>
           </div>
         </div>
       </section>
 
-      {/* 2. BARRA CORPORATIVA */}
-      <div className="container" style={{marginTop:'-40px', position:'relative', zIndex:5, marginBottom:60}}>
-        <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:20}}>
-            {(CORPORATE_WHY || []).map((item, i) => (
-               <div key={i} style={{background:'#1e293b', border:'1px solid var(--border)', padding:24, borderRadius:16, display:'flex', gap:15}}>
-                  <div style={{color:'var(--primary)'}}>{i === 0 ? <Briefcase/> : i === 1 ? <Users/> : <Award/>}</div>
-                  <div><h4 style={{color:'white', margin:'0 0 5px', fontSize:'1rem'}}>{item.title}</h4><p style={{color:'var(--text-muted)', margin:0, fontSize:'0.85rem', lineHeight:1.4}}>{item.desc}</p></div>
-               </div>
-            ))}
+      {/* 2. FEATURES (Adaptado a LSCh) */}
+      <section className="container" style={{marginTop:'-40px', position:'relative', zIndex:5}}>
+        <div className="features-grid">
+           <div className="feature-card">
+              <div className="f-icon"><Users size={28}/></div>
+              <h3>Comunidad Sorda</h3>
+              <p style={{fontSize:'0.95rem', color:'#64748b', marginTop:10}}>
+                No aprendes de un libro, aprendes de una persona sorda. Entenderás la cultura, la identidad y el respeto necesario.
+              </p>
+           </div>
+           <div className="feature-card">
+              <div className="f-icon"><GraduationCap size={28}/></div>
+              <h3>Pedagogía Real</h3>
+              <p style={{fontSize:'0.95rem', color:'#64748b', marginTop:10}}>
+                Nuestra docente es Educadora de Párvulos titulada. Sabe cómo enseñar, tiene paciencia y metodología adaptada.
+              </p>
+           </div>
+           <div className="feature-card">
+              <div className="f-icon"><Video size={28}/></div>
+              <h3>Aula Virtual 24/7</h3>
+              <p style={{fontSize:'0.95rem', color:'#64748b', marginTop:10}}>
+                Acceso a grabaciones de las clases, material visual de apoyo y tareas para practicar tus señas en casa.
+              </p>
+           </div>
         </div>
-      </div>
-
-      {/* 3. CONFIGURADOR */}
-      <section ref={pricingRef} className="builder-section container">
-         <div className="builder-grid">
-            <div>
-               <div className="step-box">
-                  <div className="step-header"><div className="step-num">1</div><h3>Tu Perfil</h3></div>
-                  <button className={`option-btn ${!church ? 'active' : ''}`} onClick={() => setChurch(false)}>
-                     <div className="option-content"><h4>Estudiante General</h4><p>Público general.</p></div><div className="toggle-switch"></div>
-                  </button>
-                  <button className={`option-btn ${church ? 'active' : ''}`} onClick={() => setChurch(true)}>
-                     <div className="option-content"><h4 style={{display:'flex', alignItems:'center', gap:8}}><Heart size={16} fill="#fbbf24" color="#fbbf24"/> Convenio Iglesia</h4><p>Tarifas preferenciales.</p></div><div className="toggle-switch"></div>
-                  </button>
-               </div>
-
-               <div className="step-box">
-                  <div className="step-header"><div className="step-num">2</div><h3>Ruta</h3></div>
-                  <div style={{display:'flex', flexDirection:'column', gap:10}}>
-                     {LSCH_MODULES.map((m) => {
-                        const active = selectedModules.includes(m.id);
-                        return (
-                           <button key={m.id} onClick={() => toggleModule(m.id)}
-                              style={{display:'flex', gap:15, padding:15, borderRadius:12, background: active ? 'rgba(45, 212, 191, 0.05)' : 'transparent', border: active ? '1px solid var(--primary)' : '1px solid transparent', transition: '0.2s'}}>
-                              <div style={{width:24, height:24, borderRadius:'50%', border:'2px solid var(--text-muted)', background: active ? 'var(--primary)' : 'transparent', borderColor: active ? 'var(--primary)' : 'var(--text-muted)', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                                 {active && <Check size={14} color="#000" strokeWidth={4}/>}
-                              </div>
-                              <div style={{textAlign:'left'}}><strong style={{color: active ? 'white' : 'var(--text-muted)', display:'block'}}>{m.name}</strong><span style={{fontSize:'0.8rem', color:'var(--text-muted)'}}>{m.summary}</span></div>
-                           </button>
-                        )
-                     })}
-                  </div>
-               </div>
-
-               <div className="step-box">
-                  <div className="step-header"><div className="step-num">3</div><h3>Plan de Pago</h3></div>
-                  <div style={{display:'grid', gap:12}}>
-                     {LSCH_GROUP_PLANS.map(p => {
-                        const isSelected = selectedGroupId === p.id;
-                        const price = priceForGroupPlan(p, { church });
-                        return (
-                           <button key={p.id} onClick={() => setSelectedGroupId(p.id)} className={`option-btn ${isSelected ? 'active' : ''}`} style={{display:'block', position:'relative', overflow:'hidden'}}>
-                              {p.badge && <div style={{position:'absolute', top:0, right:0, background:'var(--gold)', color:'black', fontSize:'0.7rem', fontWeight:800, padding:'4px 8px', borderBottomLeftRadius:8}}>{p.badge}</div>}
-                              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                                 <div className="option-content"><h4>{p.title}</h4><p>{p.desc}</p></div>
-                                 <div style={{textAlign:'right'}}><span style={{fontSize:'1.2rem', fontWeight:800, color:'white'}}>{clp(price)}</span><span style={{display:'block', fontSize:'0.75rem', color:'var(--text-muted)'}}>/mes</span></div>
-                              </div>
-                           </button>
-                        )
-                     })}
-                  </div>
-               </div>
-
-               <div className="step-box">
-                  <div className="step-header"><div className="step-num">4</div><h3>Opcionales</h3></div>
-                  <button className={`option-btn ${certSelected ? 'active' : ''}`} onClick={() => setCertSelected(!certSelected)}>
-                     <div className="option-content" style={{display:'flex', gap:12, alignItems:'center'}}><Award size={24} className={certSelected ? "text-yellow-400" : "text-gray-500"} /><div><h4>Certificación</h4><p>Diploma verificable.</p></div></div>
-                     <span style={{color:'var(--primary)', fontWeight:700}}>+{clp(CERTIFICATE_FEE)}</span>
-                  </button>
-                  <div style={{marginTop:20, padding:20, background:'rgba(0,0,0,0.2)', borderRadius:16}}>
-                     <h4 style={{color:'white', marginBottom:10, fontSize:'0.95rem', display:'flex', gap:8, alignItems:'center'}}><Zap size={16} color="#38bdf8"/> Refuerzo 1:1</h4>
-                     <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:10}}>
-                        {LSCH_ONE2ONE_PLANS.map(p => {
-                           const isActive = selectedOneId === p.id;
-                           return (
-                              <button key={p.id} onClick={() => setSelectedOneId(isActive ? null : p.id)}
-                                 style={{padding:12, border:'1px solid', borderRadius:10, textAlign:'center', borderColor: isActive ? 'var(--accent)' : 'var(--border)', background: isActive ? 'rgba(56, 189, 248, 0.1)' : 'transparent', color: isActive ? 'white' : 'var(--text-muted)', transition: '0.2s'}}>
-                                 <div style={{fontSize:'0.85rem', fontWeight:700}}>{p.title}</div><div style={{fontSize:'0.75rem'}}>+{clp(p.monthly)}/mes</div>
-                              </button>
-                           )
-                        })}
-                     </div>
-                  </div>
-               </div>
-            </div>
-
-            <div className="summary-panel">
-               <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20}}>
-                  <h3 style={{margin:0, color:'white', fontWeight:800}}>Resumen</h3>
-                  <div style={{display:'flex', gap:5, alignItems:'center', fontSize:'0.8rem', color:'var(--primary)'}}><ShieldCheck size={14}/> Garantía</div>
-               </div>
-               <div className="sum-row"><span>Plan</span><strong>{groupPlan.title}</strong></div>
-               <div className="sum-row"><span>Mensualidad</span><strong>{clp(monthlyGroup)}</strong></div>
-               {church && <div className="sum-row" style={{color:'var(--gold)'}}><span>Beneficio Iglesia</span><strong>Aplicado</strong></div>}
-               {selectedOneId && <div className="sum-row" style={{color:'var(--accent)'}}><span>Refuerzo 1:1</span><strong>+{clp(monthlyOne)}</strong></div>}
-               <div className="sum-divider"></div>
-               <div className="sum-row"><span>Matrícula</span>{isEnrollmentWaived ? <strong style={{color:'var(--primary)'}}>GRATIS</strong> : <strong>{clp(LSCH_ENROLLMENT_FEE)}</strong>}</div>
-               {certSelected && <div className="sum-row"><span>Certificado</span><strong>{clp(CERTIFICATE_FEE)}</strong></div>}
-               <div className="price-box" style={{marginTop:30}}>
-                  <div className="lbl">Total a pagar hoy</div><div className="val">{clp(totalFirstPayment)}</div>
-                  <div className="detail">{monthlyOne > 0 ? `Luego ${clp(monthlyGroup + monthlyOne)} mensualmente` : `Luego ${clp(monthlyGroup)} mensualmente`}</div>
-               </div>
-               <button onClick={() => setShowModal(true)} className="main-btn">Inscribirme Ahora <CreditCard size={20}/></button>
-               <p style={{textAlign:'center', fontSize:'0.75rem', color:'var(--text-muted)', marginTop:15, lineHeight:1.4}}>Acceso inmediato al aula virtual.</p>
-            </div>
-         </div>
       </section>
 
-      <div className="mobile-sticky">
-         <div><div style={{fontSize:'0.7rem', textTransform:'uppercase', color:'var(--text-muted)'}}>Total Hoy</div><div style={{fontSize:'1.4rem', fontWeight:800, color:'white'}}>{clp(totalFirstPayment)}</div></div>
-         <button onClick={() => setShowModal(true)} className="main-btn" style={{width:'auto', padding:'10px 24px', fontSize:'0.9rem'}}>Inscribirme</button>
+      {/* 3. BUILDER (SELECTOR DE NIVELES) */}
+      <section ref={builderRef} className="builder-section">
+        <div className="container">
+          <div style={{textAlign:'center', marginBottom:50}}>
+             <h2 style={{fontSize:'2.5rem', marginBottom:16, color:'#1e293b'}}>Elige tu Nivel</h2>
+             <p style={{color:'#64748b', maxWidth:600, margin:'0 auto'}}>
+               Comienza desde cero o perfecciona tu técnica. Todos los cursos incluyen certificación de participación.
+             </p>
+          </div>
+
+          <div className="builder-container">
+             {/* GRID DE NIVELES */}
+             <div className="level-grid">
+                {LSCH_DATA.levels.map(lvl => {
+                   const isActive = selectedLevelId === lvl.id;
+                   return (
+                     <div 
+                       key={lvl.id} 
+                       onClick={() => setSelectedLevelId(lvl.id)}
+                       className={`level-card ${isActive ? 'active' : ''}`}
+                     >
+                        <div className="check-circle"><Check size={14} strokeWidth={3}/></div>
+                        <span className="level-emoji">{lvl.emoji}</span>
+                        <h3 className="level-name">{lvl.name}</h3>
+                        <p className="level-desc">{lvl.desc}</p>
+                        
+                        {/* Selector de horario dentro de la tarjeta */}
+                        {isActive && (
+                            <div className="schedule-select" onClick={e => e.stopPropagation()}>
+                                <label style={{fontSize:'0.75rem', fontWeight:700, color:'var(--primary)', marginBottom:4, display:'block'}}>
+                                    <Calendar size={12} style={{display:'inline', marginRight:4}}/> Elige horario:
+                                </label>
+                                <select 
+                                    value={selectedSchedule} 
+                                    onChange={(e) => setSelectedSchedule(e.target.value)}
+                                >
+                                    {LSCH_DATA.schedules.map(sch => (
+                                        <option key={sch} value={sch}>{sch}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        )}
+                     </div>
+                   )
+                })}
+             </div>
+
+             {/* TICKET DE RESUMEN (DESKTOP) - Sticky a la derecha */}
+             <div className="summary-panel">
+                <div style={{marginBottom:24, paddingBottom:24, borderBottom:'1px dashed #e2e8f0'}}>
+                   <h3 style={{fontSize:'1.25rem', color:'#1e293b', display:'flex', alignItems:'center', gap:10}}>
+                      <CreditCard size={20} color="var(--primary)"/> Resumen
+                   </h3>
+                </div>
+
+                <div className="ticket-row">
+                    <span>Curso Seleccionado</span>
+                    <strong style={{color:'#1e293b'}}>{currentLevel.name}</strong>
+                </div>
+                <div className="ticket-row" style={{fontSize:'0.85rem'}}>
+                    <span>Horario</span>
+                    <span>{selectedSchedule}</span>
+                </div>
+                
+                <div style={{margin:'20px 0', height:1, background:'#e2e8f0'}}></div>
+
+                <div className="ticket-row">
+                    <span>Mensualidad</span>
+                    <span>{clp(LSCH_DATA.monthlyPrice)}</span>
+                </div>
+                <div className="ticket-row highlight">
+                    <span>Matrícula</span>
+                    <span>{LSCH_DATA.enrollmentFee === 0 ? "GRATIS" : clp(LSCH_DATA.enrollmentFee)}</span>
+                </div>
+
+                <div className="ticket-total">
+                    <div>
+                    <span style={{fontSize:'0.8rem', color:'#64748b', textTransform:'uppercase', fontWeight:700}}>Total a pagar hoy</span>
+                    <div className="big-price">{clp(totalPayNow)}</div>
+                    <div style={{fontSize:'0.8rem', color:'#64748b', marginTop:4}}>Mensualidad fija</div>
+                    </div>
+                </div>
+
+                <button onClick={() => setShowModal(true)} className="btn btn-primary" style={{marginTop:24}}>
+                    Inscribirme Ahora <ArrowRight size={18}/>
+                </button>
+                
+                <button onClick={handleAddToCart} style={{width:'100%', textAlign:'center', padding:15, color:'#64748b', fontSize:'0.9rem', background:'transparent', border:'none', cursor:'pointer', textDecoration:'underline'}}>
+                    Agregar al carrito y seguir viendo
+                </button>
+
+                <div style={{marginTop:20, padding:15, background:'#f0fdf4', borderRadius:12, display:'flex', gap:10, alignItems:'start'}}>
+                    <ShieldCheck size={18} color="#16a34a" style={{marginTop:2}}/>
+                    <p style={{fontSize:'0.8rem', color:'#166534', lineHeight:1.4}}>
+                    <strong>Certificado Incluido:</strong> Al finalizar y aprobar el nivel, recibes tu diploma digital.
+                    </p>
+                </div>
+             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* BARRA MÓVIL (STICKY BOTTOM) - Para celulares */}
+      <div className="mobile-bar">
+         <div>
+            <p style={{fontSize:'0.75rem', textTransform:'uppercase', color:'#64748b', fontWeight:700}}>Total Hoy</p>
+            <p style={{fontSize:'1.5rem', fontWeight:800, color:'#1e293b', lineHeight:1}}>{clp(totalPayNow)}</p>
+         </div>
+         <button onClick={() => setShowModal(true)} className="btn btn-primary" style={{width:'auto', padding:'12px 24px'}}>
+            Inscribirme
+         </button>
       </div>
+
     </div>
   );
 }

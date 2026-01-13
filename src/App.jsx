@@ -33,7 +33,6 @@ const Inscripcion = lazy(() => import("./pages/Inscripcion.jsx"));
 const Gracias = lazy(() => import("./pages/Gracias.jsx")); 
 const Terminos = lazy(() => import("./pages/Terminos.jsx"));
 const Privacidad = lazy(() => import("./pages/Privacidad.jsx"));
-const Pagos = lazy(() => import("./pages/Pagos.jsx"));
 const NaamaStudio = lazy(() => import("./pages/NaamaStudio.jsx"));
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
 
@@ -108,7 +107,6 @@ export default function App() {
               <Route path="/contacto" element={<Contacto />} />
               <Route path="/docentes" element={<Docentes />} />
               <Route path="/aula" element={<Aula />} />
-              <Route path="/pagos" element={<Pagos />} />
               <Route path="/inscripcion" element={<Inscripcion />} />
               <Route path="/gracias" element={<Gracias />} />
               <Route path="/terminos" element={<Terminos />} />

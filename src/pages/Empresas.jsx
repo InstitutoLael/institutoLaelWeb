@@ -1,12 +1,16 @@
 import { useState, useEffect } from "react";
 import { 
   FaBuilding, FaChartLine, FaHandshake, FaUserTie, 
-  FaWhatsapp, FaEnvelope, FaCheckCircle, FaCalculator 
+  FaWhatsapp, FaEnvelope, FaCheckCircle, FaCalculator, FaArrowRight
 } from "react-icons/fa";
-import { MdDashboardCustomize, MdOutlineTimer } from "react-icons/md";
+import { MdDashboardCustomize, MdOutlineTimer, MdVerified } from "react-icons/md";
 import { BsLightningChargeFill, BsGraphUpArrow } from "react-icons/bs";
 
-// IMPORTAR DATA Y LÓGICA (Asegúrate de que la ruta sea correcta)
+// --- IMÁGENES (Usamos Blanco para contraste y Amarillo para acento) ---
+import logoBlanco from "../assets/img/Logos/lael-inst-blanco.png";
+import logoAmarillo from "../assets/img/Logos/lael-inst-amarillo.png";
+
+// IMPORTAR DATA
 import { 
   SERVICE_LINES, 
   EMP_PACKS, 
@@ -16,16 +20,12 @@ import {
 } from "../data/empresas.js";
 
 export default function Business() {
-  // --- ESTADOS DEL COTIZADOR ---
   const [selectedServiceId, setSelectedServiceId] = useState("ingles");
   const [headcount, setHeadcount] = useState(10);
   const [months, setMonths] = useState(3);
-  const [modality, setModality] = useState("online"); // online | onsite
-  
-  // Estado para el resultado del cálculo
+  const [modality, setModality] = useState("online");
   const [quote, setQuote] = useState(null);
 
-  // --- EFECTO: Recalcular cuando cambian los inputs ---
   useEffect(() => {
     const result = calcQuote({
       lineId: selectedServiceId,
@@ -36,72 +36,79 @@ export default function Business() {
     setQuote(result);
   }, [selectedServiceId, headcount, months, modality]);
 
-  // --- HANDLER: Enviar cotización a WhatsApp ---
   const handleWappClick = () => {
     if (!quote) return;
-    const msg = `Hola Instituto Lael Corporate. Hice una cotización en la web:%0A%0A` +
+    const msg = `Hola Lael Corporate. Cotización Web:%0A%0A` +
       `📌 *Servicio:* ${quote.service.label}%0A` +
-      `👥 *Equipo:* ${headcount} personas%0A` +
-      `⏳ *Duración:* ${months} meses (${modality === 'online' ? 'Online' : 'Presencial'})%0A` +
-      `💰 *Presupuesto Est:* ${clp(quote.financials.total)} + IVA%0A%0A` +
-      `Me gustaría agendar una reunión para cerrar detalles.`;
-    
+      `👥 *Equipo:* ${headcount} p.%0A` +
+      `⏳ *Duración:* ${months} meses (${modality})%0A` +
+      `💰 *Total:* ${clp(quote.financials.total)} + IVA%0A` +
+      `Quiero agendar reunión.`;
     window.open(`https://wa.me/${WAPP_INTL}?text=${msg}`, '_blank');
   };
 
   return (
-    <div className="business-page">
+    <div className="biz-dark-page">
       <style>{css}</style>
 
-      {/* ──────────────── 1. HERO B2B ──────────────── */}
+      {/* ──────────────── 1. HERO DARK MODE ──────────────── */}
       <header className="biz-hero">
-        <div className="container bh-content">
-           <div className="bh-badge">
-              <FaHandshake /> Soluciones Corporativas 2026
+        <div className="hero-glow"></div>
+        <div className="container bh-flex">
+           <div className="bh-text">
+              <div className="bh-badge">
+                 <MdVerified /> Soluciones Corporativas B2B
+              </div>
+              <h1>
+                 Transforma tu equipo,<br/>
+                 <span className="text-gradient">Eleva tu Cultura.</span>
+              </h1>
+              <p>
+                 Capacitación de alto impacto y beneficios educativos para empresas que buscan más que resultados: buscan trascendencia.
+              </p>
+              <div className="bh-actions">
+                 <a href="#cotizador" className="btn-neon primary">
+                    <FaCalculator /> Cotizar en Tiempo Real
+                 </a>
+                 <a href="#servicios" className="btn-neon outline">
+                    Ver Servicios
+                 </a>
+              </div>
            </div>
-           <h1>Potencia tu Capital Humano con <span className="highlight">Propósito</span>.</h1>
-           <p>
-             Capacitación, Idiomas y Beneficios para el colaborador moderno. 
-             Precios transparentes, ejecución ágil y valores cristianos que fortalecen la cultura organizacional.
-           </p>
-           <div className="bh-actions">
-              <a href="#cotizador" className="btn-biz primary">
-                 <FaCalculator /> Cotizar Online Ahora
-              </a>
-              <a href="#servicios" className="btn-biz ghost">
-                 Explorar Servicios
-              </a>
+           
+           {/* Imagen decorativa Hero (Logo Flotante) */}
+           <div className="bh-visual">
+              <div className="logo-halo">
+                 <img src={logoBlanco} alt="Instituto Lael Corporate" />
+              </div>
            </div>
         </div>
       </header>
 
-      {/* ──────────────── 2. TRUST INDICATORS (Por qué elegirnos) ──────────────── */}
-      <section className="trust-section">
-         <div className="container trust-grid">
-            <div className="trust-item">
-               <MdDashboardCustomize className="t-icon" />
-               <h3>A Medida</h3>
-               <p>No vendemos enlatados. Adaptamos la malla curricular a la industria de tu empresa.</p>
+      {/* ──────────────── 2. METRICS & TRUST ──────────────── */}
+      <section className="metrics-bar">
+         <div className="container mb-grid">
+            <div className="metric">
+               <span className="m-num">+15</span>
+               <span className="m-lbl">Programas a Medida</span>
             </div>
-            <div className="trust-item">
-               <BsGraphUpArrow className="t-icon" />
-               <h3>ROI Real</h3>
-               <p>Precios de entrada agresivos y métricas de asistencia para asegurar el retorno de inversión.</p>
+            <div className="metric">
+               <span className="m-num">ROI</span>
+               <span className="m-lbl">Reportes Mensuales</span>
             </div>
-            <div className="trust-item">
-               <FaUserTie className="t-icon" />
-               <h3>Ética & Valores</h3>
-               <p>Nuestros profesionales no solo enseñan técnica; transmiten integridad y excelencia.</p>
+            <div className="metric">
+               <span className="m-num">100%</span>
+               <span className="m-lbl">Deducible SENCE (Consultar)</span>
             </div>
          </div>
       </section>
 
-      {/* ──────────────── 3. SERVICIOS (GRID) ──────────────── */}
+      {/* ──────────────── 3. SERVICIOS (NEON CARDS) ──────────────── */}
       <section id="servicios" className="services-section">
          <div className="container">
-            <div className="sec-header">
-               <h2>Líneas de Servicio</h2>
-               <p>Selecciona el área que tu equipo necesita reforzar.</p>
+            <div className="sec-head">
+               <h2>Ecosistema de Formación</h2>
+               <p>Selecciona una vertical para proyectar tu inversión.</p>
             </div>
 
             <div className="serv-grid">
@@ -111,38 +118,36 @@ export default function Business() {
                     className={`serv-card ${selectedServiceId === srv.id ? 'active' : ''}`}
                     onClick={() => {
                        setSelectedServiceId(srv.id);
-                       // Scroll suave al cotizador al seleccionar
                        document.getElementById('cotizador').scrollIntoView({ behavior: 'smooth' });
                     }}
-                    style={{ '--brand': srv.brandColor }}
+                    // Inyectamos el color de marca (pink, teal, indigo) dinámicamente
+                    style={{ '--brand-color': srv.brandColor }}
                   >
-                     <div className="sc-icon-box">{srv.icon}</div>
-                     <div className="sc-info">
-                        <h3>{srv.label}</h3>
-                        <p>{srv.desc}</p>
-                     </div>
-                     <div className="sc-cta">Cotizar &rarr;</div>
+                     <div className="sc-glow-bg"></div>
+                     <div className="sc-icon">{srv.icon}</div>
+                     <h3>{srv.label}</h3>
+                     <p>{srv.desc}</p>
+                     <div className="sc-arrow"><FaArrowRight/></div>
                   </div>
                ))}
             </div>
          </div>
       </section>
 
-      {/* ──────────────── 4. COTIZADOR INTERACTIVO (LA JOYA) ──────────────── */}
+      {/* ──────────────── 4. COTIZADOR "BLACK EDITION" ──────────────── */}
       <section id="cotizador" className="calculator-section">
          <div className="container">
-            <div className="calc-wrapper">
+            <div className="calc-frame">
                
-               {/* --- LADO IZQUIERDO: CONTROLES --- */}
-               <div className="calc-controls">
-                  <div className="cc-header">
-                     <FaCalculator className="cc-icon"/>
-                     <h3>Configura tu Plan</h3>
+               {/* Lado A: Controles */}
+               <div className="calc-panel controls">
+                  <div className="cp-head">
+                     <FaCalculator className="cp-icon"/>
+                     <h3>Configurador de Plan</h3>
                   </div>
 
-                  {/* Input: Servicio */}
-                  <div className="input-group">
-                     <label>Servicio Requerido</label>
+                  <div className="c-input">
+                     <label>Línea de Servicio</label>
                      <select 
                         value={selectedServiceId} 
                         onChange={(e) => setSelectedServiceId(e.target.value)}
@@ -153,122 +158,108 @@ export default function Business() {
                      </select>
                   </div>
 
-                  {/* Input: Cantidad Personas (Slider + Number) */}
-                  <div className="input-group">
-                     <label>Nº de Colaboradores: <strong>{headcount}</strong></label>
+                  <div className="c-input">
+                     <div className="lbl-row">
+                        <label>Colaboradores</label>
+                        <span className="val-display">{headcount}</span>
+                     </div>
                      <input 
-                        type="range" min="1" max="50" step="1"
+                        type="range" min="1" max="50" 
                         value={headcount}
                         onChange={(e) => setHeadcount(e.target.value)}
+                        className="dark-slider"
                      />
-                     <div className="range-labels">
-                        <span>1</span>
-                        <span>50+</span>
-                     </div>
                   </div>
 
-                  {/* Input: Duración */}
-                  <div className="input-group">
-                     <label>Duración del programa: <strong>{months} Meses</strong></label>
-                     <div className="months-selector">
-                        {[1, 3, 6, 10].map(m => (
+                  <div className="c-input">
+                     <label>Duración</label>
+                     <div className="btn-group">
+                        {[1, 3, 6, 12].map(m => (
                            <button 
                               key={m} 
                               className={months === m ? 'active' : ''}
                               onClick={() => setMonths(m)}
                            >
-                              {m} Mes{m>1 && 'es'}
+                              {m} M
                            </button>
                         ))}
                      </div>
                   </div>
 
-                  {/* Input: Modalidad (Solo si aplica) */}
                   {quote?.service.type !== 'flat' && (
-                     <div className="input-group">
+                     <div className="c-input">
                         <label>Modalidad</label>
-                        <div className="toggle-modality">
-                           <button 
-                              className={modality === 'online' ? 'active' : ''}
-                              onClick={() => setModality('online')}
-                           >Online (Zoom)</button>
-                           <button 
-                              className={modality === 'onsite' ? 'active' : ''}
-                              onClick={() => setModality('onsite')}
-                           >Presencial (Oficina)</button>
+                        <div className="btn-group">
+                           <button className={modality==='online'?'active':''} onClick={()=>setModality('online')}>Online</button>
+                           <button className={modality==='onsite'?'active':''} onClick={()=>setModality('onsite')}>Presencial</button>
                         </div>
                      </div>
                   )}
-
                </div>
 
-               {/* --- LADO DERECHO: RESULTADOS --- */}
-               <div className="calc-results">
+               {/* Lado B: Resultados */}
+               <div className="calc-panel results">
                   {quote && (
                      <>
-                        <div className="cr-header">
-                           <span>Presupuesto Estimado</span>
+                        <div className="r-logo-bg">
+                           <img src={logoAmarillo} alt="watermark" />
+                        </div>
+                        <div className="r-content">
+                           <span className="r-label">Inversión Total Estimada</span>
+                           <div className="r-total">
+                              {clp(quote.financials.total)}
+                              <small>+ IVA</small>
+                           </div>
+
                            {quote.financials.discountPercent > 0 && (
-                              <span className="discount-tag">
-                                 {quote.financials.discountPercent}% OFF por Volumen
-                              </span>
+                              <div className="r-badge">
+                                 Ahorras un {quote.financials.discountPercent}% por volumen
+                              </div>
                            )}
-                        </div>
-                        
-                        <div className="cr-big-price">
-                           {clp(quote.financials.total)}
-                           <small> + IVA / Total</small>
-                        </div>
 
-                        <div className="cr-breakdown">
-                           <div className="cr-row">
-                              <span>Costo por persona (Total):</span>
-                              <strong>{clp(quote.financials.perPersonTotal)}</strong>
+                           <div className="r-stats">
+                              <div className="stat">
+                                 <span>Por Persona/Mes</span>
+                                 <strong>{clp(quote.financials.perPersonMonth)}</strong>
+                              </div>
+                              <div className="stat">
+                                 <span>Costo Total Bruto</span>
+                                 <strong>{clp(quote.financials.totalBeforeDiscount)}</strong>
+                              </div>
                            </div>
-                           <div className="cr-row">
-                              <span>Costo mensual empresa:</span>
-                              <strong>{clp(quote.financials.total / quote.params.durationMonths)}</strong>
-                           </div>
-                        </div>
 
-                        <div className="cr-actions">
-                           <button onClick={handleWappClick} className="btn-wapp-calc">
-                              <FaWhatsapp /> Solicitar esta Cotización
+                           <button onClick={handleWappClick} className="btn-neon full green">
+                              <FaWhatsapp /> Confirmar Cupos
                            </button>
-                           <p className="legal-note">
-                              *Valores referenciales sujetos a disponibilidad de agenda.
-                           </p>
+                           <p className="r-note">Precios sujetos a disponibilidad de agenda.</p>
                         </div>
                      </>
                   )}
                </div>
-
             </div>
          </div>
       </section>
 
-      {/* ──────────────── 5. PACKS GANCHO ──────────────── */}
+      {/* ──────────────── 5. PACKS RAPIDOS (Quick Wins) ──────────────── */}
       <section className="packs-section">
          <div className="container">
-            <h2>Packs de Entrada Rápida</h2>
-            <p className="subtitle">¿Poco presupuesto? Prueba con estas soluciones empaquetadas.</p>
-            
-            <div className="packs-grid">
-               {EMP_PACKS.map(pack => (
-                  <div key={pack.id} className="emp-pack-card">
-                     <div className="ep-badge"><BsLightningChargeFill/> Quick Win</div>
-                     <h4>{pack.title}</h4>
+            <h2>Packs "Quick Win"</h2>
+            <p className="sub-h2">Soluciones empaquetadas de rápida implementación.</p>
+
+            <div className="packs-row">
+               {EMP_PACKS.map((pack) => (
+                  <div key={pack.id} className="pack-dark">
+                     <div className="pd-head">
+                        <BsLightningChargeFill />
+                        <h4>{pack.title}</h4>
+                     </div>
                      <p>{pack.subtitle}</p>
-                     <ul>
-                        {pack.bullets.map((b,i) => <li key={i}><FaCheckCircle/> {b}</li>)}
-                     </ul>
-                     <div className="ep-price">{pack.priceLabel}</div>
+                     <div className="pd-price">{pack.priceLabel}</div>
                      <a 
-                        href={`https://wa.me/${WAPP_INTL}?text=Hola, me interesa el pack empresas: ${pack.title}`}
-                        target="_blank" rel="noopener noreferrer"
-                        className="btn-link"
+                       href={`https://wa.me/${WAPP_INTL}?text=Interesado en ${pack.title}`}
+                       className="pd-link" target="_blank"
                      >
-                        Contratar Pack &rarr;
+                        Contratar <FaArrowRight/>
                      </a>
                   </div>
                ))}
@@ -276,17 +267,20 @@ export default function Business() {
          </div>
       </section>
 
-      {/* ──────────────── 6. CTA FINAL ──────────────── */}
-      <section className="biz-cta">
+      {/* ──────────────── 6. CTA FOOTER ──────────────── */}
+      <section className="dark-cta">
          <div className="container">
-            <h2>¿Listo para profesionalizar a tu equipo?</h2>
-            <div className="cta-buttons">
-               <a href={`mailto:contacto@institutolael.cl`} className="btn-biz outline">
-                  <FaEnvelope /> Solicitar Propuesta PDF
-               </a>
-               <a href={`https://wa.me/${WAPP_INTL}`} className="btn-biz whatsapp">
-                  <FaWhatsapp /> Hablar con un Asesor
-               </a>
+            <div className="cta-box">
+               <h2>Hablemos de Negocios</h2>
+               <p>Envíanos un correo o escríbenos. Respondemos en menos de 2 horas.</p>
+               <div className="cta-btns">
+                  <a href="mailto:contacto@institutolael.cl" className="btn-neon outline">
+                     <FaEnvelope/> Correo Corporativo
+                  </a>
+                  <a href={`https://wa.me/${WAPP_INTL}`} className="btn-neon primary">
+                     <FaWhatsapp/> Chat Directo
+                  </a>
+               </div>
             </div>
          </div>
       </section>
@@ -296,126 +290,238 @@ export default function Business() {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   ESTILOS CSS (Corporate Modern - Clean & Trustworthy)
+   CSS DARK MODE (Embedded)
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
-  --b-blue: #0f172a;       /* Dark Navy */
-  --b-blue-light: #334155;
-  --b-accent: #2563eb;     /* Corporate Blue */
-  --b-accent-hover: #1d4ed8;
-  --b-bg: #f8fafc;
-  --b-white: #ffffff;
-  --b-green: #10b981;
+  --bg-main: #020617;     /* Slate 950 - Fondo casi negro */
+  --bg-card: #0f172a;     /* Slate 900 - Fondo tarjetas */
+  --bg-input: #1e293b;    /* Slate 800 - Inputs */
+  
+  --txt-main: #f8fafc;    /* Blanco */
+  --txt-muted: #94a3b8;   /* Gris */
+  
+  --accent-gold: #fbbf24; /* Amber 400 - Color Lael */
+  --accent-gold-glow: rgba(251, 191, 36, 0.4);
 }
 
-.business-page { font-family: 'Inter', sans-serif; background: var(--b-bg); color: var(--b-blue); }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--b-blue); }
-.highlight { color: var(--b-accent); font-style: italic; }
+.biz-dark-page {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--txt-main);
+  min-height: 100vh;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+h1, h2, h3 { font-family: 'Playfair Display', serif; color: white; margin: 0; }
 
 /* 1. HERO */
-.biz-hero { background: white; padding: 80px 0 60px; text-align: center; border-bottom: 1px solid #e2e8f0; }
-.bh-content { max-width: 800px; margin: 0 auto; }
-.bh-badge { display: inline-flex; align-items: center; gap: 8px; background: #eff6ff; color: var(--b-accent); padding: 6px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; margin-bottom: 20px; border: 1px solid #dbeafe; }
-.biz-hero h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px; }
-.biz-hero p { font-size: 1.15rem; color: #64748b; margin-bottom: 40px; line-height: 1.6; }
-.bh-actions { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+.biz-hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+/* Efecto de fondo sutil */
+.hero-glow {
+  position: absolute;
+  top: -20%; right: -10%;
+  width: 50%; height: 80%;
+  background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
+  filter: blur(80px);
+  z-index: 0;
+}
 
-.btn-biz { padding: 14px 28px; border-radius: 6px; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
-.btn-biz.primary { background: var(--b-blue); color: white; }
-.btn-biz.primary:hover { background: var(--b-accent); transform: translateY(-2px); }
-.btn-biz.ghost { background: transparent; color: var(--b-blue-light); border: 1px solid #cbd5e1; }
-.btn-biz.ghost:hover { border-color: var(--b-blue); color: var(--b-blue); }
-.btn-biz.whatsapp { background: #25D366; color: white; }
-.btn-biz.outline { border: 2px solid white; color: white; }
+.bh-flex { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; gap: 40px; }
+@media(max-width: 800px) { .bh-flex { flex-direction: column-reverse; text-align: center; } }
 
-/* 2. TRUST */
-.trust-section { padding: 50px 0; border-bottom: 1px solid #e2e8f0; background: white; }
-.trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; text-align: center; }
-.t-icon { font-size: 2.5rem; color: var(--b-accent); margin-bottom: 15px; }
-.trust-item h3 { font-size: 1.2rem; margin-bottom: 10px; font-family: 'Inter', sans-serif; }
-.trust-item p { font-size: 0.95rem; color: #64748b; line-height: 1.5; }
+.bh-text { flex: 1; }
+.bh-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--accent-gold);
+  padding: 6px 16px; border-radius: 50px;
+  font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 25px;
+}
+.bh-text h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px; }
+.text-gradient {
+  background: linear-gradient(to right, #fff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.bh-text p { font-size: 1.15rem; color: var(--txt-muted); margin-bottom: 40px; line-height: 1.6; }
 
-/* 3. SERVICES */
+.bh-visual { flex: 1; display: flex; justify-content: center; }
+.logo-halo {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.05);
+  animation: float 6s ease-in-out infinite;
+}
+.logo-halo img { width: 180px; opacity: 0.9; }
+
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+/* BUTTONS */
+.bh-actions { display: flex; gap: 15px; flex-wrap: wrap; }
+@media(max-width: 800px) { .bh-actions { justify-content: center; } }
+
+.btn-neon {
+  padding: 14px 28px; border-radius: 6px; font-weight: 600; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 10px; transition: 0.3s;
+  text-decoration: none; border: none; font-size: 0.95rem;
+}
+.btn-neon.primary {
+  background: white; color: black;
+  box-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+.btn-neon.primary:hover {
+  background: var(--accent-gold); 
+  box-shadow: 0 0 30px var(--accent-gold-glow);
+}
+.btn-neon.outline {
+  background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;
+}
+.btn-neon.outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
+
+.btn-neon.full { width: 100%; justify-content: center; margin-top: 20px; }
+.btn-neon.green { background: #10b981; color: white; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+.btn-neon.green:hover { background: #059669; }
+
+/* 2. METRICS */
+.metrics-bar { border-bottom: 1px solid rgba(255,255,255,0.05); }
+.mb-grid { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
+.metric { padding: 30px; border-right: 1px solid rgba(255,255,255,0.05); }
+.metric:last-child { border-right: none; }
+.m-num { display: block; font-size: 1.8rem; font-weight: 700; color: white; margin-bottom: 5px; }
+.m-lbl { font-size: 0.85rem; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+/* 3. SERVICES (Dark Cards) */
 .services-section { padding: 80px 0; }
-.sec-header { text-align: center; margin-bottom: 50px; }
-.sec-header h2 { font-size: 2.5rem; margin-bottom: 10px; }
-.sec-header p { color: #64748b; }
+.sec-head { margin-bottom: 50px; text-align: center; }
+.sec-head h2 { font-size: 2.5rem; margin-bottom: 10px; }
+.sec-head p { color: var(--txt-muted); }
 
-.serv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
-.serv-card { background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 12px; display: flex; align-items: flex-start; gap: 15px; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden; }
-.serv-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); border-color: var(--brand); }
-.serv-card.active { border-color: var(--brand); background: #f0f9ff; box-shadow: 0 0 0 1px var(--brand); }
-.sc-icon-box { font-size: 2rem; width: 50px; text-align: center; flex-shrink: 0; }
-.sc-info h3 { font-size: 1.1rem; margin-bottom: 5px; font-family: 'Inter', sans-serif; }
-.sc-info p { font-size: 0.9rem; color: #64748b; line-height: 1.4; }
-.sc-cta { position: absolute; bottom: 15px; right: 20px; font-size: 0.8rem; font-weight: 700; color: var(--brand); opacity: 0; transform: translateX(10px); transition: 0.2s; }
-.serv-card:hover .sc-cta { opacity: 1; transform: translateX(0); }
+.serv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+.serv-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 30px; border-radius: 12px;
+  cursor: pointer; transition: 0.3s; overflow: hidden;
+  display: flex; flex-direction: column; height: 100%;
+}
+.sc-glow-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at top right, var(--brand-color), transparent);
+  opacity: 0; transition: 0.3s; pointer-events: none;
+}
+.serv-card:hover { transform: translateY(-5px); border-color: var(--brand-color); }
+.serv-card:hover .sc-glow-bg { opacity: 0.15; }
+.serv-card.active { border-color: var(--brand-color); background: #141c2f; }
+.serv-card.active .sc-glow-bg { opacity: 0.1; }
 
-/* 4. CALCULATOR */
-.calculator-section { padding: 60px 0; background: linear-gradient(to bottom, var(--b-bg) 0%, #e2e8f0 100%); }
-.calc-wrapper { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; background: white; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); overflow: hidden; }
-@media(max-width: 800px) { .calc-wrapper { grid-template-columns: 1fr; } }
+.sc-icon { font-size: 2rem; margin-bottom: 20px; position: relative; z-index: 1; }
+.serv-card h3 { font-family: 'Inter', sans-serif; font-size: 1.2rem; margin-bottom: 10px; position: relative; z-index: 1; }
+.serv-card p { font-size: 0.9rem; color: var(--txt-muted); line-height: 1.5; position: relative; z-index: 1; flex-grow: 1; }
+.sc-arrow { margin-top: 20px; color: var(--brand-color); opacity: 0; transform: translateX(-10px); transition: 0.3s; }
+.serv-card:hover .sc-arrow { opacity: 1; transform: translateX(0); }
 
-/* Left Controls */
-.calc-controls { padding: 40px; background: white; }
-.cc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; color: var(--b-blue); }
-.cc-icon { font-size: 1.5rem; color: var(--b-accent); }
+/* 4. CALCULATOR (Black Edition) */
+.calculator-section { padding: 60px 0; background: #020617; }
+.calc-frame {
+  display: grid; grid-template-columns: 1.2fr 1fr;
+  background: var(--bg-card);
+  border-radius: 20px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+}
+@media(max-width: 800px) { .calc-frame { grid-template-columns: 1fr; } }
 
-.input-group { margin-bottom: 25px; }
-.input-group label { display: block; font-weight: 600; margin-bottom: 10px; font-size: 0.9rem; color: var(--b-blue-light); }
-.input-group select, .input-group input[type="range"] { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: 'Inter', sans-serif; }
-.input-group input[type="range"] { cursor: pointer; }
-.range-labels { display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; margin-top: 5px; }
+/* Panel Controls */
+.calc-panel.controls { padding: 40px; border-right: 1px solid rgba(255,255,255,0.05); }
+.cp-head { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; color: var(--accent-gold); }
+.cp-icon { font-size: 1.4rem; }
 
-.months-selector { display: flex; gap: 5px; background: #f1f5f9; padding: 4px; border-radius: 8px; }
-.months-selector button { flex: 1; border: none; background: transparent; padding: 8px; border-radius: 6px; font-size: 0.9rem; font-weight: 600; color: #64748b; cursor: pointer; transition: 0.2s; }
-.months-selector button.active { background: white; color: var(--b-accent); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.c-input { margin-bottom: 25px; }
+.c-input label { display: block; color: var(--txt-muted); font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
+.c-input select {
+  width: 100%; background: var(--bg-main); color: white;
+  border: 1px solid rgba(255,255,255,0.1); padding: 12px;
+  border-radius: 6px; font-family: 'Inter', sans-serif;
+  outline: none;
+}
+.lbl-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.val-display { background: var(--accent-gold); color: black; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; }
 
-.toggle-modality { display: flex; gap: 10px; }
-.toggle-modality button { flex: 1; border: 1px solid #e2e8f0; background: white; padding: 10px; border-radius: 8px; font-weight: 600; color: #64748b; cursor: pointer; }
-.toggle-modality button.active { border-color: var(--b-accent); color: var(--b-accent); background: #eff6ff; }
+.dark-slider { width: 100%; cursor: pointer; accent-color: var(--accent-gold); }
 
-/* Right Results */
-.calc-results { background: var(--b-blue); color: white; padding: 40px; display: flex; flex-direction: column; justify-content: center; position: relative; }
-.cr-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.9rem; color: #94a3b8; }
-.discount-tag { background: var(--b-green); color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+.btn-group { display: flex; gap: 8px; }
+.btn-group button {
+  flex: 1; background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1);
+  color: var(--txt-muted); padding: 10px; border-radius: 6px; cursor: pointer;
+  transition: 0.2s; font-weight: 600;
+}
+.btn-group button.active {
+  background: var(--accent-gold); color: black; border-color: var(--accent-gold);
+}
 
-.cr-big-price { font-size: 3rem; font-weight: 700; font-family: 'Playfair Display', serif; line-height: 1; margin-bottom: 30px; }
-.cr-big-price small { display: block; font-size: 0.9rem; font-family: 'Inter', sans-serif; font-weight: 400; color: #cbd5e1; margin-top: 5px; }
+/* Panel Results */
+.calc-panel.results {
+  position: relative; padding: 40px; display: flex; flex-direction: column; justify-content: center;
+  background: radial-gradient(circle at bottom right, #1e293b, #0f172a);
+}
+.r-logo-bg {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  opacity: 0.05; pointer-events: none;
+}
+.r-logo-bg img { width: 250px; }
 
-.cr-breakdown { background: rgba(255,255,255,0.1); border-radius: 8px; padding: 20px; margin-bottom: 30px; }
-.cr-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.95rem; }
-.cr-row:last-child { margin-bottom: 0; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
-
-.btn-wapp-calc { width: 100%; background: white; color: var(--b-blue); border: none; padding: 15px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
-.btn-wapp-calc:hover { background: #f8fafc; transform: translateY(-2px); }
-.legal-note { font-size: 0.75rem; color: #64748b; margin-top: 20px; text-align: center; opacity: 0.6; }
+.r-content { position: relative; z-index: 2; text-align: center; }
+.r-label { font-size: 0.9rem; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 1px; }
+.r-total {
+  font-size: 3.5rem; font-weight: 700; color: white;
+  margin: 10px 0 20px; font-family: 'Inter', sans-serif;
+}
+.r-total small { font-size: 1rem; color: var(--txt-muted); font-weight: 400; margin-left: 5px; }
+.r-badge {
+  display: inline-block; background: rgba(16, 185, 129, 0.2); color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3); padding: 5px 12px; border-radius: 50px;
+  font-size: 0.8rem; margin-bottom: 30px;
+}
+.r-stats { display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; }
+.stat span { display: block; font-size: 0.8rem; color: var(--txt-muted); }
+.stat strong { display: block; font-size: 1.1rem; color: white; margin-top: 5px; }
+.r-note { margin-top: 20px; font-size: 0.75rem; color: var(--txt-muted); opacity: 0.6; }
 
 /* 5. PACKS */
-.packs-section { padding: 80px 0; background: white; }
-.subtitle { text-align: center; color: #64748b; margin-bottom: 40px; }
-.packs-grid { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
-.emp-pack-card { background: white; border: 1px solid #e2e8f0; padding: 30px; border-radius: 12px; width: 300px; display: flex; flex-direction: column; transition: 0.3s; }
-.emp-pack-card:hover { border-color: var(--b-accent); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
-.ep-badge { color: var(--b-accent); font-weight: 700; font-size: 0.8rem; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
-.emp-pack-card h4 { font-size: 1.3rem; margin-bottom: 5px; font-family: 'Inter', sans-serif; }
-.emp-pack-card p { font-size: 0.9rem; color: #64748b; margin-bottom: 20px; flex-grow: 1; }
-.emp-pack-card ul { list-style: none; padding: 0; margin-bottom: 20px; }
-.emp-pack-card li { display: flex; gap: 8px; font-size: 0.9rem; margin-bottom: 8px; color: var(--b-blue-light); }
-.ep-price { font-size: 1.1rem; font-weight: 700; color: var(--b-blue); margin-bottom: 20px; padding-top: 15px; border-top: 1px dashed #e2e8f0; }
-.btn-link { color: var(--b-accent); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+.packs-section { padding: 80px 0; background: var(--bg-main); border-top: 1px solid rgba(255,255,255,0.05); }
+.sub-h2 { text-align: center; color: var(--txt-muted); margin-bottom: 40px; }
+.packs-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+.pack-dark {
+  background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05);
+  padding: 30px; border-radius: 12px; width: 300px;
+  display: flex; flex-direction: column; transition: 0.3s;
+}
+.pack-dark:hover { border-color: var(--accent-gold); transform: translateY(-5px); }
+.pd-head { color: var(--accent-gold); display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 1.2rem; }
+.pack-dark p { color: var(--txt-muted); font-size: 0.9rem; flex-grow: 1; margin-bottom: 20px; }
+.pd-price { font-size: 1.1rem; font-weight: 700; color: white; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1); margin-bottom: 15px; }
+.pd-link { color: var(--accent-gold); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
 
 /* 6. CTA */
-.biz-cta { background: var(--b-blue); padding: 80px 0; text-align: center; color: white; }
-.biz-cta h2 { color: white; margin-bottom: 30px; }
-.cta-buttons { display: flex; gap: 20px; justify-content: center; }
-
-/* Responsive Adjustments */
-@media(max-width: 600px) {
-  .bh-actions, .cta-buttons { flex-direction: column; }
-  .btn-biz { width: 100%; justify-content: center; }
-  .cr-big-price { font-size: 2.5rem; }
+.dark-cta { padding: 60px 0; }
+.cta-box {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px; padding: 60px 20px; text-align: center;
 }
+.cta-box h2 { font-size: 2.5rem; margin-bottom: 15px; }
+.cta-box p { color: var(--txt-muted); margin-bottom: 30px; }
+.cta-btns { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
 `;

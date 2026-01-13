@@ -2,46 +2,73 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const CartContext = createContext();
 
-// ─── CAMBIO DE SEGURIDAD AQUÍ ───
-export function useCart() {
-  const context = useContext(CartContext);
-  if (!context) {
-    // Si no encuentra el contexto, devuelve un "carrito falso" vacío para no romper la web
-    console.warn("⚠️ Advertencia: useCart se está usando fuera del CartProvider");
-    return { cart: [], addToCart: () => {}, totalPagar: 0 };
-  }
-  return context;
-}
-// ────────────────────────────────
-
 export function CartProvider({ children }) {
-  // ... (MANTÉN TODO EL RESTO DE TU CÓDIGO IGUAL, ESTÁ PERFECTO) ...
+  // 1. Cargar datos guardados (si existen) o iniciar vacío
   const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem("lael_cart");
-    return saved ? JSON.parse(saved) : [];
+    try {
+      const savedCart = localStorage.getItem("lael_cart_v1");
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      return [];
+    }
   });
 
+  // 2. Guardar automáticamente cada cambio en la memoria del navegador
   useEffect(() => {
-    localStorage.setItem("lael_cart", JSON.stringify(cart));
+    localStorage.setItem("lael_cart_v1", JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (item) => {
-    setCart((prev) => [...prev, item]);
+  // --- FUNCIONES (La Lógica del Negocio) ---
+
+  // Agregar un curso (evita duplicados)
+  const addToCart = (product) => {
+    setCart((prevCart) => {
+      // ¿Ya existe este curso en el carrito?
+      const exists = prevCart.find((item) => item.id === product.id);
+      if (exists) return prevCart; // Si ya está, no hace nada (no vendemos 2 veces el mismo curso al mismo alumno)
+      
+      return [...prevCart, product];
+    });
   };
 
-  const removeFromCart = (index) => {
-    const newCart = [...cart];
-    newCart.splice(index, 1);
-    setCart(newCart);
+  // Eliminar un curso
+  const removeFromCart = (productId) => {
+    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
   };
 
-  const totalMensual = cart.reduce((acc, item) => acc + (item.precio || 0), 0);
-  const valorMatricula = cart.length > 0 ? 40000 : 0; 
-  const totalPagar = totalMensual + valorMatricula;
+  // Vaciar carrito (usar después de pagar)
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  // Calcular total automáticamente
+  const cartTotal = cart.reduce((total, item) => {
+    // Limpiamos el precio (quitamos signos $ y puntos para sumar matemáticamente)
+    const priceNumber = parseInt(item.price.replace(/\D/g, ""), 10) || 0;
+    return total + priceNumber;
+  }, 0);
+
+  // Formateador de moneda (Para mostrar $150.000 bonito)
+  const formatPrice = (amount) => {
+    return new Intl.NumberFormat("es-CL", {
+      style: "currency",
+      currency: "CLP",
+    }).format(amount);
+  };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, totalMensual, valorMatricula, totalPagar }}>
+    <CartContext.Provider value={{ 
+      cart, 
+      addToCart, 
+      removeFromCart, 
+      clearCart,
+      cartTotal,
+      formatPrice
+    }}>
       {children}
     </CartContext.Provider>
   );
 }
+
+// Hook personalizado para usar el carrito en cualquier lado fácil
+export const useCart = () => useContext(CartContext);

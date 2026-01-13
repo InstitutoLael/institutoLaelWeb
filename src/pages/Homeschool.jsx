@@ -27,7 +27,7 @@ import {
   PACKS, 
   SCHOOL_SERVICES,
   clp 
-} from "../data/academy.js";
+} from "../data/homeschool.js";
 
 /* ──────────────────────────────────────────────────────────────────────────
    COMPONENTES UI

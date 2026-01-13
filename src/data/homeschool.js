@@ -1,12 +1,6 @@
-// src/data/homeschool.js
-// === Nivelación Académica y Preparación PAES ===
+// === Lael Academy: Hub de Entrenamiento Académico & Homeschool ===
 
-/* ──────────────────────────────────────────────────────────────────────────
-   1. CONFIGURACIÓN BASE (Aquí faltaba la variable)
-   ────────────────────────────────────────────────────────────────────────── */
-export const ENROLLMENT_FEE = 35000; // <--- ESTO FALTABA
-export const MATRICULA_LABEL = "Matrícula Anual 2026";
-
+// 🔢 Helper de Moneda (Local para este archivo)
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -14,90 +8,100 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-/* ──────────────────────────────────────────────────────────────────────────
-   2. NIVELES EDUCATIVOS
-   ────────────────────────────────────────────────────────────────────────── */
-export const LEVELS = [
-  { 
-    id: "basica", 
-    name: "Educación Básica", 
-    desc: "1° a 8° Básico", 
-    basePrice: 25000, // Precio base por asignatura
-    icon: "🎒" 
-  },
-  { 
-    id: "media", 
-    name: "Educación Media", 
-    desc: "I° a IV° Medio", 
-    basePrice: 28000, 
-    icon: "📓" 
-  },
-  { 
-    id: "paes", 
-    name: "Preparación PAES", 
-    desc: "Egresados y 4° Medio", 
-    basePrice: 35000, 
-    icon: "🚀" 
-  },
-  { 
-    id: "adultos", 
-    name: "Exámenes Libres (Adultos)", 
-    desc: "2x1 Laboral", 
-    basePrice: 30000, 
-    icon: "🎓" 
-  },
-];
+// 🧾 Matrícula & Datos Base
+export const ACADEMY_CONFIG = {
+  enrollmentFee: 10000, // Barrera de entrada baja
+  enrollmentText: "Matrícula Anual",
+};
 
-/* ──────────────────────────────────────────────────────────────────────────
-   3. ASIGNATURAS DISPONIBLES
-   ────────────────────────────────────────────────────────────────────────── */
+// 🤝 ALIANZA ESTRATÉGICA
+export const ALLIANCE = {
+  name: "Los Olivos Homeschool",
+  role: "Colegio Partner",
+  desc: "Nuestros alumnos pueden estudiar sin límites para los Exámenes Libres gracias a nuestra alianza exclusiva.",
+  benefits: ["Certificado Anual", "Tramitación Mineduc", "Pauta de Contenidos"],
+};
+
+// 📚 MATERIAS DISPONIBLES
 export const SUBJECTS = [
-  { id: "mat", name: "Matemáticas", icon: "📐" },
-  { id: "len", name: "Lenguaje y Comunicación", icon: "📖" },
-  { id: "ing", name: "Inglés", icon: "🇬🇧" },
-  { id: "hist", name: "Historia y Geografía", icon: "🌍" },
-  { id: "cie", name: "Ciencias (Biología/Física/Química)", icon: "🧬" },
+  { 
+    id: 'mat', name: 'Matemáticas', icon: '📐', color: '#06b6d4', 
+    desc: 'Desde aritmética básica hasta Cálculo y PAES M1/M2.' 
+  },
+  { 
+    id: 'len', name: 'Lenguaje', icon: '📚', color: '#f97316', 
+    desc: 'Comprensión lectora, redacción y vocabulario crítico.' 
+  },
+  { 
+    id: 'cie', name: 'Ciencias', icon: '🧬', color: '#84cc16', 
+    desc: 'Física, Química y Biología con enfoque experimental.' 
+  },
+  { 
+    id: 'his', name: 'Historia', icon: '🏛️', color: '#a855f7', 
+    desc: 'Formación ciudadana, Historia de Chile y Universal.' 
+  },
+  { 
+    id: 'ing', name: 'Inglés Escolar', icon: '🇬🇧', color: '#3b82f6', 
+    desc: 'Refuerzo del currículum escolar y pronunciación.' 
+  },
+  { 
+    id: 'hab', name: 'Hábito de Estudio', icon: '🧠', color: '#ec4899', 
+    desc: 'Organización, gestión del tiempo y técnicas de aprendizaje.' 
+  },
 ];
 
-/* ──────────────────────────────────────────────────────────────────────────
-   4. PACKS DE DESCUENTO
-   ────────────────────────────────────────────────────────────────────────── */
-// Si tomas 3 o más asignaturas, aplicamos descuento
-const PACK_DISCOUNT_THRESHOLD = 3; 
-const PACK_DISCOUNT_PERCENTAGE = 0.15; // 15% de descuento
+// 🎓 NIVELES
+export const LEVELS = [
+  { id: 'basica', label: 'Ed. Básica', desc: '1º a 8º Básico' },
+  { id: 'media', label: 'Ed. Media', desc: 'Iº a IVº Medio' },
+  { id: 'paes', label: 'Prep. PAES', desc: 'Intensivo U' },
+  { id: 'adultos', label: 'Adultos', desc: 'Nivelación 2x1' }, 
+];
 
-/* ──────────────────────────────────────────────────────────────────────────
-   5. LÓGICA DE CÁLCULO DE PRECIO
-   ────────────────────────────────────────────────────────────────────────── */
-export function calculateHomeschoolPrice(levelId, selectedSubjects = []) {
-  // 1. Buscar nivel
-  const level = LEVELS.find(l => l.id === levelId);
-  if (!level) return { monthly: 0, enrollment: 0, discount: 0, label: "Seleccione Nivel" };
+// 📦 PACKS DE HORAS (PRODUCTOS VENDIBLES)
+// IMPORTANTE: Asegúrate de que diga "export const PACKS"
+export const PACKS = [
+  { 
+    id: 'academy-p4', 
+    hours: 4, 
+    title: 'Pack Rescate', 
+    subtitle: 'Apoyo puntual para pruebas',
+    price: 52000, 
+    badge: null,
+    features: ["1 hora semanal por ramo", "Resolución de dudas", "Grabación de clase"]
+  },
+  { 
+    id: 'academy-p8', 
+    hours: 8, 
+    title: 'Pack Pro', 
+    subtitle: 'Aprendizaje real y continuo',
+    price: 96000, 
+    badge: 'Más Popular',
+    features: ["2 horas semanales por ramo", "Seguimiento de notas", "Guías PDF"]
+  },
+  { 
+    id: 'academy-p12', 
+    hours: 12, 
+    title: 'Pack Intensivo', 
+    subtitle: 'Dominio total de la materia',
+    price: 138000, 
+    badge: 'Mejor Valor',
+    features: ["3 horas semanales por ramo", "Matrícula GRATIS", "Simulacros examen"]
+  },
+];
 
-  const subjectCount = selectedSubjects.length;
-  
-  // 2. Calcular precio base (Cantidad * Precio del nivel)
-  let rawMonthly = subjectCount * level.basePrice;
-
-  // 3. Calcular descuento por Pack
-  let discountAmount = 0;
-  let isPack = false;
-
-  if (subjectCount >= PACK_DISCOUNT_THRESHOLD) {
-    discountAmount = rawMonthly * PACK_DISCOUNT_PERCENTAGE;
-    isPack = true;
+// 🏫 SERVICIOS COLEGIOS (B2B)
+export const SCHOOL_SERVICES = [
+  {
+    id: 'ensayos', title: 'Corrección Externa PAES',
+    desc: 'Nos envías los ensayos, nosotros devolvemos data.', icon: '📊', priceRef: 'Desde $2.500/alumno'
+  },
+  {
+    id: 'talleres', title: 'Talleres Extra-programáticos',
+    desc: 'Robótica, Lengua de Señas o Refuerzo.', icon: '🚀', priceRef: 'Cotizar'
+  },
+  {
+    id: 'reemplazo', title: 'Banco de Suplentes',
+    desc: 'Profesores expertos Lael para cubrir licencias.', icon: '👨‍🏫', priceRef: 'Valor hora'
   }
-
-  // 4. Precio Final
-  const finalMonthly = rawMonthly - discountAmount;
-
-  return {
-    monthly: finalMonthly,
-    enrollment: ENROLLMENT_FEE,
-    basePrice: level.basePrice,
-    subjectCount,
-    discount: discountAmount,
-    isPack,
-    levelName: level.name
-  };
-}
+];

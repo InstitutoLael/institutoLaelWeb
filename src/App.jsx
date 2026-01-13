@@ -1,9 +1,7 @@
-// src/App.jsx
 import { useEffect, useState, Suspense, lazy } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
-/* ---------- CONTEXTOS (El Cerebro de la App) ---------- */
-// NOTA: Crearemos este archivo en el siguiente paso si no lo tienes
+/* ---------- CONTEXTOS (El Cerebro) ---------- */
 import { CartProvider } from "./context/CartContext"; 
 
 /* ---------- Componentes Globales ---------- */
@@ -12,7 +10,10 @@ import Footer from "./components/Footer.jsx";
 import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
 import SearchOverlay from "./components/SearchOverlay.jsx"; 
 import CartButton from "./components/CartButton.jsx";
-import { Loader2 } from "lucide-react"; // Usamos Lucide para el spinner
+import { Loader2 } from "lucide-react"; 
+
+/*IMPORTANTE: El carrito lo importamos directo (no lazy) para que abra rápido */
+import CartDrawer from "./pages/Cart.jsx"; 
 
 /* ---------- Páginas (Lazy Loading) ---------- */
 const Home = lazy(() => import("./pages/Home.jsx"));
@@ -35,7 +36,6 @@ const Privacidad = lazy(() => import("./pages/Privacidad.jsx"));
 const Pagos = lazy(() => import("./pages/Pagos.jsx"));
 const NaamaStudio = lazy(() => import("./pages/NaamaStudio.jsx"));
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
-const Cart = lazy(() => import("./pages/Cart.jsx"));
 
 /* ---------- UTILIDAD: Scroll al inicio al cambiar ruta ---------- */
 function ScrollToTop() {
@@ -55,7 +55,7 @@ const PageLoader = () => (
     flexDirection: 'column',
     alignItems: 'center', 
     justifyContent: 'center',
-    background: 'var(--bg-deep, #09090b)', // Fondo oscuro por defecto para evitar flash blanco
+    background: 'var(--bg-deep, #09090b)', 
     color: '#fbbf24'
   }}>
     <Loader2 size={48} className="animate-spin" />
@@ -70,7 +70,7 @@ const PageLoader = () => (
 export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // Atajo Ctrl+K
+  // Atajo Ctrl+K para buscar
   useEffect(() => {
     const handleKey = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -83,8 +83,8 @@ export default function App() {
   }, []);
 
   return (
-    <CartProvider> {/* <--- ESTO CONECTA TUS MUNDOS */}
-      <ScrollToTop /> {/* <--- ESTO ARREGLA LA NAVEGACIÓN EN MÓVIL */}
+    <CartProvider>
+      <ScrollToTop />
       
       <div className="app-container" style={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
         {/* Buscador y Navegación */}
@@ -115,14 +115,17 @@ export default function App() {
               <Route path="/privacidad" element={<Privacidad />} />
               <Route path="/naama-studio" element={<NaamaStudio />} />
               <Route path="*" element={<NotFound />} />
-              <Route path="/cart" element={<Cart />} />
+              {/* LA RUTA /cart HA SIDO ELIMINADA PORQUE AHORA ES UN DRAWER GLOBAL */}
             </Routes>
           </Suspense>
         </main>
 
-        <Footer />
+        {/* COMPONENTES FLOTANTES GLOBALES */}
+        <CartDrawer /> {/* <--- AQUÍ VIVE EL CARRITO AHORA, SOBRE TODO LO DEMÁS */}
         <CartButton />
         <FloatingWhatsApp />
+        
+        <Footer />
       </div>
     </CartProvider>
   );

@@ -1,27 +1,26 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
-import SEOHead from "../components/SEOHead";
-import { Trash2, ArrowRight, ShieldCheck, AlertCircle, Loader2 } from "lucide-react";
+import { Trash2, X, ShieldCheck, AlertCircle, Loader2, ArrowRight } from "lucide-react";
 
 /* Función para formatear dinero */
 const clp = (amount) => {
-  return new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP" }).format(amount);
+  return new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 }).format(amount);
 };
 
 export default function Cart() {
-  const { cart, removeFromCart, clearCart } = useCart();
+  const { cart, removeFromCart, clearCart, isCartOpen, closeCart } = useCart();
   const [isPaying, setIsPaying] = useState(false);
+  const [mount, setMount] = useState(false); // Para animación de entrada/salida
 
-  // 1. LÓGICA DE CÁLCULO FINANCIERO
-  // Total a pagar HOY (Incluye matrículas + primer mes de todos los cursos)
-  const totalToday = cart.reduce((acc, item) => acc + item.price, 0);
+  // Sincronizar animación con estado del contexto
+  useEffect(() => {
+    if (isCartOpen) setMount(true);
+    else setTimeout(() => setMount(false), 300); // Esperar a que termine la animación de cierre
+  }, [isCartOpen]);
 
-  // Total recurrente (Solo lo que pagarán mensualmente después)
-  // Si un item no tiene recurringPrice, asumimos que es pago único (0 mensual)
+  // 1. LÓGICA DE CÁLCULO FINANCIERO (Tu lógica original)
+  const totalToday = cart.reduce((acc, item) => acc + (item.price || 0), 0);
   const totalMonthly = cart.reduce((acc, item) => acc + (item.recurringPrice || 0), 0);
-
-  // El sistema deduce la matrícula calculando la diferencia
   const enrollmentTotal = totalToday - totalMonthly;
 
   const handlePayment = () => {
@@ -33,141 +32,211 @@ export default function Cart() {
     }, 2000);
   };
 
-  if (cart.length === 0) {
-    return (
-      <div style={{minHeight: '80vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', background:'#020617', color:'white', fontFamily:'Plus Jakarta Sans, sans-serif'}}>
-        <h2 style={{fontSize:'2rem', fontWeight:800, marginBottom:16}}>Tu carro está vacío</h2>
-        <p style={{color:'#94a3b8', marginBottom:32}}>Aún no has agregado cursos a tu plan.</p>
-        <Link to="/" style={{background:'#6366f1', color:'white', textDecoration:'none', padding:'12px 24px', borderRadius:50, fontWeight:700}}>
-          Ir a explorar cursos
-        </Link>
-      </div>
-    );
-  }
+  // Si está cerrado y desmontado, no renderizamos nada para ahorrar recursos
+  if (!isCartOpen && !mount) return null;
 
   return (
-    <div style={{background:'#020617', color:'#f8fafc', minHeight:'100vh', fontFamily:'Plus Jakarta Sans, sans-serif', paddingBottom:100}}>
-      <SEOHead title="Tu Carrito | Lael" />
-      
-      <div className="container" style={{maxWidth:1100, margin:'0 auto', padding:'100px 24px 40px'}}>
-        <h1 style={{fontSize:'clamp(2rem, 4vw, 3rem)', fontWeight:800, marginBottom:40}}>Finalizar Inscripción</h1>
+    <>
+      {/* OVERLAY (Fondo oscuro) */}
+      <div 
+        className={`cart-overlay ${isCartOpen ? "open" : ""}`} 
+        onClick={closeCart}
+      />
 
-        <div style={{display:'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 40}}>
+      {/* DRAWER (Panel Lateral) */}
+      <div className={`cart-drawer ${isCartOpen ? "open" : ""}`}>
+        
+        {/* HEADER DEL CARRITO */}
+        <div className="drawer-header">
+          <h2>Tu Inscripción</h2>
+          <button onClick={closeCart} className="close-btn"><X size={24}/></button>
+        </div>
+
+        {/* CONTENIDO SCROLLABLE */}
+        <div className="drawer-content">
           
-          {/* COLUMNA IZQUIERDA: LISTA DE ITEMS */}
-          <div style={{gridColumn: 'span 2'}}> 
-             {/* Nota: En mobile el span 2 se ignora si usas flex o grid simple, pero aquí asegura que ocupe espacio en desktop */}
-             
-            <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20, paddingBottom:10, borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
-              <span style={{color:'#94a3b8'}}>{cart.length} Cursos seleccionados</span>
-              <button onClick={clearCart} style={{background:'none', border:'none', color:'#ef4444', cursor:'pointer', fontSize:'0.9rem'}}>Vaciar carro</button>
+          {cart.length === 0 ? (
+            <div className="empty-state">
+              <div style={{fontSize:'3rem', marginBottom:10}}>🛒</div>
+              <h3>Tu mochila está vacía</h3>
+              <p>Agrega cursos o matrículas para continuar.</p>
+              <button onClick={closeCart} className="btn-explore">Volver a explorar</button>
             </div>
+          ) : (
+            <>
+              {/* LISTA DE ITEMS */}
+              <div className="cart-items">
+                <div style={{display:'flex', justifyContent:'space-between', marginBottom:10}}>
+                   <span style={{fontSize:'0.8rem', color:'#94a3b8'}}>{cart.length} Ítem(s)</span>
+                   <button onClick={clearCart} style={{background:'none', border:'none', color:'#ef4444', fontSize:'0.8rem', cursor:'pointer'}}>Borrar todo</button>
+                </div>
 
-            <div style={{display:'flex', flexDirection:'column', gap:16}}>
-              {cart.map((item) => (
-                <div key={item.id} style={{background:'#0f172a', border:'1px solid rgba(255,255,255,0.1)', padding:20, borderRadius:16, display:'flex', gap:20, alignItems:'start'}}>
-                  {/* Icono/Imagen */}
-                  <div style={{width:50, height:50, background:'rgba(99, 102, 241, 0.1)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.5rem', flexShrink:0}}>
-                    {item.category === 'Idiomas' ? '🌍' : '📚'}
-                  </div>
-                  
-                  {/* Info */}
-                  <div style={{flexGrow:1}}>
-                    <div style={{display:'flex', justifyContent:'space-between'}}>
-                      <h3 style={{margin:0, fontSize:'1.1rem'}}>{item.name}</h3>
-                      <button onClick={() => removeFromCart(item.id)} style={{background:'none', border:'none', color:'#64748b', cursor:'pointer'}}><Trash2 size={18}/></button>
+                {cart.map((item) => (
+                  <div key={item.id} className="cart-item">
+                    {/* Imagen o Icono */}
+                    <div className="item-img">
+                       {item.image ? (
+                         <img src={item.image} alt="Curso" style={{width:'100%', height:'100%', objectFit:'cover'}} />
+                       ) : (
+                         <span style={{fontSize:'1.5rem'}}>🎓</span>
+                       )}
                     </div>
                     
-                    {/* Detalles */}
-                    {item.details && (
-                      <p style={{fontSize:'0.85rem', color:'#94a3b8', margin:'5px 0'}}>
-                        {Array.isArray(item.details) ? item.details.join(', ') : item.details}
-                      </p>
-                    )}
-
-                    {/* Desglose visual por ítem */}
-                    <div style={{marginTop:12, paddingTop:12, borderTop:'1px dashed rgba(255,255,255,0.1)', fontSize:'0.85rem'}}>
-                      <div style={{display:'flex', justifyContent:'space-between', marginBottom:4}}>
-                        <span style={{color:'#94a3b8'}}>Pago Hoy (Matrícula + Mes 1):</span>
-                        <span style={{fontWeight:700, color:'white'}}>{clp(item.price)}</span>
+                    {/* Info */}
+                    <div className="item-info">
+                      <div className="item-header">
+                        <h4>{item.name}</h4>
+                        <button onClick={() => removeFromCart(item.id)} className="btn-trash"><Trash2 size={16}/></button>
                       </div>
-                      <div style={{display:'flex', justifyContent:'space-between'}}>
-                         <span style={{color:'#94a3b8'}}>Mensualidad futura:</span>
-                         <span style={{color:'#cbd5e1'}}>{clp(item.recurringPrice)}</span>
+                      
+                      {/* Detalles específicos */}
+                      {item.details && (
+                        <p className="item-details">
+                          {Array.isArray(item.details) ? item.details.join(' • ') : item.details}
+                        </p>
+                      )}
+
+                      {/* Precios Individuales */}
+                      <div className="item-pricing">
+                        <div>
+                           <span>Pago Hoy</span>
+                           <strong>{clp(item.price)}</strong>
+                        </div>
+                        {item.recurringPrice > 0 && (
+                          <div style={{textAlign:'right'}}>
+                             <span>Mensualidad</span>
+                             <strong style={{color:'#94a3b8'}}>{clp(item.recurringPrice)}</strong>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-            
-            <Link to="/" style={{display:'inline-flex', alignItems:'center', gap:8, color:'#6366f1', textDecoration:'none', marginTop:24, fontWeight:600}}>
-              <ArrowRight size={16} transform="rotate(180)"/> Seguir explorando
-            </Link>
-          </div>
+                ))}
+              </div>
 
-          {/* COLUMNA DERECHA: RESUMEN FINANCIERO */}
-          <div style={{minWidth: 300}}>
-            <div style={{background:'#1e293b', border:'1px solid rgba(99, 102, 241, 0.2)', borderRadius:24, padding:32, position:'sticky', top:20}}>
-              <h3 style={{fontSize:'1.5rem', marginBottom:24}}>Resumen de Pago</h3>
-
-              <div style={{background:'rgba(15, 23, 42, 0.5)', borderRadius:16, padding:16, marginBottom:24}}>
+              {/* RESUMEN FINANCIERO (Tu Lógica de Negocio) */}
+              <div className="financial-summary">
                 
                 {/* Desglose Matrícula */}
                 {enrollmentTotal > 0 && (
-                  <div style={{display:'flex', justifyContent:'space-between', marginBottom:12, fontSize:'0.9rem', color:'#94a3b8'}}>
-                    <span>Matrícula Anual (Pago Único)</span>
+                  <div className="row">
+                    <span>Matrícula (Pago Único)</span>
                     <span>{clp(enrollmentTotal)}</span>
                   </div>
                 )}
 
                 {/* Desglose Mensualidad */}
-                <div style={{display:'flex', justifyContent:'space-between', marginBottom:12, fontSize:'0.9rem', color:'#94a3b8'}}>
+                <div className="row">
                    <span>Primer mes de clases</span>
                    <span>{clp(totalMonthly)}</span>
                 </div>
 
-                <div style={{borderTop:'1px solid rgba(255,255,255,0.1)', margin:'16px 0'}}></div>
+                <div className="divider"></div>
 
                 {/* TOTAL HOY */}
-                <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
-                   <span style={{fontWeight:700, color:'white'}}>A pagar HOY</span>
-                   <span style={{fontSize:'1.8rem', fontWeight:800, color:'white'}}>{clp(totalToday)}</span>
+                <div className="row total">
+                   <span>A pagar HOY</span>
+                   <span className="amount">{clp(totalToday)}</span>
+                </div>
+
+                {/* NOTA ACLARATORIA */}
+                <div className="info-box">
+                  <AlertCircle size={16} className="info-icon" />
+                  <p>
+                    <strong>Transparencia:</strong> El monto de matrícula se paga una sola vez. 
+                    Tu mensualidad futura será de <strong>{clp(totalMonthly)}</strong>.
+                  </p>
                 </div>
               </div>
+            </>
+          )}
+        </div>
 
-              {/* NOTIFICACIÓN IMPORTANTE - LÓGICA DE NEGOCIO VISIBLE */}
-              <div style={{display:'flex', gap:10, background:'rgba(59, 130, 246, 0.1)', padding:12, borderRadius:12, marginBottom:24}}>
-                <AlertCircle size={20} color="#60a5fa" style={{flexShrink:0}} />
-                <p style={{fontSize:'0.8rem', color:'#bfdbfe', margin:0, lineHeight:1.4}}>
-                  <strong>Transparencia Total:</strong> El monto de matrícula se paga una sola vez. 
-                  Tu mensualidad a partir del próximo mes será de <strong>{clp(totalMonthly)}</strong>.
-                </p>
-              </div>
-
-              <button 
+        {/* FOOTER DEL CARRITO (BOTÓN DE PAGO) */}
+        {cart.length > 0 && (
+          <div className="drawer-footer">
+            <button 
                 onClick={handlePayment}
                 disabled={isPaying}
-                style={{width:'100%', background:'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', color:'white', border:'none', padding:'16px', borderRadius:50, fontSize:'1.1rem', fontWeight:700, cursor: isPaying ? 'wait' : 'pointer', boxShadow:'0 10px 25px -5px rgba(99, 102, 241, 0.4)', transition:'0.3s'}}
-              >
-                {isPaying ? <Loader2 className="spin" size={24} style={{animation:'spin 1s linear infinite'}}/> : "Ir a Pagar"}
-              </button>
-
-              <div style={{textAlign:'center', marginTop:16, display:'flex', alignItems:'center', justifyContent:'center', gap:6, color:'#64748b', fontSize:'0.8rem'}}>
-                <ShieldCheck size={14}/> Sitio seguro SSL
-              </div>
+                className="btn-pay"
+            >
+                {isPaying ? <Loader2 className="spin" /> : <>Ir a Pagar <ArrowRight size={18}/></>}
+            </button>
+            <div className="secure-badge">
+                <ShieldCheck size={14}/> Pagos encriptados SSL
             </div>
           </div>
-
-        </div>
+        )}
       </div>
-      
+
+      {/* ESTILOS DEL DRAWER */}
       <style>{`
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        @media (min-width: 900px) {
-           div[style*="grid-template-columns"] { grid-template-columns: 1.5fr 1fr !important; }
+        /* Overlay Oscuro */
+        .cart-overlay {
+          position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+          z-index: 9998; opacity: 0; transition: opacity 0.3s ease; pointer-events: none;
         }
+        .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+        /* Panel Lateral (Drawer) */
+        .cart-drawer {
+          position: fixed; top: 0; right: 0; height: 100%; width: 100%; max-width: 420px;
+          background: #09090b; border-left: 1px solid rgba(255,255,255,0.1);
+          z-index: 9999; display: flex; flexDirection: column;
+          transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+        }
+        .cart-drawer.open { transform: translateX(0); }
+
+        /* Componentes Internos */
+        .drawer-header {
+          padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1);
+          display: flex; justify-content: space-between; align-items: center;
+        }
+        .drawer-header h2 { margin: 0; font-size: 1.2rem; font-weight: 700; color: white; }
+        .close-btn { background: none; border: none; color: #a1a1aa; cursor: pointer; }
+        .close-btn:hover { color: white; }
+
+        .drawer-content { flex: 1; overflow-y: auto; padding: 20px; }
+
+        .empty-state { text-align: center; color: #a1a1aa; padding-top: 60px; }
+        .btn-explore { margin-top: 20px; padding: 10px 20px; background: #27272a; color: white; border: none; borderRadius: 8px; cursor: pointer; }
+
+        /* Items */
+        .cart-item { display: flex; gap: 15px; background: #18181b; padding: 15px; borderRadius: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .item-img { width: 50px; height: 50px; background: #27272a; borderRadius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+        .item-info { flex: 1; }
+        .item-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .item-header h4 { margin: 0; font-size: 0.95rem; color: white; }
+        .btn-trash { background: none; border: none; color: #52525b; cursor: pointer; }
+        .btn-trash:hover { color: #ef4444; }
+        .item-details { font-size: 0.75rem; color: #a1a1aa; margin: 0 0 10px 0; }
+        
+        .item-pricing { display: flex; justify-content: space-between; font-size: 0.8rem; background: rgba(0,0,0,0.2); padding: 8px; borderRadius: 6px; }
+        .item-pricing span { display: block; color: #71717a; font-size: 0.7rem; text-transform: uppercase; }
+        .item-pricing strong { color: #e4e4e7; }
+
+        /* Resumen Financiero */
+        .financial-summary { background: #18181b; padding: 20px; borderRadius: 16px; border: 1px solid rgba(255,255,255,0.05); margin-top: 20px; }
+        .row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem; color: #a1a1aa; }
+        .divider { height: 1px; background: rgba(255,255,255,0.1); margin: 15px 0; }
+        .total { color: white; font-weight: 700; align-items: center; }
+        .total .amount { font-size: 1.4rem; color: #fbbf24; } /* Dorado */
+
+        .info-box { display: flex; gap: 10px; background: rgba(59, 130, 246, 0.1); padding: 12px; borderRadius: 8px; margin-top: 15px; }
+        .info-icon { color: #60a5fa; flex-shrink: 0; margin-top: 2px; }
+        .info-box p { font-size: 0.75rem; color: #bfdbfe; margin: 0; line-height: 1.4; }
+
+        /* Footer */
+        .drawer-footer { padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); background: #09090b; }
+        .btn-pay { width: 100%; padding: 16px; background: #fbbf24; color: black; font-weight: 800; border: none; borderRadius: 12px; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 1rem; transition: 0.2s; }
+        .btn-pay:hover { background: #fcd34d; transform: translateY(-2px); }
+        .btn-pay:disabled { opacity: 0.7; cursor: not-allowed; }
+        .secure-badge { text-align: center; font-size: 0.75rem; color: #52525b; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 5px; }
+
+        .spin { animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
       `}</style>
-    </div>
+    </>
   );
 }

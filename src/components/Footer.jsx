@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
-import { FaInstagram, FaWhatsapp, FaLinkedin, FaEnvelope, FaMapMarkerAlt, FaYoutube } from "react-icons/fa";
+import { 
+  Instagram, Linkedin, Youtube, Mail, MapPin, Phone 
+} from "lucide-react";
 
-// 💡 CAMBIO RECOMENDADO: Usa el logo BLANCO para el fondo oscuro. Se ve mucho más elegante.
-// Si prefieres el naranja, solo cambia "blanco" por "naranja" en el nombre del archivo.
-import logo from "../assets/img/Logos/lael-inst-blanco.png"; 
+// Tu logo blanco
+import logo from "../assets/img/Logos/lael-inst-blanco.png";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -14,7 +15,7 @@ export default function Footer() {
 
       <div className="container footer-grid">
         
-        {/* COLUMNA 1: MARCA */}
+        {/* COLUMNA 1: MARCA Y MISIÓN */}
         <div className="footer-col brand-col">
             <Link to="/" className="footer-logo-link">
                 <img src={logo} alt="Instituto Lael" className="footer-logo" />
@@ -24,9 +25,9 @@ export default function Footer() {
                 para que cumplas tus metas con tecnología y valores cristianos.
             </p>
             <div className="social-links">
-                <SocialLink href="https://instagram.com/institutolael" icon={<FaInstagram />} label="Instagram" />
-                <SocialLink href="https://youtube.com/@institutolael" icon={<FaYoutube />} label="YouTube" />
-                <SocialLink href="https://linkedin.com/company/instituto-lael" icon={<FaLinkedin />} label="LinkedIn" />
+                <SocialLink href="https://instagram.com/institutolael" icon={<Instagram size={20}/>} label="Instagram" />
+                <SocialLink href="https://youtube.com/@institutolael" icon={<Youtube size={20}/>} label="YouTube" />
+                <SocialLink href="https://linkedin.com/company/instituto-lael" icon={<Linkedin size={20}/>} label="LinkedIn" />
             </div>
         </div>
 
@@ -36,7 +37,7 @@ export default function Footer() {
             <nav>
                 <Link to="/paes">Preu PAES 2026</Link>
                 <Link to="/escuela-adultos">Escuela 2x1</Link>
-                <Link to="/idiomas">Idiomas (Inglés/Coreano)</Link>
+                <Link to="/idiomas">Idiomas</Link>
                 <Link to="/lsch">Lengua de Señas</Link>
                 <Link to="/homeschool">Lael Academy</Link>
             </nav>
@@ -57,7 +58,7 @@ export default function Footer() {
         {/* COLUMNA 4: CONTACTO */}
         <div className="footer-col contact-col">
             <h4>Contacto</h4>
-            <p className="contact-text">Atención L-V de 9:00 a 19:00 hrs.</p>
+            <p className="schedule-text">Atención L-V de 9:00 a 19:00 hrs.</p>
             
             <a 
                 href="https://wa.me/56964626568" 
@@ -65,12 +66,16 @@ export default function Footer() {
                 rel="noreferrer" 
                 className="btn-footer-wa"
             >
-                <FaWhatsapp className="wa-icon"/> Hablar por WhatsApp
+                <Phone size={18} className="wa-icon"/> Hablar por WhatsApp
             </a>
 
             <div className="contact-details">
-                <a href="mailto:contacto@institutolael.cl"><FaEnvelope className="small-icon"/> contacto@institutolael.cl</a>
-                <span><FaMapMarkerAlt className="small-icon"/> San Joaquín, RM (Oficina)</span>
+                <a href="mailto:contacto@institutolael.cl">
+                  <Mail size={16} className="small-icon"/> contacto@institutolael.cl
+                </a>
+                <span>
+                  <MapPin size={16} className="small-icon"/> San Joaquín, RM (Oficina)
+                </span>
             </div>
             
             <div className="rut-tag">RUT: 78.084.019-6</div>
@@ -103,13 +108,13 @@ function SocialLink({ href, icon, label }) {
     );
 }
 
-/* ================= CSS (DARK SLATE) ================= */
+/* ================= CSS (Ajustado al Navbar) ================= */
 const css = `
 :root {
-    --footer-bg: #020617; /* Slate 950 - Coherente con toda la web */
+    --footer-bg: #050505; /* Mismo negro profundo del Navbar */
     --footer-text: #94a3b8;
     --footer-head: #f8fafc;
-    --primary: #6366f1; /* Indigo */
+    --primary: #6366F1;
     --border: rgba(255,255,255,0.08);
 }
 
@@ -133,66 +138,85 @@ const css = `
     gap: 40px;
     padding-bottom: 60px;
 }
+
+/* RESPONSIVE */
 @media (max-width: 960px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 600px) { 
-    .footer-grid { grid-template-columns: 1fr; gap: 40px; text-align: center; } 
-    .brand-col, .contact-col, .contact-details { align-items: center; } 
-    .footer-logo { margin: 0 auto; } 
-    .social-links { justify-content: center; } 
+    .footer-grid { grid-template-columns: 1fr; gap: 40px; text-align: left; } 
+    .brand-col { order: 4; border-top: 1px solid var(--border); padding-top: 30px; }
 }
 
 /* COL 1: BRAND */
 .brand-col { display: flex; flex-direction: column; gap: 20px; }
-.footer-logo { height: 38px; width: auto; margin-bottom: 5px; opacity: 0.95; }
-.footer-mission { line-height: 1.6; max-width: 300px; font-size: 0.9rem; }
+.footer-logo { height: 35px; width: auto; opacity: 0.9; }
+.footer-mission { line-height: 1.6; max-width: 320px; font-size: 0.9rem; opacity: 0.8; }
 
-.social-links { display: flex; gap: 12px; margin-top: 5px; }
+.social-links { display: flex; gap: 10px; margin-top: 5px; }
 .social-btn {
-    width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.03);
-    display: flex; align-items: center; justify-content: center; color: var(--footer-head);
-    font-size: 1.1rem; transition: .2s; border: 1px solid var(--border);
+    width: 40px; height: 40px; border-radius: 10px; 
+    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; color: var(--footer-text);
+    transition: all 0.2s ease;
 }
-.social-btn:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-3px); }
+.social-btn:hover { 
+    background: var(--primary); border-color: var(--primary); 
+    color: white; transform: translateY(-3px); 
+}
 
 /* COL 2 & 3: LINKS */
-.links-col h4 { color: var(--footer-head); margin-bottom: 20px; font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-.links-col nav { display: flex; flex-direction: column; gap: 12px; }
-.links-col a { color: var(--footer-text); text-decoration: none; transition: .2s; font-size: 0.9rem; }
-.links-col a:hover { color: var(--primary); padding-left: 5px; }
+.links-col h4 { 
+    color: var(--footer-head); margin-bottom: 24px; 
+    font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; 
+}
+.links-col nav { display: flex; flex-direction: column; gap: 14px; }
+.links-col a { 
+    color: var(--footer-text); text-decoration: none; transition: .2s; font-size: 0.95rem; 
+}
+.links-col a:hover { color: var(--primary); padding-left: 4px; }
 
 /* COL 4: CONTACT */
-.contact-col { display: flex; flex-direction: column; gap: 15px; }
-.contact-col h4 { color: var(--footer-head); font-size: 0.95rem; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; }
-.contact-text { font-size: 0.9rem; }
+.contact-col { display: flex; flex-direction: column; gap: 16px; }
+.contact-col h4 { 
+    color: var(--footer-head); font-size: 0.85rem; font-weight: 700; margin: 0; 
+    text-transform: uppercase; letter-spacing: 1px; 
+}
+.schedule-text { font-size: 0.9rem; opacity: 0.7; margin: 0; }
 
 .btn-footer-wa {
     display: inline-flex; align-items: center; gap: 10px; justify-content: center;
-    background: rgba(37, 211, 102, 0.1); color: #4ade80; padding: 12px 20px; border-radius: 8px;
-    font-weight: 700; text-decoration: none; transition: .2s; border: 1px solid rgba(37, 211, 102, 0.2);
+    background: rgba(16, 185, 129, 0.1); color: #34d399; /* Verde esmeralda suave */
+    padding: 12px 20px; border-radius: 8px;
+    font-weight: 600; text-decoration: none; transition: .2s; 
+    border: 1px solid rgba(16, 185, 129, 0.2);
 }
-.btn-footer-wa:hover { background: rgba(37, 211, 102, 0.2); transform: translateY(-2px); }
-.wa-icon { font-size: 1.2rem; }
+.btn-footer-wa:hover { 
+    background: #10b981; color: white; border-color: #10b981; 
+    transform: translateY(-2px); 
+}
 
-.contact-details { display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; margin-top: 5px; }
-.contact-details a { color: var(--footer-text); text-decoration: none; display: flex; align-items: center; gap: 8px; }
-.contact-details span { display: flex; align-items: center; gap: 8px; }
-.contact-details a:hover { text-decoration: underline; color: var(--footer-head); }
-.small-icon { color: var(--primary); font-size: 0.9rem; }
+.contact-details { display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; margin-top: 5px; }
+.contact-details a { color: var(--footer-text); text-decoration: none; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
+.contact-details span { display: flex; align-items: center; gap: 10px; color: var(--footer-text); }
+.contact-details a:hover { color: white; }
+.small-icon { color: var(--primary); opacity: 0.8; }
 
 .rut-tag { 
-    font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 4px 8px; 
-    border-radius: 4px; width: fit-content; margin-top: 5px; color: var(--footer-text);
+    font-size: 0.75rem; color: #52525b; 
+    border: 1px solid #27272a; padding: 4px 8px; border-radius: 4px; 
+    width: fit-content; margin-top: 8px;
 }
-@media (max-width: 600px) { .rut-tag { margin: 5px auto 0; } }
 
 /* BOTTOM BAR */
-.footer-bottom { border-top: 1px solid var(--border); padding: 30px 0; background: #000; }
+.footer-bottom { 
+    border-top: 1px solid var(--border); padding: 24px 0; 
+    background: #020202; /* Un poco más oscuro que el footer general */
+}
 .bottom-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
 @media (max-width: 600px) { .bottom-row { flex-direction: column; text-align: center; } }
 
-.bottom-row p { margin: 0; font-size: 0.8rem; opacity: 0.6; }
+.bottom-row p { margin: 0; font-size: 0.8rem; color: #52525b; }
 .legal-links { display: flex; gap: 15px; align-items: center; }
-.legal-links a { color: var(--footer-text); text-decoration: none; font-size: 0.8rem; transition: .2s; }
-.legal-links a:hover { color: white; }
-.sep { font-size: 0.5rem; opacity: 0.3; }
+.legal-links a { color: #52525b; text-decoration: none; font-size: 0.8rem; transition: .2s; }
+.legal-links a:hover { color: var(--footer-text); }
+.sep { font-size: 0.5rem; color: #333; }
 `;

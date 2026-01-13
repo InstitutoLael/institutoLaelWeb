@@ -3,52 +3,49 @@ import { createContext, useContext, useState, useEffect } from "react";
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  // 1. Cargar datos guardados (si existen) o iniciar vacío
+  // 1. INICIALIZACIÓN INTELIGENTE
+  // Intentamos leer del localStorage para recuperar el carrito si el usuario vuelve
   const [cart, setCart] = useState(() => {
     try {
-      const savedCart = localStorage.getItem("lael_cart_v1");
+      const savedCart = localStorage.getItem("lael_cart_storage");
       return savedCart ? JSON.parse(savedCart) : [];
     } catch (error) {
       return [];
     }
   });
 
-  // 2. Guardar automáticamente cada cambio en la memoria del navegador
+  // 2. GUARDADO AUTOMÁTICO
+  // Cada vez que el carrito cambie, lo guardamos en el navegador
   useEffect(() => {
-    localStorage.setItem("lael_cart_v1", JSON.stringify(cart));
+    localStorage.setItem("lael_cart_storage", JSON.stringify(cart));
   }, [cart]);
 
-  // --- FUNCIONES (La Lógica del Negocio) ---
+  // --- FUNCIONES ---
 
-  // Agregar un curso (evita duplicados)
+  // Agregar curso (Evita duplicados)
   const addToCart = (product) => {
-    setCart((prevCart) => {
-      // ¿Ya existe este curso en el carrito?
-      const exists = prevCart.find((item) => item.id === product.id);
-      if (exists) return prevCart; // Si ya está, no hace nada (no vendemos 2 veces el mismo curso al mismo alumno)
-      
-      return [...prevCart, product];
+    setCart((prev) => {
+      // Si ya existe el ID, no lo agregamos de nuevo
+      if (prev.find((item) => item.id === product.id)) return prev;
+      return [...prev, product];
     });
   };
 
-  // Eliminar un curso
-  const removeFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+  // Eliminar curso
+  const removeFromCart = (id) => {
+    setCart((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // Vaciar carrito (usar después de pagar)
-  const clearCart = () => {
-    setCart([]);
-  };
+  // Limpiar todo (post-compra)
+  const clearCart = () => setCart([]);
 
-  // Calcular total automáticamente
-  const cartTotal = cart.reduce((total, item) => {
-    // Limpiamos el precio (quitamos signos $ y puntos para sumar matemáticamente)
-    const priceNumber = parseInt(item.price.replace(/\D/g, ""), 10) || 0;
-    return total + priceNumber;
+  // Calcular Total (Convierte "$150.000" a numero 150000)
+  const cartTotal = cart.reduce((acc, item) => {
+    const priceNum = parseInt(item.price.toString().replace(/\D/g, ""), 10) || 0;
+    return acc + priceNum;
   }, 0);
 
-  // Formateador de moneda (Para mostrar $150.000 bonito)
+  // Formateador de moneda (Helper visual)
   const formatPrice = (amount) => {
     return new Intl.NumberFormat("es-CL", {
       style: "currency",
@@ -61,14 +58,13 @@ export function CartProvider({ children }) {
       cart, 
       addToCart, 
       removeFromCart, 
-      clearCart,
-      cartTotal,
-      formatPrice
+      clearCart, 
+      cartTotal, 
+      formatPrice 
     }}>
       {children}
     </CartContext.Provider>
   );
 }
 
-// Hook personalizado para usar el carrito en cualquier lado fácil
 export const useCart = () => useContext(CartContext);

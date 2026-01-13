@@ -2,9 +2,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEOHead from "../components/SEOHead.jsx";
+/* IMPORTANTE: Aquí importamos TU componente. Asegúrate que la ruta sea correcta */
 import PartnersMarquee from "../components/PartnersMarquee.jsx"; 
 import { FaBolt, FaGlobe, FaHands, FaArrowRight, FaQuoteLeft, FaStar, FaUserGraduate, FaDove } from "react-icons/fa";
-import { GiOlive } from "react-icons/gi"; // Icono de Rama de Olivo (opcional, o usar FaLeaf)
+import { GiOlive } from "react-icons/gi"; 
 
 /* --------------------------------------------------------------------------
    DATOS DE TESTIMONIOS
@@ -13,24 +14,24 @@ const TESTIMONIALS = [
     {
         name: "Javier M.",
         program: "PAES Matemáticas",
-        quote: "Pasé de tener 450 puntos en Matemáticas a 810. La tutoría personalizada de Diego Chaparro fue increíble. Se enfocan en entender, no solo en memorizar.",
+        quote: "Pasé de tener 450 puntos en Matemáticas a 810. La tutoría personalizada fue increíble. Se enfocan en entender, no solo en memorizar.",
         rating: 5,
     },
     {
         name: "Daniela R.",
         program: "LSCh Nivel Intermedio",
-        quote: "Fernanda es una profesora sorda nativa excelente. Aprendí cultura y lengua de señas con una pedagogía muy paciente y didáctica. 100% recomendado.",
+        quote: "Fernanda es una profesora sorda nativa excelente. Aprendí cultura y lengua de señas con una pedagogía muy paciente y didáctica.",
         rating: 5,
     },
     {
         name: "Sebastián V.",
         program: "Inglés Corporate",
-        quote: "Contratamos el plan de capacitación para el equipo de ventas y los resultados fueron inmediatos. Lael es profesional y se adapta a las necesidades B2B.",
+        quote: "Contratamos el plan de capacitación para el equipo de ventas y los resultados fueron inmediatos. Lael es profesional y se adapta necesidades B2B.",
         rating: 4,
     },
 ];
 
-/* --- COMPONENTE TYPEWRITER --- */
+/* --- COMPONENTE TYPEWRITER (Efecto de escritura) --- */
 const Typewriter = ({ words }) => {
   const [index, setIndex] = useState(0);
   const [subIndex, setSubIndex] = useState(0);
@@ -66,6 +67,12 @@ const RatingStars = ({ count }) => (
 
 
 export default function Home() {
+  
+  // Efecto para que el scroll empiece arriba siempre al cargar
+  useEffect(() => {
+    window.scrollTo(0,0);
+  }, []);
+
   return (
     <div className="home-v2">
       <SEOHead title="Instituto Lael | Educación con Propósito" description="Formación online de alto nivel bajo principios sólidos. Prepara la PAES, domina idiomas y certifícate profesionalmente." />
@@ -90,9 +97,10 @@ export default function Home() {
                 <Link to="/inscripcion" className="btn-main">
                     Empezar Ahora <FaArrowRight />
                 </Link>
-                <Link to="/nosotros" className="btn-sec">
+                {/* Botón scroll suave hacia la sección de identidad */}
+                <button onClick={() => document.getElementById('meaning').scrollIntoView({behavior: 'smooth'})} className="btn-sec">
                     Ver Manifiesto
-                </Link>
+                </button>
             </div>
 
             {/* Stats Flotantes */}
@@ -116,7 +124,7 @@ export default function Home() {
       </section>
 
       {/* --- NUEVA SECCIÓN: SIGNIFICADO LAEL (IDENTITY) --- */}
-      <section className="meaning-section">
+      <section className="meaning-section" id="meaning">
         <div className="container meaning-grid">
             <div className="meaning-text">
                 <span className="tiny-label">Nuestra Identidad</span>
@@ -157,10 +165,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- MARQUEE DE PARTNERS --- */}
+      {/* --- MARQUEE DE PARTNERS (INTEGRACIÓN DE TU COMPONENTE) --- */}
       <section className="marquee-section">
         <div className="marquee-label">Nuestros aliados estratégicos:</div>
         <div className="marquee-wrapper">
+            {/* Si tu componente no usa props, puedes borrar speed, height y gap */}
             <PartnersMarquee speed={35} height={32} gap={60} />
         </div>
       </section>
@@ -366,7 +375,7 @@ a { text-decoration: none; color: inherit; }
 .btn-main:hover { transform: scale(1.05); }
 .btn-sec {
     background: rgba(255,255,255,0.05); color: #fff; padding: 16px 32px; border-radius: 100px;
-    font-weight: 600; border: 1px solid rgba(255,255,255,0.1); transition: background 0.2s;
+    font-weight: 600; border: 1px solid rgba(255,255,255,0.1); transition: background 0.2s; cursor: pointer;
 }
 .btn-sec:hover { background: rgba(255,255,255,0.1); }
 
@@ -451,6 +460,7 @@ a { text-decoration: none; color: inherit; }
     background: var(--bg-card); border: 1px solid var(--border); border-radius: 30px;
     position: relative; overflow: hidden; padding: 32px; display: flex; flex-direction: column;
     justify-content: flex-end; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    text-decoration: none;
 }
 .bento-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2); }
 .card-bg-icon {
@@ -460,7 +470,7 @@ a { text-decoration: none; color: inherit; }
 .bento-card:hover .card-bg-icon { transform: scale(1.1) rotate(5deg); opacity: 0.15; }
 .card-info { position: relative; z-index: 2; }
 .card-tag { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 8px; letter-spacing: 1px; }
-.bento-card h3 { font-size: 1.8rem; margin-bottom: 8px; font-weight: 700; }
+.bento-card h3 { font-size: 1.8rem; margin-bottom: 8px; font-weight: 700; color: white; }
 .bento-card p { font-size: 1rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
 .link-arrow { color: var(--primary); font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
 
@@ -473,7 +483,7 @@ a { text-decoration: none; color: inherit; }
 .wide.adults { grid-column: 3 / 4; padding: 40px; }
 @media (min-width: 901px) { .wide { grid-column: span 3; } }
 .card-info.row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-.btn-small { background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: #fff; padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; transition: background 0.2s; }
+.btn-small { background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: #fff; padding: 10px 20px; border-radius: 50px; font-weight: 600; font-size: 0.9rem; transition: background 0.2s; cursor: pointer; }
 .btn-small:hover { background: rgba(255,255,255,0.2); }
 
 @media (max-width: 900px) {

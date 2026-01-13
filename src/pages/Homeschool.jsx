@@ -1,10 +1,10 @@
 import React, { useState, useMemo, useRef } from "react";
-import { useCart } from "../context/CartContext"; // Si usas el carrito
+import { useCart } from "../context/CartContext";
 import EnrollmentForm from "../components/EnrollmentForm"; 
 
-// IMPORTACIÓN CORREGIDA PARA QUE COINCIDA CON TU DATA
+// Importamos la data
 import { 
-  ACADEMY_CONFIG, // <--- Aquí estaba el error, ahora usamos el objeto config
+  ACADEMY_CONFIG, 
   SUBJECTS, 
   LEVELS, 
   PACKS, 
@@ -15,7 +15,7 @@ import {
 
 // --- IMÁGENES ---
 const heroImg = "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop";
-// Asegúrate de que esta imagen exista o comenta la línea si falla
+// Si esta imagen da error, comenta la importación
 import losOlivosLogo from "../assets/img/Partners/LosOlivos.png"; 
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -29,7 +29,9 @@ const Icons = {
   User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
   Building: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/></svg>,
   Star: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>,
-  ArrowRight: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+  ArrowRight: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>,
+  Brain: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>,
+  Target: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -66,6 +68,17 @@ h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.05; font-weight: 800; l
 .highlight { background: linear-gradient(to right, #a78bfa, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .lead { font-size: 1.15rem; color: var(--text-muted); line-height: 1.6; max-width: 500px; margin-bottom: 30px; }
 .badge-new { display: inline-flex; align-items: center; gap: 8px; background: rgba(139, 92, 246, 0.1); color: #a78bfa; padding: 6px 14px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; border: 1px solid rgba(139, 92, 246, 0.2); margin-bottom: 24px; }
+
+/* HOOK SECTION (NUEVO) */
+.hook-section { padding: 40px 0 80px; }
+.hook-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+.hook-card { background: linear-gradient(180deg, var(--bg-card) 0%, rgba(20,20,20,0) 100%); border: 1px solid var(--border); padding: 30px; border-radius: var(--radius); text-align: left; }
+.hook-icon { color: var(--accent-primary); margin-bottom: 15px; display: block; }
+.hook-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; color: white; }
+.hook-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; }
+.section-title { text-align: center; max-width: 700px; margin: 0 auto; }
+.section-title h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; }
+.section-title p { color: var(--text-muted); font-size: 1.1rem; }
 
 /* TOGGLE */
 .toggle-pill { display: inline-flex; background: #161616; padding: 5px; border-radius: 50px; border: 1px solid var(--border); }
@@ -170,6 +183,7 @@ h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.05; font-weight: 800; l
   .lead { margin-inline: auto; }
   .visual-bento { display: none; }
   .partner-float { display: none; }
+  .hook-grid { grid-template-columns: 1fr; }
   .config-container { grid-template-columns: 1fr; }
   .summary-col { display: none; }
   .b2b-container { padding: 30px 20px; }
@@ -180,13 +194,13 @@ h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.05; font-weight: 800; l
    3. COMPONENTE PRINCIPAL (Homeschool)
    ────────────────────────────────────────────────────────────────────────── */
 export default function Homeschool() {
-  const { addToCart } = useCart ? useCart() : { addToCart: ()=>{} }; // Fallback seguro
+  const { addToCart } = useCart ? useCart() : { addToCart: ()=>{} };
   const [isSchool, setIsSchool] = useState(false);
   
-  // ESTADOS - Usamos 'academy-p8' porque así se llama en tu archivo data/homeschool.js
+  // ESTADOS
   const [selectedSubject, setSelectedSubject] = useState("mat");
   const [selectedLevel, setSelectedLevel] = useState("media");
-  const [selectedPackId, setSelectedPackId] = useState("academy-p8"); // <--- CORREGIDO ID
+  const [selectedPackId, setSelectedPackId] = useState("academy-p8");
   const [showModal, setShowModal] = useState(false); 
   
   const configRef = useRef(null);
@@ -196,12 +210,12 @@ export default function Homeschool() {
   const activePack = PACKS.find(p => p.id === selectedPackId) || PACKS[1];
   const activeLevel = LEVELS.find(l => l.id === selectedLevel) || LEVELS[1];
 
-  // Cálculos de dinero (Usando ACADEMY_CONFIG)
-  const isEnrollmentFree = activePack.id === 'academy-p12'; // <--- CORREGIDO ID
+  // Cálculos de dinero
+  const isEnrollmentFree = activePack.id === 'academy-p12';
   const appliedEnrollment = isEnrollmentFree ? 0 : ACADEMY_CONFIG.enrollmentFee;
   const total = activePack.price + appliedEnrollment;
 
-  // Preparamos los datos para pasar al formulario
+  // Preparamos los datos
   const planForCheckout = useMemo(() => ({
     title: `${activeSubject.name} - ${activePack.title} (${activeLevel.label})`,
     price: clp(total),
@@ -210,7 +224,6 @@ export default function Homeschool() {
 
   const waLinkSchool = `https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, soy de un Colegio y me interesan las soluciones B2B de Lael Academy.")}`;
 
-  // Handler para agregar al carrito (opcional)
   const handleAddToCart = () => {
     addToCart({
       id: `acad-${selectedSubject}-${activeLevel.id}-${activePack.id}`,
@@ -223,6 +236,10 @@ export default function Homeschool() {
         planForCheckout.detalleHoy
       ]
     });
+  };
+
+  const scrollToConfig = () => {
+    configRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
@@ -242,7 +259,6 @@ export default function Homeschool() {
       {/* HERO SECTION */}
       <header className="hero-section">
         <div className="container hero-grid">
-          
           <div className="hero-content">
             <div className="badge-new">
               <Icons.Zap/> 
@@ -259,7 +275,7 @@ export default function Homeschool() {
             <p className="lead">
               {isSchool 
                 ? "Delegue reforzamientos PIE, reemplazos y talleres en expertos. Reduzca la carga administrativa y asegure continuidad."
-                : "Más que clases particulares. Un centro de entrenamiento para subir notas, preparar la PAES y crear hábitos de estudio sólidos."
+                : "No más frustración con las notas. Te entrenamos para que entiendas la materia, recuperes la confianza y aprendas a estudiar de verdad."
               }
             </p>
 
@@ -284,12 +300,10 @@ export default function Homeschool() {
                <img src={heroImg} alt="Estudiantes" className="hero-img" />
                <div className="gradient-overlay"></div>
             </div>
-            
             {!isSchool && (
                 <div className="partner-float">
                     <div className="pf-logo-wrapper">
-                      {/* Si no tienes logo, comenta la etiqueta img */}
-                      <img src={losOlivosLogo} alt="Logo Los Olivos" className="pf-logo" onError={(e) => e.target.style.display='none'} />
+                      <img src={losOlivosLogo} alt="Logo" className="pf-logo" onError={(e) => e.target.style.display='none'} />
                     </div>
                     <div className="partner-info">
                         <span>{ALLIANCE.role}</span>
@@ -298,7 +312,6 @@ export default function Homeschool() {
                 </div>
             )}
           </div>
-
         </div>
       </header>
 
@@ -309,6 +322,38 @@ export default function Homeschool() {
         {!isSchool && (
             <div className="animate-fade">
                 
+                {/* 🔵 NUEVA SECCIÓN DE "GANCHO" (METODOLOGÍA) 🔵 */}
+                <section className="hook-section">
+                    <div className="section-title">
+                        <h2>Más que un "Profe Particular"</h2>
+                        <p>¿Por qué estudiar en Lael es diferente a ver videos o contratar a un estudiante universitario?</p>
+                    </div>
+
+                    <div className="hook-grid">
+                        <div className="hook-card">
+                            <span className="hook-icon"><Icons.Target /></span>
+                            <div className="hook-title">Diagnóstico Real</div>
+                            <div className="hook-desc">
+                                No empezamos a ciegas. Detectamos exactamente dónde están los vacíos (bases matemáticas, comprensión lectora) y atacamos la raíz del problema.
+                            </div>
+                        </div>
+                        <div className="hook-card">
+                            <span className="hook-icon"><Icons.Brain /></span>
+                            <div className="hook-title">Técnica de Estudio</div>
+                            <div className="hook-desc">
+                                No sacas nada con entender en la clase si olvidas al día siguiente. Enseñamos a tomar apuntes y repasar para retener a largo plazo.
+                            </div>
+                        </div>
+                        <div className="hook-card">
+                            <span className="hook-icon"><Icons.Zap /></span>
+                            <div className="hook-title">Confianza y Actitud</div>
+                            <div className="hook-desc">
+                                Transformamos el "yo soy malo para esto" en "todavía no lo entiendo". Cambiar la mentalidad es el 50% de la nota final.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 {/* 1. MATERIAS */}
                 <section className="step-section">
                     <div className="step-header">
@@ -362,8 +407,8 @@ export default function Homeschool() {
                     </div>
                 </section>
 
-                {/* 3. PACKS */}
-                <section className="step-section" ref={configRef}>
+                {/* 3. PACKS (Ahora con ID para scroll) */}
+                <section className="step-section" ref={configRef} id="planes">
                     <div className="config-container">
                         
                         <div className="packs-col">

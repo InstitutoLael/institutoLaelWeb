@@ -12,7 +12,7 @@ import {
 } from "../data/idiomas.js";
 
 import { 
-  Check, Zap, ArrowRight, ShieldCheck, ShoppingCart, X, Loader2, Plus, CheckCircle
+  Zap, ArrowRight, ShieldCheck, ShoppingCart, X, Loader2, Plus, CheckCircle
 } from "lucide-react";
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -223,9 +223,10 @@ const EnrollmentForm = ({ planDetails, price, onClose }) => {
              <input className="modal-input" name="phone" type="tel" placeholder="Teléfono" required onChange={handleChange}/>
           </div>
           <button disabled={status === 'loading'} className="btn-primary" style={{width:'100%', marginTop:10, justifyContent:'center'}}>
-            {status === 'loading' ? <Loader2 className="spin"/> : "Confirmar e Ir a Pagar"}
+            {status === 'loading' ? <Loader2 className="spin" style={{animation:'spin 1s linear infinite'}}/> : "Confirmar e Ir a Pagar"}
           </button>
         </form>
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
       </div>
     </div>
   );
@@ -241,6 +242,7 @@ export default function Idiomas() {
   const [selectedIds, setSelectedIds] = useState([]); 
   const [selectedLevels, setSelectedLevels] = useState({});
   const [showEnrollment, setShowEnrollment] = useState(false);
+  const [toast, setToast] = useState(null); // NUEVO ESTADO PARA TOAST
 
   // Lógica de Precios
   const pricing = useMemo(() => computeLangBundle(selectedIds.length), [selectedIds.length]);
@@ -263,7 +265,7 @@ export default function Idiomas() {
     setSelectedLevels(prev => ({ ...prev, [courseId]: levelName }));
   }, []);
 
-  // Opción 1: Solo Carrito
+  // Opción 1: Solo Carrito (CON TOAST)
   const handleAddToCart = () => {
     const detailsText = selectedIds.map(id => {
       const course = LANGUAGES.find(l => l.id === id);
@@ -273,13 +275,16 @@ export default function Idiomas() {
     addToCart({
       id: `pack-${selectedIds.join("-")}-${Date.now()}`,
       name: pricing.label,
-      price: pricing.totalFirstMonth,
+      price: pricing.totalFirstMonth,      // Precio HOY (Incluye Matrícula)
+      recurringPrice: pricing.totalMonthly, // Precio FUTURO (Solo Mensualidad)
       recurrence: 'monthly',
-      recurringPrice: pricing.totalMonthly,
       category: "Idiomas",
       details: [detailsText]
     });
-    alert("¡Agregado al Carrito!");
+    
+    // Feedback visual (Toast) en lugar de Alert
+    setToast("¡Curso agregado al Carrito!");
+    setTimeout(() => setToast(null), 3000);
   };
 
   return (
@@ -287,6 +292,19 @@ export default function Idiomas() {
       <SEOHead title="Idiomas | Lael" description="Cursos de idiomas online" />
       <style>{styles}</style>
       <div className="orb orb-1"></div>
+
+      {/* TOAST DE NOTIFICACIÓN (NUEVO) */}
+      {toast && (
+        <div style={{
+          position: 'fixed', bottom: 120, left: '50%', transform: 'translateX(-50%)',
+          background: '#10b981', color: 'white', padding: '10px 20px', borderRadius: 50,
+          boxShadow: '0 10px 30px rgba(0,0,0,0.4)', zIndex: 9999, fontWeight: 700,
+          display: 'flex', alignItems: 'center', gap: 8, animation: 'slideUpToast 0.3s ease-out'
+        }}>
+           <CheckCircle size={18}/> {toast}
+           <style>{`@keyframes slideUpToast { from { opacity:0; transform: translate(-50%, 20px); } to { opacity:1; transform: translate(-50%, 0); } }`}</style>
+        </div>
+      )}
 
       {showEnrollment && (
         <EnrollmentForm 

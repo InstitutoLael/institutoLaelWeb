@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import SEOHead from "../components/SEOHead";
-import { Trash2, ArrowRight, ShieldCheck, AlertCircle, CheckCircle, Loader2 } from "lucide-react";
+import { Trash2, ArrowRight, ShieldCheck, AlertCircle, Loader2 } from "lucide-react";
 
 /* Función para formatear dinero */
 const clp = (amount) => {
@@ -14,20 +14,20 @@ export default function Cart() {
   const [isPaying, setIsPaying] = useState(false);
 
   // 1. LÓGICA DE CÁLCULO
-  // Total a pagar HOY (Incluye matrículas + primer mes)
+  // Total a pagar HOY (Incluye matrículas + primer mes de todos los cursos)
   const totalToday = cart.reduce((acc, item) => acc + item.price, 0);
 
-  // Total recurrente (Solo mensualidades futuras)
+  // Total recurrente (Solo lo que pagarán mensualmente después)
   const totalMonthly = cart.reduce((acc, item) => acc + (item.recurringPrice || 0), 0);
 
-  // Detectar si hay matrícula involucrada (calculando la diferencia)
+  // Detectar cuánto es matrícula (Diferencia entre lo de hoy y lo mensual)
   const enrollmentTotal = totalToday - totalMonthly;
 
   const handlePayment = () => {
     setIsPaying(true);
-    // AQUÍ IRÍA LA INTEGRACIÓN CON FLOW / MERCADOPAGO O EL WORKER
+    // AQUÍ IRÍA TU INTEGRACIÓN REAL (Flow, MercadoPago, etc)
     setTimeout(() => {
-      alert("Aquí redirigimos a la pasarela de pago real.");
+      alert("Redirigiendo a pasarela de pago...");
       setIsPaying(false);
     }, 2000);
   };
@@ -51,10 +51,12 @@ export default function Cart() {
       <div className="container" style={{maxWidth:1100, margin:'0 auto', padding:'100px 24px 40px'}}>
         <h1 style={{fontSize:'clamp(2rem, 4vw, 3rem)', fontWeight:800, marginBottom:40}}>Finalizar Inscripción</h1>
 
-        <div style={{display:'grid', gridTemplateColumns: '1.5fr 1fr', gap: 40}}>
+        <div style={{display:'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 40}}>
           
           {/* COLUMNA IZQUIERDA: LISTA DE ITEMS */}
-          <div>
+          <div style={{gridColumn: 'span 2'}}> 
+             {/* Nota: En mobile el span 2 se ignora si usas flex o grid simple, pero aquí asegura que ocupe espacio en desktop */}
+             
             <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20, paddingBottom:10, borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
               <span style={{color:'#94a3b8'}}>{cart.length} Cursos seleccionados</span>
               <button onClick={clearCart} style={{background:'none', border:'none', color:'#ef4444', cursor:'pointer', fontSize:'0.9rem'}}>Vaciar carro</button>
@@ -63,9 +65,9 @@ export default function Cart() {
             <div style={{display:'flex', flexDirection:'column', gap:16}}>
               {cart.map((item) => (
                 <div key={item.id} style={{background:'#0f172a', border:'1px solid rgba(255,255,255,0.1)', padding:20, borderRadius:16, display:'flex', gap:20, alignItems:'start'}}>
-                  {/* Icono o Imagen */}
-                  <div style={{width:50, height:50, background:'rgba(99, 102, 241, 0.1)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.5rem'}}>
-                    {item.image || "📚"}
+                  {/* Icono/Imagen */}
+                  <div style={{width:50, height:50, background:'rgba(99, 102, 241, 0.1)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.5rem', flexShrink:0}}>
+                    {item.category === 'Idiomas' ? '🌍' : '📚'}
                   </div>
                   
                   {/* Info */}
@@ -75,14 +77,14 @@ export default function Cart() {
                       <button onClick={() => removeFromCart(item.id)} style={{background:'none', border:'none', color:'#64748b', cursor:'pointer'}}><Trash2 size={18}/></button>
                     </div>
                     
-                    {/* Detalles (Ramos, Niveles) */}
+                    {/* Detalles */}
                     {item.details && (
                       <p style={{fontSize:'0.85rem', color:'#94a3b8', margin:'5px 0'}}>
                         {Array.isArray(item.details) ? item.details.join(', ') : item.details}
                       </p>
                     )}
 
-                    {/* Desglose de precio POR ITEM */}
+                    {/* Desglose visual por ítem */}
                     <div style={{marginTop:12, paddingTop:12, borderTop:'1px dashed rgba(255,255,255,0.1)', fontSize:'0.85rem'}}>
                       <div style={{display:'flex', justifyContent:'space-between', marginBottom:4}}>
                         <span style={{color:'#94a3b8'}}>Pago Hoy (Matrícula + Mes 1):</span>
@@ -99,19 +101,18 @@ export default function Cart() {
             </div>
             
             <Link to="/" style={{display:'inline-flex', alignItems:'center', gap:8, color:'#6366f1', textDecoration:'none', marginTop:24, fontWeight:600}}>
-              <ArrowRight size={16} transform="rotate(180)"/> Seguir agregando cursos
+              <ArrowRight size={16} transform="rotate(180)"/> Seguir explorando
             </Link>
           </div>
 
           {/* COLUMNA DERECHA: RESUMEN FINANCIERO */}
-          <div>
+          <div style={{minWidth: 300}}>
             <div style={{background:'#1e293b', border:'1px solid rgba(99, 102, 241, 0.2)', borderRadius:24, padding:32, position:'sticky', top:20}}>
-              <h3 style={{fontSize:'1.5rem', marginBottom:24}}>Resumen de Pagos</h3>
+              <h3 style={{fontSize:'1.5rem', marginBottom:24}}>Resumen de Pago</h3>
 
-              {/* EL PUNTO CLAVE: DIFERENCIAR PAGO UNICO DE MENSUAL */}
               <div style={{background:'rgba(15, 23, 42, 0.5)', borderRadius:16, padding:16, marginBottom:24}}>
                 
-                {/* 1. Matrícula */}
+                {/* Desglose Matrícula */}
                 {enrollmentTotal > 0 && (
                   <div style={{display:'flex', justifyContent:'space-between', marginBottom:12, fontSize:'0.9rem', color:'#94a3b8'}}>
                     <span>Matrícula Anual (Pago Único)</span>
@@ -119,7 +120,7 @@ export default function Cart() {
                   </div>
                 )}
 
-                {/* 2. Primer Mes */}
+                {/* Desglose Mensualidad */}
                 <div style={{display:'flex', justifyContent:'space-between', marginBottom:12, fontSize:'0.9rem', color:'#94a3b8'}}>
                    <span>Primer mes de clases</span>
                    <span>{clp(totalMonthly)}</span>
@@ -127,47 +128,43 @@ export default function Cart() {
 
                 <div style={{borderTop:'1px solid rgba(255,255,255,0.1)', margin:'16px 0'}}></div>
 
-                {/* TOTAL A PAGAR HOY */}
+                {/* TOTAL HOY */}
                 <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                    <span style={{fontWeight:700, color:'white'}}>A pagar HOY</span>
                    <span style={{fontSize:'1.8rem', fontWeight:800, color:'white'}}>{clp(totalToday)}</span>
                 </div>
               </div>
 
-              {/* NOTA ACLARATORIA (MUY IMPORTANTE) */}
+              {/* NOTIFICACIÓN IMPORTANTE */}
               <div style={{display:'flex', gap:10, background:'rgba(59, 130, 246, 0.1)', padding:12, borderRadius:12, marginBottom:24}}>
                 <AlertCircle size={20} color="#60a5fa" style={{flexShrink:0}} />
                 <p style={{fontSize:'0.8rem', color:'#bfdbfe', margin:0, lineHeight:1.4}}>
-                  <strong>¡Importante!</strong> El monto de matrícula se paga una sola vez al año. 
-                  A partir del próximo mes, tu mensualidad será de <strong>{clp(totalMonthly)}</strong>.
+                  <strong>Transparencia Total:</strong> El monto de matrícula se paga una sola vez. 
+                  Tu mensualidad a partir del próximo mes será de <strong>{clp(totalMonthly)}</strong>.
                 </p>
               </div>
 
-              {/* Botón de Pago */}
               <button 
                 onClick={handlePayment}
                 disabled={isPaying}
                 style={{width:'100%', background:'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', color:'white', border:'none', padding:'16px', borderRadius:50, fontSize:'1.1rem', fontWeight:700, cursor: isPaying ? 'wait' : 'pointer', boxShadow:'0 10px 25px -5px rgba(99, 102, 241, 0.4)', transition:'0.3s'}}
               >
-                {isPaying ? <Loader2 className="spin" size={24}/> : "Ir a Pagar"}
+                {isPaying ? <Loader2 className="spin" size={24} style={{animation:'spin 1s linear infinite'}}/> : "Ir a Pagar"}
               </button>
 
               <div style={{textAlign:'center', marginTop:16, display:'flex', alignItems:'center', justifyContent:'center', gap:6, color:'#64748b', fontSize:'0.8rem'}}>
-                <ShieldCheck size={14}/> Pagos encriptados y seguros
+                <ShieldCheck size={14}/> Sitio seguro SSL
               </div>
-
             </div>
           </div>
 
         </div>
       </div>
-
-      {/* CSS para spinner simple */}
+      
       <style>{`
-        .spin { animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        @media (max-width: 900px) {
-           div[style*="grid-template-columns"] { grid-template-columns: 1fr !important; }
+        @media (min-width: 900px) {
+           div[style*="grid-template-columns"] { grid-template-columns: 1.5fr 1fr !important; }
         }
       `}</style>
     </div>

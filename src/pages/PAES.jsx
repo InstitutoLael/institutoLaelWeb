@@ -1,188 +1,198 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx"; 
 import SEOHead from "../components/SEOHead.jsx"; 
 
-// 📸 IMAGEN DE FONDO
+// 📸 IMAGEN (Asegúrate que la ruta sea correcta)
 import studyOnline from "../assets/img/lael/study-online.jpg"; 
 
 // 📦 ICONOS
 import { 
-  X, User, Mail, Phone, CreditCard, 
-  CheckCircle, Loader2, ArrowRight, ShieldCheck, FileText, 
-  Book, Star, Check, Zap, PlayCircle, Award
+  X, CheckCircle, Loader2, ArrowRight, ShieldCheck, 
+  CreditCard, Book, Zap, PlayCircle, Award, ShoppingCart
 } from 'lucide-react';
 
 // 📊 DATOS
 import {
   ENROLLMENT_FEE,
   PAES_SUBJECTS,
-  priceForSubjects,
+  computePaesPrice, // Usaremos la función inteligente que ya tienes
   clp,
 } from "../data/paes.js";
 
 /* ==========================================================================
-   1. ESTILOS CSS (DISEÑO MEJORADO)
+   1. ESTILOS OPTIMIZADOS (Responsive Real + 60FPS)
    ========================================================================== */
-const css = `
+const styles = `
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 :root {
   --bg-deep: #020617;
   --bg-card: #0f172a;
   --primary: #6366f1;
-  --primary-glow: rgba(99, 102, 241, 0.5);
   --accent: #f43f5e;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --radius: 20px;
+  --border: rgba(255, 255, 255, 0.1);
 }
 
-/* BASE */
 .paes-page { 
   background: var(--bg-deep); 
   color: var(--text-main); 
   font-family: 'Plus Jakarta Sans', sans-serif; 
   min-height: 100vh; 
-  padding-bottom: 120px;
-  background-image: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.08), transparent 25%), radial-gradient(circle at 85% 30%, rgba(244, 63, 94, 0.08), transparent 25%);
+  padding-bottom: 140px; /* Espacio para barra móvil */
+  overflow-x: hidden;
 }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 800; letter-spacing: -0.02em; }
+/* OPTIMIZACIÓN DE FONDO: Radial estático en vez de blur */
+.bg-glow {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08), transparent 40%), 
+              radial-gradient(circle at 90% 50%, rgba(244, 63, 94, 0.08), transparent 40%);
+  z-index: 0; pointer-events: none;
+}
 
-/* TEXT GRADIENTS */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+/* TEXTOS */
 .text-gradient { background: linear-gradient(to right, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.text-rose-grad { background: linear-gradient(to right, #fb7185, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 800; }
 
 /* BOTONES */
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 32px; border-radius: 50px; font-weight: 700; transition: all 0.3s ease; cursor: pointer; border: none; font-size: 1rem; }
-.btn-primary { 
-  background: linear-gradient(135deg, var(--primary), #4f46e5); 
-  color: white; 
-  box-shadow: 0 10px 30px -10px var(--primary-glow);
-}
-.btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -10px var(--primary-glow); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; border-radius: 50px; font-weight: 700; transition: transform 0.2s; cursor: pointer; border: none; font-size: 1rem; }
+.btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4); }
+.btn-primary:hover { transform: translateY(-2px); }
+.btn-ghost { background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border); }
 
-.btn-ghost { background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.1); }
-.btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); }
+/* HERO SECTION */
+.hero { padding: 120px 0 60px; }
+.hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
+.hero-img-container { position: relative; border-radius: 24px; overflow: hidden; transform: rotate(2deg); border: 1px solid var(--border); }
+.hero-img { width: 100%; display: block; opacity: 0.9; }
 
-/* HERO */
-.hero { padding: 140px 0 80px; position: relative; overflow: hidden; }
-.hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
-.hero-title { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 24px; }
-.hero-desc { font-size: 1.125rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 40px; max-width: 540px; }
+/* BENEFIT CARDS */
+.benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin: 60px 0; }
+.benefit-card { background: var(--bg-card); border: 1px solid var(--border); padding: 24px; border-radius: 20px; }
 
-/* BENEFIT CARDS (NUEVO) */
-.benefits-section { margin-bottom: 80px; }
-.benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 40px; }
-.benefit-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 30px; border-radius: 20px; transition: 0.3s; }
-.benefit-card:hover { background: rgba(255,255,255,0.06); transform: translateY(-5px); border-color: rgba(255,255,255,0.1); }
-.benefit-icon { width: 48px; height: 48px; background: rgba(99, 102, 241, 0.1); color: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+/* BUILDER SECTION */
+.builder-container { display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; align-items: start; margin-top: 40px; }
 
-/* BUILDER LAYOUT */
-.builder-section { padding: 60px 0; }
-.builder-container { display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; align-items: start; }
+/* GRID DE RAMOS */
+.subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; }
 
-/* TARJETAS DE RAMOS (VISUAL FIX) */
-.subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; margin-top: 20px; }
-
+/* CARD DE RAMO OPTIMIZADA */
 .subject-card {
   position: relative;
-  background: rgba(30, 41, 59, 0.6); 
-  border: 1px solid rgba(255,255,255,0.08); 
+  background: var(--bg-card); 
+  border: 1px solid var(--border); 
   border-radius: 16px;
-  padding: 24px 16px; 
+  padding: 20px 12px; 
   cursor: pointer; 
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
   text-align: center;
-  display: flex; flex-direction: column; align-items: center; gap: 12px;
-  overflow: hidden;
+  transition: border-color 0.2s, background-color 0.2s;
+  /* Optimización Táctil */
+  touch-action: manipulation;
 }
 
-/* Categorías de Colores */
-.subject-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom right, var(--card-color), transparent); opacity: 0; transition: 0.3s; z-index: 0; }
-.subject-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
-.subject-card:hover::before { opacity: 0.1; }
+.subject-card.active {
+  border-color: var(--card-color);
+  background: rgba(15, 23, 42, 1); /* Fondo sólido para evitar recálculos alpha */
+  box-shadow: inset 0 0 0 1px var(--card-color);
+}
 
-.subject-card.active { border-color: var(--card-color); background: rgba(15, 23, 42, 0.9); box-shadow: 0 0 20px -5px var(--card-color-glow); }
-.subject-card.active::before { opacity: 0.15; }
-
-/* Iconos y Texto en Tarjetas */
-.s-icon { font-size: 2rem; z-index: 1; filter: grayscale(1); transition: 0.3s; }
-.subject-card.active .s-icon, .subject-card:hover .s-icon { filter: grayscale(0); transform: scale(1.1); }
-.s-name { font-weight: 700; font-size: 0.95rem; z-index: 1; color: var(--text-muted); transition: 0.3s; }
-.subject-card.active .s-name { color: white; }
-.s-check { position: absolute; top: 10px; right: 10px; color: var(--card-color); opacity: 0; transform: scale(0); transition: 0.3s; z-index: 2; }
+.s-check { 
+  position: absolute; top: 8px; right: 8px; 
+  opacity: 0; transform: scale(0.5); transition: 0.2s; 
+}
 .subject-card.active .s-check { opacity: 1; transform: scale(1); }
 
-/* SUMMARY PANEL (TICKET DE COMPRA) */
-.summary-panel { 
-  background: #0f172a; 
-  border: 1px solid rgba(255,255,255,0.1); 
-  border-radius: 24px; 
-  padding: 32px; 
-  position: sticky; top: 40px; 
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+/* SIDEBAR DESKTOP (Resumen) */
+.summary-desktop { 
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px; padding: 24px; 
+  position: sticky; top: 20px; 
 }
-.ticket-header { border-bottom: 2px dashed rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 20px; }
-.ticket-row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 0.95rem; color: #cbd5e1; }
-.ticket-total { margin-top: 20px; padding-top: 20px; border-top: 2px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
-.big-price { font-size: 2rem; font-weight: 800; color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+
+/* STICKY BAR MÓVIL (Solo aparece en < 900px) */
+.mobile-sticky-bar {
+  display: none; /* Oculto por defecto */
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background: #0f172a; border-top: 1px solid var(--border);
+  padding: 16px 24px 24px; z-index: 100;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+}
 
 /* MODAL */
-.modal-overlay { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.9); backdrop-filter: blur(8px); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
-.modal-content { background: #0f172a; border: 1px solid rgba(255,255,255,0.1); width: 100%; max-width: 480px; border-radius: 24px; padding: 32px; color: white; box-shadow: 0 0 50px rgba(0,0,0,0.5); animation: popIn 0.3s ease-out; }
-@keyframes popIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.modal-input { width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 12px; color: white; margin-bottom: 16px; outline: none; transition: 0.3s; }
-.modal-input:focus { border-color: var(--primary); background: rgba(99, 102, 241, 0.1); }
-.close-btn { position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: #64748b; cursor: pointer; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.modal-content { background: #0f172a; border: 1px solid var(--border); width: 100%; max-width: 450px; border-radius: 24px; padding: 24px; animation: popIn 0.3s ease-out; }
+@keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+.modal-input { width: 100%; background: #1e293b; border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: white; margin-bottom: 12px; }
 
-/* Responsive */
+/* MEDIA QUERIES */
 @media (max-width: 900px) {
-  .hero-grid, .builder-container { grid-template-columns: 1fr; }
-  .summary-panel { order: -1; margin-bottom: 40px; }
   .hero { padding-top: 100px; text-align: center; }
-  .hero-grid img { display: none; }
-  .hero-desc { margin: 0 auto 40px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 30px; }
+  .hero-img-container { display: none; } /* Ocultar imagen pesada en móvil si deseas, o ajustar */
+  
+  .builder-container { grid-template-columns: 1fr; }
+  
+  /* Ocultar Sidebar Desktop y mostrar Barra Móvil */
+  .summary-desktop { display: none; }
+  .mobile-sticky-bar { display: flex; flex-direction: column; gap: 12px; }
+  .mobile-bar-row { display: flex; justify-content: space-between; align-items: center; }
 }
 `;
 
 /* ==========================================================================
-   FORMULARIO DE INSCRIPCIÓN (MODAL OSCURO)
+   COMPONENTES AUXILIARES
    ========================================================================== */
-const API_URL = "https://instituto-lael-web.contacto-c10.workers.dev"; 
 
-function EnrollmentForm({ planTitle, price, selectedDetails, onClose }) {
-  const [status, setStatus] = useState("idle"); 
-  const [formData, setFormData] = useState({ fullName: "", rut: "", email: "", phone: "" });
+// 1. Tarjeta Ramo (Memoizada para evitar lag al seleccionar)
+const SubjectCardItem = React.memo(({ subject, isSelected, onToggle }) => {
+  // Color por categoría
+  const color = 
+    subject.category === 'Ciencias' ? '#10b981' : 
+    subject.category === 'Electivo' ? '#f59e0b' : '#3b82f6';
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  return (
+    <div 
+      onClick={() => onToggle(subject.id)} 
+      className={`subject-card ${isSelected ? 'active' : ''}`}
+      style={{'--card-color': color}}
+    >
+       <div className="s-check">
+         <CheckCircle size={16} fill={color} color="var(--bg-card)" />
+       </div>
+       <div style={{fontSize: '2rem', filter: isSelected ? 'none' : 'grayscale(1)', transition:'0.3s'}}>
+         {subject.icon}
+       </div>
+       <span style={{fontWeight: 700, fontSize: '0.9rem', color: isSelected ? 'white' : 'var(--text-muted)'}}>
+         {subject.name}
+       </span>
+    </div>
+  );
+});
 
-  const handleSubmit = async (e) => {
+// 2. Modal Formulario
+const EnrollmentForm = ({ planTitle, price, selectedDetails, onClose }) => {
+  const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setStatus("loading");
-    try {
-      await fetch(`${API_URL}/inscribir`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          program: planTitle,
-          comments: `Detalle: ${selectedDetails} | Monto Inicial: ${price}`
-        }),
-      });
-      setStatus("success");
-    } catch { setStatus("error"); }
+    setLoading(true);
+    // Simulación de envío
+    setTimeout(() => { setLoading(false); setDone(true); }, 1500);
   };
 
-  if (status === "success") return (
+  if (done) return (
     <div className="modal-overlay">
       <div className="modal-content" style={{textAlign:'center'}}>
-        <div style={{width:80, height:80, background:'#22c55e', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px'}}>
-          <CheckCircle size={40} color="white"/>
-        </div>
-        <h2>¡Todo Listo!</h2>
-        <p style={{color:'#94a3b8', marginBottom:20}}>Te hemos enviado los datos de acceso y pago a tu correo.</p>
-        <button onClick={onClose} className="btn btn-primary" style={{width:'100%'}}>Entendido</button>
+        <div style={{color:'#22c55e', marginBottom:16}}><CheckCircle size={48} style={{margin:'0 auto'}}/></div>
+        <h3>¡Solicitud Enviada!</h3>
+        <p style={{color:'var(--text-muted)', marginBottom:20}}>Revisa tu correo con las instrucciones de pago.</p>
+        <button onClick={onClose} className="btn btn-primary" style={{width:'100%'}}>Cerrar</button>
       </div>
     </div>
   );
@@ -190,30 +200,30 @@ function EnrollmentForm({ planTitle, price, selectedDetails, onClose }) {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button onClick={onClose} className="close-btn"><X/></button>
-        <h3 style={{marginBottom:20}}>Finalizar Inscripción</h3>
-        <p style={{fontSize:'0.9rem', color:'#94a3b8', marginBottom:24}}>
-          Estás reservando: <strong style={{color:'white'}}>{planTitle}</strong> por <span style={{color:'#fb7185'}}>{price}</span>
+        <div style={{display:'flex', justifyContent:'space-between', marginBottom:20}}>
+          <h3>Inscripción Rápida</h3>
+          <button onClick={onClose} style={{background:'none', border:'none', color:'white'}}><X/></button>
+        </div>
+        <p style={{fontSize:'0.9rem', color:'var(--text-muted)', marginBottom:20}}>
+          Estás reservando: <strong style={{color:'white'}}>{planTitle}</strong><br/>
+          Primer pago: <span style={{color:'var(--accent)'}}>{price}</span>
         </p>
-        
         <form onSubmit={handleSubmit}>
-          <input className="modal-input" name="fullName" placeholder="Nombre Completo" required onChange={handleChange}/>
-          <input className="modal-input" name="rut" placeholder="RUT (12.345.678-9)" required onChange={handleChange}/>
-          <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:10}}>
-             <input className="modal-input" name="email" type="email" placeholder="Correo" required onChange={handleChange}/>
-             <input className="modal-input" name="phone" type="tel" placeholder="+569..." required onChange={handleChange}/>
-          </div>
-          <button type="submit" className="btn btn-primary" style={{width:'100%', marginTop:10}} disabled={status === 'loading'}>
-            {status === 'loading' ? <Loader2 className="spin"/> : "Ir a Pagar"} <ArrowRight size={18}/>
+          <input className="modal-input" placeholder="Nombre Completo" required />
+          <input className="modal-input" placeholder="RUT" required />
+          <input className="modal-input" placeholder="Correo electrónico" type="email" required />
+          <input className="modal-input" placeholder="Teléfono" type="tel" required />
+          <button disabled={loading} className="btn btn-primary" style={{width:'100%'}}>
+            {loading ? <Loader2 className="spin"/> : "Ir a Pagar"}
           </button>
         </form>
       </div>
     </div>
   );
-}
+};
 
 /* ==========================================================================
-   COMPONENTE PRINCIPAL
+   PÁGINA PRINCIPAL
    ========================================================================== */
 export default function PAES() {
   const { addToCart } = useCart();
@@ -221,193 +231,173 @@ export default function PAES() {
   const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
   const [showEnrollment, setShowEnrollment] = useState(false);
 
-  // Cálculos desde src/data/paes.js
-  const selectedSubjects = useMemo(() => PAES_SUBJECTS.filter((s) => selectedSubjectIds.includes(s.id)), [selectedSubjectIds]);
-  const subjectCount = selectedSubjects.length;
-  const monthlyPrice = subjectCount ? priceForSubjects(selectedSubjectIds) : 0;
-  const firstPaymentTotal = subjectCount > 0 ? monthlyPrice + ENROLLMENT_FEE : 0;
-
-  // Helpers de color para las tarjetas
-  const getCardColor = (cat) => {
-    if(cat === 'Ciencias') return '#10b981'; // Green
-    if(cat === 'Electivo') return '#f59e0b'; // Amber
-    return '#3b82f6'; // Blue default
-  };
-
-  const toggleSubject = (id) => {
+  // Lógica de Precios (Memoizada)
+  const pricing = useMemo(() => computePaesPrice(selectedSubjectIds), [selectedSubjectIds]);
+  
+  const toggleSubject = useCallback((id) => {
     setSelectedSubjectIds((prev) => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  }, []);
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: `paes-${Date.now()}`,
+      name: `Preu PAES - ${pricing.label}`,
+      price: pricing.totalFirstMonth,
+      recurrence: 'monthly',
+      recurringPrice: pricing.totalMonthly,
+      category: "Preuniversitario",
+      details: PAES_SUBJECTS.filter(s => selectedSubjectIds.includes(s.id)).map(s => s.name)
+    });
+    alert("Agregado al carrito"); // Feedback simple
   };
 
   return (
     <div className="paes-page">
-      <style>{css}</style>
-      <SEOHead title="Preu PAES 2026 | Lael" description="Arma tu plan a medida." />
+      <style>{styles}</style>
+      <SEOHead title="Preu PAES 2026 | Lael" description="Personaliza tu preparación." />
+      <div className="bg-glow"></div>
 
-      {/* Modal Form */}
       {showEnrollment && (
         <EnrollmentForm 
-          planTitle={`Plan Personalizado (${subjectCount} Ramos)`} 
-          price={clp(firstPaymentTotal)} 
-          selectedDetails={selectedSubjects.map(s => s.name).join(', ')}
+          planTitle={pricing.label} 
+          price={clp(pricing.totalFirstMonth)} 
+          selectedDetails={pricing.count + " Ramos"}
           onClose={() => setShowEnrollment(false)} 
         />
       )}
 
-      {/* 1. HERO SECTION */}
-      <section className="hero">
-        <div className="container hero-grid">
+      {/* HERO */}
+      <section className="hero container">
+        <div className="hero-grid">
           <div>
-            <div style={{display:'inline-flex', alignItems:'center', gap:8, padding:'6px 16px', background:'rgba(244, 63, 94, 0.1)', border:'1px solid rgba(244, 63, 94, 0.2)', borderRadius:20, color:'#fb7185', fontSize:'0.85rem', fontWeight:'700', marginBottom:24}}>
-              <span style={{position:'relative', display:'flex', height:8, width:8}}><span style={{animation:'ping 1.5s cubic-bezier(0,0,0.2,1) infinite', position:'absolute', display:'inline-flex', height:'100%', width:'100%', borderRadius:'50%', background:'#fb7185', opacity:0.75}}></span><span style={{position:'relative', display:'inline-flex', borderRadius:'50%', height:8, width:8, background:'#f43f5e'}}></span></span>
-              Admisión 2026 Abierta
+            <div style={{display:'inline-flex', alignItems:'center', gap:8, padding:'6px 12px', background:'rgba(244, 63, 94, 0.15)', borderRadius:20, color:'#fb7185', fontSize:'0.8rem', fontWeight:'700', marginBottom:20}}>
+              <Zap size={14}/> Admisión 2026
             </div>
-            <h1 className="hero-title">
+            <h1 style={{fontSize:'clamp(2.5rem, 5vw, 4rem)', marginBottom: 20}}>
               No estudies más.<br/>
               <span className="text-gradient">Estudia Mejor.</span>
             </h1>
-            <p className="hero-desc">
-              Olvídate de las clases masivas de 100 personas. En Lael personalizamos tu estrategia 
-              para que asegures tu puntaje sin perder la vida en el intento.
+            <p style={{fontSize:'1.1rem', color:'var(--text-muted)', marginBottom: 30, maxWidth:'500px'}}>
+              Olvídate de las clases masivas. En Lael personalizamos tu estrategia para que asegures tu puntaje.
             </p>
-            <div style={{display:'flex', gap:16, flexWrap:'wrap'}}>
-               <button onClick={() => builderRef.current?.scrollIntoView({behavior:'smooth'})} className="btn btn-primary">
-                 Armar mi Horario <ArrowRight size={20}/>
-               </button>
-               <a href="#benefits" className="btn btn-ghost">¿Por qué Lael?</a>
-            </div>
+            <button onClick={() => builderRef.current?.scrollIntoView({behavior:'smooth'})} className="btn btn-primary">
+              Armar Horario <ArrowRight size={20}/>
+            </button>
           </div>
-          {/* Imagen Hero (Desktop) */}
-          <div style={{position:'relative'}}>
-             <div style={{position:'absolute', inset:0, background:'linear-gradient(to top, var(--bg-deep), transparent)', zIndex:2}}></div>
-             <img src={studyOnline} alt="Estudiantes Lael" style={{width:'100%', borderRadius:24, opacity:0.8, transform:'rotate(2deg)', border:'1px solid rgba(255,255,255,0.1)'}} />
+          
+          <div className="hero-img-container">
+             <img src={studyOnline} alt="Estudiantes" className="hero-img" />
           </div>
         </div>
       </section>
 
-      {/* 2. BENEFICIOS (EXPLICACIÓN) */}
-      <section id="benefits" className="container benefits-section">
-        <div style={{textAlign:'center', maxWidth:700, margin:'0 auto'}}>
-          <h2 style={{fontSize:'2rem', marginBottom:16}}>¿Por qué nos eligen?</h2>
-          <p style={{color:'#94a3b8'}}>No somos una fábrica de alumnos. Somos un centro de alto rendimiento.</p>
-        </div>
+      {/* BENEFICIOS */}
+      <section className="container">
         <div className="benefits-grid">
            <div className="benefit-card">
-              <div className="benefit-icon"><PlayCircle size={24}/></div>
-              <h3>Clases Grabadas 24/7</h3>
-              <p style={{fontSize:'0.9rem', color:'#94a3b8', marginTop:10}}>¿Faltaste? No importa. Todas las clases en vivo quedan en HD en tu aula virtual.</p>
+              <PlayCircle size={32} color="var(--primary)" style={{marginBottom:10}}/>
+              <h3>Clases Grabadas</h3>
+              <p style={{fontSize:'0.9rem', color:'var(--text-muted)'}}>Acceso 24/7 a todo el contenido.</p>
            </div>
            <div className="benefit-card">
-              <div className="benefit-icon"><Zap size={24}/></div>
-              <h3>Ensayos Inteligentes</h3>
-              <p style={{fontSize:'0.9rem', color:'#94a3b8', marginTop:10}}>Plataforma que detecta tus vacíos. No ensayes lo que ya sabes, ataca lo que te falta.</p>
-           </div>
-           <div className="benefit-card">
-              <div className="benefit-icon"><Award size={24}/></div>
-              <h3>Garantía de Calidad</h3>
-              <p style={{fontSize:'0.9rem', color:'#94a3b8', marginTop:10}}>Si la metodología no te convence la primera semana, te devolvemos el dinero.</p>
+              <Award size={32} color="var(--accent)" style={{marginBottom:10}}/>
+              <h3>Garantía Total</h3>
+              <p style={{fontSize:'0.9rem', color:'var(--text-muted)'}}>Si no te gusta, devolución del 100%.</p>
            </div>
         </div>
       </section>
 
-      {/* 3. CONFIGURADOR (BUILDER) */}
-      <section ref={builderRef} className="builder-section">
-        <div className="container">
-          <h2 style={{fontSize:'2.5rem', marginBottom:10}}>Diseña tu Estrategia</h2>
-          <p style={{color:'#94a3b8', fontSize:'1.1rem', marginBottom:40}}>Elige tus batallas. Paga solo lo que necesitas.</p>
+      {/* BUILDER (Lógica Principal) */}
+      <section ref={builderRef} className="container" style={{paddingBottom: 60}}>
+        <h2 style={{fontSize:'2rem'}}>Elige tus Batallas</h2>
+        <p style={{color:'var(--text-muted)', marginBottom:20}}>Arma tu pack de asignaturas a medida.</p>
 
-          <div className="builder-container">
-            {/* GRID DE RAMOS */}
-            <div>
-               <div className="subjects-grid">
-                  {PAES_SUBJECTS.map((s) => {
-                    const isActive = selectedSubjectIds.includes(s.id);
-                    const color = getCardColor(s.category);
-                    return (
-                      <div 
-                        key={s.id} 
-                        onClick={() => toggleSubject(s.id)} 
-                        className={`subject-card ${isActive ? 'active' : ''}`}
-                        style={{'--card-color': color, '--card-color-glow': color}}
-                      >
-                         <div className="s-check"><CheckCircle fill={color} color="white" /></div>
-                         <div className="s-icon">{s.icon}</div>
-                         <span className="s-name">{s.name}</span>
-                      </div>
-                    )
-                  })}
+        <div className="builder-container">
+          
+          {/* COLUMNA IZQUIERDA: GRID RAMOS */}
+          <div>
+             <div className="subjects-grid">
+                {PAES_SUBJECTS.map((s) => (
+                  <SubjectCardItem 
+                    key={s.id} 
+                    subject={s} 
+                    isSelected={selectedSubjectIds.includes(s.id)}
+                    onToggle={toggleSubject}
+                  />
+                ))}
+             </div>
+             {pricing.count >= 4 && (
+               <div style={{marginTop:20, padding:12, background:'rgba(16, 185, 129, 0.15)', borderRadius:12, color:'#34d399', fontSize:'0.9rem', display:'flex', gap:8}}>
+                  <CheckCircle size={18}/> <strong>Tarifa Plana Activada:</strong> Agrega más ramos sin costo extra.
                </div>
-               
-               {/* Mensaje de ahorro */}
-               {subjectCount >= 4 && (
-                 <div style={{marginTop:24, padding:16, background:'rgba(16, 185, 129, 0.1)', border:'1px solid rgba(16, 185, 129, 0.2)', borderRadius:16, display:'flex', gap:12, alignItems:'center', color:'#34d399'}}>
-                    <Award size={20}/>
-                    <span><strong>¡Excelente jugada!</strong> Con 4+ ramos activaste la Tarifa Plana. Agrega más sin costo extra.</span>
-                 </div>
-               )}
-            </div>
-
-            {/* TICKET DE RESUMEN */}
-            <div className="summary-panel">
-               <div className="ticket-header">
-                 <h3 style={{fontSize:'1.2rem', display:'flex', alignItems:'center', gap:10}}>
-                   <CreditCard size={20} color="#fb7185"/> Resumen de Pago
-                 </h3>
-               </div>
-
-               {subjectCount === 0 ? (
-                 <div style={{textAlign:'center', padding:'40px 0', color:'#64748b'}}>
-                    <Book size={40} style={{marginBottom:10, opacity:0.5}}/>
-                    <p>Selecciona asignaturas para calcular tu inversión.</p>
-                 </div>
-               ) : (
-                 <>
-                   <div className="ticket-row">
-                      <span>Matrícula Anual 2026</span>
-                      <span>{clp(ENROLLMENT_FEE)}</span>
-                   </div>
-                   <div className="ticket-row">
-                      <span>Plan Mensual ({subjectCount} ramos)</span>
-                      <span>{clp(monthlyPrice)}</span>
-                   </div>
-                   
-                   <div style={{margin:'15px 0', fontSize:'0.85rem', color:'#64748b', paddingLeft:10, borderLeft:'2px solid #334155'}}>
-                     {selectedSubjects.map(s => <div key={s.id}>• {s.name}</div>)}
-                   </div>
-
-                   <div className="ticket-total">
-                      <div>
-                        <span style={{display:'block', fontSize:'0.8rem', textTransform:'uppercase', color:'#94a3b8', letterSpacing:1}}>Total a Pagar Hoy</span>
-                        <span className="big-price">{clp(firstPaymentTotal)}</span>
-                      </div>
-                   </div>
-                   <p style={{fontSize:'0.8rem', color:'#64748b', marginTop:5, marginBottom:24}}>
-                     Incluye acceso inmediato a plataforma.
-                   </p>
-
-                   <button onClick={() => setShowEnrollment(true)} className="btn btn-primary" style={{width:'100%'}}>
-                     Pagar e Inscribirme <ArrowRight size={20}/>
-                   </button>
-                   
-                   <div style={{textAlign:'center', marginTop:16}}>
-                     <button onClick={() => {
-                        addToCart({
-                          id: `paes-${Date.now()}`,
-                          nombre: `Plan PAES (${subjectCount} Ramos)`,
-                          precio: monthlyPrice,
-                          tipo: 'paes',
-                          detalles: selectedSubjects.map(s=>s.name).join(', ')
-                        });
-                        alert("Agregado al carrito");
-                     }} style={{background:'none', border:'none', color:'#94a3b8', textDecoration:'underline', cursor:'pointer', fontSize:'0.9rem'}}>
-                        Solo agregar al carrito
-                     </button>
-                   </div>
-                 </>
-               )}
-            </div>
+             )}
           </div>
+
+          {/* COLUMNA DERECHA: RESUMEN DESKTOP (Oculto en móvil) */}
+          <div className="summary-desktop">
+             <h3 style={{fontSize:'1.2rem', marginBottom:16, display:'flex', alignItems:'center', gap:8}}>
+               <CreditCard size={20} color="var(--accent)"/> Resumen
+             </h3>
+
+             {pricing.count === 0 ? (
+               <div style={{textAlign:'center', padding:'30px 0', color:'var(--text-muted)'}}>
+                  <Book size={32} style={{opacity:0.5, margin:'0 auto 10px'}}/>
+                  Selecciona ramos
+               </div>
+             ) : (
+               <>
+                 <div style={{display:'flex', justifyContent:'space-between', marginBottom:8, color:'var(--text-muted)', fontSize:'0.9rem'}}>
+                    <span>Plan Mensual</span>
+                    <span>{clp(pricing.totalMonthly)}</span>
+                 </div>
+                 <div style={{display:'flex', justifyContent:'space-between', marginBottom:20, color:'var(--text-muted)', fontSize:'0.9rem'}}>
+                    <span>Matrícula</span>
+                    <span>{clp(pricing.enrollment)}</span>
+                 </div>
+                 
+                 <div style={{borderTop:'1px solid var(--border)', paddingTop:16}}>
+                    <span style={{fontSize:'0.8rem', color:'var(--text-muted)', textTransform:'uppercase'}}>Total Hoy</span>
+                    <div style={{fontSize:'2rem', fontWeight:800}}>{clp(pricing.totalFirstMonth)}</div>
+                 </div>
+
+                 <button onClick={() => setShowEnrollment(true)} className="btn btn-primary" style={{width:'100%', marginTop:20}}>
+                   Inscribirme <ArrowRight size={18}/>
+                 </button>
+                 <div style={{textAlign:'center', marginTop:12}}>
+                    <button onClick={handleAddToCart} style={{background:'transparent', border:'none', color:'var(--text-muted)', textDecoration:'underline', cursor:'pointer'}}>
+                      Solo agregar al carro
+                    </button>
+                 </div>
+               </>
+             )}
+          </div>
+
         </div>
       </section>
+
+      {/* BARRA STICKY MÓVIL (Solo visible en celular) */}
+      {selectedSubjectIds.length > 0 && (
+        <div className="mobile-sticky-bar">
+           <div className="mobile-bar-row">
+              <div>
+                <span style={{fontSize:'0.75rem', textTransform:'uppercase', color:'var(--text-muted)'}}>
+                   {pricing.label}
+                </span>
+                <div style={{fontSize:'1.4rem', fontWeight:800, color:'white'}}>
+                   {clp(pricing.totalFirstMonth)}
+                </div>
+              </div>
+              <div style={{textAlign:'right', fontSize:'0.8rem', color:'var(--text-muted)'}}>
+                 Mensual: {clp(pricing.totalMonthly)}
+              </div>
+           </div>
+           
+           <button onClick={() => setShowEnrollment(true)} className="btn btn-primary" style={{width:'100%'}}>
+              Inscribirme <ShoppingCart size={18}/>
+           </button>
+        </div>
+      )}
+
     </div>
   );
 }

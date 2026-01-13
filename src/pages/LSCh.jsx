@@ -1,593 +1,527 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useCart } from '../context/CartContext'; // Asumo que esto existe en tu proyecto
-import SEOHead from "../components/SEOHead.jsx";
-
-// ICONOS (LUCIDE REACT)
+import React, { useState, useMemo } from 'react';
 import { 
-  Hand, Check, Star, ShieldCheck, ArrowRight, 
-  Church, Sparkles, X, Heart, Loader2, Zap,
-  BookOpen, Calendar, Users, PlayCircle,
-  GraduationCap, MessageCircle, Info, ChevronDown, ChevronRight,
-  Clock, MapPin, MonitorPlay
+  BookOpen, Users, Star, Check, ChevronDown, ChevronRight, 
+  MapPin, Clock, ShieldCheck, Zap, Globe, MessageCircle, 
+  ArrowRight, Church, LayoutGrid 
 } from 'lucide-react';
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. DATA LAYER (SIMULACIÓN DE BASE DE DATOS)
-   Basado en la estructura de niveles y contenidos de tus capturas.
-   ────────────────────────────────────────────────────────────────────────── */
-
-const COURSE_DATA = {
-  id: 'lsch-pro',
-  title: 'Lengua de Señas Chilena',
-  subtitle: 'Formación Integral & Cultura Sorda',
-  description: 'Un programa académico diseñado no solo para enseñar señas, sino para estructurar tu pensamiento visual. Aprende gramática, cultura y expresión con nativos.',
-  levels: [
-    {
-      id: 'A1',
-      name: 'Nivel A1: Iniciación Visual',
-      shortDesc: 'Fundamentos y Supervivencia',
-      duration: '3 Meses',
-      lessons: 24,
-      color: '#06b6d4',
-      syllabus: [
-        {
-          unit: 'Unidad 1: Despertar Visual',
-          topics: [
-            'Alfabeto Dactilológico y configuración manual', //
-            'La importancia del contacto visual',
-            'Expresión facial: Rasgos no manuales (RNM)', //
-            'Práctica: Tu nombre en el espacio'
-          ]
-        },
-        {
-          unit: 'Unidad 2: Entorno Inmediato',
-          topics: [
-            'Familia y pronombres', //
-            'Colores y números (Cardinal vs Ordinal)',
-            'Días de la semana y meses',
-            'Laboratorio: Describiendo mi casa'
-          ]
-        },
-        {
-          unit: 'Unidad 3: Gramática Básica',
-          topics: [
-            'Estructura OSV (Objeto - Sujeto - Verbo)', //
-            'Negación y afirmación',
-            'Preguntas cerradas y abiertas',
-            'Verbos direccionales' //
-          ]
-        }
-      ]
-    },
-    {
-      id: 'A2',
-      name: 'Nivel A2: Gramática Espacial',
-      shortDesc: 'Fluidez y Narrativa',
-      duration: '4 Meses',
-      lessons: 32,
-      color: '#8b5cf6',
-      syllabus: [
-        { unit: 'Unidad 1: Clasificadores', topics: ['Uso del espacio 3D', 'Formas y tamaños', 'Movimiento y trayectoria'] },
-        { unit: 'Unidad 2: Tiempos Verbales', topics: ['Línea de tiempo corporal', 'Futuro y Pasado', 'Aspecto perfectivo'] },
-        { unit: 'Unidad 3: Narrativa', topics: ['Contar historias breves', 'Roles (Role-shifting)', 'Humor Sordo'] }
-      ]
-    },
-    {
-      id: 'B1',
-      name: 'Nivel B1: Contexto Profesional',
-      shortDesc: 'Profesionalización',
-      duration: '6 Meses',
-      lessons: 48,
-      color: '#f59e0b',
-      syllabus: [
-        { unit: 'Unidad 1: Interpretación', topics: ['Técnicas de voicing', 'Ética del intérprete', 'Contextos legales'] },
-        { unit: 'Unidad 2: Lingüística', topics: ['Fonología de la LSCh', 'Morfología avanzada', 'Sociolingüística'] }
-      ]
-    }
-  ]
-};
-
-const SCHEDULE_OPTIONS = [
-  { id: 'morning_a', label: 'Mañana A', days: 'Lun y Mié', time: '10:00 - 11:30', slots: 5 },
-  { id: 'evening_b', label: 'Noche B', days: 'Mar y Jue', time: '19:30 - 21:00', slots: 12 },
-  { id: 'saturday_c', label: 'Sábado Intensivo', days: 'Sábados', time: '09:00 - 12:00', slots: 2 }
-];
-
-const TEACHERS = [
-  { 
-    id: "fernanda",
-    name: "Fernanda",
-    role: "Educadora & Facilitadora LSCh",
-    bio: "Nuestra profesora nativa (Sorda) y Educadora de Párvulos profesional. Combina la cultura sorda con una pedagogía experta, paciente y estructurada.",
-    tags: ['Nativa', 'Pedagoga']
-  },
-
-];
-
-// Precios basados en tu captura
-const PRICING = {
-  baseMonth: 24990, 
-  enrollment: 19990,
-  churchDiscount: 0.20, // 20% descuento mensual
-  fullPackDiscount: 0.10 // 10% si paga todo el nivel
-};
-
-const clp = (num) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(num);
-
-/* ──────────────────────────────────────────────────────────────────────────
-   2. ESTILOS CSS AVANZADOS (INJECTED)
-   Esto asegura que se vea bien sin importar tu configuración de Tailwind
+   1. ESTILOS CSS ENCAPSULADOS (DISEÑO PREMIUM)
+   Esto asegura que se vea bien sin depender de librerías externas.
    ────────────────────────────────────────────────────────────────────────── */
 const styles = `
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 :root {
-  --bg-dark: #020617;
-  --bg-panel: #0f172a;
-  --bg-input: #1e293b;
-  --primary: #06b6d4;
-  --primary-dark: #0891b2;
-  --accent: #f59e0b;
+  --bg-deep: #020617;
+  --bg-card: #0f172a;
+  --bg-glass: rgba(15, 23, 42, 0.6);
+  --primary: #6366f1; /* Indigo vibrante */
+  --primary-glow: rgba(99, 102, 241, 0.5);
+  --cyan: #06b6d4;
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
-  --border: rgba(255,255,255,0.08);
-  --glass: rgba(15, 23, 42, 0.7);
+  --border: rgba(255, 255, 255, 0.08);
+  --radius: 16px;
 }
 
-.lsch-app {
-  background-color: var(--bg-dark);
-  color: var(--text-main);
+.lael-app {
   font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-deep);
+  color: var(--text-main);
   min-height: 100vh;
-  padding-bottom: 100px;
+  padding-bottom: 80px;
+  line-height: 1.5;
 }
 
-/* UI UTILS */
+/* UTILIDADES VISUALES */
 .glass-panel {
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
+  background: var(--bg-glass);
   backdrop-filter: blur(12px);
-  border-radius: 20px;
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
 }
 
-.glow-text {
-  text-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+.title-gradient {
+  background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-/* TABS NAVIGATION */
-.nav-tabs {
-  display: flex; gap: 4px; padding: 4px; background: var(--bg-input);
-  border-radius: 12px; margin-bottom: 24px; overflow-x: auto;
-}
-.nav-tab {
-  padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
-  color: var(--text-muted); cursor: pointer; transition: all 0.2s; white-space: nowrap;
-  display: flex; align-items: center; gap: 8px; border: none; background: transparent;
-}
-.nav-tab:hover { color: white; background: rgba(255,255,255,0.05); }
-.nav-tab.active { background: var(--bg-panel); color: var(--primary); shadow: 0 2px 10px rgba(0,0,0,0.2); }
-
-/* GRID SYSTEMS */
-.layout-grid {
-  display: grid; grid-template-columns: 1fr 380px; gap: 40px;
-  max-width: 1280px; margin: 0 auto; padding: 0 24px;
+.accent-text {
+  color: var(--cyan);
+  font-weight: 700;
 }
 
-/* SECTIONS */
-.hero-section {
-  padding: 80px 0 60px; text-align: center; position: relative; overflow: hidden;
-  border-bottom: 1px solid var(--border); margin-bottom: 40px;
-}
-
-/* MODULE CARDS */
-.level-card {
-  border: 1px solid var(--border); padding: 20px; border-radius: 16px; cursor: pointer;
-  background: linear-gradient(145deg, rgba(255,255,255,0.03), transparent);
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative; overflow: hidden;
-}
-.level-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.2); }
-.level-card.selected { border-color: var(--primary); background: rgba(6, 182, 212, 0.05); }
-.level-card.selected::before {
-  content:''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--primary);
-}
-
-/* ACCORDION */
-.accordion-item { border-bottom: 1px solid var(--border); }
-.accordion-trigger {
-  width: 100%; display: flex; justify-content: space-between; align-items: center;
-  padding: 16px 0; background: none; border: none; color: white; cursor: pointer;
-}
-.accordion-content {
-  padding-bottom: 16px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;
-}
-
-/* SCHEDULE SELECTOR */
-.slot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
-.time-slot {
-  background: var(--bg-input); padding: 12px; border-radius: 12px; border: 1px solid var(--border);
-  cursor: pointer; text-align: center; transition: 0.2s; position: relative;
-}
-.time-slot:hover { border-color: var(--primary); }
-.time-slot.active { background: var(--primary); color: #020617; border-color: var(--primary); font-weight: 700; }
-.slot-badge {
-  position: absolute; top: -8px; right: -8px; background: #ef4444; color: white;
-  font-size: 0.65rem; padding: 2px 6px; border-radius: 10px; font-weight: 700;
-}
-
-/* STICKY SUMMARY */
-.summary-sticky {
-  position: sticky; top: 30px;
+/* GRID LAYOUT */
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  position: relative;
 }
 
 @media (max-width: 1024px) {
-  .layout-grid { grid-template-columns: 1fr; }
-  .summary-sticky { position: relative; top: 0; }
+  .main-container { grid-template-columns: 1fr; }
 }
 
-/* ANIMATIONS */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.animate-enter { animation: fadeIn 0.5s ease-out forwards; }
+/* HERO */
+.hero {
+  padding: 80px 0 60px;
+  text-align: center;
+}
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.hero p {
+  font-size: 1.125rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* TABS DE NAVEGACIÓN */
+.custom-tabs {
+  display: flex;
+  background: rgba(255,255,255,0.03);
+  padding: 6px;
+  border-radius: 12px;
+  gap: 6px;
+  margin-bottom: 30px;
+  border: 1px solid var(--border);
+}
+.tab-btn {
+  flex: 1;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.tab-btn:hover { color: white; background: rgba(255,255,255,0.05); }
+.tab-btn.active {
+  background: var(--bg-card);
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  border: 1px solid var(--border);
+}
+
+/* TARJETAS DE SELECCIÓN (NIVELES) */
+.option-card {
+  padding: 24px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+.option-card:hover {
+  border-color: rgba(255,255,255,0.2);
+  transform: translateY(-2px);
+}
+.option-card.selected {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.05);
+}
+.option-card.selected::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--primary);
+}
+
+/* ACORDEÓN MALLA */
+.accordion-item {
+  border-bottom: 1px solid var(--border);
+}
+.accordion-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  background: none;
+  border: none;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+.accordion-body {
+  padding-bottom: 20px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  padding-left: 12px;
+}
+.accordion-body li {
+  margin-bottom: 8px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dot { width: 6px; height: 6px; background: var(--cyan); border-radius: 50%; }
+
+/* SIDEBAR RESUMEN (STICKY) */
+.summary-box {
+  position: sticky;
+  top: 40px;
+  padding: 32px;
+}
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+.price-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.total-amount {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+}
+
+/* SWITCH IGLESIA */
+.church-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 166, 0, 0.05); /* Orange tint */
+  border: 1px solid rgba(255, 166, 0, 0.2);
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin: 24px 0;
+  cursor: pointer;
+}
+.toggle-btn {
+  width: 48px;
+  height: 26px;
+  background: #334155;
+  border-radius: 50px;
+  position: relative;
+  transition: 0.3s;
+}
+.toggle-btn.active { background: #f59e0b; }
+.toggle-circle {
+  width: 20px; height: 20px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px; left: 3px;
+  transition: 0.3s;
+}
+.toggle-btn.active .toggle-circle { transform: translateX(22px); }
+
+/* BOTÓN PRIMARIO */
+.btn-primary {
+  width: 100%;
+  padding: 18px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: 0.2s;
+  box-shadow: 0 0 20px var(--primary-glow);
+}
+.btn-primary:hover {
+  background: #4f46e5;
+  transform: translateY(-2px);
+}
+
+/* TEACHER CARD */
+.teacher-card {
+  display: flex;
+  gap: 20px;
+  padding: 24px;
+  margin-top: 20px;
+}
+.avatar {
+  width: 60px; height: 60px;
+  background: #334155;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 1.5rem; color: #94a3b8;
+}
+
+/* ANIMACIONES */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in { animation: fadeIn 0.4s ease-out forwards; }
 `;
 
 /* ──────────────────────────────────────────────────────────────────────────
-   3. SUB-COMPONENTES INTERNOS (Para modularidad)
+   2. DATOS (MOCKUP)
+   Basados en tus imágenes.
    ────────────────────────────────────────────────────────────────────────── */
+const LEVELS = [
+  {
+    id: 'A1',
+    title: 'Nivel A1: Iniciación Visual',
+    desc: 'Fundamentos y Supervivencia. Aprenderás el abecedario, saludos, familia y estructura básica.',
+    duration: '3 Meses / 24 Clases',
+    price: 24990,
+    enrollment: 19990
+  },
+  {
+    id: 'A2',
+    title: 'Nivel A2: Gramática Espacial',
+    desc: 'Fluidez y Narrativa. Verbos direccionales y uso del espacio para describir escenas complejas.',
+    duration: '4 Meses / 32 Clases',
+    price: 28990,
+    enrollment: 19990
+  },
+  {
+    id: 'B1',
+    title: 'Nivel B1: Contexto Profesional',
+    desc: 'Especialización técnica para salud, educación y atención al público.',
+    duration: '6 Meses / 48 Clases',
+    price: 32990,
+    enrollment: 19990
+  }
+];
 
-// A. Selector de Nivel (Visualmente rico)
-const LevelSelector = ({ selected, onSelect }) => (
-  <div className="grid gap-4 mb-8">
-    {COURSE_DATA.levels.map((level) => (
-      <div 
-        key={level.id}
-        onClick={() => onSelect(level.id)}
-        className={`level-card ${selected === level.id ? 'selected' : ''}`}
-      >
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <span style={{color: level.color}}><Sparkles size={16}/></span>
-            {level.name}
-          </h3>
-          {selected === level.id && <div className="bg-cyan-500/20 text-cyan-400 px-2 py-1 rounded text-xs font-bold">SELECCIONADO</div>}
-        </div>
-        <p className="text-slate-400 text-sm mb-4">{level.shortDesc}</p>
-        <div className="flex gap-4 text-xs text-slate-500">
-          <span className="flex items-center gap-1"><Clock size={12}/> {level.duration}</span>
-          <span className="flex items-center gap-1"><BookOpen size={12}/> {level.lessons} Clases</span>
-        </div>
-      </div>
-    ))}
-  </div>
-);
-
-// B. Visor de Malla Curricular (Interactivo)
-const SyllabusViewer = ({ levelId }) => {
-  const level = COURSE_DATA.levels.find(l => l.id === levelId);
-  const [openUnit, setOpenUnit] = useState(0);
-
-  return (
-    <div className="animate-enter">
-      <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-        <BookOpen className="text-cyan-400"/> Malla Curricular: {level.name}
-      </h3>
-      <div className="glass-panel p-6">
-        {level.syllabus.map((item, idx) => (
-          <div key={idx} className="accordion-item">
-            <button className="accordion-trigger" onClick={() => setOpenUnit(openUnit === idx ? -1 : idx)}>
-              <span className="font-semibold text-left">{item.unit}</span>
-              {openUnit === idx ? <ChevronDown size={18}/> : <ChevronRight size={18}/>}
-            </button>
-            {openUnit === idx && (
-              <div className="accordion-content">
-                <ul className="space-y-2 pl-4 border-l-2 border-slate-700">
-                  {item.topics.map((t, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-cyan-500 flex-shrink-0"></div>
-                      <span>{t}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-// C. Selector de Horarios (Grid)
-const SchedulePicker = ({ selected, onSelect }) => (
-  <div className="animate-enter mt-8">
-    <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-      <Calendar className="text-cyan-400"/> Elige tu horario
-    </h3>
-    <div className="slot-grid">
-      {SCHEDULE_OPTIONS.map((opt) => (
-        <div 
-          key={opt.id}
-          onClick={() => onSelect(opt.id)}
-          className={`time-slot ${selected === opt.id ? 'active' : ''}`}
-        >
-          {opt.slots < 5 && <div className="slot-badge">¡Últimos {opt.slots}!</div>}
-          <div className="text-sm opacity-80 mb-1">{opt.days}</div>
-          <div className="text-lg font-bold">{opt.time}</div>
-          <div className="text-xs mt-2 opacity-60">{opt.label}</div>
-        </div>
-      ))}
-    </div>
-    <p className="text-xs text-slate-500 mt-3 flex items-center gap-2">
-      <Info size={14}/> Todos los horarios son hora local de Chile (GMT-3).
-    </p>
-  </div>
-);
-
-// D. Teacher Showcase
-const TeacherGrid = () => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 animate-enter">
-    {TEACHERS.map(t => (
-      <div key={t.id} className="glass-panel p-4 flex gap-4 items-start">
-        <div className="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center text-xl font-bold text-slate-400">
-          {t.name.charAt(0)}
-        </div>
-        <div>
-          <h4 className="font-bold text-white">{t.name}</h4>
-          <span className="text-xs text-cyan-400 font-bold uppercase tracking-wider">{t.role}</span>
-          <p className="text-xs text-slate-400 mt-2 leading-relaxed">{t.bio}</p>
-          <div className="flex gap-2 mt-2">
-            {t.tags.map(tag => (
-              <span key={tag} className="text-[10px] bg-slate-800 px-2 py-1 rounded border border-slate-700 text-slate-300">
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    ))}
-  </div>
-);
+const SYLLABUS_A1 = [
+  { title: "Unidad 1: Inmersión Visual", topics: ["Alfabeto Dactilológico", "Configuraciones Manuales", "Expresión Facial (Rasgos no manuales)"] },
+  { title: "Unidad 2: Vida Cotidiana", topics: ["Saludos y Presentación", "Familia y Entorno", "Días, Meses y Tiempo"] },
+  { title: "Unidad 3: Gramática LSCh", topics: ["Estructura OSV", "Verbos Direccionales", "Clasificadores"] }
+];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   4. COMPONENTE PRINCIPAL (CONTROLADOR DE ESTADOS)
+   3. COMPONENTE PRINCIPAL
    ────────────────────────────────────────────────────────────────────────── */
-
-export default function LschAdvancedPage() {
-  // Hook de carrito (mock si no existe)
-  const { addToCart } = useCart ? useCart() : { addToCart: () => console.log('Add to cart') };
-  
-  // --- STATE MANAGEMENT ---
-  const [activeTab, setActiveTab] = useState('overview'); // overview, syllabus, teachers
+export default function LSChInscripcion() {
+  const [activeTab, setActiveTab] = useState('programa'); // programa | malla | docentes
   const [selectedLevelId, setSelectedLevelId] = useState('A1');
-  const [selectedScheduleId, setSelectedScheduleId] = useState(null);
-  const [isChurchMode, setIsChurchMode] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [churchMode, setChurchMode] = useState(false);
+  const [openUnit, setOpenUnit] = useState(0); // Para el acordeón
 
-  // --- DERIVED DATA ---
-  const selectedLevel = COURSE_DATA.levels.find(l => l.id === selectedLevelId);
-  
-  // Cálculo de Precios con useMemo para rendimiento
-  const totals = useMemo(() => {
-    let monthly = PRICING.baseMonth;
-    let enroll = PRICING.enrollment;
-    
-    // Aplicar lógica Church Mode del screenshot
-    if (isChurchMode) {
-      monthly = monthly * (1 - PRICING.churchDiscount);
-      enroll = 0; // Matrícula gratis iglesia (Supuesto de negocio común)
-    }
+  // Cálculos
+  const selectedLevel = LEVELS.find(l => l.id === selectedLevelId);
+  const currentPrice = churchMode ? selectedLevel.price * 0.8 : selectedLevel.price; // 20% dcto iglesia
+  const currentEnrollment = churchMode ? 0 : selectedLevel.enrollment; // Matrícula gratis iglesia
+  const total = currentPrice + currentEnrollment;
 
-    return {
-      monthly,
-      enroll,
-      totalFirstMonth: monthly + enroll,
-      savings: isChurchMode ? (PRICING.baseMonth - monthly) + PRICING.enrollment : 0
-    };
-  }, [isChurchMode]);
-
-  // --- HANDLERS ---
-  const handleAddToCart = () => {
-    if (!selectedScheduleId) {
-      alert("Por favor selecciona un horario antes de continuar.");
-      return;
-    }
-    setLoading(true);
-    
-    // Simular proceso de red
-    setTimeout(() => {
-      addToCart({
-        id: `lsch-${selectedLevelId}-${Date.now()}`,
-        name: `LSCh ${selectedLevel.name}`,
-        price: totals.totalFirstMonth,
-        details: [
-          `Horario: ${SCHEDULE_OPTIONS.find(s => s.id === selectedScheduleId).label}`,
-          isChurchMode ? 'Convenio Iglesia Aplicado' : 'Plan Estándar'
-        ]
-      });
-      setLoading(false);
-      alert("Curso agregado al carrito con éxito.");
-    }, 800);
-  };
+  // Formato Moneda
+  const clp = (val) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(val);
 
   return (
-    <div className="lsch-app">
+    <div className="lael-app">
       <style>{styles}</style>
-      <SEOHead title="LSCh Pro | Lael Institute" description="Plataforma de aprendizaje LSCh." />
 
-      {/* 1. HERO CONTEXTUAL */}
-      <section className="hero-section">
-        <div className="max-w-4xl mx-auto px-6 relative z-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/50 border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase tracking-widest mb-6 backdrop-blur-md">
-            <Zap size={14} className="animate-pulse"/> Nueva Admisión 2026
-          </div>
-          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 text-white tracking-tight">
-            Rompe la barrera <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 glow-text">
-              del sonido.
-            </span>
-          </h1>
-          <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            {COURSE_DATA.description}
-          </p>
-          
-          {/* Stats rápidos */}
-          <div className="flex justify-center gap-8 mt-10 text-slate-500 text-sm font-medium">
-            <div className="flex items-center gap-2"><Users size={18} className="text-cyan-500"/> +2.5k Alumnos</div>
-            <div className="flex items-center gap-2"><Star size={18} className="text-yellow-500"/> 4.9/5 Valoración</div>
-            <div className="flex items-center gap-2"><MonitorPlay size={18} className="text-purple-500"/> 100% Online en vivo</div>
-          </div>
+      {/* HEADER HERO */}
+      <section className="hero">
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 8, 
+          padding: '6px 16px', borderRadius: 50, 
+          background: 'rgba(6, 182, 212, 0.1)', border: '1px solid rgba(6, 182, 212, 0.3)',
+          color: '#22d3ee', fontSize: '0.8rem', fontWeight: 700, marginBottom: 24
+        }}>
+          <Zap size={14} fill="currentColor"/> Admisión 2026
         </div>
-
-        {/* Decoración de fondo */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-[1200px] pointer-events-none">
-           <div className="absolute top-20 left-10 w-64 h-64 bg-cyan-500/10 rounded-full blur-[100px]"/>
-           <div className="absolute bottom-20 right-10 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px]"/>
-        </div>
+        <h1>
+          <span className="title-gradient">Rompe la barrera</span><br/>
+          <span className="accent-text">del sonido.</span>
+        </h1>
+        <p>
+          Un programa académico diseñado no solo para enseñar señas, 
+          sino para estructurar tu pensamiento visual.
+        </p>
       </section>
 
-      {/* 2. LAYOUT PRINCIPAL (GRID) */}
-      <div className="layout-grid">
+      <div className="main-container">
         
-        {/* === COLUMNA IZQUIERDA: CONTENIDO === */}
-        <div>
+        {/* COLUMNA IZQUIERDA: CONTENIDO */}
+        <div className="animate-in">
           
-          {/* NAVEGACIÓN DE PESTAÑAS */}
-          <nav className="nav-tabs">
+          {/* TABS NAVEGACIÓN */}
+          <div className="custom-tabs">
             <button 
-              className={`nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
-              onClick={() => setActiveTab('overview')}
+              className={`tab-btn ${activeTab === 'programa' ? 'active' : ''}`}
+              onClick={() => setActiveTab('programa')}
             >
-              <GraduationCap size={18}/> Programa
+              <LayoutGrid size={18}/> Programa
             </button>
             <button 
-              className={`nav-tab ${activeTab === 'syllabus' ? 'active' : ''}`}
-              onClick={() => setActiveTab('syllabus')}
+              className={`tab-btn ${activeTab === 'malla' ? 'active' : ''}`}
+              onClick={() => setActiveTab('malla')}
             >
               <BookOpen size={18}/> Malla Completa
             </button>
             <button 
-              className={`nav-tab ${activeTab === 'teachers' ? 'active' : ''}`}
-              onClick={() => setActiveTab('teachers')}
+              className={`tab-btn ${activeTab === 'docentes' ? 'active' : ''}`}
+              onClick={() => setActiveTab('docentes')}
             >
               <Users size={18}/> Docentes
             </button>
-          </nav>
-
-          {/* VISTAS DINÁMICAS */}
-          <div className="min-h-[400px]">
-            {activeTab === 'overview' && (
-              <div className="animate-enter">
-                <h2 className="text-2xl font-bold mb-6 text-white">Selecciona tu nivel de ingreso</h2>
-                <LevelSelector selected={selectedLevelId} onSelect={setSelectedLevelId} />
-                
-                {/* Info contextual del nivel seleccionado */}
-                <div className="glass-panel p-6 mt-6 border-l-4 border-l-cyan-500">
-                  <h4 className="text-lg font-bold text-white mb-2">Objetivo del {selectedLevel.name}</h4>
-                  <p className="text-slate-400 text-sm">
-                    Este nivel está diseñado para {selectedLevel.id === 'A1' ? 'personas sin conocimiento previo' : 'estudiantes con base gramatical'}. 
-                    Al finalizar, serás capaz de {selectedLevel.id === 'A1' ? 'mantener conversaciones básicas y presentarte' : 'interpretar situaciones cotidianas complejas'}.
-                  </p>
-                </div>
-
-                <SchedulePicker selected={selectedScheduleId} onSelect={setSelectedScheduleId} />
-              </div>
-            )}
-
-            {activeTab === 'syllabus' && (
-              <SyllabusViewer levelId={selectedLevelId} />
-            )}
-
-            {activeTab === 'teachers' && (
-               <div>
-                 <h3 className="text-xl font-bold mb-2">Conoce a tu equipo docente</h3>
-                 <p className="text-slate-400 mb-6">Nuestra metodología de co-docencia (Sordo + Intérprete) asegura calidad técnica y cultural.</p>
-                 <TeacherGrid />
-               </div>
-            )}
           </div>
-        </div>
 
-        {/* === COLUMNA DERECHA: RESUMEN Y PAGO (STICKY) === */}
-        <div className="summary-sticky">
-          <div className="glass-panel p-6 shadow-2xl shadow-black/50">
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-6">Tu Inscripción</h3>
+          {/* CONTENIDO DINÁMICO */}
+          {activeTab === 'programa' && (
+            <div>
+              <h3 style={{marginBottom: 20, fontSize: '1.2rem'}}>Selecciona tu nivel de ingreso</h3>
+              {LEVELS.map((level) => (
+                <div 
+                  key={level.id}
+                  className={`glass-panel option-card ${selectedLevelId === level.id ? 'selected' : ''}`}
+                  onClick={() => setSelectedLevelId(level.id)}
+                >
+                  <div style={{display: 'flex', justifyContent: 'space-between', marginBottom: 8}}>
+                    <strong style={{fontSize: '1.1rem', color: selectedLevelId === level.id ? 'var(--cyan)' : 'white'}}>
+                      {level.title}
+                    </strong>
+                    {selectedLevelId === level.id && <Check size={20} color="var(--cyan)"/>}
+                  </div>
+                  <p style={{color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: 12}}>
+                    {level.desc}
+                  </p>
+                  <div style={{display: 'flex', gap: 12, fontSize: '0.8rem', color: '#94a3b8'}}>
+                     <span style={{display:'flex', alignItems:'center', gap:6}}><Clock size={14}/> {level.duration}</span>
+                     <span style={{display:'flex', alignItems:'center', gap:6}}><Globe size={14}/> Online en Vivo</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
-            {/* Resumen Selección */}
-            <div className="flex items-start gap-4 mb-6 pb-6 border-b border-white/5">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-600 to-blue-700 flex items-center justify-center text-white shadow-lg shadow-cyan-500/20">
-                <Hand size={24}/>
-              </div>
-              <div>
-                <h4 className="font-bold text-white text-lg leading-tight">LSCh {selectedLevel.name}</h4>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded text-slate-300">Online</span>
-                  {selectedScheduleId && (
-                     <span className="text-[10px] bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded border border-cyan-500/30">
-                       {SCHEDULE_OPTIONS.find(s => s.id === selectedScheduleId).slots} cupos
-                     </span>
+          {activeTab === 'malla' && (
+            <div className="glass-panel" style={{padding: 24}}>
+              <h3 style={{marginBottom: 24}}>Malla Curricular: {selectedLevel.title}</h3>
+              {SYLLABUS_A1.map((unit, idx) => (
+                <div key={idx} className="accordion-item">
+                  <button className="accordion-header" onClick={() => setOpenUnit(openUnit === idx ? -1 : idx)}>
+                    {unit.title}
+                    {openUnit === idx ? <ChevronDown size={20}/> : <ChevronRight size={20}/>}
+                  </button>
+                  {openUnit === idx && (
+                    <div className="accordion-body">
+                      <ul>
+                        {unit.topics.map(topic => (
+                          <li key={topic}><div className="dot"></div> {topic}</li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
                 </div>
-              </div>
+              ))}
+            </div>
+          )}
+
+          {activeTab === 'docentes' && (
+            <div>
+               <h3 style={{marginBottom: 10}}>Conoce a tu equipo docente</h3>
+               <p style={{color: 'var(--text-muted)'}}>Metodología de co-docencia: Instructor Sordo + Intérprete Oyente.</p>
+               
+               <div className="glass-panel teacher-card">
+                  <div className="avatar">F</div>
+                  <div>
+                    <h4 style={{fontSize: '1.1rem', fontWeight: 700}}>Fernanda</h4>
+                    <span style={{color: 'var(--cyan)', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px'}}>
+                      Educadora & Facilitadora LSCh
+                    </span>
+                    <p style={{fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: 8, lineHeight: 1.6}}>
+                      Nuestra profesora nativa (Sorda) y Educadora de Párvulos profesional. Combina la cultura sorda con pedagogía experta.
+                    </p>
+                  </div>
+               </div>
+            </div>
+          )}
+        </div>
+
+        {/* COLUMNA DERECHA: RESUMEN (Igual a la imagen) */}
+        <div>
+          <div className="glass-panel summary-box">
+            <h3 style={{fontSize: '1rem', fontWeight: 700, marginBottom: 24}}>Tu Inscripción</h3>
+            
+            <div style={{display: 'flex', gap: 16, marginBottom: 24}}>
+               <div style={{background: '#1e293b', padding: 12, borderRadius: 12, height: 'fit-content'}}>
+                 <BookOpen size={24} color="var(--text-muted)"/>
+               </div>
+               <div>
+                 <strong style={{display: 'block', fontSize: '1rem'}}>LSCh {selectedLevel.title.split(':')[0]}</strong>
+                 <span style={{color: 'var(--text-muted)', fontSize: '0.9rem'}}>{selectedLevel.title.split(':')[1]}</span>
+               </div>
             </div>
 
-            {/* Configuración de Precio */}
-            <div className="space-y-4 mb-8">
-              {/* Toggle Iglesia */}
-              <div 
-                onClick={() => setIsChurchMode(!isChurchMode)}
-                className={`flex items-center justify-between p-3 rounded-xl border cursor-pointer transition-all ${isChurchMode ? 'bg-amber-500/10 border-amber-500/50' : 'bg-slate-800/50 border-white/5 hover:border-white/20'}`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${isChurchMode ? 'bg-amber-500 text-black' : 'bg-slate-700 text-slate-400'}`}>
-                    <Church size={18}/>
+            {/* SWITCH IGLESIA */}
+            <div className="church-switch" onClick={() => setChurchMode(!churchMode)}>
+               <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
+                  <div style={{background: '#f59e0b', padding: 6, borderRadius: 6, color: 'black'}}>
+                    <Church size={16}/>
                   </div>
                   <div>
-                    <div className={`text-sm font-bold ${isChurchMode ? 'text-amber-400' : 'text-slate-300'}`}>Convenio Iglesia</div>
-                    <div className="text-[10px] text-slate-500">Descuento aplicado a ministerios</div>
+                    <strong style={{display: 'block', fontSize: '0.9rem', color: '#f59e0b'}}>Convenio Iglesia</strong>
+                    <span style={{fontSize: '0.75rem', color: 'var(--text-muted)'}}>Descuento ministerios</span>
                   </div>
-                </div>
-                <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${isChurchMode ? 'bg-amber-500 border-amber-500' : 'border-slate-500'}`}>
-                  {isChurchMode && <Check size={12} className="text-black"/>}
-                </div>
-              </div>
+               </div>
+               <div className={`toggle-btn ${churchMode ? 'active' : ''}`}>
+                  <div className="toggle-circle"></div>
+               </div>
             </div>
 
-            {/* Desglose Matemático */}
-            <div className="space-y-2 text-sm mb-6">
-              <div className="flex justify-between text-slate-400">
-                <span>Mensualidad</span>
-                <span>{clp(totals.monthly)}</span>
-              </div>
-              <div className="flex justify-between text-slate-400">
-                <span>Matrícula</span>
-                <span className={totals.enroll === 0 ? 'text-green-400 font-bold' : ''}>
-                  {totals.enroll === 0 ? 'GRATIS' : clp(totals.enroll)}
-                </span>
-              </div>
-              {totals.savings > 0 && (
-                <div className="flex justify-between text-amber-400 font-bold text-xs bg-amber-500/10 p-2 rounded">
-                  <span>Ahorras hoy:</span>
-                  <span>-{clp(totals.savings)}</span>
-                </div>
-              )}
+            {/* DESGLOSE PRECIOS */}
+            <div className="price-row">
+              <span>Arancel Mensual</span>
+              <span>{clp(currentPrice)}</span>
+            </div>
+            <div className="price-row">
+              <span>Matrícula</span>
+              <span style={{color: currentEnrollment === 0 ? '#4ade80' : 'white', fontWeight: currentEnrollment === 0 ? 700 : 400}}>
+                {currentEnrollment === 0 ? 'GRATIS' : clp(currentEnrollment)}
+              </span>
             </div>
 
-            {/* Total y CTA */}
-            <div className="pt-4 border-t border-white/10">
-              <div className="flex justify-between items-end mb-4">
-                <span className="text-slate-400 text-sm">Total a pagar hoy</span>
-                <span className="text-3xl font-extrabold text-white tracking-tight">{clp(totals.totalFirstMonth)}</span>
-              </div>
-              
-              <button 
-                onClick={handleAddToCart}
-                disabled={loading}
-                className="w-full py-4 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl shadow-lg shadow-cyan-500/25 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? <Loader2 className="animate-spin"/> : (
-                  <>Inscribirme Ahora <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform"/></>
-                )}
-              </button>
-              
-              <p className="text-center text-[10px] text-slate-500 mt-4 flex items-center justify-center gap-1">
-                <ShieldCheck size={12}/> Garantía de devolución de 7 días sin preguntas.
-              </p>
+            {/* TOTAL */}
+            <div className="price-total">
+               <div>
+                 <span style={{fontSize: '0.85rem', color: 'var(--text-muted)', display: 'block'}}>Total a pagar hoy</span>
+                 <span style={{fontSize: '0.75rem', color: '#4ade80'}}>IVA Incluido</span>
+               </div>
+               <div className="total-amount">{clp(total)}</div>
+            </div>
+
+            <button className="btn-primary">
+              Inscribirme Ahora <ArrowRight size={20}/>
+            </button>
+
+            <div style={{display:'flex', justifyContent:'center', marginTop: 16, gap:6, color: '#64748b', fontSize: '0.75rem'}}>
+               <ShieldCheck size={14}/> Garantía de devolución de 7 días.
             </div>
           </div>
         </div>

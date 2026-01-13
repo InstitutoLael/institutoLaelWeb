@@ -8,12 +8,11 @@ import studyOnline from "../assets/img/lael/study-online.jpg";
 // 📦 ICONOS
 import { 
   X, CheckCircle, Loader2, ArrowRight, 
-  CreditCard, Book, Zap, PlayCircle, Award, ShoppingCart, Plus
+  CreditCard, Book, Zap, ShoppingCart, Plus
 } from 'lucide-react';
 
 // 📊 DATOS
 import {
-  ENROLLMENT_FEE,
   PAES_SUBJECTS,
   computePaesPrice,
   clp,
@@ -66,10 +65,6 @@ h1, h2, h3 { line-height: 1.1; margin: 0; font-weight: 800; }
 .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
 .hero-img { width: 100%; border-radius: 24px; opacity: 0.9; transform: rotate(2deg); border: 1px solid var(--border); display: block; }
 .text-gradient { background: linear-gradient(to right, #fff, #a5b4fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-/* BENEFIT CARDS */
-.benefits-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin: 60px 0; }
-.benefit-card { background: var(--bg-card); border: 1px solid var(--border); padding: 24px; border-radius: 20px; }
 
 /* BUILDER */
 .builder-container { display: grid; grid-template-columns: 1.6fr 1fr; gap: 40px; align-items: start; margin-top: 40px; }
@@ -134,11 +129,11 @@ const SubjectCardItem = React.memo(({ subject, isSelected, onToggle }) => {
   );
 });
 
-// 2. Modal Formulario (Conexión REAL a tu Worker)
+// 2. Modal Formulario (LÓGICA INTACTA)
 const WORKER_URL = "https://instituto-lael-web.contacto-c10.workers.dev/inscribir";
 
 const EnrollmentForm = ({ planTitle, price, selectedDetails, onClose }) => {
-  const [status, setStatus] = useState("idle"); // idle, loading, success, error
+  const [status, setStatus] = useState("idle"); 
   const [formData, setFormData] = useState({ name: "", rut: "", email: "", phone: "" });
 
   const handleChange = (e) => setFormData({...formData, [e.target.name]: e.target.value});
@@ -146,9 +141,7 @@ const EnrollmentForm = ({ planTitle, price, selectedDetails, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("loading");
-
     try {
-      // Envío real al Worker para Excel/CRM
       const response = await fetch(WORKER_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -159,16 +152,9 @@ const EnrollmentForm = ({ planTitle, price, selectedDetails, onClose }) => {
           amount: price
         })
       });
-
-      if (response.ok) {
-        setStatus("success");
-      } else {
-        setStatus("error");
-      }
-    } catch (error) {
-      console.error("Error enviando:", error);
-      setStatus("error");
-    }
+      if (response.ok) setStatus("success");
+      else setStatus("error");
+    } catch { setStatus("error"); }
   };
 
   if (status === "success") return (
@@ -201,11 +187,12 @@ const EnrollmentForm = ({ planTitle, price, selectedDetails, onClose }) => {
           </div>
           
           <button disabled={status === 'loading'} className="btn btn-primary" style={{width:'100%', marginTop:10}}>
-            {status === 'loading' ? <Loader2 className="spin"/> : "Confirmar e Ir a Pagar"}
+            {status === 'loading' ? <Loader2 className="spin" style={{animation:'spin 1s linear infinite'}}/> : "Confirmar e Ir a Pagar"}
           </button>
           
           {status === 'error' && <p style={{color:'#ef4444', fontSize:'0.8rem', marginTop:10, textAlign:'center'}}>Hubo un error. Intenta nuevamente.</p>}
         </form>
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
       </div>
     </div>
   );
@@ -219,6 +206,7 @@ export default function PAES() {
   const builderRef = useRef(null);
   const [selectedSubjectIds, setSelectedSubjectIds] = useState([]);
   const [showEnrollment, setShowEnrollment] = useState(false);
+  const [toast, setToast] = useState(null); // NUEVO ESTADO PARA TOAST
 
   // Cálculos Memoizados
   const pricing = useMemo(() => computePaesPrice(selectedSubjectIds), [selectedSubjectIds]);
@@ -227,19 +215,21 @@ export default function PAES() {
     setSelectedSubjectIds((prev) => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
   }, []);
 
-  // 1. Acción: Agregar al Carro (Sin Modal)
+  // 1. Acción: Agregar al Carro (MODIFICADO PARA TOAST)
   const handleAddToCart = () => {
     addToCart({
       id: `paes-${Date.now()}`,
       name: `Preu PAES - ${pricing.label}`,
-      price: pricing.totalFirstMonth,
+      price: pricing.totalFirstMonth,    // Pago Hoy (Alto)
+      recurringPrice: pricing.totalMonthly, // Mensualidad (Bajo) -> Esto permite la lógica del carro
       recurrence: 'monthly',
-      recurringPrice: pricing.totalMonthly,
       category: "Preuniversitario",
       details: PAES_SUBJECTS.filter(s => selectedSubjectIds.includes(s.id)).map(s => s.name)
     });
-    // Feedback visual simple (alert o toast)
-    alert("¡Agregado al carrito correctamente!");
+    
+    // Mostramos el Toast en vez de Alert
+    setToast("¡Curso agregado al carrito!");
+    setTimeout(() => setToast(null), 3000);
   };
 
   return (
@@ -247,6 +237,19 @@ export default function PAES() {
       <style>{styles}</style>
       <SEOHead title="Preu PAES 2026 | Lael" description="Personaliza tu preparación." />
       <div className="bg-glow"></div>
+
+      {/* COMPONENTE VISUAL DEL TOAST (NUEVO) */}
+      {toast && (
+        <div style={{
+          position: 'fixed', bottom: 120, left: '50%', transform: 'translateX(-50%)',
+          background: '#10b981', color: 'white', padding: '10px 20px', borderRadius: 50,
+          boxShadow: '0 10px 30px rgba(0,0,0,0.4)', zIndex: 9999, fontWeight: 700,
+          display: 'flex', alignItems: 'center', gap: 8, animation: 'slideUpToast 0.3s ease-out'
+        }}>
+           <CheckCircle size={18}/> {toast}
+           <style>{`@keyframes slideUpToast { from { opacity:0; transform: translate(-50%, 20px); } to { opacity:1; transform: translate(-50%, 0); } }`}</style>
+        </div>
+      )}
 
       {/* MODAL DE INSCRIPCIÓN DIRECTA */}
       {showEnrollment && (

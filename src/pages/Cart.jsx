@@ -13,14 +13,15 @@ export default function Cart() {
   const { cart, removeFromCart, clearCart } = useCart();
   const [isPaying, setIsPaying] = useState(false);
 
-  // 1. LÓGICA DE CÁLCULO
+  // 1. LÓGICA DE CÁLCULO FINANCIERO
   // Total a pagar HOY (Incluye matrículas + primer mes de todos los cursos)
   const totalToday = cart.reduce((acc, item) => acc + item.price, 0);
 
   // Total recurrente (Solo lo que pagarán mensualmente después)
+  // Si un item no tiene recurringPrice, asumimos que es pago único (0 mensual)
   const totalMonthly = cart.reduce((acc, item) => acc + (item.recurringPrice || 0), 0);
 
-  // Detectar cuánto es matrícula (Diferencia entre lo de hoy y lo mensual)
+  // El sistema deduce la matrícula calculando la diferencia
   const enrollmentTotal = totalToday - totalMonthly;
 
   const handlePayment = () => {
@@ -135,7 +136,7 @@ export default function Cart() {
                 </div>
               </div>
 
-              {/* NOTIFICACIÓN IMPORTANTE */}
+              {/* NOTIFICACIÓN IMPORTANTE - LÓGICA DE NEGOCIO VISIBLE */}
               <div style={{display:'flex', gap:10, background:'rgba(59, 130, 246, 0.1)', padding:12, borderRadius:12, marginBottom:24}}>
                 <AlertCircle size={20} color="#60a5fa" style={{flexShrink:0}} />
                 <p style={{fontSize:'0.8rem', color:'#bfdbfe', margin:0, lineHeight:1.4}}>

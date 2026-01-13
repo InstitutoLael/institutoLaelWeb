@@ -109,7 +109,7 @@ export default function About() {
                {/* FOTO: CAMBIAR EL SRC POR TU FOTO REAL */}
                <div className="fc-image">
                   <img 
-                    src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=600" 
+ 
                     alt="Diego Chaparro" 
                   />
                   <div className="fc-overlay"></div>

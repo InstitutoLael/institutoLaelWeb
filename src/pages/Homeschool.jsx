@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useRef } from "react";
 import { useCart } from "../context/CartContext";
-import EnrollmentForm from "../components/EnrollmentForm"; 
+import EnrollmentForm from "../components/EnrollmentForm"; // Asegúrate de tener este componente o quita la importación
+import SEOHead from "../components/SEOHead"; 
 
-// Importamos la data
+// Importamos la data (Asegúrate de que esta ruta sea correcta)
 import { 
   ACADEMY_CONFIG, 
   SUBJECTS, 
@@ -13,29 +14,19 @@ import {
   clp 
 } from "../data/homeschool.js";
 
+import { 
+  Zap, Check, CheckCircle, School, User, Building2, 
+  Star, ArrowRight, Brain, Target, ShieldCheck, 
+  ShoppingCart, X 
+} from 'lucide-react';
+
 // --- IMÁGENES ---
 const heroImg = "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1200&auto=format&fit=crop";
-// Si esta imagen da error, comenta la importación
-import losOlivosLogo from "../assets/img/Partners/LosOlivos.png"; 
+// Si no tienes la imagen local, comenta la siguiente línea:
+// import losOlivosLogo from "../assets/img/Partners/LosOlivos.png"; 
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. ICONOS SVG
-   ────────────────────────────────────────────────────────────────────────── */
-const Icons = {
-  Zap: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
-  Check: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
-  CheckCircle: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
-  School: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6H5a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h13l4-3.5L18 6Z"/><path d="M12 13v9"/><path d="M12 2v4"/><path d="M22 6l-4-3.5L14 6"/></svg>,
-  User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-  Building: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M8 10h.01"/><path d="M16 10h.01"/><path d="M8 14h.01"/><path d="M16 14h.01"/></svg>,
-  Star: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>,
-  ArrowRight: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>,
-  Brain: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/></svg>,
-  Target: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-};
-
-/* ──────────────────────────────────────────────────────────────────────────
-   2. ESTILOS CSS
+   1. ESTILOS CSS (Refinados y Dark Mode)
    ────────────────────────────────────────────────────────────────────────── */
 const css = `
 :root {
@@ -47,7 +38,7 @@ const css = `
   --text-main: #fff;
   --text-muted: #a1a1aa;
   --radius: 20px;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -69,7 +60,7 @@ h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.05; font-weight: 800; l
 .lead { font-size: 1.15rem; color: var(--text-muted); line-height: 1.6; max-width: 500px; margin-bottom: 30px; }
 .badge-new { display: inline-flex; align-items: center; gap: 8px; background: rgba(139, 92, 246, 0.1); color: #a78bfa; padding: 6px 14px; border-radius: 50px; font-weight: 700; font-size: 0.8rem; border: 1px solid rgba(139, 92, 246, 0.2); margin-bottom: 24px; }
 
-/* HOOK SECTION (NUEVO) */
+/* HOOK SECTION */
 .hook-section { padding: 40px 0 80px; }
 .hook-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
 .hook-card { background: linear-gradient(180deg, var(--bg-card) 0%, rgba(20,20,20,0) 100%); border: 1px solid var(--border); padding: 30px; border-radius: var(--radius); text-align: left; }
@@ -153,7 +144,7 @@ h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.05; font-weight: 800; l
 .total-note { font-size: 0.8rem; color: var(--text-muted); }
 .btn-checkout { background: white; color: black; width: 100%; padding: 16px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 800; font-size: 1.1rem; margin-top: 24px; transition: 0.2s; text-align: center; }
 .btn-checkout:hover { transform: scale(1.02); box-shadow: 0 10px 30px rgba(255,255,255,0.2); }
-.guarantee-box { margin-top: 20px; font-size: 0.8rem; color: #666; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; line-height: 1.4; }
+.guarantee-box { margin-top: 20px; font-size: 0.8rem; color: #666; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; line-height: 1.4; display:flex; gap:8; align-items:center; justify-content:center;}
 
 /* B2B */
 .b2b-container { background: #0a0a0a; border: 1px solid var(--border); border-radius: 24px; padding: 60px; text-align: center; margin-top: 40px; position: relative; overflow: hidden; }
@@ -162,11 +153,10 @@ h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.05; font-weight: 800; l
 .b2b-services { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: left; margin-bottom: 50px; }
 .serv-item { background: var(--bg-card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); transition: 0.2s; display: flex; flex-direction: column; height: 100%; }
 .serv-item:hover { border-color: #3b82f6; transform: translateY(-5px); }
-.serv-icon-circle { width: 50px; height: 50px; background: rgba(59, 130, 246, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
+.serv-icon-circle { width: 50px; height: 50px; background: rgba(59, 130, 246, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; color: #3b82f6; }
 .serv-item h3 { font-size: 1.2rem; color: white; margin: 0 0 10px 0; }
 .serv-item p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; flex-grow: 1; }
-.serv-price-ref { margin-top: 20px; font-size: 0.85rem; font-weight: 700; color: #60a5fa; padding-top: 15px; border-top: 1px solid var(--border); }
-.btn-b2b { background: white; color: black; padding: 16px 32px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; display: inline-block; transition: 0.2s; }
+.btn-b2b { background: white; color: black; padding: 16px 32px; border-radius: 12px; font-weight: 800; font-size: 1.1rem; display: inline-flex; align-items:center; gap:8; transition: 0.2s; }
 .btn-b2b:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
 
 /* MOBILE BAR */
@@ -191,10 +181,10 @@ h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.05; font-weight: 800; l
 `;
 
 /* ──────────────────────────────────────────────────────────────────────────
-   3. COMPONENTE PRINCIPAL (Homeschool)
+   2. COMPONENTE PRINCIPAL (Homeschool)
    ────────────────────────────────────────────────────────────────────────── */
 export default function Homeschool() {
-  const { addToCart } = useCart ? useCart() : { addToCart: ()=>{} };
+  const { addToCart } = useCart();
   const [isSchool, setIsSchool] = useState(false);
   
   // ESTADOS
@@ -202,6 +192,7 @@ export default function Homeschool() {
   const [selectedLevel, setSelectedLevel] = useState("media");
   const [selectedPackId, setSelectedPackId] = useState("academy-p8");
   const [showModal, setShowModal] = useState(false); 
+  const [toast, setToast] = useState(null);
   
   const configRef = useRef(null);
 
@@ -210,7 +201,7 @@ export default function Homeschool() {
   const activePack = PACKS.find(p => p.id === selectedPackId) || PACKS[1];
   const activeLevel = LEVELS.find(l => l.id === selectedLevel) || LEVELS[1];
 
-  // Cálculos de dinero
+  // Cálculos de dinero (Si el pack es el p12, matrícula es 0)
   const isEnrollmentFree = activePack.id === 'academy-p12';
   const appliedEnrollment = isEnrollmentFree ? 0 : ACADEMY_CONFIG.enrollmentFee;
   const total = activePack.price + appliedEnrollment;
@@ -224,18 +215,27 @@ export default function Homeschool() {
 
   const waLinkSchool = `https://wa.me/56964626568?text=${encodeURIComponent("Hola 👋, soy de un Colegio y me interesan las soluciones B2B de Lael Academy.")}`;
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (fromModal = false) => {
     addToCart({
-      id: `acad-${selectedSubject}-${activeLevel.id}-${activePack.id}`,
+      id: `acad-${selectedSubject}-${activeLevel.id}-${activePack.id}-${Date.now()}`,
       name: `Academy ${activeSubject.name} - ${activePack.title}`,
       price: total,
+      recurringPrice: activePack.price,
+      recurrence: 'monthly',
       category: 'Academia',
       details: [
+        `Materia: ${activeSubject.name}`,
         `Nivel: ${activeLevel.label}`,
-        `Pack: ${activePack.hours} Horas`,
+        `Plan: ${activePack.hours} Horas/mes`,
         planForCheckout.detalleHoy
       ]
     });
+
+    if(fromModal) setShowModal(false);
+
+    // Feedback Toast
+    setToast("¡Plan añadido al Carrito!");
+    setTimeout(() => setToast(null), 3000);
   };
 
   const scrollToConfig = () => {
@@ -244,15 +244,30 @@ export default function Homeschool() {
 
   return (
     <div className="academy-page">
+      <SEOHead title="Lael Academy | Reforzamiento Escolar" description="Clases particulares con metodología de alto rendimiento." />
       <style>{css}</style>
       
+      {/* TOAST DE NOTIFICACIÓN */}
+      {toast && (
+        <div style={{
+          position: 'fixed', bottom: 40, left: '50%', transform: 'translateX(-50%)',
+          background: '#10b981', color: 'white', padding: '12px 24px', borderRadius: 50,
+          boxShadow: '0 10px 30px rgba(0,0,0,0.4)', zIndex: 9999, fontWeight: 700,
+          display: 'flex', alignItems: 'center', gap: 10, animation: 'slideUpToast 0.3s ease-out'
+        }}>
+           <CheckCircle size={20}/> {toast}
+           <style>{`@keyframes slideUpToast { from { opacity:0; transform: translate(-50%, 20px); } to { opacity:1; transform: translate(-50%, 0); } }`}</style>
+        </div>
+      )}
+
       {/* MODAL CHECKOUT */}
       {showModal && (
         <EnrollmentForm 
           planTitle={planForCheckout.title}
           price={planForCheckout.price}
           selectedDetails={planForCheckout.detalleHoy}
-          onClose={() => setShowModal(false)} 
+          onClose={() => setShowModal(false)}
+          onConfirm={() => handleAddToCart(true)} 
         />
       )}
 
@@ -261,7 +276,7 @@ export default function Homeschool() {
         <div className="container hero-grid">
           <div className="hero-content">
             <div className="badge-new">
-              <Icons.Zap/> 
+              <Zap size={14} fill="currentColor"/> 
               {isSchool ? "Gestión Académica Externa" : "Matrículas 2026 Abiertas"}
             </div>
             
@@ -284,13 +299,13 @@ export default function Homeschool() {
                   className={`t-btn ${!isSchool ? 'active' : ''}`} 
                   onClick={() => setIsSchool(false)}
                 >
-                    <Icons.User/> Para Estudiantes
+                    <User size={18}/> Para Estudiantes
                 </button>
                 <button 
                   className={`t-btn ${isSchool ? 'active' : ''}`} 
                   onClick={() => setIsSchool(true)}
                 >
-                    <Icons.Building/> Para Colegios
+                    <Building2 size={18}/> Para Colegios
                 </button>
             </div>
           </div>
@@ -303,7 +318,8 @@ export default function Homeschool() {
             {!isSchool && (
                 <div className="partner-float">
                     <div className="pf-logo-wrapper">
-                      <img src={losOlivosLogo} alt="Logo" className="pf-logo" onError={(e) => e.target.style.display='none'} />
+                      {/* Placeholder si la imagen no carga */}
+                      <ShieldCheck size={32} color="#84cc16"/>
                     </div>
                     <div className="partner-info">
                         <span>{ALLIANCE.role}</span>
@@ -318,11 +334,11 @@ export default function Homeschool() {
       {/* DYNAMIC CONTENT AREA */}
       <div className="container" id="content-area">
         
-        {/* ================= VISTA B2C ================= */}
+        {/* ================= VISTA B2C (ESTUDIANTES) ================= */}
         {!isSchool && (
             <div className="animate-fade">
                 
-                {/* 🔵 NUEVA SECCIÓN DE "GANCHO" (METODOLOGÍA) 🔵 */}
+                {/* VALUE PROPS */}
                 <section className="hook-section">
                     <div className="section-title">
                         <h2>Más que un "Profe Particular"</h2>
@@ -331,21 +347,21 @@ export default function Homeschool() {
 
                     <div className="hook-grid">
                         <div className="hook-card">
-                            <span className="hook-icon"><Icons.Target /></span>
+                            <span className="hook-icon"><Target /></span>
                             <div className="hook-title">Diagnóstico Real</div>
                             <div className="hook-desc">
                                 No empezamos a ciegas. Detectamos exactamente dónde están los vacíos (bases matemáticas, comprensión lectora) y atacamos la raíz del problema.
                             </div>
                         </div>
                         <div className="hook-card">
-                            <span className="hook-icon"><Icons.Brain /></span>
+                            <span className="hook-icon"><Brain /></span>
                             <div className="hook-title">Técnica de Estudio</div>
                             <div className="hook-desc">
                                 No sacas nada con entender en la clase si olvidas al día siguiente. Enseñamos a tomar apuntes y repasar para retener a largo plazo.
                             </div>
                         </div>
                         <div className="hook-card">
-                            <span className="hook-icon"><Icons.Zap /></span>
+                            <span className="hook-icon"><Zap /></span>
                             <div className="hook-title">Confianza y Actitud</div>
                             <div className="hook-desc">
                                 Transformamos el "yo soy malo para esto" en "todavía no lo entiendo". Cambiar la mentalidad es el 50% de la nota final.
@@ -371,10 +387,13 @@ export default function Homeschool() {
                                 style={{'--accent-color': s.color}}
                                 onClick={() => setSelectedSubject(s.id)}
                             >
-                                <span className="s-icon" style={{color: s.color}}>{s.icon}</span>
+                                <span className="s-icon" style={{color: s.color}}>
+                                  {/* Renderizado condicional de iconos según ID */}
+                                  {s.id === 'mat' ? '📐' : s.id === 'len' ? '📚' : s.id === 'ing' ? '🇬🇧' : s.id === 'cie' ? '🧪' : '🎓'}
+                                </span>
                                 <span className="s-name">{s.name}</span>
                                 {selectedSubject === s.id && (
-                                  <div className="s-check-abs"><Icons.CheckCircle /></div>
+                                  <div className="s-check-abs"><CheckCircle size={16}/></div>
                                 )}
                             </div>
                         ))}
@@ -407,7 +426,7 @@ export default function Homeschool() {
                     </div>
                 </section>
 
-                {/* 3. PACKS (Ahora con ID para scroll) */}
+                {/* 3. PACKS */}
                 <section className="step-section" ref={configRef} id="planes">
                     <div className="config-container">
                         
@@ -445,7 +464,7 @@ export default function Homeschool() {
                                         <ul className="pack-features">
                                           {p.features.map((feat, i) => (
                                             <li key={i}>
-                                              <span className="pf-icon"><Icons.Check/></span>
+                                              <span className="pf-icon"><Check size={16}/></span>
                                               {feat}
                                             </li>
                                           ))}
@@ -455,12 +474,12 @@ export default function Homeschool() {
                             </div>
                         </div>
 
-                        {/* RESUMEN sticky */}
+                        {/* RESUMEN sticky (Desktop) */}
                         <div className="summary-col">
                             <div className="summary-card" style={{borderColor: activeSubject.color}}>
                                 <div className="sum-title">
                                     <span>Resumen del Plan</span>
-                                    <span style={{color: '#fbbf24'}}><Icons.Star /></span>
+                                    <span style={{color: '#fbbf24'}}><Star size={18} fill="currentColor"/></span>
                                 </div>
                                 
                                 <div className="sum-content">
@@ -499,73 +518,70 @@ export default function Homeschool() {
                                   onClick={() => setShowModal(true)} 
                                   className="btn-checkout"
                                 >
-                                    Inscribirme Ahora <Icons.ArrowRight />
+                                    Inscribirme Ahora <ArrowRight size={20}/>
                                 </button>
                                 <button 
-                                  onClick={handleAddToCart}
+                                  onClick={() => handleAddToCart(false)}
                                   style={{
                                       width:'100%', marginTop:10, background:'transparent', 
                                       color:'#94a3b8', border:'1px solid #334155', 
-                                      padding:10, borderRadius:12, cursor:'pointer'
+                                      padding:10, borderRadius:12, cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', gap:8
                                   }}
                                 >
-                                    Agregar al Carrito
+                                    <ShoppingCart size={16}/> Agregar al Carrito
                                 </button>
                                 
                                 <div className="guarantee-box">
-                                  <p>✅ <strong>Garantía:</strong> Si la primera clase no te convence, te cambiamos de tutor o devolvemos el dinero.</p>
+                                   <ShieldCheck size={16}/> Garantía de satisfacción académica
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </section>
-
-                <div className="mobile-bar">
-                    <div className="mb-info">
-                        <span>Total (Pagar hoy)</span>
-                        <strong>{clp(total)}</strong>
-                    </div>
-                    <button onClick={() => setShowModal(true)} className="btn-mb">
-                        Inscribir
-                    </button>
-                </div>
-
             </div>
         )}
 
-        {/* ================= VISTA B2B ================= */}
+        {/* ================= VISTA B2B (COLEGIOS) ================= */}
         {isSchool && (
-            <div className="b2b-container animate-fade">
+             <div className="b2b-container animate-fade">
                 <div className="b2b-header">
-                    <div className="badge-new" style={{width:'fit-content', margin:'0 auto 20px', borderColor: '#3b82f6', color: '#60a5fa', background: 'rgba(59, 130, 246, 0.1)'}}>
-                      Soluciones Educativas
-                    </div>
-                    <h2>Aliados Estratégicos para su Colegio</h2>
-                    <p>Optimice su presupuesto SEP/PIE con servicios externos de alta calidad pedagógica.</p>
+                   <h2>Extensión de su Cuerpo Docente</h2>
+                   <p>Ofrecemos soluciones llave en mano para establecimientos educacionales que requieren soporte especializado en áreas críticas.</p>
                 </div>
 
                 <div className="b2b-services">
-                    {SCHOOL_SERVICES.map(s => (
-                        <div key={s.id} className="serv-item">
-                            <div className="serv-icon-circle">{s.icon}</div>
-                            <h3>{s.title}</h3>
-                            <p>{s.desc}</p>
-                            <div className="serv-price-ref">{s.priceRef}</div>
-                        </div>
+                    {SCHOOL_SERVICES.map((serv, i) => (
+                      <div className="serv-item" key={i}>
+                         <div className="serv-icon-circle">
+                            <Building2 size={24}/>
+                         </div>
+                         <h3>{serv.title}</h3>
+                         <p>{serv.desc}</p>
+                      </div>
                     ))}
                 </div>
 
-                <div className="b2b-cta-box">
-                  <p>¿Necesita una propuesta formal?</p>
-                  <a href={waLinkSchool} target="_blank" rel="noreferrer" className="btn-b2b">
-                      Solicitar Reunión o Cotización
-                  </a>
-                </div>
-            </div>
+                <a href={waLinkSchool} target="_blank" rel="noopener noreferrer" className="btn-b2b">
+                   Contactar Área de Convenios <ArrowRight size={20}/>
+                </a>
+             </div>
         )}
 
       </div>
+
+      {/* BARRA MÓVIL INFERIOR */}
+      {!isSchool && (
+        <div className="mobile-bar">
+           <div className="mb-info">
+              <span>Total a pagar</span>
+              <strong>{clp(total)}</strong>
+           </div>
+           <button className="btn-mb" onClick={() => setShowModal(true)}>
+              Inscribirme
+           </button>
+        </div>
+      )}
+
     </div>
   );
 }

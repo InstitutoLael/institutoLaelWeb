@@ -78,6 +78,7 @@ export default function Inscripciones() {
   const [toastMsg, setToastMsg] = useState("");
   const [status, setStatus] = useState("idle"); 
   
+  // MANTENEMOS EL ESTADO EN INGLÉS PARA REACT (BUENA PRÁCTICA)
   const [form, setForm] = useState({
     fullName: "",
     rut: "",
@@ -91,7 +92,7 @@ export default function Inscripciones() {
     window.scrollTo(0, 0);
   }, []);
 
-  // Pre-llenado de comentario si hay items en el carrito
+  // Pre-llenado de comentario
   useEffect(() => {
     if (cartItems.length > 0) {
       setForm(prev => ({
@@ -115,24 +116,35 @@ export default function Inscripciones() {
     e.preventDefault();
     setStatus("loading");
 
-    // 1. LÓGICA PARA PROGRAMA Y TOTAL
-    // Si hay carrito, usamos el carrito. Si no, usamos lo que seleccionó en el Select.
     const finalProgram = cartItems.length > 0 
-        ? cartItems.map(item => item.title).join(" + ") // Ej: "Preu Anual + Inglés"
+        ? cartItems.map(item => item.title).join(" + ")
         : form.program;
         
     const finalTotal = cartItems.length > 0 ? total : "Por cotizar";
 
-    // 2. CONSTRUCCIÓN DEL PAYLOAD (CON LAS KEYS CORRECTAS PARA GOOGLE SCRIPT)
-    // El script espera: fullName, rut, phone, email, program, total, comments
+    // ──────────────────────────────────────────────────────────────────
+    // AQUÍ ESTÁ EL ARREGLO ("A PRUEBA DE TODO")
+    // Enviamos las llaves duplicadas (español e inglés) para que el Script
+    // las agarre sí o sí, sin importar qué versión esté corriendo.
+    // ──────────────────────────────────────────────────────────────────
     const payload = {
-      fullName: form.fullName, // Coincide con script
+      // Para scripts actualizados (Inglés)
+      fullName: form.fullName, 
+      phone: form.phone,       
+      program: finalProgram,   
+      comments: form.comments, 
+      
+      // Para scripts antiguos (Español) - ESTO SOLUCIONARÁ TU PROBLEMA
+      nombre: form.fullName,   
+      telefono: form.phone,    
+      programa: finalProgram,
+      comentario: form.comments,
+      
+      // Comunes
       rut: form.rut,
-      phone: form.phone,       // Coincide con script
       email: form.email,
-      program: finalProgram,   // IMPORTANTE: Key 'program'
-      total: finalTotal,       // IMPORTANTE: Key 'total'
-      comments: form.comments  // IMPORTANTE: Key 'comments'
+      total: finalTotal,
+      fecha: new Date().toLocaleString("es-CL")
     };
 
     try {
@@ -213,6 +225,7 @@ export default function Inscripciones() {
                 <label>Nombre Completo</label>
                 <div className="inp-wrapper">
                     <span className="inp-icon"><Icons.User/></span>
+                    {/* name="fullName" COINCIDE CON EL STATE */}
                     <input type="text" name="fullName" className="inp" placeholder="Ej: Marcela Paz" required value={form.fullName} onChange={handleChange}/>
                 </div>
               </div>
@@ -224,6 +237,7 @@ export default function Inscripciones() {
                 </div>
                 <div className="input-group">
                   <label>WhatsApp</label>
+                  {/* name="phone" COINCIDE CON EL STATE */}
                   <input type="tel" name="phone" className="inp" placeholder="+56 9..." required value={form.phone} onChange={handleChange}/>
                 </div>
               </div>

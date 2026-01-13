@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx"; 
-import SEOHead from "../components/SEOHead.jsx";
 
 // --- CONFIGURACIÓN ---
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG26Civ9DJm5Fvr-jq7NSb7xEobqRJSa-VJLeil_3pTgqVBdWJiT4W5XyvsX9gq1JKPg/exec";
@@ -71,8 +70,8 @@ function BankCard({ onCopy }) {
    3. PÁGINA PRINCIPAL DE INSCRIPCIÓN
    ────────────────────────────────────────────────────────────────────────── */
 export default function Inscripciones() {
-  // 🔽 AQUÍ ESTABA EL ERROR: Ahora usamos los nombres correctos de tu Contexto
-  const { cart, totalPagar } = useCart(); 
+  // ✅ CORREGIDO: Usamos las variables exactas del Contexto
+  const { cart, cartTotal, formatPrice, clearCart } = useCart(); 
 
   const [toastMsg, setToastMsg] = useState("");
   const [status, setStatus] = useState("idle"); 
@@ -86,18 +85,24 @@ export default function Inscripciones() {
     comments: ""
   });
 
-  // EFECTO: Si hay carrito, pre-cargamos el programa
+  // SEO Básico
+  useEffect(() => {
+    document.title = "Matrícula Online | Instituto Lael";
+    window.scrollTo(0, 0);
+  }, []);
+
+  // Lógica: Si hay cosas en el carrito, pre-llenamos el formulario
   useEffect(() => {
     if (cart && cart.length > 0) {
-      // 🔽 CORREGIDO: item.name -> item.nombre
-      const resumenCursos = cart.map(item => item.nombre).join(" + ");
+      // ✅ CORREGIDO: Usamos item.title (no item.nombre)
+      const resumenCursos = cart.map(item => item.title).join(" + ");
       setForm(prev => ({
         ...prev,
         program: resumenCursos,
-        comments: prev.comments || `Resumen Carrito: ${resumenCursos}. Total Web: $${totalPagar}`
+        comments: prev.comments || `Pedido Web. Total: ${formatPrice(cartTotal)}`
       }));
     }
-  }, [cart, totalPagar]);
+  }, [cart, cartTotal, formatPrice]);
 
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
@@ -114,11 +119,11 @@ export default function Inscripciones() {
     e.preventDefault();
     setStatus("loading");
 
-    const finalTotal = cart.length > 0 ? totalPagar : "Por cotizar";
+    const finalTotal = cart.length > 0 ? cartTotal : "Por cotizar";
     
-    // 🔽 CORREGIDO: item.name -> item.nombre, item.price -> item.precio
+    // ✅ CORREGIDO: Mapeo correcto de datos para el Excel
     const finalProgram = cart.length > 0 
-        ? cart.map(item => `${item.nombre} ($${item.precio})`).join(" + ")
+        ? cart.map(item => `${item.title} ($${item.price})`).join(" + ")
         : form.program;
 
     const payload = {
@@ -133,8 +138,6 @@ export default function Inscripciones() {
       estado_pago: "Pendiente Comprobante"
     };
 
-    console.log("Enviando:", payload);
-
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
@@ -144,8 +147,8 @@ export default function Inscripciones() {
       });
       
       setStatus("success");
-      // Nota: Si agregas la función 'clear' a tu Contexto en el futuro, puedes descomentar esto:
-      // clear(); 
+      // ✅ IMPORTANTE: Vaciamos el carrito tras el éxito para no confundir al usuario
+      if (cart.length > 0) clearCart();
 
     } catch (error) {
       console.error(error);
@@ -156,8 +159,10 @@ export default function Inscripciones() {
 
   // --- VISTA DE ÉXITO (POST-ENVÍO) ---
   if (status === "success") {
-    const totalMsg = cart.length > 0 ? `$${totalPagar?.toLocaleString("es-CL")}` : "lo acordado";
-    const textWsp = `Hola Admisión Lael! Soy *${form.fullName}*.\nYa envié mi ficha web.\n\nAdjunto mi comprobante de transferencia por ${totalMsg} para finalizar mi matrícula.\n(RUT: ${form.rut})`;
+    // Si venía del carrito usamos el total guardado en el form o el contexto, si no, texto genérico
+    const totalDisplay = typeof cartTotal === 'number' && cartTotal > 0 ? formatPrice(cartTotal) : "lo acordado";
+    
+    const textWsp = `Hola Admisión Lael! Soy *${form.fullName}*.\nYa envié mi ficha web.\n\nAdjunto mi comprobante de transferencia por ${totalDisplay} para finalizar mi matrícula.\n(RUT: ${form.rut})`;
     const linkWsp = `https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(textWsp)}`;
 
     return (
@@ -173,7 +178,7 @@ export default function Inscripciones() {
             <p className="steps-intro">Tu cupo se reserva al confirmar el pago:</p>
             
             <ol>
-              <li>Realiza la transferencia de <strong>{totalMsg}</strong> a la cuenta indicada abajo.</li>
+              <li>Realiza la transferencia de <strong>{totalDisplay}</strong> a la cuenta indicada abajo.</li>
               <li>Envía el comprobante a nuestro WhatsApp haciendo clic en el botón verde.</li>
             </ol>
 
@@ -196,7 +201,6 @@ export default function Inscripciones() {
   return (
     <div className="enroll-page">
       <style>{css}</style>
-      <SEOHead title="Matrícula Online | Instituto Lael" description="Formulario de inscripción oficial." />
       <Toast msg={toastMsg} />
 
       <div className="container">
@@ -262,16 +266,16 @@ export default function Inscripciones() {
                         <div className="csl-header"><Icons.Cart/> Estás inscribiéndote en:</div>
                         <ul>
                             {cart.map((item, i) => (
-                                // 🔽 CORREGIDO: item.name -> item.nombre, item.price -> item.precio
-                                <li key={i}>• {item.nombre} <small>(${parseInt(item.precio || 0).toLocaleString('es-CL')})</small></li>
+                                // ✅ CORREGIDO: item.title e item.price
+                                <li key={i}>• {item.title} <small>({formatPrice(item.price)})</small></li>
                             ))}
                         </ul>
                         <div className="csl-total">
-                            Total a Pagar: <span>${totalPagar?.toLocaleString('es-CL')}</span>
+                            Total a Pagar: <span>{formatPrice(cartTotal)}</span>
                         </div>
                     </div>
                 ) : (
-                    // MODO MANUAL: Select
+                    // MODO MANUAL: Select (por si alguien entra directo al link sin usar el carrito)
                     <select name="program" className="inp select" required value={form.program} onChange={handleChange}>
                       <option value="">-- Selecciona el curso --</option>
                       

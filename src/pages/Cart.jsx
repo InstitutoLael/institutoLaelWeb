@@ -1,152 +1,228 @@
+import { useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useCart } from "../context/CartContext.jsx";
-import { FaTrash, FaArrowRight, FaShieldAlt, FaLock } from "react-icons/fa";
-import { BsCartX } from "react-icons/bs";
+import { useCart } from "../context/CartContext";
+import { X, Trash2, ArrowRight, ShoppingBag } from "lucide-react";
 
-// Helper de moneda
-const clp = (n) => Number(n).toLocaleString("es-CL", { style: "currency", currency: "CLP" });
-
-export default function Cart() {
-  const { cartItems, removeFromCart, cartTotal } = useCart();
+export default function CartDrawer() {
+  const { cart, removeFromCart, clearCart, cartTotal, formatPrice, isCartOpen, closeCart } = useCart();
   const navigate = useNavigate();
+  const drawerRef = useRef(null);
 
-  if (cartItems.length === 0) {
-    return (
-      <div className="cart-empty-page">
-        <style>{css}</style>
-        <div className="empty-state">
-           <BsCartX className="empty-icon"/>
-           <h2>Tu carrito está vacío</h2>
-           <p>Parece que aún no has elegido tu camino al éxito.</p>
-           <Link to="/" className="btn-royal">Explorar Cursos</Link>
-        </div>
-      </div>
-    );
-  }
+  // Cierra el carrito con la tecla ESC
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") closeCart();
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [closeCart]);
 
+  // Si hacemos clic fuera del panel (en lo oscuro), cerramos
+  const handleBackdropClick = (e) => {
+    if (drawerRef.current && !drawerRef.current.contains(e.target)) {
+      closeCart();
+    }
+  };
+
+  // Navegar al checkout
+  const handleCheckout = () => {
+    closeCart();
+    navigate("/inscripcion");
+  };
+
+  // Renderizado condicional con clases CSS para animación
   return (
-    <div className="cart-page">
+    <>
       <style>{css}</style>
       
-      <div className="container cart-layout">
-        
-        {/* LISTA DE ITEMS */}
-        <div className="cart-items-col">
-           <h1>Resumen de Compra</h1>
-           <div className="items-list">
-              {cartItems.map((item) => (
-                 <div key={item.id} className="cart-item">
-                    <div className="ci-info">
-                       <span className="ci-type">{item.type === 'course' ? 'Curso / Plan' : 'Producto'}</span>
-                       <h3>{item.title}</h3>
-                       <p>{item.detail}</p>
-                       {item.extraInfo && <small className="ci-extra">{item.extraInfo}</small>}
-                    </div>
-                    <div className="ci-price-action">
-                       <div className="ci-price">{clp(item.price)}</div>
-                       <button onClick={() => removeFromCart(item.id)} className="btn-remove">
-                          <FaTrash/> Eliminar
-                       </button>
-                    </div>
-                 </div>
-              ))}
-           </div>
-           <Link to="/" className="continue-link">← Seguir explorando</Link>
-        </div>
+      {/* BACKDROP OSCURO */}
+      <div 
+        className={`cart-overlay ${isCartOpen ? "open" : ""}`} 
+        onClick={handleBackdropClick}
+      >
+        {/* PANEL LATERAL */}
+        <aside className="cart-panel" ref={drawerRef}>
+          
+          {/* CABECERA */}
+          <div className="cart-header">
+            <div className="flex items-center gap-3">
+              <ShoppingBag size={20} className="text-accent" />
+              <h2 className="text-lg font-bold text-white">Tu Mochila</h2>
+              <span className="badge-count">{cart.length}</span>
+            </div>
+            <button onClick={closeCart} className="close-btn">
+              <X size={24} />
+            </button>
+          </div>
 
-        {/* RESUMEN DE PAGO */}
-        <div className="cart-summary-col">
-           <div className="summary-card">
-              <h3>Total a Pagar</h3>
-              
-              <div className="summary-row total">
-                 <span>Total</span>
-                 <strong>{clp(cartTotal)}</strong>
+          {/* CUERPO DEL CARRITO */}
+          <div className="cart-body">
+            {cart.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-icon">🎒</div>
+                <h3>Tu mochila está vacía</h3>
+                <p>¡Explora nuestros cursos y prepárate para el futuro!</p>
+                <button onClick={closeCart} className="btn-explore">
+                  Ver Programas
+                </button>
               </div>
-
-              <div className="security-badges">
-                 <span><FaLock/> Pago 100% Seguro</span>
-                 <span><FaShieldAlt/> Garantía Lael</span>
+            ) : (
+              <div className="cart-items">
+                {cart.map((item) => (
+                  <div key={item.id} className="cart-item">
+                    <div className="item-info">
+                      <h4 className="item-title">{item.title}</h4>
+                      <p className="item-price">{formatPrice(item.price)}</p>
+                      {item.type && <span className="item-tag">{item.type}</span>}
+                    </div>
+                    <button 
+                      onClick={() => removeFromCart(item.id)} 
+                      className="btn-remove"
+                      title="Eliminar curso"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                ))}
               </div>
+            )}
+          </div>
 
-              <button onClick={() => navigate('/inscripcion')} className="btn-checkout">
-                 Ir a Finalizar Compra <FaArrowRight/>
-              </button>
+          {/* PIE DE PÁGINA (TOTALES) */}
+          {cart.length > 0 && (
+            <div className="cart-footer">
+              <div className="total-row">
+                <span>Total a pagar:</span>
+                <span className="total-amount">{formatPrice(cartTotal)}</span>
+              </div>
               
-              <p className="legal-text">
-                 Al continuar, aceptas nuestros términos y condiciones de servicio educativo.
+              <div className="actions-col">
+                <button onClick={handleCheckout} className="btn-checkout">
+                  Ir a Matrícula <ArrowRight size={18} />
+                </button>
+                <button onClick={clearCart} className="btn-clear">
+                  Vaciar Mochila
+                </button>
+              </div>
+              
+              <p className="secure-note">
+                🔒 Pago 100% seguro vía WebPay / Transferencia
               </p>
-           </div>
-        </div>
-
+            </div>
+          )}
+        </aside>
       </div>
-    </div>
+    </>
   );
 }
 
+/* ─── ESTILOS CSS ─── */
 const css = `
-:root {
-  --bg-deep: #020617;
-  --bg-card: #1e293b;
-  --gold: #fbbf24;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --border: rgba(255,255,255,0.1);
-}
+  /* Overlay Oscuro */
+  .cart-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    opacity: 0; visibility: hidden;
+    transition: all 0.3s ease-in-out;
+  }
+  .cart-overlay.open { opacity: 1; visibility: visible; }
 
-.cart-page, .cart-empty-page {
-  background: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif;
-  min-height: 80vh; padding: 120px 0 80px;
-}
-.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  /* Panel Lateral */
+  .cart-panel {
+    position: absolute; top: 0; right: 0; bottom: 0;
+    width: 100%; max-width: 400px;
+    background: #09090b; /* Zinc-950 */
+    border-left: 1px solid rgba(255,255,255,0.1);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    display: flex; flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .cart-overlay.open .cart-panel { transform: translateX(0); }
 
-/* Empty State */
-.empty-state { text-align: center; padding: 60px; }
-.empty-icon { font-size: 5rem; color: var(--text-muted); margin-bottom: 20px; opacity: 0.5; }
-.empty-state h2 { font-size: 2rem; margin-bottom: 10px; font-family: 'Playfair Display', serif; }
-.empty-state p { margin-bottom: 30px; color: var(--text-muted); }
-.btn-royal { background: var(--gold); color: black; padding: 12px 30px; border-radius: 50px; font-weight: 700; text-decoration: none; }
+  /* Header */
+  .cart-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255,255,255,0.02);
+  }
+  .text-accent { color: #fbbf24; }
+  .badge-count { 
+    background: #fbbf24; color: black; font-weight: bold; 
+    font-size: 0.75rem; padding: 2px 8px; border-radius: 12px; 
+  }
+  .close-btn { color: #a1a1aa; transition: 0.2s; background: transparent; border: none; cursor: pointer;}
+  .close-btn:hover { color: white; transform: rotate(90deg); }
 
-/* Layout */
-.cart-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 60px; }
-@media(max-width: 900px) { .cart-layout { grid-template-columns: 1fr; } }
+  /* Body */
+  .cart-body { flex: 1; overflow-y: auto; padding: 20px; }
 
-.cart-items-col h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+  /* Items */
+  .cart-items { display: flex; flex-direction: column; gap: 15px; }
+  .cart-item {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 15px; border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: 0.2s;
+  }
+  .cart-item:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+  
+  .item-title { font-weight: 600; color: #f4f4f5; margin-bottom: 4px; font-size: 0.95rem; }
+  .item-price { color: #fbbf24; font-weight: 700; font-family: monospace; font-size: 1rem; }
+  .item-tag { 
+    display: inline-block; font-size: 0.7rem; color: #a1a1aa; 
+    background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; margin-top: 6px;
+  }
 
-.cart-item {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
-  padding: 25px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-start;
-}
-@media(max-width: 600px) { .cart-item { flex-direction: column; gap: 20px; } }
+  .btn-remove {
+    color: #52525b; padding: 8px; border-radius: 8px; transition: 0.2s;
+    background: transparent; border: none; cursor: pointer;
+  }
+  .btn-remove:hover { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
 
-.ci-type { font-size: 0.7rem; text-transform: uppercase; color: var(--gold); font-weight: 700; letter-spacing: 1px; }
-.ci-info h3 { margin: 5px 0; font-size: 1.2rem; }
-.ci-info p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 5px; }
-.ci-extra { display: block; color: #10b981; font-style: italic; }
+  /* Estado Vacío */
+  .empty-state { text-align: center; padding-top: 60px; color: #71717a; }
+  .empty-icon { font-size: 3rem; margin-bottom: 10px; opacity: 0.5; }
+  .empty-state h3 { color: white; margin-bottom: 8px; font-weight: 600; }
+  .btn-explore {
+    margin-top: 20px; padding: 10px 20px; border-radius: 8px;
+    background: rgba(255,255,255,0.1); color: white;
+    font-weight: 500; transition: 0.2s; border: none; cursor: pointer;
+  }
+  .btn-explore:hover { background: white; color: black; }
 
-.ci-price-action { text-align: right; min-width: 120px; }
-@media(max-width: 600px) { .ci-price-action { text-align: left; display: flex; justify-content: space-between; width: 100%; align-items: center; } }
+  /* Footer */
+  .cart-footer {
+    padding: 20px; background: #09090b;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+  .total-row {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 20px; font-size: 1.1rem; color: #d4d4d8;
+  }
+  .total-amount { color: #fbbf24; font-weight: 800; font-size: 1.4rem; }
 
-.ci-price { font-size: 1.5rem; font-weight: 700; color: white; margin-bottom: 10px; }
-.btn-remove { background: transparent; border: none; color: #ef4444; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; margin-left: auto; }
-.btn-remove:hover { text-decoration: underline; }
+  .actions-col { display: flex; flex-direction: column; gap: 10px; }
+  
+  .btn-checkout {
+    width: 100%; padding: 14px; border-radius: 10px;
+    background: #fbbf24; color: black; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: 0.2s; border: none; cursor: pointer; font-size: 1rem;
+  }
+  .btn-checkout:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 191, 36, 0.3); }
 
-.continue-link { display: inline-block; margin-top: 20px; color: var(--text-muted); text-decoration: none; }
-.continue-link:hover { color: var(--gold); }
+  .btn-clear {
+    width: 100%; padding: 10px; background: transparent;
+    color: #71717a; font-size: 0.9rem; text-decoration: underline;
+    border: none; cursor: pointer;
+  }
+  .btn-clear:hover { color: #ef4444; }
 
-/* Summary */
-.summary-card { background: #0f172a; padding: 30px; border-radius: 16px; border: 1px solid var(--border); position: sticky; top: 100px; }
-.summary-card h3 { margin-bottom: 20px; font-family: 'Playfair Display', serif; font-size: 1.5rem; }
-
-.summary-row { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 1rem; color: var(--text-muted); }
-.summary-row.total { border-top: 1px solid var(--border); padding-top: 20px; margin-top: 20px; font-size: 1.5rem; color: white; align-items: center; }
-.summary-row.total strong { color: var(--gold); }
-
-.security-badges { display: flex; gap: 15px; margin-bottom: 25px; font-size: 0.8rem; color: #10b981; justify-content: center; background: rgba(16, 185, 129, 0.1); padding: 10px; border-radius: 8px; }
-.security-badges span { display: flex; align-items: center; gap: 5px; }
-
-.btn-checkout { width: 100%; background: var(--gold); color: black; border: none; padding: 16px; border-radius: 8px; font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; }
-.btn-checkout:hover { background: white; transform: translateY(-2px); }
-
-.legal-text { font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-top: 20px; opacity: 0.7; }
+  .secure-note {
+    text-align: center; font-size: 0.75rem; color: #52525b; margin-top: 15px;
+  }
 `;

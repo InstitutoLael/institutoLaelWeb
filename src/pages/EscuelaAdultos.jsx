@@ -1,381 +1,498 @@
-import React, { useState, useRef, useEffect } from "react";
-import SEOHead from "../components/SEOHead"; 
-import { useCart } from "../context/CartContext"; // <--- 1. CONEXIÓN AL CEREBRO
+import { useState, useEffect } from "react";
+import { useCart } from "../context/CartContext.jsx";
 
-// 📦 ICONOS
+// --- ICONOGRAFÍA CLARA Y GRANDE (Accesibilidad) ---
 import { 
-  BookOpen, Video, Heart, Award, Check, 
-  MessageCircle, ChevronDown, GraduationCap, 
-  ShieldCheck, X, Loader2, ArrowRight, User, Star, ShoppingCart
-} from "lucide-react";
+  FaUserGraduate, FaHandsHelping, FaAward, FaChalkboardTeacher, 
+  FaBookReader, FaWhatsapp, FaCheckCircle, FaBuilding, FaHandHoldingHeart,
+  FaVolumeUp, FaEye
+} from "react-icons/fa";
+import { 
+  MdSchool, MdTimer, MdFamilyRestroom, MdWork, 
+  MdOutlineVerifiedUser, MdQuiz 
+} from "react-icons/md";
+import { BsFillLightningChargeFill, BsArrowRightCircleFill } from "react-icons/bs";
+import { IoMdTime } from "react-icons/io";
 
-// 🖼️ IMAGEN
-import HeroImg from "../assets/img/lael/study-online.jpg"; 
+// --- DATA IMPORTADA ---
+import { 
+  CAMINOS_CONTENT, 
+  STUDY_CYCLES, 
+  PLANS, 
+  STEPS, 
+  FAQS, 
+  REQUIREMENTS,
+  REGISTRATION_FEE,
+  getNivelacionQuote,
+  clp 
+} from "../data/nivelacion.js";
 
-/* ==========================================================================
-   CONFIGURACIÓN
-   ========================================================================== */
-const API_URL = "https://instituto-lael-web.contacto-c10.workers.dev";
+/* ──────────────────────────────────────────────────────────────────────────
+   COMPONENTES UI PARA BAJA LECTURA
+   ────────────────────────────────────────────────────────────────────────── */
+const AudioHelper = ({ label }) => (
+  <button className="audio-helper-btn" title="Escuchar texto (Simulado)">
+    <FaVolumeUp /> <span>Escuchar</span>
+  </button>
+);
 
-const PLANS = [
-  {
-    id: "solidario",
-    title: "Beca 100%",
-    subtitle: "Cupos Limitados",
-    price: 0,
-    features: ["Clases Grabadas (Cápsulas)", "Material PDF al WhatsApp", "Inscripción a Exámenes Libres", "Tutoría Grupal Mensual"],
-    color: "#fbbf24", // Dorado
-    isScholarship: true
-  },
-  {
-    id: "completo",
-    title: "Plan Padrino",
-    subtitle: "Tu matrícula financia una beca",
-    price: 15000,
-    features: ["Clases en Vivo + Grabadas", "Tutoría Personalizada 1 a 1", "Ensayos de Examen Reales", "Gestión de Trámites Mineduc", "Certificado de Participación"],
-    color: "#2dd4bf", // Teal
-    isScholarship: false
-  }
-];
-
-const FAQS = [
-  { q: "¿El certificado es válido por el Mineduc?", a: "Absolutamente. Nosotros te preparamos para rendir los 'Exámenes Libres'. Al aprobarlos, obtienes tu Licencia de Enseñanza Media válida para todo." },
-  { q: "¿Qué pasa si trabajo por turnos?", a: "El sistema está hecho para ti. Todo queda grabado y se envía por WhatsApp. Puedes estudiar a las 3 de la mañana si lo necesitas." },
-  { q: "¿Necesito computador?", a: "No. Todo nuestro material está optimizado para verse perfecto en cualquier celular con internet básico." },
-  { q: "¿Cuánto dura el proceso?", a: "Te preparamos intensivamente durante 3 a 5 meses antes de la fecha de exámenes (usualmente junio y octubre)." },
-];
-
-const clp = (val) => new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 }).format(val);
-
-/* ==========================================================================
-   ESTILOS CSS (DARK MODE & GLASSMORPHISM)
-   ========================================================================== */
-const css = `
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
-
-:root {
-  --bg-deep: #050505;
-  --text-main: #ffffff;
-  --text-muted: #a1a1aa;
-  --gold: #fbbf24;
-  --teal: #2dd4bf;
-  --border: rgba(255, 255, 255, 0.1);
-  --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
-}
-
-.adultos-page {
-  background-color: var(--bg-deep);
-  background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, var(--bg-deep) 60%);
-  color: var(--text-main);
-  font-family: var(--font-main);
-  min-height: 100vh;
-  padding-bottom: 120px;
-}
-
-.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-button { all: unset; cursor: pointer; box-sizing: border-box; transition: all 0.2s ease; }
-
-/* ANIMACIONES */
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-.glass-card {
-  background: rgba(20, 20, 23, 0.6);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.hero { padding: 160px 0 100px; position: relative; }
-.hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
-
-h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 24px; font-weight: 800; color: white; letter-spacing: -0.02em; }
-.hero p { font-size: 1.15rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 40px; max-width: 520px; }
-
-.img-wrapper { position: relative; padding: 10px; animation: fadeIn 1s ease-out; }
-.img-wrapper img { width: 100%; border-radius: 24px; display: block; filter: brightness(0.9); box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid var(--border); }
-.floating-badge { position: absolute; bottom: 40px; left: -30px; padding: 16px 24px; display: flex; align-items: center; gap: 15px; animation: float 6s ease-in-out infinite; background: rgba(10,10,10,0.9); }
-
-.grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-.feature-box { padding: 32px; transition: 0.3s; height: 100%; display: flex; flex-direction: column; }
-.feature-box:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-5px); background: rgba(255,255,255,0.03); }
-
-.plan-card { display: flex; flex-direction: column; height: 100%; position: relative; overflow: hidden; padding: 40px 32px; transition: 0.3s; }
-.plan-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
-.plan-price { font-size: 3rem; font-weight: 800; color: white; margin: 10px 0 0; line-height: 1; }
-.plan-features li { display: flex; gap: 12px; margin-bottom: 16px; color: #d4d4d8; font-size: 0.95rem; align-items: flex-start; }
-
-.btn-main { width: 100%; padding: 18px; border-radius: 14px; font-weight: 700; font-size: 1rem; display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s; background: white; color: black; }
-.btn-main:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
-.btn-outline { background: transparent; border: 1px solid var(--border); color: white; }
-
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px; animation: fadeIn 0.3s ease-out; }
-.modal-form { width: 100%; max-width: 480px; position: relative; max-height: 90vh; overflow-y: auto; background: #121212; border: 1px solid rgba(255,255,255,0.1); }
-.form-input { width: 100%; background: #0a0a0a; border: 1px solid var(--border); padding: 16px; border-radius: 12px; color: white; outline: none; margin-top: 8px; }
-.form-input:focus { border-color: var(--teal); }
-
-.faq-item { border: 1px solid var(--border); border-radius: 16px; background: rgba(255,255,255,0.02); margin-bottom: 12px; }
-.faq-head { padding: 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: white; font-weight: 600; }
-.faq-body { padding: 0 24px 24px; color: var(--text-muted); line-height: 1.6; }
-
-@media (max-width: 900px) {
-  .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
-  .img-wrapper { display: none; } 
-  .hero { padding-top: 120px; }
-}
-`;
-
-/* ==========================================================================
-   FORMULARIO DE REGISTRO
-   ========================================================================== */
-const EnrollmentForm = ({ plan, onClose }) => {
-  const { addToCart } = useCart(); // <--- USAMOS EL CARRITO
-  const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ fullName: "", rut: "", email: "", phone: "", comments: "" });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      // 1. Enviamos los datos a tu Google Sheet (Worker)
-      const payload = {
-        fullName: formData.fullName,
-        rut: formData.rut,
-        email: formData.email,
-        phone: formData.phone,
-        program: `Caminos - ${plan.title}`,
-        comments: `Motivo: ${formData.comments || 'Sin comentarios'}`
-      };
-
-      await fetch(`${API_URL}/inscribir`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      // 2. Si todo sale bien, pasamos al paso final
-      setStep(3);
-    } catch (error) {
-      console.error(error);
-      alert("Error de conexión. Revisa tu internet.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleWhatsAppRedirect = () => {
-    const msg = `Hola, postulé a la Beca Caminos (Adultos). Mi nombre es ${formData.fullName}.`;
-    window.open(`https://wa.me/56964626568?text=${encodeURIComponent(msg)}`, '_blank');
-  };
-
-  // <--- LÓGICA DE INTEGRACIÓN AL CARRITO --->
-  const handleAddToCart = () => {
-    addToCart({
-      id: `adultos-${plan.id}`,
-      name: `Programa Caminos: ${plan.title}`,
-      price: plan.price,
-      image: HeroImg,
-      category: "Educación Adultos",
-      desc: "Matrícula Nivelación de Estudios"
-    });
-    onClose(); // Cerramos el modal (el carrito se abrirá solo gracias al Context)
-  };
-
-  return (
-    <div className="modal-overlay">
-      <div className="glass-card modal-form">
-        <button onClick={onClose} className="close-btn" style={{position:'absolute', top:20, right:20, color:'white'}}><X size={20}/></button>
-
-        <div style={{padding: '32px'}}>
-          {step === 1 && (
-            <form onSubmit={handleSubmit}>
-              <div style={{textAlign:'center', marginBottom:30}}>
-                <div style={{width:64, height:64, background: `linear-gradient(135deg, ${plan.color}20, transparent)`, border: `1px solid ${plan.color}40`, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px', color: plan.color}}>
-                  {plan.isScholarship ? <Heart size={30}/> : <Star size={30}/>}
-                </div>
-                <h2 style={{fontSize:'1.5rem', fontWeight:800, margin:0, color:'white'}}>{plan.isScholarship ? "Postulación a Beca" : "Registro de Matrícula"}</h2>
-                <p style={{color:'var(--text-muted)', fontSize:'0.9rem', marginTop:8}}>
-                  {plan.isScholarship ? "Cupos limitados. Cuéntanos tu historia." : "Paso 1: Ingresa tus datos del alumno."}
-                </p>
-              </div>
-
-              <div style={{marginBottom:15}}>
-                <label style={{color:'var(--text-muted)', fontSize:'0.8rem', textTransform:'uppercase'}}>Nombre Completo</label>
-                <input required className="form-input" onChange={e => setFormData({...formData, fullName: e.target.value})} />
-              </div>
-              <div style={{marginBottom:15}}>
-                <label style={{color:'var(--text-muted)', fontSize:'0.8rem', textTransform:'uppercase'}}>RUT</label>
-                <input required className="form-input" onChange={e => setFormData({...formData, rut: e.target.value})} />
-              </div>
-              <div style={{marginBottom:15}}>
-                <label style={{color:'var(--text-muted)', fontSize:'0.8rem', textTransform:'uppercase'}}>Email</label>
-                <input required type="email" className="form-input" onChange={e => setFormData({...formData, email: e.target.value})} />
-              </div>
-              <div style={{marginBottom:15}}>
-                <label style={{color:'var(--text-muted)', fontSize:'0.8rem', textTransform:'uppercase'}}>WhatsApp</label>
-                <input required type="tel" className="form-input" onChange={e => setFormData({...formData, phone: e.target.value})} />
-              </div>
-              <div style={{marginBottom:20}}>
-                <label style={{color:'var(--text-muted)', fontSize:'0.8rem', textTransform:'uppercase'}}>
-                    {plan.isScholarship ? "Cuéntanos tu situación" : "Comentarios (Opcional)"}
-                </label>
-                <textarea required={plan.isScholarship} className="form-input" rows="2" onChange={e => setFormData({...formData, comments: e.target.value})} />
-              </div>
-
-              <button type="submit" className="btn-main" disabled={loading} style={{background: plan.color, color: 'black', width:'100%'}}>
-                {loading ? <Loader2 className="animate-spin" size={20}/> : "Continuar"}
-              </button>
-            </form>
-          )}
-
-          {step === 3 && (
-            <div style={{textAlign:'center', padding:'30px 0'}}>
-              <div style={{width:80, height:80, background:'rgba(34, 197, 94, 0.1)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 24px', border:'1px solid rgba(34, 197, 94, 0.3)'}}>
-                <Check size={40} color="#22c55e"/>
-              </div>
-              <h3 style={{color:'white', fontSize:'1.8rem', margin:0, fontWeight:800}}>¡Datos Recibidos!</h3>
-              
-              {!plan.isScholarship ? (
-                /* OPCIÓN DE PAGO (PLAN PADRINO) */
-                <>
-                  <p style={{color:'var(--text-muted)', margin:'16px 0 30px'}}>
-                    Tus datos ya están guardados. Ahora, para confirmar tu cupo, agrega la matrícula al carrito y finaliza tu pago seguro.
-                  </p>
-                  <button onClick={handleAddToCart} className="btn-main" style={{background:'#2dd4bf', color:'black', marginBottom:12}}>
-                     <ShoppingCart size={20}/> Ir a Pagar Matrícula ({clp(plan.price)})
-                  </button>
-                  <button onClick={handleWhatsAppRedirect} style={{color:'var(--text-muted)', fontSize:'0.85rem', textDecoration:'underline'}}>
-                    Tengo problemas para pagar, prefiero WhatsApp
-                  </button>
-                </>
-              ) : (
-                /* OPCIÓN BECA (SOLO WHATSAPP) */
-                <>
-                  <p style={{color:'var(--text-muted)', margin:'16px 0 30px'}}>
-                    Tu postulación ha entrado a revisión. Te contactaremos si eres seleccionado/a.
-                  </p>
-                  <button onClick={handleWhatsAppRedirect} className="btn-main" style={{background:'#25D366', color:'white'}}>
-                     <MessageCircle size={20}/> Consultar Estado
-                  </button>
-                </>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ==========================================================================
-   COMPONENTE PRINCIPAL
-   ========================================================================== */
 export default function EscuelaAdultos() {
-  const [selectedPlan, setSelectedPlan] = useState(null); 
+  const { addToCart, openCart } = useCart();
+  
+  // --- ESTADOS ---
+  const [selectedCycle, setSelectedCycle] = useState(null); // Ciclo seleccionado
+  const [showSticky, setShowSticky] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
-  const pricingRef = useRef(null);
+
+  // --- SCROLL LISTENER ---
+  useEffect(() => {
+    const handleScroll = () => setShowSticky(window.scrollY > 800);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // --- MANEJADOR DE INSCRIPCIÓN ---
+  const handleEnroll = (planId) => {
+    const quote = getNivelacionQuote(planId);
+    
+    addToCart({
+      id: `adultos-${planId}-${selectedCycle || 'general'}`,
+      title: `Nivelación: ${quote.title}`,
+      price: quote.monthlyPrice,
+      detail: selectedCycle 
+              ? `Ciclo: ${STUDY_CYCLES.find(c=>c.id === selectedCycle)?.name}` 
+              : 'Ciclo por definir',
+      type: 'course',
+      extraInfo: `Matrícula única: ${clp(quote.registration)}`
+    });
+    openCart();
+  };
+
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if(el) el.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <div className="adultos-page">
       <style>{css}</style>
-      <SEOHead title="Nivelación de Estudios Adultos | Programa Caminos" description="Termina tu 4to medio gratis o pagando. Clases flexibles y humanas." />
 
-      {selectedPlan && <EnrollmentForm plan={selectedPlan} onClose={() => setSelectedPlan(null)} />}
+      {/* ──────────────── 1. BARRA DE ACCESIBILIDAD ──────────────── */}
+      <div className="access-bar">
+         <div className="container ab-content">
+            <span><FaEye/> Vista simplificada activada</span>
+            <span>Programa Caminos 2026</span>
+         </div>
+      </div>
 
-      {/* HERO */}
-      <section className="hero">
-        <div className="container hero-grid">
-          <div>
-            <div style={{display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.05)', border:'1px solid var(--border)', color:'var(--gold)', padding:'8px 16px', borderRadius:50, fontWeight:700, fontSize:'0.8rem', marginBottom:24}}>
-              <GraduationCap size={16}/> Programa Caminos 2026
+      {/* ──────────────── 2. HERO (GRANDE Y CLARO) ──────────────── */}
+      <header className="hero-adults">
+        <div className="container hero-content">
+           <div className="hero-badge">
+              <BsFillLightningChargeFill /> Modalidad 2x1 (Dos años en uno)
+           </div>
+           
+           <h1>Tu <span className="highlight-yellow">4to Medio</span> es posible.</h1>
+           <p className="hero-lead">
+             {CAMINOS_CONTENT.heroText}
+           </p>
+
+           <div className="hero-actions">
+              <button onClick={() => scrollToSection('pasos')} className="btn-big primary">
+                 <FaUserGraduate /> Quiero Terminar mis Estudios
+              </button>
+              <button onClick={() => scrollToSection('colaborar')} className="btn-big outline">
+                 <FaHandHoldingHeart /> Quiero Ayudar a Alguien
+              </button>
+           </div>
+           
+           <div className="trust-pill">
+              <MdOutlineVerifiedUser className="tp-icon"/>
+              <span>Exámenes válidos ante Ministerio de Educación</span>
+           </div>
+        </div>
+      </header>
+
+      {/* ──────────────── 3. EMPATÍA (NO JUZGAMOS) ──────────────── */}
+      <section className="empathy-section">
+         <div className="container">
+            <div className="empathy-card">
+               <h2>Nunca es tarde.</h2>
+               <p>
+                  Sabemos que la vida pasó: trabajo, hijos, falta de dinero o problemas familiares. 
+                  Aquí nadie te va a preguntar "¿por qué no terminaste antes?". 
+                  Aquí solo te diremos: <strong>"¡Qué bueno que llegaste!"</strong>.
+               </p>
+               <AudioHelper />
             </div>
-            <h1>Tu historia no define<br/><span style={{background: 'linear-gradient(to right, #fbbf24, #f59e0b)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>tu futuro.</span></h1>
-            <p>Nunca es tarde para terminar tu enseñanza media. Sin juicios, sin miedo y a tu propio ritmo.</p>
-            <button onClick={() => pricingRef.current?.scrollIntoView({behavior:'smooth'})} className="btn-main" style={{width:'auto', padding:'16px 32px'}}>
-              Ver Opciones de Ingreso <ArrowRight size={18}/>
+         </div>
+      </section>
+
+      {/* ──────────────── 4. CICLOS (SELECCIÓN VISUAL) ──────────────── */}
+      <section id="ciclos" className="cycles-section">
+         <div className="container">
+            <div className="sec-head">
+               <span className="step-num">1</span>
+               <h3>¿Qué curso te falta?</h3>
+               <p>Selecciona tu nivel para empezar.</p>
+            </div>
+
+            <div className="cycles-grid">
+               {STUDY_CYCLES.map((cycle) => (
+                  <div 
+                    key={cycle.id} 
+                    className={`cycle-card ${selectedCycle === cycle.id ? 'active' : ''}`}
+                    onClick={() => setSelectedCycle(cycle.id)}
+                  >
+                     <div className="cc-icon">{cycle.icon}</div>
+                     <h4>{cycle.name}</h4>
+                     <div className="cc-badge">{cycle.equivalence}</div>
+                     {selectedCycle === cycle.id && <FaCheckCircle className="cc-check"/>}
+                  </div>
+               ))}
+            </div>
+            
+            {!selectedCycle && (
+               <p className="hint-text">* Toca una tarjeta para seleccionarla</p>
+            )}
+         </div>
+      </section>
+
+      {/* ──────────────── 5. CÓMO FUNCIONA (PASOS SIMPLES) ──────────────── */}
+      <section id="pasos" className="steps-section">
+         <div className="container">
+            <div className="sec-head">
+               <span className="step-num">2</span>
+               <h3>¿Cómo funciona?</h3>
+               <p>Es más fácil de lo que piensas.</p>
+            </div>
+
+            <div className="steps-visual">
+               {STEPS.map((step, i) => (
+                  <div key={i} className="step-row">
+                     <div className="sr-num">{i + 1}</div>
+                     <div className="sr-content">
+                        <strong>{step.title}</strong>
+                        <p>{step.text}</p>
+                     </div>
+                  </div>
+               ))}
+            </div>
+         </div>
+      </section>
+
+      {/* ──────────────── 6. PRECIOS (ROBIN HOOD) ──────────────── */}
+      <section className="pricing-section">
+         <div className="container">
+            <div className="sec-head">
+               <span className="step-num">3</span>
+               <h3>Elige tu Plan</h3>
+               <p>Si puedes pagar, ayudas a otros. Si no puedes, te ayudamos a ti.</p>
+            </div>
+
+            <div className="plans-container">
+               {/* --- PLAN GRATUITO (SOCIAL) --- */}
+               <div className="plan-card social">
+                  <div className="pc-tag">Para quien lo necesita</div>
+                  <div className="pc-header">
+                     <h3>Cupo Social</h3>
+                     <div className="price-big">$0 <small>/mes</small></div>
+                     <p>Beca 100% Gratuita</p>
+                  </div>
+                  <div className="pc-body">
+                     <ul>
+                        <li><FaCheckCircle/> Clases en Vivo</li>
+                        <li><FaCheckCircle/> Material de Estudio</li>
+                        <li><MdTimer/> <strong>Exige 80% Asistencia</strong></li>
+                     </ul>
+                     <p className="commitment-note">
+                        "Me comprometo a asistir a clases para no perder el beneficio."
+                     </p>
+                     <button onClick={() => handleEnroll('social')} className="btn-plan social-btn">
+                        Postular a Gratuidad
+                     </button>
+                  </div>
+               </div>
+
+               {/* --- PLAN ESTÁNDAR (PAGADO) --- */}
+               <div className="plan-card standard">
+                  <div className="pc-tag highlight">Más Popular</div>
+                  <div className="pc-header">
+                     <h3>Plan Estándar</h3>
+                     <div className="price-big">{clp(12990)} <small>/mes</small></div>
+                     <p>Precio Justo y Consciente</p>
+                  </div>
+                  <div className="pc-body">
+                     <ul>
+                        <li><FaCheckCircle/> Todo lo del plan Social</li>
+                        <li><FaCheckCircle/> Sin mínimo de asistencia</li>
+                        <li><FaCheckCircle/> Prioridad en corrección</li>
+                        <li><FaHandsHelping/> Ayudas a financiar becas</li>
+                     </ul>
+                     <button onClick={() => handleEnroll('consciente')} className="btn-plan std-btn">
+                        Pagar mi Curso
+                     </button>
+                  </div>
+               </div>
+
+               {/* --- PLAN PADRINO (HEROE) --- */}
+               <div className="plan-card hero">
+                  <div className="pc-tag gold">Héroe Lael</div>
+                  <div className="pc-header">
+                     <h3>Plan Padrino</h3>
+                     <div className="price-big">{clp(25000)} <small>/mes</small></div>
+                     <p>Pagas el tuyo + Becas a otro</p>
+                  </div>
+                  <div className="pc-body">
+                     <ul>
+                        <li><FaAward/> Certificado de Padrino</li>
+                        <li><FaCheckCircle/> Clases Particulares</li>
+                        <li><FaCheckCircle/> Reporte de tu impacto</li>
+                        <li><FaCheckCircle/> <strong>Beca a un alumno vulnerable</strong></li>
+                     </ul>
+                     <button onClick={() => handleEnroll('padrino')} className="btn-plan gold-btn">
+                        Ser Padrino
+                     </button>
+                  </div>
+               </div>
+            </div>
+            
+            <div className="fee-notice">
+               * Todos los planes pagan matrícula única de {clp(REGISTRATION_FEE)} para reservar el cupo.
+            </div>
+         </div>
+      </section>
+
+      {/* ──────────────── 7. COLABORADORES Y EMPRESAS (NUEVO) ──────────────── */}
+      <section id="colaborar" className="sponsors-section">
+         <div className="container">
+            <div className="sponsors-box">
+               <div className="sb-left">
+                  <FaBuilding className="sb-icon"/>
+                  <h2>Empresas y Mecenas</h2>
+                  <p>¿Quieres apadrinar a 10, 50 o 100 estudiantes? <br/>Transforma vidas a través de la RSE.</p>
+               </div>
+               <div className="sb-right">
+                  <div className="impact-stat">
+                     <strong>$250.000</strong>
+                     <span>Apadrina un aula (10 alumnos)</span>
+                  </div>
+                  <button className="btn-sponsor">
+                     Contactar Coordinación
+                  </button>
+               </div>
+            </div>
+            <p className="sponsor-quote">
+               "{CAMINOS_CONTENT.impactQuote}"
+            </p>
+         </div>
+      </section>
+
+      {/* ──────────────── 8. REQUISITOS Y DUDAS ──────────────── */}
+      <section className="faq-section">
+         <div className="container">
+            <h2>Preguntas Frecuentes</h2>
+            
+            <div className="requirements-box">
+               <h3><MdQuiz/> ¿Qué papeles necesito?</h3>
+               <ul>
+                  {REQUIREMENTS.map((r, i) => (
+                     <li key={i}><FaCheckCircle/> {r}</li>
+                  ))}
+               </ul>
+            </div>
+
+            <div className="accordion">
+               {FAQS.map((faq, i) => (
+                  <div key={i} className={`acc-item ${activeFaq === i ? 'open' : ''}`} onClick={() => setActiveFaq(activeFaq === i ? null : i)}>
+                     <div className="acc-head">
+                        <span>{faq.q}</span>
+                        <BsArrowRightCircleFill className="acc-arrow"/>
+                     </div>
+                     <div className="acc-body">
+                        <p>{faq.a}</p>
+                     </div>
+                  </div>
+               ))}
+            </div>
+         </div>
+      </section>
+
+      {/* ──────────────── STICKY BAR ──────────────── */}
+      <div className={`sticky-bar ${showSticky ? 'visible' : ''}`}>
+         <div className="container sb-content">
+            <div className="sb-text">
+               <strong>Nivelación de Estudios 2026</strong>
+               <span>¡Últimos cupos disponibles!</span>
+            </div>
+            <button onClick={() => scrollToSection('ciclos')} className="btn-sticky">
+               Inscribirme
             </button>
-          </div>
-          <div className="img-wrapper">
-             <img src={HeroImg} alt="Estudiante Adulto" onError={(e) => e.target.style.display = 'none'} />
-             <div className="floating-badge">
-                <div style={{background:'rgba(255,255,255,0.1)', padding:12, borderRadius:12, color:'var(--gold)'}}><ShieldCheck size={28} /></div>
-                <div><strong style={{color:'white', display:'block', fontSize:'0.95rem'}}>Validez Oficial</strong><span style={{color:'var(--text-muted)', fontSize:'0.75rem'}}>Exámenes Libres Mineduc</span></div>
-             </div>
-          </div>
-        </div>
-      </section>
+         </div>
+      </div>
 
-      {/* CARDS FLOTANTES */}
-      <section className="container" style={{marginTop:'-80px', position:'relative', zIndex:5, marginBottom:120}}>
-        <div className="grid-cards">
-          <div className="glass-card feature-box">
-             <div style={{marginBottom:24, color:'var(--teal)'}}><Video size={36}/></div>
-             <h3 style={{color:'white', marginBottom:12}}>Clases a tu Ritmo</h3>
-             <p style={{color:'var(--text-muted)'}}>Las clases quedan grabadas y se envían cortas y precisas.</p>
-          </div>
-          <div className="glass-card feature-box">
-             <div style={{marginBottom:24, color:'var(--gold)'}}><MessageCircle size={36}/></div>
-             <h3 style={{color:'white', marginBottom:12}}>Todo por WhatsApp</h3>
-             <p style={{color:'var(--text-muted)'}}>Te enviamos las guías, lecturas y videos directo a tu celular.</p>
-          </div>
-          <div className="glass-card feature-box">
-             <div style={{marginBottom:24, color:'#f472b6'}}><Heart size={36}/></div>
-             <h3 style={{color:'white', marginBottom:12}}>Pedagogía del Afecto</h3>
-             <p style={{color:'var(--text-muted)'}}>Tutores pacientes que entienden que llevas años sin estudiar.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* PRECIOS */}
-      <section ref={pricingRef} className="container" style={{padding:'80px 0'}}>
-        <div style={{textAlign:'center', marginBottom:60}}>
-          <h2 style={{fontSize:'2.5rem', fontWeight:800, color:'white', marginBottom:20}}>Modelo Solidario</h2>
-          <p style={{color:'var(--text-muted)', maxWidth:'600px', margin:'0 auto'}}>Quienes pueden pagar, apadrinan a quienes no pueden.</p>
-        </div>
-
-        <div className="grid-cards" style={{maxWidth:960, margin:'0 auto'}}>
-          {/* BECA */}
-          <div className="glass-card plan-card" style={{borderStyle:'dashed', borderColor: '#fbbf2440'}}>
-             <div style={{marginBottom:30, borderBottom:'1px solid var(--border)', paddingBottom:30}}>
-                <h3 style={{color: '#fbbf24', fontSize:'1.5rem', fontWeight:800, display:'flex', gap:10}}><Award size={24}/> Beca Social</h3>
-                <div className="plan-price" style={{color:'#fbbf24'}}>$0</div>
-             </div>
-             <ul className="plan-features">
-                {PLANS[0].features.map((f,i)=><li key={i}><Check size={18} color="#fbbf24"/> {f}</li>)}
-             </ul>
-             <button onClick={() => setSelectedPlan(PLANS[0])} className="btn-main btn-outline" style={{borderColor: '#fbbf24', color: '#fbbf24'}}>Postular a Gratuidad</button>
-          </div>
-
-          {/* PADRINO */}
-          <div className="glass-card plan-card" style={{borderColor: '#2dd4bf', background:'rgba(45, 212, 191, 0.05)'}}>
-             <div style={{position:'absolute', top:0, right:0, padding:'8px 16px', background:'#fbbf24', color:'black', fontWeight:800, fontSize:'0.75rem', borderBottomLeftRadius:16}}>POPULAR</div>
-             <div style={{marginBottom:30, borderBottom:'1px solid var(--border)', paddingBottom:30}}>
-                <h3 style={{color: '#2dd4bf', fontSize:'1.5rem', fontWeight:800, display:'flex', gap:10}}><User size={24}/> Plan Padrino</h3>
-                <div className="plan-price">{clp(15000)}</div>
-                <div style={{color:'var(--text-muted)', fontSize:'0.9rem'}}>Mensual</div>
-             </div>
-             <ul className="plan-features">
-                {PLANS[1].features.map((f,i)=><li key={i}><Check size={18} color="#2dd4bf"/> {f}</li>)}
-             </ul>
-             <button onClick={() => setSelectedPlan(PLANS[1])} className="btn-main" style={{background: '#2dd4bf', color:'black', border:'none'}}>Quiero ser Padrino</button>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="container" style={{maxWidth:800}}>
-        <h2 style={{color:'white', textAlign:'center', marginBottom:40}}>Preguntas Frecuentes</h2>
-        {FAQS.map((faq, i) => (
-          <div key={i} className="faq-item" onClick={() => setActiveFaq(activeFaq === i ? null : i)}>
-             <div className="faq-head">{faq.q} <ChevronDown size={20} style={{transform: activeFaq === i ? 'rotate(180deg)' : 'none', transition:'0.3s'}}/></div>
-             {activeFaq === i && <div className="faq-body animate-fade">{faq.a}</div>}
-          </div>
-        ))}
-      </section>
     </div>
   );
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   ESTILOS CSS (Diseño Grande, Accesible y Digno)
+   ────────────────────────────────────────────────────────────────────────── */
+const css = `
+:root {
+  --blue-dark: #1e3a8a;
+  --blue-light: #3b82f6;
+  --yellow: #facc15;
+  --white: #ffffff;
+  --gray-bg: #f3f4f6;
+  --text: #1f2937;
+  --gold: #d97706;
+  --stone: #57534e;
+}
+
+.adultos-page { font-family: 'Inter', sans-serif; background: var(--white); color: var(--text); padding-bottom: 80px; }
+.container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+h1, h2, h3 { font-weight: 800; line-height: 1.2; margin: 0; }
+button { cursor: pointer; transition: 0.2s; border: none; font-family: inherit; }
+
+/* 0. ACCESS BAR */
+.access-bar { background: #000; color: #fff; padding: 8px 0; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.ab-content { display: flex; justify-content: space-between; align-items: center; }
+
+/* 1. HERO */
+.hero-adults { background: linear-gradient(135deg, var(--blue-dark) 0%, #172554 100%); color: white; padding: 60px 0 80px; text-align: center; position: relative; overflow: hidden; }
+.hero-adults::before { content: ''; position: absolute; inset: 0; background: url('https://www.transparenttextures.com/patterns/notebook.png'); opacity: 0.1; }
+.hero-content { position: relative; z-index: 2; }
+
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(250, 204, 21, 0.2); color: var(--yellow); padding: 8px 16px; border-radius: 50px; font-weight: 700; margin-bottom: 20px; font-size: 0.9rem; border: 1px solid var(--yellow); }
+.hero-adults h1 { font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px; }
+.highlight-yellow { color: var(--yellow); text-decoration: underline; text-decoration-thickness: 4px; }
+.hero-lead { font-size: 1.2rem; color: #dbeafe; max-width: 700px; margin: 0 auto 40px; line-height: 1.5; }
+
+.hero-actions { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 40px; }
+@media(min-width: 600px) { .hero-actions { flex-direction: row; justify-content: center; } }
+
+.btn-big { padding: 18px 30px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; width: 100%; max-width: 300px; justify-content: center; }
+.btn-big.primary { background: var(--yellow); color: #000; box-shadow: 0 4px 0 #ca8a04; transform: translateY(-4px); }
+.btn-big.primary:active { transform: translateY(0); box-shadow: none; }
+.btn-big.outline { background: transparent; border: 2px solid rgba(255,255,255,0.3); color: white; }
+.btn-big.outline:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+.trust-pill { display: inline-flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 50px; font-size: 0.9rem; color: #93c5fd; }
+.tp-icon { font-size: 1.2rem; color: var(--yellow); }
+
+/* 2. EMPATHY */
+.empathy-section { padding: 40px 0; margin-top: -40px; position: relative; z-index: 3; }
+.empathy-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); text-align: center; border-bottom: 4px solid var(--blue-light); }
+.empathy-card h2 { color: var(--blue-dark); font-size: 1.8rem; margin-bottom: 15px; }
+.empathy-card p { font-size: 1.15rem; color: var(--text); line-height: 1.6; max-width: 700px; margin: 0 auto 20px; }
+
+.audio-helper-btn { display: inline-flex; align-items: center; gap: 8px; background: #f3f4f6; padding: 8px 16px; border-radius: 50px; font-size: 0.9rem; font-weight: 600; color: #4b5563; }
+.audio-helper-btn:hover { background: #e5e7eb; color: #000; }
+
+/* HEADERS SECCIONES */
+.sec-head { text-align: center; margin-bottom: 40px; }
+.step-num { display: inline-block; width: 40px; height: 40px; background: var(--blue-dark); color: white; border-radius: 50%; line-height: 40px; font-weight: 800; font-size: 1.2rem; margin-bottom: 10px; }
+.sec-head h3 { font-size: 2rem; color: var(--blue-dark); margin-bottom: 5px; }
+.sec-head p { font-size: 1.1rem; color: #6b7280; }
+
+/* 3. CICLOS */
+.cycles-section { padding: 60px 0; background: var(--gray-bg); }
+.cycles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.cycle-card { background: white; padding: 25px; border-radius: 16px; text-align: center; border: 2px solid transparent; cursor: pointer; transition: 0.2s; position: relative; }
+.cycle-card:hover { transform: translateY(-5px); border-color: #cbd5e1; }
+.cycle-card.active { border-color: var(--blue-light); background: #eff6ff; box-shadow: 0 10px 20px rgba(59, 130, 246, 0.15); }
+.cc-icon { font-size: 2.5rem; margin-bottom: 15px; }
+.cycle-card h4 { font-size: 1.1rem; margin-bottom: 5px; color: var(--blue-dark); }
+.cc-badge { background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; display: inline-block; }
+.cc-check { position: absolute; top: 10px; right: 10px; color: var(--blue-light); font-size: 1.2rem; }
+.hint-text { text-align: center; margin-top: 15px; color: #94a3b8; font-style: italic; }
+
+/* 4. PASOS */
+.steps-section { padding: 60px 0; }
+.steps-visual { display: flex; flex-direction: column; gap: 20px; max-width: 700px; margin: 0 auto; }
+.step-row { display: flex; gap: 20px; align-items: flex-start; background: white; padding: 20px; border-radius: 12px; border: 1px solid #e5e7eb; }
+.sr-num { background: var(--yellow); color: black; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; margin-top: 2px; }
+.sr-content strong { display: block; font-size: 1.1rem; margin-bottom: 4px; color: var(--blue-dark); }
+.sr-content p { margin: 0; color: #4b5563; line-height: 1.4; }
+
+/* 5. PRECIOS */
+.pricing-section { padding: 60px 0; background: #fafaf9; }
+.plans-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; align-items: flex-start; }
+
+.plan-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative; border: 1px solid #e5e7eb; display: flex; flex-direction: column; }
+.pc-tag { background: #e5e7eb; color: #374151; font-size: 0.8rem; font-weight: 700; text-align: center; padding: 5px; text-transform: uppercase; letter-spacing: 1px; }
+.pc-tag.highlight { background: var(--blue-light); color: white; }
+.pc-tag.gold { background: var(--gold); color: white; }
+
+.pc-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid #f3f4f6; }
+.social .pc-header { background: #fafaf9; }
+.standard .pc-header { background: #eff6ff; }
+.hero .pc-header { background: #fffbeb; }
+
+.pc-header h3 { font-size: 1.4rem; margin-bottom: 10px; color: #374151; }
+.price-big { font-size: 2.5rem; font-weight: 800; color: #111827; }
+.price-big small { font-size: 1rem; color: #6b7280; font-weight: 400; }
+
+.pc-body { padding: 20px; display: flex; flex-direction: column; flex: 1; }
+.pc-body ul { list-style: none; padding: 0; margin-bottom: 20px; }
+.pc-body li { display: flex; gap: 10px; margin-bottom: 12px; font-size: 0.95rem; align-items: center; color: #4b5563; }
+.pc-body li svg { flex-shrink: 0; }
+
+.social .pc-body li svg { color: var(--stone); }
+.standard .pc-body li svg { color: var(--blue-light); }
+.hero .pc-body li svg { color: var(--gold); }
+
+.commitment-note { background: #fff1f2; color: #be123c; font-size: 0.85rem; padding: 10px; border-radius: 8px; text-align: center; font-style: italic; margin-bottom: 20px; border: 1px solid #fda4af; }
+
+.btn-plan { width: 100%; padding: 14px; border-radius: 10px; font-weight: 700; margin-top: auto; }
+.social-btn { background: var(--stone); color: white; }
+.social-btn:hover { background: #44403c; }
+.std-btn { background: var(--blue-light); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+.std-btn:hover { background: #2563eb; }
+.gold-btn { background: var(--gold); color: white; box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4); }
+.gold-btn:hover { background: #b45309; }
+
+.fee-notice { text-align: center; margin-top: 30px; font-size: 0.9rem; color: #6b7280; }
+
+/* 6. SPONSORS */
+.sponsors-section { padding: 60px 0; background: #1e3a8a; color: white; margin-top: 40px; }
+.sponsors-box { display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between; }
+.sb-left { flex: 1; min-width: 300px; }
+.sb-icon { font-size: 3rem; color: var(--yellow); margin-bottom: 15px; }
+.sb-left h2 { font-size: 2rem; margin-bottom: 10px; }
+.sb-left p { font-size: 1.1rem; color: #bfdbfe; line-height: 1.5; }
+
+.sb-right { flex: 1; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
+.impact-stat strong { font-size: 2.5rem; color: var(--yellow); display: block; line-height: 1; }
+.impact-stat span { display: block; color: white; margin-bottom: 20px; font-size: 0.9rem; }
+.btn-sponsor { background: white; color: var(--blue-dark); padding: 12px 24px; border-radius: 50px; font-weight: 800; font-size: 1rem; }
+.btn-sponsor:hover { background: var(--yellow); }
+
+.sponsor-quote { text-align: center; margin-top: 40px; font-style: italic; opacity: 0.7; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+/* 7. FAQ */
+.faq-section { padding: 60px 0; }
+.requirements-box { background: #fff7ed; border: 1px solid #fdba74; padding: 25px; border-radius: 12px; margin-bottom: 40px; }
+.requirements-box h3 { color: #c2410c; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+.requirements-box ul { list-style: none; padding: 0; margin: 0; }
+.requirements-box li { display: flex; gap: 10px; margin-bottom: 8px; font-size: 1rem; }
+.requirements-box svg { color: #f97316; }
+
+.accordion { display: flex; flex-direction: column; gap: 10px; }
+.acc-item { background: white; border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; }
+.acc-head { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: #f9fafb; font-weight: 600; }
+.acc-head:hover { background: #f3f4f6; }
+.acc-arrow { color: var(--blue-light); font-size: 1.2rem; transition: 0.3s; }
+.acc-item.open .acc-arrow { transform: rotate(90deg); }
+.acc-body { padding: 0 20px; max-height: 0; overflow: hidden; transition: 0.3s ease-out; background: white; }
+.acc-item.open .acc-body { padding: 20px; max-height: 200px; border-top: 1px solid #e5e7eb; }
+
+/* STICKY BAR */
+.sticky-bar { position: fixed; bottom: -100px; left: 0; width: 100%; background: white; border-top: 1px solid #e5e7eb; padding: 15px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 100; transition: 0.4s; }
+.sticky-bar.visible { bottom: 0; }
+.sb-content { display: flex; justify-content: space-between; align-items: center; }
+.sb-text strong { color: var(--blue-dark); display: block; }
+.sb-text span { font-size: 0.85rem; color: #6b7280; }
+.btn-sticky { background: var(--blue-light); color: white; padding: 10px 24px; border-radius: 8px; font-weight: 700; }
+`;

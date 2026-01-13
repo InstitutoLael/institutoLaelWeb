@@ -44,7 +44,7 @@ function BankCard({ onCopy }) {
       <div className="bank-card">
         <div className="card-top">
            <span className="card-chip"></span>
-           <span className="card-bank-name">Lael Bank</span>
+           <span className="card-bank-name">Mercado Pago</span>
         </div>
         <div className="card-number">
            <span onClick={() => handleCopy("1088183168")}>1088 183 168</span>
@@ -52,7 +52,7 @@ function BankCard({ onCopy }) {
         </div>
         <div className="card-details">
            <div className="cd-group">
-              <label>TITULAR</label>
+              <label>Nombre</label>
               <span>Instituto Lael SpA</span>
            </div>
            <div className="cd-group">

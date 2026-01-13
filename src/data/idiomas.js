@@ -1,16 +1,16 @@
 // src/data/idiomas.js
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. CONFIGURACIÓN DE PRECIOS Y MATRÍCULA
+   1. CONFIGURACIÓN DE NEGOCIO (PRECIOS)
    ────────────────────────────────────────────────────────────────────────── */
 
-// 🧾 Matrícula Anual (Pago único al inscribirse)
-export const ENROLLMENT_FEE = 10990;
+export const ENROLLMENT_FEE = 10990; // Matrícula única
+export const ACADEMIC_MONTHS = 9;    // Marzo a Diciembre
 
-// 📅 Duración referencial (para cálculos anuales si la web los pide)
-export const ACADEMIC_MONTHS = 9; 
-
-// 🔢 Helper para formatear dinero a Peso Chileno (CLP)
+/**
+ * 🔢 Formateador de CLP
+ * Uso: clp(17990) -> "$17.990"
+ */
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -19,147 +19,151 @@ export const clp = (n) =>
   });
 
 /**
- * 🧠 CALCULADORA DE PACKS (Lógica de Descuentos)
- * Esta función es la que llama la página web para saber cuánto cobrar.
- * Devuelve un OBJETO con el total mensual.
+ * 🧠 MOTOR DE BUNDLES (DESCUENTOS POR CANTIDAD)
+ * Lógica: 
+ * 1 Idioma: $17.990 | 2 Idiomas: $32.990 | 3+ Idiomas: $45.990
  */
-export function computeLangBundle(n) {
-  const count = Math.max(0, Number(n || 0));
+export function computeLangBundle(countSelected) {
+  const count = Math.max(0, Number(countSelected || 0));
 
-  // Precios Base
-  const PRICE_1 = 17990; // 1 Curso
-  const PRICE_2 = 32990; // 2 Cursos (Ahorras ~$3.000)
-  const PRICE_3 = 45990; // 3+ Cursos (Plan Políglota - Ahorro masivo)
+  const PRICES = {
+    SINGLE: 17990,
+    DUO: 32990,
+    POLYGLOT: 45990
+  };
 
-  let total = 0;
+  let totalMonthly = 0;
   let label = "";
+  let saving = 0;
 
   if (count === 0) {
-    total = 0;
-    label = "Sin selección";
+    totalMonthly = 0;
+    label = "Selecciona tus idiomas";
   } else if (count === 1) {
-    total = PRICE_1;
+    totalMonthly = PRICES.SINGLE;
     label = "Plan Mensual (1 Idioma)";
   } else if (count === 2) {
-    total = PRICE_2;
-    label = "Plan Dúo (Descuento aplicado)";
+    totalMonthly = PRICES.DUO;
+    label = "Plan Dúo (Ahorro)";
+    saving = (PRICES.SINGLE * 2) - PRICES.DUO;
   } else {
-    // Para 3 o más
-    total = PRICE_3;
+    totalMonthly = PRICES.POLYGLOT;
     label = "Plan Políglota (Tarifa Plana)";
+    saving = (PRICES.SINGLE * count) - PRICES.POLYGLOT;
   }
 
-  // IMPORTANTE: Devolvemos un objeto con la propiedad totalMonthly
   return {
-    totalMonthly: total, 
-    label: label,
-    count: count,
-    enrollment: ENROLLMENT_FEE
+    count,
+    label,
+    totalMonthly,
+    saving,
+    enrollment: ENROLLMENT_FEE,
+    totalFirstMonth: totalMonthly + ENROLLMENT_FEE,
+    pricePerLanguage: count > 0 ? Math.round(totalMonthly / count) : 0
   };
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. ADAPTADORES DE SEGURIDAD (Para que no falle la compilación)
-   --------------------------------------------------------------------------
-   Estas funciones conectan tu nueva lógica con lo que espera el archivo Idiomas.jsx
-   ────────────────────────────────────────────────────────────────────────── */
-
-// La página a veces pide solo el número (precio) directo
-export const priceForCount = (n) => {
-  return computeLangBundle(n).totalMonthly;
-};
-
-// Por si la página quiere mostrar el total anual tachado
-export const priceAnnual = (n) => {
-  return priceForCount(n) * ACADEMIC_MONTHS;
-};
-
-
-/* ──────────────────────────────────────────────────────────────────────────
-   3. CATÁLOGO DE CURSOS (DATA)
+   2. CATÁLOGO DE IDIOMAS (DATA)
    ────────────────────────────────────────────────────────────────────────── */
 export const LANGUAGES = [
-  // 1. INGLÉS
   {
     id: "ingles",
-    code: "EN",
     name: "English Booster",
     emoji: "🇺🇸", 
-    color: "#3b82f6",
-    badge: "Alta Empleabilidad",
-    summary: "No enseñamos solo gramática; te entrenamos para el mundo real. Preparación IELTS/TOEFL y Business English.",
-    includes: [
-      "Simulación de entrevistas laborales",
-      "Club de conversación semanal",
-      "Inglés para Tech y Negocios",
+    color: "#3b82f6", // Blue
+    badge: "Más Vendido",
+    summary: "Entrenamiento dinámico para el mundo real. Olvida la gramática aburrida y empieza a hablar desde el primer día.",
+    features: [
+      "Preparación certificaciones (IELTS/TOEFL)",
+      "Enfoque en Business English & Tech",
+      "Club de conversación semanal incluido"
     ],
-    levels: ["A1 (Básico)", "A2 (Elemental)", "B1 (Intermedio)", "B2 (Avanzado)"],
+    levels: ["A1 (Básico)", "A2", "B1", "B2 (Avanzado)"],
     comingSoon: false,
   },
-
-  // 2. COREANO
   {
     id: "coreano",
-    code: "KR",
     name: "Coreano + Cultura",
     emoji: "🇰🇷",
-    color: "#ec4899",
-    badge: "Tendencia",
-    summary: "Desde el Hangul hasta la fluidez. Mezclamos estructura académica TOPIK con análisis de K-Dramas y cultura.",
-    includes: [
-      "Alfabeto Hangul en 4 clases",
-      "Preparación examen TOPIK I",
-      "Etiqueta y jerarquías",
+    color: "#ec4899", // Pink
+    badge: "Tendencia K-Pop",
+    summary: "Aprende Hangul y gramática coreana mientras analizas tus K-Dramas y canciones favoritas.",
+    features: [
+      "Lectura y escritura Hangul en 4 sesiones",
+      "Protocolo y etiqueta coreana",
+      "Preparación examen oficial TOPIK"
     ],
-    levels: ["Nivel 1 (Inicial)", "Nivel 2 (Básico)", "Nivel 3 (Pre-Intermedio)"],
+    levels: ["Nivel 1 (Inicial)", "Nivel 2", "Nivel 3"],
     comingSoon: false,
   },
-
-  // 3. JAPONÉS (PRONTO)
-  {
-    id: "japones",
-    code: "JP",
-    name: "Japonés Nihongo",
-    emoji: "🇯🇵",
-    color: "#dc2626",
-    summary: "Domina Hiragana, Katakana y Kanji básico. Sumérgete en una cultura milenaria y moderna a la vez.",
-    levels: ["N5 (Inicial)", "N4 (Básico)"],
-    comingSoon: true, // Esto activa el botón gris en la web
-  },
-
-  // 4. CHINO MANDARÍN (PRONTO)
-  {
-    id: "chino",
-    code: "CN",
-    name: "Mandarín Negocios",
-    emoji: "🇨🇳",
-    color: "#ef4444",
-    summary: "El idioma del futuro comercial. Tonos, Pinyin y caracteres simplificados para negocios.",
-    levels: ["HSK 1", "HSK 2"],
-    comingSoon: true,
-  },
-
-  // 5. ESPAÑOL PARA EXTRANJEROS
   {
     id: "espanol",
-    code: "ES",
     name: "Spanish for Expats",
     emoji: "🇨🇱",
-    color: "#f59e0b",
-    summary: "Español chileno práctico. Enfocado en trámites migratorios, inserción laboral y cultura local.",
-    levels: ["A1 (Survival)", "A2 (Basic)", "B1 (Work)"],
+    color: "#f59e0b", // Amber
+    badge: "Inserción Local",
+    summary: "Practical Spanish for everyday life in Chile. Focused on work, residency paperwork, and local culture.",
+    features: [
+      "Survival Chilean slang & idioms",
+      "Job interview preparation",
+      "Administrative support (Migración)"
+    ],
+    levels: ["A1 (Survival)", "A2", "B1 (Fluent)"],
     comingSoon: false,
   },
-
-  // 6. ITALIANO (PRONTO)
   {
-    id: "italiano",
-    code: "IT",
-    name: "Italiano Dolce Vita",
-    emoji: "🇮🇹",
-    color: "#16a34a",
-    summary: "El idioma del arte y la gastronomía. Ideal para turismo o ciudadanía por descendencia.",
-    levels: ["A1", "A2"],
+    id: "japones",
+    name: "Japonés Nihongo",
+    emoji: "🇯🇵",
+    color: "#dc2626", // Red
+    badge: "Próximamente",
+    summary: "Un viaje a través del Hiragana, Katakana y el fascinante mundo de los Kanji. Ideal para fans del anime y cultura nipona.",
+    features: [
+      "Escritura y caligrafía básica",
+      "Preparación examen JLPT N5",
+      "Cultura y tradiciones"
+    ],
+    levels: ["Inicial N5", "Básico N4"],
     comingSoon: true,
   },
+  {
+    id: "portugues",
+    name: "Portugués Brasil",
+    emoji: "🇧🇷",
+    color: "#22c55e", // Green
+    badge: "Próximamente",
+    summary: "Aprende el idioma más alegre del mundo. Enfocado en turismo, negocios en Latinoamérica y fluidez comunicativa.",
+    features: [
+      "Pronunciación y ritmo brasileño",
+      "Portugués para negocios",
+      "Diferencias con el español"
+    ],
+    levels: ["A1/A2 (Iniciación)", "B1 (Fluidez)"],
+    comingSoon: true,
+  },
+  {
+    id: "chino",
+    name: "Mandarín Negocios",
+    emoji: "🇨🇳",
+    color: "#ef4444", // Light Red
+    badge: "Próximamente",
+    summary: "Domina el idioma con mayor proyección comercial del mundo. Enfoque en tonos, pinyin y caracteres clave.",
+    features: [
+      "Sistema de tonos simplificado",
+      "Vocabulario de importaciones",
+      "Preparación examen HSK"
+    ],
+    levels: ["HSK 1", "HSK 2"],
+    comingSoon: true,
+  }
+];
+
+/* ──────────────────────────────────────────────────────────────────────────
+   3. INFO EXTRA PARA LA UI (FAQ/VENTAJAS)
+   ────────────────────────────────────────────────────────────────────────── */
+export const LANG_FEATURES = [
+  { title: "Clases en Vivo", desc: "Nada de videos grabados. Interactúa con tu profesor en tiempo real.", icon: "🎥" },
+  { title: "Grupos Reducidos", desc: "Máximo 10-12 alumnos por sección para asegurar tu aprendizaje.", icon: "👥" },
+  { title: "Certificado Lael", desc: "Obtén un certificado que avale tus horas de estudio al finalizar el nivel.", icon: "📜" }
 ];

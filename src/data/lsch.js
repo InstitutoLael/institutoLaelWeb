@@ -1,11 +1,15 @@
 // src/data/lsch.js
-// === Lengua de Señas Chilena (LSCh) — Datos y Precios Oficiales ===
+// === Lengua de Señas Chilena (LSCh) — El Idioma de las Manos ===
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. CONFIGURACIÓN BASE Y FORMATEADORES
+   1. CONFIGURACIÓN BASE
    ────────────────────────────────────────────────────────────────────────── */
 
-// 🔢 Formateador de Moneda (CLP)
+export const ENROLLMENT_FEE = 15000; 
+export const ENROLLMENT_LABEL = "Matrícula Anual y Acceso a Comunidad Lael";
+export const LSCH_TAGLINE = "Rompe la barrera del sonido.";
+export const CHURCH_PRICE = 14990; // Precio social protegido
+
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -13,128 +17,139 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// 🧾 Matrícula (Costo de incorporación)
-export const ENROLLMENT_FEE = 15000; 
-export const ENROLLMENT_LABEL = "Matrícula Anual y Plataforma";
-
-// 📢 Slogan para WhatsApp
-export const LSCH_TAGLINE = "Rompe la barrera del sonido.";
-
 /* ──────────────────────────────────────────────────────────────────────────
-   2. ESTRUCTURA ACADÉMICA (Módulos)
+   2. ESTRUCTURA ACADÉMICA (Módulos de Aprendizaje)
    ────────────────────────────────────────────────────────────────────────── */
 export const LSCH_MODULES = [
   {
     id: "nivel-1",
-    tag: "A1 • Básico",
-    name: "Iniciación Visual",
-    desc: "Aprende el alfabeto, saludos, familia y estructura básica. Deja de usar la voz y activa tus manos.", // Cambié summary por desc para compatibilidad
+    tag: "A1 • Principiante",
+    name: "Iniciación Visual y Dactilológica",
+    duration: "3 meses",
+    icon: "👋",
+    color: "#06b6d4",
+    desc: "El primer paso. Aprenderás el abecedario, saludos, familia y cómo estructurar tus primeras ideas sin usar la voz.",
+    outcomes: ["Dominio del abecedario dactilológico", "Presentación personal completa", "Vocabulario de entorno cotidiano"]
   },
   {
     id: "nivel-2",
     tag: "A2 • Intermedio",
-    name: "Gramática Espacial",
-    desc: "Verbos direccionales, clasificadores y tiempos verbales. Construye oraciones complejas sin traducir del español.",
+    name: "Gramática Espacial y Clasificadores",
+    duration: "3 meses",
+    icon: "🤟",
+    color: "#8b5cf6",
+    desc: "Entra en la lógica visual. Verbos direccionales y uso del espacio para describir escenas complejas.",
+    outcomes: ["Uso correcto del espacio gestual", "Narración de rutinas y pasado", "Comprensión de relatos fluidos"]
   },
   {
     id: "nivel-3",
     tag: "B1 • Avanzado",
-    name: "Contexto Profesional",
-    desc: "Vocabulario técnico para salud, educación y atención al cliente. Interpretación y fluidez conversacional.",
+    name: "Contexto Profesional e Inclusión",
+    duration: "4 meses",
+    icon: "🎓",
+    color: "#f43f5e",
+    desc: "Especialización. Vocabulario técnico para salud, educación y atención al público con enfoque en la Ley de Inclusión.",
+    outcomes: ["Vocabulario técnico avanzado", "Interpretación básica", "Fluidez en debates y opinión"]
   },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   3. PLANES GRUPALES (Lógica de Suscripción)
+   3. PLANES GRUPALES (Suscripción Mensual)
    ────────────────────────────────────────────────────────────────────────── */
 export const LSCH_GROUP_PLANS = [
   { 
     id: "g-month", 
     title: "Plan Mensual Flexible", 
-    desc: "Sin compromiso de permanencia.",
-    price: 24990, // Usamos 'price' estándar para evitar errores
-    monthly: 24990, 
+    desc: "Ideal para ir a tu propio ritmo.",
+    price: 24990, 
     enrollmentWaived: false,
-    features: [ // Agregado para que se vea la lista en la tarjeta
-      "8 Clases en vivo por Zoom",
-      "Acceso a grabaciones",
-      "Certificado de asistencia",
-      "Pago mes a mes"
+    badge: "Flexibilidad Total",
+    features: [
+      "Clases en vivo vía Zoom",
+      "Material de apoyo en PDF",
+      "Acceso a grabaciones por 7 días",
+      "Diploma de participación"
     ],
-    highlight: false,
   },
   { 
     id: "g-quarter", 
-    title: "Plan Trimestral", 
-    desc: "El favorito de los estudiantes.",
-    price: 19990, // Precio visual referencia
-    monthly: 19990,
+    title: "Plan Trimestral (Ahorro)", 
+    desc: "Compromiso real con el aprendizaje.",
+    price: 19990, // Precio por mes pagando el trimestre
+    totalPayment: 59970,
     enrollmentWaived: true, 
+    badge: "Más Conveniente",
     features: [
       "Todo lo del plan mensual",
-      "🔥 Matrícula GRATIS",
-      "Ahorras $15.000",
-      "Diploma físico al aprobar"
+      "🔥 Matrícula $0 (Ahorras $15.000)",
+      "Acceso permanente a grabaciones",
+      "Certificado de Nivel aprobado"
     ],
-    highlight: true, // Destaca la tarjeta
-    tag: "Mejor Opción",
+    highlight: true,
   },
 ];
 
-// 🙌 CONVENIO IGLESIAS (Tarifa Plana Especial)
-export const CHURCH_PRICE = 14990; 
-
 /* ──────────────────────────────────────────────────────────────────────────
-   4. CLASES PARTICULARES (Refuerzo 1 a 1)
+   4. CLASES PARTICULARES (Personalizado)
    ────────────────────────────────────────────────────────────────────────── */
 export const LSCH_ONE2ONE_PLANS = [
   { 
     id: "o-light", 
     title: "Pack 4 Sesiones", 
     price: 60000,
-    monthly: 60000, 
-    features: ["Horario Flexible", "Enfoque personalizado", "Material PDF"],
+    desc: "Para dudas puntuales o nivelación rápida.",
+    features: ["Sesiones de 60 min", "Horario a convenir", "Profesor exclusivo"],
   },
   { 
     id: "o-standard", 
     title: "Pack 8 Sesiones", 
     price: 110000,
-    monthly: 110000, 
-    features: ["Ideal para nivelación", "Feedback intensivo", "Soporte WhatsApp"],
+    desc: "Avance acelerado y personalizado.",
+    features: ["Sesiones de 60 min", "Corrección de señas en video", "Prioridad de agenda"],
   },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   5. RAZONES CORPORATIVAS
+   5. VALORES CORPORATIVOS (Para la Web)
    ────────────────────────────────────────────────────────────────────────── */
-export const CORPORATE_WHY = [
-  { 
-    title: "Ley de Inclusión 21.015", 
-    desc: "Capacita a tu equipo y cumple con la normativa laboral vigente en Chile." 
-  },
-  { 
-    title: "Experiencia de Cliente", 
-    desc: "Atender a una persona sorda en su idioma marca una diferencia competitiva." 
-  },
-  { 
-    title: "Habilidad Blanda", 
-    desc: "Desarrolla la empatía, expresión corporal y comunicación no verbal del equipo." 
-  },
+export const LSCH_WHY_US = [
+  { title: "Cultura Sorda", desc: "No solo enseñamos señas, enseñamos el respeto por la identidad de la Comunidad Sorda." },
+  { title: "Ley 21.015", desc: "Ayudamos a las empresas a cumplir con la cuota de inclusión mediante capacitación real." },
+  { title: "Certificación", desc: "Nuestros cursos están diseñados bajo estándares de comunicación efectiva." }
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   6. CALCULADORA DE PRECIOS (La Lógica Maestra)
+   6. CALCULADORA DE PRECIOS
    ────────────────────────────────────────────────────────────────────────── */
-export function priceForGroupPlan(plan, options = {}) {
-  const { church } = options;
-
-  if (!plan) return 0;
-
-  // Si marcó "Soy Iglesia/Ministerio", precio fijo congelado
-  if (church) {
-    return CHURCH_PRICE;
+export function calculateLschPrice(planId, isChurch = false) {
+  // 1. Si es convenio de iglesia, ignoramos el plan y damos el precio social
+  if (isChurch) {
+    return {
+      price: CHURCH_PRICE,
+      label: "Convenio Iglesia/Ministerio",
+      enrollment: 0 // Usualmente exonerada en convenios
+    };
   }
 
-  // Retornamos price o monthly (seguridad por si la variable cambia)
-  return plan.price || plan.monthly;
+  // 2. Buscar en planes grupales
+  const groupPlan = LSCH_GROUP_PLANS.find(p => p.id === planId);
+  if (groupPlan) {
+    return {
+      price: groupPlan.price,
+      label: groupPlan.title,
+      enrollment: groupPlan.enrollmentWaived ? 0 : ENROLLMENT_FEE
+    };
+  }
+
+  // 3. Buscar en planes 1 a 1
+  const soloPlan = LSCH_ONE2ONE_PLANS.find(p => p.id === planId);
+  if (soloPlan) {
+    return {
+      price: soloPlan.price,
+      label: soloPlan.title,
+      enrollment: ENROLLMENT_FEE
+    };
+  }
+
+  return { price: 0, label: "No seleccionado", enrollment: 0 };
 }

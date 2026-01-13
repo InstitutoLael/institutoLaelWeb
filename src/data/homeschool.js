@@ -1,7 +1,7 @@
 // src/data/homeschool.js
 // === Lael Academy: Hub de Entrenamiento Académico & Homeschool ===
 
-// 🔢 Helper de Moneda
+// 🔢 Helper de Moneda (Local para este archivo)
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -9,9 +9,11 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// 🧾 Matrícula
-// Bajamos a 10.000 para que la barrera de entrada sea casi nula.
-export const ENROLLMENT_FEE = 10000; 
+// 🧾 Matrícula & Datos Base
+export const ACADEMY_CONFIG = {
+  enrollmentFee: 10000, // Barrera de entrada baja
+  enrollmentText: "Matrícula Anual",
+};
 
 // 🤝 ALIANZA ESTRATÉGICA
 export const ALLIANCE = {
@@ -21,48 +23,30 @@ export const ALLIANCE = {
   benefits: ["Certificado Anual", "Tramitación Mineduc", "Pauta de Contenidos"],
 };
 
-// 📚 MATERIAS
+// 📚 MATERIAS DISPONIBLES
 export const SUBJECTS = [
   { 
-    id: 'mat', 
-    name: 'Matemáticas', 
-    icon: '📐', 
-    color: '#06b6d4', // Cyan
+    id: 'mat', name: 'Matemáticas', icon: '📐', color: '#06b6d4', 
     desc: 'Desde aritmética básica hasta Cálculo y PAES M1/M2.' 
   },
   { 
-    id: 'len', 
-    name: 'Lenguaje', 
-    icon: '📚', 
-    color: '#f97316', // Orange
+    id: 'len', name: 'Lenguaje', icon: '📚', color: '#f97316', 
     desc: 'Comprensión lectora, redacción y vocabulario crítico.' 
   },
   { 
-    id: 'cie', 
-    name: 'Ciencias', 
-    icon: '🧬', 
-    color: '#84cc16', // Lime
+    id: 'cie', name: 'Ciencias', icon: '🧬', color: '#84cc16', 
     desc: 'Física, Química y Biología con enfoque experimental.' 
   },
   { 
-    id: 'his', 
-    name: 'Historia', 
-    icon: '🏛️', 
-    color: '#a855f7', // Purple
+    id: 'his', name: 'Historia', icon: '🏛️', color: '#a855f7', 
     desc: 'Formación ciudadana, Historia de Chile y Universal.' 
   },
   { 
-    id: 'ing', 
-    name: 'Inglés Escolar', 
-    icon: '🇬🇧', 
-    color: '#3b82f6', // Blue
+    id: 'ing', name: 'Inglés Escolar', icon: '🇬🇧', color: '#3b82f6', 
     desc: 'Refuerzo del currículum escolar y pronunciación.' 
   },
   { 
-    id: 'hab', 
-    name: 'Hábito de Estudio',
-    icon: '🧠', 
-    color: '#ec4899', // Pink
+    id: 'hab', name: 'Hábito de Estudio', icon: '🧠', color: '#ec4899', 
     desc: 'Organización, gestión del tiempo y técnicas de aprendizaje.' 
   },
 ];
@@ -75,79 +59,50 @@ export const LEVELS = [
   { id: 'adultos', label: 'Adultos', desc: 'Nivelación 2x1' }, 
 ];
 
-// 📦 PACKS DE HORAS (Precios ajustados estratégicamente)
-// Idea: "Más barato que un profe particular promedio, pero con calidad de academia"
+// 📦 PACKS DE HORAS (PRODUCTOS VENDIBLES)
+// Estos son los que el "Cerebro" importará para vender.
 export const PACKS = [
   { 
-    id: 'p4', 
+    id: 'academy-p4', // ID único para el sistema
     hours: 4, 
     title: 'Pack Rescate', 
-    subtitle: 'Apoyo puntual',
-    // Antes 75.000 -> Ahora 52.000 ($13k/hora)
+    subtitle: 'Apoyo puntual para pruebas',
     price: 52000, 
     badge: null,
-    features: [
-      "1 hora semanal por ramo",
-      "Resolución de dudas puntuales",
-      "Grabación de la clase",
-      "Acceso a material básico"
-    ]
+    features: ["1 hora semanal por ramo", "Resolución de dudas", "Grabación de clase"]
   },
   { 
-    id: 'p8', 
+    id: 'academy-p8', 
     hours: 8, 
     title: 'Pack Pro', 
-    subtitle: 'Aprendizaje real',
-    // Antes 139.000 -> Ahora 96.000 ($12k/hora)
-    // *Rompe la barrera psicológica de los 100mil pesos*
+    subtitle: 'Aprendizaje real y continuo',
     price: 96000, 
     badge: 'Más Popular',
-    features: [
-      "2 horas semanales por ramo",
-      "Seguimiento de notas",
-      "Guías de ejercicios PDF",
-      "Reporte de avance mensual"
-    ]
+    features: ["2 horas semanales por ramo", "Seguimiento de notas", "Guías PDF"]
   },
   { 
-    id: 'p12', 
+    id: 'academy-p12', 
     hours: 12, 
     title: 'Pack Intensivo', 
-    subtitle: 'Dominio total',
-    // Antes 199.000 -> Ahora 138.000 ($11.5k/hora)
-    // *Mucho valor por hora, ideal para PAES o nivelación crítica*
+    subtitle: 'Dominio total de la materia',
     price: 138000, 
     badge: 'Mejor Valor',
-    features: [
-      "3 horas semanales por ramo",
-      "Matrícula GRATIS",
-      "Simulacros de examen",
-      "Contacto directo con profesor"
-    ]
+    features: ["3 horas semanales por ramo", "Matrícula GRATIS", "Simulacros examen"]
   },
 ];
 
-// 🏫 SERVICIOS COLEGIOS
+// 🏫 SERVICIOS COLEGIOS (B2B)
 export const SCHOOL_SERVICES = [
   {
-    id: 'ensayos',
-    title: 'Corrección Externa PAES',
-    desc: 'Nos envías los ensayos, nosotros devolvemos data. Evita la ceguera de taller.',
-    icon: '📊',
-    priceRef: 'Desde $2.500 por alumno'
+    id: 'ensayos', title: 'Corrección Externa PAES',
+    desc: 'Nos envías los ensayos, nosotros devolvemos data.', icon: '📊', priceRef: 'Desde $2.500/alumno'
   },
   {
-    id: 'talleres',
-    title: 'Talleres Extra-programáticos',
-    desc: 'Robótica, Lengua de Señas o Refuerzo PAES en tu colegio.',
-    icon: '🚀',
-    priceRef: 'Cotizar por semestre'
+    id: 'talleres', title: 'Talleres Extra-programáticos',
+    desc: 'Robótica, Lengua de Señas o Refuerzo.', icon: '🚀', priceRef: 'Cotizar'
   },
   {
-    id: 'reemplazo',
-    title: 'Banco de Suplentes',
-    desc: '¿Profesor con licencia? Enviamos un experto Lael para cubrir la clase online o híbrida.',
-    icon: '👨‍🏫',
-    priceRef: 'Valor hora colegio'
+    id: 'reemplazo', title: 'Banco de Suplentes',
+    desc: 'Profesores expertos Lael para cubrir licencias.', icon: '👨‍🏫', priceRef: 'Valor hora'
   }
 ];

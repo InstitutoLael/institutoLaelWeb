@@ -1,11 +1,13 @@
 // src/data/paes.js
-// === Preuniversitario 2026: Estrategia de Volumen y Margen ===
+// === Preuniversitario Lael 2026: Estrategia de Volumen y Resultados ===
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. CONFIGURACIÓN FINANCIERA
+   1. CONFIGURACIÓN FINANCIERA Y BASE
    ────────────────────────────────────────────────────────────────────────── */
 
-// 🔢 Formateador de Moneda
+export const ENROLLMENT_FEE = 10990; 
+export const ACADEMIC_MONTHS = 8; // Abril a Noviembre (Intensivo)
+
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -13,81 +15,65 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// 🧾 Matrícula Anual (Pago Único)
-export const ENROLLMENT_FEE = 10990; 
-
-// 📅 Duración del servicio (para cálculos anuales visuales)
-export const ACADEMIC_MONTHS = 8; 
-
 /* ──────────────────────────────────────────────────────────────────────────
-   2. CALCULADORA DE PRECIOS (El cerebro del negocio)
+   2. EL CEREBRO: CALCULADORA DE PRECIOS
    ────────────────────────────────────────────────────────────────────────── */
 
 /**
- * Calcula el total mensual basado en la cantidad de ramos seleccionados.
- * Estrategia: "Tarifa Plana" a partir del 4to ramo.
+ * Calcula el total mensual basado en la cantidad de ramos.
+ * M1 y Lenguaje son los pilares, los demás son complementos estratégicos.
  */
 export function computePaesPrice(selectedIds = []) {
   const count = selectedIds.length;
   
-  // Lista de precios escalonada
-  let total = 0;
-  let label = "Selecciona tus ramos";
-  let savings = null;
+  const TIER_PRICES = {
+    1: 9990,
+    2: 18990,
+    3: 27990,
+    FULL: 34990 // 4 o más ramos
+  };
+
+  let totalMonthly = 0;
+  let label = "";
+  let saving = 0;
 
   if (count === 0) {
-    total = 0;
+    totalMonthly = 0;
+    label = "Selecciona tus ramos";
   } else if (count === 1) {
-    total = 9990;
+    totalMonthly = TIER_PRICES[1];
     label = "Plan Monoramo";
   } else if (count === 2) {
-    total = 18990;
-    label = "Plan Dúo";
+    totalMonthly = TIER_PRICES[2];
+    label = "Plan Dúo Dinámico";
+    saving = (TIER_PRICES[1] * 2) - TIER_PRICES[2];
   } else if (count === 3) {
-    total = 27990;
+    totalMonthly = TIER_PRICES[3];
     label = "Plan Trío Fundamental";
+    saving = (TIER_PRICES[1] * 3) - TIER_PRICES[3];
   } else {
-    // 4 o más ramos (Tarifa Plana)
-    total = 34990; 
+    totalMonthly = TIER_PRICES.FULL;
     label = "🏆 Plan Full Intensivo (Tarifa Plana)";
-    savings = "Estás ahorrando al máximo";
+    saving = (TIER_PRICES[1] * count) - TIER_PRICES.FULL;
   }
 
   return {
-    totalMonthly: total,
-    count: count,
-    label: label,
-    savings: savings,
-    enrollment: ENROLLMENT_FEE
+    count,
+    label,
+    totalMonthly,
+    saving,
+    enrollment: ENROLLMENT_FEE,
+    totalFirstMonth: totalMonthly + ENROLLMENT_FEE,
+    pricePerSubject: count > 0 ? Math.round(totalMonthly / count) : 0
   };
 }
 
-/* ──────────────────────────────────────────────────────────────────────────
-   3. ADAPTADORES (NECESARIOS PARA QUE LA PÁGINA COMPILE)
-   --------------------------------------------------------------------------
-   Estas funciones conectan tu nueva lógica con lo que espera el archivo PAES.jsx
-   ────────────────────────────────────────────────────────────────────────── */
-
-// La página espera esta función para calcular el precio según IDs
-export const priceForSubjects = (ids) => {
-  const result = computePaesPrice(ids);
-  return result.totalMonthly;
-};
-
-// La página espera esta función para mostrar precios en las tarjetas "desde X"
-export const priceForCount = (count) => {
-  // Creamos un array falso de longitud 'count' para usar tu calculadora central
-  const dummyIds = Array(count).fill('dummy'); 
-  return computePaesPrice(dummyIds).totalMonthly;
-};
-
-// Funciones auxiliares antiguas (por seguridad, para evitar errores si algo las llama)
-export const essaysForCount = (count) => count * 2; 
-export const priceAnnual = (ids) => priceForSubjects(ids) * ACADEMIC_MONTHS;
-
+// Adaptadores para la UI
+export const priceForSubjects = (ids) => computePaesPrice(ids).totalMonthly;
+export const priceForCount = (count) => computePaesPrice(Array(count).fill(0)).totalMonthly;
 
 /* ──────────────────────────────────────────────────────────────────────────
-   4. CATÁLOGO DE ASIGNATURAS
+   3. CATÁLOGO DE ASIGNATURAS (DATA DETALLADA)
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_SUBJECTS = [
   { 
@@ -95,82 +81,121 @@ export const PAES_SUBJECTS = [
     name: "Matemática M1", 
     category: "Obligatorio",
     icon: "📐", 
-    desc: "Eje Números, Álgebra y Funciones, Geometría, Probabilidades." 
+    color: "#3b82f6",
+    desc: "Base fundamental para todas las carreras. Números, Álgebra, Geometría y Datos.",
+    hoursPerWeek: 3
   },
   { 
     id: "len", 
     name: "Comprensión Lectora", 
     category: "Obligatorio",
     icon: "📚",
-    desc: "Estrategias de lectura, rastreo de información y evaluación."
+    color: "#f97316",
+    desc: "Estrategias críticas para textos literarios y no literarios. Vocabulario en contexto.",
+    hoursPerWeek: 3
   },
   { 
     id: "m2",  
     name: "Matemática M2", 
-    category: "Electivo",
+    category: "Electivo Especializado",
     icon: "🚀",
-    desc: "Profundización para carreras STEM (Ingenierías, Ciencias)."
+    color: "#8b5cf6",
+    desc: "Contenido avanzado para carreras STEM (Ingenierías, Ciencias, salud técnica).",
+    hoursPerWeek: 2
   },
   { 
     id: "his", 
     name: "Historia y Cs. Sociales", 
     category: "Electivo",
     icon: "🏛️",
-    desc: "Historia de Chile, Formación Ciudadana y Economía."
+    color: "#a855f7",
+    desc: "Historia de Chile y el Mundo, Formación Ciudadana y Economía.",
+    hoursPerWeek: 2
   },
   { 
     id: "bio", 
     name: "Ciencias - Biología", 
     category: "Ciencias",
     icon: "🧬",
-    desc: "Organización, estructura y actividad celular. Procesos y funciones."
+    color: "#10b981",
+    desc: "Célula, Herencia, Ecosistemas y Procesos Biológicos Humanos.",
+    hoursPerWeek: 2
   },
   { 
     id: "fis", 
     name: "Ciencias - Física", 
     category: "Ciencias",
     icon: "⚡",
-    desc: "Mecánica, Energía, Electricidad y Ondas."
+    color: "#ef4444",
+    desc: "Mecánica, Energía, Ondas, Electricidad y Magnetismo.",
+    hoursPerWeek: 2
   },
   { 
     id: "qui", 
     name: "Ciencias - Química", 
     category: "Ciencias",
     icon: "🧪",
-    desc: "Reacciones, Estequiometría, Química Orgánica."
+    color: "#06b6d4",
+    desc: "Estructura Atómica, Química Orgánica y Estequiometría.",
+    hoursPerWeek: 2
   },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   5. COMBOS PRE-ARMADOS
+   4. COMBOS PRE-ARMADOS (VENTA RÁPIDA)
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_COMBOS = [
   {
     id: "humanista",
     title: "Pack Humanista",
-    subtitle: "Para Derecho, Psicología, Periodismo...",
+    subtitle: "Para Derecho, Psicología o Artes",
     subjects: ["len", "his", "m1"], 
     price: 27990,
-    features: ["Lenguaje + Historia + M1", "3 Ensayos Mensuales", "Tutoría Vocacional"],
-    color: "amber"
+    color: "amber",
+    features: ["M1 + Lenguaje + Historia", "Ensayos semanales", "Taller de ansiedad"]
   },
   {
     id: "salud",
     title: "Pack Salud",
-    subtitle: "Para Medicina, Enfermería, Kine...",
+    subtitle: "Para Medicina o Enfermería",
     subjects: ["len", "m1", "m2", "bio", "qui"], 
     price: 34990, 
-    features: ["Plan Full (5 Ramos)", "M1 + M2 + Lenguaje", "Biología + Química"],
-    tag: "Más Vendido",
-    color: "teal"
+    color: "teal",
+    tag: "Más Completo",
+    features: ["Plan Full (5 Ramos)", "Biología + Química intensivo", "Preparación M2"]
   },
   {
     id: "ingenieria",
     title: "Pack Ingeniería",
-    subtitle: "Para Civil, Informática, Arquitectura...",
+    subtitle: "Para Civiles y Ciencias Exactas",
     subjects: ["len", "m1", "m2", "fis"], 
     price: 34990, 
-    features: ["Física + M1 + M2", "Lenguaje Intensivo", "Refuerzo Cálculo"],
-    color: "indigo"
+    color: "indigo",
+    features: ["Física + M1 + M2", "Estrategias de rapidez", "Foco en resolución"]
+  }
+];
+
+/* ──────────────────────────────────────────────────────────────────────────
+   5. VALOR AGREGADO (LO QUE INCLUYE SIEMPRE)
+   ────────────────────────────────────────────────────────────────────────── */
+export const PAES_FEATURES = [
+  { title: "Plataforma 24/7", desc: "Clases grabadas y guías descargables en cualquier momento.", icon: "💻" },
+  { title: "Ensayos Ilimitados", desc: "Simulacros con tiempo real y corrección automática.", icon: "📝" },
+  { title: "Tutorías Personalizadas", desc: "Resolución de dudas vía WhatsApp con profesores reales.", icon: "📱" },
+  { title: "Orientación Vocacional", desc: "Charlas sobre becas, gratuidad y postulación universitaria.", icon: "🎯" }
+];
+
+export const PAES_FAQS = [
+  {
+    q: "¿Cuándo comienzan las clases?",
+    a: "Nuestro ciclo principal inicia la primera semana de Abril, pero tienes acceso a material nivelatorio apenas te inscribes.",
+  },
+  {
+    q: "¿Las clases son en vivo?",
+    a: "Sí, todas las clases son vía Zoom en vivo para que preguntes lo que quieras. Si no puedes asistir, quedan grabadas.",
+  },
+  {
+    q: "¿Puedo cambiar de ramo después?",
+    a: "¡Claro! Puedes ajustar tu plan mes a mes según vayas descubriendo qué carrera te gusta más.",
   }
 ];

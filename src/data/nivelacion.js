@@ -1,12 +1,14 @@
 // src/data/nivelacion.js
 // === Programa Caminos: Nivelación de Estudios (2x1) ===
-// Estrategia: "Robin Hood" (Subsidio Cruzado)
+// Estrategia: "Robin Hood" (Subsidio Cruzado para el Chile real)
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. CONFIGURACIÓN FINANCIERA
+   1. CONFIGURACIÓN FINANCIERA & BASE
    ────────────────────────────────────────────────────────────────────────── */
 
-// 🔢 Formateador
+export const REGISTRATION_FEE = 2990; // Matrícula de compromiso
+export const ACADEMIC_CYCLE = "Ciclo 2026";
+
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -14,121 +16,155 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-// 🧾 Matrícula Simbólica
-// $2.990 filtra a los "curiosos" sin dinero, pero es pagable por casi cualquiera.
-export const REGISTRATION_FEE = 2990; 
+// Mensaje para el ticket de pago/inscripción
+export const SOCIAL_CONTRACT = "Al elegir el Cupo Social, me comprometo a asistir al 80% de las clases para mantener el beneficio.";
 
-// 🌟 MANIFIESTO (El alma del proyecto)
-export const CAMINOS_MANIFESTO = {
+/* ──────────────────────────────────────────────────────────────────────────
+   2. MANIFIESTO Y PROPUESTA DE VALOR
+   ────────────────────────────────────────────────────────────────────────── */
+export const CAMINOS_CONTENT = {
   subtitle: "Programa Caminos 2026",
   title: "Tu segunda oportunidad comienza hoy",
-  text: "No importa por qué dejaste de estudiar. Aquí no juzgamos tu pasado, celebramos tu futuro. Recupera tu confianza y tu licencia de 4to medio.",
+  heroText: "No importa por qué dejaste de estudiar. Aquí no juzgamos tu pasado, celebramos tu futuro. Recupera tu confianza y tu licencia de 4to medio con un método diseñado para adultos.",
+  impactQuote: "En Lael creemos que el dinero no debe ser la barrera para que un chileno termine su escolaridad."
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. PLANES (MODELO SOLIDARIO)
+   3. CICLOS DE ESTUDIO (¿Qué nivelas?)
+   ────────────────────────────────────────────────────────────────────────── */
+export const STUDY_CYCLES = [
+  {
+    id: "eb-1",
+    name: "Educación Básica (1er Nivel)",
+    equivalence: "5to y 6to Básico",
+    icon: "📖"
+  },
+  {
+    id: "eb-2",
+    name: "Educación Básica (2do Nivel)",
+    equivalence: "7mo y 8vo Básico",
+    icon: "🖊️"
+  },
+  {
+    id: "em-1",
+    name: "Enseñanza Media (1er Nivel)",
+    equivalence: "1ero y 2do Medio",
+    icon: "🔬"
+  },
+  {
+    id: "em-2",
+    name: "Enseñanza Media (2do Nivel)",
+    equivalence: "3ero y 4to Medio",
+    icon: "🎓"
+  }
+];
+
+/* ──────────────────────────────────────────────────────────────────────────
+   4. PLANES SOLIDARIOS
    ────────────────────────────────────────────────────────────────────────── */
 export const PLANS = [
   {
     id: "social",
     tag: "Beca 100%", 
     title: "Cupo Social",
-    price: 0, // GRATIS
-    frequency: "mensual",
+    price: 0,
     desc: "Para quienes tienen las ganas pero no los recursos. Tu pago es tu asistencia.",
+    color: "#78716c", // Stone
     features: [
-      "Clases en vivo y grabadas",
-      "Material PDF básico",
-      "Licencia válida Mineduc",
+      "Clases en vivo vía Zoom",
+      "Acceso a la plataforma 24/7",
+      "Material PDF de estudio",
+      "Preparación Exámenes Libres Mineduc",
+      "Contrato de Asistencia (Mín. 80%)"
     ],
     cta: "Postular a Gratuidad",
-    isPopular: false,
-    color: "stone"
+    isPopular: false
   },
   {
     id: "consciente",
-    tag: "Costo Real",
+    tag: "Precio Justo",
     title: "Plan Estándar",
-    price: 12990, // Precio bajo, pero sostenible
-    frequency: "mensual",
-    desc: "Pagas lo justo para mantener la plataforma y a los profesores.",
+    price: 12990, 
+    desc: "Pagas lo justo para mantener la plataforma y apoyar la causa.",
+    color: "#0ea5e9", // Sky
     features: [
       "Todo lo del plan Social",
       "Prioridad en corrección de ensayos",
-      "Talleres de oficio extra",
-      "Ayudas a financiar becas",
+      "Talleres de 'Habilidades para el Trabajo'",
+      "Ayudas a financiar becas de otros",
+      "Sin requisito mínimo de asistencia"
     ],
-    cta: "Elegir Estándar",
-    isPopular: true, // El que queremos vender
-    color: "sky"
+    cta: "Inscribirme con Plan Estándar",
+    isPopular: true
   },
   {
     id: "padrino",
-    tag: "Héroe",
+    tag: "Héroe Lael",
     title: "Plan Padrino",
     price: 25000, 
-    frequency: "mensual",
-    desc: "Pagas tus estudios y financias el cupo de alguien que no puede pagar.",
+    desc: "Pagas tus estudios y financias el cupo completo de un compañero.",
+    color: "#f59e0b", // Amber
     features: [
-      "Certificado de 'Padrino Educativo'",
-      "Reunión mensual de avance",
-      "Clase particular de refuerzo",
-      "Karma positivo instantáneo ✨",
+      "Todo lo del plan Estándar",
+      "Certificado Digital de 'Padrino Educativo'",
+      "Reporte mensual de impacto social",
+      "1 Clase particular de refuerzo al mes",
+      "Acceso a todos los cursos de soft-skills"
     ],
-    cta: "Ser Padrino",
-    isPopular: false,
-    color: "amber"
+    cta: "Ser Padrino Educativo",
+    isPopular: false
   },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   3. CALCULADORA SIMPLE (Para compatibilidad con Checkout)
+   5. EL PROCESO (PASO A PASO)
+   ────────────────────────────────────────────────────────────────────────── */
+export const STEPS = [
+  { title: "Inscripción", text: "Eliges tu ciclo y tu plan de pago ($0, $12k o $25k)." },
+  { title: "Documentación", text: "Subes tu carnet y certificado de último curso (te ayudamos)." },
+  { title: "Clases Online", text: "Conéctate 2 o 3 veces por semana en horario nocturno." },
+  { title: "Examen Final", text: "Rindes tus exámenes en una sede asignada por el Mineduc." },
+  { title: "Licencia", text: "¡Recibes tu certificado de estudios oficial y legal!" }
+];
+
+/* ──────────────────────────────────────────────────────────────────────────
+   6. CALCULADORA & HELPERS
    ────────────────────────────────────────────────────────────────────────── */
 export function getNivelacionQuote(planId) {
-  const plan = PLANS.find(p => p.id === planId);
+  const plan = PLANS.find(p => p.id === planId) || PLANS[0];
   
-  if (!plan) return { total: 0, label: "Elige un plan" };
-
   return {
-    total: plan.price,
-    label: plan.title,
+    planId: plan.id,
+    title: plan.title,
+    monthlyPrice: plan.price,
+    registration: REGISTRATION_FEE,
+    totalToPayNow: plan.price + REGISTRATION_FEE,
     isFree: plan.price === 0,
-    enrollment: REGISTRATION_FEE
+    summary: `${plan.title} - Matrícula ${clp(REGISTRATION_FEE)}`
   };
 }
 
-/* ──────────────────────────────────────────────────────────────────────────
-   4. METODOLOGÍA (Derribando Miedos)
-   ────────────────────────────────────────────────────────────────────────── */
-export const METHODOLOGY = [
+export const FAQS = [
   {
-    icon: "HeartHandshake", // Icono mental (Frontend lo mapea)
-    title: "Sin Vergüenza",
-    text: "Aquí nadie se ríe. Si te cuesta leer o sumar, empezamos de cero. Paciencia infinita garantizada."
+    q: "¿Necesito Internet?",
+    a: "Sí, las clases son por Zoom. Pero si no puedes conectarte, puedes ver las grabaciones desde tu celular cuando tengas tiempo.",
   },
   {
-    icon: "Clock", 
-    title: "A tu Ritmo",
-    text: "Si trabajas o cuidas familia, no te preocupes. Todo queda grabado. No te retamos, te apoyamos."
+    q: "¿Tienen límite de edad?",
+    a: "Ninguno. Tenemos alumnos desde los 18 hasta los 75 años. Nunca es tarde para cerrar este ciclo.",
   },
   {
-    icon: "Award", 
-    title: "Validez Oficial",
-    text: "Te preparamos para los exámenes libres del Mineduc. Tu licencia es 100% real y válida para trabajar o estudiar."
+    q: "¿Qué pasa si pierdo mi Cupo Social?",
+    a: "Si faltas injustificadamente, el cupo se libera para alguien en lista de espera. Puedes re-incorporarte pasando al Plan Estándar.",
+  },
+  {
+    q: "¿El título sirve para la Universidad?",
+    a: "Sí. Es el mismo certificado que entrega cualquier colegio de Chile. Puedes dar la PAES y seguir estudiando.",
   }
 ];
 
-export const FAQS = [
-  {
-    q: "¿De verdad es gratis el Cupo Social?",
-    a: "Sí, es $0 mensual. Solo pagas la matrícula anual ($2.990). La condición es no faltar: si te ausentas sin aviso, el cupo pasa a otro.",
-  },
-  {
-    q: "Llevo 20 años sin estudiar...",
-    a: "Mejor. Tienes experiencia de vida. Usamos el método de 'Andragogía' (enseñanza para adultos) que aprovecha lo que ya sabes.",
-  },
-  {
-    q: "¿Qué necesito para inscribirme?",
-    a: "Cédula de identidad y certificado del último curso aprobado (te ayudamos a sacarlo en línea).",
-  },
+export const REQUIREMENTS = [
+  "Cédula de Identidad vigente (o comprobante en trámite).",
+  "Certificado de último curso aprobado (lo sacamos gratis con tu RUT).",
+  "Tener al menos 18 años cumplidos."
 ];

@@ -1,194 +1,199 @@
 // src/data/empresas.js
-// === Lael Corporate: Soluciones B2B (Estrategia Market Entry) ===
+
+// === Lael Corporate: Soluciones B2B ===
+// Estrategia: Market Entry (Precios competitivos para generar tracción rápida)
 
 export const WAPP_INTL = "56964626568";
 
 /**
  * 📊 LÍNEAS DE SERVICIO
- * Precios ajustados para penetración de mercado (competitivos para PYMEs).
- * Objetivo: Cerrar los primeros 10 contratos.
+ * Configuración centralizada de precios y lógica de cobro.
+ * * - type: "hourly" -> Se cobra por hora/persona (Idiomas, Talleres)
+ * - type: "flat"   -> Se cobra fijo por mes/persona (Preu, Software)
  */
 export const SERVICE_LINES = [
   {
     id: "ingles",
     label: "Inglés Corporativo",
-    // Bajamos de 12.000 a 6.500 la hora/persona base.
-    // Esto deja el mensual aprox en $85.000 pp (muy vendible).
+    type: "hourly",
+    // Bajamos de 12.000 a 6.500 la hora base para penetración agresiva.
     publicPphOnline: 6500, 
     publicPphOnsite: 9500,
-    cohortMax: 15, // Grupos más manejables
+    defaultHoursMonth: 8, // 2 veces por semana estándar
     brandColor: "#6366f1", // Indigo
-    icon: "🌍"
+    icon: "🌍",
+    desc: "Capacitación lingüística para equipos de alto rendimiento."
   },
   {
     id: "lsch",
     label: "Lengua de Señas (Ley 21.015)",
-    // Estratégico: Precio gancho para cumplimiento normativo.
+    type: "hourly",
+    // Precio gancho para cumplimiento normativo rápido.
     publicPphOnline: 7500,
     publicPphOnsite: 10500,
-    cohortMax: 20,
+    defaultHoursMonth: 8,
     brandColor: "#14b8a6", // Teal
-    icon: "🤟"
+    icon: "🤟",
+    desc: "Cumplimiento normativo y sensibilización cultural."
   },
   {
     id: "soft",
     label: "Liderazgo & Habilidades",
-    // Talleres prácticos
+    type: "hourly",
+    // Talleres prácticos de alto valor percibido.
     publicPphOnline: 8000,
     publicPphOnsite: 12000,
-    cohortMax: 25,
+    defaultHoursMonth: 4, // 1 taller intensivo al mes
     brandColor: "#f59e0b", // Amber
-    icon: "⚡"
+    icon: "⚡",
+    desc: "Talleres de comunicación efectiva y gestión de equipos."
   },
   {
     id: "beneficio-hijos",
     label: "Beneficio Hijos (Preu PAES)",
-    // ESTO ES ORO: Vender cupos del Preu a empresas.
-    // Precio volumen muy agresivo.
-    publicPphOnline: 4500, // Simbólico, se cobra por cupo mensual
-    publicPphOnsite: 0, // No aplica
-    cohortMax: 100,
+    type: "flat", // <--- Lógica de cobro mensual fijo
+    // ESTO ES ORO: Vender cupos masivos a empresas.
+    flatPriceMonth: 35000, // Precio "Mayorista" (En web público vale +80k)
     brandColor: "#ec4899", // Pink
-    icon: "🎓"
+    icon: "🎓",
+    desc: "Beneficio social para las familias de tus colaboradores."
   },
   {
     id: "coaching",
-    label: "Coaching 1 a 1",
-    // Servicio Premium para Gerentes (se mantiene más alto)
+    label: "Coaching Ejecutivo 1:1",
+    type: "hourly",
+    // Servicio Premium (High Ticket)
     publicPphOnline: 25000,
     publicPphOnsite: 35000,
-    cohortMax: 1,
+    defaultHoursMonth: 4, // 1 sesión semanal
     brandColor: "#ef4444", // Red
-    icon: "🎯"
+    icon: "🎯",
+    desc: "Acompañamiento personalizado para gerencia."
   },
 ];
 
 /**
  * 📦 PACKS "GANCHO" (Low Cost / High Impact)
- * Diseñados para que prueben el servicio sin miedo.
+ * Diseñados para reducir la fricción de entrada.
  */
 export const EMP_PACKS = [
   {
     id: "pack-starter",
-    line: "ingles",
+    lineId: "ingles",
     title: "Pack 'Meeting Ready'",
-    subtitle: "Taller intensivo de 1 mes para perder el miedo a hablar.",
-    bullets: ["4 Sesiones de Roleplay", "Vocabulario de Reuniones", "Corrección de Pronunciación"],
-    baseAudience: 5,
-    priceLabel: "Desde $250.000 total" // Gancho visual
+    subtitle: "Taller intensivo de 1 mes: Pierde el miedo a hablar.",
+    bullets: ["4 Sesiones de Roleplay", "Vocabulario de Negocios", "Feedback Personalizado"],
+    priceLabel: "Desde $250.000 / equipo"
   },
   {
     id: "pack-inclusion",
-    line: "lsch",
+    lineId: "lsch",
     title: "Charla Ley de Inclusión",
-    subtitle: "Cumple con la normativa y sensibiliza a tu equipo en 1 jornada.",
-    bullets: ["Contexto Ley 21.015", "Mitos de la Sordera", "Señas de Cortesía"],
-    baseAudience: 20,
-    priceLabel: "UF 5 por sesión" // Precio cerrado atractivo
+    subtitle: "Cumple la norma y sensibiliza en una sola jornada.",
+    bullets: ["Contexto Ley 21.015", "Mitos de la Sordera", "Señas de Cortesía Básicas"],
+    priceLabel: "Valor fijo: UF 5"
   },
   {
     id: "pack-bienestar",
-    line: "beneficio-hijos",
+    lineId: "beneficio-hijos",
     title: "Pack Futuro (Hijos)",
-    subtitle: "Apoya a las familias de tus colaboradores con Preuniversitario.",
-    bullets: ["Acceso a Plataforma PAES", "Ensayos Mensuales", "Reporte de Asistencia a RRHH"],
-    baseAudience: 10,
-    priceLabel: "$35.000 por hijo/mes" // Muy barato para empresa, alto valor percibido
+    subtitle: "El beneficio más valorado por los colaboradores padres.",
+    bullets: ["Plataforma PAES 24/7", "Ensayos y Clases en vivo", "Reporte de Asistencia a RRHH"],
+    priceLabel: "$35.000 por alumno"
   },
 ];
 
-export const UI_OPTIONS = {
-  weeksPerMonth: 4, // Simplificamos a 4 semanas para números redondos
-};
-
-export const PRICING = {
+/**
+ * 💰 REGLAS DE DESCUENTO POR VOLUMEN
+ */
+export const PRICING_RULES = {
   volumeDiscounts: [
-    { min: 5, off: 0.0 },   // Base
-    { min: 10, off: 0.10 }, // 10%
-    { min: 20, off: 0.15 }, // 15%
-    { min: 50, off: 0.25 }, // 25% (Agresivo para grandes volúmenes)
+    { min: 5, off: 0.00 },  // 0% hasta 4 personas
+    { min: 10, off: 0.10 }, // 10% descuento
+    { min: 20, off: 0.15 }, // 15% descuento
+    { min: 50, off: 0.25 }, // 25% descuento (Gran volumen)
   ],
 };
 
-// Helper CLP
-export const clp = (n) =>
-  Number(n || 0).toLocaleString("es-CL", {
+// --- UTILS ---
+
+// Formateador de moneda CLP
+export const clp = (amount) =>
+  new Intl.NumberFormat("es-CL", {
     style: "currency",
     currency: "CLP",
     maximumFractionDigits: 0,
-  });
+  }).format(amount || 0);
 
-const clamp = (v, min, max) => Math.min(Math.max(v, min), max);
+// Restrictor de rangos (para que no pongan -5 personas)
+const clamp = (val, min, max) => Math.min(Math.max(val, min), max);
+
 
 /**
  * 🧮 MOTOR DE CÁLCULO DE PRESUPUESTO
+ * Esta función es el cerebro del cotizador.
  */
-export function calcQuote(opts) {
+export function calcQuote(options) {
   const {
     lineId = "ingles",
     headcount: _hc = 10,
     durationMonths: _dm = 3,
-    modality = "online",
-  } = opts || {};
+    modality = "online", // 'online' | 'onsite'
+  } = options || {};
 
-  const line = SERVICE_LINES.find((l) => l.id === lineId) || SERVICE_LINES[0];
-  
-  // Limites lógicos
+  // 1. Encontrar el servicio
+  const service = SERVICE_LINES.find((l) => l.id === lineId) || SERVICE_LINES[0];
+
+  // 2. Sanitizar entradas (Evitar números negativos o locos)
   const headcount = clamp(_hc, 1, 500);
   const durationMonths = clamp(_dm, 1, 12);
+
+  // 3. Calcular Descuento por Volumen
+  // Se busca el descuento más alto aplicable según la cantidad de gente
+  const discountRule = PRICING_RULES.volumeDiscounts
+    .sort((a, b) => b.min - a.min) // Ordenar descendente (50, 20, 10...)
+    .find((rule) => headcount >= rule.min);
   
-  // LÓGICA ESPECIAL PARA PREU (Beneficio Hijos)
-  if (line.id === "beneficio-hijos") {
-      // Precio fijo por alumno mensual (ej: $45.000 base)
-      const baseMonthlyPrice = 45000; 
-      
-      // Descuento por volumen
-      const discount = PRICING.volumeDiscounts
-        .sort((a, b) => b.min - a.min)
-        .find((x) => headcount >= x.min)?.off || 0;
+  const discountRate = discountRule ? discountRule.off : 0;
 
-      const monthlyTotal = baseMonthlyPrice * headcount * (1 - discount);
-      const total = monthlyTotal * durationMonths;
+  let totalGross = 0;
+  let baseUnitCost = 0; // Costo base unitario (hora o mes)
 
-      return {
-        line, headcount, durationMonths, modality,
-        total,
-        perPerson: Math.round(total / headcount),
-        perPersonMonth: Math.round(monthlyTotal / headcount),
-        discountPercent: discount * 100,
-        isSpecial: true
-      };
+  // 4. Lógica Bifurcada según Tipo de Servicio
+
+  if (service.type === "flat") {
+    // === CASO TARIFA PLANA (Ej: Preu) ===
+    // Fórmula: Personas * PrecioFijo * Meses
+    baseUnitCost = service.flatPriceMonth;
+    totalGross = baseUnitCost * headcount * durationMonths;
+
+  } else {
+    // === CASO POR HORA (Ej: Inglés) ===
+    // Fórmula: Personas * (PrecioHora * HorasMes) * Meses
+    const hourlyRate = modality === "onsite" ? service.publicPphOnsite : service.publicPphOnline;
+    const hoursMonth = service.defaultHoursMonth || 8;
+    
+    baseUnitCost = hourlyRate * hoursMonth; // Costo mensual por persona sin descuento
+    totalGross = baseUnitCost * headcount * durationMonths;
   }
 
-  // LÓGICA ESTÁNDAR (Cursos de Idiomas/Skills)
-  // Supuesto: 8 horas mensuales por persona (2 horas semanales)
-  const hoursPerMonth = 8; 
-  const totalHoursProject = hoursPerMonth * durationMonths;
-
-  // Precio Base PPH
-  let pph = modality === "onsite" ? line.publicPphOnsite : line.publicPphOnline;
-
-  // Descuento por Volumen
-  const discount = PRICING.volumeDiscounts
-    .sort((a, b) => b.min - a.min)
-    .find((x) => headcount >= x.min)?.off || 0;
-
-  // Cálculo: (Precio Hora * Horas Totales * Personas) * Descuento
-  const grossTotal = pph * totalHoursProject * headcount;
-  const total = Math.round(grossTotal * (1 - discount));
+  // 5. Aplicar Descuentos y Finales
+  const totalNet = Math.round(totalGross * (1 - discountRate));
   
-  const perPerson = Math.round(total / headcount);
-  const perPersonMonth = Math.round(perPerson / durationMonths);
+  // Métricas unitarias para mostrar "Desde $X por persona"
+  const costPerPersonTotal = Math.round(totalNet / headcount);
+  const costPerPersonMonth = Math.round(costPerPersonTotal / durationMonths);
 
   return {
-    line,
-    headcount,
-    durationMonths,
-    modality,
-    total,
-    perPerson,
-    perPersonMonth,
-    discountPercent: discount * 100,
-    isSpecial: false
+    service,
+    params: { headcount, durationMonths, modality },
+    financials: {
+      total: totalNet,
+      totalBeforeDiscount: totalGross,
+      discountAmount: totalGross - totalNet,
+      discountPercent: Math.round(discountRate * 100),
+      perPersonTotal: costPerPersonTotal,
+      perPersonMonth: costPerPersonMonth,
+    }
   };
 }

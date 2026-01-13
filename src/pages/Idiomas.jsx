@@ -38,9 +38,9 @@ const SYLLABUS_PREVIEW = {
 };
 
 const TEACHERS = [
-  { name: "Sarah Jenkins", origin: "USA 🇺🇸", role: "Head of English", bio: "Ex-examinadora de IELTS. Especialista en reducción de acento.", img: "👩🏼‍🏫" },
-  { name: "Minji Kim", origin: "Corea 🇰🇷", role: "Lead Korean Tutor", bio: "Nativa de Seúl. Enseña con K-Pop y situaciones de la vida real.", img: "👩🏻‍🏫" },
-  { name: "Carlos R.", origin: "Chile 🇨🇱", role: "Spanish Coach", bio: "Lingüista experto en dialectología chilena. Ayuda a expats a integrarse.", img: "👨🏻‍🏫" }
+  { name: "Javiera", origin: "🇺🇸", role: "Head of English", bio: "Especialista en reducción de acento.", img: "👩🏼‍🏫" },
+  { name: "Fernanda", origin: "🇰🇷", role: "Lead Korean Tutor", bio: "Enseña con K-Pop y situaciones de la vida real.", img: "👩🏻‍🏫" },
+  { name: "Diego", origin: "🇨🇱", role: "Spanish Coach", bio: "Lingüista experto en dialectología chilena. Ayuda a expats a integrarse.", img: "👨🏻‍🏫" }
 ];
 
 const COMPARISON = [

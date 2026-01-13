@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import SEOHead from "../components/SEOHead"; 
 
 // 📦 ICONOS (Lucide React)
 import { 
   BookOpen, Video, Heart, Award, Check, 
   MessageCircle, ChevronDown, GraduationCap, 
-  ShieldCheck, X, Loader2, ArrowRight, User
+  ShieldCheck, X, Loader2, ArrowRight, User, Star
 } from "lucide-react";
 
-// 🖼️ IMAGEN
+// 🖼️ IMAGEN (Asegúrate de que la ruta sea correcta)
 import HeroImg from "../assets/img/lael/study-online.jpg"; 
 
 /* ==========================================================================
    CONFIGURACIÓN Y DATOS
    ========================================================================== */
-const API_URL = "https://instituto-lael-web.contacto-c10.workers.dev"; // 🔴 URL REAL
+const API_URL = "https://instituto-lael-web.contacto-c10.workers.dev";
 
 const PLANS = [
   {
@@ -22,8 +22,8 @@ const PLANS = [
     title: "Beca 100%",
     subtitle: "Cupos Limitados",
     price: 0,
-    desc: "Para quienes tienen ganas de superarse pero hoy no cuentan con los recursos.",
-    features: ["Clases Grabadas", "Material al WhatsApp", "Exámenes Libres Mineduc", "Tutoría Grupal"],
+    desc: "Para quienes tienen el coraje de volver a intentar, pero hoy no cuentan con los recursos económicos.",
+    features: ["Clases Grabadas (Cápsulas)", "Material PDF al WhatsApp", "Inscripción a Exámenes Libres", "Tutoría Grupal Mensual"],
     cta: "Postular a Gratuidad",
     color: "#fbbf24", // Dorado
     isScholarship: true
@@ -31,152 +31,188 @@ const PLANS = [
   {
     id: "completo",
     title: "Plan Padrino",
-    subtitle: "Tú estudias + Ayudas a otro",
+    subtitle: "Tu matrícula financia una beca",
     price: 15000,
     frequency: "mensual",
-    desc: "Pagas tu educación y financias los materiales de un estudiante becado.",
-    features: ["Clases en Vivo + Grabadas", "Tutoría Personalizada 1 a 1", "Certificado de Participación", "Apoyo Inscripción Mineduc", "Ayudas a la comunidad"],
-    cta: "Matricularme",
+    desc: "Recibes una preparación premium y permites que un estudiante sin recursos pueda estudiar gratis.",
+    features: ["Clases en Vivo + Grabadas", "Tutoría Personalizada 1 a 1", "Ensayos de Examen Reales", "Gestión de Trámites Mineduc", "Certificado de Participación"],
+    cta: "Quiero ser Padrino",
     color: "#2dd4bf", // Teal
     isScholarship: false
   }
 ];
 
 const FAQS = [
-  { q: "¿Es válido por el Mineduc?", a: "Sí. Nosotros te preparamos para rendir los 'Exámenes Libres'. Al aprobarlos en el colegio examinador que te asigne el Mineduc, obtienes tu Licencia de Enseñanza Media válida para trabajar o estudiar." },
-  { q: "¿Qué pasa si trabajo por turnos?", a: "No hay problema. Aunque tenemos clases en vivo (Plan Padrino), todo queda grabado y se envía por WhatsApp para que estudies en tus tiempos libres." },
-  { q: "¿Tengo que tener computador?", a: "No es obligatorio. Todo nuestro material está adaptado para verse perfecto en un celular." },
+  { q: "¿El certificado es válido por el Mineduc?", a: "Absolutamente. Nosotros te preparamos para rendir los 'Exámenes Libres'. Al aprobarlos en el colegio examinador que te asigne el Mineduc, obtienes tu Licencia de Enseñanza Media válida para trabajar, estudiar técnico o universidad." },
+  { q: "¿Qué pasa si trabajo por turnos?", a: "El sistema está hecho para ti. Aunque el Plan Padrino tiene clases en vivo, TODO queda grabado y se envía por WhatsApp. Puedes estudiar a las 3 de la mañana si lo necesitas." },
+  { q: "¿Necesito computador?", a: "No. Sabemos que no todos tienen uno. Todo nuestro material (PDFs, Videos, Guías) está optimizado para verse perfecto en cualquier celular con internet básico." },
+  { q: "¿Cuánto dura el proceso?", a: "Los exámenes del Mineduc suelen ser en dos fechas al año (aprox. junio y octubre). Nosotros te preparamos intensivamente durante 3 a 5 meses antes de la fecha." },
 ];
 
 const clp = (val) => new Intl.NumberFormat("es-CL", { style: "currency", currency: "CLP" }).format(val);
 
 /* ==========================================================================
-   ESTILOS CSS (DARK MODE & GLASSMORPHISM)
+   ESTILOS CSS (DARK MODE & GLASSMORPHISM PREMIUM)
    ========================================================================== */
 const css = `
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap');
+
 :root {
-  --bg-deep: #0f0f11;       /* Casi negro */
-  --bg-panel: #18181b;      /* Zinc 900 */
-  --text-main: #f4f4f5;     /* Zinc 100 */
-  --text-muted: #a1a1aa;    /* Zinc 400 */
-  --gold: #fbbf24;          /* Amber 400 */
+  --bg-deep: #050505;
+  --bg-panel: #18181b;
+  --text-main: #ffffff;
+  --text-muted: #a1a1aa;
+  --gold: #fbbf24;
   --teal: #2dd4bf;
-  --border: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.1);
+  --font-main: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
+
+* { box-sizing: border-box; }
 
 .adultos-page {
   background-color: var(--bg-deep);
+  background-image: radial-gradient(circle at 50% 0%, #1a1a2e 0%, var(--bg-deep) 60%);
   color: var(--text-main);
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: var(--font-main);
   min-height: 100vh;
-  padding-bottom: 100px;
+  padding-bottom: 120px;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-button { all: unset; cursor: pointer; box-sizing: border-box; }
+button { all: unset; cursor: pointer; box-sizing: border-box; transition: all 0.2s ease; }
 
 /* ANIMACIONES */
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-@keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 /* EFECTO VIDRIO FLOTANTE */
 .glass-card {
-  background: rgba(24, 24, 27, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(20, 20, 23, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border);
   border-radius: 24px;
-  box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 /* HERO */
 .hero {
-  padding: 140px 0 80px;
+  padding: 160px 0 100px;
   position: relative;
-  background: radial-gradient(circle at top right, rgba(45, 212, 191, 0.1), transparent 40%);
+}
+.hero::before {
+  content: ''; position: absolute; top: -100px; right: -100px; width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.15) 0%, transparent 70%);
+  filter: blur(80px); pointer-events: none;
 }
 .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
 
 .badge-pill {
   display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.2);
+  background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
   color: var(--gold); padding: 8px 16px; border-radius: 50px;
-  font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px; margin-bottom: 24px;
+  font-weight: 700; font-size: 0.8rem; letter-spacing: 0.5px; margin-bottom: 24px;
+  text-transform: uppercase;
 }
 
-h1 { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 24px; font-weight: 800; color: white; }
-.hero p { font-size: 1.15rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 40px; max-width: 500px; }
+h1 { 
+  font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 24px; 
+  font-weight: 800; color: white; letter-spacing: -0.02em;
+}
+.hero p { 
+  font-size: 1.15rem; color: var(--text-muted); line-height: 1.7; 
+  margin-bottom: 40px; max-width: 520px; 
+}
 
-.img-wrapper { position: relative; padding: 10px; }
-.img-wrapper img { width: 100%; border-radius: 24px; display: block; filter: brightness(0.9); }
+.img-wrapper { position: relative; padding: 10px; animation: fadeIn 1s ease-out; }
+.img-wrapper img { 
+  width: 100%; border-radius: 24px; display: block; 
+  filter: brightness(0.9) contrast(1.1); 
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+}
 .floating-badge {
   position: absolute; bottom: 40px; left: -30px;
-  padding: 20px; display: flex; align-items: center; gap: 15px;
-  animation: float 6s ease-in-out infinite;
+  padding: 16px 24px; display: flex; align-items: center; gap: 15px;
+  animation: float 6s ease-in-out infinite; background: rgba(10,10,10,0.9);
 }
 
 /* CARDS */
-.grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-.feature-box { padding: 30px; transition: 0.3s; }
-.feature-box:hover { border-color: var(--gold); transform: translateY(-5px); background: rgba(251, 191, 36, 0.05); }
+.grid-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.feature-box { padding: 32px; transition: 0.3s; height: 100%; display: flex; flex-direction: column; }
+.feature-box:hover { 
+  border-color: rgba(255,255,255,0.2); 
+  transform: translateY(-5px); 
+  background: rgba(255,255,255,0.03); 
+}
 
 /* PRICING */
-.pricing-section { padding: 80px 0; }
+.pricing-section { padding: 80px 0; position: relative; }
 .plan-card {
-  display: flex; flex-direction: column; height: 100%; position: relative; overflow: hidden; padding: 32px;
-  transition: 0.3s;
+  display: flex; flex-direction: column; height: 100%; position: relative; 
+  overflow: hidden; padding: 40px 32px; transition: 0.3s;
 }
-.plan-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
+.plan-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+
 .plan-tag {
-  position: absolute; top: 0; right: 0; padding: 6px 12px;
+  position: absolute; top: 0; right: 0; padding: 8px 16px;
   background: var(--gold); color: black; font-weight: 800; font-size: 0.75rem;
-  border-bottom-left-radius: 12px;
+  border-bottom-left-radius: 16px; text-transform: uppercase; letter-spacing: 0.05em;
 }
-.plan-price { font-size: 2.5rem; font-weight: 800; color: white; margin: 20px 0 5px; }
-.plan-features { list-style: none; padding: 0; margin: 30px 0; flex-grow: 1; }
-.plan-features li { display: flex; gap: 10px; margin-bottom: 12px; color: var(--text-muted); font-size: 0.95rem; }
+
+.plan-header { margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 30px; }
+.plan-price { font-size: 3rem; font-weight: 800; color: white; margin: 10px 0 0; line-height: 1; }
+.plan-freq { font-size: 0.9rem; color: var(--text-muted); font-weight: 500; }
+.plan-features { list-style: none; padding: 0; margin: 0 0 30px 0; flex-grow: 1; }
+.plan-features li { display: flex; gap: 12px; margin-bottom: 16px; color: #d4d4d8; font-size: 0.95rem; align-items: flex-start; line-height: 1.4; }
 
 .btn-main {
-  width: 100%; padding: 16px; border-radius: 14px; font-weight: 700; font-size: 1rem;
+  width: 100%; padding: 18px; border-radius: 14px; font-weight: 700; font-size: 1rem;
   display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s;
-  background: var(--gold); color: black;
+  background: white; color: black; letter-spacing: -0.01em;
 }
-.btn-main:hover { background: #fcd34d; transform: translateY(-2px); }
-.btn-outline { background: transparent; border: 2px solid var(--border); color: white; }
+.btn-main:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: white; }
 .btn-outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
 
 /* MODAL */
 .modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
-  z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px;
-  animation: popIn 0.2s ease-out;
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+  z-index: 999; display: flex; align-items: center; justify-content: center; padding: 20px;
+  animation: fadeIn 0.3s ease-out;
 }
-.modal-form { width: 100%; max-width: 500px; position: relative; max-height: 90vh; overflow-y: auto; }
-.form-group { margin-bottom: 16px; }
-.form-label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.9rem; }
+.modal-form { width: 100%; max-width: 480px; position: relative; max-height: 90vh; overflow-y: auto; background: #121212; border: 1px solid rgba(255,255,255,0.1); }
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 .form-input { 
-  width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--border); 
-  padding: 14px; border-radius: 12px; color: white; outline: none; transition: 0.3s;
+  width: 100%; background: #0a0a0a; border: 1px solid var(--border); 
+  padding: 16px; border-radius: 12px; color: white; outline: none; transition: 0.3s;
+  font-family: inherit; font-size: 0.95rem;
 }
-.form-input:focus { border-color: var(--gold); background: rgba(0,0,0,0.5); }
-.close-btn { position: absolute; top: 20px; right: 20px; color: var(--text-muted); padding: 5px; }
-.close-btn:hover { color: white; }
+.form-input:focus { border-color: var(--teal); background: black; }
+.close-btn { position: absolute; top: 20px; right: 20px; color: var(--text-muted); padding: 5px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+.close-btn:hover { color: white; background: rgba(255,255,255,0.1); }
 
 /* FAQ */
-.faq-item { border: 1px solid var(--border); border-radius: 16px; background: rgba(255,255,255,0.02); margin-bottom: 12px; overflow: hidden; }
-.faq-head { padding: 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: white; font-weight: 600; }
-.faq-body { padding: 0 20px 20px; color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+.faq-item { border: 1px solid var(--border); border-radius: 16px; background: rgba(255,255,255,0.02); margin-bottom: 12px; overflow: hidden; transition: 0.3s; }
+.faq-item:hover { background: rgba(255,255,255,0.04); }
+.faq-head { padding: 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: white; font-weight: 600; font-size: 1.05rem; }
+.faq-body { padding: 0 24px 24px; color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; border-top: 1px solid transparent; }
 
 @media (max-width: 900px) {
-  .hero-grid { grid-template-columns: 1fr; text-align: center; }
+  .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
   .img-wrapper { display: none; } 
-  .hero { padding-top: 100px; }
+  .hero { padding-top: 120px; }
+  .floating-badge { display: none; }
+  h1 { font-size: 2.5rem; }
 }
 `;
 
 /* ==========================================================================
-   FORMULARIO DE REGISTRO (CONECTADO A GOOGLE SHEETS)
+   FORMULARIO DE REGISTRO (CONECTADO A WORKER)
    ========================================================================== */
 const EnrollmentForm = ({ plan, onClose }) => {
   const [step, setStep] = useState(1);
@@ -186,26 +222,23 @@ const EnrollmentForm = ({ plan, onClose }) => {
     rut: "",
     email: "",
     phone: "",
-    comments: "" // Usaremos esto para situacion/motivo
+    comments: ""
   });
 
-  // 👇 AQUÍ ESTÁ LA MAGIA: Envío real a tu Worker
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // 1. Preparamos datos
       const payload = {
         fullName: formData.fullName,
         rut: formData.rut,
         email: formData.email,
         phone: formData.phone,
-        program: `Caminos - ${plan.title}`, // Ej: Caminos - Beca 100%
-        comments: `Detalle: ${formData.comments || 'Sin comentarios'}`
+        program: `Caminos - ${plan.title}`,
+        comments: `Motivo/Situación: ${formData.comments || 'No especificado'}`
       };
 
-      // 2. Enviamos al Worker (que lo manda a Google Sheets)
       const response = await fetch(`${API_URL}/inscribir`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -215,7 +248,7 @@ const EnrollmentForm = ({ plan, onClose }) => {
       if (response.ok) {
         setStep(3); // Éxito
       } else {
-        alert("Hubo un error al enviar. Por favor intenta de nuevo.");
+        alert("Ocurrió un error temporal. Por favor intenta nuevamente.");
       }
     } catch (error) {
       console.error(error);
@@ -226,36 +259,44 @@ const EnrollmentForm = ({ plan, onClose }) => {
   };
 
   const handleWhatsAppRedirect = () => {
-    const msg = `Hola, ya llené el formulario para el ${plan.title}. Quiero finalizar mi inscripción.`;
+    // Mensaje personalizado según el plan
+    const msg = plan.isScholarship 
+      ? `Hola, acabo de postular a la Beca 100% del Programa Caminos (Adultos). Mi nombre es ${formData.fullName}. Quedo atento/a.`
+      : `Hola, me inscribí en el Plan Padrino del Programa Caminos. Quiero coordinar mi matrícula para empezar. Mi nombre es ${formData.fullName}.`;
+      
     window.open(`https://wa.me/56964626568?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
   return (
     <div className="modal-overlay">
       <div className="glass-card modal-form">
-        <button onClick={onClose} className="close-btn"><X size={24}/></button>
+        <button onClick={onClose} className="close-btn"><X size={20}/></button>
 
-        <div style={{padding: '30px'}}>
+        <div style={{padding: '32px'}}>
           {/* PASO 1: Formulario */}
           {step === 1 && (
             <form onSubmit={handleSubmit}>
-              <div style={{textAlign:'center', marginBottom:24}}>
-                <div style={{width:60, height:60, background:'rgba(251, 191, 36, 0.1)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 15px', color: plan.color}}>
-                  <User size={30}/>
+              <div style={{textAlign:'center', marginBottom:30}}>
+                <div style={{
+                    width:64, height:64, background: `linear-gradient(135deg, ${plan.color}20, transparent)`, 
+                    border: `1px solid ${plan.color}40`, borderRadius:'50%', 
+                    display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px', color: plan.color
+                }}>
+                  {plan.isScholarship ? <Heart size={30} fill="currentColor" fillOpacity={0.2}/> : <Star size={30} fill="currentColor" fillOpacity={0.2}/>}
                 </div>
-                <h2 style={{fontSize:'1.5rem', fontWeight:700, margin:0, color:'white'}}>
-                  {plan.isScholarship ? "Postular a Beca" : "Inscripción"}
+                <h2 style={{fontSize:'1.6rem', fontWeight:800, margin:0, color:'white', letterSpacing:'-0.02em'}}>
+                  {plan.isScholarship ? "Postulación a Beca" : "Matrícula Solidaria"}
                 </h2>
-                <p style={{color:'var(--text-muted)', fontSize:'0.9rem', marginTop:8}}>
+                <p style={{color:'var(--text-muted)', fontSize:'0.9rem', marginTop:8, lineHeight:1.5}}>
                   {plan.isScholarship 
-                    ? "Completa tus datos para evaluar tu gratuidad." 
-                    : "Regístrate para asegurar tu cupo."}
+                    ? "Completa tus datos con honestidad. Los cupos son limitados." 
+                    : "Gracias por invertir en tu futuro y apoyar a la comunidad."}
                 </p>
               </div>
 
               <div className="form-group">
                 <label className="form-label">Nombre Completo</label>
-                <input required className="form-input" placeholder="Ej: Juan Pérez" 
+                <input required className="form-input" placeholder="Tu nombre real" 
                   onChange={e => setFormData({...formData, fullName: e.target.value})} />
               </div>
 
@@ -265,62 +306,58 @@ const EnrollmentForm = ({ plan, onClose }) => {
                   onChange={e => setFormData({...formData, rut: e.target.value})} />
               </div>
 
-              <div className="form-group">
-                <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:15}}>
-                  <div>
-                    <label className="form-label">Correo</label>
-                    <input required type="email" className="form-input" placeholder="juan@gmail.com" 
-                      onChange={e => setFormData({...formData, email: e.target.value})} />
-                  </div>
-                  <div>
-                    <label className="form-label">Teléfono</label>
-                    <input required type="tel" className="form-input" placeholder="+569..." 
-                      onChange={e => setFormData({...formData, phone: e.target.value})} />
-                  </div>
+              <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:20}}>
+                <div>
+                  <label className="form-label">Correo</label>
+                  <input required type="email" className="form-input" placeholder="nombre@mail.com" 
+                    onChange={e => setFormData({...formData, email: e.target.value})} />
+                </div>
+                <div>
+                  <label className="form-label">WhatsApp</label>
+                  <input required type="tel" className="form-input" placeholder="+569..." 
+                    onChange={e => setFormData({...formData, phone: e.target.value})} />
                 </div>
               </div>
 
-              {/* Pregunta condicional según el plan */}
               <div className="form-group">
                 <label className="form-label">
-                    {plan.isScholarship ? "¿Cuál es tu situación actual? (Breve)" : "¿Dudas o comentarios?"}
+                    {plan.isScholarship ? "Cuéntanos tu situación (Importante)" : "¿Alguna duda antes de partir?"}
                 </label>
                 <textarea 
                   required={plan.isScholarship} 
-                  className="form-input" rows="2" 
-                  placeholder={plan.isScholarship ? "Busco trabajo, cuido familia, etc..." : "Opcional"} 
+                  className="form-input" rows="3" 
+                  placeholder={plan.isScholarship ? "Ej: Estoy cesante, cuido a mis hijos sola, necesito el certificado para trabajar..." : "Opcional"} 
                   onChange={e => setFormData({...formData, comments: e.target.value})} 
                 />
               </div>
 
-              <button type="submit" className="btn-main" disabled={loading} style={{background: plan.color, color: 'black'}}>
-                {loading ? <Loader2 className="animate-spin"/> : "Enviar Datos"}
+              <button type="submit" className="btn-main" disabled={loading} style={{background: plan.color, color: 'black', width:'100%'}}>
+                {loading ? <Loader2 className="animate-spin" size={20}/> : (plan.isScholarship ? "Enviar Postulación" : "Continuar")}
               </button>
             </form>
           )}
 
           {/* PASO 3: Éxito */}
           {step === 3 && (
-            <div style={{textAlign:'center', padding:'20px 0'}}>
-              <div style={{width:80, height:80, background:'#dcfce7', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px'}}>
-                <Check size={40} color="#16a34a"/>
+            <div style={{textAlign:'center', padding:'30px 0'}}>
+              <div style={{width:80, height:80, background:'rgba(34, 197, 94, 0.1)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 24px', border:'1px solid rgba(34, 197, 94, 0.3)'}}>
+                <Check size={40} color="#22c55e"/>
               </div>
-              <h3 style={{color:'white', fontSize:'1.5rem', margin:0}}>¡Datos Recibidos!</h3>
+              <h3 style={{color:'white', fontSize:'1.8rem', margin:0, fontWeight:800}}>¡Recibido!</h3>
               
-              <p style={{color:'var(--text-muted)', margin:'15px 0 25px', lineHeight:1.5}}>
+              <p style={{color:'var(--text-muted)', margin:'16px 0 30px', lineHeight:1.6}}>
                 {plan.isScholarship 
-                  ? "Tu postulación ha sido enviada al comité. Te contactaremos si eres seleccionado/a."
-                  : "Tus datos están seguros. Para finalizar tu matrícula, contáctanos para coordinar el pago."}
+                  ? "Tus antecedentes han entrado a revisión por nuestro comité social. Te contactaremos al WhatsApp ingresado si eres seleccionado/a."
+                  : "Ya tenemos tus datos. El siguiente paso es formalizar tu matrícula a través de nuestro WhatsApp oficial."}
               </p>
 
-              {/* Botón condicional: Si paga, va a WhatsApp. Si es beca, solo cierra */}
-              {!plan.isScholarship ? (
-                  <button onClick={handleWhatsAppRedirect} className="btn-main" style={{background:'#25D366', color:'white'}}>
-                     <MessageCircle size={20}/> Ir a Pagar / Coordinar
-                  </button>
-              ) : (
-                  <button onClick={onClose} className="btn-main btn-outline">Entendido</button>
-              )}
+              <button onClick={handleWhatsAppRedirect} className="btn-main" style={{background:'#25D366', color:'white', border:'none'}}>
+                 <MessageCircle size={20}/> {plan.isScholarship ? "Consultar Estado" : "Finalizar Matrícula"}
+              </button>
+              
+              <button onClick={onClose} style={{marginTop:16, fontSize:'0.9rem', color:'var(--text-muted)', textDecoration:'underline'}}>
+                Volver al sitio
+              </button>
             </div>
           )}
         </div>
@@ -333,16 +370,15 @@ const EnrollmentForm = ({ plan, onClose }) => {
    COMPONENTE PRINCIPAL
    ========================================================================== */
 export default function EscuelaAdultos() {
-  const [selectedPlan, setSelectedPlan] = useState(null); // Estado para el modal
+  const [selectedPlan, setSelectedPlan] = useState(null); 
   const [activeFaq, setActiveFaq] = useState(null);
   const pricingRef = useRef(null);
 
   return (
     <div className="adultos-page">
       <style>{css}</style>
-      <SEOHead title="Nivelación de Estudios Adultos | Programa Caminos" description="Termina tu 4to medio gratis o pagando. Clases flexibles." />
+      <SEOHead title="Nivelación de Estudios Adultos | Programa Caminos" description="Termina tu 4to medio gratis o pagando. Clases flexibles y humanas." />
 
-      {/* Renderizado condicional del Modal */}
       {selectedPlan && (
         <EnrollmentForm 
             plan={selectedPlan} 
@@ -350,63 +386,69 @@ export default function EscuelaAdultos() {
         />
       )}
 
-      {/* 1. HERO */}
+      {/* 1. HERO SECTION */}
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <div className="badge-pill"><GraduationCap size={16}/> Programa Caminos 2026</div>
+            <div className="badge-pill animate-fade">
+              <GraduationCap size={16}/> Programa Caminos 2026
+            </div>
             <h1>
               Tu historia no define<br/>
-              <span style={{color:'var(--gold)'}}>tu futuro.</span>
+              <span style={{background: 'linear-gradient(to right, #fbbf24, #f59e0b)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>tu futuro.</span>
             </h1>
             <p>
               Nunca es tarde para terminar tu enseñanza básica o media. 
-              Sin juicios, sin miedo y a tu propio ritmo. Diseñado para adultos que trabajan o cuidan familia.
+              Sin juicios, sin miedo y a tu propio ritmo. Diseñado por humanos, para humanos que trabajan o cuidan familia.
             </p>
-            <div style={{display:'flex', gap:15, flexWrap:'wrap'}}>
-              <button onClick={() => pricingRef.current?.scrollIntoView({behavior:'smooth'})} className="btn-main" style={{width:'auto', padding:'16px 40px'}}>
-                Ver Planes y Becas <ArrowRight size={20}/>
+            <div style={{display:'flex', gap:16, flexWrap:'wrap'}}>
+              <button 
+                onClick={() => pricingRef.current?.scrollIntoView({behavior:'smooth'})} 
+                className="btn-main" 
+                style={{width:'auto', padding:'16px 32px', background: 'white', color:'black'}}
+              >
+                Ver Opciones de Ingreso <ArrowRight size={18}/>
               </button>
             </div>
           </div>
           
           <div className="img-wrapper">
-             <img src={HeroImg} alt="Estudiante Adulto" />
+             <img src={HeroImg} alt="Estudiante Adulto logrando sus metas" onError={(e) => e.target.style.display = 'none'} />
              <div className="glass-card floating-badge">
-                <div style={{background:'rgba(251, 191, 36, 0.2)', padding:10, borderRadius:12, color:'var(--gold)'}}>
+                <div style={{background:'rgba(255,255,255,0.1)', padding:12, borderRadius:12, color:'var(--gold)'}}>
                   <ShieldCheck size={28} />
                 </div>
                 <div>
-                   <strong style={{color:'white', display:'block', fontSize:'1rem'}}>Validez Oficial</strong>
-                   <span style={{color:'var(--text-muted)', fontSize:'0.8rem'}}>Exámenes Libres Mineduc</span>
+                   <strong style={{color:'white', display:'block', fontSize:'0.95rem'}}>Validez Oficial</strong>
+                   <span style={{color:'var(--text-muted)', fontSize:'0.75rem'}}>Exámenes Libres Mineduc</span>
                 </div>
              </div>
           </div>
         </div>
       </section>
 
-      {/* 2. POR QUÉ NOSOTROS (CARDS FLOTANTES) */}
-      <section className="container" style={{marginTop:'-50px', position:'relative', zIndex:5, marginBottom:100}}>
+      {/* 2. VALUE PROPS (CARDS FLOTANTES) */}
+      <section className="container" style={{marginTop:'-80px', position:'relative', zIndex:5, marginBottom:120}}>
         <div className="grid-cards">
           <div className="glass-card feature-box">
-             <div style={{marginBottom:20, color:'var(--teal)'}}><Video size={32}/></div>
-             <h3 style={{color:'white', marginBottom:10, fontSize:'1.2rem'}}>Clases Flexibles</h3>
-             <p style={{color:'var(--text-muted)', lineHeight:1.5}}>
-               ¿Turnos rotativos? No importa. Las clases quedan grabadas y se envían cortas y precisas.
+             <div style={{marginBottom:24, color:'var(--teal)'}}><Video size={36}/></div>
+             <h3 style={{color:'white', marginBottom:12, fontSize:'1.25rem'}}>Clases a tu Ritmo</h3>
+             <p style={{color:'var(--text-muted)', lineHeight:1.6, flexGrow:1}}>
+               ¿Turnos rotativos? ¿Hijos en casa? No importa. Las clases quedan grabadas y se envían cortas y precisas. Estudia cuando puedas.
              </p>
           </div>
           <div className="glass-card feature-box">
-             <div style={{marginBottom:20, color:'var(--gold)'}}><MessageCircle size={32}/></div>
-             <h3 style={{color:'white', marginBottom:10, fontSize:'1.2rem'}}>Todo por WhatsApp</h3>
-             <p style={{color:'var(--text-muted)', lineHeight:1.5}}>
-               No necesitas computador. Te enviamos las guías y lecturas directo a tu celular.
+             <div style={{marginBottom:24, color:'var(--gold)'}}><MessageCircle size={36}/></div>
+             <h3 style={{color:'white', marginBottom:12, fontSize:'1.25rem'}}>Todo por WhatsApp</h3>
+             <p style={{color:'var(--text-muted)', lineHeight:1.6, flexGrow:1}}>
+               No necesitas un computador costoso. Te enviamos las guías, lecturas y videos directo a tu celular de forma ordenada.
              </p>
           </div>
           <div className="glass-card feature-box">
-             <div style={{marginBottom:20, color:'#f472b6'}}><Heart size={32}/></div>
-             <h3 style={{color:'white', marginBottom:10, fontSize:'1.2rem'}}>Sin Miedo</h3>
-             <p style={{color:'var(--text-muted)', lineHeight:1.5}}>
-               Tutores pacientes que entienden que llevas años sin estudiar. Aquí nadie se burla.
+             <div style={{marginBottom:24, color:'#f472b6'}}><Heart size={36}/></div>
+             <h3 style={{color:'white', marginBottom:12, fontSize:'1.25rem'}}>Pedagogía del Afecto</h3>
+             <p style={{color:'var(--text-muted)', lineHeight:1.6, flexGrow:1}}>
+               Tutores pacientes que entienden que llevas años sin estudiar. Aquí nadie se burla si te equivocas; aquí celebramos que lo intentes.
              </p>
           </div>
         </div>
@@ -415,36 +457,73 @@ export default function EscuelaAdultos() {
       {/* 3. PLANES (SOLIDARIDAD) */}
       <section ref={pricingRef} className="pricing-section container">
         <div style={{textAlign:'center', marginBottom:60}}>
-          <h2 style={{fontSize:'2.5rem', fontWeight:800, color:'white', marginBottom:15}}>Modelo Solidario</h2>
-          <p style={{color:'var(--text-muted)', maxWidth:'600px', margin:'0 auto'}}>
-            Creemos que la educación es un derecho. Si puedes pagar, ayudas a alguien más. Si no puedes, te becamos.
+          <h2 style={{fontSize:'clamp(2rem, 4vw, 3rem)', fontWeight:800, color:'white', marginBottom:20}}>Modelo Solidario</h2>
+          <p style={{color:'var(--text-muted)', maxWidth:'650px', margin:'0 auto', fontSize:'1.1rem'}}>
+            Creemos que la educación es un derecho humano. Hemos creado un sistema donde 
+            quienes pueden pagar, apadrinan a quienes no pueden.
           </p>
         </div>
 
-        <div className="grid-cards" style={{maxWidth:900, margin:'0 auto'}}>
-          {PLANS.map((plan) => (
-            <div key={plan.id} className="glass-card plan-card" style={plan.isScholarship ? {borderStyle:'dashed'} : {borderColor: plan.color}}>
-               {plan.subtitle && <div className="plan-tag">{plan.subtitle}</div>}
-               
-               <h3 style={{color: plan.color, fontSize:'1.4rem', fontWeight:700}}>{plan.title}</h3>
-               <div className="plan-price">{plan.price === 0 ? "GRATIS" : clp(plan.price)}</div>
-               <p style={{color:'var(--text-muted)', fontSize:'0.9rem'}}>{plan.desc}</p>
-               
-               <ul className="plan-features">
-                  {plan.features.map((ft, i) => (
-                    <li key={i}><Check size={18} color={plan.color} style={{minWidth:18}}/> {ft}</li>
-                  ))}
-               </ul>
+        <div className="grid-cards" style={{maxWidth:960, margin:'0 auto'}}>
+          
+          {/* PLAN BECA */}
+          <div className="glass-card plan-card" style={{borderStyle:'dashed', borderColor: 'rgba(251, 191, 36, 0.3)'}}>
+             <div className="plan-header">
+                <h3 style={{color: '#fbbf24', fontSize:'1.5rem', fontWeight:800, display:'flex', alignItems:'center', gap:10}}>
+                  <Award size={24}/> Beca Social
+                </h3>
+                <p style={{color:'#d4d4d8', fontSize:'0.9rem', marginTop:8}}>Para luchadores sin recursos actuales.</p>
+                <div className="plan-price" style={{color:'#fbbf24'}}>$0</div>
+                <div className="plan-freq">Costo $0 / mes</div>
+             </div>
+             
+             <ul className="plan-features">
+                <li><Check size={18} color="#fbbf24" style={{minWidth:18}}/> Cápsulas grabadas al WhatsApp</li>
+                <li><Check size={18} color="#fbbf24" style={{minWidth:18}}/> Guías de estudio en PDF</li>
+                <li><Check size={18} color="#fbbf24" style={{minWidth:18}}/> Tutoría Grupal 1 vez al mes</li>
+                <li><Check size={18} color="#fbbf24" style={{minWidth:18}}/> Inscripción Exámenes Mineduc</li>
+             </ul>
 
-               <button 
-                 onClick={() => setSelectedPlan(plan)}
-                 className={plan.isScholarship ? "btn-main btn-outline" : "btn-main"}
-                 style={!plan.isScholarship ? {background: plan.color, color:'#000'} : {}}
-               >
-                 {plan.cta}
-               </button>
-            </div>
-          ))}
+             <button 
+               onClick={() => setSelectedPlan(PLANS[0])}
+               className="btn-main btn-outline"
+               style={{borderColor: '#fbbf24', color: '#fbbf24'}}
+             >
+               Postular a Gratuidad
+             </button>
+          </div>
+
+          {/* PLAN PADRINO */}
+          <div className="glass-card plan-card" style={{borderColor: '#2dd4bf', background:'rgba(45, 212, 191, 0.05)'}}>
+             <div className="plan-tag">RECOMENDADO</div>
+             <div className="plan-header">
+                <h3 style={{color: '#2dd4bf', fontSize:'1.5rem', fontWeight:800, display:'flex', alignItems:'center', gap:10}}>
+                  <User size={24}/> Plan Padrino
+                </h3>
+                <p style={{color:'#d4d4d8', fontSize:'0.9rem', marginTop:8}}>Estudias tú + ayudas a otro.</p>
+                <div className="plan-price">{clp(15000)}</div>
+                <div className="plan-freq">Mensual</div>
+             </div>
+             
+             <ul className="plan-features">
+                <li><Check size={18} color="#2dd4bf" style={{minWidth:18}}/> <strong>Todo lo de la Beca +</strong></li>
+                <li><Check size={18} color="#2dd4bf" style={{minWidth:18}}/> Clases en VIVO con Profesores</li>
+                <li><Check size={18} color="#2dd4bf" style={{minWidth:18}}/> Tutoría Personal (WhatsApp directo)</li>
+                <li><Check size={18} color="#2dd4bf" style={{minWidth:18}}/> Certificado de Participación</li>
+             </ul>
+
+             <button 
+               onClick={() => setSelectedPlan(PLANS[1])}
+               className="btn-main"
+               style={{background: '#2dd4bf', color:'#000', border:'none'}}
+             >
+               Quiero ser Padrino
+             </button>
+             <div style={{textAlign:'center', marginTop:12, fontSize:'0.75rem', color:'var(--teal)', opacity:0.8}}>
+               <Heart size={10} style={{display:'inline', marginRight:4}}/> Tu pago financia materiales de becados
+             </div>
+          </div>
+
         </div>
       </section>
 
@@ -452,15 +531,16 @@ export default function EscuelaAdultos() {
       <section className="container" style={{maxWidth:800}}>
         <div style={{marginBottom:40, textAlign:'center'}}>
            <h2 style={{color:'white', fontSize:'2rem', fontWeight:700}}>Preguntas Frecuentes</h2>
+           <p style={{color:'var(--text-muted)'}}>Resolvemos tus dudas con transparencia.</p>
         </div>
         <div>
            {FAQS.map((faq, i) => (
              <div key={i} className="faq-item" onClick={() => setActiveFaq(activeFaq === i ? null : i)}>
                 <div className="faq-head">
                    {faq.q}
-                   <ChevronDown size={20} style={{transform: activeFaq === i ? 'rotate(180deg)' : 'none', transition:'0.3s'}}/>
+                   <ChevronDown size={20} style={{transform: activeFaq === i ? 'rotate(180deg)' : 'none', transition:'0.3s', color:'var(--text-muted)'}}/>
                 </div>
-                {activeFaq === i && <div className="faq-body">{faq.a}</div>}
+                {activeFaq === i && <div className="faq-body animate-fade">{faq.a}</div>}
              </div>
            ))}
         </div>

@@ -6,11 +6,11 @@ import {
   BookOpen, Users, Check, ChevronDown, ChevronRight, 
   Clock, ShieldCheck, Zap, Globe, 
   ArrowRight, Church, LayoutGrid, X, Loader2, ShoppingCart,
-  PlayCircle, BrainCircuit, HeartHandshake
+  PlayCircle, BrainCircuit, HeartHandshake, CheckCircle
 } from 'lucide-react';
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. CSS RESPONSIVO Y ENCAPSULADO (CORREGIDO)
+   1. CSS RESPONSIVO Y ENCAPSULADO
    ────────────────────────────────────────────────────────────────────────── */
 const styles = `
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -18,7 +18,7 @@ const styles = `
 :root {
   --bg-deep: #020617;
   --bg-card: #0f172a;
-  --bg-glass: rgba(15, 23, 42, 0.8); /* Un poco más opaco para legibilidad */
+  --bg-glass: rgba(15, 23, 42, 0.8);
   --primary: #6366f1;
   --primary-glow: rgba(99, 102, 241, 0.4);
   --cyan: #06b6d4;
@@ -39,7 +39,7 @@ const styles = `
 
 /* UTILIDADES */
 .glass-panel {
-  background: var(--bg-card); /* Fallback */
+  background: var(--bg-card);
   background: var(--bg-glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -67,10 +67,10 @@ const styles = `
   position: relative;
 }
 
-/* ESTILOS ESPECÍFICOS PARA MÓVIL (CORRECCIÓN) */
+/* ESTILOS ESPECÍFICOS PARA MÓVIL */
 @media (max-width: 1024px) {
   .main-container { 
-    grid-template-columns: 1fr; /* Columna única */
+    grid-template-columns: 1fr; 
     gap: 32px;
   }
   
@@ -78,15 +78,12 @@ const styles = `
   .hero h1 { font-size: 2.25rem !important; }
   
   .summary-box {
-    position: relative !important; /* Ya no es sticky en móvil */
+    position: relative !important; 
     top: 0 !important;
     margin-top: 20px;
-    order: 2; /* Asegura que quede al final si usamos flex, pero en grid es natural */
   }
 
-  .custom-tabs {
-    flex-wrap: wrap; /* Tabs se envuelven si falta espacio */
-  }
+  .custom-tabs { flex-wrap: wrap; }
   .tab-btn { flex: 1 1 40%; font-size: 0.85rem; }
 }
 
@@ -95,7 +92,7 @@ const styles = `
 .hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; line-height: 1.1; letter-spacing: -0.02em; }
 .hero p { font-size: 1.125rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; margin-bottom: 30px;}
 
-/* SECCIONES DE TEXTO (NUEVO: Para recuperar contenido) */
+/* SECCIONES DE TEXTO */
 .content-section { margin-bottom: 40px; }
 .content-section h2 { font-size: 1.5rem; margin-bottom: 16px; color: white; }
 .content-section p { color: var(--text-muted); margin-bottom: 16px; font-size: 1rem; }
@@ -151,11 +148,12 @@ const styles = `
 }
 .modal-content {
   background: #0f172a; border: 1px solid var(--border); width: 100%; max-width: 450px;
-  padding: 32px; border-radius: 20px; position: relative;
+  padding: 32px; border-radius: 20px; position: relative; animation: popIn 0.3s ease-out;
 }
+@keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 .input-field {
   width: 100%; padding: 14px; background: #1e293b; border: 1px solid var(--border);
-  border-radius: 8px; color: white; margin-bottom: 12px; font-family: inherit;
+  border-radius: 8px; color: white; margin-bottom: 12px; font-family: inherit; outline: none;
 }
 `;
 
@@ -182,13 +180,14 @@ function EnrollmentModal({ level, price, detail, onClose, onConfirm }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => { onConfirm(); setLoading(false); }, 800);
+    // Simula envío (podría conectarse al worker aquí)
+    setTimeout(() => { onConfirm(); setLoading(false); }, 1000);
   };
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content animate-in">
-        <button onClick={onClose} style={{position:'absolute', top:20, right:20, background:'none', border:'none', color:'white', cursor:'pointer'}}>
+      <div className="modal-content">
+        <button onClick={onClose} style={{position:'absolute', top:20, right:20, background:'none', border:'none', color:'#64748b', cursor:'pointer'}}>
           <X size={24}/>
         </button>
         <h3 style={{fontSize:'1.4rem', fontWeight: 700, marginBottom:8}}>Ficha de Alumno</h3>
@@ -206,9 +205,10 @@ function EnrollmentModal({ level, price, detail, onClose, onConfirm }) {
           <input className="input-field" placeholder="Correo Electrónico" type="email" required />
           <input className="input-field" placeholder="+56 9 ..." type="tel" required />
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? <Loader2 className="animate-spin"/> : 'Continuar al Pago'}
+            {loading ? <Loader2 className="animate-spin" style={{animation:'spin 1s linear infinite'}}/> : 'Confirmar e Ir a Pagar'}
           </button>
         </form>
+        <style>{`@keyframes spin { 100% { transform: rotate(360deg); } }`}</style>
       </div>
     </div>
   );
@@ -218,13 +218,14 @@ function EnrollmentModal({ level, price, detail, onClose, onConfirm }) {
    4. COMPONENTE PRINCIPAL
    ────────────────────────────────────────────────────────────────────────── */
 export default function LSChInscripcion() {
-  const { addToCart } = useCart ? useCart() : { addToCart: ()=> console.log("Modo Demo") }; 
+  const { addToCart } = useCart();
   
-  const [activeTab, setActiveTab] = useState('informacion'); // Cambié el default a 'informacion' para que lean primero
+  const [activeTab, setActiveTab] = useState('informacion'); 
   const [selectedLevelId, setSelectedLevelId] = useState('A1');
   const [churchMode, setChurchMode] = useState(false);
   const [openUnit, setOpenUnit] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [toast, setToast] = useState(null); // Nuevo estado Toast
 
   const selectedLevel = LEVELS.find(l => l.id === selectedLevelId);
   const currentPrice = churchMode ? selectedLevel.price * 0.8 : selectedLevel.price;
@@ -233,22 +234,44 @@ export default function LSChInscripcion() {
 
   const clp = (val) => new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(val);
 
-  const handleAddToCart = (redirect = false) => {
+  const handleAddToCart = (fromModal = false) => {
     addToCart({
-      id: `lsch-${selectedLevelId}-${Date.now()}`,
-      name: selectedLevel.title,
-      price: total,
+      id: `lsch-${selectedLevelId}-${churchMode ? 'igl' : 'gen'}-${Date.now()}`,
+      name: `Curso LSCh - ${selectedLevelId}`,
+      price: total, // Total a pagar hoy (Matrícula + Mes 1)
+      recurringPrice: currentPrice, // Para el futuro
+      recurrence: 'monthly',
       category: 'Cursos',
-      details: [`Plan: ${churchMode ? 'Iglesia' : 'General'}`, `Nivel: ${selectedLevelId}`]
+      details: [
+        `Plan: ${churchMode ? 'Convenio Iglesia' : 'General'}`, 
+        `Nivel: ${selectedLevel.title}`
+      ]
     });
-    setShowModal(false);
-    if (!redirect) alert("Curso añadido al carrito exitosamente.");
+
+    if (fromModal) setShowModal(false);
+    
+    // Feedback visual Toast
+    setToast("¡Curso añadido al Carrito!");
+    setTimeout(() => setToast(null), 3000);
   };
 
   return (
     <div className="lael-app">
       <SEOHead title="Curso LSCh | Admisión" description="Aprende Lengua de Señas Chilena" />
       <style>{styles}</style>
+
+      {/* TOAST DE NOTIFICACIÓN */}
+      {toast && (
+        <div style={{
+          position: 'fixed', bottom: 40, left: '50%', transform: 'translateX(-50%)',
+          background: '#10b981', color: 'white', padding: '12px 24px', borderRadius: 50,
+          boxShadow: '0 10px 30px rgba(0,0,0,0.4)', zIndex: 9999, fontWeight: 700,
+          display: 'flex', alignItems: 'center', gap: 10, animation: 'slideUpToast 0.3s ease-out'
+        }}>
+           <CheckCircle size={20}/> {toast}
+           <style>{`@keyframes slideUpToast { from { opacity:0; transform: translate(-50%, 20px); } to { opacity:1; transform: translate(-50%, 0); } }`}</style>
+        </div>
+      )}
 
       {showModal && (
         <EnrollmentModal 
@@ -291,7 +314,7 @@ export default function LSChInscripcion() {
             </button>
           </div>
 
-          {/* TAB 1: INFORMACIÓN Y PERSUASIÓN (EL TEXTO QUE FALTABA) */}
+          {/* TAB 1: INFORMACIÓN Y PERSUASIÓN */}
           {activeTab === 'informacion' && (
             <div className="glass-panel" style={{padding: '32px'}}>
               <div className="content-section">
@@ -395,7 +418,7 @@ export default function LSChInscripcion() {
           )}
         </div>
 
-        {/* COLUMNA DERECHA: SIDEBAR DE PAGO (Responsive Fix: Abajo en móvil) */}
+        {/* COLUMNA DERECHA: SIDEBAR DE PAGO */}
         <div>
           <div className="glass-panel summary-box">
             <h3 style={{fontSize: '1.1rem', fontWeight: 700, marginBottom: 20}}>Resumen de Inscripción</h3>
@@ -427,7 +450,7 @@ export default function LSChInscripcion() {
                     <span style={{fontSize: '0.75rem', color: 'var(--text-muted)'}}>Descuento + Matrícula $0</span>
                   </div>
                </div>
-               <div className={`toggle-btn ${churchMode ? 'active' : ''}`} style={{
+               <div className={`toggle-btn`} style={{
                  width: 40, height: 22, background: churchMode ? '#f59e0b' : '#334155', borderRadius: 20, position:'relative', transition:'0.3s'
                }}>
                   <div style={{

@@ -151,6 +151,18 @@ const NaamaStudio = () => {
       desc: "Depilación completa desde hombros hasta muñecas.", 
       why: "Aplicación de inhibidores de vello que debilitan la raíz en cada sesión." 
     },
+
+    { 
+      name: "Depilación de Espalda Hombre", 
+      worker: "Gaby", 
+      cat: "Depilación", 
+      old: "---", 
+      price: "20.000", 
+      time: "5 min", 
+      desc: "Remoción de vello en zona de espalda alta y baja.", 
+      why: "Actualización técnica para una extracción eficiente en zonas de difícil acceso." 
+    },
+
     { 
       name: "Depilación de Espalda Alta", 
       worker: "Gaby", 

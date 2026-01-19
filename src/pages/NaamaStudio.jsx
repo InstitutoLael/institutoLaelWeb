@@ -284,6 +284,16 @@ const NaamaStudio = () => {
       why: "Protocolo de máxima privacidad y bioseguridad con ceras elásticas de un solo uso." 
     },
     { 
+      name: "Depilación Rebaje Hombre", 
+      worker: "Gaby", 
+      cat: "Depilación", 
+      old: "16.990", 
+      price: "25.000", 
+      time: "25 min", 
+      desc: "Remoción total de vello en la zona íntima bajo estándares de salud.", 
+      why: "Protocolo de máxima privacidad y bioseguridad con ceras elásticas de un solo uso." 
+    },
+    { 
       name: "Depilación Rebaje Largo", 
       worker: "Gaby", 
       cat: "Depilación", 

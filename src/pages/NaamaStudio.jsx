@@ -136,7 +136,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Depilación", 
       old: "2.990", 
-      price: "4.000", 
+      price: "3.500", 
       time: "5 min", 
       desc: "Extracción de vello en el labio superior.", 
       why: "Uso de cera facial especial para pieles delicadas que previene manchas post-depilatorias." 
@@ -156,7 +156,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Depilación", 
       old: "6.990", 
-      price: "10.000", 
+      price: "8.000", 
       time: "5 min", 
       desc: "Remoción de vello en zona de hombros y escápulas.", 
       why: "Actualización técnica para una extracción eficiente en zonas de difícil acceso." 
@@ -256,7 +256,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Depilación", 
       old: "5.990", 
-      price: "9.000", 
+      price: "8.000", 
       time: "8 min", 
       desc: "Depilación desde el codo hacia la muñeca.", 
       why: "Remoción total de vello fino con productos que cuidan la hidratación de la piel." 
@@ -316,7 +316,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Depilación", 
       old: "6.990", 
-      price: "9.000", 
+      price: "7.000", 
       time: "10 min", 
       desc: "Diseño y limpieza de cejas según morfología facial.", 
       why: "No es solo depilación; es un diseño artístico para realzar la expresión de la mirada." 
@@ -633,7 +633,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Manicure", 
       old: "3.990", 
-      price: "3.990", 
+      price: "4.990", 
       time: "15 min", 
       desc: "Retiro suave de esmalte permanente con productos específicos.", 
       why: "Garantizamos un retiro que no reseca ni daña las capas de queratina de la uña." 
@@ -669,11 +669,11 @@ const NaamaStudio = () => {
       why: "Alivia la tensión de las manos y mejora la circulación sanguínea con activos nutritivos." 
     },
     { 
-      name: "Esmaltado Tradicional", 
+      name: "Esmaltado al aire Tradicional", 
       worker: "Gaby", 
       cat: "Manicure", 
       old: "---", 
-      price: "8.000", 
+      price: "15.000", 
       time: "20 min", 
       desc: "Cambio de color con esmalte de secado al aire de alta calidad.", 
       why: "Opción rápida para quienes prefieren cambiar de tono con frecuencia sin usar lámpara LED." 
@@ -683,7 +683,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Manicure, Pedicure", 
       old: "---", 
-      price: "8.000", 
+      price: "16.000", 
       time: "20 min", 
       desc: "Tratamiento térmico de hidratación profunda para manos o pies extremadamente secos.", 
       why: "Crea una película oclusiva que obliga a los nutrientes a penetrar en la piel, sanando grietas y resequedad." 
@@ -913,7 +913,7 @@ const NaamaStudio = () => {
 
     // --- COLOR GLOBAL TINTE ---
     { 
-      name: "Color Global Tinte (Corto)", 
+      name: "Tinte Global (Corto)", 
       worker: "Cami, Valeria", 
       cat: "Peluquería", 
       old: "40.990", 
@@ -923,7 +923,7 @@ const NaamaStudio = () => {
       why: "Garantiza cobertura 100% de canas con tinturas que protegen el cuero cabelludo." 
     },
     { 
-      name: "Color Global Tinte (Medio)", 
+      name: "Tinte Global (Medio)", 
       worker: "Cami, Valeria", 
       cat: "Peluquería", 
       old: "45.990", 
@@ -933,7 +933,7 @@ const NaamaStudio = () => {
       why: "Uso de colorantes de baja oxidación que mantienen la salud y el brillo de la hebra." 
     },
     { 
-      name: "Color Global Tinte (Largo)", 
+      name: "Tinte Global (Largo)", 
       worker: "Cami, Valeria", 
       cat: "Peluquería", 
       old: "50.990", 
@@ -943,7 +943,7 @@ const NaamaStudio = () => {
       why: "Saturación perfecta de pigmentos para evitar tonos disparejos en largos extendidos." 
     },
     { 
-      name: "Color Global Tinte (Extra largo)", 
+      name: "Tinte Global (Extra largo)", 
       worker: "Cami, Valeria", 
       cat: "Peluquería", 
       old: "55.990", 
@@ -1227,7 +1227,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Pedicure", 
       old: "24.990", 
-      price: "27.990", 
+      price: "25.000", 
       time: "50 min", 
       desc: "Limpieza profunda de pies, retiro de cutículas y esmaltado de larga duración con curado en lámpara LED.", 
       why: "Uso de esmaltes de alta gama que garantizan color y brillo intacto por semanas, resistiendo el roce del calzado." 
@@ -1237,7 +1237,7 @@ const NaamaStudio = () => {
       worker: "Gaby", 
       cat: "Pedicure", 
       old: "25.990", 
-      price: "35.000", 
+      price: "28.000", 
       time: "1.1 horas", 
       desc: "Tratamiento de lujo que incluye retiro de durezas, exfoliación profunda, máscara de hidratación y masaje relajante.", 
       why: "Protocolo extendido de podo-estética con productos hidratantes profesionales que restauran la suavidad extrema de la piel." 
@@ -1251,6 +1251,28 @@ const NaamaStudio = () => {
       time: "30 min", 
       desc: "Servicio de mantenimiento esencial: limpieza de uñas, cutículas y esmaltado de secado al aire.", 
       why: "Garantía de máxima higiene con instrumental esterilizado en autoclave de grado médico para tu total seguridad." 
+    },
+
+    { 
+      name: "Corte de uñas hombres", 
+      worker: "Gaby", 
+      cat: "Pedicure", 
+      old: "---", 
+      price: "10.000", 
+      time: "5 min", 
+      desc: "---", 
+      why: "---" 
+    },
+
+     { 
+      name: "Corte de uñas mujeres", 
+      worker: "Gaby", 
+      cat: "Pedicure", 
+      old: "---", 
+      price: "12.000", 
+      time: "5 min", 
+      desc: "---", 
+      why: "---" 
     },
     
     // PODOLOGÍA

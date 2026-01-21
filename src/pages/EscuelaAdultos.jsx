@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 // ICONS
 import {
    FaHandHoldingHeart, FaUserGraduate, FaChalkboardTeacher, FaRegCheckCircle,
-   FaWhatsapp, FaInfoCircle, FaChevronDown, FaChevronUp, FaHeart, FaHandsHelping
+   FaWhatsapp, FaInfoCircle, FaChevronDown, FaChevronUp, FaHeart, FaHandsHelping, FaCheck
 } from "react-icons/fa";
 import { MdOutlineWorkOutline, MdSchool, MdTimelapse, MdOutlineFamilyRestroom } from "react-icons/md";
 import { BiWorld, BiDonateHeart } from "react-icons/bi";

@@ -62,6 +62,19 @@ export default function EscuelaAdultos() {
       document.getElementById("plans-section").scrollIntoView({ behavior: "smooth" });
    };
 
+   // --- SAFETY CHECK (Rescue Mission) ---
+   if (!CAMINOS_CONTENT || !STUDY_CYCLES || !PLANS) {
+      return (
+         <div className="min-h-screen bg-stone-900 flex items-center justify-center text-orange-500">
+            <div className="text-center">
+               <FaHandHoldingHeart className="text-5xl mx-auto mb-4 animate-bounce" />
+               <h2 className="text-2xl font-bold">Cargando esperanza...</h2>
+               <p className="text-stone-400 mt-2">Estamos preparando los cupos para ti.</p>
+            </div>
+         </div>
+      );
+   }
+
    return (
       <div className="min-h-screen bg-stone-50 text-stone-800 font-sans selection:bg-orange-200/50">
 
@@ -77,7 +90,7 @@ export default function EscuelaAdultos() {
                   className="inline-block mb-6"
                >
                   <span className="text-orange-400 font-bold tracking-widest uppercase text-sm border-b-2 border-orange-500 pb-1">
-                     {CAMINOS_CONTENT.subtitle}
+                     {CAMINOS_CONTENT?.subtitle || "Programa Caminos"}
                   </span>
                </motion.div>
 

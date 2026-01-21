@@ -5,7 +5,7 @@
    1. CONFIGURACIÓN BASE
    ────────────────────────────────────────────────────────────────────────── */
 
-export const ENROLLMENT_FEE = 15000;
+export const ENROLLMENT_FEE = 15000; 
 export const ENROLLMENT_LABEL = "Matrícula Anual y Acceso a Comunidad Lael";
 export const LSCH_TAGLINE = "Rompe la barrera del sonido.";
 export const CHURCH_PRICE = 14990; // Precio social protegido
@@ -57,11 +57,11 @@ export const LSCH_MODULES = [
    3. PLANES GRUPALES (Suscripción Mensual)
    ────────────────────────────────────────────────────────────────────────── */
 export const LSCH_GROUP_PLANS = [
-  {
-    id: "g-month",
-    title: "Plan Mensual Flexible",
+  { 
+    id: "g-month", 
+    title: "Plan Mensual Flexible", 
     desc: "Ideal para ir a tu propio ritmo.",
-    price: 24990,
+    price: 24990, 
     enrollmentWaived: false,
     badge: "Flexibilidad Total",
     features: [
@@ -71,13 +71,13 @@ export const LSCH_GROUP_PLANS = [
       "Diploma de participación"
     ],
   },
-  {
-    id: "g-quarter",
-    title: "Plan Trimestral (Ahorro)",
+  { 
+    id: "g-quarter", 
+    title: "Plan Trimestral (Ahorro)", 
     desc: "Compromiso real con el aprendizaje.",
     price: 19990, // Precio por mes pagando el trimestre
     totalPayment: 59970,
-    enrollmentWaived: true,
+    enrollmentWaived: true, 
     badge: "Más Conveniente",
     features: [
       "Todo lo del plan mensual",
@@ -93,16 +93,16 @@ export const LSCH_GROUP_PLANS = [
    4. CLASES PARTICULARES (Personalizado)
    ────────────────────────────────────────────────────────────────────────── */
 export const LSCH_ONE2ONE_PLANS = [
-  {
-    id: "o-light",
-    title: "Pack 4 Sesiones",
+  { 
+    id: "o-light", 
+    title: "Pack 4 Sesiones", 
     price: 60000,
     desc: "Para dudas puntuales o nivelación rápida.",
     features: ["Sesiones de 60 min", "Horario a convenir", "Profesor exclusivo"],
   },
-  {
-    id: "o-standard",
-    title: "Pack 8 Sesiones",
+  { 
+    id: "o-standard", 
+    title: "Pack 8 Sesiones", 
     price: 110000,
     desc: "Avance acelerado y personalizado.",
     features: ["Sesiones de 60 min", "Corrección de señas en video", "Prioridad de agenda"],
@@ -153,24 +153,3 @@ export function calculateLschPrice(planId, isChurch = false) {
 
   return { price: 0, label: "No seleccionado", enrollment: 0 };
 }
-
-/* ──────────────────────────────────────────────────────────────────────────
-   7. TEACHER PROFILE (Fernanda)
-   ────────────────────────────────────────────────────────────────────────── */
-export const TEACHER_PROFILE = {
-  name: "Fernanda",
-  role: "Educadora de Párvulos & Instructora Sorda",
-  img: "👩🏻‍🏫",
-  bio: "Fernanda no solo es hablante nativa de LSCh, es una pedagoga profesional titulada. Esta combinación es única: posee la paciencia y didáctica de una educadora de párvulos, sumado a la autoridad cultural de una persona Sorda. Ella no te enseñará 'español señado', te enseñará a pensar visualmente.",
-  badges: ["Nativa LSCh", "Pedagogía Profesional", "Cultura Sorda", "Experta en Inclusión"]
-};
-
-/* ──────────────────────────────────────────────────────────────────────────
-   8. COMPARATIVE DATA (LSCh)
-   ────────────────────────────────────────────────────────────────────────── */
-export const COMPARISON_DATA = [
-  { feature: "Profesor", us: "Sordo Nativo + Pedagogo", others: "Oyente (o Sordo sin título)" },
-  { feature: "Metodología", us: "Inmersión Visual (Sin Voz)", others: "Bimodal (Hablan y señan)" },
-  { feature: "Enfoque", us: "Gramática & Cultura", others: "Vocabulario Suelto" },
-  { feature: "Certificación", us: "Por Competencias (Ley 21.015)", others: "Solo asistencia" }
-];

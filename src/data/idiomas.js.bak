@@ -70,7 +70,7 @@ export const LANGUAGES = [
   {
     id: "ingles",
     name: "English Booster",
-    emoji: "🇺🇸",
+    emoji: "🇺🇸", 
     color: "#3b82f6", // Blue
     badge: "Más Vendido",
     summary: "Entrenamiento dinámico para el mundo real. Olvida la gramática aburrida y empieza a hablar desde el primer día.",
@@ -166,42 +166,4 @@ export const LANG_FEATURES = [
   { title: "Clases en Vivo", desc: "Nada de videos grabados. Interactúa con tu profesor en tiempo real.", icon: "🎥" },
   { title: "Grupos Reducidos", desc: "Máximo 10-12 alumnos por sección para asegurar tu aprendizaje.", icon: "👥" },
   { title: "Certificado Lael", desc: "Obtén un certificado que avale tus horas de estudio al finalizar el nivel.", icon: "📜" }
-];
-
-/* ──────────────────────────────────────────────────────────────────────────
-   4. SYLLABUS PREVIEW (Lo que aprenderás)
-   ────────────────────────────────────────────────────────────────────────── */
-export const SYLLABUS_PREVIEW = {
-  ingles: [
-    { level: "A1-A2", topics: ["Presentaciones y 'Small Talk'", "Survival English para Viajes", "Pronunciación: TH, R, V vs B"] },
-    { level: "B1-B2", topics: ["Inglés para Negocios (Emails/Meetings)", "Debate y Argumentación", "Phrasal Verbs esenciales"] }
-  ],
-  coreano: [
-    { level: "Nivel 1", topics: ["Hangul: Lectura y Escritura", "Saludos y Etiqueta Coreana", "Estructura de Oración SOV"] },
-    { level: "Nivel 2", topics: ["Partículas Complejas", "Vocabulario de K-Dramas", "Números Sino-Coreanos vs Nativos"] }
-  ],
-  espanol: [
-    { level: "Survival", topics: ["RUT & Visas: Vocabulary", "Chilean Slang (Weón, Cachái)", "Navigating Santiago Metro"] },
-    { level: "Business", topics: ["Formal vs Informal Register", "Job Interviews in Chile", "Writing Reports"] }
-  ]
-};
-
-/* ──────────────────────────────────────────────────────────────────────────
-   5. COMPARATIVE CHART
-   ────────────────────────────────────────────────────────────────────────── */
-export const COMPARISON_DATA = [
-  { feature: "Clases en Vivo", lael: true, app: false, institute: true },
-  { feature: "Corrección de Pronunciación", lael: "En tiempo real", app: "IA Básica", institute: "Grupal" },
-  { feature: "Enfoque Cultural", lael: true, app: false, institute: "A veces" },
-  { feature: "Comunidad/Club", lael: "Incluido", app: "No", institute: "Pago extra" },
-  { feature: "Precio Mensual", lael: "$17.990", app: "$9.000", institute: "$95.000+" }
-];
-
-/* ──────────────────────────────────────────────────────────────────────────
-   6. TEACHERS (Expertos)
-   ────────────────────────────────────────────────────────────────────────── */
-export const TEACHERS_LIST = [
-  { name: "Javiera", origin: "🇺🇸", role: "Head of English", bio: "Especialista en reducción de acento.", img: "👩🏼‍🏫" },
-  { name: "Fernanda", origin: "🇰🇷", role: "Lead Korean Tutor", bio: "Enseña con K-Pop y situaciones de la vida real.", img: "👩🏻‍🏫" },
-  { name: "Diego", origin: "🇨🇱", role: "Spanish Coach", bio: "Lingüista experto en dialectología chilena.", img: "👨🏻‍🏫" }
 ];

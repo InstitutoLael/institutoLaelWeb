@@ -1,502 +1,455 @@
 import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext.jsx";
+import { motion, AnimatePresence } from "framer-motion";
 
-// --- ICONOS SOLEMNES Y ACADÉMICOS ---
-import { 
-  FaBible, FaDove, FaScroll, FaUniversity, FaPenFancy, 
-  FaChalkboardTeacher, FaHandshake, FaCheck, FaStar, 
-  FaPhoneAlt, FaEnvelope, FaWhatsapp
+// ICONS
+import {
+   FaBible, FaDove, FaScroll, FaUniversity, FaPenFancy,
+   FaChalkboardTeacher, FaHandshake, FaCheck, FaStar,
+   FaPhoneAlt, FaEnvelope, FaWhatsapp, FaGraduationCap
 } from "react-icons/fa";
-import { 
-  MdOutlineVerifiedUser, MdCastForEducation 
+import {
+   MdOutlineVerifiedUser, MdCastForEducation, MdSchool, MdHistoryEdu
 } from "react-icons/md";
-import { BsStars, BsShieldCheck, BsShuffle } from "react-icons/bs";
+import { BsStars, BsShieldCheck, BsShuffle, BsFillLightningChargeFill } from "react-icons/bs";
 import { IoLibrary } from "react-icons/io5";
 
-// --- IMÁGENES ---
+// IMAGES (Using imports for reliable bundling)
 import logoLael from "../assets/img/Logos/lael-inst-azul.png";
 import logoPartner from "../assets/img/Partners/LosOlivos.png";
 
-// --- DATA ---
-import { 
-  ACADEMY_CONFIG, 
-  ALLIANCE, 
-  SUBJECTS, 
-  LEVELS, 
-  PACKS, 
-  SCHOOL_SERVICES,
-  clp 
+// DATA
+import {
+   ACADEMY_CONFIG,
+   ALLIANCE,
+   SUBJECTS,
+   LEVELS,
+   PACKS,
+   SCHOOL_SERVICES,
+   clp
 } from "../data/homeschool.js";
 
-/* ──────────────────────────────────────────────────────────────────────────
-   COMPONENTES UI
-   ────────────────────────────────────────────────────────────────────────── */
-const SectionDivider = ({ icon: Icon, title }) => (
-  <div className="section-divider">
-    <div className="line"></div>
-    <div className="sd-content">
-      <Icon className="sd-icon"/> <span>{title}</span>
-    </div>
-    <div className="line"></div>
-  </div>
-);
+// ANIMATIONS
+const fadeInUp = {
+   hidden: { opacity: 0, y: 30 },
+   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
 
 export default function Academy() {
-  const { addToCart, openCart } = useCart();
+   const { addToCart, openCart } = useCart();
+   const [activeLevel, setActiveLevel] = useState("media");
+   const [showSticky, setShowSticky] = useState(false);
 
-  // --- ESTADOS ---
-  const [activeLevel, setActiveLevel] = useState("media"); // basica | media | paes
-  const [showSticky, setShowSticky] = useState(false);
+   // CONTACT
+   const WHATSAPP_NUM = "56964626568";
+   const EMAIL_COORD = "coordinacion@institutolael.cl";
 
-  // Datos de contacto
-  const WHATSAPP_NUM = "56964626568";
-  const EMAIL_COORD = "coordinacion@institutolael.cl";
+   useEffect(() => {
+      const handleScroll = () => setShowSticky(window.scrollY > 900);
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+   }, []);
 
-  // --- SCROLL LISTENER ---
-  useEffect(() => {
-    const handleScroll = () => setShowSticky(window.scrollY > 900);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+   const handleEnroll = (pack) => {
+      addToCart({
+         id: `academy-${pack.id}`,
+         title: `Academy: ${pack.title}`,
+         price: pack.price,
+         detail: `${pack.hours} Horas Cronológicas - Asignaturas a elección (Mix)`,
+         type: 'course',
+         extraInfo: pack.id === 'academy-p12'
+            ? 'Matrícula GRATIS incluida'
+            : `+ Matrícula Anual ${clp(ACADEMY_CONFIG.enrollmentFee)}`
+      });
+      openCart();
+   };
 
-  // --- MANEJO DE CARRITO (Flexibilidad Total) ---
-  const handleEnroll = (pack) => {
-    addToCart({
-      id: `academy-${pack.id}`,
-      title: `Academy: ${pack.title}`,
-      price: pack.price,
-      // NOTA: Aquí indicamos la flexibilidad
-      detail: `${pack.hours} Horas Cronológicas - Asignaturas a elección (Mix)`,
-      type: 'course',
-      extraInfo: pack.id === 'academy-p12' 
-        ? 'Matrícula GRATIS incluida' 
-        : `+ Matrícula Anual ${clp(ACADEMY_CONFIG.enrollmentFee)}`
-    });
-    openCart();
-  };
+   const scrollToSection = (id) => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+   };
 
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if(el) el.scrollIntoView({ behavior: 'smooth' });
-  };
+   return (
+      <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-amber-200/50">
 
-  return (
-    <div className="academy-page">
-      <style>{css}</style>
+         {/* ──────────────── 1. SOLEMN HERO ──────────────── */}
+         <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 bg-slate-900 text-white">
+            {/* Background Texture */}
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-wood.png')] opacity-30 z-0 mix-blend-overlay"></div>
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 opacity-90 z-0"></div>
 
-      {/* ──────────────── 1. HERO SOLEMNE ──────────────── */}
-      <header className="academy-hero">
-        <div className="ah-overlay"></div>
-        <div className="container ah-content">
-          <div className="ah-badge">
-            <FaBible /> Cosmovisión Cristiana & Excelencia Académica
-          </div>
-          <h1 className="ah-title">
-            Más que profesores,<br/>somos <span className="serif-italic">Mentores de Vida</span>.
-          </h1>
-          <p className="ah-subtitle">
-            El Hub Académico para familias que buscan algo más. 
-            Apoyo personalizado para Homeschoolers y refuerzo escolar, 
-            con la flexibilidad que tú necesitas y los valores que compartimos.
-          </p>
-          <div className="ah-buttons">
-            <button onClick={() => scrollToSection('packs')} className="btn-hero gold">
-              <FaChalkboardTeacher /> Ver Packs de Clases
-            </button>
-            <button onClick={() => scrollToSection('identidad')} className="btn-hero outline">
-              <FaDove /> Conoce Nuestra Identidad
-            </button>
-          </div>
-        </div>
-      </header>
+            {/* Animated Dust/Particles could go here */}
 
-      {/* ──────────────── 2. IDENTIDAD & SIGNIFICADO (LAEL) ──────────────── */}
-      <section id="identidad" className="identity-section">
-        <div className="container">
-          <SectionDivider icon={FaScroll} title="Nuestra Esencia" />
-          
-          <div className="identity-grid">
-             {/* Significado */}
-             <div className="id-card text-left">
-                <h3>Lael <span className="hebrew">(לָאֵל)</span></h3>
-                <p className="definition">
-                   Del hebreo: <strong>"Perteneciente a Dios"</strong>.
-                </p>
-                <p>
-                  No educamos para el mundo, educamos para la eternidad. Entendemos que la mente 
-                  de tus hijos es un territorio sagrado. Nuestro nombre es nuestra declaración de principios.
-                </p>
-             </div>
+            <div className="container mx-auto px-6 relative z-10 text-center max-w-4xl">
+               <motion.div
+                  initial="hidden" animate="visible" variants={fadeInUp}
+                  className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 px-5 py-2 rounded-full text-sm font-semibold mb-8 uppercase tracking-widest"
+               >
+                  <FaBible /> Cosmovisión Cristiana & Excelencia
+               </motion.div>
 
-             {/* Logo */}
-             <div className="id-center">
-                <div className="logo-halo">
-                  <img src={logoLael} alt="Logo Instituto Lael" className="logo-img" />
-                </div>
-             </div>
+               <motion.h1
+                  initial="hidden" animate="visible" variants={fadeInUp}
+                  className="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight"
+               >
+                  Más que profesores,<br />
+                  somos <span className="text-amber-400 italic font-serif">Mentores de Vida</span>.
+               </motion.h1>
 
-             {/* Simbología */}
-             <div className="id-card text-right">
-                <div className="symbol-row">
-                   <div className="sr-icon"><FaDove/></div>
-                   <div>
-                      <strong>La Paloma</strong>
-                      <p>El Espíritu Santo, fuente de toda sabiduría e inteligencia (Éxodo 31:3).</p>
-                   </div>
-                </div>
-                <div className="symbol-row">
-                   <div className="sr-icon"><FaPenFancy/></div>
-                   <div>
-                      <strong>La "É" Acentuada</strong>
-                      <p>Ponemos el acento donde importa: en el carácter y el corazón, no solo en la nota.</p>
-                   </div>
-                </div>
-             </div>
-          </div>
-        </div>
-      </section>
+               <motion.p
+                  initial="hidden" animate="visible" variants={fadeInUp}
+                  className="text-xl text-blue-100/70 mb-12 max-w-2xl mx-auto leading-relaxed font-light"
+               >
+                  El Hub Académico para familias que buscan algo más.
+                  Apoyo personalizado para <strong>Homeschoolers</strong> y refuerzo escolar,
+                  con la flexibilidad que tú necesitas y los valores que compartimos.
+               </motion.p>
 
-      {/* ──────────────── 3. ALIANZA HOMESCHOOL ──────────────── */}
-      <section className="alliance-section">
-         <div className="container alliance-wrapper">
-            <div className="aw-info">
-               <div className="aw-label">ALIANZA ESTRATÉGICA 2026</div>
-               <h2>Libertad Educativa,<br/>Respaldo Oficial.</h2>
-               <p>
-                  Instituto Lael es tu equipo de entrenamiento académico (Tutores Expertos), 
-                  y gracias a nuestra alianza con <strong>{ALLIANCE.name}</strong>, tus hijos 
-                  pueden certificar sus estudios sin estrés.
-               </p>
-               <ul className="aw-benefits">
-                  {ALLIANCE.benefits.map((b, i) => (
-                     <li key={i}><FaCheck/> {b}</li>
-                  ))}
-               </ul>
-            </div>
-            <div className="aw-logo-box">
-               <img src={logoPartner} alt="Los Olivos Homeschool" />
-               <div className="partner-badge"><MdOutlineVerifiedUser/> Colegio Partner</div>
-            </div>
-         </div>
-      </section>
-
-      {/* ──────────────── 4. MATERIAS (CATÁLOGO MIXTO) ──────────────── */}
-      <section className="subjects-section">
-         <div className="container">
-            <SectionDivider icon={IoLibrary} title="Áreas del Saber" />
-            
-            <div className="sec-intro-text">
-               <p>Cubrimos todas las necesidades curriculares.</p>
-               <div className="mix-badge">
-                  <BsShuffle /> 
-                  <strong>¡Mézclalas como quieras!</strong> 
-                  <span> (Ej: 2hrs Mate + 2hrs Inglés)</span>
-               </div>
-            </div>
-
-            <div className="levels-tabs">
-               {LEVELS.map(lvl => (
-                  <button 
-                     key={lvl.id}
-                     className={`lvl-btn ${activeLevel === lvl.id ? 'active' : ''}`}
-                     onClick={() => setActiveLevel(lvl.id)}
+               <motion.div
+                  initial="hidden" animate="visible" variants={fadeInUp}
+                  className="flex flex-col sm:flex-row gap-5 justify-center"
+               >
+                  <button
+                     onClick={() => scrollToSection('packs')}
+                     className="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-lg flex items-center justify-center gap-3 transition-all hover:-translate-y-1 shadow-[0_10px_30px_rgba(245,158,11,0.3)]"
                   >
-                     <strong>{lvl.label}</strong>
-                     <span>{lvl.desc}</span>
+                     <FaChalkboardTeacher /> Ver Packs de Clases
                   </button>
-               ))}
-            </div>
-
-            <div className="subjects-grid">
-               {SUBJECTS.map((sub) => (
-                  <div 
-                     key={sub.id} 
-                     className="sub-card"
-                     style={{'--accent': sub.color}}
+                  <button
+                     onClick={() => scrollToSection('identidad')}
+                     className="px-8 py-4 bg-transparent border border-white/20 hover:bg-white/5 text-white font-semibold rounded-lg flex items-center justify-center gap-3 transition-all"
                   >
-                     <div className="sc-icon">{sub.icon}</div>
-                     <h4>{sub.name}</h4>
-                     <p>{sub.desc}</p>
-                  </div>
-               ))}
+                     <FaDove /> Conoce Nuestra Identidad
+                  </button>
+               </motion.div>
             </div>
-         </div>
-      </section>
+         </header>
 
-      {/* ──────────────── 5. PRECIOS (PACKS FLEXIBLES) ──────────────── */}
-      <section id="packs" className="pricing-section">
-         <div className="container">
-            <div className="pricing-header">
-               <h2>Packs de Horas Flexibles</h2>
-               <p>
-                  Tú decides cómo usar tus horas. Coordina semanalmente qué asignatura reforzar.
-                  <br/>Ideales para preparar pruebas específicas o acompañamiento continuo.
-               </p>
-            </div>
+         {/* ──────────────── 2. IDENTITY SECTION (The Meaning) ──────────────── */}
+         <section id="identidad" className="py-24 bg-white relative">
+            <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-slate-900 to-transparent opacity-5 pointer-events-none"></div>
+            <div className="container mx-auto px-6">
 
-            <div className="packs-grid">
-               {PACKS.map((pack) => (
-                  <div key={pack.id} className={`pack-card ${pack.badge ? 'featured' : ''}`}>
-                     {pack.badge && <div className="pack-badge"><BsStars/> {pack.badge}</div>}
-                     
-                     <div className="pc-top">
-                        <h3>{pack.title}</h3>
-                        <p className="pc-sub">{pack.subtitle}</p>
+               <div className="flex flex-col items-center justify-center mb-16 opacity-50">
+                  <div className="w-px h-12 bg-amber-500 mb-4"></div>
+                  <FaScroll className="text-2xl text-amber-600 mb-2" />
+                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-amber-700">Nuestra Esencia</span>
+               </div>
+
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center text-center lg:text-left">
+
+                  {/* Left Column: Meaning */}
+                  <motion.div
+                     initial={{ opacity: 0, x: -50 }}
+                     whileInView={{ opacity: 1, x: 0 }}
+                     viewport={{ once: true }}
+                     className="space-y-6 lg:text-right"
+                  >
+                     <div>
+                        <h3 className="text-4xl font-serif font-bold text-slate-900 mb-1">
+                           Lael <span className="text-amber-600 text-3xl font-serif"> (לָאֵל)</span>
+                        </h3>
+                        <p className="text-lg italic text-slate-500">Del hebreo: <strong className="text-slate-800">"Perteneciente a Dios"</strong>.</p>
                      </div>
+                     <p className="text-slate-600 leading-relaxed">
+                        No educamos para el mundo, educamos para la eternidad. Entendemos que la mente
+                        de tus hijos es un territorio sagrado. Nuestro nombre es nuestra declaración de principios.
+                     </p>
+                  </motion.div>
 
-                     <div className="pc-hours">
-                        <span className="num">{pack.hours}</span>
-                        <div className="meta">
-                           <span className="hrs">Horas</span>
-                           <span className="type">Cronológicas</span>
+                  {/* Center: Logo */}
+                  <div className="relative flex justify-center">
+                     <div className="w-64 h-64 rounded-full border border-slate-100 bg-slate-50 flex items-center justify-center relative z-10 shadow-2xl">
+                        <img src={logoLael} alt="Logo Lael" className="w-48 opacity-90" />
+                     </div>
+                     <div className="absolute inset-0 bg-blue-500/5 rounded-full blur-3xl scale-110 -z-0"></div>
+                  </div>
+
+                  {/* Right: Symbols */}
+                  <motion.div
+                     initial={{ opacity: 0, x: 50 }}
+                     whileInView={{ opacity: 1, x: 0 }}
+                     viewport={{ once: true }}
+                     className="space-y-8"
+                  >
+                     <div className="flex items-start gap-4 lg:flex-row flex-col items-center lg:items-start text-center lg:text-left">
+                        <div className="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
+                           <FaDove />
+                        </div>
+                        <div>
+                           <strong className="text-slate-900 text-lg block mb-1">La Paloma</strong>
+                           <p className="text-slate-600 text-sm">El Espíritu Santo, fuente de toda sabiduría e inteligencia (Éxodo 31:3).</p>
                         </div>
                      </div>
 
-                     <div className="pc-price">
-                        {clp(pack.price)}
+                     <div className="flex items-start gap-4 lg:flex-row flex-col items-center lg:items-start text-center lg:text-left">
+                        <div className="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
+                           <FaPenFancy />
+                        </div>
+                        <div>
+                           <strong className="text-slate-900 text-lg block mb-1">La "É" Acentuada</strong>
+                           <p className="text-slate-600 text-sm">Ponemos el acento donde importa: en el carácter y el corazón, no solo en la nota.</p>
+                        </div>
                      </div>
+                  </motion.div>
 
-                     <ul className="pc-features">
-                        <li><BsShuffle className="chk highlight-icon"/> <strong>Multidisciplinario (Mix)</strong></li>
-                        {pack.features.map((f, i) => (
-                           <li key={i}><FaCheck className="chk"/> {f}</li>
-                        ))}
-                     </ul>
-
-                     <button onClick={() => handleEnroll(pack)} className="btn-pack">
-                        Contratar Pack
-                     </button>
-                  </div>
-               ))}
-            </div>
-            
-            <div className="enrollment-warning">
-               <BsShieldCheck/> Matrícula Anual Familiar: <strong>{clp(ACADEMY_CONFIG.enrollmentFee)}</strong> (Se paga solo una vez al año).
-            </div>
-         </div>
-      </section>
-
-      {/* ──────────────── 6. SERVICIOS PARA COLEGIOS (CONECTADO) ──────────────── */}
-      <section className="b2b-section">
-         <div className="container">
-            <div className="b2b-intro">
-               <FaUniversity className="b2b-icon-main"/>
-               <h2>Servicios para Colegios</h2>
-               <p>¿Eres director o sostenedor? Llevamos la excelencia de Lael a tu institución.</p>
-            </div>
-            
-            <div className="b2b-grid">
-               {SCHOOL_SERVICES.map((serv) => (
-                  <div key={serv.id} className="b2b-card">
-                     <div className="b2b-head">
-                        <span className="b2b-emoji">{serv.icon}</span>
-                        <h4>{serv.title}</h4>
-                     </div>
-                     <p>{serv.desc}</p>
-                     <div className="b2b-price">{serv.priceRef}</div>
-                  </div>
-               ))}
-            </div>
-            
-            <div className="b2b-contact-box">
-               <h3>Hablemos de tu Colegio</h3>
-               <p>Coordinemos una reunión para ver cómo podemos potenciar a tus alumnos.</p>
-               
-               <div className="b2b-actions">
-                  <a 
-                    href={`https://wa.me/${WHATSAPP_NUM}?text=Hola, soy representante de un colegio y me interesan los servicios de Lael.`}
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="btn-contact whatsapp"
-                  >
-                     <FaWhatsapp/> Contactar por WhatsApp
-                  </a>
-                  
-                  <a 
-                    href={`mailto:${EMAIL_COORD}?subject=Consulta Servicios Colegios`}
-                    className="btn-contact email"
-                  >
-                     <FaEnvelope/> Enviar Correo
-                  </a>
                </div>
             </div>
+         </section>
 
-         </div>
-      </section>
+         {/* ──────────────── 3. ALLIANCE (LOS OLIVOS) ──────────────── */}
+         <section className="py-20 bg-blue-50 border-y border-blue-100">
+            <div className="container mx-auto px-6">
+               <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-blue-100 flex flex-col-reverse md:flex-row gap-12 items-center">
 
-      {/* ──────────────── 7. FOOTER STICKY ──────────────── */}
-      <div className={`sticky-academy ${showSticky ? 'visible' : ''}`}>
-         <div className="container sa-flex">
-            <div className="sa-info">
-               <strong>Lael Academy</strong>
-               <span>Perteneciente a Dios</span>
+                  <div className="flex-1 space-y-6">
+                     <div className="inline-block bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
+                        Alianza Estratégica
+                     </div>
+                     <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
+                        Libertad Educativa,<br /> Respaldo Oficial.
+                     </h2>
+                     <p className="text-slate-600 text-lg leading-relaxed">
+                        Instituto Lael es tu equipo de entrenamiento académico (Tutores Expertos),
+                        y gracias a nuestra alianza con <strong>{ALLIANCE.name}</strong>, tus hijos
+                        pueden certificar sus estudios sin estrés.
+                     </p>
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                        {ALLIANCE.benefits.map((b, i) => (
+                           <div key={i} className="flex items-center gap-2 text-blue-900 font-medium">
+                              <FaCheck className="text-blue-500" /> {b}
+                           </div>
+                        ))}
+                     </div>
+                  </div>
+
+                  <div className="flex-1 flex flex-col items-center justify-center">
+                     <img src={logoPartner} alt="Los Olivos" className="max-w-[250px] drop-shadow-lg mb-6 mix-blend-multiply" />
+                     <div className="bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold text-slate-600">
+                        <MdOutlineVerifiedUser className="text-blue-500" /> Colegio Partner
+                     </div>
+                  </div>
+
+               </div>
             </div>
-            <button onClick={() => scrollToSection('packs')} className="btn-sa">
-               Ver Packs Disponibles
-            </button>
-         </div>
+         </section>
+
+         {/* ──────────────── 4. ACADEMIC CATALOG ──────────────── */}
+         <section className="py-24 bg-slate-50 relative">
+            <div className="container mx-auto px-6">
+
+               <div className="text-center mb-16">
+                  <span className="text-slate-400 font-serif italic text-lg mb-2 block">Curriculum Flexible</span>
+                  <h2 className="text-4xl font-bold text-slate-900 mb-6">Áreas del Saber</h2>
+                  <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
+                     <BsShuffle /> ¡Mézclalas como quieras! (Ej: 2hrs Mate + 2hrs Inglés)
+                  </div>
+               </div>
+
+               <div className="flex justify-center flex-wrap gap-4 mb-16">
+                  {LEVELS.map(lvl => (
+                     <button
+                        key={lvl.id}
+                        onClick={() => setActiveLevel(lvl.id)}
+                        className={`px-6 py-3 rounded-lg border-2 transition-all flex flex-col items-center text-center w-40
+                   ${activeLevel === lvl.id
+                              ? 'bg-slate-900 border-slate-900 text-white shadow-lg scale-105'
+                              : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'
+                           }
+                 `}
+                     >
+                        <strong className="block text-lg leading-tight">{lvl.label}</strong>
+                        <span className={`text-xs ${activeLevel === lvl.id ? 'text-slate-400' : 'text-slate-400'}`}>{lvl.desc}</span>
+                     </button>
+                  ))}
+               </div>
+
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                  {SUBJECTS.map((sub, idx) => (
+                     <motion.div
+                        key={sub.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="bg-white p-6 rounded-xl border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden"
+                     >
+                        <div className="absolute top-0 left-0 w-1 h-full opacity-60 transition-opacity group-hover:opacity-100" style={{ backgroundColor: sub.color }}></div>
+
+                        <div className="text-4xl mb-4 grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110 origin-left">
+                           {sub.icon}
+                        </div>
+                        <h4 className="text-xl font-bold text-slate-900 mb-2">{sub.name}</h4>
+                        <p className="text-slate-500 text-sm leading-relaxed">{sub.desc}</p>
+                     </motion.div>
+                  ))}
+               </div>
+
+            </div>
+         </section>
+
+         {/* ──────────────── 5. PRICING PACKS ──────────────── */}
+         <section id="packs" className="py-24 bg-slate-900 text-white relative overflow-hidden">
+            {/* Decoration */}
+            <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px]"></div>
+            <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px]"></div>
+
+            <div className="container mx-auto px-6 relative z-10">
+               <div className="text-center max-w-2xl mx-auto mb-16">
+                  <h2 className="text-4xl font-serif font-bold mb-4">Packs de Horas Flexibles</h2>
+                  <p className="text-slate-400 text-lg">
+                     Tú decides cómo usar tus horas semana a semana.
+                     Ideales para preparar pruebas específicas o acompañamiento continuo.
+                  </p>
+               </div>
+
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
+                  {PACKS.map((pack, idx) => {
+                     const isFeatured = pack.badge != null;
+                     return (
+                        <motion.div
+                           key={pack.id}
+                           initial={{ opacity: 0, y: 20 }}
+                           whileInView={{ opacity: 1, y: 0 }}
+                           viewport={{ once: true }}
+                           transition={{ delay: idx * 0.2 }}
+                           className={`relative rounded-2xl p-8 flex flex-col
+                       ${isFeatured
+                                 ? 'bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-amber-500 shadow-[0_0_40px_rgba(245,158,11,0.15)] transform scale-105 z-10'
+                                 : 'bg-slate-900 border border-slate-700 hover:border-slate-600'
+                              }
+                     `}
+                        >
+                           {isFeatured && (
+                              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-900 text-xs font-bold px-4 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                                 <BsStars /> {pack.badge}
+                              </div>
+                           )}
+
+                           <div className="text-center mb-6">
+                              <h3 className="text-2xl font-bold mb-1">{pack.title}</h3>
+                              <p className="text-slate-500 text-sm">{pack.subtitle}</p>
+                           </div>
+
+                           <div className="bg-slate-950/50 rounded-lg p-4 flex items-center justify-center gap-3 mb-6 border border-slate-800">
+                              <span className="text-4xl font-bold">{pack.hours}</span>
+                              <div className="flex flex-col text-left text-xs text-slate-500 uppercase font-bold tracking-wider">
+                                 <span className="text-amber-500">Horas</span>
+                                 <span>Cronológicas</span>
+                              </div>
+                           </div>
+
+                           <div className="text-center mb-8">
+                              <div className="text-3xl font-bold">{clp(pack.price)}</div>
+                           </div>
+
+                           <ul className="space-y-3 mb-8 flex-1">
+                              <li className="flex items-start gap-3 text-sm text-slate-300">
+                                 <BsShuffle className="text-amber-500 mt-1 shrink-0" />
+                                 <strong>Multidisciplinario (Mix)</strong>
+                              </li>
+                              {pack.features.map((f, i) => (
+                                 <li key={i} className="flex items-start gap-3 text-sm text-slate-300">
+                                    <FaCheck className="text-amber-500/50 mt-1 shrink-0" /> {f}
+                                 </li>
+                              ))}
+                           </ul>
+
+                           <button
+                              onClick={() => handleEnroll(pack)}
+                              className={`w-full py-3 rounded-lg font-bold transition-all
+                          ${isFeatured ? 'bg-amber-500 hover:bg-amber-400 text-slate-900' : 'bg-transparent border border-slate-600 text-white hover:bg-slate-800'}
+                        `}
+                           >
+                              Contratar Pack
+                           </button>
+                        </motion.div>
+                     )
+                  })}
+               </div>
+
+               <div className="mt-12 text-center">
+                  <div className="inline-flex items-center gap-2 bg-amber-900/20 border border-amber-900/40 text-amber-500 px-4 py-2 rounded-lg text-sm">
+                     <BsShieldCheck className="text-lg" />
+                     <span>Matrícula Anual Familiar: <strong>{clp(ACADEMY_CONFIG.enrollmentFee)}</strong> (Se paga solo una vez al año).</span>
+                  </div>
+               </div>
+
+            </div>
+         </section>
+
+         {/* ──────────────── 6. B2B / SCHOOL SERVICES ──────────────── */}
+         <section className="py-24 bg-white">
+            <div className="container mx-auto px-6">
+               <div className="flex flex-col lg:flex-row gap-16 items-start">
+
+                  {/* Left Text */}
+                  <div className="lg:w-1/3">
+                     <div className="w-16 h-16 bg-blue-50 text-blue-900 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                        <FaUniversity />
+                     </div>
+                     <h2 className="text-3xl font-bold text-slate-900 mb-4">Servicios para Colegios</h2>
+                     <p className="text-slate-600 mb-8 leading-relaxed">
+                        ¿Eres director o sostenedor? Llevamos la excelencia de Lael y nuestros tutores expertos a tu institución.
+                     </p>
+                     <div className="flex flex-col gap-3">
+                        <a
+                           href={`https://wa.me/${WHATSAPP_NUM}?text=Hola, soy representante de un colegio...`}
+                           className="px-6 py-3 bg-green-500 text-white font-bold rounded-lg flex items-center gap-2 w-fit hover:bg-green-600 transition-colors"
+                        >
+                           <FaWhatsapp className="text-xl" /> Contactar por WhatsApp
+                        </a>
+                        <a
+                           href={`mailto:${EMAIL_COORD}`}
+                           className="px-6 py-3 bg-slate-100 text-slate-700 font-bold rounded-lg flex items-center gap-2 w-fit hover:bg-slate-200 transition-colors"
+                        >
+                           <FaEnvelope className="text-xl" /> Enviar Correo
+                        </a>
+                     </div>
+                  </div>
+
+                  {/* Right Grid */}
+                  <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                     {SCHOOL_SERVICES.map((serv) => (
+                        <div key={serv.id} className="bg-slate-50 p-6 rounded-xl border border-slate-200 hover:border-blue-300 transition-colors">
+                           <span className="text-3xl mb-4 block">{serv.icon}</span>
+                           <h4 className="font-bold text-slate-900 mb-2">{serv.title}</h4>
+                           <p className="text-sm text-slate-500 mb-4 h-10">{serv.desc}</p>
+                           <div className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-100 py-1 px-2 rounded w-fit">
+                              {serv.priceRef}
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── STICKY BAR ──────────────── */}
+         <AnimatePresence>
+            {showSticky && (
+               <motion.div
+                  initial={{ y: 100 }}
+                  animate={{ y: 0 }}
+                  exit={{ y: 100 }}
+                  className="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-slate-800 z-50 py-3"
+               >
+                  <div className="container mx-auto px-6 flex justify-between items-center text-white">
+                     <div>
+                        <strong className="text-amber-400 block font-serif">Lael Academy</strong>
+                        <span className="text-xs text-slate-400">Perteneciente a Dios</span>
+                     </div>
+                     <button
+                        onClick={() => scrollToSection('packs')}
+                        className="px-6 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-lg text-sm transition-colors shadow-lg"
+                     >
+                        Ver Packs Disponibles
+                     </button>
+                  </div>
+               </motion.div>
+            )}
+         </AnimatePresence>
+
       </div>
-    </div>
-  );
+   );
 }
-
-/* ──────────────────────────────────────────────────────────────────────────
-   ESTILOS CSS CORREGIDOS
-   ────────────────────────────────────────────────────────────────────────── */
-const css = `
-:root {
-  --royal-blue: #1e3a8a;
-  --royal-light: #2563eb;
-  --gold: #d97706;
-  --gold-light: #fbbf24;
-  --paper: #f8fafc;
-  --text-dark: #1e293b;
-  --text-light: #64748b;
-  --bg-dark: #0f172a;
-}
-
-.academy-page { font-family: 'Inter', sans-serif; background: var(--paper); color: var(--text-dark); padding-bottom: 80px; }
-.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 700; margin: 0; }
-.serif-italic { font-style: italic; color: var(--gold-light); }
-
-/* 1. HERO */
-.academy-hero { position: relative; min-height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; background: #0f172a; color: white; overflow: hidden; }
-.ah-overlay { position: absolute; inset: 0; background: url('https://www.transparenttextures.com/patterns/dark-wood.png'); opacity: 0.4; }
-.ah-overlay::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(30, 58, 138, 0.4) 0%, #0f172a 90%); }
-.ah-content { position: relative; z-index: 2; max-width: 800px; }
-
-.ah-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 50px; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 30px; color: var(--gold-light); backdrop-filter: blur(5px); }
-.ah-title { font-size: clamp(3rem, 5vw, 5rem); line-height: 1.1; margin-bottom: 25px; }
-.ah-subtitle { font-family: 'Inter', sans-serif; font-size: 1.2rem; color: #cbd5e1; line-height: 1.6; max-width: 700px; margin: 0 auto 50px; }
-
-.ah-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-.btn-hero { padding: 16px 32px; border-radius: 4px; font-weight: 600; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 10px; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; cursor: pointer; }
-.btn-hero.gold { background: var(--gold); color: white; border: 1px solid var(--gold); }
-.btn-hero.gold:hover { background: var(--gold-light); border-color: var(--gold-light); color: black; }
-.btn-hero.outline { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; }
-.btn-hero.outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
-
-/* 2. IDENTIDAD */
-.identity-section { padding: 100px 0; background: white; }
-.section-divider { display: flex; align-items: center; gap: 20px; margin-bottom: 60px; justify-content: center; opacity: 0.6; }
-.line { height: 1px; width: 100px; background: var(--royal-blue); }
-.sd-content { display: flex; flex-direction: column; align-items: center; color: var(--royal-blue); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; }
-.sd-icon { font-size: 1.5rem; margin-bottom: 5px; }
-
-.identity-grid { display: grid; grid-template-columns: 1fr 300px 1fr; gap: 40px; align-items: center; }
-@media(max-width: 900px) { .identity-grid { grid-template-columns: 1fr; text-align: center; } .id-card.text-left, .id-card.text-right { text-align: center; } }
-.id-card h3 { font-size: 2.5rem; color: var(--royal-blue); margin-bottom: 15px; }
-.hebrew { font-family: 'Times New Roman', serif; color: var(--gold); }
-.definition { font-size: 1.2rem; font-style: italic; margin-bottom: 20px; color: var(--text-dark); border-bottom: 2px solid var(--gold); display: inline-block; padding-bottom: 5px; }
-.id-card p { color: var(--text-light); line-height: 1.6; }
-.logo-halo { width: 250px; height: 250px; border-radius: 50%; background: radial-gradient(circle, rgba(30,58,138,0.05) 0%, transparent 70%); display: flex; align-items: center; justify-content: center; border: 1px solid rgba(30,58,138,0.1); margin: 0 auto; }
-.logo-img { width: 180px; height: auto; }
-.symbol-row { display: flex; gap: 15px; margin-bottom: 25px; align-items: flex-start; }
-.text-right .symbol-row { justify-content: flex-end; text-align: right; }
-@media(max-width: 900px) { .text-right .symbol-row { justify-content: center; text-align: center; flex-direction: column; align-items: center; } }
-.sr-icon { width: 50px; height: 50px; background: var(--royal-blue); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-.text-right .symbol-row .sr-icon { order: 2; }
-@media(max-width: 900px) { .text-right .symbol-row .sr-icon { order: -1; } }
-
-/* 3. ALIANZA */
-.alliance-section { padding: 80px 0; background: #f0f9ff; border-top: 1px solid #bae6fd; border-bottom: 1px solid #bae6fd; }
-.alliance-wrapper { display: flex; gap: 60px; align-items: center; }
-@media(max-width: 800px) { .alliance-wrapper { flex-direction: column-reverse; } }
-.aw-info { flex: 1.5; }
-.aw-label { color: var(--royal-blue); font-weight: 800; letter-spacing: 1px; margin-bottom: 10px; font-size: 0.9rem; }
-.aw-info h2 { font-size: 2.8rem; color: #0f172a; margin-bottom: 20px; line-height: 1.1; }
-.aw-info p { font-size: 1.1rem; color: var(--text-light); margin-bottom: 30px; line-height: 1.6; }
-.aw-benefits { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
-.aw-benefits li { display: flex; gap: 10px; color: var(--royal-blue); font-weight: 600; font-size: 1rem; align-items: center; }
-.aw-logo-box { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 15px; }
-.aw-logo-box img { max-width: 200px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); }
-.partner-badge { background: #fff; border: 1px solid #e2e8f0; padding: 8px 16px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; color: var(--royal-light); display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-
-/* 4. SUBJECTS (Nuevo diseño flexible) */
-.subjects-section { padding: 100px 0; background: white; }
-.sec-intro-text { text-align: center; margin-bottom: 40px; }
-.mix-badge { display: inline-flex; align-items: center; gap: 8px; background: #dbeafe; color: var(--royal-blue); padding: 8px 16px; border-radius: 50px; margin-top: 10px; font-size: 0.95rem; }
-.mix-badge span { opacity: 0.8; font-size: 0.85rem; }
-
-.levels-tabs { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 50px; }
-.lvl-btn { background: white; border: 1px solid #e2e8f0; padding: 12px 24px; border-radius: 8px; text-align: left; transition: 0.2s; min-width: 140px; display: flex; flex-direction: column; align-items: center; text-align: center; cursor: pointer; }
-.lvl-btn strong { display: block; color: var(--text-dark); font-size: 1.1rem; }
-.lvl-btn span { font-size: 0.8rem; color: var(--text-light); }
-.lvl-btn.active { border-color: var(--royal-blue); background: var(--royal-blue); }
-.lvl-btn.active strong { color: white; }
-.lvl-btn.active span { color: rgba(255,255,255,0.7); }
-
-.subjects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
-.sub-card { background: white; border: 1px solid #e2e8f0; padding: 25px; border-radius: 12px; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: flex-start; }
-.sub-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent); opacity: 0.8; }
-.sc-icon { font-size: 2rem; margin-bottom: 15px; color: var(--text-dark); }
-.sub-card h4 { font-size: 1.2rem; color: var(--text-dark); margin-bottom: 5px; font-family: 'Inter', sans-serif; }
-.sub-card p { font-size: 0.9rem; color: var(--text-light); line-height: 1.4; }
-
-/* 5. PRICING */
-.pricing-section { padding: 80px 0; background: var(--bg-dark); color: white; position: relative; }
-.pricing-header { text-align: center; max-width: 600px; margin: 0 auto 50px; }
-.pricing-header h2 { font-size: 3rem; margin-bottom: 15px; color: white; }
-.pricing-header p { color: #94a3b8; font-size: 1.1rem; }
-
-.packs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
-.pack-card { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 40px 30px; display: flex; flex-direction: column; position: relative; transition: 0.3s; }
-.pack-card:hover { border-color: var(--gold); transform: translateY(-5px); }
-.pack-card.featured { background: linear-gradient(145deg, #1e3a8a 0%, #1e293b 100%); border: 1px solid var(--royal-blue); box-shadow: 0 20px 40px rgba(0,0,0,0.3); transform: scale(1.05); z-index: 10; }
-.pack-card-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--gold); color: black; font-weight: 700; padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; }
-
-.pc-top { text-align: center; margin-bottom: 20px; }
-.pc-top h3 { font-size: 1.6rem; margin-bottom: 5px; color: white; }
-.pc-sub { font-size: 0.9rem; color: #94a3b8; }
-.pc-hours { display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 12px; }
-.pc-hours .num { font-size: 3rem; font-weight: 800; line-height: 1; color: white; }
-.pc-hours .meta { display: flex; flex-direction: column; text-align: left; }
-.pc-hours .hrs { font-weight: 700; color: var(--gold); text-transform: uppercase; font-size: 0.8rem; }
-.pc-hours .type { font-size: 0.8rem; color: #94a3b8; }
-.pc-price { font-size: 2rem; text-align: center; font-family: 'Inter', sans-serif; font-weight: 700; margin-bottom: 25px; color: white; }
-.pc-features { list-style: none; padding: 0; margin-bottom: 30px; flex: 1; }
-.pc-features li { display: flex; gap: 10px; margin-bottom: 12px; font-size: 0.95rem; color: #cbd5e1; align-items: flex-start; }
-.chk { color: var(--gold); margin-top: 3px; }
-.highlight-icon { color: var(--gold-light); font-size: 1.1rem; }
-
-.btn-pack { width: 100%; padding: 15px; border-radius: 8px; font-weight: 700; font-family: 'Inter', sans-serif; cursor: pointer; border: none; transition: 0.2s; }
-.pack-card.featured .btn-pack { background: var(--gold); color: black; }
-.pack-card.featured .btn-pack:hover { background: var(--gold-light); }
-.pack-card:not(.featured) .btn-pack { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; }
-.pack-card:not(.featured) .btn-pack:hover { background: rgba(255,255,255,0.05); border-color: white; }
-
-.enrollment-warning { margin-top: 40px; text-align: center; background: rgba(217, 119, 6, 0.1); border: 1px solid rgba(217, 119, 6, 0.3); color: var(--gold-light); padding: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; max-width: 600px; margin-left: auto; margin-right: auto; }
-
-/* 6. B2B + CONTACT (Mejorado) */
-.b2b-section { padding: 80px 0; background: #fff; }
-.b2b-intro { text-align: center; margin-bottom: 50px; max-width: 600px; margin-left: auto; margin-right: auto; }
-.b2b-icon-main { font-size: 3rem; color: #64748b; margin-bottom: 15px; }
-.b2b-intro h2 { font-size: 2.5rem; color: var(--text-dark); margin-bottom: 10px; }
-.b2b-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 60px; }
-.b2b-card { background: #f8fafc; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; transition: 0.2s; }
-.b2b-head { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-.b2b-emoji { font-size: 1.5rem; }
-.b2b-card h4 { font-size: 1.1rem; color: var(--text-dark); }
-.b2b-card p { font-size: 0.95rem; color: var(--text-light); margin-bottom: 20px; }
-.b2b-price { font-size: 0.85rem; font-weight: 700; color: var(--royal-blue); text-transform: uppercase; letter-spacing: 0.5px; }
-
-.b2b-contact-box { background: #1e3a8a; color: white; border-radius: 16px; padding: 40px; text-align: center; max-width: 600px; margin: 0 auto; box-shadow: 0 20px 40px rgba(30, 58, 138, 0.2); }
-.b2b-contact-box h3 { font-size: 1.8rem; margin-bottom: 10px; color: white; }
-.b2b-contact-box p { margin-bottom: 30px; color: #bfdbfe; }
-.b2b-actions { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-.btn-contact { padding: 12px 24px; border-radius: 50px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; transition: 0.2s; font-size: 0.95rem; }
-.btn-contact.whatsapp { background: #22c55e; color: white; }
-.btn-contact.whatsapp:hover { background: #16a34a; transform: translateY(-2px); }
-.btn-contact.email { background: white; color: var(--royal-blue); }
-.btn-contact.email:hover { background: #f1f5f9; transform: translateY(-2px); }
-
-/* 7. STICKY FOOTER */
-.sticky-academy { position: fixed; bottom: -100px; left: 0; width: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); padding: 15px 0; z-index: 100; transition: 0.4s; border-top: 1px solid rgba(255,255,255,0.1); }
-.sticky-academy.visible { bottom: 0; }
-.sa-flex { display: flex; justify-content: space-between; align-items: center; color: white; }
-.sa-info { display: flex; flex-direction: column; }
-.sa-info strong { color: var(--gold); }
-.sa-info span { font-size: 0.8rem; color: #94a3b8; }
-.btn-sa { background: var(--royal-blue); color: white; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; }
-`;

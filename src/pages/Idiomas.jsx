@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext.jsx";
+import { motion, AnimatePresence } from "framer-motion";
 
-// ICONOS (Importación masiva para una página masiva)
-import { 
-  FaCheck, FaGlobeAmericas, FaPlaneDeparture, FaPassport, FaHeadphones, 
+// ICONS
+import {
+  FaCheck, FaGlobeAmericas, FaPlaneDeparture, FaPassport, FaHeadphones,
   FaWhatsapp, FaArrowRight, FaStar, FaLock, FaUsers, FaCertificate, FaVideo,
   FaTimes, FaMicrophoneAlt, FaLaptopHouse, FaBriefcase, FaGraduationCap
 } from "react-icons/fa";
@@ -12,64 +13,50 @@ import { MdTranslate, MdOutlineFlightTakeoff, MdQuiz, MdOutlineSupportAgent } fr
 import { IoIosInfinite } from "react-icons/io";
 
 // DATA
-import { 
-  LANGUAGES, 
-  LANG_FEATURES, 
-  computeLangBundle, 
-  clp 
+import {
+  LANGUAGES,
+  LANG_FEATURES,
+  SYLLABUS_PREVIEW,
+  COMPARISON_DATA,
+  TEACHERS_LIST,
+  computeLangBundle,
+  clp
 } from "../data/idiomas.js";
 
-/* ──────────────────────────────────────────────────────────────────────────
-   DATA VISUAL EXTRA (CONTENIDO EXTENSO)
-   ────────────────────────────────────────────────────────────────────────── */
-const SYLLABUS_PREVIEW = {
-  ingles: [
-    { level: "A1-A2", topics: ["Presentaciones y 'Small Talk'", "Survival English para Viajes", "Pronunciación: TH, R, V vs B"] },
-    { level: "B1-B2", topics: ["Inglés para Negocios (Emails/Meetings)", "Debate y Argumentación", "Phrasal Verbs esenciales"] }
-  ],
-  coreano: [
-    { level: "Nivel 1", topics: ["Hangul: Lectura y Escritura", "Saludos y Etiqueta Coreana", "Estructura de Oración SOV"] },
-    { level: "Nivel 2", topics: ["Partículas Complejas", "Vocabulario de K-Dramas", "Números Sino-Coreanos vs Nativos"] }
-  ],
-  espanol: [
-    { level: "Survival", topics: ["RUT & Visas: Vocabulary", "Chilean Slang (Weón, Cachái)", "Navigating Santiago Metro"] },
-    { level: "Business", topics: ["Formal vs Informal Register", "Job Interviews in Chile", "Writing Reports"] }
-  ]
+// ANIMATIONS
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
 };
 
-const TEACHERS = [
-  { name: "Javiera", origin: "🇺🇸", role: "Head of English", bio: "Especialista en reducción de acento.", img: "👩🏼‍🏫" },
-  { name: "Fernanda", origin: "🇰🇷", role: "Lead Korean Tutor", bio: "Enseña con K-Pop y situaciones de la vida real.", img: "👩🏻‍🏫" },
-  { name: "Diego", origin: "🇨🇱", role: "Spanish Coach", bio: "Lingüista experto en dialectología chilena. Ayuda a expats a integrarse.", img: "👨🏻‍🏫" }
-];
-
-const COMPARISON = [
-  { feature: "Clases en Vivo", lael: true, app: false, institute: true },
-  { feature: "Corrección de Pronunciación", lael: "En tiempo real", app: "IA Básica", institute: "Grupal" },
-  { feature: "Enfoque Cultural", lael: true, app: false, institute: "A veces" },
-  { feature: "Comunidad/Club", lael: "Incluido", app: "No", institute: "Pago extra" },
-  { feature: "Precio Mensual", lael: "$17.990", app: "$9.000", institute: "$95.000+" }
-];
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
 
 export default function Idiomas() {
   const { addToCart, openCart } = useCart();
 
-  // --- ESTADOS ---
+  // --- STATES ---
   const [selectedIds, setSelectedIds] = useState([]);
   const [pricing, setPricing] = useState(computeLangBundle(0));
   const [activeTab, setActiveTab] = useState("ingles");
   const [showSticky, setShowSticky] = useState(false);
 
-  // --- EFECTOS ---
+  // --- EFFECTS ---
   useEffect(() => {
     setPricing(computeLangBundle(selectedIds.length));
   }, [selectedIds]);
 
-  // Detector de Scroll
+  // Scroll Detection
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 800) setShowSticky(true);
-      else setShowSticky(false);
+      setShowSticky(window.scrollY > 800);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -78,13 +65,16 @@ export default function Idiomas() {
   // --- HANDLERS ---
   const toggleLanguage = (id, comingSoon) => {
     if (comingSoon) return;
-    setSelectedIds(prev => 
+    setSelectedIds(prev =>
       prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
     );
   };
 
   const handleAddBundle = () => {
-    if (selectedIds.length === 0) return;
+    if (selectedIds.length === 0) {
+      document.getElementById('lang-builder')?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
     const names = selectedIds.map(id => LANGUAGES.find(l => l.id === id).name).join(" + ");
     addToCart({
       id: `lang-bundle-${selectedIds.join('-')}`,
@@ -101,295 +91,429 @@ export default function Idiomas() {
   };
 
   return (
-    <div className="lang-huge-page">
-      <style>{css}</style>
+    <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-blue-500/30">
 
-      {/* ──────────────── 1. HERO CINEMÁTICO ──────────────── */}
-      <header className="hero-section">
-        <div className="hero-overlay"></div>
-        <div className="hero-bg-anim"></div>
-        <div className="container hero-content">
-          <div className="hero-badge">
-            <span className="pulse-dot"></span> Matrículas Abiertas 2026
-          </div>
-          <h1 className="hero-title">
+      {/* ──────────────── 1. CINEMATIC HERO ──────────────── */}
+      <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.15),transparent_70%)] z-0" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] z-0" />
+
+        {/* Animated Orbs */}
+        <motion.div
+          animate={{ x: [0, 50, 0], y: [0, -30, 0], opacity: [0.3, 0.6, 0.3] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] pointer-events-none"
+        />
+        <motion.div
+          animate={{ x: [0, -50, 0], y: [0, 40, 0], opacity: [0.2, 0.5, 0.2] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-pink-600/20 rounded-full blur-[100px] pointer-events-none"
+        />
+
+        <div className="container mx-auto px-6 relative z-10 text-center max-w-4xl">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+            className="inline-flex items-center gap-2 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 px-4 py-2 rounded-full text-sm font-medium text-blue-300 mb-8"
+          >
+            <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,211,238,0.5)]"></span>
+            Matrículas Abiertas 2026
+          </motion.div>
+
+          <motion.h1
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+            className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight"
+          >
             No estudies idiomas.<br />
-            <span className="text-gradient">Vive la cultura.</span>
-          </h1>
-          <p className="hero-subtitle">
-            Olvídate de repetir como un robot. Nuestro método de <strong>Inmersión Activa</strong> te 
-            prepara para hablar, trabajar y desenvolverte en el mundo real desde el primer mes.
-          </p>
-          
-          <div className="hero-cta-group">
-            <button onClick={scrollToBuilder} className="btn-hero primary">
-              <FaPassport /> Obtener mi Pasaporte
-            </button>
-            <button className="btn-hero secondary">
-              <FaVideo /> Ver Clase de Prueba
-            </button>
-          </div>
+            <span className="bg-gradient-to-r from-blue-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
+              Vive la cultura.
+            </span>
+          </motion.h1>
 
-          <div className="hero-trust">
-            <p>Comunidad global de aprendizaje:</p>
-            <div className="flags-row">
-              <span>🇺🇸 English</span>
-              <span>🇰🇷 한국어</span>
-              <span>🇨🇱 Español</span>
-              <span className="dimmed">🇯🇵 日本語</span>
+          <motion.p
+            initial="hidden"
+            animate="visible"
+            variants={fadeInUp}
+            className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed"
+          >
+            Olvídate de repetir como un robot. Nuestro método de <strong className="text-white">Inmersión Activa</strong> te
+            prepara para hablar, trabajar y desenvolverte en el mundo real desde el primer mes.
+          </motion.p>
+
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={scrollToBuilder}
+              className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg flex items-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] transition-all"
+            >
+              <FaPassport /> Obtener mi Pasaporte
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 bg-white/5 backdrop-blur-lg border border-white/10 text-white rounded-full font-bold text-lg flex items-center gap-2 hover:border-white/30 transition-all"
+            >
+              <FaVideo /> Ver Clase de Prueba
+            </motion.button>
+          </motion.div>
+
+          {/* Social Proof Flags */}
+          <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="flex flex-col items-center gap-4">
+            <p className="text-xs font-bold tracking-widest text-slate-500 uppercase">Comunidad Global de Aprendizaje</p>
+            <div className="flex gap-4 flex-wrap justify-center">
+              {['🇺🇸 English', '🇰🇷 한국어', '🇨🇱 Español', '🇯🇵 日本語'].map((flag, idx) => (
+                <span key={idx} className={`px-4 py-2 rounded-lg bg-slate-900/50 border border-slate-800 text-slate-300 text-sm font-semibold ${idx === 3 ? 'opacity-50' : ''}`}>
+                  {flag}
+                </span>
+              ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </header>
 
       {/* ──────────────── 2. STATS BAR ──────────────── */}
-      <section className="stats-bar">
-        <div className="container stats-grid">
-          <div className="stat-item">
-            <BiWorld className="stat-icon"/>
-            <div className="stat-text">
-              <strong>100%</strong>
-              <span>Clases en Vivo</span>
-            </div>
-          </div>
-          <div className="stat-item">
-            <IoIosInfinite className="stat-icon"/>
-            <div className="stat-text">
-              <strong>Ilimitado</strong>
-              <span>Acceso a material</span>
-            </div>
-          </div>
-          <div className="stat-item">
-            <FaUsers className="stat-icon"/>
-            <div className="stat-text">
-              <strong>+800</strong>
-              <span>Alumnos Activos</span>
-            </div>
-          </div>
-          <div className="stat-item">
-            <FaStar className="stat-icon"/>
-            <div className="stat-text">
-              <strong>4.9/5</strong>
-              <span>Valoración</span>
-            </div>
+      <section className="py-12 border-y border-slate-800/50 bg-slate-900/30 backdrop-blur-sm">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { icon: BiWorld, val: "100%", label: "Clases en Vivo" },
+              { icon: IoIosInfinite, val: "Ilimitado", label: "Acceso a material" },
+              { icon: FaUsers, val: "+800", label: "Alumnos Activos" },
+              { icon: FaStar, val: "4.9/5", label: "Valoración Alumnos" }
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex flex-col items-center text-center gap-2"
+              >
+                <stat.icon className="text-3xl text-blue-500 mb-1" />
+                <strong className="text-2xl font-bold bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">{stat.val}</strong>
+                <span className="text-sm text-slate-500">{stat.label}</span>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ──────────────── 3. EL PROBLEMA (APPS VS REALIDAD) ──────────────── */}
-      <section className="pain-section">
-        <div className="container">
-          <div className="section-header center">
-            <h2>¿Por qué las Apps no funcionan?</h2>
-            <p>Jugar con un búho verde es divertido, pero no te enseña a sobrevivir una entrevista de trabajo.</p>
+      {/* ──────────────── 3. THE PROBLEM (APPS VS REALITY) ──────────────── */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6">¿Por qué las Apps no funcionan?</h2>
+            <p className="text-xl text-slate-400">Jugar con un búho verde es divertido, pero no te enseña a sobrevivir una entrevista de trabajo o una emergencia médica.</p>
           </div>
-          <div className="pain-grid">
-            <div className="pain-card">
-              <div className="pain-icon">🦜</div>
-              <h3>Frases sin contexto</h3>
-              <p>"El gato bebe leche". Bien, pero ¿cómo preguntas direcciones o pides ayuda médica?</p>
-            </div>
-            <div className="pain-card">
-              <div className="pain-icon">🤖</div>
-              <h3>Audio Robótico</h3>
-              <p>Acostumbras tu oído a una IA perfecta. En la vida real, la gente habla rápido y con acentos.</p>
-            </div>
-            <div className="pain-card">
-              <div className="pain-icon">😶</div>
-              <h3>Miedo a Hablar</h3>
-              <p>Puedes leer muy bien, pero te congelas cuando alguien te saluda. Falta práctica real.</p>
-            </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { icon: "🦜", title: "Frases sin contexto", desc: "\"El gato bebe leche\". Bien, pero ¿cómo preguntas direcciones o pides ayuda médica?" },
+              { icon: "🤖", title: "Audio Robótico", desc: "Acostumbras tu oído a una IA perfecta. En la vida real, la gente habla rápido, con acentos y jerga." },
+              { icon: "😶", title: "Miedo a Hablar", desc: "Puedes leer muy bien, pero te congelas cuando alguien te saluda. Falta práctica real." }
+            ].map((card, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.2 }}
+                className="bg-slate-900/50 border border-slate-800 rounded-3xl p-8 hover:border-red-500/30 hover:bg-slate-800/50 transition-all group"
+              >
+                <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300">{card.icon}</div>
+                <h3 className="text-2xl font-bold mb-4 group-hover:text-white transition-colors">{card.title}</h3>
+                <p className="text-slate-400 leading-relaxed">{card.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ──────────────── 4. BUILDER (SELECTOR INTERACTIVO) ──────────────── */}
-      <section id="lang-builder" className="builder-wrapper">
-        <div className="container">
-          <div className="section-header">
-            <span className="tag-accent">TU VIAJE COMIENZA AQUÍ</span>
-            <h2>Diseña tu Plan de Estudios</h2>
-            <p>Selecciona los idiomas que te interesan. Activa el <strong>Plan Políglota</strong> eligiendo 2 o más.</p>
+      {/* ──────────────── 4. INTERACTIVE BUILDER ──────────────── */}
+      <section id="lang-builder" className="py-24 bg-slate-900 relative">
+        {/* Background Gradients */}
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-900/10 to-transparent pointer-events-none" />
+
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="text-center mb-16">
+            <span className="text-amber-400 font-bold tracking-widest text-sm uppercase mb-3 block">Tu viaje comienza aquí</span>
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">Diseña tu Plan de Estudios</h2>
+            <p className="text-slate-400 text-lg">Selecciona los idiomas que te interesan. Activa el <strong className="text-white">Plan Políglota</strong> eligiendo 2 o más.</p>
           </div>
 
-          <div className="builder-main">
-            {/* IZQUIERDA: TARJETAS DE IDIOMA */}
-            <div className="lang-grid">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+
+            {/* LEFT: LANGUAGE CARDS */}
+            <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
               {LANGUAGES.map((lang) => {
                 const isSelected = selectedIds.includes(lang.id);
                 const isComingSoon = lang.comingSoon;
+
                 return (
-                  <div 
-                    key={lang.id} 
-                    className={`lang-card ${isSelected ? 'selected' : ''} ${isComingSoon ? 'locked' : ''}`}
+                  <motion.div
+                    key={lang.id}
+                    whileHover={!isComingSoon ? { y: -5, borderColor: lang.color } : {}}
                     onClick={() => toggleLanguage(lang.id, isComingSoon)}
-                    style={{'--accent': lang.color}}
+                    className={`relative p-6 rounded-2xl border-2 transition-all cursor-pointer overflow-hidden group
+                      ${isSelected ? 'bg-slate-800/80' : 'bg-slate-950/50'}
+                      ${isComingSoon ? 'border-slate-800 opacity-60 cursor-default border-dashed' : isSelected ? 'border-transparent ring-2 ring-offset-2 ring-offset-slate-900' : 'border-slate-800 hover:bg-slate-800/50'}
+                    `}
+                    style={{ '--ring-color': lang.color, boxShadow: isSelected ? `0 0 0 2px ${lang.color}` : 'none' }}
                   >
-                     {lang.badge && <div className="lc-badge" style={{background: lang.color}}>{lang.badge}</div>}
-                     <div className="lc-head">
-                        <span className="lc-flag">{lang.emoji}</span>
-                        <div className="lc-info">
-                          <h4>{lang.name}</h4>
-                          <span>{isComingSoon ? 'Lista de Espera' : 'Inscripción Abierta'}</span>
-                        </div>
-                        <div className="lc-check">
-                          {isComingSoon ? <FaLock/> : (isSelected ? <FaCheck/> : <div className="ring"></div>)}
-                        </div>
-                     </div>
-                     <p className="lc-desc">{lang.summary}</p>
-                     {!isComingSoon && (
-                       <div className="lc-tags">
-                         {lang.levels.slice(0,2).map((l,i) => <span key={i}>{l}</span>)}
-                       </div>
-                     )}
-                  </div>
+                    {/* Badge */}
+                    {lang.badge && (
+                      <div className="absolute top-0 right-0 px-3 py-1 text-xs font-bold text-black rounded-bl-xl" style={{ backgroundColor: lang.color }}>
+                        {lang.badge}
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-4 mb-4">
+                      <span className="text-4xl filter drop-shadow-lg">{lang.emoji}</span>
+                      <div>
+                        <h4 className="text-xl font-bold group-hover:text-white transition-colors">{lang.name}</h4>
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                          {isComingSoon ? 'Lista de Espera' : 'Inscripción Abierta'}
+                        </span>
+                      </div>
+                      <div className="ml-auto">
+                        {isComingSoon ? <FaLock className="text-slate-600" /> : (
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${isSelected ? 'bg-white border-white text-black' : 'border-slate-600'}`}>
+                            {isSelected && <FaCheck className="text-xs" />}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <p className="text-slate-400 text-sm mb-4 line-clamp-3 leading-relaxed">{lang.summary}</p>
+
+                    {!isComingSoon && (
+                      <div className="flex gap-2 flex-wrap">
+                        {lang.levels.slice(0, 2).map((l, i) => (
+                          <span key={i} className="text-xs px-2 py-1 rounded bg-slate-700/50 text-slate-300 border border-slate-600/50">
+                            {l}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
                 )
               })}
             </div>
 
-            {/* DERECHA: TICKET FLOTANTE */}
-            <div className="sidebar-wrapper">
-              <div className="pricing-card">
-                <div className="pc-header">
-                  <h3><FaPassport/> Resumen</h3>
-                </div>
-                <div className="pc-body">
+            {/* RIGHT: FLOATING TICKET */}
+            <div className="lg:col-span-4 sticky top-24">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="bg-slate-800 rounded-3xl p-1 shadow-2xl border border-slate-700"
+              >
+                <div className="bg-slate-950 rounded-[20px] p-6 border border-slate-800/50">
+                  <div className="flex items-center justify-center gap-2 mb-6 pb-6 border-b border-slate-800">
+                    <FaPassport className="text-blue-400" />
+                    <h3 className="font-bold text-lg tracking-wide uppercase">Resumen de Pasaporte</h3>
+                  </div>
+
                   {selectedIds.length === 0 ? (
-                    <div className="pc-empty">
-                      <p>Selecciona tu destino <br/> en el mapa 👈</p>
+                    <div className="text-center py-8 text-slate-600 italic">
+                      <div className="text-4xl mb-4 opacity-50">👈</div>
+                      <p>Selecciona tu destino <br /> en el mapa</p>
                     </div>
                   ) : (
-                    <ul className="pc-list">
-                      {selectedIds.map(id => (
-                        <li key={id}>
-                          {LANGUAGES.find(s=>s.id===id).emoji} {LANGUAGES.find(s=>s.id===id).name}
-                        </li>
-                      ))}
+                    <ul className="space-y-3 mb-6">
+                      {selectedIds.map(id => {
+                        const l = LANGUAGES.find(s => s.id === id);
+                        return (
+                          <li key={id} className="flex items-center gap-3 text-sm text-slate-300">
+                            <span>{l.emoji}</span>
+                            <span>{l.name}</span>
+                            <FaCheck className="ml-auto text-green-500 text-xs" />
+                          </li>
+                        )
+                      })}
                     </ul>
                   )}
 
-                  <div className="pc-totals">
+                  <div className="space-y-4 mb-8">
                     {pricing.saving > 0 && (
-                      <div className="pc-saving">
-                        🎉 ¡Desbloqueaste {clp(pricing.saving)} de ahorro!
+                      <div className="bg-green-500/10 text-green-400 text-center py-2 rounded-lg text-sm font-bold border border-green-500/20">
+                        🎉 ¡Ahorras {clp(pricing.saving)} al mes!
                       </div>
                     )}
-                    <div className="total-row">
-                      <span>Mensualidad</span>
-                      <strong className="final-price">{clp(pricing.totalMonthly)}</strong>
+
+                    <div className="flex justify-between items-end">
+                      <span className="text-slate-400">Mensualidad</span>
+                      <strong className="text-3xl font-bold bg-white text-transparent bg-clip-text">
+                        {clp(pricing.totalMonthly)}
+                      </strong>
                     </div>
-                    <div className="sub-row">
-                      <span>Matrícula anual:</span>
+                    <div className="flex justify-between text-xs text-slate-500 border-t border-slate-800 pt-3">
+                      <span>Matrícula anual única</span>
                       <span>{clp(pricing.enrollment)}</span>
                     </div>
                   </div>
 
-                  <button 
-                    className="btn-add-plan" 
-                    disabled={pricing.count === 0}
+                  <button
                     onClick={handleAddBundle}
+                    disabled={pricing.count === 0}
+                    className="w-full py-4 bg-white hover:bg-blue-50 text-slate-900 font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-white/20 hover:-translate-y-1"
                   >
                     {pricing.count === 0 ? 'Elige Idiomas' : 'INSCRIBIR AHORA'}
                   </button>
-                  
-                  <div className="bundle-logic">
-                    <p>💡 <strong>Tip de Ahorro:</strong></p>
-                    <ul>
-                      <li>1 Idioma: $17.990</li>
-                      <li className={pricing.count >= 2 ? 'active' : ''}>2 Idiomas: $32.990 (Ahorra 10%)</li>
-                      <li className={pricing.count >= 3 ? 'active' : ''}>3+ Idiomas: $45.990 (Tarifa Plana)</li>
-                    </ul>
+
+                  <div className="mt-6 p-4 bg-slate-900 rounded-xl text-xs space-y-2 border border-slate-800">
+                    <p className="font-bold text-slate-300">💡 Tip de Ahorro:</p>
+                    <div className={`flex justify-between ${pricing.count === 1 ? 'text-blue-400 font-bold' : 'text-slate-500'}`}>
+                      <span>1 Idioma</span>
+                      <span>$17.990</span>
+                    </div>
+                    <div className={`flex justify-between ${pricing.count === 2 ? 'text-amber-400 font-bold' : 'text-slate-500'}`}>
+                      <span>2 Idiomas</span>
+                      <span>$32.990 (-10%)</span>
+                    </div>
+                    <div className={`flex justify-between ${pricing.count >= 3 ? 'text-green-400 font-bold' : 'text-slate-500'}`}>
+                      <span>3+ Idiomas</span>
+                      <span>$45.990 (Dosis)</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ──────────────── 5. SYLLABUS INTERACTIVO ──────────────── */}
-      <section className="syllabus-section">
-        <div className="container">
-          <div className="layout-split">
-            <div className="syllabus-text">
-              <h2>¿Qué vas a aprender?</h2>
-              <p>Un vistazo a nuestro plan de estudios práctico.</p>
-              
-              <div className="tabs-header">
+      {/* ──────────────── 5. SYLLABUS TABS ──────────────── */}
+      <section className="py-24 bg-slate-950">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+            <div className="order-2 lg:order-1">
+              <span className="text-blue-500 font-bold tracking-widest text-sm uppercase mb-2 block">Metodología</span>
+              <h2 className="text-4xl font-bold mb-6">¿Qué vas a aprender?</h2>
+              <p className="text-slate-400 mb-8 text-lg">Nuestro plan de estudios práctico se adapta a situaciones reales, no a libros de texto obsoletos.</p>
+
+              <div className="flex gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
                 {Object.keys(SYLLABUS_PREVIEW).map(key => {
                   const lang = LANGUAGES.find(l => l.id === key);
+                  const isActive = activeTab === key;
                   return (
-                    <button 
+                    <button
                       key={key}
-                      className={`tab-btn ${activeTab === key ? 'active' : ''}`}
                       onClick={() => setActiveTab(key)}
-                      style={{'--tab-color': lang.color}}
+                      className={`flex items-center gap-2 px-5 py-2 rounded-full border border-slate-800 transition-all font-medium whitespace-nowrap
+                        ${isActive ? 'bg-slate-800 text-white shadow-lg' : 'bg-transparent text-slate-500 hover:text-white'}
+                      `}
+                      style={isActive ? { borderColor: lang.color } : {}}
                     >
-                      {lang.emoji} {lang.name}
+                      <span>{lang.emoji}</span> {lang.name}
                     </button>
                   )
                 })}
               </div>
 
-              <div className="tab-body fade-in">
-                {SYLLABUS_PREVIEW[activeTab]?.map((level, i) => (
-                  <div key={i} className="syllabus-level">
-                    <h4>{level.level}</h4>
-                    <ul>
-                      {level.topics.map((t, j) => (
-                        <li key={j}><FaCheck className="chk-s"/> {t}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
+              <div className="space-y-6">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeTab}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {SYLLABUS_PREVIEW[activeTab]?.map((level, i) => (
+                      <div key={i} className="mb-6 last:mb-0">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="text-xs font-bold px-2 py-1 bg-blue-500/10 text-blue-400 rounded border border-blue-500/20">{level.level}</span>
+                          <div className="h-px bg-slate-800 flex-1"></div>
+                        </div>
+                        <ul className="space-y-3 pl-2">
+                          {level.topics.map((t, j) => (
+                            <li key={j} className="flex gap-3 text-slate-300">
+                              <FaCheck className="mt-1 text-green-500 text-xs shrink-0" />
+                              <span>{t}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
               </div>
             </div>
 
-            <div className="syllabus-visual">
-               <div className="platform-mockup">
-                 <div className="pm-screen">
-                    <div className="live-badge">🔴 EN VIVO</div>
-                    <div className="pm-content">
-                       <FaVideo className="big-icon"/>
-                       <span>Roleplay: "At the Airport"</span>
-                    </div>
-                 </div>
-                 <div className="pm-controls">
-                    <div className="ctrl"><FaMicrophoneAlt/> Practicar</div>
-                    <div className="ctrl"><MdQuiz/> Quiz</div>
-                 </div>
-               </div>
+            <div className="order-1 lg:order-2 perspective-1000">
+              <motion.div
+                animate={{ rotateY: [0, -5, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="bg-slate-900 rounded-2xl p-4 border border-slate-800 shadow-2xl relative"
+              >
+                {/* Mockup UI */}
+                <div className="absolute top-4 left-4 flex gap-1.5">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                </div>
+                <div className="bg-slate-950 rounded-xl mt-8 aspect-video flex flex-col items-center justify-center relative overflow-hidden group border border-slate-800/50">
+                  <span className="absolute top-3 left-3 bg-red-600 text-white text-[10px] uppercase font-bold px-2 py-1 rounded animate-pulse">En Vivo</span>
+                  <FaVideo className="text-6xl text-slate-800 group-hover:text-slate-700 transition-colors" />
+                  <p className="mt-4 text-slate-600 font-mono">Roleplay: "At the Airport"</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <div className="h-10 bg-slate-800 rounded-lg flex items-center justify-center gap-2 text-slate-500 text-sm hover:bg-slate-700 hover:text-white transition-colors cursor-pointer">
+                    <FaMicrophoneAlt /> Practicar
+                  </div>
+                  <div className="h-10 bg-slate-800 rounded-lg flex items-center justify-center gap-2 text-slate-500 text-sm hover:bg-slate-700 hover:text-white transition-colors cursor-pointer">
+                    <MdQuiz /> Quiz
+                  </div>
+                </div>
+              </motion.div>
             </div>
+
           </div>
         </div>
       </section>
 
-      {/* ──────────────── 6. COMPARATIVA (TABLA) ──────────────── */}
-      <section className="comparison-section">
-        <div className="container">
-          <h2>Lael vs. El Mercado</h2>
-          <div className="table-responsive">
-            <table className="comp-table">
+      {/* ──────────────── 6. COMPARISON TABLE ──────────────── */}
+      <section className="py-24 bg-slate-900 border-t border-slate-800">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold">Lael vs. El Mercado</h2>
+            <p className="text-slate-400">Comparar es de sabios.</p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[700px] border-collapse">
               <thead>
-                <tr>
-                  <th>Característica</th>
-                  <th className="th-lael">Instituto Lael</th>
-                  <th>Apps (Duolingo)</th>
-                  <th>Institutos Tradicionales</th>
+                <tr className="border-b-2 border-slate-800">
+                  <th className="text-left py-6 text-slate-400 font-medium uppercase text-sm">Característica</th>
+                  <th className="text-left py-6 text-blue-400 font-bold uppercase text-lg">Instituto Lael</th>
+                  <th className="text-left py-6 text-slate-500 font-medium uppercase text-sm">Apps (Duolingo)</th>
+                  <th className="text-left py-6 text-slate-500 font-medium uppercase text-sm">Institutos Tradicionales</th>
                 </tr>
               </thead>
               <tbody>
-                {COMPARISON.map((row, idx) => (
-                  <tr key={idx}>
-                    <td className="td-feat">{row.feature}</td>
-                    <td className="td-lael">
-                      {row.lael === true ? <FaCheck className="chk-yes"/> : row.lael}
+                {COMPARISON_DATA.map((row, idx) => (
+                  <tr key={idx} className="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
+                    <td className="py-6 font-semibold text-white">{row.feature}</td>
+                    <td className="py-6 font-bold text-white relative">
+                      <div className="absolute inset-0 bg-blue-500/5 -z-10 w-full h-full left-0 mx-0"></div>
+                      {row.lael === true ? <FaCheck className="text-green-400 text-xl" /> : row.lael}
                     </td>
-                    <td>
-                       {row.app === false ? <FaTimes className="chk-no"/> : row.app}
+                    <td className="py-6 text-slate-400">
+                      {row.app === false ? <FaTimes className="text-red-500/50 text-xl" /> : row.app}
                     </td>
-                    <td>
-                       {row.institute === true ? <FaCheck/> : row.institute}
+                    <td className="py-6 text-slate-400">
+                      {row.institute === true ? <FaCheck className="text-green-500/50" /> : row.institute}
                     </td>
                   </tr>
                 ))}
@@ -399,325 +523,99 @@ export default function Idiomas() {
         </div>
       </section>
 
-      {/* ──────────────── 7. EL EQUIPO (SENSEIS) ──────────────── */}
-      <section className="team-section">
-        <div className="container">
-          <div className="section-header center">
-            <h2>Conoce a tus Guías</h2>
-            <p>Aprende de hablantes nativos y expertos lingüistas apasionados por enseñar.</p>
+      {/* ──────────────── 7. TEAM SENSEI ──────────────── */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Conoce a tus Guías</h2>
+            <p className="text-slate-400">Hablantes nativos y expertos lingüistas apasionados por enseñar.</p>
           </div>
-          <div className="team-grid">
-            {TEACHERS.map((t, i) => (
-              <div className="teacher-card" key={i}>
-                <div className="t-img">{t.img}</div>
-                <div className="t-info">
-                  <div className="t-flag">{t.origin}</div>
-                  <h4>{t.name}</h4>
-                  <span className="t-role">{t.role}</span>
-                  <p>{t.bio}</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {TEACHERS_LIST.map((t, i) => (
+              <motion.div
+                key={i}
+                whileHover={{ y: -10 }}
+                className="bg-slate-900 border border-slate-800 p-8 rounded-3xl flex items-start gap-4 hover:border-blue-500/50 transition-colors"
+              >
+                <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center text-3xl shrink-0">
+                  {t.img}
                 </div>
-              </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h4 className="text-xl font-bold text-white">{t.name}</h4>
+                    <span className="text-sm opacity-50 grayscale">{t.origin}</span>
+                  </div>
+                  <span className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-3 block">{t.role}</span>
+                  <p className="text-slate-400 text-sm leading-relaxed">{t.bio}</p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ──────────────── 8. CERTIFICACIÓN Y BENEFICIOS ──────────────── */}
-      <section className="benefits-grid-section">
-        <div className="container">
-           <div className="b-grid">
-             <div className="b-card">
-                <FaCertificate className="b-icon"/>
-                <h3>Certificación Digital</h3>
-                <p>Al completar tu nivel, recibe un certificado con código QR verificable para agregar a tu LinkedIn.</p>
-             </div>
-             <div className="b-card">
-                <BiConversation className="b-icon"/>
-                <h3>Club de Conversación</h3>
-                <p>Acceso semanal gratuito a salas de práctica informal para perder el miedo escénico.</p>
-             </div>
-             <div className="b-card">
-                <MdOutlineSupportAgent className="b-icon"/>
-                <h3>Soporte 24/7</h3>
-                <p>¿Dudas con una tarea? Nuestro equipo académico te responde por la plataforma.</p>
-             </div>
-           </div>
-        </div>
-      </section>
+      {/* ──────────────── 8. FINAL CTA ──────────────── */}
+      <footer className="py-32 bg-gradient-to-t from-slate-900 to-slate-950 text-center relative overflow-hidden">
+        {/* Decorative Plane */}
+        <MdOutlineFlightTakeoff className="absolute top-20 left-[10%] text-slate-800 text-9xl -rotate-12 opacity-50 pointer-events-none" />
 
-      {/* ──────────────── 9. FAQ EXTENDIDO ──────────────── */}
-      <section className="faq-section">
-        <div className="container">
-          <h2>Preguntas Frecuentes</h2>
-          <div className="faq-wrapper">
-             <details className="faq-item">
-                <summary>¿Desde qué edad se puede participar?</summary>
-                <p>Nuestros cursos están diseñados para jóvenes y adultos (14 años en adelante). Para niños tenemos un programa especial (consultar por interno).</p>
-             </details>
-             <details className="faq-item">
-                <summary>¿Qué pasa si me pierdo una clase?</summary>
-                <p>Todas las sesiones quedan grabadas en tu aula virtual. Puedes verlas cuando quieras para ponerte al día.</p>
-             </details>
-             <details className="faq-item">
-                <summary>¿Cómo funcionan los pagos?</summary>
-                <p>Es una suscripción mensual. Pagas mes a mes. Puedes cancelar cuando quieras avisando con 5 días de anticipación.</p>
-             </details>
-             <details className="faq-item">
-                <summary>¿Necesito comprar libros?</summary>
-                <p>No. Todo el material (PDFs, audios, guías) está incluido en la plataforma digital sin costo extra.</p>
-             </details>
-          </div>
-        </div>
-      </section>
-
-      {/* ──────────────── 10. FINAL CTA ──────────────── */}
-      <footer className="final-cta">
-        <div className="container f-content">
-          <MdOutlineFlightTakeoff className="plane-anim"/>
-          <h2>El mundo es demasiado grande para hablar un solo idioma.</h2>
-          <p>Únete a más de 800 alumnos que ya están expandiendo sus fronteras.</p>
-          <div className="f-actions">
-            <button onClick={scrollToBuilder} className="btn-big-pulse">
+        <div className="container mx-auto px-6 relative z-10">
+          <h2 className="text-5xl md:text-6xl font-black mb-6 tracking-tight">
+            El mundo es demasiado grande para hablar un solo idioma.
+          </h2>
+          <p className="text-xl text-blue-200/60 mb-12 max-w-2xl mx-auto">
+            Únete a más de 800 alumnos que ya están expandiendo sus fronteras con Instituto Lael.
+          </p>
+          <div className="flex justify-center gap-6 flex-wrap">
+            <button
+              onClick={scrollToBuilder}
+              className="px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_50px_rgba(255,255,255,0.3)]"
+            >
               EMPEZAR MI VIAJE
             </button>
-            <a href="https://wa.me/56964626568" className="btn-wsp-ghost">
-              <FaWhatsapp/> Hablar con Asesor
+            <a
+              href="https://wa.me/56964626568"
+              className="px-10 py-5 bg-transparent border-2 border-[#25D366] text-[#25D366] rounded-full font-bold text-lg hover:bg-[#25D366] hover:text-black transition-all flex items-center gap-2"
+            >
+              <FaWhatsapp /> Hablar con Asesor
             </a>
           </div>
         </div>
       </footer>
 
-      {/* ──────────────── STICKY BOTTOM BAR (MOBILE/DESKTOP) ──────────────── */}
-      <div className={`sticky-bar ${showSticky ? 'visible' : ''}`}>
-        <div className="container sb-content">
-          <div className="sb-info">
-            <span>Tu Selección:</span>
-            <strong>{pricing.label}</strong>
-          </div>
-          <div className="sb-actions">
-             <div className="sb-price">
-                {clp(pricing.totalMonthly)} <small>/mes</small>
-             </div>
-             <button onClick={handleAddBundle} disabled={pricing.count === 0} className="btn-sb">
-                INSCRIBIR
-             </button>
-          </div>
-        </div>
-      </div>
+      {/* ──────────────── STICKY BAR ──────────────── */}
+      <AnimatePresence>
+        {showSticky && (
+          <motion.div
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+            exit={{ y: 100 }}
+            className="fixed bottom-0 left-0 w-full bg-slate-900/90 backdrop-blur-xl border-t border-slate-800 z-50 py-4"
+          >
+            <div className="container mx-auto px-6 flex justify-between items-center">
+              <div className="hidden md:block">
+                <span className="text-slate-400 text-sm block">Tu Selección:</span>
+                <strong className="text-white text-lg">{pricing.label}</strong>
+              </div>
+              <div className="flex items-center gap-6 ml-auto md:ml-0 w-full md:w-auto justify-between md:justify-end">
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-white leading-none">{clp(pricing.totalMonthly)}</div>
+                  <span className="text-xs text-slate-500">/mes</span>
+                </div>
+                <button
+                  onClick={handleAddBundle}
+                  disabled={pricing.count === 0}
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-colors disabled:opacity-50"
+                >
+                  INSCRIBIR
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
 }
-
-/* ──────────────────────────────────────────────────────────────────────────
-   CSS STYLES (MONSTRUOSO)
-   ────────────────────────────────────────────────────────────────────────── */
-const css = `
-:root {
-  --bg-deep: #050505;
-  --bg-card: #121212;
-  --bg-hover: #1c1c1c;
-  --primary: #3b82f6;
-  --accent-pink: #ec4899;
-  --accent-yellow: #f59e0b;
-  --text-main: #ffffff;
-  --text-muted: #a3a3a3;
-  --border: rgba(255,255,255,0.08);
-  --success: #10b981;
-  --danger: #ef4444;
-}
-
-/* BASE */
-.lang-huge-page { background: var(--bg-deep); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; padding-bottom: 80px; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-h1,h2,h3,h4 { font-weight: 800; margin: 0; line-height: 1.2; }
-button { font-family: inherit; border: none; cursor: pointer; transition: 0.2s; }
-section { padding: 80px 0; border-bottom: 1px solid rgba(255,255,255,0.03); }
-
-/* 1. HERO */
-.hero-section { min-height: 90vh; display: flex; align-items: center; justify-content: center; position: relative; text-align: center; overflow: hidden; padding-top: 100px; }
-.hero-overlay { position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15), transparent 70%); z-index: 1; }
-.hero-content { position: relative; z-index: 2; max-width: 900px; }
-.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 50px; border: 1px solid var(--border); font-size: 0.9rem; margin-bottom: 25px; color: #93c5fd; }
-.pulse-dot { width: 8px; height: 8px; background: var(--success); border-radius: 50%; box-shadow: 0 0 10px var(--success); animation: pulse 2s infinite; }
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-
-.hero-title { font-size: clamp(2.5rem, 5vw, 5rem); margin-bottom: 20px; letter-spacing: -1px; }
-.text-gradient { background: linear-gradient(90deg, #60a5fa, #f472b6, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hero-subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px; line-height: 1.6; }
-
-.hero-cta-group { display: flex; gap: 20px; justify-content: center; margin-bottom: 60px; }
-.btn-hero { padding: 16px 32px; border-radius: 50px; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
-.btn-hero.primary { background: #fff; color: #000; box-shadow: 0 0 20px rgba(255,255,255,0.3); }
-.btn-hero.primary:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(255,255,255,0.5); }
-.btn-hero.secondary { background: rgba(255,255,255,0.1); color: white; backdrop-filter: blur(10px); }
-.btn-hero.secondary:hover { background: rgba(255,255,255,0.2); }
-
-.hero-trust p { text-transform: uppercase; font-size: 0.85rem; color: #52525b; letter-spacing: 1px; margin-bottom: 15px; }
-.flags-row { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-.flags-row span { background: rgba(255,255,255,0.05); padding: 6px 14px; border-radius: 8px; color: #d4d4d8; font-size: 0.9rem; font-weight: 600; }
-.dimmed { opacity: 0.5; }
-
-/* 2. STATS BAR */
-.stats-bar { padding: 40px 0; background: #0a0a0a; border-bottom: 1px solid var(--border); }
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
-.stat-item { display: flex; align-items: center; gap: 15px; justify-content: center; }
-.stat-icon { font-size: 2.5rem; color: var(--primary); opacity: 0.8; }
-.stat-text strong { display: block; font-size: 1.4rem; color: white; }
-.stat-text span { font-size: 0.85rem; color: var(--text-muted); }
-
-/* 3. PAIN POINTS */
-.pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
-.pain-card { background: var(--bg-card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); transition: 0.3s; }
-.pain-card:hover { transform: translateY(-5px); border-color: var(--danger); }
-.pain-icon { font-size: 3rem; margin-bottom: 20px; }
-.center { text-align: center; max-width: 800px; margin: 0 auto; }
-
-/* 4. BUILDER */
-.builder-wrapper { background: #08080a; }
-.tag-accent { color: var(--accent-yellow); font-weight: 700; letter-spacing: 1px; font-size: 0.8rem; display: block; margin-bottom: 10px; text-align: center; }
-.section-header { text-align: center; margin-bottom: 50px; }
-.section-header h2 { font-size: 2.5rem; margin-bottom: 15px; }
-.section-header p { color: var(--text-muted); font-size: 1.1rem; }
-
-.builder-main { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: start; }
-@media(max-width: 900px) { .builder-main { grid-template-columns: 1fr; } }
-
-.lang-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-.lang-card { background: var(--bg-card); border: 2px solid var(--border); border-radius: 16px; padding: 20px; cursor: pointer; position: relative; transition: 0.2s; overflow: hidden; }
-.lang-card:hover:not(.locked) { background: var(--bg-hover); border-color: rgba(255,255,255,0.3); }
-.lang-card.selected { border-color: var(--accent); background: rgba(255,255,255,0.03); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
-.lang-card.locked { opacity: 0.5; cursor: default; border-style: dashed; }
-
-.lc-badge { position: absolute; top: 0; right: 0; padding: 4px 10px; font-size: 0.7rem; font-weight: 800; color: #000; border-bottom-left-radius: 12px; }
-.lc-head { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-.lc-flag { font-size: 2.2rem; }
-.lc-info h4 { font-size: 1.1rem; margin-bottom: 4px; }
-.lc-info span { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; }
-.lc-check { margin-left: auto; font-size: 1.2rem; color: var(--text-muted); }
-.lang-card.selected .lc-check { color: var(--accent); }
-.ring { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 50%; }
-
-.lc-desc { font-size: 0.85rem; color: #d4d4d8; margin-bottom: 15px; line-height: 1.4; }
-.lc-tags { display: flex; gap: 6px; }
-.lc-tags span { background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; color: var(--text-muted); }
-
-/* SIDEBAR TICKET */
-.sidebar-wrapper { position: sticky; top: 100px; }
-.pricing-card { background: #18181b; border-radius: 20px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-.pc-header { padding: 15px; background: #202025; border-bottom: 1px solid var(--border); text-align: center; }
-.pc-header h3 { font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
-.pc-body { padding: 20px; }
-.pc-empty { text-align: center; color: var(--text-muted); font-style: italic; padding: 20px 0; }
-.pc-list { list-style: none; padding: 0; margin-bottom: 20px; }
-.pc-list li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.95rem; }
-
-.pc-totals { margin-bottom: 20px; }
-.pc-saving { background: rgba(16, 185, 129, 0.15); color: var(--success); text-align: center; padding: 8px; border-radius: 8px; font-size: 0.85rem; margin-bottom: 15px; font-weight: 600; }
-.total-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 5px; }
-.final-price { font-size: 1.8rem; color: white; }
-.sub-row { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); }
-
-.btn-add-plan { width: 100%; background: white; color: black; font-weight: 800; padding: 16px; border-radius: 12px; transition: 0.2s; font-size: 1rem; }
-.btn-add-plan:hover:not(:disabled) { background: #e0e7ff; transform: scale(1.02); }
-.btn-add-plan:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.bundle-logic { margin-top: 20px; font-size: 0.85rem; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 10px; }
-.bundle-logic ul { list-style: none; padding: 0; margin: 10px 0 0 0; }
-.bundle-logic li { display: flex; justify-content: space-between; margin-bottom: 5px; color: var(--text-muted); }
-.bundle-logic li.active { color: var(--success); font-weight: 700; }
-
-/* 5. SYLLABUS */
-.syllabus-section { background: #0c0c0e; }
-.layout-split { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-@media(max-width: 900px) { .layout-split { grid-template-columns: 1fr; } }
-
-.tabs-header { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-.tab-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 50px; display: flex; gap: 6px; align-items: center; font-size: 0.9rem; }
-.tab-btn.active { background: rgba(255,255,255,0.1); color: white; border-color: var(--tab-color); box-shadow: 0 0 15px rgba(0,0,0,0.2); }
-
-.syllabus-level { margin-bottom: 25px; }
-.syllabus-level h4 { color: var(--primary); margin-bottom: 10px; font-size: 1.1rem; border-left: 3px solid var(--primary); padding-left: 10px; }
-.syllabus-level ul { list-style: none; padding: 0; }
-.syllabus-level li { margin-bottom: 8px; display: flex; gap: 10px; font-size: 0.95rem; color: #e4e4e7; }
-.chk-s { color: var(--success); font-size: 0.8rem; margin-top: 4px; }
-.fade-in { animation: fadeIn 0.5s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-.platform-mockup { background: #1e1e24; border-radius: 16px; padding: 15px; transform: perspective(1000px) rotateY(-5deg); transition: 0.5s; }
-.platform-mockup:hover { transform: perspective(1000px) rotateY(0deg); }
-.pm-screen { height: 220px; background: #25252b; border-radius: 8px; position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
-.live-badge { position: absolute; top: 10px; left: 10px; background: #ef4444; color: white; padding: 2px 8px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; animation: blink 2s infinite; }
-@keyframes blink { 50% { opacity: 0.5; } }
-.pm-content { text-align: center; }
-.big-icon { font-size: 3rem; color: #52525b; margin-bottom: 10px; display: block; margin: 0 auto; }
-.pm-controls { display: flex; gap: 10px; }
-.ctrl { flex: 1; background: #333; height: 10px; border-radius: 4px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: #aaa; gap: 5px; }
-
-/* 6. COMPARISON TABLE */
-.table-responsive { overflow-x: auto; margin-top: 40px; }
-.comp-table { width: 100%; min-width: 700px; border-collapse: collapse; }
-.comp-table th { text-align: left; padding: 20px; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
-.th-lael { color: var(--primary) !important; font-size: 1rem !important; font-weight: 800; }
-.comp-table td { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.03); color: white; }
-.td-feat { font-weight: 600; font-size: 0.95rem; }
-.td-lael { background: rgba(59, 130, 246, 0.05); font-weight: 700; box-shadow: inset 0 0 20px rgba(0,0,0,0.2); }
-.chk-yes { color: var(--success); }
-.chk-no { color: var(--danger); opacity: 0.5; }
-
-/* 7. TEACHERS */
-.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 40px; }
-.teacher-card { background: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid var(--border); display: flex; gap: 20px; align-items: start; transition: 0.3s; }
-.teacher-card:hover { border-color: var(--primary); transform: translateY(-5px); }
-.t-img { font-size: 3rem; background: rgba(255,255,255,0.05); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.t-info h4 { font-size: 1.1rem; margin-bottom: 2px; }
-.t-flag { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
-.t-role { color: var(--primary); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 10px; display: block; }
-.t-info p { font-size: 0.9rem; color: #d4d4d8; line-height: 1.4; margin: 0; }
-
-/* 8. BENEFITS */
-.benefits-grid-section { padding: 60px 0; }
-.b-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-.b-card { background: #1c1c1c; padding: 30px; border-radius: 16px; text-align: center; }
-.b-icon { font-size: 2.5rem; color: var(--accent-pink); margin-bottom: 15px; }
-.b-card h3 { margin-bottom: 10px; }
-.b-card p { color: var(--text-muted); font-size: 0.95rem; }
-
-/* 9. FAQ */
-.faq-wrapper { margin-top: 40px; max-width: 800px; margin-left: auto; margin-right: auto; }
-.faq-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 15px; overflow: hidden; }
-.faq-item summary { padding: 20px; cursor: pointer; font-weight: 600; list-style: none; position: relative; }
-.faq-item summary::-webkit-details-marker { display: none; }
-.faq-item[open] summary { color: var(--primary); background: rgba(255,255,255,0.02); }
-.faq-item p { padding: 0 20px 20px 20px; color: var(--text-muted); margin: 0; line-height: 1.6; }
-
-/* 10. CTA FOOTER */
-.final-cta { padding: 120px 0; background: linear-gradient(0deg, #1e1b4b 0%, var(--bg-deep) 100%); text-align: center; }
-.plane-anim { font-size: 4rem; color: var(--primary); margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
-@keyframes float { 0%, 100% { transform: translateY(0) rotate(-45deg); } 50% { transform: translateY(-10px) rotate(-45deg); } }
-.f-content h2 { font-size: 3rem; margin-bottom: 20px; }
-.f-content p { font-size: 1.2rem; color: #c7d2fe; margin-bottom: 40px; }
-.f-actions { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-.btn-big-pulse { background: white; color: black; font-weight: 800; padding: 18px 40px; border-radius: 50px; font-size: 1.1rem; animation: pulse-shadow 2s infinite; }
-@keyframes pulse-shadow { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); } 70% { box-shadow: 0 0 0 20px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
-.btn-wsp-ghost { border: 2px solid #25D366; color: #25D366; padding: 16px 30px; border-radius: 50px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 8px; }
-.btn-wsp-ghost:hover { background: #25D366; color: black; }
-
-/* STICKY BAR */
-.sticky-bar { position: fixed; bottom: -100px; left: 0; width: 100%; background: rgba(15, 15, 15, 0.95); backdrop-filter: blur(10px); border-top: 1px solid var(--border); z-index: 100; transition: bottom 0.4s ease; padding: 15px 0; }
-.sticky-bar.visible { bottom: 0; }
-.sb-content { display: flex; justify-content: space-between; align-items: center; }
-.sb-info { display: flex; gap: 10px; align-items: center; }
-.sb-info strong { color: var(--primary); }
-.sb-actions { display: flex; gap: 20px; align-items: center; }
-.sb-price { font-size: 1.4rem; font-weight: 700; color: white; }
-.sb-price small { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; }
-.btn-sb { background: var(--primary); color: white; padding: 10px 24px; border-radius: 8px; font-weight: 700; }
-.btn-sb:disabled { background: #333; opacity: 0.5; }
-
-@media(max-width: 600px) {
-  .hero-title { font-size: 2.8rem; }
-  .sb-info { display: none; }
-  .sb-content { justify-content: space-between; width: 100%; }
-}
-`;

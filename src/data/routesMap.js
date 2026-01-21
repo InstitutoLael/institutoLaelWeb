@@ -24,7 +24,7 @@ export const routesMap = [
 
     // --- IDIOMAS ---
     {
-        title: "English Academy",
+        title: "Academia de Idiomas",
         path: "/idiomas",
         category: "Idiomas",
         img: "ref_english",

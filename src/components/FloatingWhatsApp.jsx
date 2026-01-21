@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 // Asegúrate de tener: npm install react-icons
 import { FaWhatsapp, FaTimes, FaPaperPlane } from "react-icons/fa";
 import { BsCheckAll } from "react-icons/bs"; // Para el doble check azul
@@ -17,9 +18,10 @@ export default function FloatingWhatsApp({
   const [hover, setHover] = useState(false);
   const [showBadge, setShowBadge] = useState(false);
   const [isTyping, setIsTyping] = useState(true); // Estado para animación de escritura
-  
+
   const panelRef = useRef(null);
   const btnRef = useRef(null);
+  const location = useLocation();
 
   // 1. Limpiar número
   const phoneClean = useMemo(() => String(phone).replace(/\D/g, ""), [phone]);
@@ -31,6 +33,16 @@ export default function FloatingWhatsApp({
     if (hour < 20) return "¡Buenas tardes!";
     return "¡Buenas noches!";
   }, []);
+
+  // 2.1 Mensaje Inteligente según Ruta
+  const smartMessage = useMemo(() => {
+    const path = location.pathname;
+    if (path.startsWith("/paes")) return "Hola, me interesa el Preuniversitario.";
+    if (path.startsWith("/idiomas")) return "Hola, quiero información sobre sus Cursos de Idiomas.";
+    if (path.startsWith("/lsch")) return "Hola, me interesa el curso de Lengua de Señas.";
+    if (path.startsWith("/empresas")) return "Hola, busco capacitación para mi empresa.";
+    return "Hola, tengo una consulta general.";
+  }, [location.pathname]);
 
   // 3. Efecto Badge (Notificación)
   useEffect(() => {
@@ -62,7 +74,8 @@ export default function FloatingWhatsApp({
   }, [open]);
 
   const openWhatsApp = (msg) => {
-    const url = `https://wa.me/${phoneClean}?text=${encodeURIComponent(msg || "Hola, vengo de la web.")}`;
+    const messageToSend = msg || smartMessage;
+    const url = `https://wa.me/${phoneClean}?text=${encodeURIComponent(messageToSend)}`;
     window.open(url, "_blank", "noopener,noreferrer");
     setOpen(false);
     setShowBadge(false);
@@ -77,10 +90,10 @@ export default function FloatingWhatsApp({
   return (
     <>
       <div className="wa-wrapper">
-        
+
         {/* PANEL DE CHAT */}
         <div ref={panelRef} className={`wa-panel ${open ? "open" : ""}`}>
-          
+
           {/* Header */}
           <div className="wa-header">
             <div className="wa-avatar-box">
@@ -99,7 +112,7 @@ export default function FloatingWhatsApp({
 
           {/* Body (Chat) */}
           <div className="wa-body">
-            
+
             {/* Mensaje o Typing */}
             {isTyping ? (
               <div className="wa-typing">
@@ -113,7 +126,7 @@ export default function FloatingWhatsApp({
                 <p>{timeGreeting} 👋 Bienvenido a Instituto Lael. ¿En qué te podemos ayudar hoy?</p>
                 <div className="wa-meta">
                   <span className="wa-time">
-                    {new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                   <BsCheckAll className="wa-read-icon" />
                 </div>
@@ -133,8 +146,8 @@ export default function FloatingWhatsApp({
           </div>
 
           {/* Footer */}
-          <div className="wa-footer" onClick={() => openWhatsApp("Hola, tengo una duda...")}>
-            <div className="wa-input-fake">Escribe un mensaje...</div>
+          <div className="wa-footer" onClick={() => openWhatsApp(smartMessage)}>
+            <div className="wa-input-fake">{smartMessage}...</div>
             <button className="wa-send-btn">
               <FaPaperPlane />
             </button>
@@ -142,7 +155,7 @@ export default function FloatingWhatsApp({
         </div>
 
         {/* BOTÓN FLOTANTE */}
-        <div 
+        <div
           ref={btnRef}
           className="wa-btn-container"
           onMouseEnter={() => setHover(true)}

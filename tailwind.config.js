@@ -7,18 +7,23 @@ export default {
   theme: {
     extend: {
       colors: {
+        bg: "#0b1220",
+        card: "#0e1424",
+        text: "#e5e7eb",
+        muted: "#9ca3af",
+        bd: "#1f2a44",
         lael: {
-          blue: "#5850EC",   // Azul institucional
-          gold: "#FFCC33",   // Dorado institucional
-          dark: "#0b1220",   // Fondo oscuro
-          soft: "#101a2f",   // Panel suave
+          blue: "#5850EC",
+          gold: "#FFCC33",
+          dark: "#0b1220",
+          soft: "#101a2f",
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        lael: "0 8px 24px rgba(2,6,23,.25)", // sombra suave
+        lael: "0 8px 24px rgba(2,6,23,.25)",
       },
     },
   },

@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext.jsx"; 
+import { useCart } from "../context/CartContext.jsx";
 
 // --- CONFIGURACIÓN ---
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG26Civ9DJm5Fvr-jq7NSb7xEobqRJSa-VJLeil_3pTgqVBdWJiT4W5XyvsX9gq1JKPg/exec";
-const WAPP_INTL = "56964626568"; 
+import { GOOGLE_SCRIPT_URL } from "../config";
+const WAPP_INTL = "56964626568";
 
 /* ──────────────────────────────────────────────────────────────────────────
    1. UTILS & ICONS
@@ -14,12 +14,12 @@ const clp = (amount) => {
 };
 
 const Icons = {
-  Copy: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>,
-  Check: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>,
-  Whatsapp: () => <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>,
-  Lock: () => <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
-  User: () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-  Cart: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+  Copy: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>,
+  Check: () => <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12" /></svg>,
+  Whatsapp: () => <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" /></svg>,
+  Lock: () => <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>,
+  User: () => <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>,
+  Cart: () => <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -40,27 +40,27 @@ function BankCard({ onCopy }) {
     <div className="bank-card-container">
       <div className="bank-card">
         <div className="card-top">
-           <span className="card-chip"></span>
-           <span className="card-bank-name">Mercado Pago</span>
+          <span className="card-chip"></span>
+          <span className="card-bank-name">Mercado Pago</span>
         </div>
         <div className="card-number">
-           <span onClick={() => handleCopy("1088183168")}>1088 183 168</span>
-           <Icons.Copy />
+          <span onClick={() => handleCopy("1088183168")}>1088 183 168</span>
+          <Icons.Copy />
         </div>
         <div className="card-details">
-           <div className="cd-group">
-              <label>Nombre</label>
-              <span>Instituto Lael SpA</span>
-           </div>
-           <div className="cd-group">
-              <label>RUT</label>
-              <span onClick={() => handleCopy("78.084.019-6")}>78.084.019-6</span>
-           </div>
+          <div className="cd-group">
+            <label>Nombre</label>
+            <span>Instituto Lael SpA</span>
+          </div>
+          <div className="cd-group">
+            <label>RUT</label>
+            <span onClick={() => handleCopy("78.084.019-6")}>78.084.019-6</span>
+          </div>
         </div>
       </div>
       <div className="bank-info-footer">
-         <small>Cuenta Vista / Chequera Electrónica</small>
-         <small>pagos@institutolael.cl</small>
+        <small>Cuenta Vista / Chequera Electrónica</small>
+        <small>pagos@institutolael.cl</small>
       </div>
     </div>
   );
@@ -73,18 +73,18 @@ export default function Inscripciones() {
   const context = useCart();
   const cartItems = context?.cartItems || context?.cart || [];
   const total = context?.cartTotal || 0;
-  const clearCart = context?.clearCart || (() => {});
+  const clearCart = context?.clearCart || (() => { });
 
   const [toastMsg, setToastMsg] = useState("");
-  const [status, setStatus] = useState("idle"); 
-  
+  const [status, setStatus] = useState("idle");
+
   // MANTENEMOS EL ESTADO EN INGLÉS PARA REACT (BUENA PRÁCTICA)
   const [form, setForm] = useState({
     fullName: "",
     rut: "",
     email: "",
     phone: "",
-    program: "", 
+    program: "",
     comments: ""
   });
 
@@ -116,10 +116,10 @@ export default function Inscripciones() {
     e.preventDefault();
     setStatus("loading");
 
-    const finalProgram = cartItems.length > 0 
-        ? cartItems.map(item => item.title).join(" + ")
-        : form.program;
-        
+    const finalProgram = cartItems.length > 0
+      ? cartItems.map(item => item.title).join(" + ")
+      : form.program;
+
     const finalTotal = cartItems.length > 0 ? total : "Por cotizar";
 
     // ──────────────────────────────────────────────────────────────────
@@ -129,17 +129,17 @@ export default function Inscripciones() {
     // ──────────────────────────────────────────────────────────────────
     const payload = {
       // Para scripts actualizados (Inglés)
-      fullName: form.fullName, 
-      phone: form.phone,       
-      program: finalProgram,   
-      comments: form.comments, 
-      
+      fullName: form.fullName,
+      phone: form.phone,
+      program: finalProgram,
+      comments: form.comments,
+
       // Para scripts antiguos (Español) - ESTO SOLUCIONARÁ TU PROBLEMA
-      nombre: form.fullName,   
-      telefono: form.phone,    
+      nombre: form.fullName,
+      telefono: form.phone,
       programa: finalProgram,
       comentario: form.comments,
-      
+
       // Comunes
       rut: form.rut,
       email: form.email,
@@ -150,11 +150,11 @@ export default function Inscripciones() {
     try {
       await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors", 
+        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      
+
       setStatus("success");
       if (cartItems.length > 0) clearCart();
 
@@ -178,21 +178,21 @@ export default function Inscripciones() {
           <div className="success-icon"><Icons.Check /></div>
           <h1>¡Recibido!</h1>
           <p>Tu inscripción está en proceso. Para activar la matrícula, finaliza el pago.</p>
-          
+
           <div className="next-steps-card">
             <h3>Paso Final: Transferencia</h3>
             <p className="steps-intro">
-               Transfiere <strong>{totalDisplay}</strong> y envía el comprobante.
+              Transfiere <strong>{totalDisplay}</strong> y envía el comprobante.
             </p>
 
             <div className="bank-mini-details">
-                1088183168 | 78.084.019-6 <br/> pagos@institutolael.cl
+              1088183168 | 78.084.019-6 <br /> pagos@institutolael.cl
             </div>
 
             <a href={linkWsp} target="_blank" rel="noreferrer" className="btn btn-whatsapp-lg">
-               <Icons.Whatsapp /> Enviar Comprobante Ahora
+              <Icons.Whatsapp /> Enviar Comprobante Ahora
             </a>
-            
+
             <Link to="/" className="link-back">Volver al inicio</Link>
           </div>
         </div>
@@ -207,71 +207,71 @@ export default function Inscripciones() {
       <Toast msg={toastMsg} />
 
       <div className="container">
-        
+
         <header className="page-header">
-          <div className="secure-badge"><Icons.Lock/> Checkout Seguro</div>
+          <div className="secure-badge"><Icons.Lock /> Checkout Seguro</div>
           <h1>Finalizar Matrícula</h1>
         </header>
 
         <div className="layout-grid">
-          
+
           {/* IZQUIERDA: FORM */}
           <main className="main-col">
             <form className="native-form" onSubmit={handleSubmit}>
-              
+
               <div className="form-section-title">Datos Personales</div>
-              
+
               <div className="input-group">
                 <label>Nombre Completo</label>
                 <div className="inp-wrapper">
-                    <span className="inp-icon"><Icons.User/></span>
-                    {/* name="fullName" COINCIDE CON EL STATE */}
-                    <input type="text" name="fullName" className="inp" placeholder="Ej: Marcela Paz" required value={form.fullName} onChange={handleChange}/>
+                  <span className="inp-icon"><Icons.User /></span>
+                  {/* name="fullName" COINCIDE CON EL STATE */}
+                  <input type="text" name="fullName" className="inp" placeholder="Ej: Marcela Paz" required value={form.fullName} onChange={handleChange} />
                 </div>
               </div>
 
               <div className="row-2">
                 <div className="input-group">
                   <label>RUT (Sin puntos)</label>
-                  <input type="text" name="rut" className="inp" placeholder="12345678-9" required value={form.rut} onChange={handleChange}/>
+                  <input type="text" name="rut" className="inp" placeholder="12345678-9" required value={form.rut} onChange={handleChange} />
                 </div>
                 <div className="input-group">
                   <label>WhatsApp</label>
                   {/* name="phone" COINCIDE CON EL STATE */}
-                  <input type="tel" name="phone" className="inp" placeholder="+56 9..." required value={form.phone} onChange={handleChange}/>
+                  <input type="tel" name="phone" className="inp" placeholder="+56 9..." required value={form.phone} onChange={handleChange} />
                 </div>
               </div>
 
               <div className="input-group">
                 <label>Correo Electrónico</label>
-                <input type="email" name="email" className="inp" placeholder="contacto@correo.com" required value={form.email} onChange={handleChange}/>
+                <input type="email" name="email" className="inp" placeholder="contacto@correo.com" required value={form.email} onChange={handleChange} />
               </div>
 
               <div className="form-section-title mt-4">Detalle Académico</div>
 
               <div className="input-group">
                 <label>Programa Seleccionado</label>
-                
+
                 {cartItems.length > 0 ? (
-                    <div className="cart-summary-locked">
-                        <div className="csl-header"><Icons.Cart/> Resumen de Compra</div>
-                        <ul>
-                            {cartItems.map((item, i) => (
-                                <li key={i}>{item.title} <span className="price-tag">{clp(item.price)}</span></li>
-                            ))}
-                        </ul>
-                        <div className="csl-total">
-                            Total: <span>{clp(total)}</span>
-                        </div>
+                  <div className="cart-summary-locked">
+                    <div className="csl-header"><Icons.Cart /> Resumen de Compra</div>
+                    <ul>
+                      {cartItems.map((item, i) => (
+                        <li key={i}>{item.title} <span className="price-tag">{clp(item.price)}</span></li>
+                      ))}
+                    </ul>
+                    <div className="csl-total">
+                      Total: <span>{clp(total)}</span>
                     </div>
+                  </div>
                 ) : (
-                    <select name="program" className="inp select" required value={form.program} onChange={handleChange}>
-                      <option value="">-- Selecciona Curso --</option>
-                      <option value="PAES Anual">PAES Anual</option>
-                      <option value="PAES Intensivo">PAES Intensivo</option>
-                      <option value="Escuela Adultos">Escuela Adultos 2x1</option>
-                      <option value="Ingles">Inglés</option>
-                    </select>
+                  <select name="program" className="inp select" required value={form.program} onChange={handleChange}>
+                    <option value="">-- Selecciona Curso --</option>
+                    <option value="PAES Anual">PAES Anual</option>
+                    <option value="PAES Intensivo">PAES Intensivo</option>
+                    <option value="Escuela Adultos">Escuela Adultos 2x1</option>
+                    <option value="Ingles">Inglés</option>
+                  </select>
                 )}
               </div>
 
@@ -297,7 +297,7 @@ export default function Inscripciones() {
                 <p>Usa estos datos si prefieres transferencia directa:</p>
                 <BankCard onCopy={handleCopy} />
               </div>
-              
+
               <div className="trust-badges">
                 <span>🔒 SSL Encriptado</span>
                 <span>🎓 Garantía Académica</span>

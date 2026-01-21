@@ -5,13 +5,13 @@ import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async"; // SEO
 
 // Tus estilos globales
-import "./styles/styles.css"; 
+import "./index.css";
 
 // Tu aplicación principal
 import App from "./App.jsx";
 
 // Tu contexto del Carrito
-import { CartProvider } from "./context/CartContext.jsx"; 
+import { CartProvider } from "./context/CartContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>

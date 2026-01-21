@@ -1,222 +1,110 @@
 import { Link } from "react-router-dom";
-import { 
-  Instagram, Linkedin, Youtube, Mail, MapPin, Phone 
+import {
+    Instagram, Linkedin, Youtube, Mail, MapPin, Phone
 } from "lucide-react";
 
 // Tu logo blanco
 import logo from "../assets/img/Logos/lael-inst-blanco.png";
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
+    const currentYear = new Date().getFullYear();
 
-  return (
-    <footer className="site-footer">
-      <style>{css}</style>
+    return (
+        <footer className="bg-[#050505] text-slate-400 font-sans border-t border-white/10 pt-20 text-sm relative z-10">
 
-      <div className="container footer-grid">
-        
-        {/* COLUMNA 1: MARCA Y MISIÓN */}
-        <div className="footer-col brand-col">
-            <Link to="/" className="footer-logo-link">
-                <img src={logo} alt="Instituto Lael" className="footer-logo" />
-            </Link>
-            <p className="footer-mission">
-                Educación con propósito. Rompemos barreras académicas y geográficas 
-                para que cumplas tus metas con tecnología y valores cristianos.
-            </p>
-            <div className="social-links">
-                <SocialLink href="https://instagram.com/institutolael" icon={<Instagram size={20}/>} label="Instagram" />
-                <SocialLink href="https://youtube.com/@institutolael" icon={<Youtube size={20}/>} label="YouTube" />
-                <SocialLink href="https://linkedin.com/company/instituto-lael" icon={<Linkedin size={20}/>} label="LinkedIn" />
+            <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr] gap-10 pb-16">
+
+                {/* COLUMNA 1: MARCA Y MISIÓN */}
+                <div className="flex flex-col gap-5 order-4 lg:order-1 border-t border-white/10 pt-8 lg:border-t-0 lg:pt-0">
+                    <Link to="/" className="inline-block">
+                        <img src={logo} alt="Instituto Lael" className="h-9 w-auto opacity-90" />
+                    </Link>
+                    <p className="leading-relaxed max-w-xs text-sm opacity-80">
+                        Educación con propósito. Rompemos barreras académicas y geográficas
+                        para que cumplas tus metas con tecnología y valores cristianos.
+                    </p>
+                    <div className="flex gap-2.5 mt-1.5">
+                        <SocialLink href="https://instagram.com/institutolael" icon={<Instagram size={20} />} label="Instagram" />
+                        <SocialLink href="https://youtube.com/@institutolael" icon={<Youtube size={20} />} label="YouTube" />
+                        <SocialLink href="https://linkedin.com/company/instituto-lael" icon={<Linkedin size={20} />} label="LinkedIn" />
+                    </div>
+                </div>
+
+                {/* COLUMNA 2: PROGRAMAS */}
+                <div className="flex flex-col gap-4">
+                    <h4 className="text-slate-50 text-xs font-bold uppercase tracking-widest mb-2">Programas</h4>
+                    <nav className="flex flex-col gap-3.5">
+                        <Link to="/paes" className="hover:text-indigo-500 hover:pl-1 transition-all">Preu PAES 2026</Link>
+                        <Link to="/escuela-adultos" className="hover:text-indigo-500 hover:pl-1 transition-all">Escuela 2x1</Link>
+                        <Link to="/idiomas" className="hover:text-indigo-500 hover:pl-1 transition-all">Idiomas</Link>
+                        <Link to="/lsch" className="hover:text-indigo-500 hover:pl-1 transition-all">Lengua de Señas</Link>
+                        <Link to="/homeschool" className="hover:text-indigo-500 hover:pl-1 transition-all">Lael Academy</Link>
+                    </nav>
+                </div>
+
+                {/* COLUMNA 3: INSTITUCIONAL */}
+                <div className="flex flex-col gap-4">
+                    <h4 className="text-slate-50 text-xs font-bold uppercase tracking-widest mb-2">Institucional</h4>
+                    <nav className="flex flex-col gap-3.5">
+                        <Link to="/nosotros" className="hover:text-indigo-500 hover:pl-1 transition-all">Nuestra Historia</Link>
+                        <Link to="/empresas" className="hover:text-indigo-500 hover:pl-1 transition-all">Capacitación Empresas</Link>
+                        <Link to="/convenios" className="hover:text-indigo-500 hover:pl-1 transition-all">Alianzas</Link>
+                        <Link to="/trabaja" className="hover:text-indigo-500 hover:pl-1 transition-all">Trabaja con Nosotros</Link>
+                        <Link to="/contacto" className="hover:text-indigo-500 hover:pl-1 transition-all">Centro de Ayuda</Link>
+                    </nav>
+                </div>
+
+                {/* COLUMNA 4: CONTACTO */}
+                <div className="flex flex-col gap-4">
+                    <h4 className="text-slate-50 text-xs font-bold uppercase tracking-widest mb-0">Contacto</h4>
+                    <p className="text-sm opacity-70 m-0">Atención L-V de 9:00 a 19:00 hrs.</p>
+
+                    <a
+                        href="https://wa.me/56964626568"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-2.5 justify-center bg-emerald-500/10 text-emerald-400 px-5 py-3 rounded-lg font-semibold border border-emerald-500/20 transition hover:bg-emerald-500 hover:text-white hover:border-emerald-500 hover:-translate-y-0.5"
+                    >
+                        <Phone size={18} /> Hablar por WhatsApp
+                    </a>
+
+                    <div className="flex flex-col gap-3 text-sm mt-1.5">
+                        <a href="mailto:contacto@institutolael.cl" className="flex items-center gap-2.5 hover:text-white transition-colors">
+                            <Mail size={16} className="text-indigo-500 opacity-80" /> contacto@institutolael.cl
+                        </a>
+                        <span className="flex items-center gap-2.5">
+                            <MapPin size={16} className="text-indigo-500 opacity-80" /> San Joaquín, RM (Oficina)
+                        </span>
+                    </div>
+
+                    <div className="text-xs text-zinc-600 border border-zinc-800 px-2 py-1 rounded w-fit mt-2">
+                        RUT: 78.084.019-6
+                    </div>
+                </div>
+
             </div>
-        </div>
 
-        {/* COLUMNA 2: PROGRAMAS */}
-        <div className="footer-col links-col">
-            <h4>Programas</h4>
-            <nav>
-                <Link to="/paes">Preu PAES 2026</Link>
-                <Link to="/escuela-adultos">Escuela 2x1</Link>
-                <Link to="/idiomas">Idiomas</Link>
-                <Link to="/lsch">Lengua de Señas</Link>
-                <Link to="/homeschool">Lael Academy</Link>
-            </nav>
-        </div>
-
-        {/* COLUMNA 3: INSTITUCIONAL */}
-        <div className="footer-col links-col">
-            <h4>Institucional</h4>
-            <nav>
-                <Link to="/nosotros">Nuestra Historia</Link>
-                <Link to="/empresas">Capacitación Empresas</Link>
-                <Link to="/convenios">Alianzas</Link>
-                <Link to="/trabaja">Trabaja con Nosotros</Link>
-                <Link to="/contacto">Centro de Ayuda</Link>
-            </nav>
-        </div>
-
-        {/* COLUMNA 4: CONTACTO */}
-        <div className="footer-col contact-col">
-            <h4>Contacto</h4>
-            <p className="schedule-text">Atención L-V de 9:00 a 19:00 hrs.</p>
-            
-            <a 
-                href="https://wa.me/56964626568" 
-                target="_blank" 
-                rel="noreferrer" 
-                className="btn-footer-wa"
-            >
-                <Phone size={18} className="wa-icon"/> Hablar por WhatsApp
-            </a>
-
-            <div className="contact-details">
-                <a href="mailto:contacto@institutolael.cl">
-                  <Mail size={16} className="small-icon"/> contacto@institutolael.cl
-                </a>
-                <span>
-                  <MapPin size={16} className="small-icon"/> San Joaquín, RM (Oficina)
-                </span>
+            {/* BARRA INFERIOR (LEGAL) */}
+            <div className="border-t border-white/10 py-6 bg-[#020202]">
+                <div className="max-w-7xl mx-auto px-6 flex justify-between items-center flex-wrap gap-4 text-center sm:text-left">
+                    <p className="m-0 text-xs text-zinc-500">© {currentYear} Instituto Lael SpA.</p>
+                    <div className="flex gap-4 items-center text-xs text-zinc-500">
+                        <Link to="/terminos" className="hover:text-slate-300 transition-colors">Términos</Link>
+                        <span className="text-zinc-800">•</span>
+                        <Link to="/privacidad" className="hover:text-slate-300 transition-colors">Privacidad</Link>
+                    </div>
+                </div>
             </div>
-            
-            <div className="rut-tag">RUT: 78.084.019-6</div>
-        </div>
 
-      </div>
-
-      {/* BARRA INFERIOR (LEGAL) */}
-      <div className="footer-bottom">
-        <div className="container bottom-row">
-            <p>© {currentYear} Instituto Lael SpA.</p>
-            <div className="legal-links">
-                <Link to="/terminos">Términos</Link>
-                <span className="sep">•</span>
-                <Link to="/privacidad">Privacidad</Link>
-            </div>
-        </div>
-      </div>
-
-    </footer>
-  );
+        </footer>
+    );
 }
 
 /* --- SUBCOMPONENTE SOCIAL --- */
 function SocialLink({ href, icon, label }) {
     return (
-        <a href={href} target="_blank" rel="noreferrer" className="social-btn" aria-label={label}>
+        <a href={href} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 transition-all hover:bg-indigo-600 hover:border-indigo-600 hover:text-white hover:-translate-y-1" aria-label={label}>
             {icon}
         </a>
     );
 }
-
-/* ================= CSS (Ajustado al Navbar) ================= */
-const css = `
-:root {
-    --footer-bg: #050505; /* Mismo negro profundo del Navbar */
-    --footer-text: #94a3b8;
-    --footer-head: #f8fafc;
-    --primary: #6366F1;
-    --border: rgba(255,255,255,0.08);
-}
-
-.site-footer {
-    background-color: var(--footer-bg);
-    color: var(--footer-text);
-    font-family: 'Inter', sans-serif;
-    border-top: 1px solid var(--border);
-    padding-top: 80px;
-    font-size: 0.9rem;
-    position: relative;
-    z-index: 10;
-}
-
-.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-
-/* GRID LAYOUT */
-.footer-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
-    gap: 40px;
-    padding-bottom: 60px;
-}
-
-/* RESPONSIVE */
-@media (max-width: 960px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 600px) { 
-    .footer-grid { grid-template-columns: 1fr; gap: 40px; text-align: left; } 
-    .brand-col { order: 4; border-top: 1px solid var(--border); padding-top: 30px; }
-}
-
-/* COL 1: BRAND */
-.brand-col { display: flex; flex-direction: column; gap: 20px; }
-.footer-logo { height: 35px; width: auto; opacity: 0.9; }
-.footer-mission { line-height: 1.6; max-width: 320px; font-size: 0.9rem; opacity: 0.8; }
-
-.social-links { display: flex; gap: 10px; margin-top: 5px; }
-.social-btn {
-    width: 40px; height: 40px; border-radius: 10px; 
-    background: rgba(255,255,255,0.03); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center; color: var(--footer-text);
-    transition: all 0.2s ease;
-}
-.social-btn:hover { 
-    background: var(--primary); border-color: var(--primary); 
-    color: white; transform: translateY(-3px); 
-}
-
-/* COL 2 & 3: LINKS */
-.links-col h4 { 
-    color: var(--footer-head); margin-bottom: 24px; 
-    font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; 
-}
-.links-col nav { display: flex; flex-direction: column; gap: 14px; }
-.links-col a { 
-    color: var(--footer-text); text-decoration: none; transition: .2s; font-size: 0.95rem; 
-}
-.links-col a:hover { color: var(--primary); padding-left: 4px; }
-
-/* COL 4: CONTACT */
-.contact-col { display: flex; flex-direction: column; gap: 16px; }
-.contact-col h4 { 
-    color: var(--footer-head); font-size: 0.85rem; font-weight: 700; margin: 0; 
-    text-transform: uppercase; letter-spacing: 1px; 
-}
-.schedule-text { font-size: 0.9rem; opacity: 0.7; margin: 0; }
-
-.btn-footer-wa {
-    display: inline-flex; align-items: center; gap: 10px; justify-content: center;
-    background: rgba(16, 185, 129, 0.1); color: #34d399; /* Verde esmeralda suave */
-    padding: 12px 20px; border-radius: 8px;
-    font-weight: 600; text-decoration: none; transition: .2s; 
-    border: 1px solid rgba(16, 185, 129, 0.2);
-}
-.btn-footer-wa:hover { 
-    background: #10b981; color: white; border-color: #10b981; 
-    transform: translateY(-2px); 
-}
-
-.contact-details { display: flex; flex-direction: column; gap: 12px; font-size: 0.9rem; margin-top: 5px; }
-.contact-details a { color: var(--footer-text); text-decoration: none; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
-.contact-details span { display: flex; align-items: center; gap: 10px; color: var(--footer-text); }
-.contact-details a:hover { color: white; }
-.small-icon { color: var(--primary); opacity: 0.8; }
-
-.rut-tag { 
-    font-size: 0.75rem; color: #52525b; 
-    border: 1px solid #27272a; padding: 4px 8px; border-radius: 4px; 
-    width: fit-content; margin-top: 8px;
-}
-
-/* BOTTOM BAR */
-.footer-bottom { 
-    border-top: 1px solid var(--border); padding: 24px 0; 
-    background: #020202; /* Un poco más oscuro que el footer general */
-}
-.bottom-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
-@media (max-width: 600px) { .bottom-row { flex-direction: column; text-align: center; } }
-
-.bottom-row p { margin: 0; font-size: 0.8rem; color: #52525b; }
-.legal-links { display: flex; gap: 15px; align-items: center; }
-.legal-links a { color: #52525b; text-decoration: none; font-size: 0.8rem; transition: .2s; }
-.legal-links a:hover { color: var(--footer-text); }
-.sep { font-size: 0.5rem; color: #333; }
-`;

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { 
-  X, User, Mail, Phone, 
+import {
+  X, User, Mail, Phone,
   CheckCircle, Loader2, ArrowRight, ShieldCheck, FileText, Lock
 } from 'lucide-react';
 
 // TU URL DE GOOGLE SCRIPT (Asegúrate de que sea la correcta y esté desplegada como "Web App")
-const API_URL = "https://script.google.com/macros/s/AKfycbxtpSpOLYlNvkhSa86EohNUWYLtJ0fY6-FqkwGe1lwjH9Q372DTRmdgD45YtX0juQiw8g/exec";
+import { GOOGLE_SCRIPT_URL } from "../config";
+const API_URL = GOOGLE_SCRIPT_URL;
 
 export default function EnrollmentForm({ planTitle, price, selectedDetails, onClose }) {
-  const [status, setStatus] = useState("idle"); 
+  const [status, setStatus] = useState("idle");
   const [formData, setFormData] = useState({
     fullName: "",
     rut: "",
@@ -65,9 +66,9 @@ export default function EnrollmentForm({ planTitle, price, selectedDetails, onCl
             <span className="sub-text">Te hemos enviado un correo con los detalles.</span>
           </div>
           <div className="modal-body">
-             <button onClick={onClose} className="btn-primary full-width">
-               Cerrar y Continuar
-             </button>
+            <button onClick={onClose} className="btn-primary full-width">
+              Cerrar y Continuar
+            </button>
           </div>
         </div>
       </div>
@@ -77,20 +78,20 @@ export default function EnrollmentForm({ planTitle, price, selectedDetails, onCl
   // --- VISTA DE ERROR ---
   if (status === "error") {
     return (
-       <div className="modal-overlay">
+      <div className="modal-overlay">
         <style>{modalCss}</style>
         <div className="modal-card animate-zoom">
-            <div className="error-content">
-                <div className="error-icon">⚠️</div>
-                <h3>Hubo un problema</h3>
-                <p>No pudimos conectar con el servidor.</p>
-                <div className="btn-row">
-                  <button onClick={onClose} className="btn-secondary">Cancelar</button>
-                  <button onClick={() => setStatus('idle')} className="btn-primary">Reintentar</button>
-                </div>
+          <div className="error-content">
+            <div className="error-icon">⚠️</div>
+            <h3>Hubo un problema</h3>
+            <p>No pudimos conectar con el servidor.</p>
+            <div className="btn-row">
+              <button onClick={onClose} className="btn-secondary">Cancelar</button>
+              <button onClick={() => setStatus('idle')} className="btn-primary">Reintentar</button>
             </div>
+          </div>
         </div>
-       </div>
+      </div>
     )
   }
 
@@ -98,7 +99,7 @@ export default function EnrollmentForm({ planTitle, price, selectedDetails, onCl
   return (
     <div className="modal-overlay">
       <style>{modalCss}</style>
-      
+
       <div className="modal-card animate-slide">
         {/* Botón Cerrar */}
         <button onClick={onClose} className="close-btn" aria-label="Cerrar">
@@ -119,18 +120,18 @@ export default function EnrollmentForm({ planTitle, price, selectedDetails, onCl
         {/* Body Scrollable */}
         <div className="modal-body custom-scrollbar">
           <form onSubmit={handleSubmit}>
-            
+
             {/* Campo: Nombre */}
             <div className="form-group">
               <label>Nombre Completo</label>
               <div className="input-wrapper">
                 <User className="input-icon" size={18} />
-                <input 
-                  required 
-                  name="fullName" 
+                <input
+                  required
+                  name="fullName"
                   value={formData.fullName}
-                  onChange={handleChange} 
-                  placeholder="Ej: Sofía Valdés" 
+                  onChange={handleChange}
+                  placeholder="Ej: Sofía Valdés"
                 />
               </div>
             </div>
@@ -141,12 +142,12 @@ export default function EnrollmentForm({ planTitle, price, selectedDetails, onCl
                 <label>RUT</label>
                 <div className="input-wrapper">
                   <FileText className="input-icon" size={18} />
-                  <input 
-                    required 
-                    name="rut" 
+                  <input
+                    required
+                    name="rut"
                     value={formData.rut}
-                    onChange={handleChange} 
-                    placeholder="12.345.678-9" 
+                    onChange={handleChange}
+                    placeholder="12.345.678-9"
                   />
                 </div>
               </div>
@@ -155,13 +156,13 @@ export default function EnrollmentForm({ planTitle, price, selectedDetails, onCl
                 <label>Teléfono</label>
                 <div className="input-wrapper">
                   <Phone className="input-icon" size={18} />
-                  <input 
-                    required 
-                    name="phone" 
-                    type="tel" 
+                  <input
+                    required
+                    name="phone"
+                    type="tel"
                     value={formData.phone}
-                    onChange={handleChange} 
-                    placeholder="+569..." 
+                    onChange={handleChange}
+                    placeholder="+569..."
                   />
                 </div>
               </div>
@@ -172,13 +173,13 @@ export default function EnrollmentForm({ planTitle, price, selectedDetails, onCl
               <label>Correo Electrónico</label>
               <div className="input-wrapper">
                 <Mail className="input-icon" size={18} />
-                <input 
-                  required 
-                  name="email" 
-                  type="email" 
+                <input
+                  required
+                  name="email"
+                  type="email"
                   value={formData.email}
-                  onChange={handleChange} 
-                  placeholder="hola@ejemplo.com" 
+                  onChange={handleChange}
+                  placeholder="hola@ejemplo.com"
                 />
               </div>
             </div>
@@ -195,14 +196,14 @@ export default function EnrollmentForm({ planTitle, price, selectedDetails, onCl
             {/* Submit */}
             <button type="submit" disabled={status === "loading"} className="btn-primary full-width">
               {status === "loading" ? (
-                <Loader2 className="spin" /> 
+                <Loader2 className="spin" />
               ) : (
                 <>Confirmar Inscripción <ArrowRight size={20} /></>
               )}
             </button>
-            
+
             <p className="footer-note">
-              <Lock size={12} style={{marginRight:4}}/> 
+              <Lock size={12} style={{ marginRight: 4 }} />
               Tus datos están protegidos por SSL.
             </p>
           </form>

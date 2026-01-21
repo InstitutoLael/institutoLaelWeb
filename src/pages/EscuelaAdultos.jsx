@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 
-// ICONS
+// SAFE ICONS
 import {
    FaHandHoldingHeart, FaUserGraduate, FaChalkboardTeacher, FaRegCheckCircle,
-   FaWhatsapp, FaInfoCircle, FaChevronDown, FaChevronUp, FaHeart, FaHandsHelping
+   FaWhatsapp, FaInfoCircle, FaChevronDown, FaChevronUp, FaHeart, FaHandshake
 } from "react-icons/fa";
-import { MdOutlineWorkOutline, MdSchool, MdTimelapse, MdOutlineFamilyRestroom } from "react-icons/md";
+import { MdWork, MdSchool, MdTimelapse, MdOutlineFamilyRestroom } from "react-icons/md";
 import { BiWorld, BiDonateHeart } from "react-icons/bi";
 import { BsArrowRight } from "react-icons/bs";
 
@@ -30,7 +30,11 @@ const fadeInUp = {
 };
 
 export default function EscuelaAdultos() {
-   const { addToCart, openCart } = useCart();
+   // HOOK SAFETY
+   const cartContext = useCart();
+   const addToCart = cartContext?.addToCart || (() => console.warn("Cart Context missing"));
+   const openCart = cartContext?.openCart || (() => { });
+
    const [activeFaq, setActiveFaq] = useState(null);
    const [showSticky, setShowSticky] = useState(false);
 
@@ -42,6 +46,7 @@ export default function EscuelaAdultos() {
    }, []);
 
    const handleEnroll = (planId) => {
+      if (!getNivelacionQuote) return;
       const quote = getNivelacionQuote(planId);
       addToCart({
          id: `caminos-${quote.planId}`,
@@ -59,7 +64,8 @@ export default function EscuelaAdultos() {
    };
 
    const scrollToPlans = () => {
-      document.getElementById("plans-section").scrollIntoView({ behavior: "smooth" });
+      const section = document.getElementById("plans-section");
+      if (section) section.scrollIntoView({ behavior: "smooth" });
    };
 
    // --- SAFETY CHECK (Rescue Mission) ---

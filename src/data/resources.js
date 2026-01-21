@@ -7,53 +7,54 @@ export const RESOURCES = {
     // Categoría 1: Clases On-Demand (Productos propios)
     on_demand: [
         {
-            id: "pack-mate-m1",
-            title: "Pack Intensivo PAES M1",
+            id: "pack-quimica-2025",
+            title: "Pack Química M1 + M2 (2025)",
             price: "$19.990",
-            description: "5 Clases grabadas enfocadas en Ejes de Números y Álgebra con material PDF incluido.",
-            image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800",
-            buyLink: "#", // Link a pasarela de pago (Stripe/Revue/etc)
-            features: ["5 Horas de Video", "PDF de Ejercicios", "Acceso de por vida"]
-        },
-        {
-            id: "pack-lenguaje",
-            title: "Masterclass Comprensión Lectora",
-            price: "$14.990",
-            description: "Aprende a identificar la idea principal y el tono del autor en textos complejos.",
-            image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800",
+            description: "Acceso inmediato a más de 50 clases intensivas. Domina Eje y Electivo a tu ritmo. Incluye repasos y ejercicios.",
+            image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=800", // ref_quimica
             buyLink: "#",
-            features: ["Técnicas de Lectura", "Guía Práctica", "Video 4K"]
+            features: ["50+ Clases Grabadas", "Eje y Electivo", "Material PDF", "Soporte Dudas"],
+            tag: "Más Vendido"
         }
     ],
 
     // Categoría 2: Kit del Estudiante (Afiliados / Recomendados)
     affiliates: [
         {
-            id: "kit-ipad",
-            title: "iPad 10.9 (Recomendado)",
-            description: "La mejor tablet para estudiantes. Ideal para tomar apuntes digitales y ver clases.",
+            id: "calc-casio",
+            title: "Casio fx-570",
+            description: "La fiel compañera para Cálculo y Física. No entres a ingeniería sin ella.",
+            price: "Ver Oferta",
+            image: "https://images.unsplash.com/photo-1587145820266-a5951eebebb1?auto=format&fit=crop&q=80&w=800",
+            affiliateLink: "https://www.amazon.com/s?k=Casio+fx-570",
+            store: "Amazon"
+        },
+        {
+            id: "tablet-samsung-ipad",
+            title: "iPad / Tablet Samsung",
+            description: "Para tomar apuntes digitales y no perder hojas nunca más.",
             price: "Ver Oferta",
             image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&q=80&w=800",
-            affiliateLink: "https://amazon.com", // Link de afiliado
+            affiliateLink: "https://www.amazon.com/s?k=iPad+Samsung+Tablet",
             store: "Amazon"
         },
         {
-            id: "kit-audifonos",
-            title: "Sony WH-1000XM5",
-            description: "Cancelación de ruido líder en la industria para estudiar sin distracciones.",
+            id: "audifonos-nc",
+            title: "Audífonos NC",
+            description: "Indispensables para estudiar en la biblioteca o en el metro.",
             price: "Ver Oferta",
-            image: "https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&q=80&w=800",
-            affiliateLink: "https://amazon.com",
+            image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800",
+            affiliateLink: "https://www.amazon.com/s?k=Noise+Cancelling+Headphones",
             store: "Amazon"
         },
         {
-            id: "kit-planner",
-            title: "Planner Académico 2025",
-            description: "Organiza tu estudio semanal con este planner físico de alta calidad.",
+            id: "planner",
+            title: "Planner Semanal",
+            description: "La organización es el 50% del éxito académico.",
             price: "Ver Oferta",
             image: "https://images.unsplash.com/photo-1506784365847-bbad939e9335?auto=format&fit=crop&q=80&w=800",
-            affiliateLink: "https://amazon.com",
-            store: "Tienda Partner"
+            affiliateLink: "https://www.amazon.com/s?k=Academic+Planner",
+            store: "Amazon"
         }
     ]
 };

@@ -64,7 +64,12 @@ export default function Recursos() {
 
                                 {/* Contenido */}
                                 <div className="p-6 flex-1 flex flex-col">
-                                    <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
+                                    <div className="flex justify-between items-start mb-2">
+                                        <h3 className="text-xl font-bold text-white">{item.title}</h3>
+                                        {item.tag && (
+                                            <span className="bg-amber-500/20 text-amber-400 text-xs font-bold px-2 py-1 rounded uppercase tracking-wider">{item.tag}</span>
+                                        )}
+                                    </div>
                                     <p className="text-slate-400 text-sm mb-4 line-clamp-2">{item.description}</p>
 
                                     {/* Features */}
@@ -89,9 +94,16 @@ export default function Recursos() {
 
                 {/* SECCIÓN 2: KIT DEL ESTUDIANTE (AFILIADOS) */}
                 <section>
-                    <div className="flex items-center gap-4 mb-8">
-                        <h2 className="text-3xl font-bold text-white">Kit del Estudiante</h2>
+                    <div className="flex items-center gap-4 mb-4">
+                        <h2 className="text-3xl font-bold text-white">Lo que recomendamos para la U</h2>
                         <div className="h-px bg-white/10 flex-1"></div>
+                    </div>
+
+                    <div className="mb-8 p-4 bg-indigo-900/20 border border-indigo-500/20 rounded-xl max-w-2xl">
+                        <p className="text-indigo-300 text-sm flex items-center gap-2">
+                            <FaCheck className="shrink-0" />
+                            Estos son los equipos que usamos y recomendamos en el Instituto. No es publicidad, ¡es lo que funciona!
+                        </p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

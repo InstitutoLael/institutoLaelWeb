@@ -1,334 +1,312 @@
-import { useState } from "react";
-import { 
-  FaBible, FaLightbulb, FaGraduationCap, FaHeart, FaArrowRight, FaChalkboardTeacher 
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import {
+   FaBible, FaLightbulb, FaGraduationCap, FaHeart, FaArrowRight, FaChalkboardTeacher, FaQuoteRight
 } from "react-icons/fa";
 import { BsStars, BsChatQuote } from "react-icons/bs";
 import { RiDoubleQuotesL } from "react-icons/ri";
 
-// --- IMÁGENES ---
+// ASSETS
 import logoDorado from "../assets/img/Logos/lael-inst-amarillo.png";
 
-// IMPORTANTE: Pon tu foto real aquí. 
-// Si la tienes en la carpeta assets, impórtala así:
-// import diegoFoto from "../assets/img/Equipo/diego.jpg"; 
-// Por ahora usaré un placeholder elegante.
+// DATA
+import { ABOUT_DATA } from "../data/about.js";
+
+// SEO
+import SEOHead from "../components/SEOHead.jsx";
+
+// HELPERS FOR ICONS (Mapping string names to components)
+const IconMap = {
+   FaBible: <FaBible />,
+   BsStars: <BsStars />,
+   FaHeart: <FaHeart />,
+   FaChalkboardTeacher: <FaChalkboardTeacher />,
+   FaLightbulb: <FaLightbulb />,
+   FaGraduationCap: <FaGraduationCap />
+};
 
 export default function About() {
-  const [activeValue, setActiveValue] = useState(0);
+   const [activeValue, setActiveValue] = useState(0);
 
-  const VALUES = [
-    {
-      icon: <FaBible/>,
-      title: "Cosmovisión Bíblica",
-      desc: "No separamos la fe del intelecto. Creemos que toda verdad es verdad de Dios y educamos desde esa certeza."
-    },
-    {
-      icon: <BsStars/>,
-      title: "Excelencia",
-      desc: "Hacemos todo como para el Señor. La mediocridad no tiene cabida en nuestra metodología ni en nuestro servicio."
-    },
-    {
-      icon: <FaHeart/>,
-      title: "Mentoring",
-      desc: "Más que profesores, somos mentores. Nos importa el corazón y el carácter del alumno, no solo su nota."
-    }
-  ];
+   useEffect(() => { window.scrollTo(0, 0); }, []);
 
-  return (
-    <div className="about-page">
-      <style>{css}</style>
+   return (
+      <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-amber-500/30">
+         <SEOHead
+            title="Nuestra Historia | Instituto Lael"
+            description="Educar es trascender. Conoce el origen, los valores y la visión detrás de Instituto Lael."
+         />
 
-      {/* ──────────────── 1. HERO: EL MANIFIESTO ──────────────── */}
-      <header className="about-hero">
-        <div className="ah-overlay"></div>
-        <div className="container ah-content">
-          <div className="logo-reveal">
-             <img src={logoDorado} alt="Lael Logo" className="logo-hero"/>
-          </div>
-          <h1 className="ah-title">
-            Educar es <span className="text-gold">Trascender</span>.
-          </h1>
-          <p className="ah-subtitle">
-            Somos Instituto Lael. Nacimos en 2020 en una pequeña habitación con un gran propósito: 
-            desafiar el estándar educativo uniendo excelencia académica y principios eternos.
-          </p>
-        </div>
-      </header>
+         {/* ──────────────── 1. HERO: EL MANIFIESTO ──────────────── */}
+         <header className="relative min-h-[70vh] flex items-center justify-center text-center overflow-hidden border-b border-white/5">
+            {/* Background Texture */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950"></div>
+            <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat"></div>
 
-      {/* ──────────────── 2. EL ORIGEN (SIGNIFICADO) ──────────────── */}
-      <section className="origin-section">
-         <div className="container origin-grid">
-            <div className="origin-text">
-               <span className="section-label">Nuestro Origen</span>
-               <h2>¿Por qué <span className="hebrew">LAEL</span>?</h2>
-               
-               <div className="meaning-box">
-                  <div className="mb-row">
-                     <span className="mb-term">Lael (לָאֵל)</span>
-                     <span className="mb-def">= Perteneciente a Dios.</span>
-                  </div>
-               </div>
+            <div className="container mx-auto px-6 relative z-10 max-w-3xl">
+               <motion.div
+                  initial={{ opacity: 0, y: -30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 1 }}
+                  className="mb-8"
+               >
+                  <img src={logoDorado} alt="Lael Logo" className="w-24 mx-auto drop-shadow-[0_0_20px_rgba(245,158,11,0.3)] filter brightness-110" />
+               </motion.div>
 
-               <p>
-                  En Números 3:24 aparece este nombre. Elegimos llamarnos así porque es nuestra 
-                  declaración de propiedad: <strong>Esta institución, nuestros talentos y nuestros alumnos 
-                  tienen un propósito divino.</strong>
-               </p>
-               <p>
-                  En un mundo confundido, queremos ser un faro de claridad. Aquí los números se entienden y las señas comunican vida.
-               </p>
+               <motion.h1
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3, duration: 1 }}
+                  className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight"
+               >
+                  {ABOUT_DATA.hero.title.split(' ').map((word, i) =>
+                     word === 'Trascender' ? <span key={i} className="text-amber-400 italic font-serif block sm:inline">{word}</span> : word + ' '
+                  )}
+               </motion.h1>
+
+               <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  className="text-lg text-slate-400 leading-relaxed"
+               >
+                  {ABOUT_DATA.hero.subtitle}
+               </motion.p>
             </div>
-            
-            <div className="origin-visual">
-               <div className="ov-card">
-                  <FaChalkboardTeacher className="ov-icon"/>
-                  <h4>Pedagogía</h4>
-                  <p>Explicamos fácil lo difícil</p>
-               </div>
-               <div className="ov-card">
-                  <FaLightbulb className="ov-icon"/>
-                  <h4>Mente</h4>
-                  <p>Pensamiento Crítico</p>
-               </div>
-               <div className="ov-card">
-                  <FaGraduationCap className="ov-icon"/>
-                  <h4>Academia</h4>
-                  <p>Rigor Intelectual</p>
-               </div>
-            </div>
-         </div>
-      </section>
+         </header>
 
-      {/* ──────────────── 3. EL DIRECTOR (MAIN FEATURE) ──────────────── */}
-      <section className="founder-section">
-         <div className="container">
-            <div className="section-label center">Liderazgo</div>
-            <h2 className="center-h2">Quien guía la visión</h2>
+         {/* ──────────────── 2. EL ORIGEN (SIGNIFICADO) ──────────────── */}
+         <section className="py-24 bg-slate-950 relative">
+            <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-            <div className="founder-card">
-               {/* FOTO: CAMBIAR EL SRC POR TU FOTO REAL */}
-               <div className="fc-image">
-                  <img 
- 
-                    alt="Diego Chaparro" 
-                  />
-                  <div className="fc-overlay"></div>
-               </div>
-               
-               <div className="fc-content">
-                  <div className="fc-header">
-                     <div>
-                        <h3>Diego Chaparro</h3>
-                        <span className="fc-role">Fundador & Director • Profe Matemáticas</span>
+               {/* Left: Text */}
+               <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+               >
+                  <span className="text-amber-500 font-bold uppercase tracking-[0.2em] text-xs mb-4 block">
+                     {ABOUT_DATA.origin.title}
+                  </span>
+                  <h2 className="text-4xl md:text-5xl font-serif font-bold mb-8">
+                     El significado de <br /><span className="text-white">LAEL</span>
+                  </h2>
+
+                  <div className="border-l-4 border-amber-500 pl-6 py-2 my-8 bg-gradient-to-r from-amber-500/10 to-transparent rounded-r-lg">
+                     <div className="flex flex-col">
+                        <span className="text-5xl font-serif text-white mb-1">{ABOUT_DATA.origin.term}</span>
+                        <span className="text-amber-500 font-bold uppercase tracking-widest text-sm">
+                           = {ABOUT_DATA.origin.definition}
+                        </span>
                      </div>
-                     <span className="fc-hebrew">לָאֵל</span>
                   </div>
 
-                  <div className="fc-tags">
-                     <span className="tag">Liderazgo</span>
-                     <span className="tag">Matemáticas</span>
-                  </div>
-
-                  <p className="fc-bio">
-                     Fundador de Instituto Lael. Comenzó enseñando matemáticas con una pizarra 
-                     en una habitación en 2020 y hoy lidera la visión educativa. 
-                     <span className="highlight-text"> Cree firmemente que los números no son difíciles, solo están mal explicados.</span>
+                  <p className="text-slate-400 text-lg leading-relaxed mb-6">
+                     {ABOUT_DATA.origin.description}
                   </p>
+                  <p className="text-slate-500 font-light italic">
+                     En un mundo confundido, queremos ser un faro de claridad. Aquí los números se entienden y las señas comunican vida.
+                  </p>
+               </motion.div>
 
-                  <div className="fc-quote-box">
-                     <BsChatQuote className="quote-mark"/>
-                     <p>
-                        "Lael no es solo un instituto, es mi forma de decir 'Gracias'. 
-                        Ver a alguien superar el miedo a las matemáticas o aprender a comunicarse con señas 
-                        me recuerda por qué empezamos en esa habitación. <strong>Aquí nadie es un número, todos tienen un propósito.</strong>"
-                     </p>
-                  </div>
-               </div>
-            </div>
-
-         </div>
-      </section>
-
-      {/* ──────────────── 4. VALORES INTERACTIVOS ──────────────── */}
-      <section className="dna-section">
-         <div className="container">
-            <div className="dna-head">
-               <h2>Nuestro ADN</h2>
-               <p>Los pilares innegociables sobre los que construimos.</p>
-            </div>
-
-            <div className="dna-wrapper">
-               <div className="dna-list">
-                  {VALUES.map((val, idx) => (
-                     <button 
-                        key={idx} 
-                        className={`dna-btn ${activeValue === idx ? 'active' : ''}`}
-                        onClick={() => setActiveValue(idx)}
+               {/* Right: Visual Blocks */}
+               <div className="space-y-6">
+                  {ABOUT_DATA.origin.cards.map((card, i) => (
+                     <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: 50 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.2 }}
+                        className="bg-slate-900 border border-slate-800 p-6 rounded-xl flex items-center gap-6 hover:border-amber-500/50 hover:bg-slate-800 transition-all group cursor-default"
                      >
-                        <div className="dna-icon-sm">{val.icon}</div>
-                        <span>{val.title}</span>
-                        {activeValue === idx && <FaArrowRight className="arrow-indic"/>}
-                     </button>
+                        <div className="text-3xl text-amber-500 group-hover:scale-110 transition-transform">
+                           {IconMap[card.icon]}
+                        </div>
+                        <div>
+                           <h4 className="text-lg font-bold text-white group-hover:text-amber-200 transition-colors">
+                              {card.title}
+                           </h4>
+                           <p className="text-slate-500 text-sm group-hover:text-slate-400">
+                              {card.desc}
+                           </p>
+                        </div>
+                     </motion.div>
                   ))}
                </div>
+            </div>
+         </section>
 
-               <div className="dna-display">
-                  <div className="dd-content">
-                     <div className="dd-icon-big">
-                        {VALUES[activeValue].icon}
+         {/* ──────────────── 3. EL DIRECTOR (Ficha Técnica) ──────────────── */}
+         <section className="py-24 bg-[#0B0F19] border-y border-white/5">
+            <div className="container mx-auto px-6">
+               <div className="text-center mb-16">
+                  <span className="text-amber-500 font-bold text-xs uppercase tracking-widest">Liderazgo</span>
+                  <h2 className="text-3xl font-serif font-bold text-white mt-2">Quien guía la visión</h2>
+               </div>
+
+               <div className="max-w-5xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
+
+                  {/* Image Placeholder */}
+                  <div className="md:w-5/12 bg-slate-800 relative min-h-[300px]">
+                     {/* Pseudo Image div */}
+                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent z-10"></div>
+                     <img
+                        src="https://ui-avatars.com/api/?name=Diego+Chaparro&background=0F172A&color=fbbf24&size=400&bold=true"
+                        alt="Diego Chaparro"
+                        className="w-full h-full object-cover opacity-80 mix-blend-overlay"
+                     />
+                     <div className="absolute bottom-6 left-6 z-20">
+                        <span className="text-6xl font-serif text-white/10 font-bold select-none">לָאֵל</span>
                      </div>
-                     <h3>{VALUES[activeValue].title}</h3>
-                     <p>{VALUES[activeValue].desc}</p>
+                  </div>
+
+                  {/* Content */}
+                  <div className="md:w-7/12 p-10 md:p-14 flex flex-col justify-center">
+                     <div className="flex items-start justify-between mb-6">
+                        <div>
+                           <h3 className="text-3xl font-bold text-white mb-1">{ABOUT_DATA.founder.name}</h3>
+                           <span className="text-amber-500 font-bold text-sm uppercase tracking-wider">{ABOUT_DATA.founder.role}</span>
+                        </div>
+                     </div>
+
+                     <div className="flex gap-2 mb-8">
+                        {ABOUT_DATA.founder.tags.map(tag => (
+                           <span key={tag} className="px-3 py-1 rounded bg-white/5 border border-white/10 text-xs text-slate-400">
+                              {tag}
+                           </span>
+                        ))}
+                     </div>
+
+                     <p className="text-slate-300 leading-relaxed mb-8 text-lg">
+                        {ABOUT_DATA.founder.bio}
+                     </p>
+
+                     <div className="relative pl-6 border-l-2 border-amber-500/50 bg-slate-950/50 p-4 rounded-r-lg">
+                        <FaQuoteRight className="absolute top-2 right-2 text-white/5 text-2xl" />
+                        <p className="italic text-slate-400">
+                           "{ABOUT_DATA.founder.quote}"
+                        </p>
+                     </div>
+                  </div>
+
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 4. TIMELINE (SCROLL) ──────────────── */}
+         <section className="py-24 bg-slate-950 relative overflow-hidden">
+            <div className="container mx-auto px-6 relative z-10">
+               <h2 className="text-3xl font-bold text-center mb-20 text-white">Nuestra Trayectoria</h2>
+
+               <div className="relative max-w-4xl mx-auto">
+                  {/* Vertical Line */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-0.5 h-full bg-slate-800"></div>
+
+                  {ABOUT_DATA.timeline.map((item, i) => (
+                     <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        transition={{ delay: i * 0.2 }}
+                        className={`relative flex items-center justify-between mb-16 last:mb-0 ${i % 2 === 0 ? 'flex-row-reverse' : ''}`}
+                     >
+                        {/* Content Side */}
+                        <div className={`w-5/12 ${i % 2 === 0 ? 'text-right' : 'text-left'}`}>
+                           <span className="text-5xl font-bold text-slate-800 block mb-2">{item.year}</span>
+                           <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
+                           <p className="text-slate-400 text-sm">{item.desc}</p>
+                        </div>
+
+                        {/* Center Dot */}
+                        <div className="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-amber-500 border-4 border-slate-950 shadow-[0_0_15px_rgba(245,158,11,0.5)] z-10"></div>
+
+                        {/* Empty Side */}
+                        <div className="w-5/12"></div>
+                     </motion.div>
+                  ))}
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 5. ADN / VALORES INTERACTIVOS ──────────────── */}
+         <section className="py-24 bg-[#080B14]">
+            <div className="container mx-auto px-6">
+               <div className="text-center mb-16">
+                  <h2 className="text-3xl font-bold text-white mb-2">Nuestro ADN</h2>
+                  <p className="text-slate-400">Los pilares innegociables sobre los que construimos.</p>
+               </div>
+
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start max-w-6xl mx-auto">
+                  {/* Buttons List */}
+                  <div className="flex flex-col gap-4">
+                     {ABOUT_DATA.values.map((val, idx) => (
+                        <button
+                           key={idx}
+                           onClick={() => setActiveValue(idx)}
+                           className={`text-left p-6 rounded-xl border transition-all duration-300 flex items-center gap-4 group
+                           ${activeValue === idx
+                                 ? 'bg-amber-500 text-slate-900 border-amber-500 shadow-lg shadow-amber-500/20'
+                                 : 'bg-transparent border-slate-800 text-slate-400 hover:bg-slate-900 hover:text-white'
+                              }
+                        `}
+                        >
+                           <span className={`text-xl ${activeValue === idx ? 'text-slate-900' : 'text-amber-600'}`}>
+                              {IconMap[val.iconName]}
+                           </span>
+                           <span className="font-bold text-lg">{val.title}</span>
+                           {activeValue === idx && <FaArrowRight className="ml-auto animate-pulse" />}
+                        </button>
+                     ))}
+                  </div>
+
+                  {/* Display Area */}
+                  <div className="lg:col-span-2 bg-slate-900/50 border border-slate-800 rounded-2xl p-12 min-h-[300px] flex flex-col items-center justify-center text-center relative overflow-hidden">
+                     <div className="absolute inset-0 bg-gradient-to-b from-amber-500/5 to-transparent pointer-events-none"></div>
+
+                     <motion.div
+                        key={activeValue}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.4 }}
+                        className="relative z-10"
+                     >
+                        <div className="text-6xl text-amber-500 mb-6 mx-auto w-fit filter drop-shadow-[0_0_15px_rgba(245,158,11,0.4)]">
+                           {IconMap[ABOUT_DATA.values[activeValue].iconName]}
+                        </div>
+                        <h3 className="text-3xl font-serif font-bold text-white mb-4">
+                           {ABOUT_DATA.values[activeValue].title}
+                        </h3>
+                        <p className="text-xl text-slate-300 max-w-lg mx-auto leading-relaxed">
+                           {ABOUT_DATA.values[activeValue].desc}
+                        </p>
+                     </motion.div>
                   </div>
                </div>
-            </div>
-         </div>
-      </section>
 
-      {/* ──────────────── 5. CITA FINAL / CTA ──────────────── */}
-      <section className="quote-section">
-         <div className="container">
-            <RiDoubleQuotesL className="quote-icon"/>
-            <blockquote>
-               La educación no es llenar un cubo, es encender un fuego. 
-               Y en Lael, encendemos fuegos que alumbran eternamente.
-            </blockquote>
-            
-            <div className="cta-about">
-               <h3>¿Listo para aprender diferente?</h3>
-               <div className="cta-btns-row">
-                  <a href="/academy" className="btn-gold">Ver Cursos</a>
-                  <a href="/empresas" className="btn-outline">Para Empresas</a>
+            </div>
+         </section>
+
+         {/* ──────────────── 6. CTA FINAL ──────────────── */}
+         <section className="py-24 bg-slate-950 border-t border-slate-900 text-center">
+            <div className="container mx-auto px-6 max-w-2xl">
+               <RiDoubleQuotesL className="text-4xl text-amber-500 mx-auto mb-6 opacity-50" />
+               <blockquote className="text-2xl md:text-3xl font-serif text-white mb-12 italic">
+                  "La educación no es llenar un cubo, es encender un fuego. Y en Lael, encendemos fuegos que alumbran eternamente."
+               </blockquote>
+
+               <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <a href="/programas" className="px-8 py-3 bg-amber-500 text-slate-900 font-bold rounded-lg hover:bg-amber-400 transition-colors shadow-[0_4px_20px_rgba(245,158,11,0.3)]">
+                     Ver Cursos
+                  </a>
+                  <a href="/empresas" className="px-8 py-3 bg-transparent border border-slate-600 text-slate-300 font-bold rounded-lg hover:border-white hover:text-white transition-colors">
+                     Soluciones Empresas
+                  </a>
                </div>
             </div>
-         </div>
-      </section>
-    </div>
-  );
+         </section>
+
+      </div>
+   );
 }
-
-/* ──────────────────────────────────────────────────────────────────────────
-   ESTILOS CSS (Dark Royal Theme)
-   ────────────────────────────────────────────────────────────────────────── */
-const css = `
-:root {
-  --navy-dark: #0a1128;   /* Fondo principal */
-  --navy-light: #1c2a4e;  /* Fondo paneles */
-  --gold: #fbbf24;        /* Dorado principal */
-  --gold-dark: #d97706;   /* Dorado oscuro */
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-}
-
-.about-page { font-family: 'Inter', sans-serif; background: var(--navy-dark); color: var(--text-main); }
-.container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
-h1, h2, h3, h4 { font-family: 'Playfair Display', serif; margin: 0; color: white; }
-.text-gold { color: var(--gold); font-style: italic; }
-.section-label { color: var(--gold); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 10px; }
-
-/* 1. HERO */
-.about-hero { position: relative; min-height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; background: radial-gradient(circle at center, #1e3a8a22 0%, var(--navy-dark) 80%); border-bottom: 1px solid rgba(255,255,255,0.05); }
-.ah-overlay { position: absolute; inset: 0; background-image: url("https://www.transparenttextures.com/patterns/cubes.png"); opacity: 0.05; pointer-events: none; }
-.ah-content { position: relative; z-index: 2; max-width: 700px; padding: 40px 0; }
-
-.logo-reveal { margin-bottom: 25px; animation: fadeInDown 1.5s ease; }
-.logo-hero { width: 100px; filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.3)); }
-.ah-title { font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 25px; animation: fadeInUp 1.5s ease; }
-.ah-subtitle { font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; max-width: 600px; margin: 0 auto; animation: fadeInUp 2s ease; }
-
-@keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-/* 2. ORIGEN */
-.origin-section { padding: 80px 0; background: var(--navy-dark); }
-.origin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-@media(max-width: 800px) { .origin-grid { grid-template-columns: 1fr; } }
-
-.meaning-box { border-left: 3px solid var(--gold); padding-left: 20px; margin: 30px 0; }
-.mb-term { font-size: 2.2rem; font-family: 'Playfair Display', serif; color: white; display: block; }
-.mb-def { font-size: 1rem; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-.hebrew { color: var(--gold); font-family: sans-serif; }
-
-.origin-text p { color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; font-size: 1rem; }
-
-.origin-visual { display: grid; grid-template-columns: 1fr; gap: 20px; }
-.ov-card { background: var(--navy-light); padding: 20px; border-radius: 8px; display: flex; align-items: center; gap: 15px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
-.ov-card:hover { border-color: var(--gold); transform: translateX(10px); }
-.ov-icon { font-size: 1.5rem; color: var(--gold); }
-.ov-card h4 { font-size: 1rem; margin-bottom: 2px; }
-.ov-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
-
-/* 3. FOUNDER SECTION (NUEVO) */
-.founder-section { padding: 60px 0 100px; background: #080c1b; }
-.center { text-align: center; }
-.center-h2 { text-align: center; font-size: 2.5rem; margin-bottom: 50px; }
-
-.founder-card { 
-  background: var(--navy-light); 
-  border-radius: 20px; 
-  overflow: hidden; 
-  display: grid; 
-  grid-template-columns: 350px 1fr; 
-  border: 1px solid rgba(255,255,255,0.05);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-}
-@media(max-width: 900px) { .founder-card { grid-template-columns: 1fr; } }
-
-.fc-image { position: relative; height: 100%; min-height: 300px; }
-.fc-image img { width: 100%; height: 100%; object-fit: cover; }
-.fc-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(10,17,40,0) 0%, var(--navy-light) 100%); }
-@media(max-width: 900px) { .fc-overlay { background: linear-gradient(to top, var(--navy-light) 10%, rgba(10,17,40,0) 100%); } }
-
-.fc-content { padding: 40px; display: flex; flex-direction: column; justify-content: center; }
-
-.fc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-.fc-header h3 { font-size: 2rem; color: white; line-height: 1; }
-.fc-role { color: var(--gold); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 5px; display: block; }
-.fc-hebrew { font-size: 2.5rem; color: rgba(255,255,255,0.1); font-family: sans-serif; font-weight: 700; }
-
-.fc-tags { display: flex; gap: 10px; margin-bottom: 25px; }
-.tag { background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 50px; font-size: 0.75rem; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); }
-
-.fc-bio { color: var(--text-muted); line-height: 1.6; margin-bottom: 30px; font-size: 1rem; }
-.highlight-text { color: white; font-weight: 500; }
-
-.fc-quote-box { background: rgba(0,0,0,0.2); border-left: 3px solid var(--gold); padding: 20px; border-radius: 0 8px 8px 0; position: relative; }
-.quote-mark { position: absolute; top: -10px; left: -10px; background: var(--navy-light); color: var(--gold); padding: 5px; font-size: 1.5rem; border-radius: 50%; }
-.fc-quote-box p { font-style: italic; color: #cbd5e1; font-size: 0.95rem; line-height: 1.6; margin: 0; }
-.fc-quote-box strong { color: white; font-weight: 600; }
-
-/* 4. ADN (Tabs Verticales) */
-.dna-section { padding: 80px 0; background: linear-gradient(to bottom, var(--navy-dark), #0f172a); }
-.dna-head { text-align: center; margin-bottom: 50px; }
-.dna-head h2 { font-size: 2.5rem; margin-bottom: 10px; }
-
-.dna-wrapper { display: grid; grid-template-columns: 300px 1fr; gap: 40px; }
-@media(max-width: 768px) { .dna-wrapper { grid-template-columns: 1fr; } }
-
-.dna-list { display: flex; flex-direction: column; gap: 10px; }
-.dna-btn { display: flex; align-items: center; gap: 15px; padding: 20px; background: transparent; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); text-align: left; cursor: pointer; transition: 0.3s; border-radius: 8px; font-size: 1rem; position: relative; }
-.dna-btn:hover { background: rgba(255,255,255,0.03); color: white; }
-.dna-btn.active { background: var(--gold); color: black; border-color: var(--gold); font-weight: 700; }
-.dna-icon-sm { font-size: 1.2rem; }
-.arrow-indic { position: absolute; right: 20px; font-size: 0.9rem; }
-
-.dna-display { background: var(--navy-light); border-radius: 12px; padding: 40px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.05); min-height: 300px; }
-.dd-content { text-align: center; max-width: 500px; animation: fadeIn 0.4s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-.dd-icon-big { font-size: 4rem; color: var(--gold); margin-bottom: 20px; }
-.dd-content h3 { font-size: 2rem; margin-bottom: 15px; color: white; }
-.dd-content p { font-size: 1.1rem; color: var(--text-muted); line-height: 1.6; }
-
-/* 5. CTA / QUOTE */
-.quote-section { padding: 80px 0; background: #020617; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); }
-.quote-icon { font-size: 3rem; color: var(--gold); margin-bottom: 20px; opacity: 0.5; }
-blockquote { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 4vw, 2.2rem); color: white; max-width: 800px; margin: 0 auto 40px; line-height: 1.3; }
-
-.cta-about h3 { margin-bottom: 25px; font-size: 1.5rem; color: var(--text-muted); }
-.cta-btns-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-.btn-gold { background: var(--gold); color: black; padding: 12px 30px; border-radius: 4px; font-weight: 700; text-decoration: none; transition: 0.3s; }
-.btn-gold:hover { background: white; }
-.btn-outline { border: 1px solid white; color: white; padding: 12px 30px; border-radius: 4px; font-weight: 600; text-decoration: none; transition: 0.3s; }
-.btn-outline:hover { background: rgba(255,255,255,0.1); }
-`;

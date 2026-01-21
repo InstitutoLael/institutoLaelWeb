@@ -1,222 +1,260 @@
-// src/pages/Docentes.jsx
-import { useEffect } from "react";
-import { FaLinkedin, FaInstagram, FaEnvelope } from "react-icons/fa"; 
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaLinkedin, FaInstagram, FaEnvelope, FaChalkboardTeacher, FaFilter, FaSearch } from "react-icons/fa";
+import { MdVerified } from "react-icons/md";
 import SEOHead from "../components/SEOHead.jsx";
-import { teachers } from "../data/teachers"; // <--- AQUÍ ESTÁ LA CONEXIÓN
+import { teachers } from "../data/teachers.js";
+
+// --- ANIMATION VARIANTS ---
+const containerVar = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
+
+const cardVar = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+};
 
 export default function Docentes() {
-  
-  // Scroll al inicio al cargar la página
+  const [filter, setFilter] = useState("Todos");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredTeachers, setFilteredTeachers] = useState(teachers);
+
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
+  // --- FILTER LOGIC ---
+  useEffect(() => {
+    let result = teachers;
+
+    // 1. Filter by Category (using tags logic)
+    if (filter !== "Todos") {
+      result = result.filter(t => {
+        const joinTags = t.tags.join(" ").toLowerCase();
+        const mapCategory = {
+          "Ciencias": ["ciencia", "biología", "química", "física", "matemática"],
+          "Humanidades": ["lenguaje", "literatura", "historia"],
+          "Idiomas": ["inglés", "lsch", "sorda"],
+          "Gestión": ["liderazgo", "director"]
+        };
+        const keywords = mapCategory[filter] || [];
+        return keywords.some(k => joinTags.includes(k));
+      });
+    }
+
+    // 2. Filter by Search
+    if (searchTerm.trim() !== "") {
+      const lowerTerm = searchTerm.toLowerCase();
+      result = result.filter(t =>
+        t.name.toLowerCase().includes(lowerTerm) ||
+        t.role.toLowerCase().includes(lowerTerm) ||
+        t.subject.toLowerCase().includes(lowerTerm)
+      );
+    }
+
+    setFilteredTeachers(result);
+  }, [filter, searchTerm]);
+
+  const categories = ["Todos", "Ciencias", "Humanidades", "Idiomas", "Gestión"];
+
   return (
-    <div className="team-page">
-      <SEOHead 
-        title="Nuestro Equipo | Instituto Lael" 
-        description="Conoce a los profesionales detrás de tu educación. Liderazgo, vocación y experiencia." 
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30">
+      <SEOHead
+        title="Nuestro Equipo | Instituto Lael"
+        description="Conoce a los mentores detrás de tu educación. Vocación, experiencia y compromiso."
       />
-      <style>{css}</style>
 
-      {/* --- LUCES AMBIENTALES --- */}
-      <div className="glow-spot top-center"></div>
+      {/* ──────────────── 1. HERO HEADER ──────────────── */}
+      <header className="relative pt-32 pb-20 px-6 text-center overflow-hidden">
+        {/* Ambient Glows */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-indigo-600/20 blur-[120px] rounded-full -z-10 pointer-events-none"></div>
 
-      <div className="container relative-z">
-        
-        {/* HEADER */}
-        <header className="team-header">
-          <span className="badge-team">Humanos, no Robots</span>
-          <h1>Mentores con <span className="text-grad">Vocación.</span></h1>
-          <p className="lead">
-            Detrás de cada clase, guía y ensayo, hay un equipo de personas reales 
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="container mx-auto max-w-4xl relative z-10"
+        >
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-slate-700 bg-slate-900/50 backdrop-blur-sm text-indigo-400 text-xs font-bold uppercase tracking-widest mb-6">
+            <FaChalkboardTeacher /> Staff Académico 2026
+          </div>
+
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight">
+            Mentores con <span className="text-indigo-500">Vocación</span>.
+          </h1>
+
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Detrás de cada clase, guía y ensayo, hay un equipo de personas reales
             comprometidas con tu futuro. Conoce a quienes lideran tu proceso.
           </p>
-        </header>
+        </motion.div>
+      </header>
 
-        {/* GRID DEL EQUIPO */}
-        <div className="team-grid">
-          {teachers.map((member) => (
-            <div 
-              key={member.id} 
-              className={`team-card ${member.featured ? 'featured' : ''}`}
-              style={{ '--accent': member.accent }}
-            >
-              <div className="card-bg-glow"></div>
-              
-              <div className="member-visual">
-                <img src={member.img} alt={member.name} className="member-img" />
-                
-                {/* Redes Sociales Dinámicas */}
-                <div className="member-social">
-                  {member.social?.linkedin && (
-                    <a href={member.social.linkedin} target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                      <FaLinkedin/>
-                    </a>
-                  )}
-                  {member.social?.instagram && (
-                    <a href={member.social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
-                      <FaInstagram/>
-                    </a>
-                  )}
-                  <a href={`mailto:contacto@institutolael.cl`} aria-label="Correo">
-                    <FaEnvelope/>
-                  </a>
-                </div>
-              </div>
+      {/* ──────────────── 2. FILTERS BAR ──────────────── */}
+      <div className="sticky top-20 z-40 bg-slate-950/80 backdrop-blur-md border-y border-slate-800 py-4 mb-20">
+        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
 
-              <div className="member-info">
-                <span className="member-role" style={{ color: member.accent }}>
-                  {member.role}
-                </span>
-                <h3>{member.name}</h3>
-                <p className="member-bio">{member.bio}</p>
-                
-                <div className="tags-row">
-                  {member.tags.map(tag => (
-                    <span key={tag} className="tag">{tag}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
+          {/* Categories */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all
+                   ${filter === cat
+                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25'
+                    : 'bg-slate-900 border border-slate-700 text-slate-400 hover:text-white hover:border-slate-500'
+                  }
+                 `}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Search */}
+          <div className="relative w-full md:w-64">
+            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm" />
+            <input
+              type="text"
+              placeholder="Buscar por nombre..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg py-2 pl-9 pr-4 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-slate-600"
+            />
+          </div>
+
         </div>
-
-        {/* CTA UNIRSE */}
-        <div className="join-cta">
-          <h3>¿Eres profe y tienes esta misma pasión?</h3>
-          <p>Siempre buscamos talentos para sumar a nuestras filas.</p>
-          <a href="/trabaja" className="btn-join">Postular al Equipo →</a>
-        </div>
-
       </div>
+
+      {/* ──────────────── 3. TEACHERS GRID ──────────────── */}
+      <section className="container mx-auto px-6 pb-32">
+        <motion.div
+          variants={containerVar}
+          initial="hidden"
+          animate="visible"
+          layout
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          <AnimatePresence>
+            {filteredTeachers.map((t) => (
+              <motion.div
+                key={t.id}
+                variants={cardVar}
+                layout
+                initial="hidden" animate="visible" exit={{ opacity: 0, scale: 0.9 }}
+                whileHover={{ y: -8 }}
+                className={`relative group bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300
+                   ${t.featured ? 'md:col-span-2 lg:col-span-1 lg:row-span-2 flex flex-col' : ''}
+                `}
+                style={{ '--accent': t.accent || '#6366f1' }}
+              >
+                {/* Header Gradient Overlay */}
+                <div
+                  className="absolute top-0 inset-x-0 h-32 opacity-20 pointer-events-none transition-opacity group-hover:opacity-40"
+                  style={{ background: `linear-gradient(to bottom, ${t.accent}, transparent)` }}
+                ></div>
+
+                <div className="p-8 flex flex-col items-center text-center h-full relative z-10">
+                  {/* Avatar */}
+                  <div className="relative mb-6">
+                    <div className="w-28 h-28 rounded-full p-1 bg-gradient-to-br from-white/10 to-transparent border border-white/10 shadow-xl group-hover:scale-110 transition-transform duration-500">
+                      <img
+                        src={t.img}
+                        alt={t.name}
+                        className="w-full h-full rounded-full object-cover bg-slate-950"
+                      />
+                    </div>
+                    {/* Badge if Featured/Director */}
+                    {t.tags.includes("Liderazgo") && (
+                      <div className="absolute -bottom-2 -right-2 bg-amber-500 text-slate-950 text-[10px] font-bold px-2 py-1 rounded-full shadow-lg flex items-center gap-1">
+                        <MdVerified /> LÍDER
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Info */}
+                  <h3 className="text-2xl font-bold text-white mb-1 group-hover:text-indigo-400 transition-colors">
+                    {t.name}
+                  </h3>
+                  <span
+                    className="text-xs font-bold uppercase tracking-wider mb-4 px-2 py-1 rounded bg-slate-800/50 border border-white/5"
+                    style={{ color: t.accent }}
+                  >
+                    {t.role}
+                  </span>
+
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6 line-clamp-4">
+                    {t.bio}
+                  </p>
+
+                  {/* Tags */}
+                  <div className="flex flex-wrap justify-center gap-2 mb-8 mt-auto">
+                    {t.tags.map((tag, i) => (
+                      <span key={i} className="text-[10px] bg-slate-800 text-slate-300 px-2 py-1 rounded border border-slate-700">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Social Actions (Slide Up on Hover) */}
+                  <div className="flex gap-4 opacity-100 md:opacity-0 md:translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    {t.social?.linkedin && (
+                      <a href={t.social.linkedin} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white hover:bg-indigo-600 p-2 rounded-full transition-all">
+                        <FaLinkedin size={20} />
+                      </a>
+                    )}
+                    {t.social?.instagram && (
+                      <a href={t.social.instagram} target="_blank" rel="noreferrer" className="text-slate-400 hover:text-white hover:bg-pink-600 p-2 rounded-full transition-all">
+                        <FaInstagram size={20} />
+                      </a>
+                    )}
+                    <a href={`mailto:contacto@institutolael.cl?subject=Contacto para ${t.name}`} className="text-slate-400 hover:text-white hover:bg-emerald-600 p-2 rounded-full transition-all">
+                      <FaEnvelope size={20} />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Decoration Lines */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-slate-700 to-transparent group-hover:via-indigo-500 transition-all"></div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {filteredTeachers.length === 0 && (
+          <div className="text-center py-20">
+            <p className="text-slate-500 text-lg">No encontramos docentes con ese criterio.</p>
+            <button onClick={() => { setFilter("Todos"); setSearchTerm("") }} className="text-indigo-400 hover:underline mt-2">
+              Limpiar filtros
+            </button>
+          </div>
+        )}
+      </section>
+
+      {/* ──────────────── 4. CTA JOIN ──────────────── */}
+      <div className="container mx-auto px-6 pb-20">
+        <div className="bg-gradient-to-r from-slate-900 to-indigo-950/30 rounded-3xl p-12 text-center border border-indigo-500/20 relative overflow-hidden">
+          <div className="relative z-10">
+            <h3 className="text-3xl font-bold mb-4">¿Eres profe y tienes esta misma pasión?</h3>
+            <p className="text-slate-400 mb-8 max-w-xl mx-auto">
+              Siempre buscamos talentos para sumar a nuestras filas. Si crees que educar es trascender, hablemos.
+            </p>
+            <a
+              href="/trabaja"
+              className="inline-block px-8 py-3 bg-white text-slate-950 font-bold rounded-full hover:bg-indigo-50 transition-colors shadow-lg shadow-white/10"
+            >
+              Postular al Equipo
+            </a>
+          </div>
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat"></div>
+        </div>
+      </div>
+
     </div>
   );
 }
-
-/* ================= CSS (DARK PREMIUM TEAM) ================= */
-const css = `
-:root {
-  --bg-deep: #050505;
-  --bg-card: #0F1115;
-  --border: rgba(255, 255, 255, 0.1);
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
-}
-
-.team-page {
-  background-color: var(--bg-deep);
-  color: var(--text-main);
-  min-height: 100vh;
-  font-family: 'Inter', sans-serif;
-  padding-bottom: 80px;
-  position: relative;
-  overflow-x: hidden;
-}
-
-.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-.relative-z { position: relative; z-index: 2; }
-
-/* AMBIENT LIGHT */
-.glow-spot {
-  position: absolute; width: 600px; height: 600px; border-radius: 50%;
-  filter: blur(150px); opacity: 0.15; pointer-events: none; z-index: 0;
-}
-.top-center { top: -300px; left: 50%; transform: translateX(-50%); background: #6366F1; }
-
-/* HEADER */
-.team-header { text-align: center; padding: 120px 0 60px; position: relative; z-index: 2; }
-.badge-team {
-  display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-  padding: 6px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; 
-  text-transform: uppercase; margin-bottom: 20px; color: #cbd5e1; letter-spacing: 1px;
-}
-.team-header h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; margin-bottom: 20px; line-height: 1.1; }
-.text-grad { background: linear-gradient(135deg, #fff 0%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.lead { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto; line-height: 1.6; }
-
-/* GRID */
-.team-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
-  position: relative; z-index: 2;
-}
-
-/* CARD */
-.team-card {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px;
-  padding: 30px; display: flex; flex-direction: column; align-items: center; text-align: center;
-  position: relative; overflow: hidden; transition: .3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
-.team-card:hover { transform: translateY(-10px); border-color: var(--accent); }
-
-/* Glow Effect on Hover */
-.card-bg-glow {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: radial-gradient(circle at top, var(--accent), transparent 70%);
-  opacity: 0; transition: .5s; z-index: 0; pointer-events: none;
-}
-.team-card:hover .card-bg-glow { opacity: 0.1; }
-
-/* Visuals */
-.member-visual { position: relative; z-index: 2; margin-bottom: 20px; }
-.member-img {
-  width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
-  border: 2px solid var(--accent); box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  transition: .3s;
-}
-.team-card:hover .member-img { transform: scale(1.05); box-shadow: 0 0 30px var(--accent); }
-
-/* Social Icons (Hidden by default, show on hover) */
-.member-social {
-  position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%) translateY(20px);
-  display: flex; gap: 10px; opacity: 0; transition: .3s;
-  background: rgba(0,0,0,0.8); padding: 5px 10px; border-radius: 20px; border: 1px solid var(--border);
-}
-.team-card:hover .member-social { opacity: 1; transform: translateX(-50%) translateY(0); }
-.member-social a { color: #fff; font-size: 1rem; padding: 5px; transition: .2s; }
-.member-social a:hover { color: var(--accent); }
-
-/* Info */
-.member-info { position: relative; z-index: 2; width: 100%; }
-.member-role {
-  font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-  display: block; margin-bottom: 8px;
-}
-.team-card h3 { font-size: 1.5rem; margin-bottom: 15px; font-weight: 700; color: #fff; }
-.member-bio { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; }
-
-/* Tags */
-.tags-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
-.tag {
-  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-  color: var(--text-muted); font-size: 0.7rem; padding: 4px 10px; border-radius: 6px;
-}
-
-/* DESTACADO (Director) */
-.team-card.featured {
-  grid-column: 1 / -1; 
-  background: linear-gradient(180deg, #161209, #0F1115);
-  border-color: #F59E0B;
-}
-@media (min-width: 900px) {
-  .team-card.featured {
-    flex-direction: row; text-align: left; align-items: center; padding: 40px; gap: 40px;
-  }
-  .team-card.featured .member-img { width: 160px; height: 160px; }
-  .team-card.featured .member-social { bottom: 20px; transform: translateX(-50%); } 
-  .team-card.featured .tags-row { justify-content: flex-start; }
-}
-
-/* JOIN CTA */
-.join-cta {
-  margin-top: 80px; text-align: center; padding: 60px;
-  background: rgba(255,255,255,0.02); border: 1px dashed var(--border); border-radius: 30px;
-}
-.join-cta h3 { font-size: 1.8rem; margin-bottom: 10px; }
-.join-cta p { color: var(--text-muted); margin-bottom: 30px; }
-.btn-join {
-  display: inline-block; background: #fff; color: #000; padding: 12px 30px;
-  border-radius: 50px; font-weight: 700; text-decoration: none; transition: .2s;
-}
-.btn-join:hover { transform: scale(1.05); }
-`;

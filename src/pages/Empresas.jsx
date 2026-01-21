@@ -1,527 +1,403 @@
 import { useState, useEffect } from "react";
-import { 
-  FaBuilding, FaChartLine, FaHandshake, FaUserTie, 
-  FaWhatsapp, FaEnvelope, FaCheckCircle, FaCalculator, FaArrowRight
+import { motion, AnimatePresence } from "framer-motion";
+import {
+   FaBuilding, FaChartLine, FaHandshake, FaUserTie,
+   FaWhatsapp, FaEnvelope, FaCalculator, FaArrowRight
 } from "react-icons/fa";
-import { MdDashboardCustomize, MdOutlineTimer, MdVerified } from "react-icons/md";
-import { BsLightningChargeFill, BsGraphUpArrow } from "react-icons/bs";
+import { MdVerified, MdDashboardCustomize } from "react-icons/md";
+import { BsLightningChargeFill } from "react-icons/bs";
+import SEOHead from "../components/SEOHead.jsx";
 
-// --- IMÁGENES (Usamos Blanco para contraste y Amarillo para acento) ---
+// ASSETS (Importing logos for branding)
 import logoBlanco from "../assets/img/Logos/lael-inst-blanco.png";
-import logoAmarillo from "../assets/img/Logos/lael-inst-amarillo.png";
 
-// IMPORTAR DATA
-import { 
-  SERVICE_LINES, 
-  EMP_PACKS, 
-  WAPP_INTL, 
-  calcQuote, 
-  clp 
+// DATA
+import {
+   SERVICE_LINES,
+   EMP_PACKS,
+   WAPP_INTL,
+   calcQuote,
+   clp
 } from "../data/empresas.js";
 
+// ANIMATIONS
+const fadeInUp = {
+   hidden: { opacity: 0, y: 30 },
+   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+};
+
 export default function Business() {
-  const [selectedServiceId, setSelectedServiceId] = useState("ingles");
-  const [headcount, setHeadcount] = useState(10);
-  const [months, setMonths] = useState(3);
-  const [modality, setModality] = useState("online");
-  const [quote, setQuote] = useState(null);
+   // Calculator State
+   const [selectedServiceId, setSelectedServiceId] = useState("ingles");
+   const [headcount, setHeadcount] = useState(10);
+   const [months, setMonths] = useState(3);
+   const [modality, setModality] = useState("online");
+   const [quote, setQuote] = useState(null);
 
-  useEffect(() => {
-    const result = calcQuote({
-      lineId: selectedServiceId,
-      headcount: Number(headcount),
-      durationMonths: Number(months),
-      modality: modality
-    });
-    setQuote(result);
-  }, [selectedServiceId, headcount, months, modality]);
+   useEffect(() => { window.scrollTo(0, 0); }, []);
 
-  const handleWappClick = () => {
-    if (!quote) return;
-    const msg = `Hola Lael Corporate. Cotización Web:%0A%0A` +
-      `📌 *Servicio:* ${quote.service.label}%0A` +
-      `👥 *Equipo:* ${headcount} p.%0A` +
-      `⏳ *Duración:* ${months} meses (${modality})%0A` +
-      `💰 *Total:* ${clp(quote.financials.total)} + IVA%0A` +
-      `Quiero agendar reunión.`;
-    window.open(`https://wa.me/${WAPP_INTL}?text=${msg}`, '_blank');
-  };
+   // Recalculate whenever inputs change
+   useEffect(() => {
+      const result = calcQuote({
+         lineId: selectedServiceId,
+         headcount: Number(headcount),
+         durationMonths: Number(months),
+         modality: modality
+      });
+      setQuote(result);
+   }, [selectedServiceId, headcount, months, modality]);
 
-  return (
-    <div className="biz-dark-page">
-      <style>{css}</style>
+   const handleWappClick = () => {
+      if (!quote) return;
+      const msg = `Hola Lael Corporate. Cotización Web:%0A%0A` +
+         `📌 *Servicio:* ${quote.service.label}%0A` +
+         `👥 *Equipo:* ${headcount} p.%0A` +
+         `⏳ *Duración:* ${months} meses (${modality})%0A` +
+         `💰 *Total Estimado:* ${clp(quote.financials.total)} + IVA%0A` +
+         `Me gustaría agendar una reunión comercial.`;
+      window.open(`https://wa.me/${WAPP_INTL}?text=${msg}`, '_blank');
+   };
 
-      {/* ──────────────── 1. HERO DARK MODE ──────────────── */}
-      <header className="biz-hero">
-        <div className="hero-glow"></div>
-        <div className="container bh-flex">
-           <div className="bh-text">
-              <div className="bh-badge">
-                 <MdVerified /> Soluciones Corporativas B2B
-              </div>
-              <h1>
-                 Transforma tu equipo,<br/>
-                 <span className="text-gradient">Eleva tu Cultura.</span>
-              </h1>
-              <p>
-                 Capacitación de alto impacto y beneficios educativos para empresas que buscan más que resultados: buscan trascendencia.
-              </p>
-              <div className="bh-actions">
-                 <a href="#cotizador" className="btn-neon primary">
-                    <FaCalculator /> Cotizar en Tiempo Real
-                 </a>
-                 <a href="#servicios" className="btn-neon outline">
-                    Ver Servicios
-                 </a>
-              </div>
-           </div>
-           
-           {/* Imagen decorativa Hero (Logo Flotante) */}
-           <div className="bh-visual">
-              <div className="logo-halo">
-                 <img src={logoBlanco} alt="Instituto Lael Corporate" />
-              </div>
-           </div>
-        </div>
-      </header>
+   const scrollToCalculator = () => {
+      document.getElementById('cotizador').scrollIntoView({ behavior: 'smooth' });
+   };
 
-      {/* ──────────────── 2. METRICS & TRUST ──────────────── */}
-      <section className="metrics-bar">
-         <div className="container mb-grid">
-            <div className="metric">
-               <span className="m-num">+15</span>
-               <span className="m-lbl">Programas a Medida</span>
-            </div>
-            <div className="metric">
-               <span className="m-num">ROI</span>
-               <span className="m-lbl">Reportes Mensuales</span>
-            </div>
-            <div className="metric">
-               <span className="m-num">100%</span>
-               <span className="m-lbl">Deducible SENCE (Consultar)</span>
-            </div>
-         </div>
-      </section>
+   return (
+      <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-amber-500/30 overflow-x-hidden">
+         <SEOHead title="Lael Corporate | Soluciones B2B" description="Capacitación de alto impacto y beneficios educativos para empresas líderes." />
 
-      {/* ──────────────── 3. SERVICIOS (NEON CARDS) ──────────────── */}
-      <section id="servicios" className="services-section">
-         <div className="container">
-            <div className="sec-head">
-               <h2>Ecosistema de Formación</h2>
-               <p>Selecciona una vertical para proyectar tu inversión.</p>
+         {/* ──────────────── 1. HERO DARK CORPORATE ──────────────── */}
+         <header className="relative min-h-[85vh] flex items-center overflow-hidden border-b border-white/5">
+            {/* Abstract Background */}
+            <div className="absolute inset-0 bg-slate-950 z-0">
+               <div className="absolute top-0 right-0 w-3/4 h-full bg-gradient-to-l from-[#0f172a] to-transparent opacity-80"></div>
+               <div className="absolute -top-[20%] -right-[10%] w-[800px] h-[800px] bg-blue-900/10 rounded-full blur-[120px]"></div>
             </div>
 
-            <div className="serv-grid">
-               {SERVICE_LINES.map((srv) => (
-                  <div 
-                    key={srv.id} 
-                    className={`serv-card ${selectedServiceId === srv.id ? 'active' : ''}`}
-                    onClick={() => {
-                       setSelectedServiceId(srv.id);
-                       document.getElementById('cotizador').scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    // Inyectamos el color de marca (pink, teal, indigo) dinámicamente
-                    style={{ '--brand-color': srv.brandColor }}
-                  >
-                     <div className="sc-glow-bg"></div>
-                     <div className="sc-icon">{srv.icon}</div>
-                     <h3>{srv.label}</h3>
-                     <p>{srv.desc}</p>
-                     <div className="sc-arrow"><FaArrowRight/></div>
-                  </div>
-               ))}
-            </div>
-         </div>
-      </section>
+            <div className="container mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-      {/* ──────────────── 4. COTIZADOR "BLACK EDITION" ──────────────── */}
-      <section id="cotizador" className="calculator-section">
-         <div className="container">
-            <div className="calc-frame">
-               
-               {/* Lado A: Controles */}
-               <div className="calc-panel controls">
-                  <div className="cp-head">
-                     <FaCalculator className="cp-icon"/>
-                     <h3>Configurador de Plan</h3>
+               {/* Text Side */}
+               <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
+                  <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-amber-400 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-8">
+                     <MdVerified /> Soluciones Corporativas B2B
                   </div>
 
-                  <div className="c-input">
-                     <label>Línea de Servicio</label>
-                     <select 
-                        value={selectedServiceId} 
-                        onChange={(e) => setSelectedServiceId(e.target.value)}
+                  <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight">
+                     Transforma tu equipo,<br />
+                     <span className="bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent">Eleva tu Cultura.</span>
+                  </h1>
+
+                  <p className="text-xl text-slate-400 mb-10 leading-relaxed max-w-lg">
+                     Capacitación de alto impacto y beneficios educativos para empresas que buscan más que resultados: buscan trascendencia.
+                  </p>
+
+                  <div className="flex flex-wrap gap-4">
+                     <button
+                        onClick={scrollToCalculator}
+                        className="px-8 py-4 bg-white text-slate-950 font-bold rounded-lg hover:bg-amber-400 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.1)] flex items-center gap-2"
                      >
-                        {SERVICE_LINES.map(s => (
-                           <option key={s.id} value={s.id}>{s.label}</option>
-                        ))}
-                     </select>
-                  </div>
-
-                  <div className="c-input">
-                     <div className="lbl-row">
-                        <label>Colaboradores</label>
-                        <span className="val-display">{headcount}</span>
-                     </div>
-                     <input 
-                        type="range" min="1" max="50" 
-                        value={headcount}
-                        onChange={(e) => setHeadcount(e.target.value)}
-                        className="dark-slider"
-                     />
-                  </div>
-
-                  <div className="c-input">
-                     <label>Duración</label>
-                     <div className="btn-group">
-                        {[1, 3, 6, 12].map(m => (
-                           <button 
-                              key={m} 
-                              className={months === m ? 'active' : ''}
-                              onClick={() => setMonths(m)}
-                           >
-                              {m} M
-                           </button>
-                        ))}
-                     </div>
-                  </div>
-
-                  {quote?.service.type !== 'flat' && (
-                     <div className="c-input">
-                        <label>Modalidad</label>
-                        <div className="btn-group">
-                           <button className={modality==='online'?'active':''} onClick={()=>setModality('online')}>Online</button>
-                           <button className={modality==='onsite'?'active':''} onClick={()=>setModality('onsite')}>Presencial</button>
-                        </div>
-                     </div>
-                  )}
-               </div>
-
-               {/* Lado B: Resultados */}
-               <div className="calc-panel results">
-                  {quote && (
-                     <>
-                        <div className="r-logo-bg">
-                           <img src={logoAmarillo} alt="watermark" />
-                        </div>
-                        <div className="r-content">
-                           <span className="r-label">Inversión Total Estimada</span>
-                           <div className="r-total">
-                              {clp(quote.financials.total)}
-                              <small>+ IVA</small>
-                           </div>
-
-                           {quote.financials.discountPercent > 0 && (
-                              <div className="r-badge">
-                                 Ahorras un {quote.financials.discountPercent}% por volumen
-                              </div>
-                           )}
-
-                           <div className="r-stats">
-                              <div className="stat">
-                                 <span>Por Persona/Mes</span>
-                                 <strong>{clp(quote.financials.perPersonMonth)}</strong>
-                              </div>
-                              <div className="stat">
-                                 <span>Costo Total Bruto</span>
-                                 <strong>{clp(quote.financials.totalBeforeDiscount)}</strong>
-                              </div>
-                           </div>
-
-                           <button onClick={handleWappClick} className="btn-neon full green">
-                              <FaWhatsapp /> Confirmar Cupos
-                           </button>
-                           <p className="r-note">Precios sujetos a disponibilidad de agenda.</p>
-                        </div>
-                     </>
-                  )}
-               </div>
-            </div>
-         </div>
-      </section>
-
-      {/* ──────────────── 5. PACKS RAPIDOS (Quick Wins) ──────────────── */}
-      <section className="packs-section">
-         <div className="container">
-            <h2>Packs "Quick Win"</h2>
-            <p className="sub-h2">Soluciones empaquetadas de rápida implementación.</p>
-
-            <div className="packs-row">
-               {EMP_PACKS.map((pack) => (
-                  <div key={pack.id} className="pack-dark">
-                     <div className="pd-head">
-                        <BsLightningChargeFill />
-                        <h4>{pack.title}</h4>
-                     </div>
-                     <p>{pack.subtitle}</p>
-                     <div className="pd-price">{pack.priceLabel}</div>
-                     <a 
-                       href={`https://wa.me/${WAPP_INTL}?text=Interesado en ${pack.title}`}
-                       className="pd-link" target="_blank"
+                        <FaCalculator /> Cotizar Online
+                     </button>
+                     <a
+                        href="#servicios"
+                        className="px-8 py-4 bg-transparent border border-white/20 text-white font-bold rounded-lg hover:bg-white/5 transition-colors"
                      >
-                        Contratar <FaArrowRight/>
+                        Ver Servicios
                      </a>
                   </div>
-               ))}
-            </div>
-         </div>
-      </section>
+               </motion.div>
 
-      {/* ──────────────── 6. CTA FOOTER ──────────────── */}
-      <section className="dark-cta">
-         <div className="container">
-            <div className="cta-box">
-               <h2>Hablemos de Negocios</h2>
-               <p>Envíanos un correo o escríbenos. Respondemos en menos de 2 horas.</p>
-               <div className="cta-btns">
-                  <a href="mailto:contacto@institutolael.cl" className="btn-neon outline">
-                     <FaEnvelope/> Correo Corporativo
+               {/* Visual Side (Floating Logo) */}
+               <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="flex justify-center items-center relative"
+               >
+                  <div className="relative w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full border border-white/5 flex items-center justify-center animate-[spin_60s_linear_infinite]">
+                     <div className="absolute inset-0 rounded-full border border-white/5 scale-75"></div>
+                     <div className="absolute inset-0 rounded-full border border-white/5 scale-50"></div>
+                  </div>
+                  <img
+                     src={logoBlanco}
+                     alt="Lael Corporate"
+                     className="absolute w-40 md:w-64 drop-shadow-[0_0_50px_rgba(255,255,255,0.1)]"
+                  />
+               </motion.div>
+            </div>
+         </header>
+
+         {/* ──────────────── 2. METRICS BAR ──────────────── */}
+         <section className="border-b border-white/5 bg-[#020617]">
+            <div className="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
+               <div className="px-4">
+                  <span className="block text-4xl font-bold text-white mb-1">+15</span>
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Programas a Medida</span>
+               </div>
+               <div className="px-4 pt-8 md:pt-0">
+                  <span className="block text-4xl font-bold text-white mb-1">ROI</span>
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Reportes Mensuales de Avance</span>
+               </div>
+               <div className="px-4 pt-8 md:pt-0">
+                  <span className="block text-4xl font-bold text-emerald-400 mb-1">100%</span>
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Deducible SENCE (Consultar)</span>
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 3. SERVICIOS (NEON CARDS) ──────────────── */}
+         <section id="servicios" className="py-24 bg-slate-950">
+            <div className="container mx-auto px-6">
+               <div className="text-center mb-16">
+                  <h2 className="text-3xl font-bold font-serif text-white mb-4">Ecosistema de Formación</h2>
+                  <p className="text-slate-400">Selecciona una vertical para proyectar tu inversión.</p>
+               </div>
+
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {SERVICE_LINES.map((srv) => (
+                     <motion.div
+                        key={srv.id}
+                        layoutId={`card-${srv.id}`}
+                        onClick={() => {
+                           setSelectedServiceId(srv.id);
+                           scrollToCalculator();
+                        }}
+                        whileHover={{ y: -8 }}
+                        className={`relative p-8 rounded-2xl border cursor-pointer transition-all overflow-hidden group h-full flex flex-col
+                       ${selectedServiceId === srv.id
+                              ? 'bg-slate-900 border-white/20 shadow-2xl scale-[1.02] ring-1 ring-white/20'
+                              : 'bg-slate-900/50 border-white/5 hover:border-white/10 hover:bg-slate-900'
+                           }
+                    `}
+                        style={{ '--brand': srv.brandColor }}
+                     >
+                        {/* Glow Background */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)] to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
+
+                        <div className="text-4xl mb-6 relative z-10">{srv.icon}</div>
+                        <h3 className="text-xl font-bold text-white mb-3 relative z-10">{srv.label}</h3>
+                        <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-1 relative z-10 group-hover:text-slate-300">
+                           {srv.desc}
+                        </p>
+
+                        <div className="mt-auto flex justify-between items-center text-[var(--brand)] relative z-10">
+                           <span className="text-xs font-bold uppercase tracking-wider">Cotizar</span>
+                           <FaArrowRight className="transform -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
+                        </div>
+                     </motion.div>
+                  ))}
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 4. CALCULATOR (BLACK EDITION) ──────────────── */}
+         <section id="cotizador" className="py-24 bg-[#080B14] relative overflow-hidden">
+            {/* Decoration */}
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none"></div>
+
+            <div className="container mx-auto px-6 relative z-10">
+               <div className="max-w-6xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-2">
+
+                  {/* --- PANEL A: CONTROLS --- */}
+                  <div className="p-10 border-b lg:border-b-0 lg:border-r border-slate-800">
+                     <div className="flex items-center gap-3 mb-10 text-amber-500">
+                        <FaCalculator className="text-xl" />
+                        <h3 className="font-bold uppercase tracking-widest text-sm text-white">Configurador de Plan</h3>
+                     </div>
+
+                     {/* 1. Service Selector */}
+                     <div className="mb-8">
+                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Línea de Servicio</label>
+                        <select
+                           value={selectedServiceId}
+                           onChange={(e) => setSelectedServiceId(e.target.value)}
+                           className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition-all cursor-pointer"
+                        >
+                           {SERVICE_LINES.map(s => (
+                              <option key={s.id} value={s.id}>{s.label}</option>
+                           ))}
+                        </select>
+                     </div>
+
+                     {/* 2. Headcount Slider */}
+                     <div className="mb-8 p-6 bg-slate-950/50 rounded-xl border border-slate-800">
+                        <div className="flex justify-between items-center mb-4">
+                           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Colaboradores</label>
+                           <span className="bg-amber-500 text-slate-900 font-bold px-3 py-1 rounded text-sm">
+                              {headcount} pers.
+                           </span>
+                        </div>
+                        <input
+                           type="range" min="1" max="50" step="1"
+                           value={headcount}
+                           onChange={(e) => setHeadcount(e.target.value)}
+                           className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
+                        />
+                        <div className="flex justify-between mt-2 text-[10px] text-slate-600 font-mono">
+                           <span>1</span>
+                           <span>50+</span>
+                        </div>
+                     </div>
+
+                     {/* 3. Duration & Modality */}
+                     <div className="grid grid-cols-2 gap-6">
+                        <div>
+                           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Duración</label>
+                           <div className="flex gap-2">
+                              {[1, 3, 6, 12].map(m => (
+                                 <button
+                                    key={m}
+                                    onClick={() => setMonths(m)}
+                                    className={`flex-1 py-2 rounded-lg text-sm font-bold border transition-all
+                                    ${months === m ? 'bg-amber-500 border-amber-500 text-slate-900' : 'bg-transparent border-slate-700 text-slate-400 hover:border-slate-500'}
+                                 `}
+                                 >
+                                    {m}M
+                                 </button>
+                              ))}
+                           </div>
+                        </div>
+
+                        {quote?.service.type !== 'flat' && (
+                           <div>
+                              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Modalidad</label>
+                              <div className="flex gap-2">
+                                 <button
+                                    onClick={() => setModality('online')}
+                                    className={`flex-1 py-2 rounded-lg text-sm font-bold border transition-all
+                                   ${modality === 'online' ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-transparent border-slate-700 text-slate-400 hover:border-slate-500'}
+                                `}
+                                 >
+                                    Online
+                                 </button>
+                                 <button
+                                    onClick={() => setModality('onsite')}
+                                    className={`flex-1 py-2 rounded-lg text-sm font-bold border transition-all
+                                   ${modality === 'onsite' ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-transparent border-slate-700 text-slate-400 hover:border-slate-500'}
+                                `}
+                                 >
+                                    Presen.
+                                 </button>
+                              </div>
+                           </div>
+                        )}
+                     </div>
+                  </div>
+
+                  {/* --- PANEL B: RESULTS --- */}
+                  <div className="relative p-10 bg-slate-950 flex flex-col justify-center">
+                     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950 pointer-events-none"></div>
+
+                     <AnimatePresence mode="wait">
+                        {quote && (
+                           <motion.div
+                              key={`${selectedServiceId}-${headcount}-${months}-${modality}`}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -10 }}
+                              className="relative z-10 text-center"
+                           >
+                              <span className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-4">
+                                 Inversión Total Estimada
+                              </span>
+
+                              <div className="text-5xl md:text-6xl font-bold text-white mb-2 tracking-tight">
+                                 {clp(quote.financials.total)}
+                              </div>
+                              <span className="text-slate-500 text-sm font-mono">+ IVA</span>
+
+                              {quote.financials.discountPercent > 0 && (
+                                 <div className="inline-block mt-6 px-4 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-wide">
+                                    Ahorro por volumen: {quote.financials.discountPercent}%
+                                 </div>
+                              )}
+
+                              <div className="grid grid-cols-2 gap-4 mt-12 pt-8 border-t border-slate-900 text-left">
+                                 <div>
+                                    <span className="text-xs text-slate-500 block mb-1">Por Persona/Mes</span>
+                                    <strong className="text-white text-lg">{clp(quote.financials.perPersonMonth)}</strong>
+                                 </div>
+                                 <div>
+                                    <span className="text-xs text-slate-500 block mb-1">Total Bruto</span>
+                                    <strong className="text-slate-400 text-lg line-through">{clp(quote.financials.totalBeforeDiscount)}</strong>
+                                 </div>
+                              </div>
+
+                              <button
+                                 onClick={handleWappClick}
+                                 className="w-full mt-10 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all flex items-center justify-center gap-3 group"
+                              >
+                                 <FaWhatsapp className="text-xl" /> Confirmar Disponibilidad
+                                 <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                              </button>
+
+                              <p className="mt-4 text-[10px] text-slate-600">
+                                 *Precios referenciales sujetos a confirmación de agenda docente.
+                              </p>
+                           </motion.div>
+                        )}
+                     </AnimatePresence>
+                  </div>
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 5. QUICK WINS PACKS ──────────────── */}
+         <section className="py-24 bg-slate-950 border-t border-white/5">
+            <div className="container mx-auto px-6">
+               <h2 className="text-3xl font-bold font-serif text-white mb-2">Packs "Quick Win"</h2>
+               <p className="text-slate-400 mb-12">Soluciones empaquetadas de rápida implementación.</p>
+
+               <div className="flex flex-wrap gap-6 justify-center">
+                  {EMP_PACKS.map((pack) => (
+                     <div key={pack.id} className="w-full md:w-80 bg-slate-900 border border-slate-800 p-8 rounded-2xl hover:border-amber-500/50 transition-colors group">
+                        <div className="flex items-center gap-3 mb-4 text-amber-500">
+                           <BsLightningChargeFill />
+                           <h4 className="font-bold text-white group-hover:text-amber-400 transition-colors">{pack.title}</h4>
+                        </div>
+                        <p className="text-sm text-slate-400 mb-6 min-h-[40px]">{pack.subtitle}</p>
+
+                        <div className="pt-6 border-t border-slate-800">
+                           <span className="block font-bold text-white mb-4">{pack.priceLabel}</span>
+                           <a
+                              href={`https://wa.me/${WAPP_INTL}?text=Hola, me interesa el pack: ${pack.title}`}
+                              target="_blank" rel="noreferrer"
+                              className="text-sm font-bold text-amber-500 flex items-center gap-2 hover:underline"
+                           >
+                              Contratar Pack <FaArrowRight />
+                           </a>
+                        </div>
+                     </div>
+                  ))}
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 6. CTA CONTACT ──────────────── */}
+         <section className="py-20 bg-gradient-to-br from-slate-900 to-slate-950 text-center">
+            <div className="container mx-auto px-6 max-w-2xl">
+               <h2 className="text-3xl font-bold text-white mb-6">Hablemos de Negocios</h2>
+               <p className="text-slate-400 mb-10">
+                  ¿Necesitas una propuesta formal en PDF? ¿O una reunión con el Director?
+                  Escríbenos y te respondemos en menos de 2 horas.
+               </p>
+               <div className="flex justify-center gap-4">
+                  <a
+                     href="mailto:contacto@institutolael.cl"
+                     className="px-6 py-3 border border-slate-600 text-white font-bold rounded-lg hover:bg-white/5 transition-colors flex items-center gap-2"
+                  >
+                     <FaEnvelope /> Correo Corporativo
                   </a>
-                  <a href={`https://wa.me/${WAPP_INTL}`} className="btn-neon primary">
-                     <FaWhatsapp/> Chat Directo
+                  <a
+                     href={`https://wa.me/${WAPP_INTL}`}
+                     className="px-6 py-3 bg-white text-slate-950 font-bold rounded-lg hover:bg-slate-200 transition-colors flex items-center gap-2 shadow-lg"
+                  >
+                     <FaWhatsapp /> Chat Directo
                   </a>
                </div>
             </div>
-         </div>
-      </section>
+         </section>
 
-    </div>
-  );
+      </div>
+   );
 }
-
-/* ──────────────────────────────────────────────────────────────────────────
-   CSS DARK MODE (Embedded)
-   ────────────────────────────────────────────────────────────────────────── */
-const css = `
-:root {
-  --bg-main: #020617;     /* Slate 950 - Fondo casi negro */
-  --bg-card: #0f172a;     /* Slate 900 - Fondo tarjetas */
-  --bg-input: #1e293b;    /* Slate 800 - Inputs */
-  
-  --txt-main: #f8fafc;    /* Blanco */
-  --txt-muted: #94a3b8;   /* Gris */
-  
-  --accent-gold: #fbbf24; /* Amber 400 - Color Lael */
-  --accent-gold-glow: rgba(251, 191, 36, 0.4);
-}
-
-.biz-dark-page {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg-main);
-  color: var(--txt-main);
-  min-height: 100vh;
-}
-.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-h1, h2, h3 { font-family: 'Playfair Display', serif; color: white; margin: 0; }
-
-/* 1. HERO */
-.biz-hero {
-  position: relative;
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-/* Efecto de fondo sutil */
-.hero-glow {
-  position: absolute;
-  top: -20%; right: -10%;
-  width: 50%; height: 80%;
-  background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, transparent 70%);
-  filter: blur(80px);
-  z-index: 0;
-}
-
-.bh-flex { display: flex; align-items: center; justify-content: space-between; position: relative; z-index: 1; gap: 40px; }
-@media(max-width: 800px) { .bh-flex { flex-direction: column-reverse; text-align: center; } }
-
-.bh-text { flex: 1; }
-.bh-badge {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: var(--accent-gold);
-  padding: 6px 16px; border-radius: 50px;
-  font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;
-  margin-bottom: 25px;
-}
-.bh-text h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px; }
-.text-gradient {
-  background: linear-gradient(to right, #fff, #94a3b8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.bh-text p { font-size: 1.15rem; color: var(--txt-muted); margin-bottom: 40px; line-height: 1.6; }
-
-.bh-visual { flex: 1; display: flex; justify-content: center; }
-.logo-halo {
-  width: 300px; height: 300px;
-  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.05);
-  animation: float 6s ease-in-out infinite;
-}
-.logo-halo img { width: 180px; opacity: 0.9; }
-
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-
-/* BUTTONS */
-.bh-actions { display: flex; gap: 15px; flex-wrap: wrap; }
-@media(max-width: 800px) { .bh-actions { justify-content: center; } }
-
-.btn-neon {
-  padding: 14px 28px; border-radius: 6px; font-weight: 600; cursor: pointer;
-  display: inline-flex; align-items: center; gap: 10px; transition: 0.3s;
-  text-decoration: none; border: none; font-size: 0.95rem;
-}
-.btn-neon.primary {
-  background: white; color: black;
-  box-shadow: 0 0 20px rgba(255,255,255,0.2);
-}
-.btn-neon.primary:hover {
-  background: var(--accent-gold); 
-  box-shadow: 0 0 30px var(--accent-gold-glow);
-}
-.btn-neon.outline {
-  background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white;
-}
-.btn-neon.outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
-
-.btn-neon.full { width: 100%; justify-content: center; margin-top: 20px; }
-.btn-neon.green { background: #10b981; color: white; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-.btn-neon.green:hover { background: #059669; }
-
-/* 2. METRICS */
-.metrics-bar { border-bottom: 1px solid rgba(255,255,255,0.05); }
-.mb-grid { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
-.metric { padding: 30px; border-right: 1px solid rgba(255,255,255,0.05); }
-.metric:last-child { border-right: none; }
-.m-num { display: block; font-size: 1.8rem; font-weight: 700; color: white; margin-bottom: 5px; }
-.m-lbl { font-size: 0.85rem; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 1px; }
-
-/* 3. SERVICES (Dark Cards) */
-.services-section { padding: 80px 0; }
-.sec-head { margin-bottom: 50px; text-align: center; }
-.sec-head h2 { font-size: 2.5rem; margin-bottom: 10px; }
-.sec-head p { color: var(--txt-muted); }
-
-.serv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-.serv-card {
-  position: relative;
-  background: var(--bg-card);
-  border: 1px solid rgba(255,255,255,0.05);
-  padding: 30px; border-radius: 12px;
-  cursor: pointer; transition: 0.3s; overflow: hidden;
-  display: flex; flex-direction: column; height: 100%;
-}
-.sc-glow-bg {
-  position: absolute; inset: 0;
-  background: radial-gradient(circle at top right, var(--brand-color), transparent);
-  opacity: 0; transition: 0.3s; pointer-events: none;
-}
-.serv-card:hover { transform: translateY(-5px); border-color: var(--brand-color); }
-.serv-card:hover .sc-glow-bg { opacity: 0.15; }
-.serv-card.active { border-color: var(--brand-color); background: #141c2f; }
-.serv-card.active .sc-glow-bg { opacity: 0.1; }
-
-.sc-icon { font-size: 2rem; margin-bottom: 20px; position: relative; z-index: 1; }
-.serv-card h3 { font-family: 'Inter', sans-serif; font-size: 1.2rem; margin-bottom: 10px; position: relative; z-index: 1; }
-.serv-card p { font-size: 0.9rem; color: var(--txt-muted); line-height: 1.5; position: relative; z-index: 1; flex-grow: 1; }
-.sc-arrow { margin-top: 20px; color: var(--brand-color); opacity: 0; transform: translateX(-10px); transition: 0.3s; }
-.serv-card:hover .sc-arrow { opacity: 1; transform: translateX(0); }
-
-/* 4. CALCULATOR (Black Edition) */
-.calculator-section { padding: 60px 0; background: #020617; }
-.calc-frame {
-  display: grid; grid-template-columns: 1.2fr 1fr;
-  background: var(--bg-card);
-  border-radius: 20px; overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.05);
-  box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
-}
-@media(max-width: 800px) { .calc-frame { grid-template-columns: 1fr; } }
-
-/* Panel Controls */
-.calc-panel.controls { padding: 40px; border-right: 1px solid rgba(255,255,255,0.05); }
-.cp-head { display: flex; align-items: center; gap: 10px; margin-bottom: 30px; color: var(--accent-gold); }
-.cp-icon { font-size: 1.4rem; }
-
-.c-input { margin-bottom: 25px; }
-.c-input label { display: block; color: var(--txt-muted); font-size: 0.85rem; margin-bottom: 8px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; }
-.c-input select {
-  width: 100%; background: var(--bg-main); color: white;
-  border: 1px solid rgba(255,255,255,0.1); padding: 12px;
-  border-radius: 6px; font-family: 'Inter', sans-serif;
-  outline: none;
-}
-.lbl-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.val-display { background: var(--accent-gold); color: black; font-weight: 700; padding: 2px 8px; border-radius: 4px; font-size: 0.9rem; }
-
-.dark-slider { width: 100%; cursor: pointer; accent-color: var(--accent-gold); }
-
-.btn-group { display: flex; gap: 8px; }
-.btn-group button {
-  flex: 1; background: var(--bg-main); border: 1px solid rgba(255,255,255,0.1);
-  color: var(--txt-muted); padding: 10px; border-radius: 6px; cursor: pointer;
-  transition: 0.2s; font-weight: 600;
-}
-.btn-group button.active {
-  background: var(--accent-gold); color: black; border-color: var(--accent-gold);
-}
-
-/* Panel Results */
-.calc-panel.results {
-  position: relative; padding: 40px; display: flex; flex-direction: column; justify-content: center;
-  background: radial-gradient(circle at bottom right, #1e293b, #0f172a);
-}
-.r-logo-bg {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  opacity: 0.05; pointer-events: none;
-}
-.r-logo-bg img { width: 250px; }
-
-.r-content { position: relative; z-index: 2; text-align: center; }
-.r-label { font-size: 0.9rem; color: var(--txt-muted); text-transform: uppercase; letter-spacing: 1px; }
-.r-total {
-  font-size: 3.5rem; font-weight: 700; color: white;
-  margin: 10px 0 20px; font-family: 'Inter', sans-serif;
-}
-.r-total small { font-size: 1rem; color: var(--txt-muted); font-weight: 400; margin-left: 5px; }
-.r-badge {
-  display: inline-block; background: rgba(16, 185, 129, 0.2); color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.3); padding: 5px 12px; border-radius: 50px;
-  font-size: 0.8rem; margin-bottom: 30px;
-}
-.r-stats { display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; text-align: left; }
-.stat span { display: block; font-size: 0.8rem; color: var(--txt-muted); }
-.stat strong { display: block; font-size: 1.1rem; color: white; margin-top: 5px; }
-.r-note { margin-top: 20px; font-size: 0.75rem; color: var(--txt-muted); opacity: 0.6; }
-
-/* 5. PACKS */
-.packs-section { padding: 80px 0; background: var(--bg-main); border-top: 1px solid rgba(255,255,255,0.05); }
-.sub-h2 { text-align: center; color: var(--txt-muted); margin-bottom: 40px; }
-.packs-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-.pack-dark {
-  background: var(--bg-card); border: 1px solid rgba(255,255,255,0.05);
-  padding: 30px; border-radius: 12px; width: 300px;
-  display: flex; flex-direction: column; transition: 0.3s;
-}
-.pack-dark:hover { border-color: var(--accent-gold); transform: translateY(-5px); }
-.pd-head { color: var(--accent-gold); display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 1.2rem; }
-.pack-dark p { color: var(--txt-muted); font-size: 0.9rem; flex-grow: 1; margin-bottom: 20px; }
-.pd-price { font-size: 1.1rem; font-weight: 700; color: white; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.1); margin-bottom: 15px; }
-.pd-link { color: var(--accent-gold); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 5px; font-size: 0.9rem; }
-
-/* 6. CTA */
-.dark-cta { padding: 60px 0; }
-.cta-box {
-  background: linear-gradient(135deg, #1e293b, #0f172a);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 20px; padding: 60px 20px; text-align: center;
-}
-.cta-box h2 { font-size: 2.5rem; margin-bottom: 15px; }
-.cta-box p { color: var(--txt-muted); margin-bottom: 30px; }
-.cta-btns { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-`;

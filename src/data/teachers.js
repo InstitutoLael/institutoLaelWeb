@@ -1,28 +1,18 @@
 // src/data/teachers.js
 
 export const teachers = [
+  // === REALES / CONFIRMADOS ===
   {
     id: "diego",
     name: "Diego Chaparro",
-    role: "Director & Profe Matemáticas", // Cargo principal
-    subject: "PAES M1/M2 · Estrategia",   // Subtítulo
+    role: "Director & Profe Matemáticas",
+    subject: "PAES M1/M2 · Estrategia",
     bio: "Fundador de Instituto Lael. Comenzó enseñando matemáticas con una pizarra y hoy lidera la visión educativa. Cree firmemente que los números no son difíciles, solo están mal explicados.",
     accent: "#F59E0B", // Gold
     img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=F59E0B&color=fff&size=200&bold=true",
     tags: ["Liderazgo", "Matemáticas", "Estrategia"],
     social: { linkedin: "#", instagram: "#" },
-    featured: true // Para que salga destacado
-  },
-  {
-    id: "camila",
-    name: "Camila Acuña",
-    role: "Coordinadora Académica",
-    subject: "Gestión · Coaching · Inglés",
-    bio: "El corazón operativo de Lael. Se encarga de que cada alumno tenga su material a tiempo, los horarios cuadren y que la experiencia educativa sea impecable.",
-    accent: "#F43F5E", // Rose
-    img: "https://ui-avatars.com/api/?name=Camila+Acuna&background=F43F5E&color=fff&size=200&bold=true",
-    tags: ["Coordinación", "Gestión", "Soft Skills"],
-    social: { linkedin: "#" }
+    featured: true
   },
   {
     id: "fernanda",
@@ -33,7 +23,7 @@ export const teachers = [
     accent: "#10B981", // Emerald
     img: "https://ui-avatars.com/api/?name=Fernanda+LSCh&background=10B981&color=fff&size=200&bold=true",
     tags: ["Sorda Nativa", "Educ. Párvulos", "Cultura Sorda"],
-    social: { instagram: "#" }
+    featured: true
   },
   {
     id: "martin",
@@ -44,6 +34,51 @@ export const teachers = [
     accent: "#3B82F6", // Blue
     img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=3B82F6&color=fff&size=200&bold=true",
     tags: ["Biología", "Química", "Ciencia"],
-    social: {}
-  }
+    featured: true
+  },
+
+  // === Placeholder / Staff Ejemplos (Desde PAES.jsx) ===
+  // Estos se usan para llenar la UI mientras se confirma el equipo completo
+  {
+    id: "javiera",
+    name: "Javiera Paz",
+    role: "Docente Lenguaje",
+    subject: "Comprensión Lectora",
+    title: "Magíster en Literatura",
+    uni: "U. de Chile",
+    area: "Lenguaje",
+    img: "https://ui-avatars.com/api/?name=Javiera+Paz&background=F43F5E&color=fff&size=200&bold=true",
+    bio: "Experta en letras y comprensión lectora. Te enseñará a leer entre líneas.",
+    accent: "#F43F5E",
+    tags: ["Lenguaje", "Literatura"],
+    placeholder: true
+  },
+  {
+    id: "carlos",
+    name: "Carlos Soto",
+    role: "Docente Matemáticas",
+    subject: "Matemática Avanzada",
+    title: "Ingeniero Civil",
+    uni: "PUC",
+    area: "Matemática",
+    img: "https://ui-avatars.com/api/?name=Carlos+Soto&background=3B82F6&color=fff&size=200&bold=true",
+    bio: "Ingeniero Civil con pasión por la docencia. Hace fácil lo difícil.",
+    accent: "#3B82F6",
+    tags: ["Ingeniería", "Matemática"],
+    placeholder: true
+  },
+  {
+    id: "ana",
+    name: "Ana María",
+    role: "Docente Ciencias",
+    subject: "Biología Celular",
+    title: "Dra. en Ciencias",
+    uni: "U. de Concepción",
+    area: "Biología",
+    img: "https://ui-avatars.com/api/?name=Ana+Maria&background=10B981&color=fff&size=200&bold=true",
+    bio: "Doctora en Ciencias que ama enseñar desde la evidencia y el asombro.",
+    accent: "#10B981",
+    tags: ["Ciencia", "Investigación"],
+    placeholder: true
+  },
 ];

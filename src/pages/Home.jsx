@@ -10,6 +10,8 @@ import { BsStars, BsArrowRightCircleFill, BsPlayCircle } from "react-icons/bs";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { IoSchoolOutline } from "react-icons/io5";
 
+import { TESTIMONIALS } from "../data/testimonials";
+
 /* --- ANIMATION VARIANTS (Staggered Reveal) --- */
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -31,28 +33,6 @@ const itemVariants = {
     }
 };
 
-/* --- DATA: TESTIMONIOS --- */
-const TESTIMONIALS = [
-    {
-        name: "Javier M.",
-        program: "Preu PAES",
-        quote: "Pasé de 450 a 810 puntos. No solo te enseñan a responder, te enseñan a pensar.",
-        rating: 5,
-    },
-    {
-        name: "Daniela R.",
-        program: "LSCh Intermedio",
-        quote: "Fernanda es una profesora excelente. Aprendí cultura sorda con una pedagogía muy paciente.",
-        rating: 5,
-    },
-    {
-        name: "Gerencia RRHH",
-        program: "Corporate",
-        quote: "Resultados inmediatos en el equipo de ventas. Gestión impecable y profesionalismo.",
-        rating: 5,
-    },
-];
-
 const RatingStars = ({ count }) => (
     <div className="flex gap-1 text-amber-400 text-sm">
         {[...Array(5)].map((_, i) => (
@@ -64,6 +44,9 @@ const RatingStars = ({ count }) => (
 export default function Home() {
 
     useEffect(() => { window.scrollTo(0, 0); }, []);
+
+    // Filter featured testimonials for Home
+    const featuredTestimonials = TESTIMONIALS.filter(t => t.featured).slice(0, 3);
 
     return (
         <div className="bg-[#020617] text-slate-200 font-sans overflow-x-hidden selection:bg-amber-500/30">
@@ -272,7 +255,7 @@ export default function Home() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {TESTIMONIALS.map((t, index) => (
+                        {featuredTestimonials.map((t, index) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}

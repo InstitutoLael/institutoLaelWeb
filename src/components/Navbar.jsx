@@ -1,10 +1,13 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/img/Logos/lael-inst-blanco.png";
+import { NAVIGATION } from "../data/navigation";
 
 /* ─── ICONOS SVG (Lucide-like optimizados) ─── */
+// Nota: Para este refactor mantengo los SVG inline por rendimiento y estilo visual específico
+// aunque NAVIGATION use react-icons. Los íconos del MegaMenu se mapean visualmente aquí.
 const Icons = {
   ChevronDown: ({ className }) => <svg className={className} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>,
   Menu: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></svg>,
@@ -12,12 +15,24 @@ const Icons = {
   Bag: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>,
   WhatsApp: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.08-.13-.27-.2-.57-.35M12.05 21.78h-.01A9.87 9.87 0 017.01 20.4l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26C2.16 6.49 6.6 2.05 12.05 2.05c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.89 6.99c-.01 5.45-4.44 9.84-9.88 9.84" /></svg>,
   User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>,
+  // Icon mapping helpers for MegaMenu
   Grad: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>,
   World: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>,
   Hand: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0" /><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" /><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" /><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></svg>,
   Book: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>,
   Rocket: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" /><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" /><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" /><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /></svg>,
-  ArrowR: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg>
+};
+
+// Helper para mapear string icon a componente
+const getIcon = (name) => {
+  const map = {
+    "FaGraduationCap": <Icons.Grad />,
+    "FaGlobeAmericas": <Icons.World />,
+    "FaHandsHelping": <Icons.Hand />,
+    "FaBookReader": <Icons.Book />,
+    "FaRocket": <Icons.Rocket />
+  };
+  return map[name] || <Icons.Book />;
 };
 
 /* ─── COMPONENTE NAVBAR ─── */
@@ -28,9 +43,9 @@ export default function Navbar() {
   const cartCount = cart ? cart.length : 0;
   const location = useLocation();
 
-  // Scroll Detection for Glass Effect
+  // Scroll Detection
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -40,17 +55,16 @@ export default function Navbar() {
     setMobileOpen(false);
   }, [location.pathname]);
 
-  // Prevent Body Scroll when Mobile Menu is Open
+  // Lock Body Scroll
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  // Navbar Dynamic Classes
-  // PC: Transparent gradient at top, Solid Glass on scroll
+  // Navbar Classes (Glass effect)
   const navClasses = `fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled
-      ? "bg-black/80 backdrop-blur-xl border-b border-white/10 shadow-lg py-3"
-      : "bg-transparent py-5"
+    ? "bg-[#050505]/80 backdrop-blur-xl border-b border-white/10 shadow-lg py-3"
+    : "bg-transparent py-5"
     }`;
 
   return (
@@ -68,8 +82,9 @@ export default function Navbar() {
 
         {/* === DESKTOP NAVIGATION (> 1024px) === */}
         <nav className="hidden lg:flex items-center gap-1">
-          <NavLink to="/" className={({ isActive }) => `px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}>
-            Inicio
+          {/* Main Links (Inicio) */}
+          <NavLink to={NAVIGATION.main[0].path} className={({ isActive }) => `px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}>
+            {NAVIGATION.main[0].name}
           </NavLink>
 
           {/* Mega Menu Trigger */}
@@ -82,21 +97,25 @@ export default function Navbar() {
             {/* Mega Menu Dropdown */}
             <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[360px] p-2 bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible translate-y-2 transition-all duration-300 group-hover/dropdown:opacity-100 group-hover/dropdown:visible group-hover/dropdown:translate-y-0 z-50">
               <div className="grid gap-1">
-                <MegaItem to="/paes" title="Preu PAES" icon={<Icons.Grad />} color="text-cyan-400" />
-                <MegaItem to="/idiomas" title="Idiomas" icon={<Icons.World />} color="text-emerald-400" />
-                <MegaItem to="/lsch" title="Lengua de Señas" icon={<Icons.Hand />} color="text-purple-400" />
-                <MegaItem to="/escuela-adultos" title="Escuela Adultos" icon={<Icons.Book />} color="text-amber-400" />
-                <MegaItem to="/homeschool" title="Lael Academy" icon={<Icons.Rocket />} color="text-rose-400" />
+                {NAVIGATION.megaMenu.map((item, idx) => (
+                  <MegaItem
+                    key={idx}
+                    to={item.path}
+                    title={item.title}
+                    icon={getIcon(item.icon)}
+                    color={item.color}
+                  />
+                ))}
               </div>
             </div>
           </div>
 
-          <NavLink to="/empresas" className={({ isActive }) => `px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}>
-            Empresas
-          </NavLink>
-          <NavLink to="/nosotros" className={({ isActive }) => `px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}>
-            Nosotros
-          </NavLink>
+          {/* Main Links Restantes (Empresas, Nosotros) */}
+          {NAVIGATION.main.slice(1).map((link, idx) => (
+            <NavLink key={idx} to={link.path} className={({ isActive }) => `px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}>
+              {link.name}
+            </NavLink>
+          ))}
         </nav>
 
         {/* === ACTION BUTTONS === */}
@@ -118,12 +137,12 @@ export default function Navbar() {
 
           {/* Desktop Only Actions */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link to="/aula" className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 transition-all hover:bg-white/10 hover:text-white hover:scale-105" title="Aula Virtual">
+            <Link to={NAVIGATION.action.aula.path} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 transition-all hover:bg-white/10 hover:text-white hover:scale-105" title={NAVIGATION.action.aula.name}>
               <Icons.User />
             </Link>
 
-            <Link to="/inscripcion" className="px-6 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-amber-400 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-              Inscripción
+            <Link to={NAVIGATION.action.enroll.path} className="px-6 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-amber-400 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+              {NAVIGATION.action.enroll.name}
             </Link>
           </div>
 
@@ -158,22 +177,18 @@ export default function Navbar() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed top-0 right-0 bottom-0 w-full max-w-sm bg-[#09090b]/95 backdrop-blur-xl border-l border-white/10 z-[100] flex flex-col shadow-2xl"
             >
-              {/* Drawer Header */}
-              <div className="flex items-center justify-between p-6 border-b border-white/10">
-                <span className="text-lg font-bold text-white tracking-wide">Menú</span>
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-slate-400 hover:text-white hover:bg-white/10"
-                >
-                  <Icons.X />
-                </button>
-              </div>
-
               {/* Drawer Content */}
               <div className="flex-1 overflow-y-auto p-6 space-y-8">
+                {/* Header & Close */}
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-bold text-white tracking-wide">Menú</span>
+                  <button onClick={() => setMobileOpen(false)} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white hover:bg-white/10">
+                    <Icons.X />
+                  </button>
+                </div>
 
                 {/* User Access Card */}
-                <Link to="/aula" className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-white/5 to-transparent border border-white/5 hover:border-white/20 transition-all">
+                <Link to={NAVIGATION.action.aula.path} className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-white/5 to-transparent border border-white/5 hover:border-white/20 transition-all">
                   <div className="w-10 h-10 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
                     <Icons.User />
                   </div>
@@ -186,32 +201,31 @@ export default function Navbar() {
                 {/* Navigation Links */}
                 <div className="space-y-4">
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Explorar</p>
-                  <MobileLink to="/">Inicio</MobileLink>
-                  <MobileLink to="/paes">Preuniversitario PAES</MobileLink>
-                  <MobileLink to="/idiomas">Idiomas del Mundo</MobileLink>
-                  <MobileLink to="/lsch">Lengua de Señas</MobileLink>
-                  <MobileLink to="/escuela-adultos">Escuela de Adultos (2x1)</MobileLink>
-                  <MobileLink to="/homeschool">Lael Academy</MobileLink>
+                  <MobileLink to={NAVIGATION.main[0].path}>{NAVIGATION.main[0].name}</MobileLink>
+                  {NAVIGATION.megaMenu.map((item, idx) => (
+                    <MobileLink key={idx} to={item.path}>{item.title}</MobileLink>
+                  ))}
                 </div>
 
                 <div className="space-y-4">
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Nosotros</p>
-                  <MobileLink to="/empresas">Para Empresas</MobileLink>
-                  <MobileLink to="/nosotros">Nuestra Historia</MobileLink>
+                  {NAVIGATION.main.slice(1).map((item, idx) => (
+                    <MobileLink key={idx} to={item.path}>{item.name}</MobileLink>
+                  ))}
                 </div>
               </div>
 
               {/* Drawer Footer */}
               <div className="p-6 border-t border-white/10 bg-black/20">
                 <Link
-                  to="/inscripcion"
+                  to={NAVIGATION.action.enroll.path}
                   className="block w-full py-4 bg-amber-400 text-black text-center font-extrabold text-lg rounded-xl hover:bg-amber-300 transition-colors shadow-lg shadow-amber-500/20"
                 >
                   🚀 Matricularme Ahora
                 </Link>
                 <div className="mt-4 text-center">
-                  <a href="https://wa.me/56964626568" className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center gap-2">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.08-.13-.27-.2-.57-.35M12.05 21.78h-.01A9.87 9.87 0 017.01 20.4l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26C2.16 6.49 6.6 2.05 12.05 2.05c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.89 6.99c-.01 5.45-4.44 9.84-9.88 9.84" /></svg>
+                  <a href={NAVIGATION.action.whatsapp.url} className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center gap-2">
+                    <Icons.WhatsApp />
                     ¿Necesitas ayuda?
                   </a>
                 </div>

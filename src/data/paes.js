@@ -5,7 +5,7 @@
    1. CONFIGURACIÓN FINANCIERA Y BASE
    ────────────────────────────────────────────────────────────────────────── */
 
-export const ENROLLMENT_FEE = 10990; 
+export const ENROLLMENT_FEE = 10990;
 export const ACADEMIC_MONTHS = 8; // Abril a Noviembre (Intensivo)
 
 export const clp = (n) =>
@@ -25,7 +25,7 @@ export const clp = (n) =>
  */
 export function computePaesPrice(selectedIds = []) {
   const count = selectedIds.length;
-  
+
   const TIER_PRICES = {
     1: 9990,
     2: 18990,
@@ -76,63 +76,63 @@ export const priceForCount = (count) => computePaesPrice(Array(count).fill(0)).t
    3. CATÁLOGO DE ASIGNATURAS (DATA DETALLADA)
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_SUBJECTS = [
-  { 
-    id: "m1",  
-    name: "Matemática M1", 
+  {
+    id: "m1",
+    name: "Matemática M1",
     category: "Obligatorio",
-    icon: "📐", 
+    icon: "📐",
     color: "#3b82f6",
     desc: "Base fundamental para todas las carreras. Números, Álgebra, Geometría y Datos.",
     hoursPerWeek: 3
   },
-  { 
-    id: "len", 
-    name: "Comprensión Lectora", 
+  {
+    id: "len",
+    name: "Comprensión Lectora",
     category: "Obligatorio",
     icon: "📚",
     color: "#f97316",
     desc: "Estrategias críticas para textos literarios y no literarios. Vocabulario en contexto.",
     hoursPerWeek: 3
   },
-  { 
-    id: "m2",  
-    name: "Matemática M2", 
+  {
+    id: "m2",
+    name: "Matemática M2",
     category: "Electivo Especializado",
     icon: "🚀",
     color: "#8b5cf6",
     desc: "Contenido avanzado para carreras STEM (Ingenierías, Ciencias, salud técnica).",
     hoursPerWeek: 2
   },
-  { 
-    id: "his", 
-    name: "Historia y Cs. Sociales", 
+  {
+    id: "his",
+    name: "Historia y Cs. Sociales",
     category: "Electivo",
     icon: "🏛️",
     color: "#a855f7",
     desc: "Historia de Chile y el Mundo, Formación Ciudadana y Economía.",
     hoursPerWeek: 2
   },
-  { 
-    id: "bio", 
-    name: "Ciencias - Biología", 
+  {
+    id: "bio",
+    name: "Ciencias - Biología",
     category: "Ciencias",
     icon: "🧬",
     color: "#10b981",
     desc: "Célula, Herencia, Ecosistemas y Procesos Biológicos Humanos.",
     hoursPerWeek: 2
   },
-  { 
-    id: "fis", 
-    name: "Ciencias - Física", 
+  {
+    id: "fis",
+    name: "Ciencias - Física",
     category: "Ciencias",
     icon: "⚡",
     color: "#ef4444",
     desc: "Mecánica, Energía, Ondas, Electricidad y Magnetismo.",
     hoursPerWeek: 2
   },
-  { 
-    id: "qui", 
-    name: "Ciencias - Química", 
+  {
+    id: "qui",
+    name: "Ciencias - Química",
     category: "Ciencias",
     icon: "🧪",
     color: "#06b6d4",
@@ -149,7 +149,7 @@ export const PAES_COMBOS = [
     id: "humanista",
     title: "Pack Humanista",
     subtitle: "Para Derecho, Psicología o Artes",
-    subjects: ["len", "his", "m1"], 
+    subjects: ["len", "his", "m1"],
     price: 27990,
     color: "amber",
     features: ["M1 + Lenguaje + Historia", "Ensayos semanales", "Taller de ansiedad"]
@@ -158,8 +158,8 @@ export const PAES_COMBOS = [
     id: "salud",
     title: "Pack Salud",
     subtitle: "Para Medicina o Enfermería",
-    subjects: ["len", "m1", "m2", "bio", "qui"], 
-    price: 34990, 
+    subjects: ["len", "m1", "m2", "bio", "qui"],
+    price: 34990,
     color: "teal",
     tag: "Más Completo",
     features: ["Plan Full (5 Ramos)", "Biología + Química intensivo", "Preparación M2"]
@@ -168,8 +168,8 @@ export const PAES_COMBOS = [
     id: "ingenieria",
     title: "Pack Ingeniería",
     subtitle: "Para Civiles y Ciencias Exactas",
-    subjects: ["len", "m1", "m2", "fis"], 
-    price: 34990, 
+    subjects: ["len", "m1", "m2", "fis"],
+    price: 34990,
     color: "indigo",
     features: ["Física + M1 + M2", "Estrategias de rapidez", "Foco en resolución"]
   }
@@ -195,7 +195,32 @@ export const PAES_FAQS = [
     a: "Sí, todas las clases son vía Zoom en vivo para que preguntes lo que quieras. Si no puedes asistir, quedan grabadas.",
   },
   {
-    q: "¿Puedo cambiar de ramo después?",
-    a: "¡Claro! Puedes ajustar tu plan mes a mes según vayas descubriendo qué carrera te gusta más.",
   }
+];
+
+/* ──────────────────────────────────────────────────────────────────────────
+   6. DATOS DE CONTENIDO (SYLLABUS & COMPARATIVA)
+   ────────────────────────────────────────────────────────────────────────── */
+export const PAES_SYLLABUS = {
+  m1: [
+    "Números: Racionales, Potencias y Raíces.",
+    "Álgebra: Ecuaciones, Inecuaciones y Sistemas.",
+    "Geometría: Figuras 2D, 3D y Vectores.",
+    "Datos y Azar: Probabilidades y Estadística Descriptiva."
+  ],
+  len: [
+    "Textos Literarios: Narrativa y Dramática.",
+    "Textos No Literarios: Medios Masivos y Argumentación.",
+    "Vocabulario Contextual y Plan de Redacción.",
+    "Lectura Crítica e Inferencial."
+  ]
+};
+
+export const PAES_COMPARISON = [
+  { feature: "Clases en Vivo", lael: true, other: true, tutor: true },
+  { feature: "Grabaciones 4K", lael: true, other: false, tutor: false },
+  { feature: "Ensayo Semanal", lael: true, other: "Mensual", tutor: "No incluído" },
+  { feature: "Corrección con IA", lael: true, other: false, tutor: false },
+  { feature: "Orientación Vocacional", lael: true, other: false, tutor: false },
+  { feature: "Precio Mensual Promedio", lael: "$27.990", other: "$85.000", tutor: "$160.000" },
 ];

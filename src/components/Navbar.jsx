@@ -95,16 +95,23 @@ export default function Navbar() {
             </button>
 
             {/* Mega Menu Dropdown */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[360px] p-2 bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible translate-y-2 transition-all duration-300 group-hover/dropdown:opacity-100 group-hover/dropdown:visible group-hover/dropdown:translate-y-0 z-50">
-              <div className="grid gap-1">
-                {NAVIGATION.megaMenu.map((item, idx) => (
-                  <MegaItem
-                    key={idx}
-                    to={item.path}
-                    title={item.title}
-                    icon={getIcon(item.icon)}
-                    color={item.color}
-                  />
+            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[600px] p-6 bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible translate-y-2 transition-all duration-300 group-hover/dropdown:opacity-100 group-hover/dropdown:visible group-hover/dropdown:translate-y-0 z-50">
+              <div className="grid grid-cols-3 gap-8">
+                {Object.entries(NAVIGATION.megaMenu).map(([category, items]) => (
+                  <div key={category}>
+                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 border-b border-white/5 pb-2">{category}</h4>
+                    <div className="flex flex-col gap-2">
+                      {items.map((item, idx) => (
+                        <MegaItem
+                          key={idx}
+                          to={item.path}
+                          title={item.title}
+                          icon={getIcon(item.icon)}
+                          color={item.color}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -202,8 +209,15 @@ export default function Navbar() {
                 <div className="space-y-4">
                   <p className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Explorar</p>
                   <MobileLink to={NAVIGATION.main[0].path}>{NAVIGATION.main[0].name}</MobileLink>
-                  {NAVIGATION.megaMenu.map((item, idx) => (
-                    <MobileLink key={idx} to={item.path}>{item.title}</MobileLink>
+
+                  {/* Categorized Mobile Menu */}
+                  {Object.entries(NAVIGATION.megaMenu).map(([category, items]) => (
+                    <div key={category} className="pl-2 border-l border-white/10 ml-2">
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 pl-2">{category}</p>
+                      {items.map((item, idx) => (
+                        <MobileLink key={idx} to={item.path}>{item.title}</MobileLink>
+                      ))}
+                    </div>
                   ))}
                 </div>
 

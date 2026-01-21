@@ -1,17 +1,37 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import PartnersMarquee from "../components/PartnersMarquee.jsx"; 
-import { 
-  FaBolt, FaGlobe, FaHands, FaArrowRight, FaUniversity, 
-  FaBuilding, FaChalkboardTeacher, FaQuoteLeft, FaStar, FaUserGraduate
+import { motion } from "framer-motion";
+import PartnersMarquee from "../components/PartnersMarquee.jsx";
+import {
+    FaBolt, FaGlobe, FaHands, FaArrowRight, FaUniversity,
+    FaBuilding, FaChalkboardTeacher, FaQuoteLeft, FaStar, FaUserGraduate
 } from "react-icons/fa";
 import { BsStars, BsArrowRightCircleFill, BsPlayCircle } from "react-icons/bs";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { IoSchoolOutline } from "react-icons/io5";
 
-/* --------------------------------------------------------------------------
-   DATOS DE TESTIMONIOS (Vital para reemplazar Noticias/Naama con confianza)
-   -------------------------------------------------------------------------- */
+/* --- ANIMATION VARIANTS (Staggered Reveal) --- */
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1, // Escalonado rápido
+            delayChildren: 0.2
+        }
+    }
+};
+
+const itemVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        transition: { type: "spring", stiffness: 50, damping: 20 }
+    }
+};
+
+/* --- DATA: TESTIMONIOS --- */
 const TESTIMONIALS = [
     {
         name: "Javier M.",
@@ -34,405 +54,319 @@ const TESTIMONIALS = [
 ];
 
 const RatingStars = ({ count }) => (
-    <div className="rating-row">
+    <div className="flex gap-1 text-amber-400 text-sm">
         {[...Array(5)].map((_, i) => (
-            <FaStar key={i} className={i < count ? "star filled" : "star"} />
+            <FaStar key={i} className={i < count ? "fill-current" : "text-slate-700"} />
         ))}
     </div>
 );
 
 export default function Home() {
-  
-  useEffect(() => { window.scrollTo(0,0); }, []);
 
-  return (
-    <div className="home-master">
-      <style>{css}</style>
+    useEffect(() => { window.scrollTo(0, 0); }, []);
 
-      {/* ─────────────────────────────────────────────────────────────
-          1. HERO SECTION
+    return (
+        <div className="bg-[#020617] text-slate-200 font-sans overflow-x-hidden selection:bg-amber-500/30">
+
+            {/* ─────────────────────────────────────────────────────────────
+          1. HERO SECTION (Premium Glow + Motion)
          ───────────────────────────────────────────────────────────── */}
-      <section className="hero-master">
-        <div className="hero-bg-glow"></div>
-        <div className="container hero-container">
-            
-            <div className="hero-badge">
-                <span className="pulse-dot"></span> Admisión 2026 Abierta
-            </div>
+            <section className="relative min-h-[90vh] flex items-center justify-center pt-20 overflow-hidden">
+                {/* Ambient Glow */}
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,_rgba(56,189,248,0.15)_0%,_transparent_70%)] pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#020617] to-transparent pointer-events-none" />
 
-            <h1 className="hero-title">
-                Excelencia Académica.<br/>
-                <span className="text-gradient-gold">Principios Eternos.</span>
-            </h1>
+                <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
 
-            <p className="hero-subtitle">
-                Bienvenido a <strong>Instituto Lael</strong>. Un ecosistema educativo integral donde 
-                formamos el intelecto sin descuidar el espíritu. Desde preuniversitario hasta 
-                capacitación corporativa.
-            </p>
+                    <motion.div
+                        initial={{ y: -20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.6 }}
+                        className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-amber-400 mb-8 shadow-2xl backdrop-blur-md"
+                    >
+                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_10px_#fbbf24]"></span>
+                        Admisión 2026 Abierta
+                    </motion.div>
 
-            <div className="hero-buttons">
-                <Link to="/inscripcion" className="btn-royal-solid">
-                    Postular Ahora
-                </Link>
-                <Link to="/nosotros" className="btn-royal-outline">
-                    <BsPlayCircle className="icon-left"/> Nuestra Visión
-                </Link>
-            </div>
+                    <motion.h1
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.8, delay: 0.1 }}
+                        className="text-5xl md:text-7xl lg:text-8xl font-serif font-medium text-white leading-[1.1] mb-8 tracking-tight"
+                    >
+                        Excelencia Académica.<br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 font-bold">Principios Eternos.</span>
+                    </motion.h1>
 
-            {/* Stats Rápidos */}
-            <div className="hero-stats-row">
-                <div className="h-stat"><strong>+3.000</strong> Alumnos</div>
-                <div className="h-sep">/</div>
-                <div className="h-stat"><strong>100%</strong> Online</div>
-                <div className="h-sep">/</div>
-                <div className="h-stat"><strong>4.9/5</strong> Satisfacción</div>
-            </div>
-        </div>
-      </section>
+                    <motion.p
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed"
+                    >
+                        Un ecosistema educativo integral donde formamos el intelecto sin descuidar el espíritu.
+                        Desde preuniversitario hasta capacitación corporativa.
+                    </motion.p>
 
-      {/* ─────────────────────────────────────────────────────────────
+                    <motion.div
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.8, delay: 0.3 }}
+                        className="flex flex-col sm:flex-row gap-5 justify-center items-center"
+                    >
+                        <Link to="/inscripcion" className="group relative px-8 py-4 bg-amber-400 text-black font-bold rounded-full text-lg shadow-[0_0_0_4px_rgba(251,191,36,0.1)] hover:shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:scale-105 transition-all duration-300 overflow-hidden">
+                            <span className="relative z-10">Postular Ahora</span>
+                            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12" />
+                        </Link>
+
+                        <Link to="/nosotros" className="flex items-center gap-3 px-8 py-4 rounded-full border border-white/10 text-white font-medium hover:bg-white/5 hover:border-white/30 transition-all group">
+                            <BsPlayCircle className="text-xl group-hover:text-amber-400 transition-colors" /> Nuestra Visión
+                        </Link>
+                    </motion.div>
+
+                    {/* Stats Rápidos */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.8, duration: 1 }}
+                        className="mt-16 flex justify-center gap-8 text-sm text-slate-500 font-medium tracking-wide uppercase"
+                    >
+                        <div><strong className="text-white">+3.000</strong> Alumnos</div>
+                        <div className="w-px h-4 bg-white/10"></div>
+                        <div><strong className="text-white">100%</strong> Online</div>
+                        <div className="w-px h-4 bg-white/10"></div>
+                        <div><strong className="text-white">4.9/5</strong> Satisfacción</div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ─────────────────────────────────────────────────────────────
           2. PARTNERS STRIP
          ───────────────────────────────────────────────────────────── */}
-      <section className="partners-section">
-         <div className="partners-label">Confían en nuestra metodología</div>
-         <PartnersMarquee speed={40} height={40} gap={80} />
-      </section>
+            <section className="bg-black py-4 border-y border-white/5 relative z-20">
+                <div className="text-center text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 mb-4">Confían en nuestra metodología</div>
+                <PartnersMarquee speed={40} height={40} gap={80} />
+            </section>
 
-      {/* ─────────────────────────────────────────────────────────────
-          3. ACADEMIC HUB (BENTO GRID)
+            {/* ─────────────────────────────────────────────────────────────
+          3. ACADEMIC HUB (BENTO GRID REVEAL)
          ───────────────────────────────────────────────────────────── */}
-      <section className="hub-section">
-        <div className="container">
-            <div className="section-header">
-                <span className="sub-gold">Nuestra Oferta Académica</span>
-                <h2>Elige tu camino de crecimiento</h2>
-            </div>
-
-            <div className="bento-grid">
-                
-                {/* A. PAES */}
-                <Link to="/paes" className="b-card large paes-theme">
-                    <div className="b-bg-icon"><FaBolt/></div>
-                    <div className="b-content">
-                        <div className="b-tag">Preuniversitario</div>
-                        <h3>Preu PAES</h3>
-                        <p>El programa insignia. Metodología intensiva, ensayos y tutoría para asegurar tu puntaje.</p>
-                        <span className="b-link">Ver Planes <FaArrowRight/></span>
+            <section className="py-24 bg-[#020617] relative">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="text-center mb-16">
+                        <span className="text-amber-500 font-bold uppercase tracking-widest text-xs mb-3 block">Nuestra Oferta Académica</span>
+                        <h2 className="text-4xl md:text-5xl font-serif text-white">Elige tu camino de crecimiento</h2>
                     </div>
-                </Link>
 
-                {/* B. IDIOMAS */}
-                <Link to="/idiomas" className="b-card standard">
-                    <div className="b-bg-icon"><FaGlobe/></div>
-                    <div className="b-content">
-                        <div className="b-tag">Global</div>
-                        <h3>Idiomas</h3>
-                        <p>Inglés y Coreano. Rompe fronteras.</p>
-                    </div>
-                </Link>
+                    <motion.div
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px]"
+                        variants={containerVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-100px" }}
+                    >
 
-                {/* C. LSCH */}
-                <Link to="/lsch" className="b-card standard">
-                    <div className="b-bg-icon"><FaHands/></div>
-                    <div className="b-content">
-                        <div className="b-tag">Inclusión</div>
-                        <h3>Lengua de Señas</h3>
-                        <p>Cultura sorda y conexión real.</p>
-                    </div>
-                </Link>
+                        {/* A. PAES (Large Card) */}
+                        <motion.div variants={itemVariants} className="md:col-span-2 relative group overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f172a] to-[#1e293b] border border-white/10 hover:border-amber-500/50 transition-colors duration-500">
+                            <Link to="/paes" className="absolute inset-0 p-8 md:p-10 flex flex-col justify-end z-20">
+                                <div className="text-xs font-bold text-amber-400 uppercase tracking-widest mb-2">Preuniversitario</div>
+                                <h3 className="text-3xl font-bold text-white mb-3 font-serif">Preu PAES 2026</h3>
+                                <p className="text-slate-400 max-w-md mb-6 leading-relaxed">Metodología intensiva con tutorías personalizadas. No solo nos enfocamos en el contenido, sino en la estrategia.</p>
+                                <div className="inline-flex items-center gap-2 text-white font-bold group-hover:gap-4 transition-all">
+                                    Ver Planes <FaArrowRight className="text-amber-400" />
+                                </div>
+                            </Link>
+                            {/* Background Icon Effect */}
+                            <FaBolt className="absolute -top-10 -right-10 text-[18rem] text-white/5 group-hover:text-amber-400/10 group-hover:rotate-12 transition-all duration-700 z-10" />
+                        </motion.div>
 
-                {/* D. HOMESCHOOL */}
-                <Link to="/homeschool" className="b-card wide academy-theme">
-                    <div className="b-row">
-                        <div>
-                            <div className="b-tag gold-text">Refuerzo Escolar</div>
-                            <h3>Lael Academy & Homeschool</h3>
-                            <p>Tutorías personalizadas y apoyo para exámenes libres.</p>
-                        </div>
-                        <div className="b-action">
-                            <span className="btn-circle">→</span>
-                        </div>
-                    </div>
-                </Link>
+                        {/* B. IDIOMAS */}
+                        <motion.div variants={itemVariants} className="relative group overflow-hidden rounded-3xl bg-[#0f172a] border border-white/10 hover:border-emerald-500/50 transition-colors duration-500">
+                            <Link to="/idiomas" className="absolute inset-0 p-8 flex flex-col justify-end z-20">
+                                <div className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">Global</div>
+                                <h3 className="text-2xl font-bold text-white mb-2 font-serif">Idiomas</h3>
+                                <p className="text-slate-400 text-sm leading-relaxed mb-4">Inglés y Coreano con certificación. Rompe fronteras.</p>
+                            </Link>
+                            <FaGlobe className="absolute -top-6 -right-6 text-[10rem] text-white/5 group-hover:text-emerald-500/10 group-hover:scale-110 transition-all duration-700 z-10" />
+                        </motion.div>
 
-            </div>
-        </div>
-      </section>
+                        {/* C. LSCH */}
+                        <motion.div variants={itemVariants} className="relative group overflow-hidden rounded-3xl bg-[#0f172a] border border-white/10 hover:border-purple-500/50 transition-colors duration-500">
+                            <Link to="/lsch" className="absolute inset-0 p-8 flex flex-col justify-end z-20">
+                                <div className="text-xs font-bold text-purple-400 uppercase tracking-widest mb-2">Inclusión</div>
+                                <h3 className="text-2xl font-bold text-white mb-2 font-serif">Lengua de Señas</h3>
+                                <p className="text-slate-400 text-sm leading-relaxed mb-4">Conecta con la cultura sorda desde el respeto.</p>
+                            </Link>
+                            <FaHands className="absolute -top-6 -right-6 text-[10rem] text-white/5 group-hover:text-purple-500/10 group-hover:scale-110 transition-all duration-700 z-10" />
+                        </motion.div>
 
-      {/* ─────────────────────────────────────────────────────────────
+                        {/* D. HOMESCHOOL (Wide Card) */}
+                        <motion.div variants={itemVariants} className="md:col-span-2 relative group overflow-hidden rounded-3xl bg-[#0f172a] border border-white/10 hover:border-rose-500/50 transition-colors duration-500 flex items-center">
+                            <Link to="/homeschool" className="w-full h-full p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 z-20">
+                                <div className="flex-1">
+                                    <div className="text-xs font-bold text-rose-400 uppercase tracking-widest mb-2">Lael Academy</div>
+                                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 font-serif">Homeschool & Tutorías</h3>
+                                    <p className="text-slate-400 leading-relaxed">Apoyo académico personalizado para exámenes libres. Educación a tu ritmo.</p>
+                                </div>
+                                <div className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-rose-500 group-hover:border-rose-500 group-hover:text-black transition-all">
+                                    <FaArrowRight size={20} />
+                                </div>
+                            </Link>
+                            <FaUserGraduate className="absolute -bottom-10 right-20 text-[12rem] text-white/5 group-hover:text-rose-500/10 transition-all duration-700 z-10" />
+                        </motion.div>
+
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* ─────────────────────────────────────────────────────────────
           4. DIVISIÓN CORPORATIVA Y SOCIAL
          ───────────────────────────────────────────────────────────── */}
-      <section className="split-section">
-        <div className="container split-grid">
-            
-            {/* EMPRESAS */}
-            <Link to="/empresas" className="split-card corporate">
-                <div className="sc-overlay"></div>
-                <div className="sc-content">
-                    <FaBuilding className="sc-icon"/>
-                    <h3>Para Empresas</h3>
-                    <p>Capacitación corporativa, inglés de negocios y habilidades blandas para equipos de alto rendimiento.</p>
-                    <span className="sc-link">Soluciones B2B →</span>
-                </div>
-            </Link>
+            <section className="py-20 bg-black/40">
+                <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
 
-            {/* ADULTOS */}
-            <Link to="/escuela-adultos" className="split-card social">
-                <div className="sc-overlay"></div>
-                <div className="sc-content">
-                    <IoSchoolOutline className="sc-icon"/>
-                    <h3>Nivelación de Estudios</h3>
-                    <p>Nunca es tarde. Termina tu 4to medio con nuestro programa 2x1 enfocado en adultos.</p>
-                    <span className="sc-link">Ver Programa →</span>
-                </div>
-            </Link>
+                    {/* EMPRESAS */}
+                    <Link to="/empresas" className="group relative h-[400px] rounded-3xl overflow-hidden border border-white/10">
+                        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90" />
 
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────
-          5. TESTIMONIOS (Sustituye a Naamá/Noticias)
-         ───────────────────────────────────────────────────────────── */}
-      <section className="reviews-section">
-        <div className="container">
-            <div className="section-header">
-                <span className="sub-gold"><FaUserGraduate/> Historias Reales</span>
-                <h2>Nuestros alumnos hablan</h2>
-            </div>
-            <div className="reviews-grid">
-                {TESTIMONIALS.map((t, index) => (
-                    <div key={index} className="review-card">
-                        <div className="rc-top">
-                            <FaQuoteLeft className="rc-quote-icon" />
-                            <RatingStars count={t.rating} />
+                        <div className="absolute inset-0 p-10 flex flex-col justify-end">
+                            <FaBuilding className="text-4xl text-amber-400 mb-4 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
+                            <h3 className="text-3xl font-serif text-white mb-2">Para Empresas</h3>
+                            <p className="text-slate-300 mb-6 max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-all duration-500 overflow-hidden">
+                                Capacitación corporativa de alto nivel, inglés de negocios y desarrollo de habilidades blandas.
+                            </p>
+                            <span className="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2">Soluciones B2B <FaArrowRight /></span>
                         </div>
-                        <p className="rc-text">"{t.quote}"</p>
-                        <div className="rc-author">
-                            <strong>{t.name}</strong>
-                            <small>{t.program}</small>
+                    </Link>
+
+                    {/* ADULTOS */}
+                    <Link to="/escuela-adultos" className="group relative h-[400px] rounded-3xl overflow-hidden border border-white/10">
+                        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90" />
+
+                        <div className="absolute inset-0 p-10 flex flex-col justify-end">
+                            <IoSchoolOutline className="text-4xl text-amber-400 mb-4 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
+                            <h3 className="text-3xl font-serif text-white mb-2">Nivelación de Estudios</h3>
+                            <p className="text-slate-300 mb-6 max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-all duration-500 overflow-hidden">
+                                Nunca es tarde. Termina tu 4to medio con nuestro programa 2x1 enfocado 100% en adultos trabajadores.
+                            </p>
+                            <span className="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2">Ver Programa <FaArrowRight /></span>
+                        </div>
+                    </Link>
+
+                </div>
+            </section>
+
+            {/* ─────────────────────────────────────────────────────────────
+          5. TESTIMONIOS
+         ───────────────────────────────────────────────────────────── */}
+            <section className="py-24 bg-[#0f172a] border-y border-white/5">
+                <div className="max-w-7xl mx-auto px-6">
+                    <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                        <div>
+                            <span className="text-amber-500 font-bold uppercase tracking-widest text-xs mb-2 block"><FaUserGraduate className="inline mr-2" />Historias Reales</span>
+                            <h2 className="text-3xl md:text-5xl font-serif text-white">Nuestros alumnos hablan</h2>
+                        </div>
+                        <div className="hidden md:block h-px w-32 bg-white/10 mb-4"></div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {TESTIMONIALS.map((t, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                viewport={{ once: true }}
+                                className="bg-[#020617] border border-white/5 p-8 rounded-2xl hover:border-amber-500/30 transition-colors"
+                            >
+                                <div className="flex justify-between items-start mb-6">
+                                    <FaQuoteLeft className="text-2xl text-amber-500/20" />
+                                    <RatingStars count={t.rating} />
+                                </div>
+                                <p className="text-slate-300 text-lg leading-relaxed italic mb-6">"{t.quote}"</p>
+                                <div className="border-t border-white/5 pt-4">
+                                    <strong className="block text-white font-serif text-lg">{t.name}</strong>
+                                    <span className="text-xs text-slate-500 uppercase tracking-wider">{t.program}</span>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ─────────────────────────────────────────────────────────────
+          6. TALENTO HUMANO
+         ───────────────────────────────────────────────────────────── */}
+            <section className="py-24 bg-black relative overflow-hidden text-center">
+                {/* Background Gradients */}
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/20 via-black to-black pointer-events-none"></div>
+
+                <div className="relative z-10 max-w-4xl mx-auto px-6">
+                    <h2 className="text-4xl md:text-6xl font-serif text-white mb-6">Mentores, no solo profesores.</h2>
+                    <p className="text-xl text-slate-400 mb-12 leading-relaxed">
+                        En Lael, seleccionamos a nuestro equipo no solo por su currículum,
+                        sino por su corazón y capacidad de inspirar a la siguiente generación.
+                    </p>
+
+                    <div className="flex justify-center gap-4 mb-20 flex-wrap">
+                        <Link to="/docentes" className="px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-amber-400 transition-colors">
+                            Ver Equipo Docente
+                        </Link>
+                        <Link to="/trabaja" className="px-8 py-3 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:border-white transition-colors">
+                            Trabaja con nosotros
+                        </Link>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-white/10 pt-12">
+                        <div className="flex flex-col items-center gap-4">
+                            <FaChalkboardTeacher className="text-5xl text-amber-500 mb-2" />
+                            <span className="text-slate-300">Profesionales Titulados<br />y Especialistas</span>
+                        </div>
+                        <div className="flex flex-col items-center gap-4 border-l-0 md:border-l border-white/10">
+                            <HiOutlineUserGroup className="text-5xl text-amber-500 mb-2" />
+                            <span className="text-slate-300">Mentoring 1 a 1<br />y Valores Cristianos</span>
                         </div>
                     </div>
-                ))}
-            </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────
-          6. TALENTO HUMANO (DOCENTES Y TRABAJO)
-         ───────────────────────────────────────────────────────────── */}
-      <section className="talent-section">
-        <div className="container talent-container">
-            <div className="talent-content">
-                <h2>Mentores, no solo profesores.</h2>
-                <p>
-                    En Lael, seleccionamos a nuestro equipo no solo por su currículum, 
-                    sino por su corazón y capacidad de inspirar a la siguiente generación.
-                </p>
-                <div className="talent-actions">
-                    <Link to="/docentes" className="btn-talent primary">Ver Equipo Docente</Link>
-                    <Link to="/trabaja" className="btn-talent secondary">¿Quieres unirte? (Trabaja con nosotros)</Link>
                 </div>
-            </div>
-            
-            <div className="talent-features">
-                 <div className="tf-item">
-                    <FaChalkboardTeacher className="tf-icon"/>
-                    <span>Profesionales<br/>Titulados</span>
-                 </div>
-                 <div className="tf-sep"></div>
-                 <div className="tf-item">
-                    <HiOutlineUserGroup className="tf-icon"/>
-                    <span>Mentoring<br/>1 a 1</span>
-                 </div>
-            </div>
-        </div>
-      </section>
+            </section>
 
-      {/* ─────────────────────────────────────────────────────────────
-          7. FINAL CTA (CONVENIOS & PAGOS)
+            {/* ─────────────────────────────────────────────────────────────
+          7. FINAL CTA
          ───────────────────────────────────────────────────────────── */}
-      <section className="final-master">
-        <div className="container fm-content">
-            <BsStars className="fm-star"/>
-            <h2>¿Listo para dar el siguiente paso?</h2>
-            <p>Ya sea que busques un convenio institucional o inscribirte como alumno.</p>
-            
-            <div className="fm-grid">
-                <Link to="/inscripcion" className="fm-card primary">
-                    <h3>Inscripción Online</h3>
-                    <p>Reserva tu matrícula hoy mismo.</p>
-                    <BsArrowRightCircleFill className="fm-arrow"/>
-                </Link>
+            <section className="py-24 bg-[#020617] border-t border-white/10 text-center">
+                <div className="max-w-5xl mx-auto px-6">
+                    <BsStars className="text-4xl text-amber-400 mx-auto mb-6 animate-pulse" />
+                    <h2 className="text-4xl md:text-5xl font-serif text-white mb-6">¿Listo para dar el siguiente paso?</h2>
+                    <p className="text-xl text-slate-400 mb-16">
+                        Ya sea que busques un convenio institucional o inscribirte como alumno.
+                    </p>
 
-                <Link to="/convenios" className="fm-card secondary">
-                    <h3>Convenios</h3>
-                    <p>Alianzas para instituciones.</p>
-                    <FaUniversity className="fm-icon-sm"/>
-                </Link>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <Link to="/inscripcion" className="bg-amber-500 rounded-2xl p-8 text-left hover:-translate-y-2 transition-transform shadow-[0_0_30px_rgba(251,191,36,0.2)] group">
+                            <h3 className="text-2xl font-bold text-black mb-2">Inscripción Online</h3>
+                            <p className="text-black/80 mb-8">Reserva tu matrícula hoy mismo en 3 pasos simples.</p>
+                            <div className="w-12 h-12 bg-black/10 rounded-full flex items-center justify-center text-black group-hover:bg-black group-hover:text-amber-500 transition-colors">
+                                <BsArrowRightCircleFill size={24} />
+                            </div>
+                        </Link>
 
-                <Link to="/pagos" className="fm-card secondary">
-                    <h3>Portal de Pagos</h3>
-                    <p>Gestión financiera simple.</p>
-                    <span className="fm-small-link">Ir al portal</span>
-                </Link>
-            </div>
+                        <Link to="/convenios" className="bg-[#0f172a] border border-white/10 rounded-2xl p-8 text-left hover:border-amber-500 transition-colors group">
+                            <h3 className="text-xl font-bold text-white mb-2">Convenios</h3>
+                            <p className="text-slate-400 text-sm mb-8">Alianzas estratégicas para colegios e instituciones.</p>
+                            <FaUniversity className="text-3xl text-amber-500/50 group-hover:text-amber-500 transition-colors" />
+                        </Link>
+
+                        <Link to="/pagos" className="bg-[#0f172a] border border-white/10 rounded-2xl p-8 text-left hover:border-amber-500 transition-colors group">
+                            <h3 className="text-xl font-bold text-white mb-2">Portal de Pagos</h3>
+                            <p className="text-slate-400 text-sm mb-8">Gestión financiera simple y segura para apoderados.</p>
+                            <span className="text-xs text-slate-500 uppercase tracking-widest group-hover:text-amber-500 transition-colors">Ir al portal →</span>
+                        </Link>
+                    </div>
+                </div>
+            </section>
+
         </div>
-      </section>
-
-    </div>
-  );
+    );
 }
-
-/* ──────────────────────────────────────────────────────────────────────────
-   CSS (Dark Royal Theme - Optimized)
-   ────────────────────────────────────────────────────────────────────────── */
-const css = `
-:root {
-  --bg-deep: #020617;
-  --bg-panel: #0f172a;
-  --bg-card: #1e293b;
-  --gold: #fbbf24;
-  --gold-dim: #b45309;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --border: rgba(255,255,255,0.08);
-}
-
-.home-master { font-family: 'Inter', sans-serif; background-color: var(--bg-deep); color: var(--text-main); overflow-x: hidden; }
-.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-h1, h2, h3, h4 { font-family: 'Playfair Display', serif; color: white; margin: 0; }
-a { text-decoration: none; color: inherit; transition: 0.3s; }
-.sub-gold { color: var(--gold); text-transform: uppercase; font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; display: block; margin-bottom: 10px; }
-
-/* 1. HERO MASTER */
-.hero-master { position: relative; min-height: 85vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; padding-top: 80px; }
-.hero-bg-glow { position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: radial-gradient(circle at 50% 30%, #1e3a8a33 0%, var(--bg-deep) 70%); pointer-events: none; }
-.hero-container { position: relative; z-index: 2; }
-
-.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); padding: 6px 16px; border-radius: 50px; font-size: 0.8rem; margin-bottom: 30px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
-.pulse-dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 10px var(--gold); animation: pulse 2s infinite; }
-
-.hero-title { font-size: clamp(3rem, 6vw, 5rem); line-height: 1.1; margin-bottom: 25px; font-weight: 700; }
-.text-gradient-gold { background: linear-gradient(to right, #fff, var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hero-subtitle { font-size: 1.2rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 40px; line-height: 1.6; }
-
-.hero-buttons { display: flex; gap: 20px; justify-content: center; margin-bottom: 60px; flex-wrap: wrap; }
-.btn-royal-solid { background: var(--gold); color: #000; padding: 16px 36px; border-radius: 50px; font-weight: 700; font-size: 1.1rem; box-shadow: 0 0 20px rgba(251, 191, 36, 0.3); }
-.btn-royal-solid:hover { transform: scale(1.05); background: white; }
-.btn-royal-outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 16px 36px; border-radius: 50px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-.btn-royal-outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
-
-.hero-stats-row { display: flex; justify-content: center; gap: 20px; align-items: center; opacity: 0.7; font-size: 0.9rem; letter-spacing: 1px; }
-.h-stat strong { color: white; margin-right: 5px; }
-.h-sep { color: var(--border); }
-
-/* 2. PARTNERS */
-.partners-section { background: #000; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-.partners-label { text-align: center; font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); margin-bottom: 15px; letter-spacing: 2px; }
-
-/* 3. HUB SECTION (BENTO) */
-.hub-section { padding: 100px 0; background: var(--bg-deep); }
-.section-header { text-align: center; margin-bottom: 60px; }
-.section-header h2 { font-size: 2.5rem; }
-
-.bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-.b-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 20px; padding: 30px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; min-height: 280px; transition: 0.3s; }
-.b-card:hover { transform: translateY(-5px); border-color: var(--gold); }
-.b-bg-icon { position: absolute; top: -10px; right: -10px; font-size: 8rem; opacity: 0.03; transition: 0.5s; color: white; }
-.b-card:hover .b-bg-icon { transform: scale(1.1) rotate(5deg); opacity: 0.1; }
-
-.b-content { position: relative; z-index: 2; }
-.b-tag { font-size: 0.7rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; letter-spacing: 1px; }
-.b-card h3 { font-size: 1.5rem; margin-bottom: 10px; font-family: 'Inter', sans-serif; font-weight: 700; }
-.b-card p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 20px; }
-.b-link { font-size: 0.9rem; font-weight: 600; color: var(--gold); display: flex; align-items: center; gap: 5px; }
-
-/* Specific Cards */
-.large { grid-column: span 2; background: linear-gradient(145deg, var(--bg-panel), #1e293b); }
-.large h3 { font-size: 2rem; }
-.paes-theme { border-top: 2px solid var(--gold); }
-.wide { grid-column: span 3; padding: 40px; }
-.academy-theme { background: #0f172a; }
-.b-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-.gold-text { color: var(--gold); }
-.btn-circle { width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; color: white; transition: 0.3s; }
-.b-card:hover .btn-circle { background: var(--gold); color: black; border-color: var(--gold); }
-
-@media(max-width: 900px) { .bento-grid { grid-template-columns: 1fr; } .large, .wide { grid-column: span 1; } }
-
-/* 4. SPLIT SECTION */
-.split-section { padding: 50px 0 100px; }
-.split-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-@media(max-width: 800px) { .split-grid { grid-template-columns: 1fr; } }
-
-.split-card { position: relative; height: 350px; border-radius: 20px; overflow: hidden; display: flex; align-items: flex-end; padding: 40px; border: 1px solid var(--border); group; }
-.corporate { background: linear-gradient(to top, rgba(0,0,0,0.9), transparent), url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=600'); background-size: cover; }
-.social { background: linear-gradient(to top, rgba(0,0,0,0.9), transparent), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600'); background-size: cover; }
-
-.sc-content { position: relative; z-index: 2; transition: 0.3s; transform: translateY(10px); }
-.split-card:hover .sc-content { transform: translateY(0); }
-.sc-icon { font-size: 2rem; color: var(--gold); margin-bottom: 15px; }
-.split-card h3 { font-size: 1.8rem; margin-bottom: 10px; }
-.split-card p { font-size: 1rem; color: #cbd5e1; margin-bottom: 20px; line-height: 1.5; opacity: 0; transition: 0.3s; height: 0; overflow: hidden; }
-.split-card:hover p { opacity: 1; height: auto; margin-bottom: 20px; }
-.sc-link { color: var(--gold); font-weight: 700; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
-
-/* 5. TESTIMONIOS (Clean Dark) */
-.reviews-section { padding: 80px 0; background: var(--bg-panel); border-top: 1px solid var(--border); }
-.reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; }
-.review-card { background: var(--bg-deep); border: 1px solid var(--border); border-radius: 16px; padding: 30px; transition: 0.3s; }
-.review-card:hover { border-color: var(--gold); transform: translateY(-5px); }
-.rc-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.rc-quote-icon { color: var(--gold); font-size: 1.5rem; opacity: 0.5; }
-.rating-row { color: var(--gold); font-size: 0.9rem; }
-.rc-text { color: var(--text-muted); font-style: italic; line-height: 1.6; margin-bottom: 20px; font-size: 1rem; }
-.rc-author strong { display: block; color: white; margin-bottom: 2px; }
-.rc-author small { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
-
-/* 6. TALENT SECTION (Centered) */
-.talent-section { padding: 120px 0; background: #000; position: relative; overflow: hidden; text-align: center; }
-.talent-container { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 50px; }
-.talent-content { max-width: 600px; }
-.talent-content h2 { font-size: 3rem; margin-bottom: 20px; }
-.talent-content p { color: var(--text-muted); font-size: 1.2rem; margin-bottom: 40px; }
-.talent-actions { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-
-.btn-talent { padding: 12px 30px; border-radius: 50px; font-weight: 600; transition: 0.3s; font-size: 0.95rem; }
-.btn-talent.primary { background: white; color: black; }
-.btn-talent.primary:hover { background: var(--gold); }
-.btn-talent.secondary { border: 1px solid rgba(255,255,255,0.2); color: white; }
-.btn-talent.secondary:hover { border-color: white; }
-
-.talent-features { display: flex; gap: 60px; margin-top: 20px; }
-.tf-item { text-align: center; }
-.tf-icon { font-size: 2.5rem; color: var(--gold); margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
-.tf-item span { color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; display: block; }
-.tf-sep { width: 1px; background: var(--border); height: 80px; }
-@media(max-width: 600px) { .talent-features { flex-direction: column; gap: 30px; } .tf-sep { display: none; } }
-
-/* 7. FINAL MASTER */
-.final-master { padding: 100px 0; text-align: center; background: var(--bg-deep); border-top: 1px solid var(--border); }
-.fm-star { font-size: 2rem; color: var(--gold); margin-bottom: 20px; }
-.fm-content h2 { font-size: 2.8rem; margin-bottom: 15px; }
-.fm-content p { color: var(--text-muted); margin-bottom: 50px; font-size: 1.2rem; }
-
-.fm-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 20px; max-width: 900px; margin: 0 auto; }
-@media(max-width: 800px) { .fm-grid { grid-template-columns: 1fr; } }
-
-.fm-card { padding: 30px; border-radius: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.3s; min-height: 180px; }
-.fm-card:hover { transform: translateY(-5px); }
-.fm-card.primary { background: var(--gold); color: black; align-items: flex-start; text-align: left; }
-.fm-card.primary h3, .fm-card.primary p { color: black; font-family: 'Inter', sans-serif; }
-.fm-card.primary h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 5px; }
-.fm-card.primary .fm-arrow { font-size: 2rem; margin-top: 20px; align-self: flex-end; }
-
-.fm-card.secondary { background: var(--bg-panel); border: 1px solid var(--border); color: white; }
-.fm-card.secondary:hover { border-color: var(--gold); }
-.fm-card.secondary h3 { font-size: 1.2rem; margin-bottom: 5px; font-family: 'Inter', sans-serif; }
-.fm-card.secondary p { font-size: 0.9rem; color: var(--text-muted); }
-.fm-icon-sm { font-size: 1.5rem; color: var(--gold); margin-top: 15px; }
-.fm-small-link { font-size: 0.8rem; text-decoration: underline; margin-top: 15px; color: var(--text-muted); }
-
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(251, 191, 36, 0); } 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); } }
-`;

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { routesMap, getRoutesByCategory } from "../data/routesMap";
 import { FaArrowRight } from "react-icons/fa";
@@ -12,6 +12,28 @@ const IMG_MAP = {
     ref_lsch: "https://images.unsplash.com/photo-1617112028686-2ab99f43a532?auto=format&fit=crop&q=80&w=800",
     ref_adultos: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800",
     ref_empresas: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800"
+};
+
+const ImageWithFallback = ({ src, alt, className }) => {
+    const [error, setError] = useState(false);
+
+    // If no src is provided or if it errored out, show gradient
+    if (!src || error) {
+        return (
+            <div className={`w-full h-full bg-gradient-to-br from-indigo-900 via-slate-900 to-black flex items-center justify-center ${className}`}>
+                <span className="text-white/20 font-serif italic text-2xl select-none">Lael</span>
+            </div>
+        );
+    }
+
+    return (
+        <img
+            src={src}
+            alt={alt}
+            className={className}
+            onError={() => setError(true)}
+        />
+    );
 };
 
 export default function Programas() {
@@ -50,10 +72,10 @@ export default function Programas() {
                                         key={item.path}
                                         className="group relative bg-[#0f172a] rounded-2xl overflow-hidden border border-white/5 hover:border-indigo-500/50 transition-all hover:-translate-y-1 shadow-lg hover:shadow-indigo-500/10"
                                     >
-                                        {/* Image */}
-                                        <div className="h-48 overflow-hidden relative">
+                                        {/* Image or Gradient Fallback */}
+                                        <div className="h-48 overflow-hidden relative bg-[#1e293b]">
                                             <div className="absolute inset-0 bg-indigo-900/20 group-hover:bg-transparent transition-colors z-10" />
-                                            <img
+                                            <ImageWithFallback
                                                 src={IMG_MAP[item.img] || item.img}
                                                 alt={item.title}
                                                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"

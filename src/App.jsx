@@ -36,6 +36,7 @@ const Privacidad = lazy(() => import("./pages/Privacidad.jsx"));
 const Pagos = lazy(() => import("./pages/Pagos.jsx"));
 const NaamaStudio = lazy(() => import("./pages/NaamaStudio.jsx"));
 const Programas = lazy(() => import("./pages/Programas.jsx"));
+const Recursos = lazy(() => import("./pages/Recursos.jsx"));
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
 
 /* ---------- UTILIDAD: Scroll al inicio al cambiar ruta ---------- */
@@ -85,6 +86,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/programas" element={<Programas />} />
+              <Route path="/recursos" element={<Recursos />} />
               <Route path="/paes" element={<PAES />} />
               <Route path="/idiomas" element={<Idiomas />} />
               <Route path="/lsch" element={<LSCh />} />

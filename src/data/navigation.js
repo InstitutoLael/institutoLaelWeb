@@ -31,6 +31,7 @@ routesMap.forEach(item => {
 export const NAVIGATION = {
     main: [
         { name: "Inicio", path: "/" },
+        { name: "Recursos", path: "/recursos" },
         { name: "Empresas", path: "/empresas" },
         { name: "Nosotros", path: "/nosotros" },
     ],

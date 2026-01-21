@@ -9,7 +9,7 @@ export const routesMap = [
     },
     {
         title: "Nivelación Académica",
-        path: "/aula",
+        path: "/escuela-adultos",
         category: "Escolar",
         img: "ref_aula",
         desc: "Refuerzo escolar personalizado para 1° a 4° medio."

@@ -15,6 +15,7 @@ const IDIOMAS_ROADMAP = [
   { title: "Certificación", desc: "Preparación para exámenes intl.", subinfo: "Logro", icon: <FaTrophy /> },
 ];
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "../supabaseClient";
 
 // ICONS
 import {
@@ -58,12 +59,34 @@ export default function Idiomas() {
   const { addToCart, openCart } = useCart();
 
   // --- STATES ---
+  const [dbProducts, setDbProducts] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [pricing, setPricing] = useState(computeLangBundle(0));
   const [activeTab, setActiveTab] = useState("ingles");
   const [showSticky, setShowSticky] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // --- EFFECTS ---
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('category', 'Idioma');
+
+      if (error) throw error;
+      setDbProducts(data || []);
+    } catch (err) {
+      console.error("Error fetching Idioma products:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     setPricing(computeLangBundle(selectedIds.length));
   }, [selectedIds]);
@@ -91,8 +114,12 @@ export default function Idiomas() {
       return;
     }
     const names = selectedIds.map(id => LANGUAGES.find(l => l.id === id).name).join(" + ");
+    const dbProduct = dbProducts.find(p => p.category === 'Idioma');
+
+    // We use a custom ID for the bundle, but in the checkout we will associate it with DB products
     addToCart({
       id: `lang-bundle-${selectedIds.join('-')}`,
+      db_id: dbProduct ? dbProduct.id : null,
       title: pricing.label,
       price: pricing.totalMonthly,
       detail: names,

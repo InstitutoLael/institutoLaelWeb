@@ -21,9 +21,9 @@ import {
 import { teachers } from "../data/teachers.js";
 import { TESTIMONIALS } from "../data/testimonials.js";
 
-// Components
 import PaesSimulator from "../components/PaesSimulator.jsx";
 import VisualRoadmap from "../components/VisualRoadmap.jsx";
+import { supabase } from "../supabaseClient";
 
 const ROADMAP_STEPS = [
   { title: "Inscripción", desc: "Matrícula digital y diagnóstico inicial.", subinfo: "Paso 1", icon: <FaUserGraduate /> },
@@ -40,13 +40,38 @@ export default function Paes() {
   const { addToCart, openCart } = useCart();
 
   // --- ESTADOS ---
+  const [dbProducts, setDbProducts] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [pricing, setPricing] = useState(computePaesPrice([]));
   const [activeTab, setActiveTab] = useState("m1"); // Para el Syllabus
   const [showSticky, setShowSticky] = useState(false); // Barra inferior pegajosa
+  const [loading, setLoading] = useState(true);
 
   // --- EFECTOS ---
   useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('category', 'PAES');
+
+      if (error) throw error;
+      setDbProducts(data || []);
+    } catch (err) {
+      console.error("Error fetching PAES products:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    // We still use computePaesPrice for the logic of tiers, 
+    // but in a real e-commerce, the price would come from the specific item.
+    // However, if the user builds a custom plan, we apply the tier logic.
     setPricing(computePaesPrice(selectedIds));
   }, [selectedIds]);
 
@@ -66,9 +91,15 @@ export default function Paes() {
 
   const handleAddCustom = () => {
     if (selectedIds.length === 0) return;
+
+    // Find matching subjects in DB products to get their real IDs if available
+    // For now, we keep the custom plan logic, but using the calculated price.
     const names = selectedIds.map(id => PAES_SUBJECTS.find(s => s.id === id).name).join(", ");
+    const dbProduct = dbProducts.find(p => p.name.includes("PAES"));
+
     addToCart({
-      id: `custom-${selectedIds.join('-')}`,
+      id: `custom-paes-${selectedIds.join('-')}`,
+      db_id: dbProduct ? dbProduct.id : null,
       title: `${pricing.label} (${selectedIds.length} ramos)`,
       price: pricing.totalMonthly,
       detail: names,
@@ -78,11 +109,16 @@ export default function Paes() {
   };
 
   const handleAddCombo = (combo) => {
+    // Find the corresponding product in DB by name or matching criteria
+    const dbProduct = dbProducts.find(p => p.name.includes(combo.title));
+
     addToCart({
-      id: `combo-${combo.id}`,
-      title: `Pack ${combo.title}`,
-      price: combo.price,
-      detail: combo.features.join(", "),
+      id: dbProduct ? dbProduct.id : `combo-${combo.id}`,
+      db_id: dbProduct ? dbProduct.id : null,
+      title: dbProduct ? dbProduct.name : `Pack ${combo.title}`,
+      price: dbProduct ? dbProduct.price : combo.price,
+      detail: dbProduct ? dbProduct.description : combo.features.join(", "),
+      image_url: dbProduct ? dbProduct.image_url : null,
       type: 'pack'
     });
     openCart();

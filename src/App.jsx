@@ -41,6 +41,7 @@ const NaamaStudio = lazy(() => import("./pages/NaamaStudio.jsx"));
 const Programas = lazy(() => import("./pages/Programas.jsx"));
 const Recursos = lazy(() => import("./pages/Recursos.jsx"));
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
+const Checkout = lazy(() => import("./pages/Checkout.jsx"));
 
 /* ---------- UTILIDAD: Scroll al inicio al cambiar ruta ---------- */
 function ScrollToTop() {
@@ -146,6 +147,14 @@ export default function App() {
                   element={
                     <ProtectedRoute>
                       <Aula />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/checkout"
+                  element={
+                    <ProtectedRoute>
+                      <Checkout />
                     </ProtectedRoute>
                   }
                 />

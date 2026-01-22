@@ -29,15 +29,6 @@ const fadeInUp = {
    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
 };
 
-// SIMULATED TICKER DATA
-const TICKER_DATA = [
-   "Walmart Chile: Implementó Pack Futuro (Hijos)",
-   "Cencosud: Contrató Inglés Nivel B2 para Gerencia",
-   "Falabella: 15 becas activas para colaboradores",
-   "SMU: Renovación de convenio anual",
-   "LATAM: Auditoría de ROI completada (3.2x)",
-   "Entel: Nuevo taller de Skills de Liderazgo"
-];
 
 export default function Business() {
    // Calculator State
@@ -81,17 +72,6 @@ export default function Business() {
       <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30 overflow-x-hidden">
          <SEOHead title="Lael Corporate | B2B Experience 2.0" description="ROI proyectado, capacitación de élite y beneficios educativos de alto impacto." />
 
-         {/* ──────────────── 0. TICKER (REAL-TIME SOCIAL PROOF) ──────────────── */}
-         <div className="bg-slate-900 border-b border-white/5 py-2 overflow-hidden whitespace-nowrap relative z-50">
-            <div className="flex animate-[ticker_30s_linear_infinite] pause-on-hover">
-               {[...TICKER_DATA, ...TICKER_DATA].map((text, i) => (
-                  <span key={i} className="inline-flex items-center gap-2 mx-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                     {text}
-                  </span>
-               ))}
-            </div>
-         </div>
 
          {/* ──────────────── 1. HERO RE-ENGINEERED ──────────────── */}
          <header className="relative min-h-[90vh] flex items-center overflow-hidden">
@@ -173,19 +153,6 @@ export default function Business() {
             </div>
          </header>
 
-         {/* ──────────────── 2. TRUST SYMBOLS ──────────────── */}
-         <section className="py-20 bg-slate-950 border-y border-white/5 relative">
-            <div className="container mx-auto px-6 overflow-hidden">
-               <p className="text-center text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mb-12">Empresas que confían en nuestra visión</p>
-               <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-40 grayscale group hover:grayscale-0 transition-all duration-700">
-                  <div className="text-2xl font-black tracking-tighter italic">RETAIL_CORP</div>
-                  <div className="text-2xl font-black tracking-tighter italic">MAX_LOGISTICS</div>
-                  <div className="text-2xl font-black tracking-tighter italic">FINTECH_SOLUTIONS</div>
-                  <div className="text-2xl font-black tracking-tighter italic">MINING_LEADER</div>
-                  <div className="text-2xl font-black tracking-tighter italic">GLOBAL_FOODS</div>
-               </div>
-            </div>
-         </section>
 
          {/* ──────────────── 3. COTIZADOR EXPERIENCE 2.0 ──────────────── */}
          <section id="cotizador" className="py-32 bg-[#020617] relative">
@@ -425,46 +392,38 @@ export default function Business() {
             </div>
          </section>
 
-         {/* ──────────────── 4. CASOS DE ÉXITO 2.0 ──────────────── */}
+         {/* ──────────────── 4. VALUE PROPOSITION: WHY LAEL? ──────────────── */}
          <section className="py-32 bg-slate-950">
             <div className="container mx-auto px-6">
-               <div className="max-w-4xl mb-24">
-                  <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter">Evidencia de <br />Resultados.</h2>
-                  <p className="text-xl text-slate-400">No solo capacitamos; transformamos la cultura organizacional con datos.</p>
+               <div className="max-w-4xl mb-20">
+                  <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter">¿Por qué confiar <br />en Lael?</h2>
+                  <p className="text-xl text-slate-400">Construimos puentes entre el potencial humano y los objetivos de negocio.</p>
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                  <motion.div whileHover={{ scale: 1.02 }} className="group relative bg-[#080B14] border border-white/5 p-12 rounded-[3rem] overflow-hidden">
-                     <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 blur-[80px] group-hover:bg-indigo-500/10 transition-colors"></div>
-                     <span className="text-indigo-400 font-black text-xs uppercase tracking-[0.3em] block mb-6">RETAIL TECH</span>
-                     <h3 className="text-3xl font-black text-white mb-8">"Un beneficio que paga dividendos en lealtad."</h3>
-                     <p className="text-slate-400 mb-12 text-lg">
-                        Al implementar el **Pack Futuro** para los hijos de los desarrolladores junior, logramos frenar una ola de fugas de talento hacia la competencia, ahorrando más de **$40M en reclutamiento**.
-                     </p>
-                     <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-2xl text-amber-500"><FaTrophy /></div>
-                        <div>
-                           <div className="text-white font-black">CTO / Retail Chile</div>
-                           <div className="text-slate-600 text-xs">Retention Rate +32%</div>
-                        </div>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {[
+                     {
+                        title: "Medición de Impacto Real",
+                        desc: "No solo entregamos certificados; entregamos reportes de ROI basados en productividad y retención.",
+                        icon: <FaChartLine className="text-indigo-400" />
+                     },
+                     {
+                        title: "Cultura de Aprendizaje",
+                        desc: "Transformamos la capacitación en un beneficio aspiracional que eleva el orgullo de pertenencia.",
+                        icon: <FaUsers className="text-emerald-400" />
+                     },
+                     {
+                        title: "Personalización Extrema",
+                        desc: "Diseñamos el contenido en base a los desafíos específicos de tu industria y KPIs.",
+                        icon: <FaRocket className="text-amber-400" />
+                     }
+                  ].map((item, i) => (
+                     <div key={i} className="bg-slate-900/50 border border-white/5 p-10 rounded-[2.5rem] hover:border-white/20 transition-all">
+                        <div className="text-3xl mb-6">{item.icon}</div>
+                        <h3 className="text-xl font-black text-white mb-4 uppercase tracking-tighter">{item.title}</h3>
+                        <p className="text-slate-400 leading-relaxed text-sm">{item.desc}</p>
                      </div>
-                  </motion.div>
-
-                  <motion.div whileHover={{ scale: 1.02 }} className="group relative bg-[#080B14] border border-white/5 p-12 rounded-[3rem] overflow-hidden">
-                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[80px] group-hover:bg-emerald-500/10 transition-colors"></div>
-                     <span className="text-emerald-400 font-black text-xs uppercase tracking-[0.3em] block mb-6">GLOBAL LOGISTICS</span>
-                     <h3 className="text-3xl font-black text-white mb-8">"Comunicación fluida = Operación eficiente."</h3>
-                     <p className="text-slate-400 mb-12 text-lg">
-                        El programa intensivo de Inglés para el área de Aduanas eliminó los errores de traducción que causaban multas mensuales, generando un **ROI directo en el primer trimestre**.
-                     </p>
-                     <div className="flex items-center gap-6">
-                        <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-2xl text-blue-500"><FaRocket /></div>
-                        <div>
-                           <div className="text-white font-black">Operations Director</div>
-                           <div className="text-slate-600 text-xs">Errors Reduced -60%</div>
-                        </div>
-                     </div>
-                  </motion.div>
+                  ))}
                </div>
             </div>
          </section>

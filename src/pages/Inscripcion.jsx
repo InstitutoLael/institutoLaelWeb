@@ -77,8 +77,8 @@ export default function Inscripciones() {
 
   const [toastMsg, setToastMsg] = useState("");
   const [status, setStatus] = useState("idle");
+  const [currentStep, setCurrentStep] = useState(1);
 
-  // MANTENEMOS EL ESTADO EN INGLÉS PARA REACT (BUENA PRÁCTICA)
   const [form, setForm] = useState({
     fullName: "",
     rut: "",
@@ -90,9 +90,8 @@ export default function Inscripciones() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [currentStep]);
 
-  // Pre-llenado de comentario
   useEffect(() => {
     if (cartItems.length > 0) {
       setForm(prev => ({
@@ -112,6 +111,19 @@ export default function Inscripciones() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const nextStep = () => {
+    if (currentStep === 1) {
+      if (!form.fullName || !form.rut || !form.email || !form.phone) {
+        setToastMsg("Completa todos los campos obligatorios");
+        setTimeout(() => setToastMsg(""), 3000);
+        return;
+      }
+    }
+    setCurrentStep(prev => prev + 1);
+  };
+
+  const prevStep = () => setCurrentStep(prev => prev - 1);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("loading");
@@ -122,25 +134,15 @@ export default function Inscripciones() {
 
     const finalTotal = cartItems.length > 0 ? total : "Por cotizar";
 
-    // ──────────────────────────────────────────────────────────────────
-    // AQUÍ ESTÁ EL ARREGLO ("A PRUEBA DE TODO")
-    // Enviamos las llaves duplicadas (español e inglés) para que el Script
-    // las agarre sí o sí, sin importar qué versión esté corriendo.
-    // ──────────────────────────────────────────────────────────────────
     const payload = {
-      // Para scripts actualizados (Inglés)
       fullName: form.fullName,
       phone: form.phone,
       program: finalProgram,
       comments: form.comments,
-
-      // Para scripts antiguos (Español) - ESTO SOLUCIONARÁ TU PROBLEMA
       nombre: form.fullName,
       telefono: form.phone,
       programa: finalProgram,
       comentario: form.comments,
-
-      // Comunes
       rut: form.rut,
       email: form.email,
       total: finalTotal,
@@ -165,143 +167,231 @@ export default function Inscripciones() {
     }
   };
 
-  // --- VISTA ÉXITO ---
   if (status === "success") {
     const totalDisplay = total > 0 ? clp(total) : "lo acordado";
     const textWsp = `Hola Lael! Soy *${form.fullName}*.\nYa envié mi ficha.\nAdjunto comprobante por ${totalDisplay} para mi matrícula.\n(RUT: ${form.rut})`;
     const linkWsp = `https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(textWsp)}`;
 
     return (
-      <div className="enroll-page success-view">
-        <style>{css}</style>
-        <div className="container success-container">
-          <div className="success-icon"><Icons.Check /></div>
-          <h1>¡Recibido!</h1>
-          <p>Tu inscripción está en proceso. Para activar la matrícula, finaliza el pago.</p>
+      <div className="enroll-page success-view min-h-screen flex items-center justify-center bg-[#050505] py-24 px-6 overflow-hidden relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)] opacity-50" />
 
-          <div className="next-steps-card">
-            <h3>Paso Final: Transferencia</h3>
-            <p className="steps-intro">
-              Transfiere <strong>{totalDisplay}</strong> y envía el comprobante.
-            </p>
+        <div className="container max-w-2xl relative z-10 text-center">
+          <motion.div
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            className="w-24 h-24 bg-emerald-500 rounded-3xl flex items-center justify-center text-slate-950 text-4xl mx-auto mb-10 shadow-2xl shadow-emerald-500/20"
+          >
+            <Icons.Check />
+          </motion.div>
 
-            <div className="bank-mini-details">
-              1088183168 | 78.084.019-6 <br /> pagos@institutolael.cl
+          <h1 className="text-5xl md:text-7xl font-black text-white mb-6 uppercase tracking-tighter">¡Ficha <span className="text-emerald-500">Enviada</span>!</h1>
+          <p className="text-xl text-slate-400 mb-12 font-light">Tu inscripción está siendo procesada. Sigue los pasos finales para activar tu matrícula.</p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white/[0.02] border border-white/10 p-12 rounded-[3.5rem] backdrop-blur-3xl text-left shadow-2xl relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 p-8 text-emerald-500/5 pointer-events-none">
+              <Icons.Check size={120} />
             </div>
 
-            <a href={linkWsp} target="_blank" rel="noreferrer" className="btn btn-whatsapp-lg">
+            <h3 className="text-amber-500 font-black text-xs mb-6 uppercase tracking-[0.3em]">Paso Final: Verificación</h3>
+            <p className="text-slate-300 mb-10 leading-relaxed text-lg">
+              Transfiere <strong className="text-white text-2xl block mt-1 tracking-tighter font-black">{totalDisplay}</strong> a la cuenta del instituto y envía tu comprobante por WhatsApp para validación inmediata.
+            </p>
+
+            <div className="bg-black/40 p-8 rounded-[2rem] border border-white/5 mb-10 font-mono text-sm text-slate-400 space-y-2">
+              <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                <span>RUT: 78.084.019-6</span>
+                <button onClick={() => handleCopy("78.084.019-6")} className="text-amber-500 hover:text-white transition-colors"><Icons.Copy /></button>
+              </div>
+              <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                <span>Cuenta: 1088183168</span>
+                <button onClick={() => handleCopy("1088183168")} className="text-amber-500 hover:text-white transition-colors"><Icons.Copy /></button>
+              </div>
+              <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
+                <span>Email: pagos@institutolael.cl</span>
+                <button onClick={() => handleCopy("pagos@institutolael.cl")} className="text-amber-500 hover:text-white transition-colors"><Icons.Copy /></button>
+              </div>
+            </div>
+
+            <a href={linkWsp} target="_blank" rel="noreferrer" className="w-full py-6 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl flex items-center justify-center gap-3 transition-all shadow-2xl shadow-emerald-600/20 uppercase tracking-widest text-[10px]">
               <Icons.Whatsapp /> Enviar Comprobante Ahora
             </a>
 
-            <Link to="/" className="link-back">Volver al inicio</Link>
-          </div>
+            <Link to="/" className="block text-center mt-10 text-slate-500 hover:text-white transition-colors uppercase text-[10px] font-black tracking-[.3em]">Regresar al Home</Link>
+          </motion.div>
         </div>
       </div>
     );
   }
 
-  // --- VISTA FORMULARIO ---
   return (
-    <div className="enroll-page">
-      <style>{css}</style>
+    <div className="enroll-page min-h-screen pt-40 pb-32 bg-[#050505] selection:bg-amber-500/30">
       <Toast msg={toastMsg} />
 
-      <div className="container">
+      <div className="container max-w-7xl mx-auto px-6">
 
-        <header className="page-header">
-          <div className="secure-badge"><Icons.Lock /> Checkout Seguro</div>
-          <h1>Finalizar Matrícula</h1>
-        </header>
-
-        <div className="layout-grid">
-
-          {/* IZQUIERDA: FORM */}
-          <main className="main-col">
-            <form className="native-form" onSubmit={handleSubmit}>
-
-              <div className="form-section-title">Datos Personales</div>
-
-              <div className="input-group">
-                <label>Nombre Completo</label>
-                <div className="inp-wrapper">
-                  <span className="inp-icon"><Icons.User /></span>
-                  {/* name="fullName" COINCIDE CON EL STATE */}
-                  <input type="text" name="fullName" className="inp" placeholder="Ej: Marcela Paz" required value={form.fullName} onChange={handleChange} />
+        {/* PROGRESS HUD */}
+        <div className="mb-20">
+          <div className="flex justify-between mb-4">
+            {[
+              { step: 1, label: "Datos Personales" },
+              { step: 2, label: "Detalle Académico" },
+              { step: 3, label: "Finalizar & Pago" }
+            ].map((s) => (
+              <div key={s.step} className={`flex flex-col items-center gap-3 transition-all duration-500 ${currentStep >= s.step ? 'opacity-100' : 'opacity-30'}`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-xs ${currentStep === s.step ? 'bg-amber-500 text-slate-950 scale-125' : (currentStep > s.step ? 'bg-emerald-500 text-white' : 'bg-white/10 text-white')}`}>
+                  {currentStep > s.step ? <Icons.Check /> : s.step}
                 </div>
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 hidden md:block">{s.label}</span>
               </div>
+            ))}
+          </div>
+          <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+            <motion.div
+              initial={{ width: "33.33%" }}
+              animate={{ width: `${(currentStep / 3) * 100}%` }}
+              className="h-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]"
+            />
+          </div>
+        </div>
 
-              <div className="row-2">
-                <div className="input-group">
-                  <label>RUT (Sin puntos)</label>
-                  <input type="text" name="rut" className="inp" placeholder="12345678-9" required value={form.rut} onChange={handleChange} />
-                </div>
-                <div className="input-group">
-                  <label>WhatsApp</label>
-                  {/* name="phone" COINCIDE CON EL STATE */}
-                  <input type="tel" name="phone" className="inp" placeholder="+56 9..." required value={form.phone} onChange={handleChange} />
-                </div>
-              </div>
+        <div className="layout-grid grid lg:grid-cols-12 gap-12">
 
-              <div className="input-group">
-                <label>Correo Electrónico</label>
-                <input type="email" name="email" className="inp" placeholder="contacto@correo.com" required value={form.email} onChange={handleChange} />
-              </div>
+          {/* MAIN FORM AREA */}
+          <main className="lg:col-span-8">
+            <div className="bg-slate-900/50 border border-white/5 p-12 rounded-[3.5rem] backdrop-blur-3xl shadow-2xl overflow-hidden relative">
+              <form onSubmit={handleSubmit}>
 
-              <div className="form-section-title mt-4">Detalle Académico</div>
+                {/* STEP 1: PERSONAL DATA */}
+                {currentStep === 1 && (
+                  <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                    <h2 className="text-4xl md:text-5xl font-black text-white mb-10 uppercase tracking-tighter">1. <span className="text-amber-500">Tus Datos</span></h2>
 
-              <div className="input-group">
-                <label>Programa Seleccionado</label>
+                    <div className="space-y-8">
+                      <div className="input-group">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-3 pl-1">Nombre Completo</label>
+                        <div className="relative group">
+                          <span className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-amber-500 transition-colors"><Icons.User /></span>
+                          <input type="text" name="fullName" className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 pl-16 pr-8 text-white text-base focus:border-amber-500/50 focus:bg-white/5 transition-all outline-none" placeholder="Ingresa tu nombre" required value={form.fullName} onChange={handleChange} />
+                        </div>
+                      </div>
 
-                {cartItems.length > 0 ? (
-                  <div className="cart-summary-locked">
-                    <div className="csl-header"><Icons.Cart /> Resumen de Compra</div>
-                    <ul>
-                      {cartItems.map((item, i) => (
-                        <li key={i}>{item.title} <span className="price-tag">{clp(item.price)}</span></li>
-                      ))}
-                    </ul>
-                    <div className="csl-total">
-                      Total: <span>{clp(total)}</span>
+                      <div className="grid md:grid-cols-2 gap-8">
+                        <div className="input-group">
+                          <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-3 pl-1">RUT (Sin puntos)</label>
+                          <input type="text" name="rut" className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-white text-base focus:border-amber-500/50 focus:bg-white/5 transition-all outline-none" placeholder="12345678-9" required value={form.rut} onChange={handleChange} />
+                        </div>
+                        <div className="input-group">
+                          <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-3 pl-1">WhatsApp</label>
+                          <input type="tel" name="phone" className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-white text-base focus:border-amber-500/50 focus:bg-white/5 transition-all outline-none" placeholder="+56 9..." required value={form.phone} onChange={handleChange} />
+                        </div>
+                      </div>
+
+                      <div className="input-group">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-3 pl-1">Correo Electrónico</label>
+                        <input type="email" name="email" className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-white text-base focus:border-amber-500/50 focus:bg-white/5 transition-all outline-none" placeholder="tu@email.com" required value={form.email} onChange={handleChange} />
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <select name="program" className="inp select" required value={form.program} onChange={handleChange}>
-                    <option value="">-- Selecciona Curso --</option>
-                    <option value="PAES Anual">PAES Anual</option>
-                    <option value="PAES Intensivo">PAES Intensivo</option>
-                    <option value="Escuela Adultos">Escuela Adultos 2x1</option>
-                    <option value="Ingles">Inglés</option>
-                  </select>
+
+                    <button type="button" onClick={nextStep} className="w-full mt-12 py-6 bg-white text-slate-950 font-black rounded-2xl flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-95 shadow-2xl shadow-white/5 uppercase tracking-widest text-xs">
+                      Continuar <FaArrowRight />
+                    </button>
+                  </motion.div>
                 )}
-              </div>
 
-              <div className="input-group">
-                <label>Comentarios (Opcional)</label>
-                <textarea name="comments" className="inp ta" rows="2" placeholder="Dudas o requerimientos especiales" value={form.comments} onChange={handleChange}></textarea>
-              </div>
+                {/* STEP 2: ACADEMIC DETAILS */}
+                {currentStep === 2 && (
+                  <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
+                    <h2 className="text-4xl md:text-5xl font-black text-white mb-10 uppercase tracking-tighter">2. <span className="text-amber-500">Tu Camino</span></h2>
 
-              <div className="form-actions">
-                <button type="submit" className={`btn btn-primary submit-btn ${status === 'loading' ? 'loading' : ''}`} disabled={status === 'loading'}>
-                  {status === 'loading' ? <span className="spinner-mini"></span> : "Confirmar y Pagar"}
-                </button>
-              </div>
+                    <div className="space-y-10">
+                      <div className="input-group">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-6 pl-1">Selección Académica</label>
+                        {cartItems.length > 0 ? (
+                          <div className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-10 backdrop-blur-3xl shadow-2xl">
+                            <div className="flex items-center gap-3 text-amber-500 font-black text-[10px] uppercase tracking-[0.3em] mb-8 border-b border-white/5 pb-4">
+                              <Icons.Cart /> Resumen de Selección
+                            </div>
+                            <ul className="space-y-4">
+                              {cartItems.map((item, i) => (
+                                <li key={i} className="flex justify-between items-center bg-white/[0.03] p-6 rounded-2xl border border-white/5 group hover:border-amber-500/30 transition-all">
+                                  <span className="text-white font-black text-base uppercase tracking-tight">{item.title}</span>
+                                  <span className="text-slate-400 font-black text-sm tracking-tighter">{clp(item.price)}</span>
+                                </li>
+                              ))}
+                            </ul>
+                            <div className="mt-10 pt-8 border-t border-white/10 flex justify-between items-center">
+                              <span className="text-[10px] font-black text-slate-500 uppercase tracking-[.2em]">Total Matrícula</span>
+                              <span className="text-5xl font-black text-amber-500 tracking-tighter shadow-amber-500/10 drop-shadow-2xl">{clp(total)}</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="relative group">
+                            <select name="program" className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-5 px-8 text-white text-base focus:border-amber-500/50 focus:bg-white/5 transition-all outline-none appearance-none cursor-pointer" required value={form.program} onChange={handleChange}>
+                              <option value="" className="bg-[#050505]">-- Elige tu Programa --</option>
+                              <option value="PAES Anual" className="bg-[#050505]">PAES Anual 2026</option>
+                              <option value="PAES Intensivo" className="bg-[#050505]">PAES Intensivo Invierno</option>
+                              <option value="Escuela Adultos" className="bg-[#050505]">Escuela Adultos 2x1</option>
+                              <option value="Ingles Flexible" className="bg-[#050505]">Inglés Flexible B2</option>
+                            </select>
+                            <div className="absolute right-8 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 group-hover:text-amber-500 transition-colors"><FaArrowRight className="rotate-90" /></div>
+                          </div>
+                        )}
+                      </div>
 
-            </form>
+                      <div className="input-group">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-3 pl-1">Mensaje o Dudas (Opcional)</label>
+                        <textarea name="comments" className="w-full bg-white/[0.03] border border-white/10 rounded-2xl py-6 px-8 text-white text-base focus:border-amber-500/50 focus:bg-white/5 transition-all outline-none resize-none h-40" placeholder="Cuéntanos si tienes alguna necesidad especial..." value={form.comments} onChange={handleChange}></textarea>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-6 mt-12">
+                      <button type="button" onClick={prevStep} className="px-10 py-6 bg-white/5 border border-white/10 text-white font-black rounded-2xl uppercase text-[10px] tracking-[.3em] hover:bg-white/10 transition-all flex-1">Volver</button>
+                      <button type="submit" className={`px-12 py-6 bg-amber-500 text-slate-950 font-black rounded-2xl flex items-center justify-center gap-4 transition-all hover:scale-[1.02] active:scale-95 shadow-2xl shadow-amber-500/20 flex-[2] uppercase tracking-widest text-xs ${status === 'loading' ? 'opacity-70 cursor-wait' : ''}`} disabled={status === 'loading'}>
+                        {status === 'loading' ? <span className="animate-spin text-xl"><Icons.Check /></span> : (
+                          <>Finalizar & Enviar <FaLock size={12} /></>
+                        )}
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+
+              </form>
+            </div>
           </main>
 
-          {/* DERECHA: DATOS BANCARIOS */}
-          <aside className="sidebar-col">
-            <div className="sticky-content">
-              <div className="payment-helper">
-                <h3>Datos para Transferencia</h3>
-                <p>Usa estos datos si prefieres transferencia directa:</p>
-                <BankCard onCopy={handleCopy} />
+          {/* SIDEBAR: TRUST & BANK */}
+          <aside className="lg:col-span-4 space-y-8">
+            <div className="sticky top-32 space-y-8">
+
+              {/* Bank Card Helper */}
+              <div className="bg-slate-900 border border-white/10 p-8 rounded-[3rem] shadow-2xl overflow-hidden relative group">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
+                <h3 className="text-xl font-black text-white mb-6 relative z-10 uppercase tracking-tight">Depósito Directo</h3>
+                <div className="relative z-10">
+                  <BankCard onCopy={handleCopy} />
+                </div>
+                <div className="mt-8 text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2 relative z-10">
+                  <FaShieldAlt className="text-emerald-500" /> Transacción Segura
+                </div>
               </div>
 
-              <div className="trust-badges">
-                <span>🔒 SSL Encriptado</span>
-                <span>🎓 Garantía Académica</span>
+              {/* Secure Trust */}
+              <div className="p-8 bg-white/5 rounded-[2.5rem] border border-white/5 flex items-center gap-6">
+                <div className="w-16 h-16 rounded-full bg-amber-500/10 flex items-center justify-center text-3xl text-amber-500">
+                  <FaLock />
+                </div>
+                <div>
+                  <h4 className="text-white font-black text-sm uppercase tracking-tight">Privacidad 256-bit</h4>
+                  <p className="text-[10px] text-slate-500 leading-relaxed font-bold">Tus datos están protegidos bajo protocolos de seguridad bancaria.</p>
+                </div>
               </div>
+
             </div>
           </aside>
 
@@ -311,138 +401,4 @@ export default function Inscripciones() {
   );
 }
 
-/* ──────────────────────────────────────────────────────────────────────────
-   4. CSS SCOPED
-   ────────────────────────────────────────────────────────────────────────── */
-const css = `
-:root {
-  --bg-deep: #020617;
-  --bg-panel: #0f172a;
-  --bg-input: #1e293b;
-  --gold: #fbbf24;
-  --gold-glow: rgba(251, 191, 36, 0.3);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --border: rgba(255,255,255,0.08);
-}
-
-.enroll-page {
-  background-color: var(--bg-deep); color: var(--text-main);
-  font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 80px;
-}
-.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-
-/* HEADER */
-.page-header { text-align: center; padding: 120px 0 50px; }
-.secure-badge { 
-  display: inline-flex; align-items: center; gap: 6px; 
-  background: rgba(16, 185, 129, 0.1); color: #10b981; 
-  padding: 5px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; 
-  margin-bottom: 20px;
-}
-h1 { font-family: 'Playfair Display', serif; font-size: 3rem; margin: 0; }
-
-/* LAYOUT */
-.layout-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 50px; align-items: start; }
-@media (max-width: 900px) { .layout-grid { grid-template-columns: 1fr; display: flex; flex-direction: column-reverse; } }
-
-/* FORMULARIO */
-.native-form {
-  background: var(--bg-panel); border: 1px solid var(--border);
-  border-radius: 16px; padding: 40px;
-}
-.form-section-title { font-size: 1.1rem; color: var(--gold); margin-bottom: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-.mt-4 { margin-top: 30px; }
-
-.input-group { margin-bottom: 20px; }
-.input-group label { display: block; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 8px; }
-
-/* INPUTS FIX */
-.inp {
-  width: 100%; background: var(--bg-input); border: 1px solid var(--border);
-  color: white; padding: 14px 16px; border-radius: 8px; font-size: 1rem;
-  transition: 0.2s; font-family: inherit;
-}
-.inp:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow); }
-/* Autofill fix para Chrome en modo oscuro */
-.inp:-webkit-autofill,
-.inp:-webkit-autofill:hover, 
-.inp:-webkit-autofill:focus {
-  -webkit-text-fill-color: white;
-  -webkit-box-shadow: 0 0 0px 1000px var(--bg-input) inset;
-  transition: background-color 5000s ease-in-out 0s;
-}
-
-.inp-wrapper { position: relative; }
-.inp-wrapper .inp { padding-left: 45px; }
-.inp-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-
-.row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-@media (max-width: 600px) { .row-2 { grid-template-columns: 1fr; } }
-
-.select { cursor: pointer; }
-.ta { resize: vertical; min-height: 80px; }
-
-/* RESUMEN CARRITO */
-.cart-summary-locked {
-    background: rgba(251, 191, 36, 0.05); border: 1px dashed var(--gold);
-    padding: 20px; border-radius: 12px;
-}
-.csl-header { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--gold); margin-bottom: 10px; }
-.cart-summary-locked ul { list-style: none; padding: 0; margin: 0 0 15px 0; }
-.cart-summary-locked li { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.95rem; }
-.price-tag { color: var(--text-muted); }
-.csl-total { border-top: 1px solid var(--border); padding-top: 10px; font-weight: 700; font-size: 1.1rem; display: flex; justify-content: space-between; }
-.csl-total span { color: var(--gold); }
-
-/* BOTONES */
-.submit-btn { width: 100%; height: 55px; font-size: 1.1rem; margin-top: 10px; }
-.btn { display: inline-flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: 700; cursor: pointer; border: none; transition: 0.3s; text-decoration: none; }
-.btn-primary { background: var(--gold); color: #000; }
-.btn-primary:hover { background: #fff; transform: translateY(-2px); }
-
-/* TARJETA BANCARIA (Glassmorphism) */
-.bank-card-container { margin-top: 10px; }
-.bank-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 16px; padding: 25px;
-  position: relative; overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-  color: white; font-family: 'Courier New', monospace;
-}
-.card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-.card-chip { width: 40px; height: 30px; background: linear-gradient(135deg, #d97706, #fbbf24); border-radius: 6px; }
-.card-bank-name { font-weight: 700; font-family: sans-serif; opacity: 0.8; }
-.card-number { font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
-.card-number:hover { color: var(--gold); }
-.card-number svg { opacity: 0; transition: 0.2s; }
-.card-number:hover svg { opacity: 1; }
-.card-details { display: flex; justify-content: space-between; font-family: sans-serif; font-size: 0.8rem; }
-.cd-group label { display: block; opacity: 0.5; font-size: 0.6rem; margin-bottom: 2px; }
-.cd-group span { font-weight: 600; cursor: pointer; }
-.cd-group span:hover { color: var(--gold); }
-
-.bank-info-footer { display: flex; justify-content: space-between; margin-top: 10px; color: var(--text-muted); font-size: 0.75rem; }
-
-.trust-badges { display: flex; gap: 15px; justify-content: center; margin-top: 20px; font-size: 0.8rem; color: #10b981; opacity: 0.8; }
-.sticky-content { position: sticky; top: 100px; }
-
-/* SUCCESS */
-.success-view { display: flex; align-items: center; justify-content: center; padding-top: 80px; }
-.success-container { text-align: center; max-width: 600px; animation: fadeIn 0.5s ease; }
-.success-icon { width: 80px; height: 80px; background: #10b981; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: black; margin-bottom: 20px; box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); }
-
-.next-steps-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 16px; padding: 40px; margin-top: 30px; text-align: left; }
-.next-steps-card h3 { color: white; margin-bottom: 10px; }
-.btn-whatsapp-lg { width: 100%; background: #25D366; color: #000; padding: 16px; font-size: 1.1rem; gap: 10px; margin: 20px 0; }
-.btn-whatsapp-lg:hover { filter: brightness(1.1); }
-.link-back { display: block; text-align: center; color: var(--text-muted); margin-top: 15px; font-size: 0.9rem; }
-
-.spinner-mini { width: 20px; height: 20px; border: 2px solid rgba(0,0,0,0.3); border-top-color: #000; border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-.toast-notification { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--gold); color: #000; padding: 10px 20px; border-radius: 30px; font-weight: 700; z-index: 100; display: flex; align-items: center; gap: 8px; animation: fadeIn 0.3s; }
-`;
+// NO embedded CSS anymore, everything is Tailwind

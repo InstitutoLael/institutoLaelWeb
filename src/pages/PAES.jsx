@@ -98,10 +98,10 @@ export default function Paes() {
   const featuredTeachers = teachers.slice(0, 3);
 
   return (
-    <div className="bg-[#020617] text-white font-sans overflow-x-hidden selection:bg-indigo-500/30 pb-20">
+    <div className="bg-[#050505] text-white font-sans overflow-x-hidden selection:bg-indigo-500/30 pb-20">
 
       {/* ──────────────── SECTION 1: HERO MASIVO ──────────────── */}
-      <header className="relative min-h-[90vh] flex items-center justify-center pt-24 pb-20 overflow-hidden bg-[radial-gradient(circle_at_50%_30%,_#1e1b4b_0%,_#020617_70%)]">
+      <header className="relative min-h-[95vh] flex items-center justify-center pt-24 pb-20 overflow-hidden bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)]">
         {/* Ambient Effects */}
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-5 mix-blend-overlay"></div>
 
@@ -145,7 +145,7 @@ export default function Paes() {
       </header>
 
       {/* ──────────────── SECTION 2: DATOS DUROS (STATS) ──────────────── */}
-      <section className="py-12 bg-[#08080a] border-y border-white/5">
+      <section className="py-16 bg-white/[0.02] border-y border-white/5 backdrop-blur-3xl">
         <div className="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
             { icon: <FaChartLine />, val: "+180 pts", label: "Alza promedio" },
@@ -178,8 +178,8 @@ export default function Paes() {
               { icon: "🥱", title: "Clases aburridas", desc: "Estar sentado 2 horas escuchando a un profesor dictar materia es la forma menos eficiente de aprender." },
               { icon: "😰", title: "Ansiedad y Estrés", desc: "Llegar a la prueba sin haber ensayado bajo presión real provoca bloqueos mentales el día D." }
             ].map((card, i) => (
-              <div key={i} className="bg-[#0f172a] p-8 rounded-3xl border border-white/5 hover:border-indigo-500/30 hover:-translate-y-2 transition-all duration-300 group">
-                <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300">{card.icon}</div>
+              <div key={i} className="bg-slate-900/40 p-10 rounded-[2.5rem] border border-white/5 hover:border-indigo-500/30 hover:-translate-y-2 transition-all duration-500 group backdrop-blur-sm">
+                <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform duration-300">{card.icon}</div>
                 <h3 className="text-xl font-bold text-white mb-3">{card.title}</h3>
                 <p className="text-slate-400 leading-relaxed">{card.desc}</p>
               </div>
@@ -252,7 +252,7 @@ export default function Paes() {
       </section>
 
       {/* ──────────────── SECTION 5: CALCULADORA (CORE) ──────────────── */}
-      <section id="builder-section" className="py-24 bg-[#08080a] scroll-mt-24">
+      <section id="builder-section" className="py-32 bg-[#050505] scroll-mt-24">
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-5xl font-serif text-white mb-4">Arma tu Horario y Ahorra</h2>
@@ -268,20 +268,20 @@ export default function Paes() {
                   <div
                     key={sub.id}
                     onClick={() => toggleSubject(sub.id)}
-                    className={`flex items-center gap-5 p-5 rounded-2xl border transition-all cursor-pointer ${isActive
-                      ? 'bg-indigo-500/10 border-indigo-500'
-                      : 'bg-[#0f172a] border-white/5 hover:bg-[#1e293b]'
+                    className={`flex items-center gap-6 p-6 rounded-[2rem] border transition-all cursor-pointer ${isActive
+                      ? 'bg-indigo-500/10 border-indigo-500 shadow-[0_0_20px_rgba(99,102,241,0.1)]'
+                      : 'bg-white/[0.03] border-white/5 hover:bg-white/5 hover:border-white/10'
                       }`}
                   >
                     <div
-                      className="w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 text-white shadow-lg"
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0 text-white shadow-xl"
                       style={{ backgroundColor: sub.color }}
                     >
                       {sub.icon}
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-lg font-bold text-white">{sub.name}</h4>
-                      <span className="text-slate-500 text-xs uppercase font-bold tracking-wider">{sub.category} • {sub.hoursPerWeek} hrs/sem</span>
+                      <h4 className="text-xl font-black text-white uppercase tracking-tight">{sub.name}</h4>
+                      <span className="text-slate-500 text-[10px] uppercase font-black tracking-widest leading-none">{sub.category} • {sub.hoursPerWeek} hrs/sem</span>
                     </div>
                     <div className="w-8 h-8 flex items-center justify-center">
                       {isActive ? (
@@ -297,12 +297,12 @@ export default function Paes() {
 
             {/* DERECHA: TICKET FLOTANTE (2 cols) */}
             <div className="lg:col-span-2 relative">
-              <div className="sticky top-28 bg-[#18181b] border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
-                <div className="bg-[#272730] px-6 py-4 border-b border-white/5 text-center">
-                  <h3 className="font-serif font-bold text-xl text-white">Resumen de Matrícula</h3>
+              <div className="sticky top-28 bg-[#0a0a0b] border border-white/10 rounded-[2.5rem] overflow-hidden shadow-2xl backdrop-blur-3xl">
+                <div className="bg-white/[0.02] px-8 py-6 border-b border-white/5 text-center">
+                  <h3 className="font-black uppercase tracking-widest text-xs text-slate-500">Resumen de Matrícula</h3>
                 </div>
 
-                <div className="p-8">
+                <div className="p-10">
                   {pricing.count === 0 ? (
                     <div className="text-center py-8 text-slate-500 italic flex flex-col items-center gap-2">
                       <FaArrowRight className="animate-bounce-x" /> Selecciona tus ramos
@@ -354,11 +354,11 @@ export default function Paes() {
       </section>
 
       {/* ──────────────── SECTION 6: PACKS RECOMENDADOS ──────────────── */}
-      <section className="py-20 bg-[#020617] border-t border-white/5">
+      <section className="py-24 bg-[#050505] border-t border-white/5">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-serif text-white mb-2">O elige un Pack de Carrera</h2>
-            <p className="text-slate-400">Combinaciones optimizadas para las carreras más demandadas.</p>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-4 uppercase tracking-tighter">O elige un <span className="text-amber-500">Pack de Carrera</span></h2>
+            <p className="text-slate-500 font-medium">Combinaciones optimizadas para las carreras más demandadas.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -371,34 +371,34 @@ export default function Paes() {
               };
 
               return (
-                <div key={combo.id} className={`bg-[#0f172a] rounded-2xl border border-white/10 p-8 relative hover:-translate-y-2 transition-transform duration-300 border-t-4 ${borderColors[combo.id] || "border-t-white"}`}>
+                <div key={combo.id} className={`bg-slate-900/40 rounded-[2.5rem] border border-white/5 p-10 relative hover:-translate-y-2 transition-transform duration-500 border-t-4 ${borderColors[combo.id] || "border-t-white"} backdrop-blur-3xl shadow-2xl overflow-hidden group`}>
                   {combo.tag && (
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-rose-500 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-rose-600 text-white text-[10px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest shadow-lg shadow-rose-600/20">
                       {combo.tag}
                     </div>
                   )}
 
-                  <div className="text-center mb-6 pt-2">
-                    <h3 className="text-xl font-bold text-white mb-1">{combo.title}</h3>
-                    <p className="text-slate-400 text-sm">{combo.subtitle}</p>
+                  <div className="text-center mb-8 pt-2">
+                    <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tight">{combo.title}</h3>
+                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{combo.subtitle}</p>
                   </div>
 
-                  <div className="text-center mb-6">
-                    <span className="text-4xl font-bold text-white tracking-tight">{clp(combo.price)}</span>
-                    <span className="text-slate-500 text-sm">/mes</span>
+                  <div className="text-center mb-10">
+                    <span className="text-5xl font-black text-white tracking-tighter">{clp(combo.price)}</span>
+                    <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest ml-1">/mes</span>
                   </div>
 
-                  <ul className="space-y-3 mb-8 min-h-[140px]">
+                  <ul className="space-y-4 mb-10 min-h-[160px]">
                     {combo.features.map((f, i) => (
-                      <li key={i} className="flex items-start gap-3 text-slate-300 text-sm">
-                        <FaCheck className="text-emerald-400 mt-1 shrink-0" /> {f}
+                      <li key={i} className="flex items-start gap-4 text-slate-400 text-sm font-medium">
+                        <FaCheck className="text-emerald-500 mt-1 shrink-0" /> {f}
                       </li>
                     ))}
                   </ul>
 
                   <button
                     onClick={() => handleAddCombo(combo)}
-                    className="w-full py-3 bg-transparent border border-white/20 text-white font-bold rounded-xl hover:bg-white hover:text-black transition-colors"
+                    className="w-full py-5 bg-white/5 border border-white/10 text-white font-black rounded-2xl hover:bg-white hover:text-slate-950 transition-all uppercase tracking-widest text-[10px]"
                   >
                     Seleccionar Pack
                   </button>
@@ -504,28 +504,33 @@ export default function Paes() {
       </section>
 
       {/* ──────────────── SECTION 9: EQUIPO DOCENTE ──────────────── */}
-      <section className="py-24 bg-[#08080a]">
+      <section className="py-32 bg-[#050505]">
         <div className="container mx-auto px-6 text-center">
-          <h2 className="text-4xl font-serif text-white mb-4">Aprende de los Mejores</h2>
-          <p className="text-slate-400 mb-16 max-w-2xl mx-auto">Nuestros profesores no solo saben la materia, saben enseñarla.</p>
+          <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter">Aprende de los <span className="text-white/20">Mejores</span></h2>
+          <p className="text-slate-500 font-medium mb-20 max-w-2xl mx-auto">Nuestros mentores no solo dominan la materia, dominan el arte de la enseñanza estratégica.</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {featuredTeachers.map((t, i) => (
-              <div key={i} className="bg-[#0f172a] rounded-3xl p-8 border border-white/5 hover:border-indigo-500/50 transition-all group">
-                <div className="w-24 h-24 mx-auto bg-white/5 rounded-full flex items-center justify-center text-4xl mb-6 group-hover:bg-indigo-500/20 transition-colors overflow-hidden">
-                  {t.img && t.img.startsWith("http") ? (
-                    <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
-                  ) : (
-                    t.img || <FaChalkboardTeacher />
-                  )}
+              <div key={i} className="bg-white/[0.02] rounded-[3rem] p-10 border border-white/5 hover:border-white/10 transition-all group backdrop-blur-3xl shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-6 text-white/5 group-hover:text-white/10 transition-colors">
+                  <FaUserGraduate size={100} />
                 </div>
-                <h4 className="text-xl font-bold text-white mb-2">{t.name}</h4>
-                <span className="text-indigo-400 font-bold text-sm uppercase tracking-wider block mb-4">{t.subject}</span>
-                <div className="flex flex-col gap-2 text-sm text-slate-400">
-                  <span className="flex items-center justify-center gap-2">
-                    <FaUserGraduate /> {t.title || t.role}
-                  </span>
-                  {t.uni && <span className="flex items-center justify-center gap-2"><FaUniversity /> {t.uni}</span>}
+                <div className="relative z-10">
+                  <div className="w-28 h-28 mx-auto bg-gradient-to-br from-indigo-500/20 to-transparent rounded-3xl flex items-center justify-center text-5xl mb-8 group-hover:scale-110 transition-transform duration-500 overflow-hidden border border-white/5">
+                    {t.img && t.img.startsWith("http") ? (
+                      <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
+                    ) : (
+                      t.img || <FaChalkboardTeacher className="text-indigo-400" />
+                    )}
+                  </div>
+                  <h4 className="text-2xl font-black text-white mb-2 tracking-tight uppercase">{t.name}</h4>
+                  <span className="text-indigo-500 font-black text-[10px] uppercase tracking-[0.3em] block mb-6">{t.subject}</span>
+                  <div className="flex flex-col gap-3 text-[10px] font-black uppercase tracking-widest text-slate-500 items-center">
+                    <span className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/5">
+                      {t.title || t.role}
+                    </span>
+                    {t.uni && <span className="flex items-center gap-2 opacity-60"><FaUniversity /> {t.uni}</span>}
+                  </div>
                 </div>
               </div>
             ))}
@@ -537,23 +542,23 @@ export default function Paes() {
       </section>
 
       {/* ──────────────── SECTION 10: TESTIMONIOS ──────────────── */}
-      <section className="py-24 bg-[#020617]">
+      <section className="py-32 bg-[#050505] border-t border-white/5">
         <div className="container mx-auto px-6">
-          <h2 className="text-3xl font-serif text-center mb-16 text-white">Historias de Éxito</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <h2 className="text-4xl md:text-6xl font-black text-center mb-24 text-white uppercase tracking-tighter">Voces de <span className="text-amber-500">Éxito</span></h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {paesTestimonials.map((r, i) => (
-              <div key={i} className="bg-[#18181b] p-8 rounded-2xl relative">
-                <div className="flex gap-1 text-amber-500 mb-4 text-sm">
+              <div key={i} className="bg-white/[0.02] p-10 rounded-[2.5rem] border border-white/5 relative backdrop-blur-3xl group hover:border-white/10 transition-all">
+                <div className="flex gap-1 text-amber-500 mb-6 text-xs">
                   {[...Array(r.rating || 5)].map((_, i) => <FaStar key={i} />)}
                 </div>
-                <p className="text-slate-300 italic mb-6 leading-relaxed">"{r.quote}"</p>
-                <div className="flex items-center gap-4 border-t border-white/5 pt-4">
-                  <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold text-white">
+                <p className="text-slate-400 font-medium italic mb-10 leading-relaxed text-lg group-hover:text-slate-300 transition-colors">"{r.quote}"</p>
+                <div className="flex items-center gap-5 border-t border-white/5 pt-8">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center font-black text-white text-xl">
                     {r.name.charAt(0)}
                   </div>
                   <div>
-                    <strong className="block text-white text-sm">{r.name}</strong>
-                    <span className="text-slate-500 text-xs">{r.program}</span>
+                    <strong className="block text-white text-sm font-black uppercase tracking-tight">{r.name}</strong>
+                    <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{r.program}</span>
                   </div>
                 </div>
               </div>
@@ -608,44 +613,42 @@ export default function Paes() {
       </section>
 
       {/* ──────────────── FINAL CTA ──────────────── */}
-      <footer className="py-24 bg-gradient-to-t from-[#1e1b4b] to-[#020617] text-center border-t border-white/5">
-        <div className="container mx-auto px-6 max-w-3xl">
-          <h2 className="text-4xl md:text-5xl font-serif text-white mb-6">Tu futuro universitario comienza hoy</h2>
-          <p className="text-xl text-indigo-200/80 mb-12">No dejes que pase otro mes sin prepararte. Los cupos son limitados por sección.</p>
+      <footer className="py-40 bg-gradient-to-t from-[#1e1b4b]/20 to-[#050505] text-center border-t border-white/5 relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-600/5 blur-[150px] rounded-full"></div>
+        <div className="container mx-auto px-6 max-w-4xl relative z-10">
+          <h2 className="text-5xl md:text-8xl font-black text-white mb-8 tracking-tighter uppercase">Tu Futuro <br /><span className="text-white/20">Comienza Hoy</span></h2>
+          <p className="text-xl text-slate-400 mb-16 max-w-2xl mx-auto leading-relaxed">No dejes que pase otro mes sin prepararte con la élite académica. Los cupos son limitados para garantizar personalización extrema.</p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <button onClick={scrollToBuilder} className="px-8 py-4 bg-white text-black font-extrabold rounded-full text-lg shadow-xl hover:scale-105 transition-transform animate-pulse">
+            <button onClick={scrollToBuilder} className="px-12 py-6 bg-white text-slate-950 font-black rounded-3xl text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all shadow-white/10 uppercase tracking-widest">
               INSCRIBIRME AHORA
             </button>
-            <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="flex items-center gap-2 px-8 py-4 border-2 border-[#25D366] text-[#25D366] font-bold rounded-full hover:bg-[#25D366] hover:text-black transition-colors">
-              <FaWhatsapp className="text-xl" /> Dudas al WhatsApp
+            <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="flex items-center gap-3 px-12 py-6 bg-emerald-600/10 border border-emerald-500/20 text-emerald-500 font-black rounded-3xl hover:bg-emerald-600 hover:text-white transition-all text-xl uppercase tracking-widest">
+              <FaWhatsapp /> WhatsApp
             </a>
           </div>
-          <p className="mt-12 text-slate-600 text-xs">
-            *Resultados pasados no garantizan resultados futuros. El éxito depende de tu compromiso.
-          </p>
         </div>
       </footer>
 
       {/* ──────────────── STICKY BOTTOM BAR (MÓVIL/DESKTOP) ──────────────── */}
-      <div className={`fixed bottom-0 left-0 w-full bg-[#171717]/95 backdrop-blur-lg border-t border-white/10 z-50 transition-transform duration-500 px-6 py-4 ${showSticky ? 'translate-y-0' : 'translate-y-full'}`}>
+      <div className={`fixed bottom-0 left-0 w-full bg-[#0a0a0b]/95 backdrop-blur-2xl border-t border-white/10 z-50 transition-transform duration-500 px-8 py-6 ${showSticky ? 'translate-y-0' : 'translate-y-full'}`}>
         <div className="container mx-auto flex items-center justify-between">
           <div className="hidden md:block">
-            <span className="text-slate-400 text-sm mr-2">Tu Plan:</span>
-            <strong className="text-white text-lg">{pricing.label}</strong>
+            <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1 block">Tu Plan Seleccionado</span>
+            <strong className="text-white text-2xl font-black uppercase tracking-tighter">{pricing.label}</strong>
           </div>
 
-          <div className="flex items-center gap-6 ml-auto md:ml-0 w-full md:w-auto justify-between md:justify-end">
+          <div className="flex items-center gap-8 ml-auto md:ml-0 w-full md:w-auto justify-between md:justify-end">
             <div className="text-right">
-              <div className="text-2xl font-bold text-white leading-none">{clp(pricing.totalMonthly)}</div>
-              <small className="text-slate-500 text-xs">/mes</small>
+              <div className="text-3xl font-black text-amber-500 tracking-tighter leading-none">{clp(pricing.totalMonthly)}</div>
+              <small className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Inversión Mensual</small>
             </div>
             <button
               onClick={handleAddCustom}
               disabled={pricing.count === 0}
-              className="px-6 py-3 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-8 py-4 bg-white text-slate-950 font-black rounded-2xl hover:bg-indigo-50 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest text-xs"
             >
-              INSCRIBIR
+              Matricularme
             </button>
           </div>
         </div>

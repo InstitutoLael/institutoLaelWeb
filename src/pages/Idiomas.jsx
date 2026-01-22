@@ -105,13 +105,12 @@ export default function Idiomas() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-blue-500/30">
+    <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-blue-500/30">
 
       {/* ──────────────── 1. CINEMATIC HERO ──────────────── */}
-      <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20">
+      <header className="relative min-h-[95vh] flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)] pt-20">
         {/* Background Effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.15),transparent_70%)] z-0" />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] z-0" />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] z-0 mix-blend-overlay" />
 
         {/* Animated Orbs */}
         <motion.div
@@ -140,7 +139,7 @@ export default function Idiomas() {
             initial="hidden"
             animate="visible"
             variants={fadeInUp}
-            className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight"
+            className="text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-tight uppercase"
           >
             No estudies idiomas.<br />
             <span className="bg-gradient-to-r from-blue-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
@@ -152,9 +151,9 @@ export default function Idiomas() {
             initial="hidden"
             animate="visible"
             variants={fadeInUp}
-            className="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed"
+            className="text-xl md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light"
           >
-            Olvídate de repetir como un robot. Nuestro método de <strong className="text-white">Inmersión Activa</strong> te
+            Olvídate de repetir como un robot. Nuestro método de <strong className="text-white font-black uppercase tracking-tight">Inmersión Activa</strong> te
             prepara para hablar, trabajar y desenvolverte en el mundo real desde el primer mes.
           </motion.p>
 
@@ -196,7 +195,7 @@ export default function Idiomas() {
       </header>
 
       {/* ──────────────── 2. STATS BAR ──────────────── */}
-      <section className="py-12 border-y border-slate-800/50 bg-slate-900/30 backdrop-blur-sm">
+      <section className="py-16 border-y border-white/5 bg-white/[0.02] backdrop-blur-3xl">
         <div className="container mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
@@ -213,9 +212,9 @@ export default function Idiomas() {
                 transition={{ delay: i * 0.1 }}
                 className="flex flex-col items-center text-center gap-2"
               >
-                <stat.icon className="text-3xl text-blue-500 mb-1" />
-                <strong className="text-2xl font-bold bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">{stat.val}</strong>
-                <span className="text-sm text-slate-500">{stat.label}</span>
+                <stat.icon className="text-4xl text-blue-500 mb-2" />
+                <strong className="text-3xl font-black bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent tracking-tighter">{stat.val}</strong>
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">{stat.label}</span>
               </motion.div>
             ))}
           </div>
@@ -223,28 +222,28 @@ export default function Idiomas() {
       </section>
 
       {/* ──────────────── VISUAL ROADMAP: TRAVESÍA GLOBAL ──────────────── */}
-      <section className="py-24 bg-slate-950 border-t border-white/5">
+      <section className="py-24 bg-[#050505] border-t border-white/5">
         <div className="container mx-auto px-6">
           <VisualRoadmap steps={IDIOMAS_ROADMAP} title="Travesía hacia la Fluidez" color="emerald" />
         </div>
       </section>
 
       {/* ──────────────── LANGUAGE PLACEMENT QUIZ ──────────────── */}
-      <section className="py-24 bg-[#020617]">
+      <section className="py-24 bg-[#050505] border-t border-white/5">
         <div className="container mx-auto px-6 max-w-4xl">
           <LanguagePlacementQuiz />
         </div>
       </section>
 
       {/* ──────────────── 3. THE PROBLEM (APPS VS REALITY) ──────────────── */}
-      <section className="py-24 relative overflow-hidden">
+      <section className="py-24 relative overflow-hidden bg-[#050505]">
         <div className="container mx-auto px-6 relative z-10">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">¿Por qué las Apps no funcionan?</h2>
-            <p className="text-xl text-slate-400">Jugar con un búho verde es divertido, pero no te enseña a sobrevivir una entrevista de trabajo o una emergencia médica.</p>
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <h2 className="text-4xl md:text-6xl font-black mb-8 uppercase tracking-tighter">¿Por qué las <span className="text-red-500">Apps</span> no funcionan?</h2>
+            <p className="text-xl text-slate-400 font-light leading-relaxed">Jugar con un búho verde es divertido, pero no te enseña a sobrevivir una entrevista de trabajo o una emergencia médica.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {[
               { icon: "🦜", title: "Frases sin contexto", desc: "\"El gato bebe leche\". Bien, pero ¿cómo preguntas direcciones o pides ayuda médica?" },
               { icon: "🤖", title: "Audio Robótico", desc: "Acostumbras tu oído a una IA perfecta. En la vida real, la gente habla rápido, con acentos y jerga." },
@@ -256,11 +255,11 @@ export default function Idiomas() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.2 }}
-                className="bg-slate-900/50 border border-slate-800 rounded-3xl p-8 hover:border-red-500/30 hover:bg-slate-800/50 transition-all group"
+                className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-12 hover:border-red-500/30 hover:bg-white/[0.04] transition-all group backdrop-blur-3xl"
               >
-                <div className="text-5xl mb-6 group-hover:scale-110 transition-transform duration-300">{card.icon}</div>
-                <h3 className="text-2xl font-bold mb-4 group-hover:text-white transition-colors">{card.title}</h3>
-                <p className="text-slate-400 leading-relaxed">{card.desc}</p>
+                <div className="text-6xl mb-8 group-hover:scale-110 transition-transform duration-500 grayscale group-hover:grayscale-0">{card.icon}</div>
+                <h3 className="text-2xl font-black mb-4 uppercase tracking-tight text-white group-hover:text-red-500 transition-colors">{card.title}</h3>
+                <p className="text-slate-500 leading-relaxed font-medium">{card.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -268,21 +267,21 @@ export default function Idiomas() {
       </section>
 
       {/* ──────────────── 4. INTERACTIVE BUILDER ──────────────── */}
-      <section id="lang-builder" className="py-24 bg-slate-900 relative">
+      <section id="lang-builder" className="py-32 bg-[#050505] relative border-t border-white/5">
         {/* Background Gradients */}
         <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-900/10 to-transparent pointer-events-none" />
 
         <div className="container mx-auto px-6 relative z-10">
-          <div className="text-center mb-16">
-            <span className="text-amber-400 font-bold tracking-widest text-sm uppercase mb-3 block">Tu viaje comienza aquí</span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">Diseña tu Plan de Estudios</h2>
-            <p className="text-slate-400 text-lg">Selecciona los idiomas que te interesan. Activa el <strong className="text-white">Plan Políglota</strong> eligiendo 2 o más.</p>
+          <div className="text-center mb-20">
+            <span className="text-amber-500 font-black tracking-[0.3em] text-[10px] uppercase mb-4 block">Tu viaje comienza aquí</span>
+            <h2 className="text-4xl md:text-6xl font-black mb-4 uppercase tracking-tighter">Diseña tu Plan de <span className="text-blue-500">Estudios</span></h2>
+            <p className="text-slate-400 text-xl font-light">Selecciona los idiomas que te interesan. Activa el <strong className="text-white font-black uppercase tracking-tight">Plan Políglota</strong> eligiendo 2 o más.</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
 
             {/* LEFT: LANGUAGE CARDS */}
-            <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
               {LANGUAGES.map((lang) => {
                 const isSelected = selectedIds.includes(lang.id);
                 const isComingSoon = lang.comingSoon;
@@ -290,44 +289,48 @@ export default function Idiomas() {
                 return (
                   <motion.div
                     key={lang.id}
-                    whileHover={!isComingSoon ? { y: -5, borderColor: lang.color } : {}}
+                    whileHover={!isComingSoon ? { y: -8, scale: 1.02 } : {}}
                     onClick={() => toggleLanguage(lang.id, isComingSoon)}
-                    className={`relative p-6 rounded-2xl border-2 transition-all cursor-pointer overflow-hidden group
-                      ${isSelected ? 'bg-slate-800/80' : 'bg-slate-950/50'}
-                      ${isComingSoon ? 'border-slate-800 opacity-60 cursor-default border-dashed' : isSelected ? 'border-transparent ring-2 ring-offset-2 ring-offset-slate-900' : 'border-slate-800 hover:bg-slate-800/50'}
+                    className={`relative p-10 rounded-[2.5rem] border-2 transition-all cursor-pointer overflow-hidden group backdrop-blur-3xl
+                      ${isSelected ? 'bg-white/[0.05]' : 'bg-white/[0.02]'}
+                      ${isComingSoon ? 'border-white/5 opacity-50 cursor-default border-dashed' : isSelected ? 'border-blue-500 shadow-[0_0_40px_rgba(59,130,246,0.1)]' : 'border-white/5 hover:border-blue-500/30'}
                     `}
-                    style={{ '--ring-color': lang.color, boxShadow: isSelected ? `0 0 0 2px ${lang.color}` : 'none' }}
                   >
+                    {/* Highlight Orb */}
+                    {isSelected && (
+                      <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/10 rounded-full blur-[50px] pointer-events-none" />
+                    )}
+
                     {/* Badge */}
                     {lang.badge && (
-                      <div className="absolute top-0 right-0 px-3 py-1 text-xs font-bold text-black rounded-bl-xl" style={{ backgroundColor: lang.color }}>
+                      <div className="absolute top-0 right-10 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-white rounded-b-xl shadow-lg" style={{ backgroundColor: lang.color }}>
                         {lang.badge}
                       </div>
                     )}
 
-                    <div className="flex items-center gap-4 mb-4">
-                      <span className="text-4xl filter drop-shadow-lg">{lang.emoji}</span>
+                    <div className="flex items-center gap-6 mb-8">
+                      <span className="text-6xl filter drop-shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-500">{lang.emoji}</span>
                       <div>
-                        <h4 className="text-xl font-bold group-hover:text-white transition-colors">{lang.name}</h4>
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                        <h4 className="text-2xl font-black uppercase tracking-tighter text-white group-hover:text-blue-400 transition-colors">{lang.name}</h4>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                           {isComingSoon ? 'Lista de Espera' : 'Inscripción Abierta'}
                         </span>
                       </div>
                       <div className="ml-auto">
-                        {isComingSoon ? <FaLock className="text-slate-600" /> : (
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${isSelected ? 'bg-white border-white text-black' : 'border-slate-600'}`}>
-                            {isSelected && <FaCheck className="text-xs" />}
+                        {isComingSoon ? <FaLock className="text-slate-700" /> : (
+                          <div className={`w-8 h-8 rounded-xl flex items-center justify-center border-2 transition-all ${isSelected ? 'bg-blue-500 border-blue-500 text-white' : 'border-white/10'}`}>
+                            {isSelected && <FaCheck className="text-sm" />}
                           </div>
                         )}
                       </div>
                     </div>
 
-                    <p className="text-slate-400 text-sm mb-4 line-clamp-3 leading-relaxed">{lang.summary}</p>
+                    <p className="text-slate-500 text-sm mb-8 line-clamp-3 leading-relaxed font-medium">{lang.summary}</p>
 
                     {!isComingSoon && (
-                      <div className="flex gap-2 flex-wrap">
+                      <div className="flex gap-3 flex-wrap">
                         {lang.levels.slice(0, 2).map((l, i) => (
-                          <span key={i} className="text-xs px-2 py-1 rounded bg-slate-700/50 text-slate-300 border border-slate-600/50">
+                          <span key={i} className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg bg-white/5 text-slate-400 border border-white/5">
                             {l}
                           </span>
                         ))}
@@ -343,49 +346,51 @@ export default function Idiomas() {
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-slate-800 rounded-3xl p-1 shadow-2xl border border-slate-700"
+                className="bg-white/[0.02] backdrop-blur-3xl rounded-[3rem] p-12 border border-white/5 shadow-2xl relative overflow-hidden"
               >
-                <div className="bg-slate-950 rounded-[20px] p-6 border border-slate-800/50">
-                  <div className="flex items-center justify-center gap-2 mb-6 pb-6 border-b border-slate-800">
-                    <FaPassport className="text-blue-400" />
-                    <h3 className="font-bold text-lg tracking-wide uppercase">Resumen de Pasaporte</h3>
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-blue-500/5 rounded-full blur-[60px]" />
+
+                <div className="relative z-10">
+                  <div className="flex items-center justify-center gap-3 mb-10 pb-10 border-b border-white/5">
+                    <FaPassport className="text-blue-500 text-2xl" />
+                    <h3 className="font-black text-xl tracking-tighter uppercase text-white">Boarding Pass</h3>
                   </div>
 
                   {selectedIds.length === 0 ? (
-                    <div className="text-center py-8 text-slate-600 italic">
-                      <div className="text-4xl mb-4 opacity-50">👈</div>
-                      <p>Selecciona tu destino <br /> en el mapa</p>
+                    <div className="text-center py-12 text-slate-600 italic">
+                      <div className="text-6xl mb-6 opacity-20">🌍</div>
+                      <p className="font-medium text-sm">Selecciona tu próximo <br /> destino en el mapa</p>
                     </div>
                   ) : (
-                    <ul className="space-y-3 mb-6">
+                    <ul className="space-y-4 mb-10">
                       {selectedIds.map(id => {
                         const l = LANGUAGES.find(s => s.id === id);
                         return (
-                          <li key={id} className="flex items-center gap-3 text-sm text-slate-300">
-                            <span>{l.emoji}</span>
+                          <li key={id} className="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-slate-300">
+                            <span className="text-2xl grayscale group-hover:grayscale-0">{l.emoji}</span>
                             <span>{l.name}</span>
-                            <FaCheck className="ml-auto text-green-500 text-xs" />
+                            <FaCheck className="ml-auto text-blue-500" />
                           </li>
                         )
                       })}
                     </ul>
                   )}
 
-                  <div className="space-y-4 mb-8">
+                  <div className="space-y-6 mb-12">
                     {pricing.saving > 0 && (
-                      <div className="bg-green-500/10 text-green-400 text-center py-2 rounded-lg text-sm font-bold border border-green-500/20">
-                        🎉 ¡Ahorras {clp(pricing.saving)} al mes!
+                      <div className="bg-blue-500/10 text-blue-400 text-center py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-blue-500/20 shadow-2xl shadow-blue-500/10">
+                        🎉 Pack Políglota: -{clp(pricing.saving)}
                       </div>
                     )}
 
                     <div className="flex justify-between items-end">
-                      <span className="text-slate-400">Mensualidad</span>
-                      <strong className="text-3xl font-bold bg-white text-transparent bg-clip-text">
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Inversión Mensual</span>
+                      <strong className="text-4xl font-black text-white tracking-tighter">
                         {clp(pricing.totalMonthly)}
                       </strong>
                     </div>
-                    <div className="flex justify-between text-xs text-slate-500 border-t border-slate-800 pt-3">
-                      <span>Matrícula anual única</span>
+                    <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-600 border-t border-white/5 pt-6">
+                      <span>Matrícula única</span>
                       <span>{clp(pricing.enrollment)}</span>
                     </div>
                   </div>
@@ -393,26 +398,10 @@ export default function Idiomas() {
                   <button
                     onClick={handleAddBundle}
                     disabled={pricing.count === 0}
-                    className="w-full py-4 bg-white hover:bg-blue-50 text-slate-900 font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-white/20 hover:-translate-y-1"
+                    className="w-full py-6 bg-white hover:bg-blue-50 text-slate-950 font-black uppercase tracking-widest text-[10px] rounded-[1.5rem] transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-2xl shadow-white/10"
                   >
-                    {pricing.count === 0 ? 'Elige Idiomas' : 'INSCRIBIR AHORA'}
+                    {pricing.count === 0 ? 'Elige tus Idiomas' : 'Confirmar Inscripción'}
                   </button>
-
-                  <div className="mt-6 p-4 bg-slate-900 rounded-xl text-xs space-y-2 border border-slate-800">
-                    <p className="font-bold text-slate-300">💡 Tip de Ahorro:</p>
-                    <div className={`flex justify-between ${pricing.count === 1 ? 'text-blue-400 font-bold' : 'text-slate-500'}`}>
-                      <span>1 Idioma</span>
-                      <span>$17.990</span>
-                    </div>
-                    <div className={`flex justify-between ${pricing.count === 2 ? 'text-amber-400 font-bold' : 'text-slate-500'}`}>
-                      <span>2 Idiomas</span>
-                      <span>$32.990 (-10%)</span>
-                    </div>
-                    <div className={`flex justify-between ${pricing.count >= 3 ? 'text-green-400 font-bold' : 'text-slate-500'}`}>
-                      <span>3+ Idiomas</span>
-                      <span>$45.990 (Dosis)</span>
-                    </div>
-                  </div>
                 </div>
               </motion.div>
             </div>
@@ -421,16 +410,16 @@ export default function Idiomas() {
       </section>
 
       {/* ──────────────── 5. SYLLABUS TABS ──────────────── */}
-      <section className="py-24 bg-slate-950">
+      <section className="py-24 bg-[#050505]">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
 
             <div className="order-2 lg:order-1">
-              <span className="text-blue-500 font-bold tracking-widest text-sm uppercase mb-2 block">Metodología</span>
-              <h2 className="text-4xl font-bold mb-6">¿Qué vas a aprender?</h2>
-              <p className="text-slate-400 mb-8 text-lg">Nuestro plan de estudios práctico se adapta a situaciones reales, no a libros de texto obsoletos.</p>
+              <span className="text-blue-500 font-black tracking-widest text-[10px] uppercase mb-4 block">Metodología de Alto Impacto</span>
+              <h2 className="text-4xl md:text-6xl font-black mb-8 uppercase tracking-tighter">¿Qué vas a <span className="text-blue-500">dominar?</span></h2>
+              <p className="text-xl text-slate-400 mb-10 font-light leading-relaxed">Nuestro plan de estudios práctico se adapta a situaciones reales, no a libros de texto obsoletos.</p>
 
-              <div className="flex gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
+              <div className="flex gap-4 mb-10 overflow-x-auto pb-4 no-scrollbar">
                 {Object.keys(SYLLABUS_PREVIEW).map(key => {
                   const lang = LANGUAGES.find(l => l.id === key);
                   const isActive = activeTab === key;
@@ -438,18 +427,17 @@ export default function Idiomas() {
                     <button
                       key={key}
                       onClick={() => setActiveTab(key)}
-                      className={`flex items-center gap-2 px-5 py-2 rounded-full border border-slate-800 transition-all font-medium whitespace-nowrap
-                        ${isActive ? 'bg-slate-800 text-white shadow-lg' : 'bg-transparent text-slate-500 hover:text-white'}
+                      className={`flex items-center gap-3 px-8 py-3 rounded-2xl border-2 transition-all font-black uppercase tracking-widest text-[10px] whitespace-nowrap
+                        ${isActive ? 'bg-blue-600 border-blue-600 text-white shadow-2xl shadow-blue-600/20' : 'bg-white/[0.02] border-white/5 text-slate-500 hover:text-white hover:border-white/10'}
                       `}
-                      style={isActive ? { borderColor: lang.color } : {}}
                     >
-                      <span>{lang.emoji}</span> {lang.name}
+                      <span className="text-xl grayscale group-hover:grayscale-0">{lang.emoji}</span> {lang.name}
                     </button>
                   )
                 })}
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeTab}
@@ -512,36 +500,36 @@ export default function Idiomas() {
       </section>
 
       {/* ──────────────── 6. COMPARISON TABLE ──────────────── */}
-      <section className="py-24 bg-slate-900 border-t border-slate-800">
+      <section className="py-24 bg-[#050505] border-t border-white/5">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold">Lael vs. El Mercado</h2>
-            <p className="text-slate-400">Comparar es de sabios.</p>
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white">Lael vs. <span className="text-blue-500">El Mercado</span></h2>
+            <p className="text-xl text-slate-500 font-light mt-4">Comparar es de sabios. Transparencia total.</p>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[700px] border-collapse">
+            <table className="w-full min-w-[700px] border-collapse bg-white/[0.01] rounded-[2.5rem] overflow-hidden">
               <thead>
-                <tr className="border-b-2 border-slate-800">
-                  <th className="text-left py-6 text-slate-400 font-medium uppercase text-sm">Característica</th>
-                  <th className="text-left py-6 text-blue-400 font-bold uppercase text-lg">Instituto Lael</th>
-                  <th className="text-left py-6 text-slate-500 font-medium uppercase text-sm">Apps (Duolingo)</th>
-                  <th className="text-left py-6 text-slate-500 font-medium uppercase text-sm">Institutos Tradicionales</th>
+                <tr className="border-b border-white/5 bg-white/[0.02]">
+                  <th className="text-left p-10 text-slate-500 font-black uppercase tracking-widest text-[10px]">Característica</th>
+                  <th className="text-left p-10 text-blue-500 font-black uppercase tracking-widest text-xs">Instituto Lael</th>
+                  <th className="text-left p-10 text-slate-600 font-black uppercase tracking-widest text-[10px]">Apps (Duolingo)</th>
+                  <th className="text-left p-10 text-slate-600 font-black uppercase tracking-widest text-[10px]">Institutos Tradicionales</th>
                 </tr>
               </thead>
               <tbody>
                 {COMPARISON_DATA.map((row, idx) => (
-                  <tr key={idx} className="border-b border-slate-800/50 hover:bg-slate-800/20 transition-colors">
-                    <td className="py-6 font-semibold text-white">{row.feature}</td>
-                    <td className="py-6 font-bold text-white relative">
+                  <tr key={idx} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                    <td className="p-10 font-black uppercase tracking-tight text-white text-sm">{row.feature}</td>
+                    <td className="p-10 font-bold text-white relative">
                       <div className="absolute inset-0 bg-blue-500/5 -z-10 w-full h-full left-0 mx-0"></div>
-                      {row.lael === true ? <FaCheck className="text-green-400 text-xl" /> : row.lael}
+                      {row.lael === true ? <FaCheck className="text-blue-400 text-xl" /> : row.lael}
                     </td>
-                    <td className="py-6 text-slate-400">
-                      {row.app === false ? <FaTimes className="text-red-500/50 text-xl" /> : row.app}
+                    <td className="p-10 text-slate-500 font-medium">
+                      {row.app === false ? <FaTimes className="text-red-500/20 text-xl" /> : row.app}
                     </td>
-                    <td className="py-6 text-slate-400">
-                      {row.institute === true ? <FaCheck className="text-green-500/50" /> : row.institute}
+                    <td className="p-10 text-slate-500 font-medium">
+                      {row.institute === true ? <FaCheck className="text-white/20" /> : row.institute}
                     </td>
                   </tr>
                 ))}
@@ -552,30 +540,30 @@ export default function Idiomas() {
       </section>
 
       {/* ──────────────── 7. TEAM SENSEI ──────────────── */}
-      <section className="py-24 relative overflow-hidden">
+      <section className="py-32 bg-[#050505] relative overflow-hidden">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Conoce a tus Guías</h2>
-            <p className="text-slate-400">Hablantes nativos y expertos lingüistas apasionados por enseñar.</p>
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-black mb-4 uppercase tracking-tighter">Conoce a tus <span className="text-blue-500">Guías</span></h2>
+            <p className="text-xl text-slate-400 font-light">Hablantes nativos y expertos lingüistas apasionados por enseñar.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {TEACHERS_LIST.map((t, i) => (
               <motion.div
                 key={i}
                 whileHover={{ y: -10 }}
-                className="bg-slate-900 border border-slate-800 p-8 rounded-3xl flex items-start gap-4 hover:border-blue-500/50 transition-colors"
+                className="bg-white/[0.02] border border-white/5 p-12 rounded-[2.5rem] flex flex-col items-center text-center gap-8 hover:border-blue-500/50 transition-all backdrop-blur-3xl group"
               >
-                <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center text-3xl shrink-0">
+                <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center text-5xl shrink-0 grayscale group-hover:grayscale-0 transition-all duration-500 border border-white/10 group-hover:scale-110 shadow-2xl">
                   {t.img}
                 </div>
                 <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className="text-xl font-bold text-white">{t.name}</h4>
-                    <span className="text-sm opacity-50 grayscale">{t.origin}</span>
+                  <div className="flex flex-col items-center gap-2 mb-4">
+                    <h4 className="text-2xl font-black text-white uppercase tracking-tight">{t.name}</h4>
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500 bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20">{t.role}</span>
                   </div>
-                  <span className="text-xs font-bold text-blue-400 uppercase tracking-widest mb-3 block">{t.role}</span>
-                  <p className="text-slate-400 text-sm leading-relaxed">{t.bio}</p>
+                  <p className="text-slate-500 text-sm leading-relaxed font-medium mb-6 italic">"{t.bio}"</p>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">Origen: {t.origin}</span>
                 </div>
               </motion.div>
             ))}
@@ -584,29 +572,31 @@ export default function Idiomas() {
       </section>
 
       {/* ──────────────── 8. FINAL CTA ──────────────── */}
-      <footer className="py-32 bg-gradient-to-t from-slate-900 to-slate-950 text-center relative overflow-hidden">
+      <footer className="py-40 bg-[#050505] text-center relative overflow-hidden">
         {/* Decorative Plane */}
-        <MdOutlineFlightTakeoff className="absolute top-20 left-[10%] text-slate-800 text-9xl -rotate-12 opacity-50 pointer-events-none" />
+        <MdOutlineFlightTakeoff className="absolute top-20 left-[10%] text-white/5 text-[15rem] -rotate-12 pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,_#1e1b4b_0%,_transparent_50%)]" />
 
         <div className="container mx-auto px-6 relative z-10">
-          <h2 className="text-5xl md:text-6xl font-black mb-6 tracking-tight">
-            El mundo es demasiado grande para hablar un solo idioma.
+          <h2 className="text-5xl md:text-8xl font-black mb-10 tracking-tighter uppercase leading-[0.9]">
+            El mundo es <br /> <span className="text-blue-500">demasiado grande</span> <br /> para un solo idioma.
           </h2>
-          <p className="text-xl text-blue-200/60 mb-12 max-w-2xl mx-auto">
+          <p className="text-xl md:text-2xl text-slate-400 mb-16 max-w-3xl mx-auto font-light leading-relaxed">
             Únete a más de 800 alumnos que ya están expandiendo sus fronteras con Instituto Lael.
           </p>
-          <div className="flex justify-center gap-6 flex-wrap">
+          <div className="flex flex-col sm:flex-row justify-center gap-6">
             <button
               onClick={scrollToBuilder}
-              className="px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:scale-105 transition-transform shadow-[0_0_50px_rgba(255,255,255,0.3)]"
+              className="px-12 py-6 bg-white text-slate-950 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all shadow-2xl shadow-white/10"
             >
               EMPEZAR MI VIAJE
             </button>
             <a
               href="https://wa.me/56964626568"
-              className="px-10 py-5 bg-transparent border-2 border-[#25D366] text-[#25D366] rounded-full font-bold text-lg hover:bg-[#25D366] hover:text-black transition-all flex items-center gap-2"
+              target="_blank" rel="noopener noreferrer"
+              className="px-12 py-6 bg-white/[0.02] border border-white/10 text-white rounded-2xl font-black uppercase tracking-widest text-xs hover:bg-white/[0.05] transition-all flex items-center justify-center gap-3"
             >
-              <FaWhatsapp /> Hablar con Asesor
+              <FaWhatsapp className="text-[#25D366] text-lg" /> Hablar con Asesor
             </a>
           </div>
         </div>
@@ -619,24 +609,24 @@ export default function Idiomas() {
             initial={{ y: 100 }}
             animate={{ y: 0 }}
             exit={{ y: 100 }}
-            className="fixed bottom-0 left-0 w-full bg-slate-900/90 backdrop-blur-xl border-t border-slate-800 z-50 py-4"
+            className="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-3xl border-t border-white/5 z-50 py-6"
           >
-            <div className="container mx-auto px-6 flex justify-between items-center">
-              <div className="hidden md:block">
-                <span className="text-slate-400 text-sm block">Tu Selección:</span>
-                <strong className="text-white text-lg">{pricing.label}</strong>
+            <div className="container mx-auto px-8 flex justify-between items-center">
+              <div>
+                <strong className="text-blue-500 font-black uppercase tracking-widest text-xs block mb-1">Pasaporte Cultural</strong>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">{pricing.label}</span>
               </div>
-              <div className="flex items-center gap-6 ml-auto md:ml-0 w-full md:w-auto justify-between md:justify-end">
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-white leading-none">{clp(pricing.totalMonthly)}</div>
-                  <span className="text-xs text-slate-500">/mes</span>
+              <div className="flex items-center gap-10">
+                <div className="text-right hidden sm:block">
+                  <div className="text-2xl font-black text-white tracking-tighter">{clp(pricing.totalMonthly)}</div>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-600">/mes</span>
                 </div>
                 <button
                   onClick={handleAddBundle}
                   disabled={pricing.count === 0}
-                  className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-colors disabled:opacity-50"
+                  className="px-10 py-4 bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-widest text-[10px] rounded-xl transition-all shadow-2xl shadow-blue-600/20 disabled:opacity-30"
                 >
-                  INSCRIBIR
+                  Inscribir Ahora
                 </button>
               </div>
             </div>

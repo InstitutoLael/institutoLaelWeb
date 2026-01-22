@@ -1,6 +1,6 @@
 // === Lael Careers: Base de Datos de Talentos ===
 
-export const HR_EMAIL = "talento@institutolael.cl";
+export const HR_EMAIL = "coordinacion@institutolael.cl";
 export const HR_WAPP = "56964626568"; // Número para recibir CVs
 
 /**

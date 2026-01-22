@@ -212,17 +212,21 @@ export default function About() {
             <div className="container mx-auto px-6">
                <div className="bg-slate-900/50 border border-white/5 rounded-[4rem] overflow-hidden grid grid-cols-1 lg:grid-cols-2 shadow-2xl backdrop-blur-3xl">
 
-                  {/* Photo Side */}
-                  <div className="relative min-h-[500px]">
-                     <img
-                        src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop"
-                        alt="Diego Chaparro"
-                        className="w-full h-full object-cover"
-                     />
-                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
-                     <div className="absolute bottom-12 left-12">
-                        <span className="text-7xl font-serif text-white/5 font-black uppercase">Visionary</span>
+                  {/* Abstract Visual Side */}
+                  <div className="relative min-h-[500px] bg-[#0c0f1d] flex items-center justify-center overflow-hidden group">
+                     {/* Animated Circles/Gradients */}
+                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-amber-500/20 blur-[100px] rounded-full group-hover:scale-150 transition-transform duration-1000"></div>
+                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-white/5 rounded-full group-hover:w-48 transition-all duration-1000"></div>
+                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-white/5 rounded-full group-hover:w-64 transition-all duration-1000"></div>
+
+                     <div className="relative z-10 text-center">
+                        <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-3xl mx-auto flex items-center justify-center text-4xl text-slate-950 shadow-2xl shadow-amber-500/50 mb-6">
+                           <FaQuoteRight />
+                        </div>
+                        <span className="text-7xl font-serif text-white/5 font-black uppercase pointer-events-none select-none">Visionary</span>
                      </div>
+
+                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
                   </div>
 
                   {/* Content Side */}

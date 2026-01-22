@@ -8,13 +8,6 @@ export const routesMap = [
         desc: "Maximiza tu puntaje con IA y tutores expertos."
     },
     {
-        title: "Nivelación Académica",
-        path: "/escuela-adultos",
-        category: "Escolar",
-        img: "ref_aula",
-        desc: "Refuerzo escolar personalizado para 1° a 4° medio."
-    },
-    {
         title: "Homeschool",
         path: "/homeschool",
         category: "Escolar",

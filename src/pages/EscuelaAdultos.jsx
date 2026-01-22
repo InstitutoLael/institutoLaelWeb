@@ -63,27 +63,29 @@ export default function EscuelaAdultos() {
    };
 
    return (
-      <div className="min-h-screen bg-stone-50 text-stone-800 font-sans selection:bg-orange-200/50">
+      <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-orange-500/30">
 
          {/* ──────────────── 1. HERO (EMPATHETIC) ──────────────── */}
-         <header className="relative min-h-[85vh] flex items-center justify-center overflow-hidden py-24 bg-stone-900 text-white">
-            {/* Warm Background */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#451a03_0%,#0c0a09_70%)] opacity-80 z-0"></div>
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/p5.png')] opacity-10 z-0 mix-blend-overlay"></div>
+         <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 bg-[radial-gradient(circle_at_50%_40%,_#451a03_0%,_#050505_80%)]">
+            {/* Warm Background Pattern */}
+            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-5 mix-blend-overlay"></div>
 
             <div className="container mx-auto px-6 relative z-10 text-center max-w-3xl">
                <motion.div
                   initial="hidden" animate="visible" variants={fadeInUp}
-                  className="inline-block mb-6"
+                  className="inline-flex flex-col items-center gap-2 mb-6"
                >
-                  <span className="text-orange-400 font-bold tracking-widest uppercase text-sm border-b-2 border-orange-500 pb-1">
+                  <div className="bg-orange-500 text-white text-[10px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-full shadow-lg shadow-orange-500/20 mb-3 animate-pulse">
+                     Admisión Pioneros | Lanzamiento 2026
+                  </div>
+                  <span className="text-orange-400 font-bold tracking-widest uppercase text-xs border-b border-orange-500 pb-1">
                      {CAMINOS_CONTENT.subtitle}
                   </span>
                </motion.div>
 
                <motion.h1
                   initial="hidden" animate="visible" variants={fadeInUp}
-                  className="text-5xl md:text-7xl font-bold mb-8 leading-tight tracking-tight"
+                  className="text-5xl md:text-8xl font-black mb-8 leading-tight tracking-tighter uppercase"
                >
                   {CAMINOS_CONTENT.title}
                </motion.h1>
@@ -111,37 +113,36 @@ export default function EscuelaAdultos() {
          </header>
 
          {/* ──────────────── 2. MANIFESTO & CYCLES ──────────────── */}
-         <section className="py-24 bg-white">
+         <section className="py-24 bg-[#050505]">
             <div className="container mx-auto px-6">
-               <div className="flex flex-col md:flex-row gap-16 items-center mb-24">
+               <div className="flex flex-col md:flex-row gap-20 items-center mb-32">
                   <div className="md:w-1/2">
-                     <h2 className="text-4xl font-bold text-stone-900 mb-6">El modelo "Robin Hood"</h2>
-                     <p className="text-lg text-stone-600 leading-relaxed mb-6">
+                     <h2 className="text-4xl md:text-6xl font-black text-white mb-8 uppercase tracking-tighter">El modelo <span className="text-orange-500">"Robin Hood"</span></h2>
+                     <p className="text-xl text-slate-400 leading-relaxed mb-8">
                         {CAMINOS_CONTENT.impactQuote}
                      </p>
-                     <p className="text-stone-600 leading-relaxed mb-8">
+                     <p className="text-slate-500 leading-relaxed mb-10">
                         Funciona así: quienes pueden pagar un precio justo (Plan Estándar) o solidario (Plan Padrino),
-                        subsidian directamente a quienes no tienen recursos (Cupo Social). Es una comunidad de apoyo real.
+                        subsidian directamente a quienes no tienen recursos (Cupo Social). Es una comunidad de apoyo real diseñada para cambiar destinos.
                      </p>
-                     <div className="flex items-center gap-4 text-sm font-bold text-stone-500">
-                        <div className="flex -space-x-3">
-                           {[1, 2, 3].map(i => <div key={i} className="w-10 h-10 bg-stone-200 rounded-full border-2 border-white"></div>)}
+                     <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        <div className="flex -space-x-4">
+                           {[1, 2, 3].map(i => <div key={i} className="w-12 h-12 bg-white/5 rounded-full border-2 border-[#050505]"></div>)}
                         </div>
-                        +1.200 Graduados
+                        +1.200 Vidas Transformadas
                      </div>
                   </div>
-                  <div className="md:w-1/2 relative bg-stone-100 rounded-3xl p-8 border border-stone-200">
-                     <div className="absolute top-0 right-0 -mr-4 -mt-4 bg-orange-500 text-white p-3 rounded-full shadow-lg">
-                        <FaHeart className="text-xl animate-pulse" />
+                  <div className="md:w-1/2 relative bg-white/[0.02] backdrop-blur-3xl rounded-[3rem] p-12 border border-white/5 shadow-2xl overflow-hidden group">
+                     <div className="absolute top-0 right-0 p-8 text-orange-500/10 group-hover:text-orange-500/20 transition-colors">
+                        <FaHeart size={120} />
                      </div>
-                     <h3 className="font-bold text-stone-800 mb-4">Lo que dicen nuestros alumnos:</h3>
-                     <blockquote className="italic text-stone-600 text-lg">
-                        "Pensé que por mi edad me iba a costar mucho, pero los profes tienen una paciencia de oro.
-                        Saqué mi 4to medio a los 54 años y ahora estoy estudiando Técnico en Enfermería."
+                     <h3 className="font-black uppercase tracking-widest text-xs text-orange-500 mb-8 relative z-10">Lo que dicen nuestros alumnos:</h3>
+                     <blockquote className="italic text-slate-200 text-2xl font-light leading-relaxed mb-10 relative z-10">
+                        "{CAMINOS_CONTENT.heroText.split('.')[0]}..."
                      </blockquote>
-                     <div className="mt-4 text-right">
-                        <strong className="block text-stone-900">Marta G.</strong>
-                        <span className="text-xs text-stone-500">Generación 2024</span>
+                     <div className="text-right relative z-10">
+                        <strong className="block text-white font-black uppercase tracking-tight text-lg">Marta G.</strong>
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Generación 2024</span>
                      </div>
                   </div>
                </div>
@@ -152,19 +153,19 @@ export default function EscuelaAdultos() {
                   <p className="text-stone-500">Terminas dos años en uno.</p>
                </div>
 
-               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                   {STUDY_CYCLES.map((cycle, i) => (
                      <motion.div
                         key={i}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.1 }}
-                        className="bg-stone-50 p-6 rounded-2xl border border-stone-200 hover:border-orange-300 transition-colors text-center group"
+                        className="bg-white/[0.03] p-10 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all text-center group backdrop-blur-3xl"
                      >
-                        <div className="text-4xl mb-4 grayscale group-hover:grayscale-0 transition-all">{cycle.icon}</div>
-                        <h4 className="font-bold text-stone-800 mb-1">{cycle.name}</h4>
-                        <span className="text-orange-600 text-sm font-bold bg-orange-100 px-2 py-1 rounded inline-block">
+                        <div className="text-6xl mb-6 grayscale group-hover:grayscale-0 transition-all group-hover:scale-110 duration-500">{cycle.icon}</div>
+                        <h4 className="font-black text-white mb-2 uppercase tracking-tight text-xl">{cycle.name}</h4>
+                        <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.2em] bg-orange-500/10 px-4 py-1.5 rounded-full inline-block border border-orange-500/20">
                            {cycle.equivalence}
                         </span>
                      </motion.div>
@@ -174,7 +175,7 @@ export default function EscuelaAdultos() {
          </section>
 
          {/* ──────────────── 3. PROCESS TIMELINE ──────────────── */}
-         <section className="py-24 bg-stone-100 border-y border-stone-200">
+         <section className="py-24 bg-white/[0.01] border-y border-white/5">
             <div className="container mx-auto px-6">
                <h2 className="text-3xl font-bold text-center mb-16">Tu Camino a la Licenciatura</h2>
                <div className="relative">
@@ -183,12 +184,12 @@ export default function EscuelaAdultos() {
 
                   <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 relative z-10">
                      {STEPS.map((step, i) => (
-                        <div key={i} className="flex flex-col items-center text-center bg-white lg:bg-transparent p-6 lg:p-0 rounded-2xl shadow-sm lg:shadow-none">
-                           <div className="w-12 h-12 bg-stone-800 text-white rounded-full flex items-center justify-center font-bold text-xl mb-4 border-4 border-stone-100">
+                        <div key={i} className="flex flex-col items-center text-center bg-white/[0.03] lg:bg-transparent p-10 lg:p-0 rounded-[2.5rem] border border-white/5 lg:border-none backdrop-blur-md">
+                           <div className="w-16 h-16 bg-white text-slate-950 rounded-2xl flex items-center justify-center font-black text-2xl mb-6 shadow-2xl shadow-white/20">
                               {i + 1}
                            </div>
-                           <strong className="text-lg text-stone-900 block mb-2">{step.title}</strong>
-                           <p className="text-sm text-stone-500">{step.text}</p>
+                           <strong className="text-lg text-white font-black uppercase tracking-tight block mb-3">{step.title}</strong>
+                           <p className="text-xs text-slate-500 font-medium leading-relaxed px-4">{step.text}</p>
                         </div>
                      ))}
                   </div>
@@ -197,14 +198,14 @@ export default function EscuelaAdultos() {
          </section>
 
          {/* ──────────────── 4. PRICING CARDS (ROBIN HOOD) ──────────────── */}
-         <section id="plans-section" className="py-24 bg-stone-900 text-white">
+         <section id="plans-section" className="py-32 bg-[#050505]">
             <div className="container mx-auto px-6">
                <div className="text-center mb-16">
                   <h2 className="text-4xl font-bold mb-4">Únete a la Causa</h2>
                   <p className="text-stone-400">Elige cuánto puedes aportar. Nadie se queda fuera.</p>
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-start">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto items-stretch">
                   {PLANS.map((plan, idx) => {
                      const isStandard = plan.id === 'consciente';
                      const isSocial = plan.id === 'social';
@@ -214,30 +215,29 @@ export default function EscuelaAdultos() {
                         <motion.div
                            key={plan.id}
                            whileHover={{ y: -10 }}
-                           className={`relative rounded-3xl p-8 flex flex-col h-full
-                       ${isStandard ? 'bg-sky-600 text-white' : 'bg-stone-800 border border-stone-700'}
-                       ${isPadrino ? 'bg-gradient-to-br from-amber-600 to-amber-700 border-none' : ''}
-                       ${isSocial ? 'bg-stone-800/50' : ''}
-                     `}
+                           className={`relative rounded-[3rem] p-12 flex flex-col h-full border backdrop-blur-3xl transition-all duration-500
+                             ${isStandard ? 'bg-orange-600/10 border-orange-500/50 shadow-[0_0_40px_rgba(249,115,22,0.1)]' : 'bg-white/[0.02] border-white/5'}
+                             ${isPadrino ? 'bg-amber-600/10 border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.1)]' : ''}
+                           `}
                         >
-                           <div className="bg-black/20 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded w-fit mb-4">
+                           <div className="bg-white/5 text-[10px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full w-fit mb-8 border border-white/10 text-slate-400">
                               {plan.tag}
                            </div>
 
-                           <h3 className="text-2xl font-bold mb-2">{plan.title}</h3>
-                           <div className="flex items-baseline gap-1 mb-4">
-                              <span className="text-4xl font-bold">{clp(plan.price)}</span>
-                              <span className="text-sm opacity-80">/mes</span>
+                           <h3 className="text-3xl font-black mb-3 uppercase tracking-tighter text-white">{plan.title}</h3>
+                           <div className="flex items-baseline gap-2 mb-8">
+                              <span className="text-5xl font-black text-white tracking-tighter">{clp(plan.price)}</span>
+                              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">/mes</span>
                            </div>
 
-                           <p className="text-sm opacity-90 mb-8 min-h-[50px] leading-relaxed">
+                           <p className="text-sm text-slate-400 mb-10 min-h-[60px] leading-relaxed font-medium">
                               {plan.desc}
                            </p>
 
-                           <ul className="space-y-4 mb-8 flex-1">
+                           <ul className="space-y-4 mb-12 flex-1">
                               {plan.features.map((f, i) => (
-                                 <li key={i} className="flex items-start gap-3 text-sm">
-                                    <FaCheck className={`mt-1 shrink-0 ${isStandard || isPadrino ? 'text-white' : 'text-stone-400'}`} />
+                                 <li key={i} className="flex items-start gap-4 text-sm font-medium text-slate-300">
+                                    <FaCheck className={`mt-1 shrink-0 ${isStandard ? 'text-orange-500' : isPadrino ? 'text-amber-500' : 'text-slate-500'}`} />
                                     <span>{f}</span>
                                  </li>
                               ))}
@@ -245,11 +245,11 @@ export default function EscuelaAdultos() {
 
                            <button
                               onClick={() => handleEnroll(plan.id)}
-                              className={`w-full py-4 rounded-xl font-bold transition-all shadow-lg
-                          ${isStandard ? 'bg-white text-sky-700 hover:bg-sky-50' : ''}
-                          ${isPadrino ? 'bg-white text-amber-700 hover:bg-amber-50' : ''}
-                          ${isSocial ? 'bg-stone-700 hover:bg-stone-600 border border-stone-600' : ''}
-                        `}
+                              className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-2xl
+                                ${isStandard ? 'bg-orange-500 text-white hover:bg-orange-400 shadow-orange-500/20' : ''}
+                                ${isPadrino ? 'bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-amber-500/20' : ''}
+                                ${isSocial ? 'bg-white/5 text-white hover:bg-white/10 border border-white/10' : ''}
+                              `}
                            >
                               {plan.cta}
                            </button>
@@ -261,19 +261,19 @@ export default function EscuelaAdultos() {
          </section>
 
          {/* ──────────────── 5. PREGUNTAS FRECUENTES ──────────────── */}
-         <section className="py-24 bg-white">
+         <section className="py-24 bg-[#050505]">
             <div className="container mx-auto px-6 max-w-3xl">
-               <h2 className="text-3xl font-bold text-center mb-12">Preguntas Frecuentes</h2>
+               <h2 className="text-4xl font-black text-center mb-16 uppercase tracking-tighter">Preguntas <span className="text-orange-500">Frecuentes</span></h2>
 
                <div className="space-y-4">
                   {FAQS.map((faq, i) => (
-                     <div key={i} className="border border-stone-200 rounded-xl overflow-hidden">
+                     <div key={i} className="border border-white/5 rounded-2xl overflow-hidden bg-white/[0.02]">
                         <button
                            onClick={() => toggleFaq(i)}
-                           className="w-full flex justify-between items-center p-6 bg-stone-50 hover:bg-stone-100 transition-colors text-left"
+                           className="w-full flex justify-between items-center p-8 hover:bg-white/5 transition-colors text-left"
                         >
-                           <span className="font-bold text-stone-800">{faq.q}</span>
-                           {activeFaq === i ? <FaChevronUp /> : <FaChevronDown className="text-stone-400" />}
+                           <span className="font-black text-white uppercase tracking-tight text-sm">{faq.q}</span>
+                           {activeFaq === i ? <FaChevronUp /> : <FaChevronDown className="text-slate-500" />}
                         </button>
                         <AnimatePresence>
                            {activeFaq === i && (
@@ -281,9 +281,9 @@ export default function EscuelaAdultos() {
                                  initial={{ height: 0 }}
                                  animate={{ height: "auto" }}
                                  exit={{ height: 0 }}
-                                 className="overflow-hidden bg-white"
+                                 className="overflow-hidden bg-white/[0.01]"
                               >
-                                 <div className="p-6 text-stone-600 leading-relaxed border-t border-stone-100">
+                                 <div className="p-8 text-slate-400 leading-relaxed border-t border-white/5 text-sm font-medium">
                                     {faq.a}
                                  </div>
                               </motion.div>
@@ -293,13 +293,13 @@ export default function EscuelaAdultos() {
                   ))}
                </div>
 
-               <div className="mt-12 bg-blue-50 p-8 rounded-2xl flex md:flex-row flex-col items-center gap-6 text-center md:text-left">
-                  <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-2xl shrink-0">
+               <div className="mt-16 bg-orange-500/5 p-10 rounded-[2.5rem] flex md:flex-row flex-col items-center gap-8 text-center md:text-left border border-orange-500/10">
+                  <div className="w-16 h-16 bg-orange-500/10 text-orange-500 rounded-2xl flex items-center justify-center text-3xl shrink-0 border border-orange-500/20 shadow-2xl">
                      <FaInfoCircle />
                   </div>
                   <div className="flex-1">
-                     <h4 className="font-bold text-blue-900 mb-1">Requisitos de Matrícula</h4>
-                     <p className="text-sm text-blue-700">Solo necesitas tu Carnet de Identidad y Certificado de Nacimiento/Estudios. Si no los tienes, te ayudamos a obtenerlos.</p>
+                     <h4 className="font-black text-white uppercase tracking-tight text-lg mb-2">Requisitos de Matrícula</h4>
+                     <p className="text-sm text-slate-500 font-medium">Solo necesitas tu Carnet de Identidad y Certificado de Estudios. Si no los tienes, te brindamos asesoría completa para obtenerlos sin costo.</p>
                   </div>
                </div>
             </div>
@@ -312,16 +312,16 @@ export default function EscuelaAdultos() {
                   initial={{ y: 100 }}
                   animate={{ y: 0 }}
                   exit={{ y: 100 }}
-                  className="fixed bottom-0 left-0 w-full bg-stone-900/95 backdrop-blur-md border-t border-stone-800 z-50 py-3"
+                  className="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-2xl border-t border-white/10 z-50 py-5"
                >
-                  <div className="container mx-auto px-6 flex justify-between items-center text-white">
+                  <div className="container mx-auto px-8 flex justify-between items-center text-white">
                      <div>
-                        <strong className="text-orange-400 block">Programa Caminos</strong>
-                        <span className="text-xs text-stone-400">Nivelación de Estudios 2026</span>
+                        <strong className="text-orange-500 font-black uppercase tracking-widest text-xs block mb-1">Programa Caminos</strong>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Nivelación de Estudios 2026</span>
                      </div>
                      <button
                         onClick={scrollToPlans}
-                        className="px-6 py-2 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-lg text-sm transition-colors shadow-lg"
+                        className="px-10 py-4 bg-orange-600 hover:bg-orange-500 text-white font-black rounded-2xl text-[10px] transition-all shadow-2xl shadow-orange-600/20 uppercase tracking-widest"
                      >
                         Postular Ahora
                      </button>

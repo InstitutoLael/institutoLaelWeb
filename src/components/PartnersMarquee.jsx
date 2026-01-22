@@ -10,13 +10,13 @@ import naama from "../assets/img/Partners/naama-studio.png";
 import losolivos from "../assets/img/Partners/LosOlivos.png";
 
 const LOGOS = [
-  { src: gws,       alt: "Google Workspace" },
+  { src: gws, alt: "Google Workspace" },
   { src: transbank, alt: "Transbank" },
-  { src: onepay,    alt: "Onepay" },
-  { src: u1,        alt: "Universidad asociada 1" },
-  { src: u2,        alt: "Universidad asociada 2" },
-  { src: naama,     alt: "Naamá Studio" },
-  { src: ino,       alt: "Instituto Nacional de Ortodoncia" },
+  { src: onepay, alt: "Onepay" },
+  { src: u1, alt: "Universidad asociada 1" },
+  { src: u2, alt: "Universidad asociada 2" },
+  { src: naama, alt: "Naamá Studio" },
+  { src: ino, alt: "Instituto Nacional de Ortodoncia" },
   { src: losolivos, alt: "Los Olivos HomeSchool" },
 ];
 
@@ -71,8 +71,8 @@ export default function PartnersMarquee({ height = 32, gap = 40, speed = 100 }) 
 
     @media (max-width:576px){
       .marquee__track { gap: 28px; }
-      .marquee__item  { height: ${Math.max(24, height-8) + 10}px; }
-      .marquee__logo  { height: ${Math.max(24, height-8)}px; }
+      .marquee__item  { height: ${Math.max(24, height - 8) + 10}px; }
+      .marquee__logo  { height: ${Math.max(24, height - 8)}px; }
     }
   `;
 
@@ -89,7 +89,7 @@ export default function PartnersMarquee({ height = 32, gap = 40, speed = 100 }) 
               loading="lazy"
               decoding="async"
               style={{ transform: `scale(${SCALE[item.alt] || 1})` }}
-              onError={(e)=>{ e.currentTarget.style.opacity = ".4"; }}
+              onError={(e) => { e.currentTarget.style.opacity = ".4"; }}
             />
           </div>
         ))}

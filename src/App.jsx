@@ -13,7 +13,7 @@ import CartButton from "./components/CartButton.jsx";
 import { Loader2 } from "lucide-react";
 
 /*IMPORTANTE: El carrito lo importamos directo (no lazy) para que abra rápido */
-import CartDrawer from "./pages/Cart.jsx";
+import CartDrawer from "./components/CartDrawer.jsx";
 
 /* ---------- Páginas (Lazy Loading) ---------- */
 const Home = lazy(() => import("./pages/Home.jsx"));

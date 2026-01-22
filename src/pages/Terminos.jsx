@@ -1,5 +1,5 @@
 // src/pages/Terminos.jsx
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEOHead from "../components/SEOHead.jsx";
 import { FaGavel, FaMoneyBillWave, FaUndo, FaFingerprint, FaUsers, FaEnvelope } from "react-icons/fa";
@@ -27,7 +27,7 @@ export default function Terminos() {
       <div className="legal-glow glow-2"></div>
 
       <div className="container legal-grid">
-        
+
         {/* SIDEBAR DE NAVEGACIÓN (Solo Desktop) */}
         <aside className="legal-sidebar">
           <div className="sidebar-sticky">
@@ -60,15 +60,15 @@ export default function Terminos() {
             </p>
 
             <section id="s1" className="term-section">
-              <h3><FaGavel className="icon"/> 1. Descripción del Servicio</h3>
+              <h3><FaGavel className="icon" /> 1. Descripción del Servicio</h3>
               <p>
-                Instituto Lael SpA provee servicios de capacitación y educación online (modalidad síncrona y asíncrona). 
+                Instituto Lael SpA provee servicios de capacitación y educación online (modalidad síncrona y asíncrona).
                 La matrícula otorga al estudiante el derecho de acceso al <strong>Aula Virtual</strong>, a las clases en vivo vía Zoom/Meet y a todo el material digital (guías, ensayos, grabaciones) correspondiente al programa contratado durante el año académico vigente.
               </p>
             </section>
 
             <section id="s2" className="term-section">
-              <h3><FaMoneyBillWave className="icon"/> 2. Matrícula y Mensualidades</h3>
+              <h3><FaMoneyBillWave className="icon" /> 2. Matrícula y Mensualidades</h3>
               <p>
                 <strong>La Matrícula:</strong> Es un pago único anual que garantiza la reserva del cupo y cubre los costos administrativos de gestión de plataformas. No es reembolsable bajo ninguna circunstancia.
               </p>
@@ -78,7 +78,7 @@ export default function Terminos() {
             </section>
 
             <section id="s3" className="term-section">
-              <h3><FaUndo className="icon"/> 3. Política de Retracto y Reembolso</h3>
+              <h3><FaUndo className="icon" /> 3. Política de Retracto y Reembolso</h3>
               <p>
                 Entendemos que los planes pueden cambiar. Nuestra política es transparente:
               </p>
@@ -90,22 +90,22 @@ export default function Terminos() {
             </section>
 
             <section id="s4" className="term-section">
-              <h3><FaFingerprint className="icon"/> 4. Propiedad Intelectual</h3>
+              <h3><FaFingerprint className="icon" /> 4. Propiedad Intelectual</h3>
               <p>
-                Todo el material entregado (guías PDF, ensayos, grabaciones de clases, presentaciones) es propiedad intelectual exclusiva de Instituto Lael. 
+                Todo el material entregado (guías PDF, ensayos, grabaciones de clases, presentaciones) es propiedad intelectual exclusiva de Instituto Lael.
                 Queda <strong>estrictamente prohibida</strong> su difusión, venta, publicación en redes sociales o compartición con terceros ajenos a la institución. La detección de estas prácticas resultará en la cancelación inmediata de la matrícula.
               </p>
             </section>
 
             <section id="s5" className="term-section">
-              <h3><FaUsers className="icon"/> 5. Convivencia Digital</h3>
+              <h3><FaUsers className="icon" /> 5. Convivencia Digital</h3>
               <p>
                 Fomentamos un ambiente seguro, cristiano y de respeto mutuo. Cualquier conducta de acoso, discriminación, lenguaje ofensivo o falta de respeto hacia docentes, administrativos o compañeros (ya sea en clases en vivo o grupos de WhatsApp) será causal de <strong>expulsión inmediata</strong> sin derecho a reembolso.
               </p>
             </section>
 
             <div className="contact-box">
-              <FaEnvelope className="c-icon"/>
+              <FaEnvelope className="c-icon" />
               <div>
                 <strong>¿Dudas legales o administrativas?</strong>
                 <p>Escríbenos a <a href="mailto:administracion@institutolael.cl">administracion@institutolael.cl</a></p>

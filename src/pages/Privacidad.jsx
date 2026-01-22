@@ -1,5 +1,5 @@
 // src/pages/Privacidad.jsx
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEOHead from "../components/SEOHead.jsx";
 import { FaShieldAlt, FaUserCheck, FaDatabase, FaCookieBite, FaLock, FaEnvelope } from "react-icons/fa";
@@ -27,7 +27,7 @@ export default function Privacidad() {
       <div className="legal-glow glow-2"></div>
 
       <div className="container legal-grid">
-        
+
         {/* SIDEBAR DE NAVEGACIÓN */}
         <aside className="legal-sidebar">
           <div className="sidebar-sticky">
@@ -60,16 +60,16 @@ export default function Privacidad() {
             </p>
 
             <section id="p1" className="term-section">
-              <h3><FaDatabase className="icon"/> 1. Recopilación de Información</h3>
+              <h3><FaDatabase className="icon" /> 1. Recopilación de Información</h3>
               <p>
-                Solo recopilamos los datos estrictamente necesarios para formalizar tu matrícula y brindarte el servicio educativo: 
-                <strong> Nombre completo, RUT, correo electrónico y teléfono de contacto</strong>. 
+                Solo recopilamos los datos estrictamente necesarios para formalizar tu matrícula y brindarte el servicio educativo:
+                <strong> Nombre completo, RUT, correo electrónico y teléfono de contacto</strong>.
                 Estos datos son entregados voluntariamente por ti al completar nuestros formularios de inscripción.
               </p>
             </section>
 
             <section id="p2" className="term-section">
-              <h3><FaUserCheck className="icon"/> 2. Uso de la Información</h3>
+              <h3><FaUserCheck className="icon" /> 2. Uso de la Información</h3>
               <p>
                 Tus datos personales son utilizados exclusivamente para fines académicos y administrativos internos:
               </p>
@@ -82,7 +82,7 @@ export default function Privacidad() {
             </section>
 
             <section id="p3" className="term-section">
-              <h3><FaShieldAlt className="icon"/> 3. Protección Financiera</h3>
+              <h3><FaShieldAlt className="icon" /> 3. Protección Financiera</h3>
               <p>
                 Nos tomamos la seguridad muy en serio. Instituto Lael <strong>NO almacena</strong> los datos de tu tarjeta de crédito o débito en nuestros servidores.
               </p>
@@ -92,14 +92,14 @@ export default function Privacidad() {
             </section>
 
             <section id="p4" className="term-section">
-              <h3><FaCookieBite className="icon"/> 4. Cookies y Analítica</h3>
+              <h3><FaCookieBite className="icon" /> 4. Cookies y Analítica</h3>
               <p>
                 Utilizamos cookies técnicas esenciales para que el sitio funcione correctamente y cookies de análisis (Google Analytics) para entender cómo mejorar nuestra plataforma. Estas estadísticas son anónimas y no rastrean tu identidad personal fuera de nuestro sitio.
               </p>
             </section>
 
             <section id="p5" className="term-section">
-              <h3><FaLock className="icon"/> 5. Tus Derechos (ARCO)</h3>
+              <h3><FaLock className="icon" /> 5. Tus Derechos (ARCO)</h3>
               <p>
                 Tú eres el dueño de tus datos. Tienes derecho a solicitar el Acceso, Rectificación, Cancelación u Oposición de tu información personal en cualquier momento.
               </p>
@@ -109,7 +109,7 @@ export default function Privacidad() {
             </section>
 
             <div className="contact-box privacy-mode">
-              <FaEnvelope className="c-icon"/>
+              <FaEnvelope className="c-icon" />
               <div>
                 <strong>¿Consultas sobre tus datos?</strong>
                 <p>Contacta al Oficial de Privacidad: <a href="mailto:contacto@institutolael.cl">contacto@institutolael.cl</a></p>

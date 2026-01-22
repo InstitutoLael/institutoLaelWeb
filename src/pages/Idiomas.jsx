@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext.jsx";
 import { TESTIMONIALS } from "../data/testimonials.js";
 import { teachers } from "../data/teachers.js";

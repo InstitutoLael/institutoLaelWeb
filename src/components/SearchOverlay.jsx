@@ -1,5 +1,5 @@
 // src/components/SearchOverlay.jsx
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // --- ÍCONOS NATIVOS (Sin librerías pesadas) ---
@@ -50,7 +50,7 @@ export default function SearchOverlay({ open, onClose, items = ITEMS }) {
       try {
         const raw = localStorage.getItem(RECENTS_KEY);
         if (raw) setRecents(JSON.parse(raw));
-      } catch {}
+      } catch { }
     } else {
       const timer = setTimeout(() => setVisible(false), 200); // Espera animación de salida
       document.body.style.overflow = "";
@@ -87,7 +87,7 @@ export default function SearchOverlay({ open, onClose, items = ITEMS }) {
       const next = [{ title, to }, ...recents.filter((r) => r.to !== to)].slice(0, MAX_RECENTS);
       setRecents(next);
       localStorage.setItem(RECENTS_KEY, JSON.stringify(next));
-    } catch {}
+    } catch { }
     nav(to);
     onClose?.();
   }
@@ -159,7 +159,7 @@ export default function SearchOverlay({ open, onClose, items = ITEMS }) {
 
         {/* Body */}
         <div className="body" role="listbox">
-          
+
           {/* STATE: Empty / Instrucciones */}
           {!debouncedQ && !showingRecents && (
             <div className="msg-empty">
@@ -226,7 +226,7 @@ export default function SearchOverlay({ open, onClose, items = ITEMS }) {
             </div>
           )}
         </div>
-        
+
         {/* Footer pequeño */}
         <div className="footer-hint">
           <span><b>↑↓</b> navegar</span>

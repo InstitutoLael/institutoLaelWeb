@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import {
    FaBible, FaLightbulb, FaGraduationCap, FaHeart, FaArrowRight, FaChalkboardTeacher, FaQuoteRight,

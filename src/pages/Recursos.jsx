@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RESOURCES } from "../data/resources";
 import { FaShoppingCart, FaExternalLinkAlt, FaCheck } from "react-icons/fa";
 

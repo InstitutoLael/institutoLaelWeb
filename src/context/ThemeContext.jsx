@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
 const KEY = "lael:theme"; // "light" | "dark" | "system"
 const ThemeCtx = createContext(null);
@@ -33,7 +33,7 @@ export function ThemeProvider({ children }) {
 
   const setAndSave = useCallback((v) => {
     setMode(v);
-    try { localStorage.setItem(KEY, v); } catch {}
+    try { localStorage.setItem(KEY, v); } catch { }
   }, []);
 
   const cycle = useCallback(() => {

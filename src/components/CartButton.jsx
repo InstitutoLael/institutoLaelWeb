@@ -1,5 +1,5 @@
 // src/components/CartButton.jsx
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext.jsx";
 import { ShoppingBag, X } from "lucide-react"; // Usamos Lucide para consistencia
 
@@ -33,12 +33,12 @@ export default function CartButton() {
             ) : (
               <ShoppingBag size={20} color="black" />
             )}
-            
+
             {!isCartOpen && count > 0 && (
               <span className="cart-badge">{count}</span>
             )}
           </div>
-          
+
           <div className="cart-info">
             <span className="cart-label">
               {isCartOpen ? "Cerrar" : "Total a Pagar"}

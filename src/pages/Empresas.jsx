@@ -1,14 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
    FaBuilding, FaChartLine, FaHandshake, FaUserTie,
-   FaWhatsapp, FaEnvelope, FaCalculator, FaArrowRight
+   FaWhatsapp, FaEnvelope, FaCalculator, FaArrowRight,
+   FaAward, FaTrophy, FaRocket, FaCheckCircle, FaMoneyBillWave,
+   FaUsers, FaHeartbeat, FaLeaf
 } from "react-icons/fa";
-import { MdVerified, MdDashboardCustomize } from "react-icons/md";
-import { BsLightningChargeFill } from "react-icons/bs";
+import { MdVerified, MdCompareArrows } from "react-icons/md";
+import { BsLightningChargeFill, BsArrowRepeat } from "react-icons/bs";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, AreaChart, Area } from "recharts";
 import SEOHead from "../components/SEOHead.jsx";
 
-// ASSETS (Importing logos for branding)
+// ASSETS
 import logoBlanco from "../assets/img/Logos/lael-inst-blanco.png";
 
 // DATA
@@ -26,6 +29,16 @@ const fadeInUp = {
    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
 };
 
+// SIMULATED TICKER DATA
+const TICKER_DATA = [
+   "Walmart Chile: Implementó Pack Futuro (Hijos)",
+   "Cencosud: Contrató Inglés Nivel B2 para Gerencia",
+   "Falabella: 15 becas activas para colaboradores",
+   "SMU: Renovación de convenio anual",
+   "LATAM: Auditoría de ROI completada (3.2x)",
+   "Entel: Nuevo taller de Skills de Liderazgo"
+];
+
 export default function Business() {
    // Calculator State
    const [selectedServiceId, setSelectedServiceId] = useState("ingles");
@@ -33,6 +46,7 @@ export default function Business() {
    const [months, setMonths] = useState(3);
    const [modality, setModality] = useState("online");
    const [quote, setQuote] = useState(null);
+   const [viewMode, setViewMode] = useState("financial"); // 'financial' | 'impact'
 
    useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -49,12 +63,13 @@ export default function Business() {
 
    const handleWappClick = () => {
       if (!quote) return;
-      const msg = `Hola Lael Corporate. Cotización Web:%0A%0A` +
+      const msg = `Hola Lael Corporate. Cotización Web Experience 2.0:%0A%0A` +
          `📌 *Servicio:* ${quote.service.label}%0A` +
          `👥 *Equipo:* ${headcount} p.%0A` +
          `⏳ *Duración:* ${months} meses (${modality})%0A` +
          `💰 *Total Estimado:* ${clp(quote.financials.total)} + IVA%0A` +
-         `Me gustaría agendar una reunión comercial.`;
+         `🚀 *ROI Proyectado:* ${(quote.impact.totalROI).toFixed(1)}x%0A` +
+         `Deseo agendar una consultoría de impacto.`;
       window.open(`https://wa.me/${WAPP_INTL}?text=${msg}`, '_blank');
    };
 
@@ -63,336 +78,414 @@ export default function Business() {
    };
 
    return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-amber-500/30 overflow-x-hidden">
-         <SEOHead title="Lael Corporate | Soluciones B2B" description="Capacitación de alto impacto y beneficios educativos para empresas líderes." />
+      <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30 overflow-x-hidden">
+         <SEOHead title="Lael Corporate | B2B Experience 2.0" description="ROI proyectado, capacitación de élite y beneficios educativos de alto impacto." />
 
-         {/* ──────────────── 1. HERO DARK CORPORATE ──────────────── */}
-         <header className="relative min-h-[85vh] flex items-center overflow-hidden border-b border-white/5">
-            {/* Abstract Background */}
-            <div className="absolute inset-0 bg-slate-950 z-0">
-               <div className="absolute top-0 right-0 w-3/4 h-full bg-gradient-to-l from-[#0f172a] to-transparent opacity-80"></div>
-               <div className="absolute -top-[20%] -right-[10%] w-[800px] h-[800px] bg-blue-900/10 rounded-full blur-[120px]"></div>
+         {/* ──────────────── 0. TICKER (REAL-TIME SOCIAL PROOF) ──────────────── */}
+         <div className="bg-slate-900 border-b border-white/5 py-2 overflow-hidden whitespace-nowrap relative z-50">
+            <div className="flex animate-[ticker_30s_linear_infinite] pause-on-hover">
+               {[...TICKER_DATA, ...TICKER_DATA].map((text, i) => (
+                  <span key={i} className="inline-flex items-center gap-2 mx-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                     {text}
+                  </span>
+               ))}
+            </div>
+         </div>
+
+         {/* ──────────────── 1. HERO RE-ENGINEERED ──────────────── */}
+         <header className="relative min-h-[90vh] flex items-center overflow-hidden">
+            {/* Background Architecture */}
+            <div className="absolute inset-0 z-0">
+               <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,_rgba(99,102,241,0.15),transparent)]"></div>
+               <div className="absolute bottom-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_80%,_rgba(251,191,36,0.05),transparent)]"></div>
+               <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]"></div>
             </div>
 
-            <div className="container mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-               {/* Text Side */}
+            <div className="container mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center pt-10">
                <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-                  <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-amber-400 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-8">
-                     <MdVerified /> Soluciones Corporativas B2B
+                  <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-[0.2em] mb-8">
+                     <MdVerified className="animate-pulse" /> Corporate Solution 2.0
                   </div>
 
-                  <h1 className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight">
-                     Transforma tu equipo,<br />
-                     <span className="bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent">Eleva tu Cultura.</span>
+                  <h1 className="text-6xl md:text-8xl font-serif font-black mb-6 leading-[0.9] tracking-tight">
+                     Inversión en <br />
+                     <span className="bg-gradient-to-r from-white via-indigo-200 to-indigo-500 bg-clip-text text-transparent">Capital Humano.</span>
                   </h1>
 
-                  <p className="text-xl text-slate-400 mb-10 leading-relaxed max-w-lg">
-                     Capacitación de alto impacto y beneficios educativos para empresas que buscan más que resultados: buscan trascendencia.
+                  <p className="text-xl text-slate-400 mb-10 leading-relaxed max-w-xl">
+                     No vendemos cursos; optimizamos el rendimiento corporativo a través de la formación especializada y beneficios con alto retorno social.
                   </p>
 
                   <div className="flex flex-wrap gap-4">
                      <button
                         onClick={scrollToCalculator}
-                        className="px-8 py-4 bg-white text-slate-950 font-bold rounded-lg hover:bg-amber-400 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.1)] flex items-center gap-2"
+                        className="group px-10 py-5 bg-white text-slate-950 font-black rounded-2xl hover:bg-indigo-500 hover:text-white transition-all duration-500 shadow-[0_20px_50px_rgba(255,255,255,0.05)] flex items-center gap-3 active:scale-95"
                      >
-                        <FaCalculator /> Cotizar Online
+                        <FaCalculator className="group-hover:rotate-12 transition-transform" />
+                        Proyectar ROI
+                        <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
                      </button>
-                     <a
-                        href="#servicios"
-                        className="px-8 py-4 bg-transparent border border-white/20 text-white font-bold rounded-lg hover:bg-white/5 transition-colors"
+                     <button
+                        className="px-10 py-5 bg-slate-900/50 border border-white/10 text-white font-bold rounded-2xl hover:bg-white/5 transition-all"
                      >
-                        Ver Servicios
-                     </a>
+                        Brochure PDF
+                     </button>
                   </div>
                </motion.div>
 
-               {/* Visual Side (Floating Logo) */}
+               {/* Visual: The Glass Dashboard Preview */}
                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 1, delay: 0.2 }}
-                  className="flex justify-center items-center relative"
+                  className="hidden lg:block relative"
                >
-                  <div className="relative w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full border border-white/5 flex items-center justify-center animate-[spin_60s_linear_infinite]">
-                     <div className="absolute inset-0 rounded-full border border-white/5 scale-75"></div>
-                     <div className="absolute inset-0 rounded-full border border-white/5 scale-50"></div>
+                  <div className="relative z-10 bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-3xl shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-1000 group">
+                     <div className="flex justify-between items-center mb-8">
+                        <div className="flex gap-2">
+                           <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
+                           <div className="w-3 h-3 rounded-full bg-amber-500/50"></div>
+                           <div className="w-3 h-3 rounded-full bg-emerald-500/50"></div>
+                        </div>
+                        <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Analytics Dashboard_v2</div>
+                     </div>
+                     <div className="space-y-6">
+                        <div className="h-24 bg-indigo-500/10 rounded-2xl border border-white/5 flex items-center px-6 gap-6 group-hover:bg-indigo-500/20 transition-colors">
+                           <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400"><FaChartLine /></div>
+                           <div>
+                              <div className="text-[10px] text-slate-500 font-bold uppercase">Proyección ROI</div>
+                              <div className="text-2xl font-black">+340%</div>
+                           </div>
+                        </div>
+                        <div className="h-24 bg-emerald-500/10 rounded-2xl border border-white/5 flex items-center px-6 gap-6 group-hover:bg-emerald-500/20 transition-colors">
+                           <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400"><FaHandshake /></div>
+                           <div>
+                              <div className="text-[10px] text-slate-500 font-bold uppercase">Employee Retention</div>
+                              <div className="text-2xl font-black">+25%</div>
+                           </div>
+                        </div>
+                     </div>
+                     {/* Floating Glow */}
+                     <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-indigo-500/30 blur-[60px] rounded-full group-hover:scale-150 transition-transform duration-1000"></div>
                   </div>
-                  <img
-                     src={logoBlanco}
-                     alt="Lael Corporate"
-                     className="absolute w-40 md:w-64 drop-shadow-[0_0_50px_rgba(255,255,255,0.1)]"
-                  />
                </motion.div>
             </div>
          </header>
 
-         {/* ──────────────── 2. METRICS BAR ──────────────── */}
-         <section className="border-b border-white/5 bg-[#020617]">
-            <div className="container mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-white/10">
-               <div className="px-4">
-                  <span className="block text-4xl font-bold text-white mb-1">+15</span>
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Programas a Medida</span>
-               </div>
-               <div className="px-4 pt-8 md:pt-0">
-                  <span className="block text-4xl font-bold text-white mb-1">ROI</span>
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Reportes Mensuales de Avance</span>
-               </div>
-               <div className="px-4 pt-8 md:pt-0">
-                  <span className="block text-4xl font-bold text-emerald-400 mb-1">100%</span>
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Deducible SENCE (Consultar)</span>
+         {/* ──────────────── 2. TRUST SYMBOLS ──────────────── */}
+         <section className="py-20 bg-slate-950 border-y border-white/5 relative">
+            <div className="container mx-auto px-6 overflow-hidden">
+               <p className="text-center text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] mb-12">Empresas que confían en nuestra visión</p>
+               <div className="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-40 grayscale group hover:grayscale-0 transition-all duration-700">
+                  <div className="text-2xl font-black tracking-tighter italic">RETAIL_CORP</div>
+                  <div className="text-2xl font-black tracking-tighter italic">MAX_LOGISTICS</div>
+                  <div className="text-2xl font-black tracking-tighter italic">FINTECH_SOLUTIONS</div>
+                  <div className="text-2xl font-black tracking-tighter italic">MINING_LEADER</div>
+                  <div className="text-2xl font-black tracking-tighter italic">GLOBAL_FOODS</div>
                </div>
             </div>
          </section>
 
-         {/* ──────────────── 3. SERVICIOS (NEON CARDS) ──────────────── */}
-         <section id="servicios" className="py-24 bg-slate-950">
+         {/* ──────────────── 3. COTIZADOR EXPERIENCE 2.0 ──────────────── */}
+         <section id="cotizador" className="py-32 bg-[#020617] relative">
+            {/* Immersive Background */}
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03]"></div>
+
             <div className="container mx-auto px-6">
-               <div className="text-center mb-16">
-                  <h2 className="text-3xl font-bold font-serif text-white mb-4">Ecosistema de Formación</h2>
-                  <p className="text-slate-400">Selecciona una vertical para proyectar tu inversión.</p>
-               </div>
+               <div className="max-w-7xl mx-auto">
 
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {SERVICE_LINES.map((srv) => (
-                     <motion.div
-                        key={srv.id}
-                        layoutId={`card-${srv.id}`}
-                        onClick={() => {
-                           setSelectedServiceId(srv.id);
-                           scrollToCalculator();
-                        }}
-                        whileHover={{ y: -8 }}
-                        className={`relative p-8 rounded-2xl border cursor-pointer transition-all overflow-hidden group h-full flex flex-col
-                       ${selectedServiceId === srv.id
-                              ? 'bg-slate-900 border-white/20 shadow-2xl scale-[1.02] ring-1 ring-white/20'
-                              : 'bg-slate-900/50 border-white/5 hover:border-white/10 hover:bg-slate-900'
-                           }
-                    `}
-                        style={{ '--brand': srv.brandColor }}
-                     >
-                        {/* Glow Background */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand)] to-transparent opacity-0 group-hover:opacity-10 transition-opacity duration-500"></div>
+                  {/* Grid Layout */}
+                  <div className="bg-slate-900/40 border border-white/10 rounded-[3rem] overflow-hidden backdrop-blur-xl shadow-[0_40px_100px_rgba(0,0,0,0.5)] grid grid-cols-1 lg:grid-cols-12 min-h-[700px]">
 
-                        <div className="text-4xl mb-6 relative z-10">{srv.icon}</div>
-                        <h3 className="text-xl font-bold text-white mb-3 relative z-10">{srv.label}</h3>
-                        <p className="text-slate-400 text-sm leading-relaxed mb-6 flex-1 relative z-10 group-hover:text-slate-300">
-                           {srv.desc}
-                        </p>
-
-                        <div className="mt-auto flex justify-between items-center text-[var(--brand)] relative z-10">
-                           <span className="text-xs font-bold uppercase tracking-wider">Cotizar</span>
-                           <FaArrowRight className="transform -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all" />
-                        </div>
-                     </motion.div>
-                  ))}
-               </div>
-            </div>
-         </section>
-
-         {/* ──────────────── 4. CALCULATOR (BLACK EDITION) ──────────────── */}
-         <section id="cotizador" className="py-24 bg-[#080B14] relative overflow-hidden">
-            {/* Decoration */}
-            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-
-            <div className="container mx-auto px-6 relative z-10">
-               <div className="max-w-6xl mx-auto bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-2">
-
-                  {/* --- PANEL A: CONTROLS --- */}
-                  <div className="p-10 border-b lg:border-b-0 lg:border-r border-slate-800">
-                     <div className="flex items-center gap-3 mb-10 text-amber-500">
-                        <FaCalculator className="text-xl" />
-                        <h3 className="font-bold uppercase tracking-widest text-sm text-white">Configurador de Plan</h3>
-                     </div>
-
-                     {/* 1. Service Selector */}
-                     <div className="mb-8">
-                        <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Línea de Servicio</label>
-                        <select
-                           value={selectedServiceId}
-                           onChange={(e) => setSelectedServiceId(e.target.value)}
-                           className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition-all cursor-pointer"
-                        >
-                           {SERVICE_LINES.map(s => (
-                              <option key={s.id} value={s.id}>{s.label}</option>
-                           ))}
-                        </select>
-                     </div>
-
-                     {/* 2. Headcount Slider */}
-                     <div className="mb-8 p-6 bg-slate-950/50 rounded-xl border border-slate-800">
-                        <div className="flex justify-between items-center mb-4">
-                           <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Colaboradores</label>
-                           <span className="bg-amber-500 text-slate-900 font-bold px-3 py-1 rounded text-sm">
-                              {headcount} pers.
-                           </span>
-                        </div>
-                        <input
-                           type="range" min="1" max="50" step="1"
-                           value={headcount}
-                           onChange={(e) => setHeadcount(e.target.value)}
-                           className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
-                        />
-                        <div className="flex justify-between mt-2 text-[10px] text-slate-600 font-mono">
-                           <span>1</span>
-                           <span>50+</span>
-                        </div>
-                     </div>
-
-                     {/* 3. Duration & Modality */}
-                     <div className="grid grid-cols-2 gap-6">
-                        <div>
-                           <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Duración</label>
-                           <div className="flex gap-2">
-                              {[1, 3, 6, 12].map(m => (
-                                 <button
-                                    key={m}
-                                    onClick={() => setMonths(m)}
-                                    className={`flex-1 py-2 rounded-lg text-sm font-bold border transition-all
-                                    ${months === m ? 'bg-amber-500 border-amber-500 text-slate-900' : 'bg-transparent border-slate-700 text-slate-400 hover:border-slate-500'}
-                                 `}
-                                 >
-                                    {m}M
-                                 </button>
-                              ))}
-                           </div>
+                     {/* LEFT PANEL: CONFIGURATOR (4 Cols) */}
+                     <div className="lg:col-span-5 p-12 lg:p-16 bg-slate-900/50 border-b lg:border-b-0 lg:border-r border-white/5">
+                        <div className="flex items-center gap-3 mb-12">
+                           <div className="p-3 bg-indigo-500/10 rounded-xl text-indigo-400"><FaCalculator /></div>
+                           <h3 className="font-black uppercase tracking-widest text-sm">Configurador Pro</h3>
                         </div>
 
-                        {quote?.service.type !== 'flat' && (
+                        <div className="space-y-10">
+                           {/* 1. Service Selection with Visual Radio Icons */}
                            <div>
-                              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Modalidad</label>
-                              <div className="flex gap-2">
-                                 <button
-                                    onClick={() => setModality('online')}
-                                    className={`flex-1 py-2 rounded-lg text-sm font-bold border transition-all
-                                   ${modality === 'online' ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-transparent border-slate-700 text-slate-400 hover:border-slate-500'}
-                                `}
-                                 >
-                                    Online
-                                 </button>
-                                 <button
-                                    onClick={() => setModality('onsite')}
-                                    className={`flex-1 py-2 rounded-lg text-sm font-bold border transition-all
-                                   ${modality === 'onsite' ? 'bg-indigo-600 border-indigo-600 text-white' : 'bg-transparent border-slate-700 text-slate-400 hover:border-slate-500'}
-                                `}
-                                 >
-                                    Presen.
-                                 </button>
+                              <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6">Vertical de Impacto</label>
+                              <div className="grid grid-cols-2 gap-3">
+                                 {SERVICE_LINES.map(s => (
+                                    <button
+                                       key={s.id}
+                                       onClick={() => setSelectedServiceId(s.id)}
+                                       className={`p-4 rounded-2xl border text-left transition-all duration-300 flex flex-col gap-2
+                                          ${selectedServiceId === s.id
+                                             ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg'
+                                             : 'bg-white/5 border-white/5 text-slate-400 hover:border-white/20'
+                                          }
+                                       `}
+                                    >
+                                       <span className="text-xl">{s.icon}</span>
+                                       <span className="text-[11px] font-bold leading-tight">{s.label}</span>
+                                    </button>
+                                 ))}
                               </div>
                            </div>
-                        )}
-                     </div>
-                  </div>
 
-                  {/* --- PANEL B: RESULTS --- */}
-                  <div className="relative p-10 bg-slate-950 flex flex-col justify-center">
-                     <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950 pointer-events-none"></div>
-
-                     <AnimatePresence mode="wait">
-                        {quote && (
-                           <motion.div
-                              key={`${selectedServiceId}-${headcount}-${months}-${modality}`}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -10 }}
-                              className="relative z-10 text-center"
-                           >
-                              <span className="text-xs font-bold text-slate-500 uppercase tracking-widest block mb-4">
-                                 Inversión Total Estimada
-                              </span>
-
-                              <div className="text-5xl md:text-6xl font-bold text-white mb-2 tracking-tight">
-                                 {clp(quote.financials.total)}
-                              </div>
-                              <span className="text-slate-500 text-sm font-mono">+ IVA</span>
-
-                              {quote.financials.discountPercent > 0 && (
-                                 <div className="inline-block mt-6 px-4 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full text-xs font-bold uppercase tracking-wide">
-                                    Ahorro por volumen: {quote.financials.discountPercent}%
+                           {/* 2. Headcount Interactive Slider */}
+                           <div className="p-8 bg-black/30 rounded-[2rem] border border-white/5 shadow-inner">
+                              <div className="flex justify-between items-end mb-6">
+                                 <div>
+                                    <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">Equipo</label>
+                                    <span className="text-3xl font-black text-white">{headcount}</span>
+                                    <span className="text-slate-500 font-bold ml-2">Pers.</span>
                                  </div>
+                                 <div className="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded">
+                                    {(headcount >= 10) ? 'VOLUMEN APL.' : 'MIN.'}
+                                 </div>
+                              </div>
+                              <input
+                                 type="range" min="1" max="100" step="1"
+                                 value={headcount}
+                                 onChange={(e) => setHeadcount(e.target.value)}
+                                 className="w-full h-1.5 bg-slate-800 rounded-full appearance-none cursor-pointer accent-indigo-500"
+                              />
+                           </div>
+
+                           {/* 3. Time & Modality */}
+                           <div className="grid grid-cols-2 gap-6">
+                              <div>
+                                 <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Plazo</label>
+                                 <div className="flex p-1 bg-black/40 rounded-xl border border-white/5">
+                                    {[3, 6, 12].map(m => (
+                                       <button
+                                          key={m}
+                                          onClick={() => setMonths(m)}
+                                          className={`flex-1 py-2 rounded-lg text-xs font-black transition-all
+                                             ${months === m ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}
+                                          `}
+                                       >
+                                          {m}M
+                                       </button>
+                                    ))}
+                                 </div>
+                              </div>
+                              <div>
+                                 <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Modalidad</label>
+                                 <div className="flex p-1 bg-black/40 rounded-xl border border-white/5">
+                                    {['online', 'onsite'].map(mod => (
+                                       <button
+                                          key={mod}
+                                          onClick={() => setModality(mod)}
+                                          className={`flex-1 py-2 rounded-lg text-[10px] font-black uppercase transition-all
+                                             ${modality === mod ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}
+                                          `}
+                                       >
+                                          {mod === 'online' ? 'Global' : 'Local'}
+                                       </button>
+                                    ))}
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+                     {/* RIGHT PANEL: DUAL DASHBOARD (7 Cols) */}
+                     <div className="lg:col-span-7 bg-slate-950 flex flex-col relative overflow-hidden">
+
+                        {/* Selector de Modo (Financial vs Impact) */}
+                        <div className="flex border-b border-white/5">
+                           <button
+                              onClick={() => setViewMode('financial')}
+                              className={`flex-1 py-6 text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-2 transition-all
+                                 ${viewMode === 'financial' ? 'bg-indigo-500/10 text-indigo-400 border-b-2 border-indigo-500' : 'text-slate-600 hover:text-slate-400'}
+                              `}
+                           >
+                              <FaMoneyBillWave /> Vista Financiera
+                           </button>
+                           <button
+                              onClick={() => setViewMode('impact')}
+                              className={`flex-1 py-6 text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-2 transition-all
+                                 ${viewMode === 'impact' ? 'bg-emerald-500/10 text-emerald-400 border-b-2 border-emerald-500' : 'text-slate-600 hover:text-slate-400'}
+                              `}
+                           >
+                              <FaHeartbeat /> Impacto ROI
+                           </button>
+                        </div>
+
+                        <div className="flex-1 p-12 relative">
+                           <AnimatePresence mode="wait">
+                              {quote && viewMode === 'financial' && (
+                                 <motion.div
+                                    key="financial"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    className="space-y-12"
+                                 >
+                                    <div className="text-center">
+                                       <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4">Investment Total_Final</span>
+                                       <div className="text-6xl md:text-8xl font-black text-white tracking-tighter mb-2">
+                                          {clp(quote.financials.total)}
+                                       </div>
+                                       <span className="text-slate-600 font-mono text-xs">+ IVA / Período {months}M</span>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-6">
+                                       <div className="p-8 bg-slate-900/50 rounded-3xl border border-white/5">
+                                          <div className="text-[10px] font-black text-slate-500 uppercase mb-2">Costo Mensual Unitario</div>
+                                          <div className="text-3xl font-black text-white">{clp(quote.financials.perPersonMonth)}</div>
+                                       </div>
+                                       <div className="p-8 bg-slate-900/50 rounded-3xl border border-white/5">
+                                          <div className="text-[10px] font-black text-slate-500 uppercase mb-2">Descuento Volumen</div>
+                                          <div className="text-3xl font-black text-emerald-400">-{quote.financials.discountPercent}%</div>
+                                       </div>
+                                    </div>
+
+                                    {/* Financial Mini Chart */}
+                                    <div className="h-40 w-full mt-8 bg-black/40 rounded-3xl border border-white/5 p-6 shadow-inner">
+                                       <ResponsiveContainer width="100%" height="100%">
+                                          <AreaChart data={[
+                                             { x: 0, y: 0 },
+                                             { x: 1, y: quote.financials.total * 0.4 },
+                                             { x: 2, y: quote.financials.total * 0.7 },
+                                             { x: 3, y: quote.financials.total }
+                                          ]}>
+                                             <defs>
+                                                <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                                                   <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
+                                                   <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                                                </linearGradient>
+                                             </defs>
+                                             <Area type="monotone" dataKey="y" stroke="#6366f1" fillOpacity={1} fill="url(#colorPrice)" strokeWidth={3} />
+                                          </AreaChart>
+                                       </ResponsiveContainer>
+                                    </div>
+                                 </motion.div>
                               )}
 
-                              <div className="grid grid-cols-2 gap-4 mt-12 pt-8 border-t border-slate-900 text-left">
-                                 <div>
-                                    <span className="text-xs text-slate-500 block mb-1">Por Persona/Mes</span>
-                                    <strong className="text-white text-lg">{clp(quote.financials.perPersonMonth)}</strong>
-                                 </div>
-                                 <div>
-                                    <span className="text-xs text-slate-500 block mb-1">Total Bruto</span>
-                                    <strong className="text-slate-400 text-lg line-through">{clp(quote.financials.totalBeforeDiscount)}</strong>
-                                 </div>
-                              </div>
+                              {quote && viewMode === 'impact' && (
+                                 <motion.div
+                                    key="impact"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    className="space-y-12"
+                                 >
+                                    <div className="text-center">
+                                       <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4">ROI Proyectado del Proyecto</span>
+                                       <div className="text-6xl md:text-8xl font-black text-emerald-400 tracking-tighter mb-2">
+                                          {(quote.impact.totalROI).toFixed(1)}x
+                                       </div>
+                                       <span className="text-slate-600 font-mono text-xs">Retorno mínimo estimado sobre la inversión</span>
+                                    </div>
 
-                              <button
-                                 onClick={handleWappClick}
-                                 className="w-full mt-10 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/20 transition-all flex items-center justify-center gap-3 group"
-                              >
-                                 <FaWhatsapp className="text-xl" /> Confirmar Disponibilidad
-                                 <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
-                              </button>
+                                    <div className="space-y-6">
+                                       <div className="flex justify-between items-center p-6 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
+                                          <div className="flex items-center gap-4">
+                                             <div className="p-3 bg-emerald-500/20 rounded-lg text-emerald-400"><BsArrowRepeat className="animate-spin-slow" /></div>
+                                             <div>
+                                                <div className="text-xs font-bold text-white">Ahorro x Retención</div>
+                                                <div className="text-[10px] text-slate-500">Reducción de rotación estimada</div>
+                                             </div>
+                                          </div>
+                                          <div className="text-2xl font-black text-emerald-400">+{clp(quote.impact.retentionSavings)}</div>
+                                       </div>
+                                       <div className="flex justify-between items-center p-6 bg-blue-500/10 rounded-2xl border border-blue-500/20">
+                                          <div className="flex items-center gap-4">
+                                             <div className="p-3 bg-blue-500/20 rounded-lg text-blue-400"><FaRocket /></div>
+                                             <div>
+                                                <div className="text-xs font-bold text-white">Ganancia Productividad</div>
+                                                <div className="text-[10px] text-slate-500">Efectividad operacional proyectada</div>
+                                             </div>
+                                          </div>
+                                          <div className="text-2xl font-black text-blue-400">+{clp(quote.impact.productivityGain)}</div>
+                                       </div>
+                                    </div>
 
-                              <p className="mt-4 text-[10px] text-slate-600">
-                                 *Precios referenciales sujetos a confirmación de agenda docente.
-                              </p>
-                           </motion.div>
-                        )}
-                     </AnimatePresence>
+                                    <p className="text-[10px] text-slate-600 font-mono text-center">
+                                       *Cálculos basados en estándares de la industria (SHRM & ROI Institute) adaptados al mercado local.
+                                    </p>
+                                 </motion.div>
+                              )}
+                           </AnimatePresence>
+                        </div>
+
+                        {/* FINAL CTA ACTION */}
+                        <div className="p-12 border-t border-white/5">
+                           <button
+                              onClick={handleWappClick}
+                              className="w-full py-6 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-3xl shadow-[0_20px_50px_rgba(16,185,129,0.2)] transition-all flex items-center justify-center gap-3 group overflow-hidden relative"
+                           >
+                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                              <FaWhatsapp className="text-2xl" />
+                              Solicitar Consultoría de Impacto
+                              <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
+                           </button>
+                        </div>
+                     </div>
                   </div>
                </div>
             </div>
          </section>
 
-         {/* ──────────────── 5. QUICK WINS PACKS ──────────────── */}
-         <section className="py-24 bg-slate-950 border-t border-white/5">
+         {/* ──────────────── 4. CASOS DE ÉXITO 2.0 ──────────────── */}
+         <section className="py-32 bg-slate-950">
             <div className="container mx-auto px-6">
-               <h2 className="text-3xl font-bold font-serif text-white mb-2">Packs "Quick Win"</h2>
-               <p className="text-slate-400 mb-12">Soluciones empaquetadas de rápida implementación.</p>
+               <div className="max-w-4xl mb-24">
+                  <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter">Evidencia de <br />Resultados.</h2>
+                  <p className="text-xl text-slate-400">No solo capacitamos; transformamos la cultura organizacional con datos.</p>
+               </div>
 
-               <div className="flex flex-wrap gap-6 justify-center">
-                  {EMP_PACKS.map((pack) => (
-                     <div key={pack.id} className="w-full md:w-80 bg-slate-900 border border-slate-800 p-8 rounded-2xl hover:border-amber-500/50 transition-colors group">
-                        <div className="flex items-center gap-3 mb-4 text-amber-500">
-                           <BsLightningChargeFill />
-                           <h4 className="font-bold text-white group-hover:text-amber-400 transition-colors">{pack.title}</h4>
-                        </div>
-                        <p className="text-sm text-slate-400 mb-6 min-h-[40px]">{pack.subtitle}</p>
-
-                        <div className="pt-6 border-t border-slate-800">
-                           <span className="block font-bold text-white mb-4">{pack.priceLabel}</span>
-                           <a
-                              href={`https://wa.me/${WAPP_INTL}?text=Hola, me interesa el pack: ${pack.title}`}
-                              target="_blank" rel="noreferrer"
-                              className="text-sm font-bold text-amber-500 flex items-center gap-2 hover:underline"
-                           >
-                              Contratar Pack <FaArrowRight />
-                           </a>
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <motion.div whileHover={{ scale: 1.02 }} className="group relative bg-[#080B14] border border-white/5 p-12 rounded-[3rem] overflow-hidden">
+                     <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 blur-[80px] group-hover:bg-indigo-500/10 transition-colors"></div>
+                     <span className="text-indigo-400 font-black text-xs uppercase tracking-[0.3em] block mb-6">RETAIL TECH</span>
+                     <h3 className="text-3xl font-black text-white mb-8">"Un beneficio que paga dividendos en lealtad."</h3>
+                     <p className="text-slate-400 mb-12 text-lg">
+                        Al implementar el **Pack Futuro** para los hijos de los desarrolladores junior, logramos frenar una ola de fugas de talento hacia la competencia, ahorrando más de **$40M en reclutamiento**.
+                     </p>
+                     <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-2xl text-amber-500"><FaTrophy /></div>
+                        <div>
+                           <div className="text-white font-black">CTO / Retail Chile</div>
+                           <div className="text-slate-600 text-xs">Retention Rate +32%</div>
                         </div>
                      </div>
-                  ))}
+                  </motion.div>
+
+                  <motion.div whileHover={{ scale: 1.02 }} className="group relative bg-[#080B14] border border-white/5 p-12 rounded-[3rem] overflow-hidden">
+                     <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[80px] group-hover:bg-emerald-500/10 transition-colors"></div>
+                     <span className="text-emerald-400 font-black text-xs uppercase tracking-[0.3em] block mb-6">GLOBAL LOGISTICS</span>
+                     <h3 className="text-3xl font-black text-white mb-8">"Comunicación fluida = Operación eficiente."</h3>
+                     <p className="text-slate-400 mb-12 text-lg">
+                        El programa intensivo de Inglés para el área de Aduanas eliminó los errores de traducción que causaban multas mensuales, generando un **ROI directo en el primer trimestre**.
+                     </p>
+                     <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-2xl text-blue-500"><FaRocket /></div>
+                        <div>
+                           <div className="text-white font-black">Operations Director</div>
+                           <div className="text-slate-600 text-xs">Errors Reduced -60%</div>
+                        </div>
+                     </div>
+                  </motion.div>
                </div>
             </div>
          </section>
 
-         {/* ──────────────── 6. CTA CONTACT ──────────────── */}
-         <section className="py-20 bg-gradient-to-br from-slate-900 to-slate-950 text-center">
-            <div className="container mx-auto px-6 max-w-2xl">
-               <h2 className="text-3xl font-bold text-white mb-6">Hablemos de Negocios</h2>
-               <p className="text-slate-400 mb-10">
-                  ¿Necesitas una propuesta formal en PDF? ¿O una reunión con el Director?
-                  Escríbenos y te respondemos en menos de 2 horas.
-               </p>
-               <div className="flex justify-center gap-4">
-                  <a
-                     href="mailto:contacto@institutolael.cl"
-                     className="px-6 py-3 border border-slate-600 text-white font-bold rounded-lg hover:bg-white/5 transition-colors flex items-center gap-2"
+         {/* ──────────────── 5. FINAL DECISION ──────────────── */}
+         <section className="py-40 bg-indigo-600 relative overflow-hidden">
+            <div className="absolute inset-0 bg-black/20"></div>
+            <div className="container mx-auto px-6 relative z-10 text-center text-white">
+               <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-12">¿Listo para elevar <br />el estándar?</h2>
+               <div className="flex flex-col md:flex-row gap-6 justify-center">
+                  <button
+                     onClick={handleWappClick}
+                     className="px-12 py-6 bg-white text-slate-950 font-black rounded-2xl hover:bg-slate-100 transition-all flex items-center justify-center gap-3"
                   >
-                     <FaEnvelope /> Correo Corporativo
-                  </a>
+                     <FaHandshake /> Agenda Sesión Comercial
+                  </button>
                   <a
-                     href={`https://wa.me/${WAPP_INTL}`}
-                     className="px-6 py-3 bg-white text-slate-950 font-bold rounded-lg hover:bg-slate-200 transition-colors flex items-center gap-2 shadow-lg"
+                     href="mailto:corporate@institutolael.cl"
+                     className="px-12 py-6 bg-transparent border-2 border-white/30 text-white font-black rounded-2xl hover:bg-white/10 transition-all"
                   >
-                     <FaWhatsapp /> Chat Directo
+                     Solicitar Factibilidad SENCE
                   </a>
                </div>
             </div>

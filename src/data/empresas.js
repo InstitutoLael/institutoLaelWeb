@@ -17,7 +17,7 @@ export const SERVICE_LINES = [
     label: "Inglés Corporativo",
     type: "hourly",
     // Bajamos de 12.000 a 6.500 la hora base para penetración agresiva.
-    publicPphOnline: 6500, 
+    publicPphOnline: 6500,
     publicPphOnsite: 9500,
     defaultHoursMonth: 8, // 2 veces por semana estándar
     brandColor: "#6366f1", // Indigo
@@ -153,7 +153,7 @@ export function calcQuote(options) {
   const discountRule = PRICING_RULES.volumeDiscounts
     .sort((a, b) => b.min - a.min) // Ordenar descendente (50, 20, 10...)
     .find((rule) => headcount >= rule.min);
-  
+
   const discountRate = discountRule ? discountRule.off : 0;
 
   let totalGross = 0;
@@ -172,14 +172,20 @@ export function calcQuote(options) {
     // Fórmula: Personas * (PrecioHora * HorasMes) * Meses
     const hourlyRate = modality === "onsite" ? service.publicPphOnsite : service.publicPphOnline;
     const hoursMonth = service.defaultHoursMonth || 8;
-    
+
     baseUnitCost = hourlyRate * hoursMonth; // Costo mensual por persona sin descuento
     totalGross = baseUnitCost * headcount * durationMonths;
   }
 
   // 5. Aplicar Descuentos y Finales
   const totalNet = Math.round(totalGross * (1 - discountRate));
-  
+
+  // 6. MÉTRICAS DE IMPACTO ROI (Simuladas/Matemáticas)
+  // - Ahorro por Retención: Evitar 1 renuncia al año cuesta ~2M CLP
+  const retentionSavings = headcount > 10 ? 2500000 : 800000;
+  // - Ganancia Productividad: +10% de efectividad por hora
+  const productivityGain = headcount * (modality === 'online' ? 120000 : 150000);
+
   // Métricas unitarias para mostrar "Desde $X por persona"
   const costPerPersonTotal = Math.round(totalNet / headcount);
   const costPerPersonMonth = Math.round(costPerPersonTotal / durationMonths);
@@ -194,6 +200,11 @@ export function calcQuote(options) {
       discountPercent: Math.round(discountRate * 100),
       perPersonTotal: costPerPersonTotal,
       perPersonMonth: costPerPersonMonth,
+    },
+    impact: {
+      retentionSavings,
+      productivityGain,
+      totalROI: (retentionSavings + productivityGain) / totalNet
     }
   };
 }

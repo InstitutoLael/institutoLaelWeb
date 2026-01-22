@@ -1,23 +1,94 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaPaperPlane, FaInstagram, FaClock, FaArrowRight, FaHeadset, FaCheck
+  FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaPaperPlane, FaInstagram, FaClock,
+  FaArrowRight, FaHeadset, FaCheck, FaGraduationCap, FaBuilding, FaChalkboardTeacher,
+  FaLifeRing, FaBriefcase, FaTimes
 } from "react-icons/fa";
+import { MdVerified, MdOutlineSmartButton } from "react-icons/md";
 import SEOHead from "../components/SEOHead.jsx";
 import { CONTACT_INFO, CONTACT_SUBJECTS } from "../data/contact.js";
 
-// ANIMATIONS
-const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-};
+// --- STEP DATA ---
+const PORTALS = [
+  {
+    id: "student",
+    title: "Soy Estudiante",
+    subtitle: "PAES, Idiomas o Nivelación",
+    icon: <FaGraduationCap />,
+    color: "from-blue-500 to-indigo-600",
+    actions: [
+      { label: "Inscripción a Cursos", type: "whatsapp", msg: "Hola, quiero inscribirme a un curso." },
+      { label: "Consultar Horarios", type: "form", subject: "inscripcion" },
+      { label: "Becas y Convenios", type: "whatsapp", msg: "Hola, quiero saber sobre becas." }
+    ]
+  },
+  {
+    id: "corporate",
+    title: "Soy Empresa",
+    subtitle: "Capacitación y ROI B2B",
+    icon: <FaBuilding />,
+    color: "from-emerald-500 to-teal-600",
+    actions: [
+      { label: "Solicitar Cotización ROI", type: "whatsapp", msg: "Hola, quiero una cotización corporativa." },
+      { label: "Factibilidad SENCE", type: "form", subject: "empresa" },
+      { label: "Alianza Estratégica", type: "whatsapp", msg: "Hola, me interesa una alianza." }
+    ]
+  },
+  {
+    id: "teacher",
+    title: "Soy Docente",
+    subtitle: "Postulaciones y Talento",
+    icon: <FaChalkboardTeacher />,
+    color: "from-amber-500 to-orange-600",
+    actions: [
+      { label: "Enviar Currículum", type: "whatsapp", msg: "Hola, quiero postular como docente." },
+      { label: "Soporte Académico", type: "form", subject: "otro" }
+    ]
+  },
+  {
+    id: "help",
+    title: "Soporte",
+    subtitle: "Pagos y Plataforma",
+    icon: <FaLifeRing />,
+    color: "from-rose-500 to-red-600",
+    actions: [
+      { label: "Problemas de Acceso", type: "whatsapp", msg: "Hola, tengo problemas con la plataforma." },
+      { label: "Dudas de Facturación", type: "form", subject: "pagos" }
+    ]
+  }
+];
 
 export default function Contacto() {
+  const [step, setStep] = useState(1); // 1: Selection, 2: Actions/Form
+  const [selectedPortal, setSelectedPortal] = useState(null);
   const [form, setForm] = useState({ name: "", email: "", subject: "consulta", message: "" });
   const [isSending, setIsSending] = useState(false);
   const [sentSuccess, setSentSuccess] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  const handlePortalSelect = (portal) => {
+    setSelectedPortal(portal);
+    setStep(2);
+  };
+
+  const backToPortals = () => {
+    setStep(1);
+    setSelectedPortal(null);
+    setShowForm(false);
+  };
+
+  const handleAction = (action) => {
+    if (action.type === 'whatsapp') {
+      const url = `https://wa.me/${CONTACT_INFO.whatsapp.number}?text=${encodeURIComponent(action.msg)}`;
+      window.open(url, '_blank');
+    } else {
+      setForm(prev => ({ ...prev, subject: action.subject }));
+      setShowForm(true);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,263 +98,228 @@ export default function Contacto() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSending(true);
-
-    // Simulate sending process (UX) before opening WhatsApp
     setTimeout(() => {
-      // Find label for better formatting
       const subjectLabel = CONTACT_SUBJECTS.find(s => s.id === form.subject)?.label || form.subject;
-
-      const text = `Hola *Instituto Lael* 👋%0A%0ASoy *${form.name}* y tengo una consulta.%0A%0A📌 *Motivo:* ${subjectLabel}%0A📝 *Mensaje:* ${form.message}%0A%0A(Mi correo es: ${form.email})`;
-
-      const url = `https://wa.me/${CONTACT_INFO.whatsapp.number}?text=${text}`;
-      window.open(url, '_blank', 'noopener,noreferrer');
-
+      const text = `Hola *Instituto Lael* 👋%0A%0ASoy *${form.name}* (${selectedPortal.title}).%0A%0A📌 *Motivo:* ${subjectLabel}%0A📝 *Mensaje:* ${form.message}%0A%0A(Email: ${form.email})`;
+      window.open(`https://wa.me/${CONTACT_INFO.whatsapp.number}?text=${text}`, '_blank');
       setIsSending(false);
       setSentSuccess(true);
       setForm({ name: "", email: "", subject: "consulta", message: "" });
-
-      // Reset success message after 5s
-      setTimeout(() => setSentSuccess(false), 5000);
+      setTimeout(() => {
+        setSentSuccess(false);
+        backToPortals();
+      }, 3000);
     }, 800);
   };
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30 overflow-x-hidden">
-      <SEOHead title="Contacto | Instituto Lael" description="Hablemos. Estamos aquí para resolver tus dudas académicas y administrativas." />
+      <SEOHead title="Hub de Contacto | Experience 2.0 | Instituto Lael" description="Centro inteligente de atención al estudiante y partners corporativos." />
 
-      {/* ──────────────── 1. BACKGROUND GLOWS ──────────────── */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute -top-20 -left-20 w-[600px] h-[600px] bg-indigo-600/10 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[100px]"></div>
-      </div>
+      {/* ──────────────── 1. HERO HEADER ──────────────── */}
+      <header className="relative pt-40 pb-20 px-6 text-center">
+        {/* Background Ambience */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-96 bg-indigo-600/10 blur-[120px] rounded-full -z-10"></div>
 
-      <div className="container mx-auto px-6 relative z-10 pt-32 pb-20">
-
-        {/* ──────────────── 2. HERO HEADER ──────────────── */}
-        <motion.header
-          initial="hidden" animate="visible" variants={fadeInUp}
-          className="text-center mb-16"
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="container mx-auto max-w-4xl"
         >
-          <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-6 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Equipo de Admisión: En Línea
+          <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-10 text-indigo-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Sistema de Respuesta Inteligente
+          </div>
+          <h1 className="text-6xl md:text-8xl font-black mb-8 leading-[0.85] tracking-tighter">
+            ¿Cómo podemos <br />
+            <span className="bg-gradient-to-r from-white via-indigo-200 to-indigo-500 bg-clip-text text-transparent">Ayudarte Hoy?</span>
+          </h1>
+          <p className="text-xl text-slate-400 font-light max-w-2xl mx-auto leading-relaxed">
+            Selecciona tu perfil para conectarte instantáneamente con el área correspondiente. Experiencia 2.0: Sin esperas, sin burocracia.
+          </p>
+        </motion.div>
+      </header>
+
+      {/* ──────────────── 2. INTERACTIVE DECISION TREE ──────────────── */}
+      <section className="container mx-auto px-6 pb-40 min-h-[600px] relative">
+        <AnimatePresence mode="wait">
+
+          {step === 1 && (
+            <motion.div
+              key="step1"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 1.05 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto"
+            >
+              {PORTALS.map((portal) => (
+                <button
+                  key={portal.id}
+                  onClick={() => handlePortalSelect(portal)}
+                  className="group relative h-80 bg-[#080B14] border border-white/5 rounded-[3rem] overflow-hidden flex flex-col items-center justify-center p-10 transition-all duration-500 hover:border-white/20 hover:shadow-2xl hover:shadow-indigo-500/10 active:scale-95"
+                >
+                  <div className={`w-20 h-20 rounded-3xl bg-gradient-to-br ${portal.color} flex items-center justify-center text-3xl text-white mb-8 shadow-lg group-hover:scale-110 transition-transform duration-500`}>
+                    {portal.icon}
+                  </div>
+                  <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tighter">{portal.title}</h3>
+                  <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">{portal.subtitle}</p>
+
+                  <div className="absolute bottom-10 opacity-0 group-hover:opacity-100 transition-opacity transform translate-y-2 group-hover:translate-y-0 text-indigo-400 font-black text-[10px] uppercase tracking-widest flex items-center gap-2">
+                    Ingresar <FaArrowRight />
+                  </div>
+                </button>
+              ))}
+            </motion.div>
+          )}
+
+          {step === 2 && selectedPortal && (
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              className="max-w-4xl mx-auto"
+            >
+              <div className="flex items-center gap-6 mb-12">
+                <button
+                  onClick={backToPortals}
+                  className="p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors text-slate-400 hover:text-white"
+                >
+                  <FaTimes />
+                </button>
+                <div>
+                  <h3 className="text-3xl font-black text-white uppercase tracking-tighter">{selectedPortal.title}</h3>
+                  <p className="text-slate-500 uppercase font-black text-[10px] tracking-widest">{selectedPortal.subtitle}</p>
+                </div>
+              </div>
+
+              {!showForm ? (
+                <div className="grid grid-cols-1 gap-4">
+                  {selectedPortal.actions.map((action, i) => (
+                    <button
+                      key={i}
+                      onClick={() => handleAction(action)}
+                      className="p-8 bg-slate-900/50 border border-white/5 rounded-3xl flex items-center justify-between group hover:border-indigo-500/30 hover:bg-slate-900 transition-all"
+                    >
+                      <div className="flex items-center gap-6">
+                        <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                          {action.type === 'whatsapp' ? <FaWhatsapp /> : <FaEnvelope />}
+                        </div>
+                        <span className="text-xl font-bold text-white uppercase tracking-tight">{action.label}</span>
+                      </div>
+                      <FaArrowRight className="text-slate-700 group-hover:text-indigo-400 group-hover:translate-x-2 transition-all" />
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-slate-900 border border-white/5 p-10 rounded-[3rem] shadow-2xl relative"
+                >
+                  {sentSuccess && (
+                    <div className="absolute inset-0 z-20 bg-slate-950/95 flex flex-col items-center justify-center text-center p-10 rounded-[3rem]">
+                      <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center text-white text-4xl mb-6 shadow-2xl shadow-emerald-500/50">
+                        <FaCheck />
+                      </div>
+                      <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tight">¡Todo Listo!</h3>
+                      <p className="text-slate-400">Redirigiendo a WhatsApp para finalizar la gestión.</p>
+                    </div>
+                  )}
+
+                  <form onSubmit={handleSubmit} className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Tu Nombre</label>
+                        <input
+                          type="text" name="name" required value={form.name} onChange={handleChange}
+                          className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-white focus:border-indigo-500 transition-all outline-none"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Email Corporativo / Personal</label>
+                        <input
+                          type="email" name="email" required value={form.email} onChange={handleChange}
+                          className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-white focus:border-indigo-500 transition-all outline-none"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest">¿En qué podemos profundizar?</label>
+                      <textarea
+                        name="message" rows="4" required value={form.message} onChange={handleChange}
+                        className="w-full bg-black/40 border border-white/10 rounded-2xl px-6 py-4 text-white focus:border-indigo-500 transition-all outline-none"
+                      ></textarea>
+                    </div>
+                    <button
+                      type="submit" disabled={isSending}
+                      className="w-full py-6 bg-indigo-600 text-white font-black rounded-2xl uppercase tracking-[0.2em] shadow-2xl shadow-indigo-600/30 hover:bg-indigo-500 active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                    >
+                      {isSending ? "Validando..." : <><FaPaperPlane /> Iniciar Conversación</>}
+                    </button>
+                  </form>
+                </motion.div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </section>
+
+      {/* ──────────────── 3. GLOBAL INFO GRID ──────────────── */}
+      <section className="py-24 bg-[#080B14] border-y border-white/5">
+        <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+
+          <div className="flex items-start gap-6">
+            <div className="p-4 bg-indigo-500/10 rounded-2xl text-indigo-400 text-2xl"><FaMapMarkerAlt /></div>
+            <div>
+              <h4 className="font-black text-white uppercase tracking-tighter mb-2">Visítanos</h4>
+              <p className="text-slate-500 text-sm leading-relaxed">
+                {CONTACT_INFO.location.address} <br />
+                <span className="text-xs italic">{CONTACT_INFO.location.note}</span>
+              </p>
+            </div>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-4 bg-gradient-to-r from-white via-white to-slate-400 bg-clip-text text-transparent">
-            Hablemos de tu Futuro
-          </h1>
-          <p className="text-lg text-slate-400 max-w-xl mx-auto leading-relaxed">
-            ¿Dudas sobre la PAES, Idiomas o Nivelación? <br />
-            Nuestro equipo es real. Sin bots, solo respuestas claras.
-          </p>
-        </motion.header>
-
-        {/* ──────────────── 3. QUICK GRID (Direct Links) ──────────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
-        >
-          {/* WhatsApp */}
-          <a
-            href={CONTACT_INFO.whatsapp.url}
-            target="_blank" rel="noreferrer"
-            className="group bg-slate-900/40 backdrop-blur border border-slate-800 p-6 rounded-2xl flex items-center gap-5 hover:border-emerald-500/30 hover:bg-slate-800/60 transition-all"
-          >
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white text-2xl shadow-lg shadow-emerald-900/20">
-              <FaWhatsapp />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-white text-lg">WhatsApp</h3>
-              <p className="text-slate-400 text-sm">Respuesta Prioritaria</p>
-            </div>
-            <FaArrowRight className="text-slate-600 group-hover:text-emerald-400 group-hover:translate-x-1 transition-all" />
-          </a>
-
-          {/* Email */}
-          <a
-            href={`mailto:${CONTACT_INFO.email.address}`}
-            className="group bg-slate-900/40 backdrop-blur border border-slate-800 p-6 rounded-2xl flex items-center gap-5 hover:border-indigo-500/30 hover:bg-slate-800/60 transition-all"
-          >
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center text-white text-xl shadow-lg shadow-indigo-900/20">
-              <FaEnvelope />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-white text-lg">Email</h3>
-              <p className="text-slate-400 text-sm truncate">{CONTACT_INFO.email.address}</p>
-            </div>
-            <FaArrowRight className="text-slate-600 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
-          </a>
-
-          {/* Instagram */}
-          <a
-            href={CONTACT_INFO.instagram.url}
-            target="_blank" rel="noreferrer"
-            className="group bg-slate-900/40 backdrop-blur border border-slate-800 p-6 rounded-2xl flex items-center gap-5 hover:border-pink-500/30 hover:bg-slate-800/60 transition-all"
-          >
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center text-white text-xl shadow-lg shadow-pink-900/20">
-              <FaInstagram />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-white text-lg">Instagram</h3>
-              <p className="text-slate-400 text-sm">Vida estudiantil</p>
-            </div>
-            <FaArrowRight className="text-slate-600 group-hover:text-pink-400 group-hover:translate-x-1 transition-all" />
-          </a>
-        </motion.div>
-
-        {/* ──────────────── 4. MAIN LAYOUT (Form + Map) ──────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
-
-          {/* LEFT: GLASS FORM */}
-          <motion.section
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 }}
-            className="lg:col-span-3 bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden"
-          >
-            {/* Success Overlay */}
-            {sentSuccess && (
-              <div className="absolute inset-0 z-20 bg-slate-900/95 flex flex-col items-center justify-center text-center p-8 animate-fadeIn">
-                <div className="w-20 h-20 bg-emerald-500 rounded-full flex items-center justify-center text-white text-4xl mb-4 shadow-[0_0_30px_rgba(16,185,129,0.5)]">
-                  <FaCheck />
-                </div>
-                <h3 className="text-2xl font-bold text-white mb-2">¡Todo listo!</h3>
-                <p className="text-slate-400">Te hemos redirigido a WhatsApp para continuar la conversación.</p>
-              </div>
-            )}
-
-            <div className="flex items-start gap-4 mb-8 border-b border-white/5 pb-6">
-              <FaHeadset className="text-amber-400 text-3xl shrink-0" />
-              <div>
-                <h2 className="text-2xl font-bold text-white">Déjanos un Mensaje</h2>
-                <p className="text-slate-400 text-sm">Elige el tema y te conectaremos con el experto adecuado.</p>
-              </div>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Nombre Completo</label>
-                  <input
-                    type="text" name="name"
-                    placeholder="Ej: Marcela Paz"
-                    required value={form.name} onChange={handleChange}
-                    className="w-full bg-slate-950/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Tu Correo</label>
-                  <input
-                    type="email" name="email"
-                    placeholder="nombre@gmail.com"
-                    required value={form.email} onChange={handleChange}
-                    className="w-full bg-slate-950/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">¿Sobre qué quieres hablar?</label>
-                <div className="relative">
-                  <select
-                    name="subject" value={form.subject} onChange={handleChange}
-                    className="w-full appearance-none bg-slate-950/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition-all cursor-pointer"
-                  >
-                    {CONTACT_SUBJECTS.map(s => (
-                      <option key={s.id} value={s.id}>{s.label}</option>
-                    ))}
-                  </select>
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                    ▼
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Mensaje</label>
-                <textarea
-                  name="message" rows="4"
-                  placeholder="Escribe aquí tu duda..."
-                  required value={form.message} onChange={handleChange}
-                  className="w-full bg-slate-950/50 border border-slate-700 rounded-xl px-4 py-3 text-white placeholder:text-slate-600 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all"
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSending}
-                className="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-500/25 transition-all transform active:scale-98 flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-wait"
-              >
-                {isSending ? (
-                  'Abriendo WhatsApp...'
-                ) : (
-                  <> <FaPaperPlane /> Enviar Mensaje </>
-                )}
-              </button>
-              <p className="text-center text-xs text-slate-600 pt-2 opacity-60">
-                Al enviar, serás redirigido a WhatsApp Web o App.
+          <div className="flex items-start gap-6">
+            <div className="p-4 bg-amber-500/10 rounded-2xl text-amber-500 text-2xl"><FaClock /></div>
+            <div>
+              <h4 className="font-black text-white uppercase tracking-tighter mb-2">Atención Admisión</h4>
+              <p className="text-slate-500 text-sm leading-relaxed">
+                {CONTACT_INFO.schedule.week} <br />
+                {CONTACT_INFO.schedule.weekend}
               </p>
-            </form>
-          </motion.section>
+            </div>
+          </div>
 
-          {/* RIGHT: DARK MAP & INFO */}
-          <aside className="lg:col-span-2 space-y-6">
-
-            {/* Info Box: Schedule */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.5 }}
-              className="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-start gap-4"
-            >
-              <FaClock className="text-amber-500 text-xl mt-1" />
-              <div>
-                <h4 className="font-bold text-white mb-1">Horarios de Atención</h4>
-                <p className="text-sm text-slate-400 block">{CONTACT_INFO.schedule.week}</p>
-                <p className="text-sm text-slate-400 block">{CONTACT_INFO.schedule.weekend}</p>
-              </div>
-            </motion.div>
-
-            {/* Info Box: Location */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.6 }}
-              className="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex items-start gap-4"
-            >
-              <FaMapMarkerAlt className="text-amber-500 text-xl mt-1" />
-              <div>
-                <h4 className="font-bold text-white mb-1">{CONTACT_INFO.location.name}</h4>
-                <p className="text-sm text-slate-400 mb-2">{CONTACT_INFO.location.address}</p>
-                <span className="text-xs bg-slate-800 text-slate-500 px-2 py-1 rounded border border-slate-700 italic">
-                  {CONTACT_INFO.location.note}
-                </span>
-              </div>
-            </motion.div>
-
-            {/* Dark Google Map */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="h-[300px] bg-slate-800 rounded-2xl overflow-hidden border border-slate-800 relative group"
-            >
-              <iframe
-                src={CONTACT_INFO.location.mapEmbed}
-                className="w-full h-full grayscale invert brightness-90 contrast-125 opacity-70 group-hover:opacity-100 transition-opacity duration-500"
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Mapa Ubicación Lael"
-              ></iframe>
-              {/* Overlay to enforce dark mode look */}
-              <div className="absolute inset-0 bg-indigo-900/10 pointer-events-none mix-blend-overlay"></div>
-            </motion.div>
-
-          </aside>
+          <div className="flex items-start gap-6">
+            <div className="p-4 bg-emerald-500/10 rounded-2xl text-emerald-400 text-2xl"><FaInstagram /></div>
+            <div>
+              <h4 className="font-black text-white uppercase tracking-tighter mb-2">Social Hub</h4>
+              <p className="text-slate-500 text-sm leading-relaxed mb-4">Síguenos para tips de estudio y vida universitaria.</p>
+              <a href={CONTACT_INFO.instagram.url} target="_blank" className="text-xs font-black text-indigo-400 hover:underline uppercase tracking-widest">@institutolael</a>
+            </div>
+          </div>
 
         </div>
-      </div>
+      </section>
+
+      {/* ──────────────── 4. DARK MAP EMBED ──────────────── */}
+      <section className="h-[500px] w-full relative group grayscale invert contrast-125 opacity-40 hover:opacity-100 transition-opacity duration-1000">
+        <iframe
+          src={CONTACT_INFO.location.mapEmbed}
+          className="w-full h-full border-none"
+          loading="lazy"
+          title="Mapa Lael 2.0"
+        ></iframe>
+        <div className="absolute inset-0 bg-indigo-900/10 pointer-events-none mix-blend-overlay"></div>
+        <div className="absolute bottom-10 left-10 z-10">
+          <div className="bg-slate-950 p-6 rounded-[2rem] border border-white/10 shadow-2xl">
+            <div className="flex items-center gap-3 text-white font-black uppercase tracking-tighter">
+              <MdVerified className="text-indigo-400" /> HQ Santiago de Chile
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }

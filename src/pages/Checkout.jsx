@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
     FaShoppingCart, FaCreditCard, FaUniversity, FaWhatsapp,
     FaArrowLeft, FaShieldAlt, FaUser, FaLock, FaEnvelope,
-    FaArrowRight, FaTrash, FaCheckCircle
+    FaArrowRight, FaTrash, FaFingerprint, FaPhoneAlt
 } from "react-icons/fa";
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 
@@ -24,18 +24,36 @@ export default function Checkout() {
     const { user, profile, signIn, signUp } = useAuth();
     const navigate = useNavigate();
 
-    // Steps: 'auth' | 'summary' | 'payment'
-    const [step, setStep] = useState(user ? 'summary' : 'auth');
+    // Steps: 'student_data' | 'summary' | 'payment'
+    const [step, setStep] = useState('student_data');
     const [paymentMethod, setPaymentMethod] = useState("transfer");
     const [loading, setLoading] = useState(false);
     const [preferenceId, setPreferenceId] = useState(null);
 
-    // Auth Form State
-    const [isLogin, setIsLogin] = useState(true);
-    const [authForm, setAuthForm] = useState({ email: '', password: '', fullName: '' });
-    const [authError, setAuthError] = useState("");
+    // Administrative Form State (Data for the order columns)
+    const [formData, setFormData] = useState({
+        fullName: profile?.full_name || "",
+        email: user?.email || "",
+        phone: profile?.phone || "",
+        rut: profile?.rut || "",
+        password: "" // Needed if creating account
+    });
 
+    const [authError, setAuthError] = useState("");
     const total = cart.reduce((acc, item) => acc + item.price, 0);
+
+    // Sync form with profile if user logs in mid-way or is already logged in
+    useEffect(() => {
+        if (profile) {
+            setFormData(prev => ({
+                ...prev,
+                fullName: profile.full_name || prev.fullName,
+                email: user?.email || prev.email,
+                phone: profile.phone || prev.phone,
+                rut: profile.rut || prev.rut
+            }));
+        }
+    }, [profile, user]);
 
     // Redirect if cart is empty
     useEffect(() => {
@@ -44,36 +62,34 @@ export default function Checkout() {
         }
     }, [cart, navigate]);
 
-    // Update step if user logs in
-    useEffect(() => {
-        if (user && step === 'auth') {
-            setStep('summary');
-        }
-    }, [user, step]);
-
-    // Handle Auth
-    const handleAuth = async (e) => {
+    // Handle Data Completion (Step 1)
+    const handleNextStep = async (e) => {
         e.preventDefault();
         setLoading(true);
         setAuthError("");
-        try {
-            if (isLogin) {
-                await signIn({ email: authForm.email, password: authForm.password });
-            } else {
-                const { data } = await signUp({
-                    email: authForm.email,
-                    password: authForm.password,
-                    fullName: authForm.fullName
-                });
 
-                if (data?.user && data?.session) {
-                    // Signed up and logged in automatically (if confirmation is off)
-                    setStep('summary');
-                } else {
-                    // Confirmation email sent
-                    setAuthError("¡Cuenta creada! Por favor, verifica tu email para continuar.");
+        try {
+            // Invisible Registration Logic: If not logged in, we try to sign in or sign up
+            if (!user) {
+                try {
+                    // Try to sign up (if user is new)
+                    await signUp({
+                        email: formData.email,
+                        password: formData.password || "Lael2026!", // Default password for guest leads
+                        fullName: formData.fullName
+                    });
+                } catch (err) {
+                    // If error is "user already exists", we might want them to login 
+                    // but for "Lead mode", we just move on or ask for password
+                    if (err.message.includes("already registered")) {
+                        setAuthError("Ya tienes una cuenta. Por favor, usa la opción de Iniciar Sesión o usa otro correo.");
+                        setLoading(false);
+                        return;
+                    }
+                    throw err;
                 }
             }
+            setStep('summary');
         } catch (err) {
             setAuthError(err.message);
         } finally {
@@ -81,51 +97,33 @@ export default function Checkout() {
         }
     };
 
-    // Handle Creation of Preference for Mercado Pago
-    const createPreference = async (orderId) => {
-        try {
-            const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-mp-preference`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    orderId,
-                    items: cart.map(item => ({
-                        title: item.title,
-                        unit_price: item.price,
-                        quantity: 1
-                    })),
-                    back_urls: {
-                        success: `${window.location.origin}/gracias`,
-                        failure: `${window.location.origin}/checkout`,
-                        pending: `${window.location.origin}/gracias`
-                    }
-                })
-            });
-            const data = await response.json();
-            if (data.id) setPreferenceId(data.id);
-        } catch (err) {
-            console.error("Error creating preference:", err);
-        }
-    };
-
     const handleFinalize = async () => {
         setLoading(true);
         try {
-            // 1. Create Order
+            // 1. Prepare Administrative Summary
+            const itemsSummary = cart.map(i => i.title).join(" + ");
+
+            // 2. Create Order with Explicit Administrative Columns
             const { data: order, error: orderError } = await supabase
                 .from('orders')
                 .insert({
-                    user_id: user.id,
+                    user_id: user?.id || null, // Link to user if exists
                     total_amount: total,
                     payment_method: paymentMethod,
-                    status: 'pending'
+                    status: 'pending',
+                    // NEW ADMINISTRATIVE COLUMNS
+                    customer_name: formData.fullName,
+                    customer_email: formData.email,
+                    customer_phone: formData.phone,
+                    customer_rut: formData.rut,
+                    items_summary: itemsSummary
                 })
                 .select()
                 .single();
 
             if (orderError) throw orderError;
 
-            // 2. Insert Items
+            // 3. Insert Items (for detailed records)
             const items = cart.map(item => ({
                 order_id: order.id,
                 product_id: item.db_id || null,
@@ -133,18 +131,36 @@ export default function Checkout() {
             }));
             await supabase.from('order_items').insert(items);
 
-            // 3. Logic based on method
+            // 4. Logic based on method
             if (paymentMethod === 'transfer') {
                 clearCart();
                 navigate("/gracias", { state: { order, total, paymentMethod: 'transfer' } });
             } else {
-                // Mercado Pago - We stay here to show the Wallet button or redirect
-                await createPreference(order.id);
+                // Mercado Pago Implementation
+                const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-mp-preference`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: order.id,
+                        items: cart.map(item => ({
+                            title: item.title,
+                            unit_price: item.price,
+                            quantity: 1
+                        })),
+                        back_urls: {
+                            success: `${window.location.origin}/gracias`,
+                            failure: `${window.location.origin}/checkout`,
+                            pending: `${window.location.origin}/gracias`
+                        }
+                    })
+                });
+                const data = await response.json();
+                if (data.id) setPreferenceId(data.id);
             }
 
         } catch (err) {
-            console.error("Order error:", err);
-            setAuthError("Error al procesar la orden.");
+            console.error("Order completion error:", err);
+            setAuthError("No pudimos guardar tu orden. Revisa tus datos e intenta de nuevo.");
         } finally {
             setLoading(false);
         }
@@ -158,7 +174,7 @@ export default function Checkout() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
                     <div>
                         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-white transition-colors text-[10px] font-black uppercase tracking-widest mb-4">
-                            <FaArrowLeft /> Volver atrás
+                            <FaArrowLeft /> Volver al Catálogo
                         </button>
                         <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter">
                             Finalizar <span className="text-indigo-500">Inscripción</span>
@@ -167,7 +183,7 @@ export default function Checkout() {
 
                     {/* Progress Bar */}
                     <div className="flex items-center gap-4">
-                        {['auth', 'summary', 'payment'].map((s, idx) => (
+                        {['student_data', 'summary', 'payment'].map((s, idx) => (
                             <div key={s} className="flex items-center gap-3">
                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${step === s ? 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-white/5 text-slate-500'}`}>
                                     {idx + 1}
@@ -180,74 +196,99 @@ export default function Checkout() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-                    {/* LEFT CONTENT */}
+                    {/* LEFT CONTENT: THE FORM */}
                     <div className="lg:col-span-7 space-y-8">
 
                         <AnimatePresence mode="wait">
-                            {/* STEP 1: AUTHENTICATION */}
-                            {step === 'auth' && (
+                            {/* STEP 1: STUDENT DATA / LEAD CAPTURE */}
+                            {step === 'student_data' && (
                                 <motion.div
-                                    key="auth-step"
+                                    key="data-step"
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     exit={{ opacity: 0, x: 20 }}
                                     className="bg-white/[0.02] border border-white/5 rounded-[3rem] p-10 md:p-14 backdrop-blur-3xl"
                                 >
-                                    <div className="text-center mb-10">
-                                        <h2 className="text-2xl font-black uppercase tracking-tight text-white mb-2">Paso 1: Identidad</h2>
-                                        <div className="flex justify-center gap-4 mt-6">
-                                            <button onClick={() => setIsLogin(true)} className={`text-[10px] font-black uppercase tracking-widest pb-1 border-b-2 transition-all ${isLogin ? 'border-indigo-500 text-white' : 'border-transparent text-slate-500'}`}>Ya tengo cuenta</button>
-                                            <button onClick={() => setIsLogin(false)} className={`text-[10px] font-black uppercase tracking-widest pb-1 border-b-2 transition-all ${!isLogin ? 'border-indigo-500 text-white' : 'border-transparent text-slate-500'}`}>Soy nuevo</button>
-                                        </div>
+                                    <div className="mb-10">
+                                        <h2 className="text-2xl font-black uppercase tracking-tight text-white mb-2">Datos para Matrícula</h2>
+                                        <p className="text-slate-500 text-sm">Completa la información del alumno o apoderado para generar tu orden.</p>
                                     </div>
 
-                                    <form onSubmit={handleAuth} className="space-y-6">
-                                        {!isLogin && (
+                                    <form onSubmit={handleNextStep} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="md:col-span-2 space-y-2">
+                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2 italic">Nombre Completo del Alumno</label>
+                                            <div className="relative">
+                                                <FaUser className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
+                                                <input
+                                                    type="text" required placeholder="Ej: Juan Antonio Pérez"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
+                                                    value={formData.fullName} onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2 italic">Correo Electrónico</label>
+                                            <div className="relative">
+                                                <FaEnvelope className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
+                                                <input
+                                                    type="email" required placeholder="alumno@ejemplo.com"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
+                                                    value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2 italic">Teléfono / WhatsApp</label>
+                                            <div className="relative">
+                                                <FaPhoneAlt className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
+                                                <input
+                                                    type="tel" required placeholder="+569 1234 5678"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
+                                                    value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2 italic">RUT del Alumno</label>
+                                            <div className="relative">
+                                                <FaFingerprint className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
+                                                <input
+                                                    type="text" required placeholder="12.345.678-9"
+                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
+                                                    value={formData.rut} onChange={(e) => setFormData({ ...formData, rut: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {!user && (
                                             <div className="space-y-2">
-                                                <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2">Nombre Completo</label>
+                                                <label className="text-[9px] font-black text-indigo-400 uppercase tracking-widest ml-2 italic">Crea una Contraseña (opcional)</label>
                                                 <div className="relative">
-                                                    <FaUser className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
+                                                    <FaLock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
                                                     <input
-                                                        type="text" required placeholder="Ej: Juan Pérez"
+                                                        type="password" placeholder="Definir para acceso futuro"
                                                         className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
-                                                        value={authForm.fullName} onChange={(e) => setAuthForm({ ...authForm, fullName: e.target.value })}
+                                                        value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                                     />
                                                 </div>
                                             </div>
                                         )}
-                                        <div className="space-y-2">
-                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2">Email</label>
-                                            <div className="relative">
-                                                <FaEnvelope className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
-                                                <input
-                                                    type="email" required placeholder="tu@email.com"
-                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
-                                                    value={authForm.email} onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2">Contraseña</label>
-                                            <div className="relative">
-                                                <FaLock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
-                                                <input
-                                                    type="password" required placeholder="••••••••"
-                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
-                                                    value={authForm.password} onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
-                                                />
-                                            </div>
-                                        </div>
 
-                                        {authError && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest text-center">{authError}</p>}
-
-                                        <button disabled={loading} className="w-full py-5 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3">
-                                            {loading ? 'Cargando...' : isLogin ? 'Siguiente Paso' : 'Crear Cuenta'} <FaArrowRight />
-                                        </button>
+                                        <div className="md:col-span-2 mt-4">
+                                            {authError && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest text-center mb-6">{authError}</p>}
+                                            <button disabled={loading} className="w-full py-6 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3">
+                                                {loading ? 'Validando...' : 'Confirmar Datos y Ver Resumen'} <FaArrowRight />
+                                            </button>
+                                            <p className="text-center text-[9px] text-slate-600 mt-4 uppercase tracking-[0.2em]">Al continuar aceptas nuestros términos de servicio académico.</p>
+                                        </div>
                                     </form>
                                 </motion.div>
                             )}
 
-                            {/* STEP 2: SUMMARY */}
+                            {/* STEP 2: SUMMARY (Same as before but with data context) */}
                             {step === 'summary' && (
                                 <motion.div
                                     key="summary-step"
@@ -257,14 +298,14 @@ export default function Checkout() {
                                     className="space-y-8"
                                 >
                                     <div className="bg-white/[0.02] border border-white/5 rounded-[3rem] p-10 backdrop-blur-3xl">
-                                        <div className="flex items-center justify-between mb-8">
-                                            <h2 className="text-2xl font-black uppercase tracking-tight">Paso 2: Tu Mochila</h2>
-                                            <span className="bg-indigo-500 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">{cart.length} Item(s)</span>
+                                        <div className="mb-8">
+                                            <h2 className="text-2xl font-black uppercase tracking-tight">Paso 2: Revisión de Mochila</h2>
+                                            <p className="text-slate-500 text-sm italic">Verifica tus cursos antes de proceder al pago.</p>
                                         </div>
 
                                         <div className="space-y-4">
                                             {cart.map((item, i) => (
-                                                <div key={i} className="flex justify-between items-center bg-white/5 p-6 rounded-3xl border border-white/5 group hover:border-white/20 transition-all">
+                                                <div key={i} className="flex justify-between items-center bg-white/5 p-6 rounded-3xl border border-white/5">
                                                     <div className="flex-1">
                                                         <h4 className="font-bold text-lg text-white mb-1">{item.title}</h4>
                                                         <p className="text-slate-500 text-xs line-clamp-1">{item.detail}</p>
@@ -282,12 +323,15 @@ export default function Checkout() {
                                             ))}
                                         </div>
 
-                                        <button
-                                            onClick={() => setStep('payment')}
-                                            className="w-full mt-10 py-5 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3"
-                                        >
-                                            Siguiente: Pago <FaArrowRight />
-                                        </button>
+                                        <div className="mt-10 flex gap-4">
+                                            <button onClick={() => setStep('student_data')} className="flex-1 py-5 border border-white/10 text-slate-400 font-black rounded-2xl hover:bg-white/5 transition-all uppercase tracking-widest text-xs">Editar Datos</button>
+                                            <button
+                                                onClick={() => setStep('payment')}
+                                                className="flex-[2] py-5 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3"
+                                            >
+                                                Paso Final: Pago <FaArrowRight />
+                                            </button>
+                                        </div>
                                     </div>
                                 </motion.div>
                             )}
@@ -326,29 +370,32 @@ export default function Checkout() {
                                                     <FaUniversity size={20} />
                                                 </div>
                                                 <div className="text-left">
-                                                    <span className="block font-black uppercase tracking-widest text-[10px] text-white">Transferencia</span>
-                                                    <span className="text-slate-500 text-[10px]">Pagar después</span>
+                                                    <span className="block font-black uppercase tracking-widest text-[10px] text-white">Pagar Después</span>
+                                                    <span className="text-slate-500 text-[10px]">Transferencia / Agencia</span>
                                                 </div>
                                             </button>
                                         </div>
 
                                         {preferenceId ? (
                                             <div className="bg-white/5 p-8 rounded-3xl border border-white/10 text-center">
-                                                <p className="text-slate-400 text-sm mb-6">Haz clic en el botón oficial para completar el pago:</p>
+                                                <p className="text-slate-400 text-sm mb-6">Paga de forma segura con el procesador oficial:</p>
                                                 <div className="max-w-[280px] mx-auto">
                                                     <Wallet initialization={{ preferenceId }} />
                                                 </div>
                                             </div>
                                         ) : (
-                                            <button
-                                                onClick={handleFinalize}
-                                                disabled={loading}
-                                                className="w-full py-6 bg-white text-slate-950 font-black rounded-2xl shadow-xl shadow-white/10 hover:bg-slate-100 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3"
-                                            >
-                                                {loading ? 'Procesando...' : (
-                                                    paymentMethod === 'mercadopago' ? 'Configurar Pago Mercado Pago' : 'Confirmar Inscripción'
-                                                )}
-                                            </button>
+                                            <div className="space-y-4">
+                                                <button
+                                                    onClick={handleFinalize}
+                                                    disabled={loading}
+                                                    className="w-full py-6 bg-white text-slate-950 font-black rounded-2xl shadow-xl shadow-white/10 hover:bg-slate-100 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3"
+                                                >
+                                                    {loading ? 'Guardando Orden...' : (
+                                                        paymentMethod === 'mercadopago' ? 'Generar Pago Mercado Pago' : 'Finalizar Reseva de Cupo'
+                                                    )}
+                                                </button>
+                                                <button onClick={() => setStep('summary')} className="w-full text-[9px] font-black uppercase tracking-[0.3em] text-slate-600 hover:text-white transition-colors">Volver al Resumen</button>
+                                            </div>
                                         )}
                                     </div>
                                 </motion.div>
@@ -356,56 +403,52 @@ export default function Checkout() {
                         </AnimatePresence>
                     </div>
 
-                    {/* RIGHT SIDEBAR: TICKET */}
+                    {/* RIGHT SIDEBAR: TICKET (Always Visible Summary) */}
                     <div className="lg:col-span-5 lg:pt-24">
                         <div className="sticky top-24">
                             <div className="bg-[#0a0a0b] border border-white/10 rounded-[3rem] p-10 md:p-14 shadow-2xl relative overflow-hidden">
-                                {/* Decorative circle */}
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 rounded-full blur-3xl" />
 
                                 <div className="relative z-10">
-                                    <div className="flex items-center gap-3 mb-8 opacity-50">
-                                        <FaShoppingCart />
-                                        <span className="font-black uppercase tracking-[0.2em] text-[10px]">Resumen de Inversión</span>
-                                    </div>
+                                    <h3 className="text-xl font-black uppercase tracking-tight mb-8">Tu Reserva</h3>
 
                                     <div className="space-y-4 mb-10 pb-10 border-b border-white/5">
                                         <div className="flex justify-between items-center">
-                                            <span className="text-slate-500 text-sm font-medium">Subtotal Académico</span>
+                                            <span className="text-slate-500 text-xs font-medium uppercase tracking-widest">Inversión Académica</span>
                                             <span className="font-bold text-white text-lg">{clp(total)}</span>
                                         </div>
-                                        <div className="flex justify-between items-center">
-                                            <span className="text-slate-500 text-sm font-medium">Matrícula Anual Lael</span>
-                                            <span className="text-emerald-500 font-black text-sm uppercase tracking-widest italic">Bonificada</span>
+                                        <div className="flex justify-between items-center text-emerald-500">
+                                            <span className="text-xs font-black uppercase tracking-widest italic">Matrícula Lael Digital</span>
+                                            <span className="font-black text-xs uppercase tracking-widest badge bg-emerald-500/10 px-2 py-1 rounded">Bonificada</span>
                                         </div>
                                     </div>
 
                                     <div className="flex justify-between items-end mb-12">
                                         <div className="text-left">
-                                            <span className="block text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Total Final</span>
+                                            <span className="block text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Total a Pagar</span>
                                             <div className="text-5xl font-black text-white tracking-tighter leading-none">{clp(total)}</div>
                                         </div>
-                                        <div className="text-right">
-                                            <span className="text-[10px] text-slate-600 block mb-1">Pagas en CLP</span>
-                                            <div className="px-2 py-1 bg-white/5 rounded border border-white/10 text-[10px] font-bold text-white uppercase italic">Zero Fees</div>
-                                        </div>
                                     </div>
 
-                                    <div className="p-6 bg-white/[0.02] rounded-3xl border border-white/5 flex items-center gap-4 mb-8">
-                                        <div className="w-10 h-10 rounded-full bg-indigo-500/10 flex items-center justify-center text-indigo-500">
-                                            <FaShieldAlt />
-                                        </div>
-                                        <div>
-                                            <h4 className="text-xs font-bold text-white">Garantía Lael</h4>
-                                            <p className="text-[10px] text-slate-500">Tu educación está protegida y encriptada.</p>
-                                        </div>
-                                    </div>
-
-                                    {step !== 'auth' && (
-                                        <div className="text-center opacity-40">
-                                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.4em]">Inscripción para: <br /> <span className="text-indigo-400">{profile?.full_name || user?.email}</span></p>
+                                    {/* Administrative Preview */}
+                                    {formData.fullName && (
+                                        <div className="p-6 bg-indigo-500/5 rounded-3xl border border-indigo-500/10 space-y-3 mb-8">
+                                            <span className="block text-[8px] font-black text-indigo-400 uppercase tracking-[0.3em] mb-2">Información de Matrícula</span>
+                                            <div className="flex items-center gap-3 text-xs">
+                                                <FaUser className="text-indigo-400/50" />
+                                                <span className="text-slate-300 font-bold truncate">{formData.fullName}</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-xs">
+                                                <FaWhatsapp className="text-emerald-400/50" />
+                                                <span className="text-slate-300 font-mono">{formData.phone || 'Pendiente'}</span>
+                                            </div>
                                         </div>
                                     )}
+
+                                    <div className="flex items-center gap-4 text-slate-600">
+                                        <FaShieldAlt className="text-indigo-500" />
+                                        <span className="text-[9px] font-black uppercase tracking-widest">Garantía de Privacidad SSL</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

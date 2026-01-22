@@ -1,10 +1,9 @@
-import { useEffect, useState, Suspense, lazy } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import React, { useEffect, useState, Suspense, lazy } from "react";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { Navigate } from "react-router-dom";
 import logoAmarillo from "./assets/img/Logos/lael-inst-amarillo.png";
 
 /* ---------- Componentes Globales ---------- */

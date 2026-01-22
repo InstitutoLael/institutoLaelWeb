@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../supabaseClient";
@@ -29,6 +29,8 @@ export default function Checkout() {
     const [paymentMethod, setPaymentMethod] = useState("transfer");
     const [loading, setLoading] = useState(false);
     const [preferenceId, setPreferenceId] = useState(null);
+    const [searchParams] = useSearchParams();
+    const [acceptedTerms, setAcceptedTerms] = useState(false);
 
     const [errors, setErrors] = useState({});
     const [authError, setAuthError] = useState("");
@@ -46,6 +48,24 @@ export default function Checkout() {
             }));
         }
     }, [profile, user]);
+
+    // MAGIC LINKS EFFECT: Read data from URL
+    useEffect(() => {
+        const urlName = searchParams.get('name');
+        const urlEmail = searchParams.get('email');
+        const urlPhone = searchParams.get('phone');
+        const urlRut = searchParams.get('rut');
+
+        if (urlName || urlEmail || urlPhone || urlRut) {
+            setFormData(prev => ({
+                ...prev,
+                fullName: urlName || prev.fullName,
+                email: urlEmail || prev.email,
+                phone: urlPhone || prev.phone,
+                rut: urlRut || prev.rut
+            }));
+        }
+    }, [searchParams]);
 
     // Redirect if cart is empty
     useEffect(() => {
@@ -408,11 +428,33 @@ export default function Checkout() {
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div className="space-y-4">
+                                            <div className="space-y-6">
+                                                {/* LEGAL CHECKBOX */}
+                                                <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
+                                                    <label className="flex items-start gap-4 cursor-pointer group">
+                                                        <div className="relative flex items-center mt-1">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="sr-only peer"
+                                                                checked={acceptedTerms}
+                                                                onChange={(e) => setAcceptedTerms(e.target.checked)}
+                                                            />
+                                                            <div className="w-6 h-6 border-2 border-white/10 rounded-lg group-hover:border-indigo-500 transition-colors peer-checked:bg-indigo-600 peer-checked:border-indigo-600 flex items-center justify-center">
+                                                                <svg className={`w-4 h-4 text-white transition-opacity ${acceptedTerms ? 'opacity-100' : 'opacity-0'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                                                </svg>
+                                                            </div>
+                                                        </div>
+                                                        <span className="text-[11px] leading-relaxed text-slate-400 group-hover:text-slate-300 transition-colors">
+                                                            He leído y acepto los <Link to="/terminos" target="_blank" className="text-indigo-400 hover:underline">Términos y Condiciones</Link> y la <Link to="/privacidad" target="_blank" className="text-indigo-400 hover:underline">Política de Privacidad</Link> del Instituto Lael.
+                                                        </span>
+                                                    </label>
+                                                </div>
+
                                                 <button
                                                     onClick={handleFinalize}
-                                                    disabled={loading}
-                                                    className={`w-full py-6 bg-white text-slate-950 font-black rounded-2xl shadow-xl shadow-white/10 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-slate-100 active:scale-95'}`}
+                                                    disabled={loading || !acceptedTerms}
+                                                    className={`w-full py-6 bg-white text-slate-950 font-black rounded-2xl shadow-xl shadow-white/10 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3 ${loading || !acceptedTerms ? 'opacity-30 cursor-not-allowed grayscale' : 'hover:bg-slate-100 active:scale-95'}`}
                                                 >
                                                     {loading ? 'Procesando...' : (
                                                         paymentMethod === 'mercadopago' ? 'Generar Pago Mercado Pago' : 'Finalizar Reserva de Cupo'

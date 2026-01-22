@@ -55,7 +55,7 @@ export const NAVIGATION = {
 
     social: [
         { name: "Instagram", url: "https://instagram.com/institutolael", icon: FaInstagram },
-        { name: "YouTube", url: "https://youtube.com/@institutolael", icon: FaYoutube },
+        { name: "YouTube", url: "https://www.youtube.com/channel/UCl0JuF0HlFpQEWPV_tIxV2g", icon: FaYoutube },
         { name: "LinkedIn", url: "https://linkedin.com/company/instituto-lael", icon: FaLinkedin },
     ],
 

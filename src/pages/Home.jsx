@@ -309,6 +309,51 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+            {/* ──────────────── 4.5 YOUTUBE CHANNEL CALL-TO-ACTION ──────────────── */}
+            <section className="py-24 relative overflow-hidden">
+                <div className="container mx-auto px-6">
+                    <div className="bg-gradient-to-br from-red-600/20 via-slate-900 to-black border border-white/5 rounded-[4rem] p-12 md:p-20 relative overflow-hidden group shadow-2xl">
+                        {/* Decorative Glow */}
+                        <div className="absolute -right-20 -top-20 w-96 h-96 bg-red-600/10 blur-[120px] rounded-full group-hover:bg-red-600/20 transition-all duration-700"></div>
+
+                        <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+                            <div className="text-center lg:text-left max-w-2xl">
+                                <div className="inline-flex items-center gap-3 bg-red-600/10 px-6 py-2 rounded-full border border-red-600/20 mb-8">
+                                    <FaYoutube className="text-red-500 animate-pulse" />
+                                    <span className="text-xs font-black uppercase tracking-[0.2em] text-red-500">Contenido Exclusivo</span>
+                                </div>
+                                <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter leading-tight italic">
+                                    Domina la PAES <br /> <span className="text-red-500">En YouTube.</span>
+                                </h2>
+                                <p className="text-xl text-slate-400 font-light mb-10 leading-relaxed">
+                                    Clases gratuitas, resolución de ensayos y tips de última hora. Únete a nuestra comunidad de más de 3.000 suscriptores.
+                                </p>
+                                <a
+                                    href="https://www.youtube.com/channel/UCl0JuF0HlFpQEWPV_tIxV2g"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="inline-flex items-center gap-4 px-12 py-6 bg-red-600 hover:bg-red-500 text-white font-black rounded-[2rem] text-lg shadow-2xl shadow-red-600/30 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest"
+                                >
+                                    Suscribirme Gratis <BsPlayCircle />
+                                </a>
+                            </div>
+
+                            <div className="relative w-full max-w-md aspect-video rounded-3xl overflow-hidden border border-white/10 group-hover:border-red-500/30 transition-all shadow-2xl shadow-black/80">
+                                <img
+                                    src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&q=80&w=800"
+                                    alt="YouTube Channel"
+                                    className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center text-white scale-110 group-hover:scale-125 transition-transform shadow-2xl pl-2">
+                                        <FaPlay size={30} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* ──────────────── 5. HALL DE LA FAMA (SOCIAL PROOF) ──────────────── */}
             <section className="py-32 bg-[#050505] border-y border-white/5 relative overflow-hidden">

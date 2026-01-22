@@ -1,179 +1,330 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaVideo, FaGoogleDrive, FaChalkboardTeacher, FaUserCircle,
-  FaCalendarCheck, FaBook, FaBell, FaArrowRight, FaLock
+  FaCalendarCheck, FaBook, FaBell, FaArrowRight, FaLock, FaPlay,
+  FaBroadcastTower, FaClock, FaCheckCircle
 } from "react-icons/fa";
 import { SiGooglemeet, SiGoogledrive, SiMoodle } from "react-icons/si";
+import ReactPlayer from "react-player";
 import SEOHead from "../components/SEOHead.jsx";
 
-const COURSES = [
-  { name: "Matemática M1", time: "18:30 - 20:00", tutor: "Prof. García" },
-  { name: "Comprensión Lectora", time: "16:00 - 17:30", tutor: "Prof. Soto" },
-];
+// CONFIG & DATA
+import { ACCESS_CODE, LIVE_MEET_LINK, LIVE_STATUS } from "../data/configAula";
+import { RECORDED_CLASSES } from "../data/curriculum";
 
 const LOBBY_TOOLS = [
   {
-    id: "meet",
-    name: "Sala de Clases",
-    desc: "Entrada directa a Google Meet para tus clases en vivo.",
-    icon: <SiGooglemeet />,
-    color: "bg-emerald-500/10 text-emerald-500",
-    link: "https://meet.google.com" // Placeholder
-  },
-  {
     id: "drive",
     name: "Material Teórico",
-    desc: "Acceso a Google Drive con guías y material de estudio.",
+    desc: "Plataforma central de guías, textos y recursos descargables.",
     icon: <SiGoogledrive />,
     color: "bg-blue-500/10 text-blue-500",
-    link: "https://drive.google.com" // Placeholder
+    link: "https://drive.google.com"
   },
   {
     id: "moodle",
     name: "Campus Moodle",
-    desc: "Plataforma de ejercitación y exámenes de simulación.",
+    desc: "Plataforma de ejercitación oficial y simulacros PAES.",
     icon: <SiMoodle />,
     color: "bg-orange-500/10 text-orange-500",
-    link: "https://moodle.org" // Placeholder
+    link: "https://moodle.org"
   }
 ];
 
 export default function Aula() {
-  return (
-    <div className="min-h-screen bg-[#050505] text-slate-200 font-sans pt-32 pb-24 overflow-x-hidden">
-      <SEOHead title="Mí Aula | Lael Student Lobby" description="Panel central para estudiantes de Instituto Lael. Acceso a clases, material y campus." />
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+  const [activeVideo, setActiveVideo] = useState(null);
 
-      {/* Background Decorations */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-600/5 blur-[150px] rounded-full"></div>
-        <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-amber-500/5 blur-[150px] rounded-full"></div>
+  // Persistence check
+  useEffect(() => {
+    const sessionAuth = sessionStorage.getItem("aula_auth");
+    if (sessionAuth === "true") {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (password.toUpperCase() === ACCESS_CODE.toUpperCase()) {
+      setIsAuthenticated(true);
+      sessionStorage.setItem("aula_auth", "true");
+      setError(false);
+    } else {
+      setError(true);
+      setTimeout(() => setError(false), 2000);
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 font-sans">
+        <SEOHead title="Acceso Restringido | Instituto Lael" description="Ingresa tu código de acceso mensual para entrar al Aula Virtual." />
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-md w-full"
+        >
+          <div className="bg-slate-900/50 border border-white/10 p-12 rounded-[3.5rem] backdrop-blur-3xl shadow-2xl text-center">
+            <div className="w-20 h-20 bg-amber-500/10 rounded-3xl flex items-center justify-center text-amber-500 text-3xl mx-auto mb-8 border border-amber-500/20">
+              <FaLock />
+            </div>
+            <h2 className="text-3xl font-black text-white mb-4 uppercase tracking-tighter">Área stringida</h2>
+            <p className="text-slate-400 mb-10 text-sm leading-relaxed">
+              Ingresa el <strong>Código de Acceso Mensual</strong> enviado a tu correo o grupo de WhatsApp oficial.
+            </p>
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <input
+                type="password"
+                placeholder="CÓDIGO LAEL..."
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`w-full bg-white/5 border ${error ? 'border-red-500' : 'border-white/10'} rounded-2xl py-5 px-8 text-center text-white font-black tracking-[0.5em] focus:border-amber-500/50 outline-none transition-all`}
+              />
+              <button
+                type="submit"
+                className="w-full py-5 bg-amber-500 text-slate-950 font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-amber-500/20 uppercase tracking-widest text-xs"
+              >
+                Desbloquear Aula
+              </button>
+            </form>
+
+            {error && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="text-red-500 mt-4 text-[10px] font-black uppercase tracking-widest"
+              >
+                Código Incorrecto
+              </motion.p>
+            )}
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#050505] text-slate-200 font-sans pt-32 pb-40 overflow-x-hidden selection:bg-indigo-500/30">
+      <SEOHead title="Live Learning Hub | Mi Aula Lael" description="Acceso a clases en vivo, grabaciones y material académico exclusivo." />
+
+      {/* Decorative gradients */}
+      <div className="fixed inset-0 pointer-events-none">
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-600/5 blur-[150px] rounded-full"></div>
+        <div className="absolute bottom-0 left-0 w-[800px] h-[800px] bg-amber-500/5 blur-[150px] rounded-full"></div>
       </div>
 
       <div className="container mx-auto px-6 relative z-10 max-w-6xl">
 
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-          <div>
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-amber-500 text-[10px] font-black uppercase tracking-widest mb-6"
-            >
-              <FaLock /> Acceso Estudiante
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-5xl md:text-7xl font-sans font-black text-white tracking-tighter"
-            >
-              Bienvenido al <br /><span className="text-white/20 uppercase">Lobby Académico.</span>
-            </motion.h1>
+        {/* HEADER */}
+        <header className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+          <div className="max-w-xl">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-6">
+              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> Sistema In-House v2.0
+            </div>
+            <h1 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none">
+              Live learning <br /><span className="text-white/20 uppercase">Hub.</span>
+            </h1>
           </div>
-          <div className="flex items-center gap-4 bg-white/5 p-4 rounded-3xl border border-white/10 backdrop-blur-xl">
-            <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-2xl text-indigo-400">
-              <FaUserCircle />
+          <div className="flex items-center gap-5 bg-white/5 p-5 rounded-[2.5rem] border border-white/5 backdrop-blur-3xl shadow-2xl">
+            <div className="relative">
+              <div className="w-14 h-14 rounded-2xl bg-indigo-500/20 flex items-center justify-center text-3xl text-indigo-400 border border-indigo-500/10">
+                <FaUserCircle />
+              </div>
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 border-4 border-[#0a0a0b] rounded-full"></div>
             </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none">Mi Perfil</p>
-              <h3 className="text-white font-black text-lg">Estudiante Lael</h3>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Sesión Activa</p>
+              <h3 className="text-white font-black text-lg leading-none">Estudiante Lael</h3>
             </div>
           </div>
-        </div>
+        </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* 1. LIVE COMMAND CENTER (HERO) */}
+        <section className="mb-20">
+          <div className="relative bg-slate-900 border border-white/10 rounded-[4rem] p-12 md:p-16 overflow-hidden shadow-2xl group">
+            {/* Grid background */}
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none"></div>
+            <div className="absolute -right-20 -top-20 w-96 h-96 bg-indigo-600/10 blur-[100px] rounded-full group-hover:bg-indigo-600/20 transition-all duration-700"></div>
 
-          {/* LEFT AREA: TOOLS */}
-          <div className="lg:col-span-8 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {LOBBY_TOOLS.map((tool, idx) => (
-                <motion.a
-                  key={tool.id}
-                  href={tool.link}
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
+              <div className="text-center md:text-left">
+                <div className="inline-flex items-center gap-3 bg-black/40 px-6 py-2 rounded-full border border-white/5 mb-8">
+                  <span className={`w-3 h-3 rounded-full ${LIVE_STATUS ? 'bg-red-500 animate-pulse shadow-[0_0_15px_rgba(239,68,68,0.5)]' : 'bg-slate-600'}`}></span>
+                  <span className="text-xs font-black uppercase tracking-[0.2em] text-white">
+                    {LIVE_STATUS ? 'BROADCASTING LIVE' : 'OFF AIR'}
+                  </span>
+                </div>
+                <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter leading-tight italic">
+                  Sala de Clases <br /> <span className="text-indigo-400">En Vivo</span>
+                </h2>
+                <p className="text-xl text-slate-400 font-light mb-10 max-w-md">
+                  Únete a la transmisión en tiempo real. Activa tu cámara y prepárate para participar.
+                </p>
+
+                <a
+                  href={LIVE_MEET_LINK}
                   target="_blank"
                   rel="noreferrer"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  whileHover={{ y: -5 }}
-                  className="bg-slate-900/50 border border-white/5 p-8 rounded-[2.5rem] flex flex-col justify-between group hover:border-white/20 transition-all shadow-2xl backdrop-blur-3xl min-h-[280px]"
+                  className="inline-flex items-center gap-4 px-12 py-6 bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-[2rem] text-lg shadow-2xl shadow-indigo-600/30 transition-all hover:scale-105 active:scale-95 uppercase tracking-widest"
                 >
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center text-3xl mb-8 ${tool.color}`}>
-                    {tool.icon}
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-black text-white mb-3 uppercase tracking-tight">{tool.name}</h3>
-                    <p className="text-sm text-slate-500 leading-relaxed mb-6 font-medium">{tool.desc}</p>
-                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-white transition-colors">
-                      Acceder ahora <FaArrowRight />
-                    </div>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-
-            {/* Announcements / News */}
-            <div className="bg-[#080B14]/80 border border-white/5 rounded-[3rem] p-12 relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-8 text-amber-500/10 group-hover:text-amber-500/20 transition-colors">
-                <FaBell size={120} />
+                  <SiGooglemeet className="text-2xl" /> UNIRSE A LA CLASE (MEET)
+                </a>
               </div>
-              <div className="relative z-10">
-                <h3 className="text-2xl font-black text-white mb-6 uppercase tracking-tighter">Novedades del Campus</h3>
-                <div className="space-y-6">
-                  <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
-                    <span className="text-[10px] font-bold text-amber-500 uppercase tracking-[0.2em] block mb-2">Aviso Importante</span>
-                    <p className="text-slate-300 font-medium">Inscripciones para el primer ensayo nacional de invierno abiertas.</p>
-                  </div>
-                  <div className="p-6 bg-white/5 rounded-2xl border border-white/5">
-                    <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-[0.2em] block mb-2">Nuevo Recurso</span>
-                    <p className="text-slate-300 font-medium">Ya puedes descargar la guía de Estrategia para M1 en la sección de Drive.</p>
+
+              <div className="w-full md:w-[400px] space-y-4">
+                <div className="bg-black/40 p-8 rounded-[3rem] border border-white/5 backdrop-blur-md">
+                  <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-6 flex items-center gap-2">
+                    <FaClock /> Agenda del Día
+                  </h4>
+                  <div className="space-y-6">
+                    <div className="flex border-b border-white/5 pb-4">
+                      <div className="text-indigo-400 font-black text-xl mr-4">18:30</div>
+                      <div>
+                        <p className="text-white font-black text-sm uppercase tracking-tight">Matemática M1</p>
+                        <p className="text-xs text-slate-500">Prof. Diego Chaparro</p>
+                      </div>
+                    </div>
+                    <div className="flex opacity-50">
+                      <div className="text-slate-600 font-black text-xl mr-4">20:15</div>
+                      <div>
+                        <p className="text-white font-black text-sm uppercase tracking-tight">Lenguaje PAES</p>
+                        <p className="text-xs text-slate-500">Nivelación Base</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </section>
 
-          {/* RIGHT AREA: SCHEDULE & INFO */}
-          <div className="lg:col-span-4 space-y-8">
+        {/* 2. VIDEOTECA & TOOLS GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-            {/* Weekly Schedule Preview */}
-            <div className="bg-slate-900 border border-white/10 rounded-[3rem] p-10 shadow-2xl backdrop-blur-3xl h-fit">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="p-3 bg-amber-500/10 rounded-xl text-amber-500"><FaCalendarCheck /></div>
-                <h3 className="font-black uppercase tracking-widest text-sm">Mis Clases</h3>
+          {/* VIDEOTECA (ON-DEMAND) */}
+          <div className="lg:col-span-8 space-y-12">
+            <div>
+              <div className="flex justify-between items-end mb-10">
+                <div>
+                  <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2 italic">Videoteca On-Demand</h3>
+                  <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Repasa las últimas grabaciones</p>
+                </div>
+                <button className="text-[10px] font-black text-indigo-400 hover:text-white transition-colors uppercase tracking-widest">Ver Todo</button>
               </div>
 
-              <div className="space-y-6">
-                {COURSES.map((c, i) => (
-                  <div key={i} className="group p-6 bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-colors">
-                    <h4 className="text-white font-black uppercase tracking-tight mb-2 text-lg">{c.name}</h4>
-                    <div className="flex justify-between text-[11px] font-bold text-slate-500">
-                      <span className="flex items-center gap-2"><FaVideo className="text-indigo-400" /> {c.time}</span>
-                      <span className="text-amber-500/80">{c.tutor}</span>
+              {/* Player Modal / Inline Placeholder */}
+              <AnimatePresence>
+                {activeVideo && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className="mb-12 bg-black rounded-[3rem] overflow-hidden border border-indigo-500/20 shadow-2xl aspect-video relative group"
+                  >
+                    <ReactPlayer
+                      url={activeVideo.url}
+                      width="100%"
+                      height="100%"
+                      controls
+                      playing
+                    />
+                    <button
+                      onClick={() => setActiveVideo(null)}
+                      className="absolute top-6 right-6 bg-white/10 hover:bg-white/20 p-3 rounded-full text-white backdrop-blur-md transition-colors"
+                    >
+                      <FaArrowRight className="rotate-45" />
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {RECORDED_CLASSES.map((video) => (
+                  <div
+                    key={video.id}
+                    onClick={() => {
+                      setActiveVideo(video);
+                      window.scrollTo({ top: 400, behavior: 'smooth' });
+                    }}
+                    className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-6 hover:border-indigo-500/30 transition-all group cursor-pointer"
+                  >
+                    <div className="relative aspect-video rounded-2xl overflow-hidden mb-6">
+                      <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-slate-950 pl-1 shadow-2xl">
+                          <FaPlay />
+                        </div>
+                      </div>
+                      <div className="absolute bottom-4 right-4 bg-black/80 px-3 py-1 rounded-lg text-[10px] font-black text-white backdrop-blur-md">
+                        {video.duration}
+                      </div>
                     </div>
+                    <span className="text-[9px] font-black text-indigo-500 uppercase tracking-widest mb-2 block">{video.subject}</span>
+                    <h4 className="text-white font-black text-lg leading-tight uppercase tracking-tight mb-2 group-hover:text-indigo-400 transition-colors">{video.title}</h4>
+                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{new Date(video.date).toLocaleDateString('es-CL', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
                   </div>
                 ))}
               </div>
-
-              <button className="w-full mt-10 py-4 border border-white/5 bg-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:bg-white hover:text-slate-950 transition-all">
-                Ver Calendario Completo
-              </button>
             </div>
+          </div>
 
-            {/* Support Card */}
-            <div className="bg-gradient-to-br from-indigo-900/30 to-slate-900 border border-indigo-500/20 rounded-[3rem] p-10 flex flex-col items-center text-center">
-              <div className="w-16 h-16 bg-indigo-500 rounded-full flex items-center justify-center text-white text-2xl mb-6 shadow-xl shadow-indigo-500/20">
-                <FaChalkboardTeacher />
+          {/* SIDEBAR TOOLS */}
+          <div className="lg:col-span-4 space-y-12">
+            <div className="sticky top-40 space-y-8">
+
+              <div className="bg-indigo-600/10 border border-indigo-500/20 rounded-[3rem] p-10 backdrop-blur-3xl shadow-2xl relative overflow-hidden group">
+                <div className="absolute -right-10 -bottom-10 p-8 text-indigo-500/5 group-hover:text-indigo-500/10 transition-colors">
+                  <FaBell size={120} />
+                </div>
+                <h3 className="text-xl font-black text-white mb-8 uppercase tracking-tighter">Campus & Recursos</h3>
+
+                <div className="space-y-6">
+                  {LOBBY_TOOLS.map((tool) => (
+                    <a
+                      key={tool.id}
+                      href={tool.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-5 p-5 bg-white/5 rounded-[2rem] border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all"
+                    >
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${tool.color}`}>
+                        {tool.icon}
+                      </div>
+                      <div>
+                        <h4 className="text-white font-black text-sm uppercase tracking-tight">{tool.name}</h4>
+                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Acceder Ahora</p>
+                      </div>
+                    </a>
+                  ))}
+                </div>
               </div>
-              <h4 className="text-xl font-black text-white mb-2 uppercase tracking-tight">Dudas Académicas</h4>
-              <p className="text-xs text-slate-500 mb-8 leading-relaxed font-medium">Si tienes dudas sobre el material o necesitas apoyo pedagógico, contáctanos.</p>
-              <a
-                href="https://wa.me/56964626568"
-                className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest transition-all"
-              >
-                Contactar Tutor
-              </a>
-            </div>
 
+              {/* Support Card */}
+              <div className="bg-slate-900 border border-white/10 rounded-[3rem] p-10 text-center shadow-2xl">
+                <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-500 text-3xl mx-auto mb-6">
+                  <FaChalkboardTeacher />
+                </div>
+                <h4 className="text-xl font-black text-white mb-2 uppercase tracking-tight">Tutoría Personal</h4>
+                <p className="text-xs text-slate-500 mb-8 leading-relaxed font-medium px-4">Resuelve tus dudas directamente con nuestro equipo académico vía WhatsApp.</p>
+                <a
+                  href="https://wa.me/56964626568"
+                  className="w-full py-5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest transition-all block shadow-2xl shadow-emerald-600/20"
+                >
+                  Contactar Tutor Ahora
+                </a>
+              </div>
+
+              {/* Verified Badge */}
+              <div className="flex items-center justify-center gap-3 text-[10px] font-black text-slate-600 uppercase tracking-[0.3em]">
+                <FaCheckCircle className="text-emerald-500" /> Acceso Verificado 2026
+              </div>
+
+            </div>
           </div>
 
         </div>

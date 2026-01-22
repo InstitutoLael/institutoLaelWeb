@@ -148,8 +148,8 @@ export default function Navbar() {
               <Icons.User />
             </Link>
 
-            <Link to={NAVIGATION.action.enroll.path} className="px-6 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-amber-400 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-              {NAVIGATION.action.enroll.name}
+            <Link to="/#catalog" className="px-6 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-amber-400 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.2)]">
+              Oferta Académica
             </Link>
           </div>
 
@@ -231,16 +231,16 @@ export default function Navbar() {
 
               {/* Drawer Footer */}
               <div className="p-6 border-t border-white/10 bg-black/20">
-                <Link
-                  to={NAVIGATION.action.enroll.path}
-                  className="block w-full py-4 bg-amber-400 text-black text-center font-extrabold text-lg rounded-xl hover:bg-amber-300 transition-colors shadow-lg shadow-amber-500/20"
+                <button
+                  onClick={() => { setMobileOpen(false); toggleCart(); }}
+                  className="block w-full py-4 bg-white text-black text-center font-extrabold text-lg rounded-xl hover:bg-amber-400 transition-colors shadow-lg shadow-white/10"
                 >
-                  🚀 Matricularme Ahora
-                </Link>
+                  🛒 Ver Mi Mochila
+                </button>
                 <div className="mt-4 text-center">
                   <a href={NAVIGATION.action.whatsapp.url} className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center gap-2">
                     <Icons.WhatsApp />
-                    ¿Necesitas ayuda?
+                    ¿Consultas vía WhatsApp?
                   </a>
                 </div>
               </div>

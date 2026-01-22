@@ -15,11 +15,10 @@ const ITEMS = [
   { title: "PAES", to: "/paes", type: "Programa" },
   { title: "Lengua de Señas (LSCh)", to: "/lsch", type: "Programa" },
   { title: "Idiomas", to: "/idiomas", type: "Programa" },
-  { title: "Inscripción", to: "/inscripcion", type: "Página" },
-  { title: "Nosotros", to: "/nosotros", type: "Página" },
   { title: "Empresas", to: "/empresas", type: "Página" },
-  { title: "Pagos", to: "/pagos", type: "Página" },
+  { title: "Nosotros", to: "/nosotros", type: "Página" },
   { title: "Trabaja con nosotros", to: "/trabaja", type: "Página" },
+  { title: "Contacto", to: "/contacto", type: "Página" },
 ];
 
 const normalize = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
@@ -163,7 +162,7 @@ export default function SearchOverlay({ open, onClose, items = ITEMS }) {
           {/* STATE: Empty / Instrucciones */}
           {!debouncedQ && !showingRecents && (
             <div className="msg-empty">
-              <p>Prueba buscando <b>"PAES"</b>, <b>"Coreano"</b> o <b>"Pagos"</b>...</p>
+              <p>Prueba buscando <b>"PAES"</b>, <b>"Coreano"</b> o <b>"Empresas"</b>...</p>
             </div>
           )}
 

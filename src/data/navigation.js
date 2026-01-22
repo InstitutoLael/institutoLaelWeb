@@ -60,8 +60,7 @@ export const NAVIGATION = {
     ],
 
     action: {
-        enroll: { name: "Inscripción", path: "/inscripcion" },
         aula: { name: "Aula Virtual", path: "/aula" },
-        whatsapp: { url: "https://wa.me/56964626568", label: "Chat WhatsApp" }
+        whatsapp: { url: "https://wa.me/56964626568", label: "Consultas" }
     }
 };

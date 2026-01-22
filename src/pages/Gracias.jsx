@@ -1,196 +1,102 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
+import { FaCheckCircle, FaWhatsapp, FaUniversity, FaArrowRight, FaBookOpen } from "react-icons/fa";
 
-/* 1. ICONOS SVG (Para no depender de librerías externas) */
-const Icons = {
-  Check: () => <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
-  Whatsapp: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>,
-  ArrowLeft: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-};
+const clp = (n) => Number(n || 0).toLocaleString("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
 
 export default function Gracias() {
-  // Scroll arriba al cargar
-  useEffect(() => { window.scrollTo(0, 0); }, []);
+  const location = useLocation();
+  const { order, total, paymentMethod } = location.state || {};
 
-  /* --- ZONA DE CONVERSIÓN ---
-     Si usas Google Ads o Meta Ads, descomenta y configura esto:
-  */
-  useEffect(() => {
-    // console.log("Evento de conversión disparado");
-    // if(window.fbq) window.fbq('track', 'CompleteRegistration');
-    // if(window.gtag) window.gtag('event', 'conversion', {'send_to': 'AW-TU-ID-AQUI'});
-  }, []);
+  // Si no hay datos, mostrar algo genérico o redirigir
+  const orderId = order?.id?.slice(0, 8) || "N/A";
+  const amount = total || 0;
 
   return (
-    <div className="thanks-page">
-      <style>{css}</style>
-      <div className="container">
-        
-        <div className="icon-box">
-            <Icons.Check />
-        </div>
+    <div className="min-h-screen bg-[#050505] text-white pt-32 pb-20 px-6 relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-600/10 blur-[120px] rounded-full pointer-events-none"></div>
 
-        <h1>¡Solicitud Recibida!</h1>
-        <p className="lead">
-          Hemos recibido tus datos correctamente. Estás a un paso de comenzar tu nivelación de estudios.
-        </p>
-        
-        <div className="next-steps">
-          <h2>¿Qué pasa ahora?</h2>
-          <ul>
-            <li>
-              <span className="step-icon"><Icons.Whatsapp /></span>
-              <span>
-                Un coordinador académico te contactará por <strong>WhatsApp</strong> en las próximas horas para confirmar tu beca o cupo.
-              </span>
-            </li>
-            <li>
-              <span className="step-num">2</span>
-              <span>
-                Revisa tu correo electrónico (incluyendo SPAM), te enviamos un resumen de los planes.
-              </span>
-            </li>
-          </ul>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="max-w-3xl mx-auto relative z-10"
+      >
+        <div className="bg-white/[0.02] border border-white/10 rounded-[3.5rem] p-12 text-center backdrop-blur-3xl shadow-2xl">
+          <div className="w-24 h-24 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-emerald-500/20">
+            <FaCheckCircle className="text-emerald-500 text-5xl" />
+          </div>
+
+          <h1 className="text-4xl md:text-6xl font-black mb-4 uppercase tracking-tighter">¡Bienvenido a <br /><span className="text-indigo-500">La Revolución!</span></h1>
+          <p className="text-slate-400 text-lg mb-10 font-medium">Hemos recibido tu solicitud de inscripción de forma correcta.</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <div className="bg-white/5 p-6 rounded-3xl border border-white/5 text-left">
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">ID de Orden</span>
+              <span className="text-xl font-mono text-white">#{orderId}</span>
+            </div>
+            <div className="bg-white/5 p-6 rounded-3xl border border-white/5 text-left">
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Total Confirmado</span>
+              <span className="text-xl font-black text-emerald-400">{clp(amount)}</span>
+            </div>
+          </div>
+
+          {paymentMethod === 'transfer' && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-indigo-600/10 rounded-[2.5rem] p-8 mb-12 text-left border border-indigo-500/20"
+            >
+              <h3 className="font-black text-white mb-6 uppercase tracking-widest text-xs flex items-center gap-3">
+                <FaUniversity className="text-indigo-400 text-lg" /> Próximo Paso: Transferencia
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-sm">
+                <div>
+                  <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">Banco</span>
+                  <span className="text-white font-bold">Banco Estado</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">Tipo Cuenta</span>
+                  <span className="text-white font-bold">Chequera Electrónica</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">Número</span>
+                  <span className="text-white font-bold">123456789</span>
+                </div>
+                <div>
+                  <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">RUT</span>
+                  <span className="text-white font-bold">76.543.210-K</span>
+                </div>
+                <div className="sm:col-span-2">
+                  <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">Nombre</span>
+                  <span className="text-white font-bold">Instituto Lael SpA</span>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          <div className="space-y-4">
+            <a
+              href={`https://wa.me/56964626568?text=Hola! He realizado la orden #${orderId} por ${clp(amount)}. Adjunto el comprobante de pago.`}
+              target="_blank"
+              rel="noreferrer"
+              className="w-full py-6 bg-emerald-600 text-white font-black rounded-2xl flex items-center justify-center gap-3 hover:bg-emerald-500 transition-all uppercase tracking-widest text-xs shadow-xl shadow-emerald-600/20"
+            >
+              <FaWhatsapp className="text-xl" /> Enviar Comprobante por WhatsApp
+            </a>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Link to="/aula" className="py-5 bg-white/5 border border-white/10 text-white font-black rounded-2xl hover:bg-white/10 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                <FaBookOpen /> Ir a mi Aula
+              </Link>
+              <Link to="/" className="py-5 bg-white text-slate-950 font-black rounded-2xl hover:bg-slate-100 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                Volver al Inicio <FaArrowRight />
+              </Link>
+            </div>
+          </div>
         </div>
-        
-        <Link to="/" className="btn-main">
-          <Icons.ArrowLeft /> Volver al Inicio
-        </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }
-
-const css = `
-:root {
-  --bg-deep: #050505;
-  --bg-card: #121212;
-  --text-main: #F8FAFC;
-  --text-muted: #94a3b8; /* Agregada variable faltante */
-  --primary: #10B981;    /* Verde Éxito */
-  --accent: #fbbf24;     /* Dorado (Linkeado con EscuelaAdultos) */
-}
-
-.thanks-page {
-  background-color: var(--bg-deep);
-  color: var(--text-main);
-  min-height: 100vh;
-  padding: 100px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
-  text-align: center;
-}
-
-.container {
-  max-width: 550px;
-  width: 100%;
-  background: var(--bg-card);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 24px;
-  padding: 50px 30px;
-  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-  animation: fadeIn 0.6s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.icon-box {
-  color: var(--primary);
-  margin-bottom: 25px;
-  display: inline-block;
-  padding: 20px;
-  background: rgba(16, 185, 129, 0.1);
-  border-radius: 50%;
-  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both;
-}
-
-@keyframes popIn {
-  from { transform: scale(0); }
-  to { transform: scale(1); }
-}
-
-h1 {
-  font-size: 2.2rem;
-  font-weight: 800;
-  margin-bottom: 15px;
-  line-height: 1.1;
-}
-
-.lead {
-  font-size: 1.1rem;
-  color: var(--text-muted);
-  margin-bottom: 40px;
-  line-height: 1.6;
-}
-
-.next-steps {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 16px;
-  padding: 30px;
-  margin-bottom: 40px;
-  text-align: left;
-}
-
-.next-steps h2 {
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    color: var(--accent);
-    margin-top: 0;
-    margin-bottom: 20px;
-    font-weight: 700;
-}
-
-.next-steps ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.next-steps li {
-    color: #e2e8f0;
-    margin-bottom: 20px;
-    font-size: 0.95rem;
-    display: flex;
-    gap: 15px;
-    align-items: flex-start;
-    line-height: 1.5;
-}
-.next-steps li:last-child { margin-bottom: 0; }
-
-.step-icon, .step-num {
-    background: rgba(255,255,255,0.1);
-    color: var(--primary);
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    font-weight: 700;
-    font-size: 0.9rem;
-}
-
-.btn-main {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--text-main);
-  color: #000;
-  padding: 14px 32px;
-  border-radius: 50px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: .3s;
-}
-.btn-main:hover {
-  background: var(--primary);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
-}
-`;

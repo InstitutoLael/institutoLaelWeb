@@ -617,7 +617,7 @@ export default function Idiomas() {
               onClick={scrollToBuilder}
               className="px-12 py-6 bg-white text-slate-950 rounded-2xl font-black uppercase tracking-widest text-xs hover:scale-105 transition-all shadow-2xl shadow-white/10"
             >
-              EMPEZAR MI VIAJE
+              CONFIGURAR MI MOCHILA
             </button>
             <a
               href="https://wa.me/56964626568"
@@ -654,7 +654,7 @@ export default function Idiomas() {
                   disabled={pricing.count === 0}
                   className="px-10 py-4 bg-blue-600 hover:bg-blue-500 text-white font-black uppercase tracking-widest text-[10px] rounded-xl transition-all shadow-2xl shadow-blue-600/20 disabled:opacity-30"
                 >
-                  Inscribir Ahora
+                  Añadir a Mochila
                 </button>
               </div>
             </div>

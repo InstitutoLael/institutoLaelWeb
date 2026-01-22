@@ -663,7 +663,7 @@ export default function Paes() {
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <button onClick={scrollToBuilder} className="px-12 py-6 bg-white text-slate-950 font-black rounded-3xl text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all shadow-white/10 uppercase tracking-widest">
-              INSCRIBIRME AHORA
+              AGREGAR A MI MOCHILA
             </button>
             <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="flex items-center gap-3 px-12 py-6 bg-emerald-600/10 border border-emerald-500/20 text-emerald-500 font-black rounded-3xl hover:bg-emerald-600 hover:text-white transition-all text-xl uppercase tracking-widest">
               <FaWhatsapp /> WhatsApp
@@ -690,7 +690,7 @@ export default function Paes() {
               disabled={pricing.count === 0}
               className="px-8 py-4 bg-white text-slate-950 font-black rounded-2xl hover:bg-indigo-50 hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-widest text-xs"
             >
-              Matricularme
+              Añadir a Mochila
             </button>
           </div>
         </div>

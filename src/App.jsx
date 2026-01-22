@@ -158,8 +158,6 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
-                <Route path="/pagos" element={<Pagos />} />
-                <Route path="/inscripcion" element={<Inscripcion />} />
                 <Route path="/gracias" element={<Gracias />} />
                 <Route path="/terminos" element={<Terminos />} />
                 <Route path="/privacidad" element={<Privacidad />} />

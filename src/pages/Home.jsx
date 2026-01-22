@@ -113,10 +113,10 @@ export default function Home() {
                         transition={{ delay: 0.8, duration: 1 }}
                         className="flex flex-col sm:flex-row gap-6 justify-center items-center"
                     >
-                        <Link to="/inscripcion" className="group relative px-12 py-6 bg-amber-500 text-slate-950 font-black rounded-[2rem] text-xl shadow-2xl shadow-amber-500/20 hover:scale-[1.05] active:scale-95 transition-all duration-500 overflow-hidden">
-                            <span className="relative z-10 flex items-center gap-3">Postular Ahora <FaArrowRight /></span>
+                        <a href="#catalog" className="group relative px-12 py-6 bg-amber-500 text-slate-950 font-black rounded-[2rem] text-xl shadow-2xl shadow-amber-500/20 hover:scale-[1.05] active:scale-95 transition-all duration-500 overflow-hidden">
+                            <span className="relative z-10 flex items-center gap-3">Explorar Oferta <FaArrowRight /></span>
                             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                        </Link>
+                        </a>
 
                         <Link to="/nosotros" className="px-12 py-6 rounded-[2rem] border border-white/10 text-white font-black text-xl hover:bg-white/5 backdrop-blur-md transition-all flex items-center gap-3 group">
                             <BsPlayCircle className="text-amber-500 group-hover:rotate-12 transition-transform" /> Nuestra Visión
@@ -245,7 +245,7 @@ export default function Home() {
             </section>
 
             {/* ──────────────── 4. ACADEMIC HUB (BENTO GRID) ──────────────── */}
-            <section className="py-32 bg-[#020617] relative">
+            <section id="catalog" className="py-32 bg-[#020617] relative">
                 <div className="container mx-auto px-6">
                     <div className="text-center mb-20">
                         <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Oferta Académica</span>
@@ -379,10 +379,10 @@ export default function Home() {
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <Link to="/inscripcion" className="bg-amber-500 group rounded-[3rem] p-12 text-left hover:scale-[1.02] transition-all shadow-2xl shadow-amber-500/20 flex flex-col justify-between h-96">
+                        <Link to="/paes" className="bg-amber-500 group rounded-[3rem] p-12 text-left hover:scale-[1.02] transition-all shadow-2xl shadow-amber-500/20 flex flex-col justify-between h-96">
                             <div>
-                                <h3 className="text-4xl font-black text-slate-950 mb-4 uppercase tracking-tighter">Inscripción</h3>
-                                <p className="text-slate-900 font-bold leading-relaxed">Reserva tu matriz 2026 ahora. Proceso 100% digital.</p>
+                                <h3 className="text-4xl font-black text-slate-950 mb-4 uppercase tracking-tighter">Matrículas</h3>
+                                <p className="text-slate-900 font-bold leading-relaxed">Reserva tu cupo 2026 ahora. Proceso de inscripción 100% digital.</p>
                             </div>
                             <div className="w-16 h-16 bg-slate-950 rounded-full flex items-center justify-center text-amber-500 group-hover:scale-110 transition-transform">
                                 <BsArrowRightCircleFill size={32} />
@@ -397,12 +397,12 @@ export default function Home() {
                             <FaBuilding className="text-5xl text-emerald-500/50 group-hover:text-emerald-500 transition-colors" />
                         </Link>
 
-                        <Link to="/pagos" className="bg-slate-900 border border-white/5 rounded-[3rem] p-12 text-left hover:border-indigo-500/30 transition-all flex flex-col justify-between h-96 group">
+                        <Link to="/aula" className="bg-slate-900 border border-white/5 rounded-[3rem] p-12 text-left hover:border-indigo-500/30 transition-all flex flex-col justify-between h-96 group">
                             <div>
                                 <h3 className="text-3xl font-black text-white mb-4 uppercase tracking-tighter">Plataforma</h3>
-                                <p className="text-slate-500 leading-relaxed">Acceso para apoderados y gestión de cuotas.</p>
+                                <p className="text-slate-500 leading-relaxed">Acceso exclusivo para alumnos y apoderados vigentes.</p>
                             </div>
-                            <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest group-hover:translate-x-4 transition-all flex items-center gap-2">Portal Pagos <FaArrowRight /></div>
+                            <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest group-hover:translate-x-4 transition-all flex items-center gap-2">Entrar al Aula <FaArrowRight /></div>
                         </Link>
                     </div>
                 </div>

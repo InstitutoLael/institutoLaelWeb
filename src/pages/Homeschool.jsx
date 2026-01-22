@@ -360,7 +360,7 @@ export default function Academy() {
                           ${isFeatured ? 'bg-amber-500 hover:bg-amber-400 text-slate-900' : 'bg-transparent border border-slate-600 text-white hover:bg-slate-800'}
                         `}
                            >
-                              Contratar Pack
+                              Agregar a la Mochila
                            </button>
                         </motion.div>
                      )

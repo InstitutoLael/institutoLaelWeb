@@ -20,7 +20,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   FaCheck, FaGlobeAmericas, FaPlaneDeparture, FaPassport, FaHeadphones,
   FaWhatsapp, FaArrowRight, FaStar, FaLock, FaUsers, FaCertificate, FaVideo,
-  FaTimes, FaMicrophoneAlt, FaLaptopHouse, FaBriefcase, FaGraduationCap
+  FaTimes, FaMicrophoneAlt, FaLaptopHouse, FaBriefcase, FaGraduationCap,
+  FaInfoCircle, FaGlobe, FaBolt, FaTrophy
 } from "react-icons/fa";
 import { BiWorld, BiConversation, BiBuildings, BiCoffeeTogo, BiStats } from "react-icons/bi";
 import { MdTranslate, MdOutlineFlightTakeoff, MdQuiz, MdOutlineSupportAgent } from "react-icons/md";

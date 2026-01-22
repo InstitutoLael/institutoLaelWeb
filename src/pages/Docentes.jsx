@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   FaLinkedin, FaInstagram, FaEnvelope, FaChalkboardTeacher, FaFilter, FaSearch,
   FaStar, FaTrophy, FaAward, FaBookReader, FaCertificate, FaHandshake,
-  FaChartLine, FaUserTie, FaCheckDouble
+  FaChartLine, FaUserTie, FaCheckDouble, FaArrowRight
 } from "react-icons/fa";
 import { MdVerified, MdOutlineSchool } from "react-icons/md";
 import SEOHead from "../components/SEOHead.jsx";
@@ -22,8 +22,8 @@ const BADGE_MAP = {
 const getTeacherStats = (id) => {
   const stats = {
     diego: { classes: "1.5k+", satisfaction: "100%", exp: "12y" },
-    fernanda: { classes: "850+", satisfaction: "98%", exp: "8y" },
-    martin: { classes: "600+", satisfaction: "99%", exp: "6y" },
+    fernanda: { classes: "100+", satisfaction: "98%", exp: "8y" },
+    martin: { classes: "200+", satisfaction: "99%", exp: "6y" },
     javiera: { classes: "400+", satisfaction: "97%", exp: "5y" },
     carlos: { classes: "900+", satisfaction: "99%", exp: "10y" },
     ana: { classes: "500+", satisfaction: "100%", exp: "15y" },

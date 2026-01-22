@@ -39,14 +39,22 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     const fetchProfile = async (userId) => {
-        const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', userId)
-            .single();
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', userId)
+                .maybeSingle();
 
-        if (!error) {
-            setProfile(data);
+            if (error) {
+                console.warn("Aviso: No se pudo cargar el perfil o no existe aún.", error.message);
+                return;
+            }
+            if (data) {
+                setProfile(data);
+            }
+        } catch (err) {
+            console.error("Error crítico recuperando perfil:", err);
         }
     };
 

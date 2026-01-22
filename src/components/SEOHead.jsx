@@ -112,7 +112,7 @@ export default function SEOHead({
 
       {/* Schema.org JSON-LD */}
       <script type="application/ld+json">
-        {JSON.stringify(schemaOrg)}
+        {JSON.stringify(schemaOrg.filter(item => item && typeof item === 'object' && item['@context']))}
       </script>
     </Helmet>
   );

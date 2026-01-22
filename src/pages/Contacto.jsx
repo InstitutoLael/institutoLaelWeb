@@ -119,7 +119,7 @@ export default function Contacto() {
       {/* ──────────────── 1. HERO HEADER ──────────────── */}
       <header className="relative pt-40 pb-20 px-6 text-center">
         {/* Background Ambience */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-96 bg-indigo-600/10 blur-[120px] rounded-full -z-10"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-96 bg-indigo-600/10 blur-[40px] rounded-full -z-10"></div>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}

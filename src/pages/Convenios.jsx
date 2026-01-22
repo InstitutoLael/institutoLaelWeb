@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import SEOHead from "../components/SEOHead.jsx"; 
+import SEOHead from "../components/SEOHead.jsx";
 import { FaHandshake, FaBuilding, FaUserGraduate, FaChartLine, FaArrowRight, FaCheck } from "react-icons/fa";
 import { BiWorld } from "react-icons/bi";
 
@@ -7,10 +7,9 @@ import { BiWorld } from "react-icons/bi";
    DATA
    ────────────────────────────────────────────────────────────────────────── */
 const PARTNERS = [
-  { name: "Los Olivos", type: "Homeschool", color: "#84cc16" }, 
-  { name: "Muni. Santiago", type: "Alianza Pública", color: "#3b82f6" }, 
-  { name: "Caja Los Andes", type: "Bienestar", color: "#f97316" }, 
-  { name: "Fundación Futuro", type: "ONG Educativa", color: "#ec4899" }, 
+  { name: "INO", type: "Salud Visual", color: "#3b82f6" },
+  { name: "Naamá Studio", type: "Potenciación Humana", color: "#fbbf24" },
+  { name: "Los Olivos", type: "Homeschool", color: "#84cc16" },
 ];
 
 const BENEFITS = [
@@ -81,17 +80,17 @@ export default function Convenios() {
       <div className="glow-orb orb-2"></div>
 
       <div className="container relative-z">
-        
+
         {/* HERO */}
         <header className="hero-partners">
           <div className="hero-pill">
-            <span className="pill-icon"><FaHandshake/></span> Red de Impacto Lael
+            <span className="pill-icon"><FaHandshake /></span> Red de Impacto Lael
           </div>
           <h1 className="hero-title">
             Crezcamos <span className="highlight">Juntos.</span>
           </h1>
           <p className="hero-desc">
-            Establecemos alianzas con colegios, empresas y fundaciones para democratizar el acceso a la educación. 
+            Establecemos alianzas con colegios, empresas y fundaciones para democratizar el acceso a la educación.
             <strong> Sin costos ocultos para tu organización.</strong>
           </p>
           <div className="cta-group">
@@ -106,7 +105,7 @@ export default function Convenios() {
           <p className="strip-label">ORGANIZACIONES QUE CONFÍAN EN NOSOTROS</p>
           <div className="logo-grid">
             {PARTNERS.map((p, i) => (
-              <div key={i} className="partner-badge" style={{'--p-color': p.color}}>
+              <div key={i} className="partner-badge" style={{ '--p-color': p.color }}>
                 <span className="p-dot"></span>
                 <div className="p-info">
                   <span className="p-name">{p.name}</span>
@@ -140,19 +139,19 @@ export default function Convenios() {
             <h2>Modelos de Colaboración</h2>
             <p>Adaptamos nuestra propuesta a la naturaleza de tu institución.</p>
           </div>
-          
+
           <div className="seg-grid">
             {TARGETS.map((t) => (
               <div key={t.id} className={`seg-card border-${t.accent}`}>
                 <div className={`seg-header bg-${t.accent}-dim`}>
-                   <span className="seg-subtitle">{t.subtitle}</span>
-                   <h3>{t.title}</h3>
+                  <span className="seg-subtitle">{t.subtitle}</span>
+                  <h3>{t.title}</h3>
                 </div>
                 <div className="seg-body">
                   <p>{t.desc}</p>
                   <ul className="features-list">
                     {t.features.map((f, i) => (
-                      <li key={i}><FaCheck className={`check-${t.accent}`}/> {f}</li>
+                      <li key={i}><FaCheck className={`check-${t.accent}`} /> {f}</li>
                     ))}
                   </ul>
                 </div>

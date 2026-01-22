@@ -136,12 +136,13 @@ export default function Checkout() {
                 clearCart();
                 navigate("/gracias", { state: { order, total, paymentMethod: 'transfer' } });
             } else {
-                // Mercado Pago Implementation
+                // Mercado Pago - LEAD CAPTURE FIRST, THEN REDIRECT
                 const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-mp-preference`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         orderId: order.id,
+                        customer_email: formData.email, // Pass lead info
                         items: cart.map(item => ({
                             title: item.title,
                             unit_price: item.price,
@@ -155,7 +156,16 @@ export default function Checkout() {
                     })
                 });
                 const data = await response.json();
-                if (data.id) setPreferenceId(data.id);
+
+                if (data.init_point) {
+                    // Success: Lead is in DB, now off to MP
+                    window.location.href = data.init_point;
+                } else if (data.id) {
+                    // Fallback to Bricks if needed
+                    setPreferenceId(data.id);
+                } else {
+                    throw new Error("No se pudo generar el link de pago.");
+                }
             }
 
         } catch (err) {

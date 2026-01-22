@@ -61,8 +61,8 @@ export default function Home() {
 
                 {/* Immersive Background Layers */}
                 <div className="absolute inset-0 z-0">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-indigo-600/10 blur-[80px] md:blur-[180px] rounded-full"></div>
-                    <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-amber-500/5 blur-[60px] md:blur-[150px] rounded-full"></div>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-indigo-600/10 blur-[40px] md:blur-[60px] rounded-full"></div>
+                    <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-amber-500/5 blur-[40px] md:blur-[60px] rounded-full"></div>
                     <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat"></div>
                 </div>
 

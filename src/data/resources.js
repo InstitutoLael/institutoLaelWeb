@@ -25,7 +25,7 @@ export const RESOURCES = {
             title: "Casio fx-570",
             description: "La fiel compañera para Cálculo y Física. No entres a ingeniería sin ella.",
             price: "Ver Oferta",
-            image: "https://images.unsplash.com/photo-1587145820266-a5951eebebb1?auto=format&fit=crop&q=80&w=800",
+            image: "https://images.unsplash.com/photo-1583529362239-514c072e036e?auto=format&fit=crop&q=80&w=800",
             affiliateLink: "https://www.amazon.com/s?k=Casio+fx-570",
             store: "Amazon"
         },

@@ -3,16 +3,7 @@ import { Link } from "react-router-dom";
 import { routesMap, getRoutesByCategory } from "../data/routesMap";
 import { FaArrowRight } from "react-icons/fa";
 
-// Placeholder images map if you don't have the real assets yet
-const IMG_MAP = {
-    ref_paes: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800",
-    ref_aula: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=800",
-    ref_homeschool: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800",
-    ref_english: "https://images.unsplash.com/photo-1526948531399-320e7e40f0ca?auto=format&fit=crop&q=80&w=800",
-    ref_lsch: "https://images.unsplash.com/photo-1617112028686-2ab99f43a532?auto=format&fit=crop&q=80&w=800",
-    ref_adultos: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=800",
-    ref_empresas: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800"
-};
+// Image with fallback logic
 
 const ImageWithFallback = ({ src, alt, className }) => {
     const [error, setError] = useState(false);
@@ -76,7 +67,7 @@ export default function Programas() {
                                         <div className="h-48 overflow-hidden relative bg-[#1e293b]">
                                             <div className="absolute inset-0 bg-indigo-900/20 group-hover:bg-transparent transition-colors z-10" />
                                             <ImageWithFallback
-                                                src={IMG_MAP[item.img] || item.img}
+                                                src={item.img}
                                                 alt={item.title}
                                                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                             />

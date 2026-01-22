@@ -21,6 +21,18 @@ import {
 import { teachers } from "../data/teachers.js";
 import { TESTIMONIALS } from "../data/testimonials.js";
 
+// Components
+import PaesSimulator from "../components/PaesSimulator.jsx";
+import VisualRoadmap from "../components/VisualRoadmap.jsx";
+
+const ROADMAP_STEPS = [
+  { title: "Inscripción", desc: "Matrícula digital y diagnóstico inicial.", subinfo: "Paso 1", icon: <FaUserGraduate /> },
+  { title: "Diagnóstico", desc: "Evaluamos tu base para nivelación.", subinfo: "Semana 1", icon: <FaInfoCircle /> },
+  { title: "Nivelación", desc: "Clases base para cerrar brechas.", subinfo: "Mes 1-2", icon: <FaBookOpen /> },
+  { title: "Estrategia", desc: "Dominio de temario y atajos PAES.", subinfo: "Mes 3-8", icon: <FaLaptopCode /> },
+  { title: "Simulacros", desc: "Ensayos intensivos reales.", subinfo: "Final", icon: <FaUniversity /> },
+];
+
 /* ──────────────────────────────────────────────────────────────────────────
    COMPONENTE PRINCIPAL
    ────────────────────────────────────────────────────────────────────────── */
@@ -222,6 +234,20 @@ export default function Paes() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ──────────────── VISUAL ROADMAP: CAMINO A LA U ──────────────── */}
+      <section className="py-24 bg-[#050510] border-t border-white/5">
+        <div className="container mx-auto px-6">
+          <VisualRoadmap steps={ROADMAP_STEPS} title="Tu Ruta hacia el Puntaje Nacional" color="indigo" />
+        </div>
+      </section>
+
+      {/* ──────────────── PAES SCORE SIMULATOR ──────────────── */}
+      <section className="py-24 bg-[#020617] relative">
+        <div className="container mx-auto px-6">
+          <PaesSimulator />
         </div>
       </section>
 

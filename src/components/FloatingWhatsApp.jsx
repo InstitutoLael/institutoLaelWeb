@@ -197,9 +197,10 @@ const css = `
   cursor: pointer; box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative; z-index: 20;
+  animation: wa-pulse 2s infinite;
 }
-.wa-float-btn:hover { transform: scale(1.1); box-shadow: 0 10px 30px rgba(37, 211, 102, 0.6); }
-.wa-float-btn.active { background: #1f2937; transform: rotate(180deg); }
+.wa-float-btn:hover { transform: scale(1.1); box-shadow: 0 10px 30px rgba(37, 211, 102, 0.6); animation: none; }
+.wa-float-btn.active { background: #1f2937; transform: rotate(180deg); animation: none; }
 
 /* Badge */
 .wa-badge {
@@ -309,6 +310,11 @@ const css = `
 @keyframes wa-slide { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes wa-fade { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes wa-typing { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+@keyframes wa-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+  70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
 
 @media (max-width: 480px) {
   .wa-panel { bottom: 0; right: 0; width: 100%; height: 100%; max-width: none; border-radius: 0; }

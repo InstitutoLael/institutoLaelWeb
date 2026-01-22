@@ -1,5 +1,19 @@
 import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext.jsx";
+import { TESTIMONIALS } from "../data/testimonials.js";
+import { teachers } from "../data/teachers.js";
+
+// Components
+import LanguagePlacementQuiz from "../components/LanguagePlacementQuiz.jsx";
+import VisualRoadmap from "../components/VisualRoadmap.jsx";
+
+const IDIOMAS_ROADMAP = [
+  { title: "Diagnóstico", desc: "Test de nivelación y objetivos.", subinfo: "Día 1", icon: <FaInfoCircle /> },
+  { title: "Inmersión", desc: "Clases 100% interactivas.", subinfo: "Semana 1+", icon: <FaGlobe /> },
+  { title: "Conversación", desc: "Storytelling y role-play.", subinfo: "Día 15+", icon: <FaUsers /> },
+  { title: "Fluidez", desc: "Dominio de estructuras reales.", subinfo: "Mes 3+", icon: <FaBolt /> },
+  { title: "Certificación", desc: "Preparación para exámenes intl.", subinfo: "Logro", icon: <FaTrophy /> },
+];
 import { motion, AnimatePresence } from "framer-motion";
 
 // ICONS
@@ -205,6 +219,20 @@ export default function Idiomas() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ──────────────── VISUAL ROADMAP: TRAVESÍA GLOBAL ──────────────── */}
+      <section className="py-24 bg-slate-950 border-t border-white/5">
+        <div className="container mx-auto px-6">
+          <VisualRoadmap steps={IDIOMAS_ROADMAP} title="Travesía hacia la Fluidez" color="emerald" />
+        </div>
+      </section>
+
+      {/* ──────────────── LANGUAGE PLACEMENT QUIZ ──────────────── */}
+      <section className="py-24 bg-[#020617]">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <LanguagePlacementQuiz />
         </div>
       </section>
 

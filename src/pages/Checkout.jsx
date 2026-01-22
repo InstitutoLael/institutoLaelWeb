@@ -30,15 +30,7 @@ export default function Checkout() {
     const [loading, setLoading] = useState(false);
     const [preferenceId, setPreferenceId] = useState(null);
 
-    // Administrative Form State (Data for the order columns)
-    const [formData, setFormData] = useState({
-        fullName: profile?.full_name || "",
-        email: user?.email || "",
-        phone: profile?.phone || "",
-        rut: profile?.rut || "",
-        password: "" // Needed if creating account
-    });
-
+    const [errors, setErrors] = useState({});
     const [authError, setAuthError] = useState("");
     const total = cart.reduce((acc, item) => acc + item.price, 0);
 
@@ -62,27 +54,44 @@ export default function Checkout() {
         }
     }, [cart, navigate]);
 
+    // Validation Helper
+    const validateForm = () => {
+        let newErrors = {};
+        if (!formData.fullName || formData.fullName.length < 3) {
+            newErrors.fullName = "El nombre es obligatorio (mín. 3 caracteres).";
+        }
+        if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = "Ingresa un correo electrónico válido.";
+        }
+        if (!formData.phone || formData.phone.length < 8) {
+            newErrors.phone = "El teléfono es obligatorio.";
+        }
+        if (!formData.rut) {
+            newErrors.rut = "El RUT es obligatorio.";
+        }
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     // Handle Data Completion (Step 1)
     const handleNextStep = async (e) => {
         e.preventDefault();
-        setLoading(true);
         setAuthError("");
+        if (!validateForm()) return;
+
+        setLoading(true);
 
         try {
-            // Invisible Registration Logic: If not logged in, we try to sign in or sign up
             if (!user) {
                 try {
-                    // Try to sign up (if user is new)
                     await signUp({
                         email: formData.email,
-                        password: formData.password || "Lael2026!", // Default password for guest leads
+                        password: formData.password || "Lael2026!",
                         fullName: formData.fullName
                     });
                 } catch (err) {
-                    // If error is "user already exists", we might want them to login 
-                    // but for "Lead mode", we just move on or ask for password
                     if (err.message.includes("already registered")) {
-                        setAuthError("Ya tienes una cuenta. Por favor, usa la opción de Iniciar Sesión o usa otro correo.");
+                        setAuthError("Ya tienes una cuenta. Por favor, inicia sesión o usa otro correo.");
                         setLoading(false);
                         return;
                     }
@@ -98,20 +107,18 @@ export default function Checkout() {
     };
 
     const handleFinalize = async () => {
+        if (loading) return;
         setLoading(true);
         try {
-            // 1. Prepare Administrative Summary
             const itemsSummary = cart.map(i => i.title).join(" + ");
 
-            // 2. Create Order with Explicit Administrative Columns
             const { data: order, error: orderError } = await supabase
                 .from('orders')
                 .insert({
-                    user_id: user?.id || null, // Link to user if exists
+                    user_id: user?.id || null,
                     total_amount: total,
                     payment_method: paymentMethod,
                     status: 'pending',
-                    // NEW ADMINISTRATIVE COLUMNS
                     customer_name: formData.fullName,
                     customer_email: formData.email,
                     customer_phone: formData.phone,
@@ -123,7 +130,6 @@ export default function Checkout() {
 
             if (orderError) throw orderError;
 
-            // 3. Insert Items (for detailed records)
             const items = cart.map(item => ({
                 order_id: order.id,
                 product_id: item.db_id || null,
@@ -131,18 +137,16 @@ export default function Checkout() {
             }));
             await supabase.from('order_items').insert(items);
 
-            // 4. Logic based on method
             if (paymentMethod === 'transfer') {
                 clearCart();
                 navigate("/gracias", { state: { order, total, paymentMethod: 'transfer' } });
             } else {
-                // Mercado Pago - LEAD CAPTURE FIRST, THEN REDIRECT
                 const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-mp-preference`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         orderId: order.id,
-                        customer_email: formData.email, // Pass lead info
+                        customer_email: formData.email,
                         items: cart.map(item => ({
                             title: item.title,
                             unit_price: item.price,
@@ -158,10 +162,8 @@ export default function Checkout() {
                 const data = await response.json();
 
                 if (data.init_point) {
-                    // Success: Lead is in DB, now off to MP
                     window.location.href = data.init_point;
                 } else if (data.id) {
-                    // Fallback to Bricks if needed
                     setPreferenceId(data.id);
                 } else {
                     throw new Error("No se pudo generar el link de pago.");
@@ -169,7 +171,8 @@ export default function Checkout() {
             }
 
         } catch (err) {
-            console.error("Order completion error:", err);
+            console.error(err);
+            alert("Hubo un problema al procesar tu solicitud. Por favor intenta nuevamente.");
             setAuthError("No pudimos guardar tu orden. Revisa tus datos e intenta de nuevo.");
         } finally {
             setLoading(false);
@@ -228,49 +231,53 @@ export default function Checkout() {
                                         <div className="md:col-span-2 space-y-2">
                                             <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2 italic">Nombre Completo del Alumno</label>
                                             <div className="relative">
-                                                <FaUser className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
+                                                <FaUser className={`absolute left-5 top-1/2 -translate-y-1/2 ${errors.fullName ? 'text-red-500' : 'text-slate-600'}`} />
                                                 <input
-                                                    type="text" required placeholder="Ej: Juan Antonio Pérez"
-                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
+                                                    type="text" placeholder="Ej: Juan Antonio Pérez"
+                                                    className={`w-full bg-white/5 border rounded-2xl py-4 pl-12 pr-6 text-sm outline-none transition-all ${errors.fullName ? 'border-red-500/50 bg-red-500/5' : 'border-white/10 focus:border-indigo-500'}`}
                                                     value={formData.fullName} onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                                                 />
                                             </div>
+                                            {errors.fullName && <p className="text-red-500 text-[9px] font-bold ml-2 uppercase italic">{errors.fullName}</p>}
                                         </div>
 
                                         <div className="space-y-2">
                                             <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2 italic">Correo Electrónico</label>
                                             <div className="relative">
-                                                <FaEnvelope className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
+                                                <FaEnvelope className={`absolute left-5 top-1/2 -translate-y-1/2 ${errors.email ? 'text-red-500' : 'text-slate-600'}`} />
                                                 <input
-                                                    type="email" required placeholder="alumno@ejemplo.com"
-                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
+                                                    type="email" placeholder="alumno@ejemplo.com"
+                                                    className={`w-full bg-white/5 border rounded-2xl py-4 pl-12 pr-6 text-sm outline-none transition-all ${errors.email ? 'border-red-500/50 bg-red-500/5' : 'border-white/10 focus:border-indigo-500'}`}
                                                     value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                                 />
                                             </div>
+                                            {errors.email && <p className="text-red-500 text-[9px] font-bold ml-2 uppercase italic">{errors.email}</p>}
                                         </div>
 
                                         <div className="space-y-2">
                                             <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2 italic">Teléfono / WhatsApp</label>
                                             <div className="relative">
-                                                <FaPhoneAlt className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
+                                                <FaPhoneAlt className={`absolute left-5 top-1/2 -translate-y-1/2 ${errors.phone ? 'text-red-500' : 'text-slate-600'}`} />
                                                 <input
-                                                    type="tel" required placeholder="+569 1234 5678"
-                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
+                                                    type="tel" placeholder="+569 1234 5678"
+                                                    className={`w-full bg-white/5 border rounded-2xl py-4 pl-12 pr-6 text-sm outline-none transition-all ${errors.phone ? 'border-red-500/50 bg-red-500/5' : 'border-white/10 focus:border-indigo-500'}`}
                                                     value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                                 />
                                             </div>
+                                            {errors.phone && <p className="text-red-500 text-[9px] font-bold ml-2 uppercase italic">{errors.phone}</p>}
                                         </div>
 
                                         <div className="space-y-2">
                                             <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2 italic">RUT del Alumno</label>
                                             <div className="relative">
-                                                <FaFingerprint className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600" />
+                                                <FaFingerprint className={`absolute left-5 top-1/2 -translate-y-1/2 ${errors.rut ? 'text-red-500' : 'text-slate-600'}`} />
                                                 <input
-                                                    type="text" required placeholder="12.345.678-9"
-                                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm focus:border-indigo-500 outline-none transition-all"
+                                                    type="text" placeholder="12.345.678-9"
+                                                    className={`w-full bg-white/5 border rounded-2xl py-4 pl-12 pr-6 text-sm outline-none transition-all ${errors.rut ? 'border-red-500/50 bg-red-500/5' : 'border-white/10 focus:border-indigo-500'}`}
                                                     value={formData.rut} onChange={(e) => setFormData({ ...formData, rut: e.target.value })}
                                                 />
                                             </div>
+                                            {errors.rut && <p className="text-red-500 text-[9px] font-bold ml-2 uppercase italic">{errors.rut}</p>}
                                         </div>
 
                                         {!user && (
@@ -289,8 +296,15 @@ export default function Checkout() {
 
                                         <div className="md:col-span-2 mt-4">
                                             {authError && <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest text-center mb-6">{authError}</p>}
-                                            <button disabled={loading} className="w-full py-6 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-600/20 hover:bg-indigo-500 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3">
-                                                {loading ? 'Validando...' : 'Confirmar Datos y Ver Resumen'} <FaArrowRight />
+                                            <button
+                                                disabled={loading}
+                                                className={`w-full py-6 bg-indigo-600 text-white font-black rounded-2xl shadow-xl shadow-indigo-600/20 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-indigo-500 active:scale-95'}`}
+                                            >
+                                                {loading ? (
+                                                    <>Procesando...</>
+                                                ) : (
+                                                    <>Confirmar Datos y Ver Resumen <FaArrowRight /></>
+                                                )}
                                             </button>
                                             <p className="text-center text-[9px] text-slate-600 mt-4 uppercase tracking-[0.2em]">Al continuar aceptas nuestros términos de servicio académico.</p>
                                         </div>
@@ -398,10 +412,10 @@ export default function Checkout() {
                                                 <button
                                                     onClick={handleFinalize}
                                                     disabled={loading}
-                                                    className="w-full py-6 bg-white text-slate-950 font-black rounded-2xl shadow-xl shadow-white/10 hover:bg-slate-100 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3"
+                                                    className={`w-full py-6 bg-white text-slate-950 font-black rounded-2xl shadow-xl shadow-white/10 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-3 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-slate-100 active:scale-95'}`}
                                                 >
-                                                    {loading ? 'Guardando Orden...' : (
-                                                        paymentMethod === 'mercadopago' ? 'Generar Pago Mercado Pago' : 'Finalizar Reseva de Cupo'
+                                                    {loading ? 'Procesando...' : (
+                                                        paymentMethod === 'mercadopago' ? 'Generar Pago Mercado Pago' : 'Finalizar Reserva de Cupo'
                                                     )}
                                                 </button>
                                                 <button onClick={() => setStep('summary')} className="w-full text-[9px] font-black uppercase tracking-[0.3em] text-slate-600 hover:text-white transition-colors">Volver al Resumen</button>

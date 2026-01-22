@@ -60,13 +60,19 @@ export default function Checkout() {
             if (isLogin) {
                 await signIn({ email: authForm.email, password: authForm.password });
             } else {
-                await signUp({
+                const { data } = await signUp({
                     email: authForm.email,
                     password: authForm.password,
                     fullName: authForm.fullName
                 });
-                setAuthError("¡Cuenta creada! Revisa tu email para confirmar.");
-                setIsLogin(true);
+
+                if (data?.user && data?.session) {
+                    // Signed up and logged in automatically (if confirmation is off)
+                    setStep('summary');
+                } else {
+                    // Confirmation email sent
+                    setAuthError("¡Cuenta creada! Por favor, verifica tu email para continuar.");
+                }
             }
         } catch (err) {
             setAuthError(err.message);

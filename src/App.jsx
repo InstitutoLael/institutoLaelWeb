@@ -148,14 +148,7 @@ export default function App() {
                     </ProtectedRoute>
                   }
                 />
-                <Route
-                  path="/checkout"
-                  element={
-                    <ProtectedRoute>
-                      <Checkout />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/checkout" element={<Checkout />} />
                 <Route path="/gracias" element={<Gracias />} />
                 <Route path="/terminos" element={<Terminos />} />
                 <Route path="/privacidad" element={<Privacidad />} />

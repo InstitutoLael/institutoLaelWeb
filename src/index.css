@@ -3,7 +3,30 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-bg text-text font-sans m-0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Tactile feedback for buttons and interactive elements */
+  button:active, 
+  a:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease;
+  }
+
+  /* Custom selection color */
+  ::selection {
+    @apply bg-amber-500/30 text-white;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-xl bg-white/5 border border-white/10;
   }
 }

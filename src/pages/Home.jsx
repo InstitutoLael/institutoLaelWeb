@@ -61,8 +61,8 @@ export default function Home() {
 
                 {/* Immersive Background Layers */}
                 <div className="absolute inset-0 z-0">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-indigo-600/10 blur-[180px] rounded-full"></div>
-                    <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-amber-500/5 blur-[150px] rounded-full"></div>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-indigo-600/10 blur-[80px] md:blur-[180px] rounded-full"></div>
+                    <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-amber-500/5 blur-[60px] md:blur-[150px] rounded-full"></div>
                     <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat"></div>
                 </div>
 
@@ -310,34 +310,56 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ──────────────── 5. TESTIMONIOS (EXPERIENCE 2.0) ──────────────── */}
-            <section className="py-32 bg-slate-950 border-y border-white/5 overflow-hidden">
+            {/* ──────────────── 5. HALL DE LA FAMA (SOCIAL PROOF) ──────────────── */}
+            <section className="py-32 bg-[#050505] border-y border-white/5 relative overflow-hidden">
                 <div className="container mx-auto px-6">
                     <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
                         <div className="max-w-xl">
-                            <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Voz del Estudiante</span>
-                            <h2 className="text-5xl md:text-7xl font-sans font-black text-white tracking-tighter">Nuestra Mayor <br /> <span className="text-white/20">Evidencia.</span></h2>
+                            <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Social Proof</span>
+                            <h2 className="text-5xl md:text-7xl font-sans font-black text-white tracking-tighter">Hall de la <br /> <span className="text-white/20">Fama.</span></h2>
                         </div>
-                        <Link to="/recursos" className="px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-slate-950 transition-all mb-4">
-                            Ver más historias
-                        </Link>
+                        <div className="flex items-center gap-4 text-emerald-500 font-bold bg-emerald-500/5 border border-emerald-500/10 px-6 py-3 rounded-2xl text-[10px] uppercase tracking-widest">
+                            <RatingStars count={5} /> +3.000 Alumnos Felices
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                        {featuredTestimonials.map((t, index) => (
+                        {[
+                            {
+                                name: "Sofía A.",
+                                quote: "Gracias a Lael subí 150 puntos en Matemáticas. La atención personalizada y el nivel de los profes es de otro planeta.",
+                                program: "PAES ANUAL 2026",
+                                rating: 5
+                            },
+                            {
+                                name: "Camila A.",
+                                quote: "El método de inglés es muy dinámico. Pasé de no entender nada a poder mantener conversaciones fluidas en pocos meses.",
+                                program: "INGLÉS FLEXIBLE",
+                                rating: 5
+                            },
+                            {
+                                name: "Valentina",
+                                quote: "Luego de 3 años rindiendo la PAES, logré entrar a la universidad y carrera que deseaba gracias a la disciplina de Lael.",
+                                program: "PAES INTENSIVO",
+                                rating: 5
+                            }
+                        ].map((t, index) => (
                             <motion.div
                                 key={index}
-                                whileHover={{ y: -15 }}
-                                className="bg-[#0f172a] border border-white/5 p-12 rounded-[3rem] relative shadow-2xl"
+                                whileHover={{ y: -15, scale: 1.02 }}
+                                className="bg-[#0f172a]/50 border border-white/5 p-12 rounded-[3.5rem] relative shadow-2xl backdrop-blur-3xl group transition-all"
                             >
+                                <div className="absolute -top-6 -right-6 w-12 h-12 bg-amber-500 rounded-2xl flex items-center justify-center text-slate-950 shadow-2xl scale-0 group-hover:scale-100 transition-transform">
+                                    <FaQuoteRight />
+                                </div>
                                 <div className="flex justify-between items-start mb-10">
-                                    <FaQuoteLeft className="text-4xl text-amber-500/20" />
+                                    <FaQuoteLeft className="text-4xl text-amber-500/20 group-hover:text-amber-500/40 transition-colors" />
                                     <RatingStars count={t.rating} />
                                 </div>
                                 <p className="text-xl text-slate-300 font-light italic leading-relaxed mb-10">"{t.quote}"</p>
                                 <div className="border-t border-white/5 pt-8">
                                     <strong className="block text-white text-2xl font-black uppercase tracking-tighter mb-1">{t.name}</strong>
-                                    <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">{t.program}</span>
+                                    <span className="text-[10px] text-amber-500/60 font-black uppercase tracking-widest">{t.program}</span>
                                 </div>
                             </motion.div>
                         ))}

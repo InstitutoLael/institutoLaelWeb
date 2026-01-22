@@ -518,7 +518,13 @@ export default function Paes() {
                 <div className="relative z-10">
                   <div className="w-28 h-28 mx-auto bg-gradient-to-br from-indigo-500/20 to-transparent rounded-3xl flex items-center justify-center text-5xl mb-8 group-hover:scale-110 transition-transform duration-500 overflow-hidden border border-white/5">
                     {t.img && t.img.startsWith("http") ? (
-                      <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
+                      <img
+                        src={t.img}
+                        alt={t.name}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       t.img || <FaChalkboardTeacher className="text-indigo-400" />
                     )}

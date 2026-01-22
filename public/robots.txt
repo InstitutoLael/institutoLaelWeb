@@ -1,5 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /naama-studio
 
-# Aquí está la corrección clave: Tu dominio real
-Sitemap: https://www.institutolael.cl/sitemap.xml
+Sitemap: https://institutolael.cl/sitemap.xml

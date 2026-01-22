@@ -4,13 +4,16 @@ import { useCart } from "../context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     FaTimes, FaTrashAlt, FaArrowRight, FaShoppingBag,
-    FaLock, FaRocket, FaShieldAlt
+    FaLock, FaRocket, FaShieldAlt, FaUniversity, FaCreditCard, FaCopy
 } from "react-icons/fa";
+import { MdEmail, MdWhatsapp } from "react-icons/md";
 
 export default function CartDrawer() {
     const { cart, removeFromCart, clearCart, cartTotal, formatPrice, isCartOpen, closeCart } = useCart();
     const navigate = useNavigate();
     const drawerRef = useRef(null);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const [copiedField, setCopiedField] = useState(null);
 
     // Close on ESC
     useEffect(() => {
@@ -22,8 +25,26 @@ export default function CartDrawer() {
     }, [closeCart]);
 
     const handleCheckout = () => {
-        closeCart();
-        navigate("/inscripcion");
+        setIsPaymentModalOpen(true);
+    };
+
+    const handleCopy = (text, field) => {
+        navigator.clipboard.writeText(text);
+        setCopiedField(field);
+        setTimeout(() => setCopiedField(null), 2000);
+    };
+
+    const getWappLink = () => {
+        const items = cart.map(i => i.title).join(", ");
+        const text = `Hola! 👋 Realicé mi inscripción en Instituto Lael para: ${items}. Adjunto mi comprobante por el total de ${formatPrice(cartTotal)}.`;
+        return `https://wa.me/56964626568?text=${encodeURIComponent(text)}`;
+    };
+
+    const getMailLink = () => {
+        const items = cart.map(i => i.title).join(", ");
+        const subject = encodeURIComponent("Comprobante de Pago - Instituto Lael");
+        const body = encodeURIComponent(`Hola!\n\nAdjunto mi comprobante de transferencia por la inscripción de: ${items}.\n\nTotal: ${formatPrice(cartTotal)}`);
+        return `mailto:pagos@institutolael.cl?subject=${subject}&body=${body}`;
     };
 
     return (
@@ -142,7 +163,15 @@ export default function CartDrawer() {
 
                                 <div className="space-y-3">
                                     <button
-                                        onClick={handleCheckout}
+                                        onClick={() => {
+                                            handleCheckout();
+                                            if (window.gtag) {
+                                                window.gtag('event', 'begin_checkout_transfer', {
+                                                    'event_category': 'Sales',
+                                                    'event_label': 'Tu Mochila'
+                                                });
+                                            }
+                                        }}
                                         className="w-full py-6 bg-amber-500 text-slate-950 font-black rounded-2xl text-lg flex items-center justify-center gap-3 shadow-[0_20px_40px_rgba(245,158,11,0.2)] hover:scale-[1.02] active:scale-95 transition-all group overflow-hidden relative"
                                     >
                                         {/* Shine effect */}
@@ -170,6 +199,107 @@ export default function CartDrawer() {
                     </motion.aside>
                 </>
             )}
+
+            {/* PAYMENT MODAL */}
+            <AnimatePresence>
+                {isPaymentModalOpen && (
+                    <div className="fixed inset-0 z-[200] flex items-center justify-center px-6">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setIsPaymentModalOpen(false)}
+                            className="absolute inset-0 bg-[#020617]/80 backdrop-blur-xl"
+                        />
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            className="bg-[#09090b] border border-white/10 w-full max-w-lg rounded-[2.5rem] shadow-2xl relative z-10 overflow-hidden"
+                        >
+                            {/* Modal Header */}
+                            <div className="p-8 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 bg-amber-500/20 rounded-xl flex items-center justify-center text-amber-500">
+                                        <FaCreditCard />
+                                    </div>
+                                    <h3 className="text-xl font-black text-white uppercase tracking-tighter">Finalizar Inscripción</h3>
+                                </div>
+                                <button
+                                    onClick={() => setIsPaymentModalOpen(false)}
+                                    className="text-slate-500 hover:text-white transition-colors"
+                                >
+                                    <FaTimes size={20} />
+                                </button>
+                            </div>
+
+                            {/* Modal Body */}
+                            <div className="p-8 space-y-8">
+                                <div className="text-center">
+                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Total a Transferir</span>
+                                    <div className="text-5xl font-black text-amber-500 tracking-tighter shadow-amber-500/10 drop-shadow-2xl">
+                                        {formatPrice(cartTotal)}
+                                    </div>
+                                </div>
+
+                                <div className="bg-white/[0.03] border border-white/5 rounded-[2rem] p-6 space-y-4">
+                                    <h4 className="text-[10px] font-black text-white px-2 uppercase tracking-widest flex items-center gap-2">
+                                        <FaUniversity className="text-amber-500" /> Datos de Transferencia
+                                    </h4>
+
+                                    <div className="space-y-2">
+                                        {[
+                                            { label: "Banco", value: "Banco Estado", field: "banco" },
+                                            { label: "Tipo", value: "Cuenta RUT / Vista", field: "tipo" },
+                                            { label: "Número", value: "12345678-9", field: "numero" },
+                                            { label: "RUT", value: "78.084.019-6", field: "rut" },
+                                            { label: "Email", value: "pagos@institutolael.cl", field: "email" }
+                                        ].map((item) => (
+                                            <div key={item.field} className="flex justify-between items-center bg-black/40 p-4 rounded-xl border border-white/5 group hover:border-white/10 transition-all">
+                                                <div>
+                                                    <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest block">{item.label}</span>
+                                                    <span className="text-sm font-bold text-slate-200">{item.value}</span>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleCopy(item.value, item.field)}
+                                                    className={`p-2 rounded-lg transition-all ${copiedField === item.field ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white/5 text-slate-500 hover:text-white'}`}
+                                                >
+                                                    {copiedField === item.field ? <span className="text-[10px] font-black px-1">Copiado</span> : <FaCopy size={12} />}
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Actions */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <a
+                                        href={getWappLink()}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="py-5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl shadow-emerald-500/10 transition-all active:scale-95"
+                                    >
+                                        <MdWhatsapp className="text-lg" /> Enviar WhatsApp
+                                    </a>
+                                    <a
+                                        href={getMailLink()}
+                                        className="py-5 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-black rounded-2xl text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-all active:scale-95"
+                                    >
+                                        <MdEmail className="text-lg" /> Enviar por Mail
+                                    </a>
+                                </div>
+                            </div>
+
+                            {/* Modal Footer */}
+                            <div className="px-8 pb-8 text-center">
+                                <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest leading-relaxed">
+                                    Tu inscripción será confirmada manualmente una vez recibido el comprobante.
+                                </p>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </AnimatePresence>
     );
 }

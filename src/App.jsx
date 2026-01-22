@@ -1,13 +1,13 @@
 import { useEffect, useState, Suspense, lazy } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
-/* ---------- CONTEXTOS (El Cerebro) ---------- */
 import { CartProvider } from "./context/CartContext";
+import logoAmarillo from "./assets/img/Logos/lael-inst-amarillo.png";
 
 /* ---------- Componentes Globales ---------- */
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
-import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
+import WhatsAppButton from "./components/WhatsAppButton.jsx";
 import SearchOverlay from "./components/SearchOverlay.jsx";
 import CartButton from "./components/CartButton.jsx";
 import { Loader2 } from "lucide-react";
@@ -48,11 +48,41 @@ function ScrollToTop() {
   return null;
 }
 
-/* ---------- UTILIDAD: Loader de Pantalla Completa ---------- */
+/* ---------- UTILIDAD: Loader de Pantalla Completa (Premium) ---------- */
 const PageLoader = () => (
-  <div className="h-screen w-full flex flex-col items-center justify-center bg-[#09090b] text-amber-400">
-    <Loader2 size={48} className="animate-spin" />
-    <p className="mt-4 text-sm opacity-70 font-sans">Cargando experiencia...</p>
+  <div className="h-screen w-full flex flex-col items-center justify-center bg-[#050505] relative overflow-hidden">
+    {/* Background Glow */}
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-amber-500/10 blur-[100px] rounded-full"></div>
+
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{
+        opacity: [0, 1, 0.5, 1],
+        scale: [0.9, 1.05, 1]
+      }}
+      transition={{
+        duration: 2,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+      className="relative z-10"
+    >
+      <img
+        src={logoAmarillo}
+        alt="Instituto Lael"
+        className="w-24 h-24 object-contain drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]"
+        loading="eager"
+      />
+    </motion.div>
+
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: [0.3, 0.6, 0.3] }}
+      transition={{ duration: 2, repeat: Infinity }}
+      className="mt-8 text-[10px] font-black text-amber-500 uppercase tracking-[0.5em] relative z-10"
+    >
+      Cargando Experiencia
+    </motion.div>
   </div>
 );
 
@@ -113,7 +143,7 @@ export default function App() {
         {/* COMPONENTES FLOTANTES GLOBALES */}
         <CartDrawer /> {/* <--- AQUÍ VIVE EL CARRITO AHORA, SOBRE TODO LO DEMÁS */}
         <CartButton />
-        <FloatingWhatsApp />
+        <WhatsAppButton />
 
         <Footer />
       </div>

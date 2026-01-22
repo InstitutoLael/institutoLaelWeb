@@ -52,6 +52,12 @@ export default function Aula() {
       setIsAuthenticated(true);
       sessionStorage.setItem("aula_auth", "true");
       setError(false);
+      if (window.gtag) {
+        window.gtag('event', 'login_aula_success', {
+          'event_category': 'Engagement',
+          'event_label': 'Aula Virtual Hub'
+        });
+      }
     } else {
       setError(true);
       setTimeout(() => setError(false), 2000);
@@ -254,7 +260,13 @@ export default function Aula() {
                     className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-6 hover:border-indigo-500/30 transition-all group cursor-pointer"
                   >
                     <div className="relative aspect-video rounded-2xl overflow-hidden mb-6">
-                      <img src={video.thumbnail} alt={video.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" />
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                      />
                       <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center text-slate-950 pl-1 shadow-2xl">
                           <FaPlay />

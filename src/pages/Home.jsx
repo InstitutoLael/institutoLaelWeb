@@ -1,37 +1,37 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import PartnersMarquee from "../components/PartnersMarquee.jsx";
+import LiveActivityTicker from "../components/LiveActivityTicker.jsx";
 import {
     FaBolt, FaGlobe, FaHands, FaArrowRight, FaUniversity,
-    FaBuilding, FaChalkboardTeacher, FaQuoteLeft, FaStar, FaUserGraduate
+    FaBuilding, FaChalkboardTeacher, FaQuoteLeft, FaStar, FaUserGraduate,
+    FaCalendarAlt, FaQuoteRight, FaBookOpen, FaGamepad, FaChartLine
 } from "react-icons/fa";
-import { BsStars, BsArrowRightCircleFill, BsPlayCircle } from "react-icons/bs";
+import { BsStars, BsArrowRightCircleFill, BsPlayCircle, BsLightningChargeFill } from "react-icons/bs";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { IoSchoolOutline } from "react-icons/io5";
+import { MdVerified, MdDashboardCustomize } from "react-icons/md";
 
 import { TESTIMONIALS } from "../data/testimonials";
 
-/* --- ANIMATION VARIANTS (Staggered Reveal) --- */
-const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: {
-            staggerChildren: 0.1, // Escalonado rápido
-            delayChildren: 0.2
-        }
-    }
-};
+// --- QUOTES DATA ---
+const MOTIVATIONAL_QUOTES = [
+    "La educación es el arma más poderosa para cambiar el mundo. - Nelson Mandela",
+    "El éxito consiste en ir de fracaso en fracaso sin perder el entusiasmo. - Winston Churchill",
+    "No juzgues cada día por lo que cosechas, sino por las semillas que plantas. - Robert Louis Stevenson",
+    "La mente que se abre a una nueva idea, jamás volverá a su tamaño original. - Albert Einstein",
+    "Cree que puedes y casi habrás llegado. - Theodore Roosevelt",
+    "Educar es redimir. - Instituto Lael Vision 2026",
+];
 
-const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-        y: 0,
-        opacity: 1,
-        transition: { type: "spring", stiffness: 50, damping: 20 }
-    }
-};
+// --- HELPERS ---
+function calculateDaysToPAES() {
+    const goal = new Date("2025-11-24");
+    const now = new Date();
+    const diff = goal - now;
+    return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+}
 
 const RatingStars = ({ count }) => (
     <div className="flex gap-1 text-amber-400 text-sm">
@@ -42,236 +42,302 @@ const RatingStars = ({ count }) => (
 );
 
 export default function Home() {
+    const [daysLeft, setDaysLeft] = useState(0);
+    const [quote, setQuote] = useState("");
 
-    useEffect(() => { window.scrollTo(0, 0); }, []);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        setDaysLeft(calculateDaysToPAES());
+        setQuote(MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)]);
+    }, []);
 
-    // Filter featured testimonials for Home
     const featuredTestimonials = TESTIMONIALS.filter(t => t.featured).slice(0, 3);
 
     return (
         <div className="bg-[#020617] text-slate-200 font-sans overflow-x-hidden selection:bg-amber-500/30">
 
-            {/* ─────────────────────────────────────────────────────────────
-          1. HERO SECTION (Premium Glow + Motion)
-         ───────────────────────────────────────────────────────────── */}
-            <section className="relative min-h-[90vh] flex items-center justify-center pt-20 overflow-hidden">
-                {/* Ambient Glow */}
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,_rgba(56,189,248,0.15)_0%,_transparent_70%)] pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#020617] to-transparent pointer-events-none" />
+            {/* ──────────────── 1. HERO SECTION "VIVA" ──────────────── */}
+            <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden px-6">
 
-                <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+                {/* Immersive Background Layers */}
+                <div className="absolute inset-0 z-0">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-indigo-600/10 blur-[180px] rounded-full"></div>
+                    <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-amber-500/5 blur-[150px] rounded-full"></div>
+                    <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat"></div>
+                </div>
 
+                <div className="relative z-10 max-w-5xl mx-auto text-center">
+
+                    {/* Live Component Integration */}
                     <motion.div
-                        initial={{ y: -20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.6 }}
-                        className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-amber-400 mb-8 shadow-2xl backdrop-blur-md"
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="mb-10"
                     >
-                        <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_10px_#fbbf24]"></span>
-                        Admisión 2026 Abierta
+                        <LiveActivityTicker />
                     </motion.div>
 
-                    <motion.h1
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.1 }}
-                        className="text-5xl md:text-7xl lg:text-8xl font-serif font-medium text-white leading-[1.1] mb-8 tracking-tight"
+                    <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                     >
-                        Excelencia Académica.<br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 font-bold">Principios Eternos.</span>
-                    </motion.h1>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.5 }}
+                            className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-2xl text-amber-400 text-[10px] font-black uppercase tracking-[0.4em] mb-12 shadow-2xl"
+                        >
+                            <BsLightningChargeFill className="animate-pulse" /> Lael Experience 2.0
+                        </motion.div>
+
+                        <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-black text-white leading-[0.85] tracking-tighter mb-10 pb-4">
+                            Educar <br />
+                            <span className="bg-gradient-to-r from-amber-200 via-amber-500 to-amber-700 bg-clip-text text-transparent italic">Sin Límites.</span>
+                        </h1>
+                    </motion.div>
 
                     <motion.p
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5, duration: 1 }}
+                        className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto mb-16 font-light leading-relaxed"
                     >
-                        Un ecosistema educativo integral donde formamos el intelecto sin descuidar el espíritu.
-                        Desde preuniversitario hasta capacitación corporativa.
+                        Bienvenido al futuro de la formación. No somos una web, somos tu <span className="text-white font-bold">centro de mando académico</span> diseñado para el éxito 2026.
                     </motion.p>
 
                     <motion.div
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.8, delay: 0.3 }}
-                        className="flex flex-col sm:flex-row gap-5 justify-center items-center"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.8, duration: 1 }}
+                        className="flex flex-col sm:flex-row gap-6 justify-center items-center"
                     >
-                        <Link to="/inscripcion" className="group relative px-8 py-4 bg-amber-400 text-black font-bold rounded-full text-lg shadow-[0_0_0_4px_rgba(251,191,36,0.1)] hover:shadow-[0_0_20px_rgba(251,191,36,0.6)] hover:scale-105 transition-all duration-300 overflow-hidden">
-                            <span className="relative z-10">Postular Ahora</span>
-                            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-12" />
+                        <Link to="/inscripcion" className="group relative px-12 py-6 bg-amber-500 text-slate-950 font-black rounded-[2rem] text-xl shadow-2xl shadow-amber-500/20 hover:scale-[1.05] active:scale-95 transition-all duration-500 overflow-hidden">
+                            <span className="relative z-10 flex items-center gap-3">Postular Ahora <FaArrowRight /></span>
+                            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
                         </Link>
 
-                        <Link to="/nosotros" className="flex items-center gap-3 px-8 py-4 rounded-full border border-white/10 text-white font-medium hover:bg-white/5 hover:border-white/30 transition-all group">
-                            <BsPlayCircle className="text-xl group-hover:text-amber-400 transition-colors" /> Nuestra Visión
+                        <Link to="/nosotros" className="px-12 py-6 rounded-[2rem] border border-white/10 text-white font-black text-xl hover:bg-white/5 backdrop-blur-md transition-all flex items-center gap-3 group">
+                            <BsPlayCircle className="text-amber-500 group-hover:rotate-12 transition-transform" /> Nuestra Visión
                         </Link>
                     </motion.div>
 
-                    {/* Stats Rápidos */}
+                    {/* Stats (Experience 2.0 Style) */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 0.8, duration: 1 }}
-                        className="mt-16 flex justify-center gap-8 text-sm text-slate-500 font-medium tracking-wide uppercase"
+                        transition={{ delay: 1.5 }}
+                        className="mt-20 flex justify-center flex-wrap gap-12 text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]"
                     >
-                        <div><strong className="text-white">+3.000</strong> Alumnos</div>
-                        <div className="w-px h-4 bg-white/10"></div>
-                        <div><strong className="text-white">100%</strong> Online</div>
-                        <div className="w-px h-4 bg-white/10"></div>
-                        <div><strong className="text-white">4.9/5</strong> Satisfacción</div>
+                        <div className="flex flex-col gap-2">
+                            <span className="text-2xl text-white">+3K</span>
+                            <span>Alumnos</span>
+                        </div>
+                        <div className="w-px h-12 bg-white/5"></div>
+                        <div className="flex flex-col gap-2">
+                            <span className="text-2xl text-white">2026</span>
+                            <span>Visión Ready</span>
+                        </div>
+                        <div className="w-px h-12 bg-white/5"></div>
+                        <div className="flex flex-col gap-2">
+                            <span className="text-2xl text-white">4.9/5</span>
+                            <span>Calificación</span>
+                        </div>
                     </motion.div>
                 </div>
             </section>
 
-            {/* ─────────────────────────────────────────────────────────────
-          2. PARTNERS STRIP
-         ───────────────────────────────────────────────────────────── */}
+            {/* ──────────────── 2. DASHBOARD PÚBLICO (SIMULATED INTRANET) ──────────────── */}
+            <section className="py-24 relative z-10 -mt-20">
+                <div className="container mx-auto px-6">
+                    <div className="mb-12 flex items-center gap-4">
+                        <div className="p-3 bg-indigo-500/20 rounded-2xl text-indigo-400 text-xl border border-indigo-500/30">
+                            <MdDashboardCustomize />
+                        </div>
+                        <div>
+                            <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Campus Virtual</h2>
+                            <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Dashboard de acceso rápido</p>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[280px]">
+
+                        {/* WIDGET 1: COUNTDOWN */}
+                        <motion.div
+                            whileHover={{ y: -10 }}
+                            className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-10 backdrop-blur-3xl flex flex-col justify-between group overflow-hidden relative"
+                        >
+                            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                                <FaCalendarAlt size={120} />
+                            </div>
+                            <div>
+                                <span className="text-emerald-500 font-black text-[10px] uppercase tracking-widest block mb-4">Meta PAES 2025</span>
+                                <h3 className="text-5xl font-black text-white leading-none mb-2">{daysLeft}</h3>
+                                <p className="text-slate-500 font-bold uppercase text-xs tracking-widest">Días para el gran desafío</p>
+                            </div>
+                            <Link to="/paes" className="w-fit px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-slate-950 transition-all">
+                                Ver Cronograma
+                            </Link>
+                        </motion.div>
+
+                        {/* WIDGET 2: FRASE DEL DÍA */}
+                        <motion.div
+                            whileHover={{ y: -10 }}
+                            className="bg-gradient-to-br from-[#1e1b4b] to-[#0f172a] border border-white/10 rounded-[2.5rem] p-10 flex flex-col justify-between relative overflow-hidden"
+                        >
+                            <FaQuoteLeft className="text-3xl text-indigo-500/30" />
+                            <p className="text-xl text-slate-200 font-light italic leading-relaxed">
+                                "{quote}"
+                            </p>
+                            <div className="flex justify-between items-center">
+                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Inspiración Diaria</span>
+                                <FaQuoteRight className="text-indigo-500/30" />
+                            </div>
+                        </motion.div>
+
+                        {/* WIDGET 3: ACCESO RECURSOS */}
+                        <motion.div
+                            whileHover={{ y: -10 }}
+                            className="bg-[#080B14] border border-white/10 rounded-[2.5rem] p-10 flex flex-col justify-between group"
+                        >
+                            <div>
+                                <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 text-2xl mb-6">
+                                    <FaBookOpen />
+                                </div>
+                                <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tighter">Mis Recursos</h3>
+                                <p className="text-slate-500 text-sm leading-relaxed">Accede a tus clases on-demand, guías y material exclusivo.</p>
+                            </div>
+                            <Link to="/recursos" className="flex items-center gap-2 text-amber-500 font-black text-[10px] uppercase tracking-widest hover:gap-4 transition-all">
+                                Explorar Material <FaArrowRight />
+                            </Link>
+                        </motion.div>
+
+                    </div>
+
+                    {/* FAST TRACK LINKS TO PHASE 1 PAGES */}
+                    <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {[
+                            { label: "Área Empresas", to: "/empresas", icon: <FaBuilding />, color: "hover:text-emerald-400" },
+                            { label: "Nuestra Historia", to: "/nosotros", icon: <FaUniversity />, color: "hover:text-indigo-400" },
+                            { label: "Staff Docente", to: "/docentes", icon: <MdVerified />, color: "hover:text-amber-400" },
+                            { label: "Centro de Ayuda", to: "/contacto", icon: <FaLifeRing />, color: "hover:text-rose-400" },
+                        ].map((link, idx) => (
+                            <Link
+                                key={idx} to={link.to}
+                                className={`p-6 bg-white/5 border border-white/5 rounded-3xl flex items-center justify-between group transition-all duration-300 hover:bg-white/10 ${link.color}`}
+                            >
+                                <div className="flex items-center gap-4 font-black uppercase text-xs tracking-widest">
+                                    <span className="text-xl opacity-60 group-hover:opacity-100 transition-opacity">{link.icon}</span>
+                                    {link.label}
+                                </div>
+                                <FaArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                            </Link>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* ──────────────── 3. PARTNERS STRIP ──────────────── */}
             <section className="bg-black py-4 border-y border-white/5 relative z-20">
-                <div className="text-center text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 mb-4">Confían en nuestra metodología</div>
+                <div className="text-center text-[10px] font-bold uppercase tracking-[0.2em] text-slate-600 mb-4">Confían en nuestra metodología corporativa</div>
                 <PartnersMarquee speed={40} height={40} gap={80} />
             </section>
 
-            {/* ─────────────────────────────────────────────────────────────
-          3. ACADEMIC HUB (BENTO GRID REVEAL)
-         ───────────────────────────────────────────────────────────── */}
-            <section className="py-24 bg-[#020617] relative">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-16">
-                        <span className="text-amber-500 font-bold uppercase tracking-widest text-xs mb-3 block">Nuestra Oferta Académica</span>
-                        <h2 className="text-4xl md:text-5xl font-serif text-white">Elige tu camino de crecimiento</h2>
+            {/* ──────────────── 4. ACADEMIC HUB (BENTO GRID) ──────────────── */}
+            <section className="py-32 bg-[#020617] relative">
+                <div className="container mx-auto px-6">
+                    <div className="text-center mb-20">
+                        <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Oferta Académica</span>
+                        <h2 className="text-5xl md:text-7xl font-serif font-black text-white tracking-tighter">Camino al <br /> <span className="text-white/20">Crecimiento.</span></h2>
                     </div>
 
-                    <motion.div
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px]"
-                        variants={containerVariants}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                    >
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-[350px]">
 
-                        {/* A. PAES (Large Card) */}
-                        <motion.div variants={itemVariants} className="md:col-span-2 relative group overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f172a] to-[#1e293b] border border-white/10 hover:border-amber-500/50 transition-colors duration-500">
-                            <Link to="/paes" className="absolute inset-0 p-8 md:p-10 flex flex-col justify-end z-20">
-                                <div className="text-xs font-bold text-amber-400 uppercase tracking-widest mb-2">Preuniversitario</div>
-                                <h3 className="text-3xl font-bold text-white mb-3 font-serif">Preu PAES 2026</h3>
-                                <p className="text-slate-400 max-w-md mb-6 leading-relaxed">Metodología intensiva con tutorías personalizadas. No solo nos enfocamos en el contenido, sino en la estrategia.</p>
-                                <div className="inline-flex items-center gap-2 text-white font-bold group-hover:gap-4 transition-all">
-                                    Ver Planes <FaArrowRight className="text-amber-400" />
+                        {/* PAES CARD */}
+                        <motion.div className="md:col-span-2 bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-[3rem] border border-white/10 overflow-hidden group relative">
+                            <Link to="/paes" className="absolute inset-0 p-12 flex flex-col justify-end z-20">
+                                <div className="flex items-center gap-3 text-amber-400 font-black text-xs uppercase tracking-widest mb-4">
+                                    <FaChartLine /> Preuniversitario
+                                </div>
+                                <h3 className="text-5xl font-black text-white mb-4 uppercase tracking-tighter">Preu PAES 2026</h3>
+                                <p className="text-slate-400 max-w-md mb-8 leading-relaxed font-light">Estrategia, contenidos y simulacros de alta fidelidad. Tu puntaje nacional empieza aquí.</p>
+                                <div className="flex items-center gap-3 text-white font-black uppercase text-xs tracking-[0.2em] group-hover:gap-6 transition-all">
+                                    Ver Planes de Élite <FaArrowRight />
                                 </div>
                             </Link>
-                            {/* Background Icon Effect */}
-                            <FaBolt className="absolute -top-10 -right-10 text-[18rem] text-white/5 group-hover:text-amber-400/10 group-hover:rotate-12 transition-all duration-700 z-10" />
+                            <FaBolt className="absolute -top-10 -right-10 text-[25rem] text-white/5 group-hover:text-amber-400/10 group-hover:rotate-12 transition-all duration-1000 z-10" />
                         </motion.div>
 
-                        {/* B. IDIOMAS */}
-                        <motion.div variants={itemVariants} className="relative group overflow-hidden rounded-3xl bg-[#0f172a] border border-white/10 hover:border-emerald-500/50 transition-colors duration-500">
-                            <Link to="/idiomas" className="absolute inset-0 p-8 flex flex-col justify-end z-20">
-                                <div className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2">Global</div>
-                                <h3 className="text-2xl font-bold text-white mb-2 font-serif">Idiomas</h3>
-                                <p className="text-slate-400 text-sm leading-relaxed mb-4">Inglés y Coreano con certificación. Rompe fronteras.</p>
+                        {/* IDIOMAS */}
+                        <div className="bg-[#0f172a] rounded-[3rem] border border-white/10 overflow-hidden relative group">
+                            <Link to="/idiomas" className="absolute inset-0 p-10 flex flex-col justify-end z-20">
+                                <div className="text-emerald-400 font-black text-xs uppercase tracking-widest mb-4">Academia Global</div>
+                                <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">Idiomas</h3>
+                                <p className="text-slate-500 text-sm leading-relaxed mb-8">Inglés y Coreano con metodología de inmersión total.</p>
+                                <div className="text-white font-black uppercase text-[10px] tracking-widest group-hover:text-emerald-400 transition-colors flex items-center gap-2">Explorar <FaArrowRight /></div>
                             </Link>
-                            <FaGlobe className="absolute -top-6 -right-6 text-[10rem] text-white/5 group-hover:text-emerald-500/10 group-hover:scale-110 transition-all duration-700 z-10" />
-                        </motion.div>
+                            <FaGlobe className="absolute -top-10 -right-10 text-[18rem] text-white/5 opacity-40 group-hover:scale-110 transition-transform duration-1000" />
+                        </div>
 
-                        {/* C. LSCH */}
-                        <motion.div variants={itemVariants} className="relative group overflow-hidden rounded-3xl bg-[#0f172a] border border-white/10 hover:border-purple-500/50 transition-colors duration-500">
-                            <Link to="/lsch" className="absolute inset-0 p-8 flex flex-col justify-end z-20">
-                                <div className="text-xs font-bold text-purple-400 uppercase tracking-widest mb-2">Inclusión</div>
-                                <h3 className="text-2xl font-bold text-white mb-2 font-serif">Lengua de Señas</h3>
-                                <p className="text-slate-400 text-sm leading-relaxed mb-4">Conecta con la cultura sorda desde el respeto.</p>
+                        {/* LSCH */}
+                        <div className="bg-[#0f172a] rounded-[3rem] border border-white/10 overflow-hidden relative group">
+                            <Link to="/lsch" className="absolute inset-0 p-10 flex flex-col justify-end z-20">
+                                <div className="text-purple-400 font-black text-xs uppercase tracking-widest mb-4">Inclusión Real</div>
+                                <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">LSCh</h3>
+                                <p className="text-slate-500 text-sm leading-relaxed mb-8">Naturaleza, cultura y gramática de la lengua de señas.</p>
+                                <div className="text-white font-black uppercase text-[10px] tracking-widest group-hover:text-purple-400 transition-colors flex items-center gap-2">Ver Cursos <FaArrowRight /></div>
                             </Link>
-                            <FaHands className="absolute -top-6 -right-6 text-[10rem] text-white/5 group-hover:text-purple-500/10 group-hover:scale-110 transition-all duration-700 z-10" />
-                        </motion.div>
+                            <FaHands className="absolute -top-10 -right-10 text-[18rem] text-white/5 opacity-40 group-hover:rotate-12 transition-transform duration-1000" />
+                        </div>
 
-                        {/* D. HOMESCHOOL (Wide Card) */}
-                        <motion.div variants={itemVariants} className="md:col-span-2 relative group overflow-hidden rounded-3xl bg-[#0f172a] border border-white/10 hover:border-rose-500/50 transition-colors duration-500 flex items-center">
-                            <Link to="/homeschool" className="w-full h-full p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 z-20">
+                        {/* HOMESCHOOL */}
+                        <motion.div className="md:col-span-2 bg-[#080B14] rounded-[3rem] border border-white/10 overflow-hidden group relative">
+                            <Link to="/homeschool" className="absolute inset-0 p-12 flex flex-col md:flex-row items-center justify-between gap-12 z-20 text-center md:text-left">
                                 <div className="flex-1">
-                                    <div className="text-xs font-bold text-rose-400 uppercase tracking-widest mb-2">Lael Academy</div>
-                                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 font-serif">Homeschool & Tutorías</h3>
-                                    <p className="text-slate-400 leading-relaxed">Apoyo académico personalizado para exámenes libres. Educación a tu ritmo.</p>
+                                    <div className="text-rose-400 font-black text-xs uppercase tracking-widest mb-4">Lael Academy</div>
+                                    <h3 className="text-4xl font-black text-white mb-4 uppercase tracking-tighter">Homeschooling</h3>
+                                    <p className="text-slate-500 leading-relaxed font-light">Tutorías personalizadas y preparación para exámenes libres. Educación humana al ritmo de tu hijo.</p>
                                 </div>
-                                <div className="w-14 h-14 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-rose-500 group-hover:border-rose-500 group-hover:text-black transition-all">
-                                    <FaArrowRight size={20} />
+                                <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-rose-500 group-hover:border-rose-500 group-hover:text-black transition-all duration-500">
+                                    <FaArrowRight size={30} />
                                 </div>
                             </Link>
-                            <FaUserGraduate className="absolute -bottom-10 right-20 text-[12rem] text-white/5 group-hover:text-rose-500/10 transition-all duration-700 z-10" />
+                            <FaUserGraduate className="absolute -bottom-10 right-20 text-[15rem] text-white/5 group-hover:text-rose-500/10 transition-all duration-1000" />
                         </motion.div>
 
-                    </motion.div>
+                    </div>
                 </div>
             </section>
 
-            {/* ─────────────────────────────────────────────────────────────
-          4. DIVISIÓN CORPORATIVA Y SOCIAL
-         ───────────────────────────────────────────────────────────── */}
-            <section className="py-20 bg-black/40">
-                <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-
-                    {/* EMPRESAS */}
-                    <Link to="/empresas" className="group relative h-[400px] rounded-3xl overflow-hidden border border-white/10">
-                        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90" />
-
-                        <div className="absolute inset-0 p-10 flex flex-col justify-end">
-                            <FaBuilding className="text-4xl text-amber-400 mb-4 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
-                            <h3 className="text-3xl font-serif text-white mb-2">Para Empresas</h3>
-                            <p className="text-slate-300 mb-6 max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-all duration-500 overflow-hidden">
-                                Capacitación corporativa de alto nivel, inglés de negocios y desarrollo de habilidades blandas.
-                            </p>
-                            <span className="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2">Soluciones B2B <FaArrowRight /></span>
+            {/* ──────────────── 5. TESTIMONIOS (EXPERIENCE 2.0) ──────────────── */}
+            <section className="py-32 bg-slate-950 border-y border-white/5 overflow-hidden">
+                <div className="container mx-auto px-6">
+                    <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+                        <div className="max-w-xl">
+                            <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Voz del Estudiante</span>
+                            <h2 className="text-5xl md:text-7xl font-sans font-black text-white tracking-tighter">Nuestra Mayor <br /> <span className="text-white/20">Evidencia.</span></h2>
                         </div>
-                    </Link>
-
-                    {/* ADULTOS */}
-                    <Link to="/escuela-adultos" className="group relative h-[400px] rounded-3xl overflow-hidden border border-white/10">
-                        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent opacity-90" />
-
-                        <div className="absolute inset-0 p-10 flex flex-col justify-end">
-                            <IoSchoolOutline className="text-4xl text-amber-400 mb-4 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
-                            <h3 className="text-3xl font-serif text-white mb-2">Nivelación de Estudios</h3>
-                            <p className="text-slate-300 mb-6 max-h-0 opacity-0 group-hover:max-h-20 group-hover:opacity-100 transition-all duration-500 overflow-hidden">
-                                Nunca es tarde. Termina tu 4to medio con nuestro programa 2x1 enfocado 100% en adultos trabajadores.
-                            </p>
-                            <span className="text-xs font-bold text-amber-400 uppercase tracking-widest flex items-center gap-2">Ver Programa <FaArrowRight /></span>
-                        </div>
-                    </Link>
-
-                </div>
-            </section>
-
-            {/* ─────────────────────────────────────────────────────────────
-          5. TESTIMONIOS
-         ───────────────────────────────────────────────────────────── */}
-            <section className="py-24 bg-[#0f172a] border-y border-white/5">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                        <div>
-                            <span className="text-amber-500 font-bold uppercase tracking-widest text-xs mb-2 block"><FaUserGraduate className="inline mr-2" />Historias Reales</span>
-                            <h2 className="text-3xl md:text-5xl font-serif text-white">Nuestros alumnos hablan</h2>
-                        </div>
-                        <div className="hidden md:block h-px w-32 bg-white/10 mb-4"></div>
+                        <Link to="/recursos" className="px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-slate-950 transition-all mb-4">
+                            Ver más historias
+                        </Link>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                         {featuredTestimonials.map((t, index) => (
                             <motion.div
                                 key={index}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                viewport={{ once: true }}
-                                className="bg-[#020617] border border-white/5 p-8 rounded-2xl hover:border-amber-500/30 transition-colors"
+                                whileHover={{ y: -15 }}
+                                className="bg-[#0f172a] border border-white/5 p-12 rounded-[3rem] relative shadow-2xl"
                             >
-                                <div className="flex justify-between items-start mb-6">
-                                    <FaQuoteLeft className="text-2xl text-amber-500/20" />
+                                <div className="flex justify-between items-start mb-10">
+                                    <FaQuoteLeft className="text-4xl text-amber-500/20" />
                                     <RatingStars count={t.rating} />
                                 </div>
-                                <p className="text-slate-300 text-lg leading-relaxed italic mb-6">"{t.quote}"</p>
-                                <div className="border-t border-white/5 pt-4">
-                                    <strong className="block text-white font-serif text-lg">{t.name}</strong>
-                                    <span className="text-xs text-slate-500 uppercase tracking-wider">{t.program}</span>
+                                <p className="text-xl text-slate-300 font-light italic leading-relaxed mb-10">"{t.quote}"</p>
+                                <div className="border-t border-white/5 pt-8">
+                                    <strong className="block text-white text-2xl font-black uppercase tracking-tighter mb-1">{t.name}</strong>
+                                    <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">{t.program}</span>
                                 </div>
                             </motion.div>
                         ))}
@@ -279,72 +345,42 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ─────────────────────────────────────────────────────────────
-          6. TALENTO HUMANO
-         ───────────────────────────────────────────────────────────── */}
-            <section className="py-24 bg-black relative overflow-hidden text-center">
-                {/* Background Gradients */}
-                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/20 via-black to-black pointer-events-none"></div>
-
-                <div className="relative z-10 max-w-4xl mx-auto px-6">
-                    <h2 className="text-4xl md:text-6xl font-serif text-white mb-6">Mentores, no solo profesores.</h2>
-                    <p className="text-xl text-slate-400 mb-12 leading-relaxed">
-                        En Lael, seleccionamos a nuestro equipo no solo por su currículum,
-                        sino por su corazón y capacidad de inspirar a la siguiente generación.
+            {/* ──────────────── 6. FINAL DECISION HUB ──────────────── */}
+            <section className="py-40 bg-[#020617] text-center border-t border-white/5">
+                <div className="container mx-auto px-6 max-w-6xl">
+                    <BsStars className="text-6xl text-amber-500 mx-auto mb-10 animate-pulse" />
+                    <h2 className="text-6xl md:text-9xl font-black text-white mb-10 tracking-tighter uppercase leading-[0.8]">
+                        Empieza tu <br /><span className="text-white/20">Transformación.</span>
+                    </h2>
+                    <p className="text-2xl text-slate-500 font-light mb-20 max-w-2xl mx-auto">
+                        Toma el mando de tu futuro hoy. Elige el área que resuena con tu propósito.
                     </p>
 
-                    <div className="flex justify-center gap-4 mb-20 flex-wrap">
-                        <Link to="/docentes" className="px-8 py-3 bg-white text-black font-bold rounded-full hover:bg-amber-400 transition-colors">
-                            Ver Equipo Docente
-                        </Link>
-                        <Link to="/trabaja" className="px-8 py-3 border border-white/20 text-white font-medium rounded-full hover:bg-white/5 hover:border-white transition-colors">
-                            Trabaja con nosotros
-                        </Link>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12 border-t border-white/10 pt-12">
-                        <div className="flex flex-col items-center gap-4">
-                            <FaChalkboardTeacher className="text-5xl text-amber-500 mb-2" />
-                            <span className="text-slate-300">Profesionales Titulados<br />y Especialistas</span>
-                        </div>
-                        <div className="flex flex-col items-center gap-4 border-l-0 md:border-l border-white/10">
-                            <HiOutlineUserGroup className="text-5xl text-amber-500 mb-2" />
-                            <span className="text-slate-300">Mentoring 1 a 1<br />y Valores Cristianos</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* ─────────────────────────────────────────────────────────────
-          7. FINAL CTA
-         ───────────────────────────────────────────────────────────── */}
-            <section className="py-24 bg-[#020617] border-t border-white/10 text-center">
-                <div className="max-w-5xl mx-auto px-6">
-                    <BsStars className="text-4xl text-amber-400 mx-auto mb-6 animate-pulse" />
-                    <h2 className="text-4xl md:text-5xl font-serif text-white mb-6">¿Listo para dar el siguiente paso?</h2>
-                    <p className="text-xl text-slate-400 mb-16">
-                        Ya sea que busques un convenio institucional o inscribirte como alumno.
-                    </p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <Link to="/inscripcion" className="bg-amber-500 rounded-2xl p-8 text-left hover:-translate-y-2 transition-transform shadow-[0_0_30px_rgba(251,191,36,0.2)] group">
-                            <h3 className="text-2xl font-bold text-black mb-2">Inscripción Online</h3>
-                            <p className="text-black/80 mb-8">Reserva tu matrícula hoy mismo en 3 pasos simples.</p>
-                            <div className="w-12 h-12 bg-black/10 rounded-full flex items-center justify-center text-black group-hover:bg-black group-hover:text-amber-500 transition-colors">
-                                <BsArrowRightCircleFill size={24} />
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <Link to="/inscripcion" className="bg-amber-500 group rounded-[3rem] p-12 text-left hover:scale-[1.02] transition-all shadow-2xl shadow-amber-500/20 flex flex-col justify-between h-96">
+                            <div>
+                                <h3 className="text-4xl font-black text-slate-950 mb-4 uppercase tracking-tighter">Inscripción</h3>
+                                <p className="text-slate-900 font-bold leading-relaxed">Reserva tu matriz 2026 ahora. Proceso 100% digital.</p>
+                            </div>
+                            <div className="w-16 h-16 bg-slate-950 rounded-full flex items-center justify-center text-amber-500 group-hover:scale-110 transition-transform">
+                                <BsArrowRightCircleFill size={32} />
                             </div>
                         </Link>
 
-                        <Link to="/convenios" className="bg-[#0f172a] border border-white/10 rounded-2xl p-8 text-left hover:border-amber-500 transition-colors group">
-                            <h3 className="text-xl font-bold text-white mb-2">Convenios</h3>
-                            <p className="text-slate-400 text-sm mb-8">Alianzas estratégicas para colegios e instituciones.</p>
-                            <FaUniversity className="text-3xl text-amber-500/50 group-hover:text-amber-500 transition-colors" />
+                        <Link to="/empresas" className="bg-slate-900 border border-white/5 rounded-[3rem] p-12 text-left hover:border-emerald-500/30 transition-all flex flex-col justify-between h-96 group">
+                            <div>
+                                <h3 className="text-3xl font-black text-white mb-4 uppercase tracking-tighter">Empresas</h3>
+                                <p className="text-slate-500 leading-relaxed">Capacitación con retorno de inversión garantizado.</p>
+                            </div>
+                            <FaBuilding className="text-5xl text-emerald-500/50 group-hover:text-emerald-500 transition-colors" />
                         </Link>
 
-                        <Link to="/pagos" className="bg-[#0f172a] border border-white/10 rounded-2xl p-8 text-left hover:border-amber-500 transition-colors group">
-                            <h3 className="text-xl font-bold text-white mb-2">Portal de Pagos</h3>
-                            <p className="text-slate-400 text-sm mb-8">Gestión financiera simple y segura para apoderados.</p>
-                            <span className="text-xs text-slate-500 uppercase tracking-widest group-hover:text-amber-500 transition-colors">Ir al portal →</span>
+                        <Link to="/pagos" className="bg-slate-900 border border-white/5 rounded-[3rem] p-12 text-left hover:border-indigo-500/30 transition-all flex flex-col justify-between h-96 group">
+                            <div>
+                                <h3 className="text-3xl font-black text-white mb-4 uppercase tracking-tighter">Plataforma</h3>
+                                <p className="text-slate-500 leading-relaxed">Acceso para apoderados y gestión de cuotas.</p>
+                            </div>
+                            <div className="text-[10px] font-black text-indigo-400 uppercase tracking-widest group-hover:translate-x-4 transition-all flex items-center gap-2">Portal Pagos <FaArrowRight /></div>
                         </Link>
                     </div>
                 </div>

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext.jsx";
+import { motion } from "framer-motion";
+import { FaArrowRight, FaLock, FaShieldAlt } from "react-icons/fa";
 
 // --- CONFIGURACIÓN ---
 import { GOOGLE_SCRIPT_URL } from "../config";

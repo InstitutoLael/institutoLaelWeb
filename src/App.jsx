@@ -2,6 +2,8 @@ import { useEffect, useState, Suspense, lazy } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 
 import { CartProvider } from "./context/CartContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { Navigate } from "react-router-dom";
 import logoAmarillo from "./assets/img/Logos/lael-inst-amarillo.png";
 
 /* ---------- Componentes Globales ---------- */
@@ -29,6 +31,7 @@ const Trabaja = lazy(() => import("./pages/Trabaja.jsx"));
 const Contacto = lazy(() => import("./pages/Contacto.jsx"));
 const Docentes = lazy(() => import("./pages/Docentes.jsx"));
 const Aula = lazy(() => import("./pages/Aula.jsx"));
+const Login = lazy(() => import("./pages/Login.jsx"));
 const Inscripcion = lazy(() => import("./pages/Inscripcion.jsx"));
 const Gracias = lazy(() => import("./pages/Gracias.jsx"));
 const Terminos = lazy(() => import("./pages/Terminos.jsx"));
@@ -86,6 +89,14 @@ const PageLoader = () => (
   </div>
 );
 
+/* ---------- COMPONENTE: Ruta Protegida ---------- */
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  if (loading) return <PageLoader />;
+  if (!user) return <Navigate to="/login" replace />;
+  return children;
+};
+
 export default function App() {
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -102,51 +113,61 @@ export default function App() {
   }, []);
 
   return (
-    <CartProvider>
-      <ScrollToTop />
+    <AuthProvider>
+      <CartProvider>
+        <ScrollToTop />
 
-      <div className="flex flex-col min-h-screen">
-        {/* Buscador y Navegación */}
-        <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
-        <Navbar />
+        <div className="flex flex-col min-h-screen">
+          {/* Buscador y Navegación */}
+          <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+          <Navbar />
 
-        {/* Área principal */}
-        <main className="flex-1 relative">
-          <Suspense fallback={<PageLoader />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/programas" element={<Programas />} />
-              <Route path="/recursos" element={<Recursos />} />
-              <Route path="/paes" element={<PAES />} />
-              <Route path="/idiomas" element={<Idiomas />} />
-              <Route path="/lsch" element={<LSCh />} />
-              <Route path="/homeschool" element={<Homeschool />} />
-              <Route path="/escuela-adultos" element={<EscuelaAdultos />} />
-              <Route path="/empresas" element={<Empresas />} />
-              <Route path="/nosotros" element={<Nosotros />} />
-              <Route path="/convenios" element={<Convenios />} />
-              <Route path="/trabaja" element={<Trabaja />} />
-              <Route path="/contacto" element={<Contacto />} />
-              <Route path="/docentes" element={<Docentes />} />
-              <Route path="/aula" element={<Aula />} />
-              <Route path="/pagos" element={<Pagos />} />
-              <Route path="/inscripcion" element={<Inscripcion />} />
-              <Route path="/gracias" element={<Gracias />} />
-              <Route path="/terminos" element={<Terminos />} />
-              <Route path="/privacidad" element={<Privacidad />} />
-              <Route path="/naama-studio" element={<NaamaStudio />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Suspense>
-        </main>
+          {/* Área principal */}
+          <main className="flex-1 relative">
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/programas" element={<Programas />} />
+                <Route path="/recursos" element={<Recursos />} />
+                <Route path="/paes" element={<PAES />} />
+                <Route path="/idiomas" element={<Idiomas />} />
+                <Route path="/lsch" element={<LSCh />} />
+                <Route path="/homeschool" element={<Homeschool />} />
+                <Route path="/escuela-adultos" element={<EscuelaAdultos />} />
+                <Route path="/empresas" element={<Empresas />} />
+                <Route path="/nosotros" element={<Nosotros />} />
+                <Route path="/convenios" element={<Convenios />} />
+                <Route path="/trabaja" element={<Trabaja />} />
+                <Route path="/contacto" element={<Contacto />} />
+                <Route path="/docentes" element={<Docentes />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/aula"
+                  element={
+                    <ProtectedRoute>
+                      <Aula />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/pagos" element={<Pagos />} />
+                <Route path="/inscripcion" element={<Inscripcion />} />
+                <Route path="/gracias" element={<Gracias />} />
+                <Route path="/terminos" element={<Terminos />} />
+                <Route path="/privacidad" element={<Privacidad />} />
+                <Route path="/naama-studio" element={<NaamaStudio />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </main>
 
-        {/* COMPONENTES FLOTANTES GLOBALES */}
-        <CartDrawer /> {/* <--- AQUÍ VIVE EL CARRITO AHORA, SOBRE TODO LO DEMÁS */}
-        <CartButton />
-        <WhatsAppButton />
+          {/* COMPONENTES FLOTANTES GLOBALES */}
+          <CartDrawer />
+          <CartButton />
+          <WhatsAppButton />
 
-        <Footer />
-      </div>
-    </CartProvider>
+          <Footer />
+        </div>
+      </CartProvider>
+    </AuthProvider>
   );
 }

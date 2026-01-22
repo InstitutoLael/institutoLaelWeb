@@ -10,8 +10,9 @@ import ReactPlayer from "react-player";
 import SEOHead from "../components/SEOHead.jsx";
 
 // CONFIG & DATA
-import { ACCESS_CODE, LIVE_MEET_LINK, LIVE_STATUS } from "../data/configAula";
+import { LIVE_MEET_LINK, LIVE_STATUS } from "../data/configAula";
 import { RECORDED_CLASSES } from "../data/curriculum";
+import { useAuth } from "../context/AuthContext";
 
 const LOBBY_TOOLS = [
   {
@@ -33,81 +34,55 @@ const LOBBY_TOOLS = [
 ];
 
 export default function Aula() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const { user, profile, loading } = useAuth();
   const [activeVideo, setActiveVideo] = useState(null);
 
-  // Persistence check
-  useEffect(() => {
-    const sessionAuth = sessionStorage.getItem("aula_auth");
-    if (sessionAuth === "true") {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (password.toUpperCase() === ACCESS_CODE.toUpperCase()) {
-      setIsAuthenticated(true);
-      sessionStorage.setItem("aula_auth", "true");
-      setError(false);
-      if (window.gtag) {
-        window.gtag('event', 'login_aula_success', {
-          'event_category': 'Engagement',
-          'event_label': 'Aula Virtual Hub'
-        });
-      }
-    } else {
-      setError(true);
-      setTimeout(() => setError(false), 2000);
-    }
-  };
-
-  if (!isAuthenticated) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 font-sans">
-        <SEOHead title="Acceso Restringido | Instituto Lael" description="Ingresa tu código de acceso mensual para entrar al Aula Virtual." />
+      <div className="h-screen w-full flex flex-col items-center justify-center bg-[#050505]">
+        <div className="w-12 h-12 border-4 border-amber-500/20 border-t-amber-500 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  // Si no está pagado: Muro de Pago
+  if (profile && !profile.is_paid) {
+    const textWsp = `Hola Lael! Mi correo es ${user?.email}. Solicito la activación de mi acceso al Aula Virtual.`;
+    const linkWsp = `https://wa.me/56964626568?text=${encodeURIComponent(textWsp)}`;
+
+    return (
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center p-6 font-sans relative overflow-hidden">
+        <SEOHead title="Activación Pendiente | Instituto Lael" description="Tu cuenta está creada. Activa tu acceso enviando tu comprobante." />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)] opacity-50" />
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-md w-full"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-md w-full relative z-10"
         >
           <div className="bg-slate-900/50 border border-white/10 p-12 rounded-[3.5rem] backdrop-blur-3xl shadow-2xl text-center">
-            <div className="w-20 h-20 bg-amber-500/10 rounded-3xl flex items-center justify-center text-amber-500 text-3xl mx-auto mb-8 border border-amber-500/20">
+            <div className="w-24 h-24 bg-amber-500/10 rounded-3xl flex items-center justify-center text-amber-500 text-4xl mx-auto mb-10 border border-amber-500/20 relative">
               <FaLock />
+              <div className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-[10px] text-white font-bold border-4 border-[#0a0a0b]">!</div>
             </div>
-            <h2 className="text-3xl font-black text-white mb-4 uppercase tracking-tighter">Área stringida</h2>
+
+            <h2 className="text-3xl font-black text-white mb-4 uppercase tracking-tighter">¡Hola, <span className="text-amber-500">{profile?.full_name?.split(' ')[0] || 'Estudiante'}</span>!</h2>
             <p className="text-slate-400 mb-10 text-sm leading-relaxed">
-              Ingresa el <strong>Código de Acceso Mensual</strong> enviado a tu correo o grupo de WhatsApp oficial.
+              Tu cuenta ha sido creada exitosamente. <br /><br />
+              Para desbloquear tu acceso al **Learning Hub** y las clases en vivo, por favor envía tu comprobante de pago por WhatsApp.
             </p>
 
-            <form onSubmit={handleLogin} className="space-y-4">
-              <input
-                type="password"
-                placeholder="CÓDIGO LAEL..."
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={`w-full bg-white/5 border ${error ? 'border-red-500' : 'border-white/10'} rounded-2xl py-5 px-8 text-center text-white font-black tracking-[0.5em] focus:border-amber-500/50 outline-none transition-all`}
-              />
-              <button
-                type="submit"
-                className="w-full py-5 bg-amber-500 text-slate-950 font-black rounded-2xl hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-amber-500/20 uppercase tracking-widest text-xs"
+            <div className="space-y-4">
+              <a
+                href={linkWsp}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full py-6 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-2xl flex items-center justify-center gap-3 transition-all shadow-2xl shadow-emerald-600/20 uppercase tracking-widest text-xs"
               >
-                Desbloquear Aula
-              </button>
-            </form>
-
-            {error && (
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-red-500 mt-4 text-[10px] font-black uppercase tracking-widest"
-              >
-                Código Incorrecto
-              </motion.p>
-            )}
+                Solicitar Activación
+              </a>
+              <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Activación instantánea tras verificación</p>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -145,7 +120,7 @@ export default function Aula() {
             </div>
             <div>
               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Sesión Activa</p>
-              <h3 className="text-white font-black text-lg leading-none">Estudiante Lael</h3>
+              <h3 className="text-white font-black text-lg leading-none">{profile?.full_name || 'Estudiante Lael'}</h3>
             </div>
           </div>
         </header>

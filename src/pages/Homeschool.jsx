@@ -19,6 +19,7 @@ import logoLael from "../assets/img/Logos/lael-inst-azul.png";
 import logoPartner from "../assets/img/Partners/LosOlivos.png";
 
 // DATA
+import { CONTACT_INFO } from "../data/contact.js";
 import {
    ACADEMY_CONFIG,
    ALLIANCE,
@@ -414,13 +415,13 @@ export default function Academy() {
                      </p>
                      <div className="flex flex-col gap-3">
                         <a
-                           href={`https://wa.me/${WHATSAPP_NUM}?text=Hola, soy representante de un colegio...`}
+                           href={`https://wa.me/${CONTACT_INFO.whatsapp.number}?text=Hola, soy representante de un colegio...`}
                            className="px-6 py-3 bg-green-500 text-white font-bold rounded-lg flex items-center gap-2 w-fit hover:bg-green-600 transition-colors"
                         >
                            <FaWhatsapp className="text-xl" /> Contactar por WhatsApp
                         </a>
                         <a
-                           href={`mailto:${EMAIL_COORD}`}
+                           href={`mailto:${CONTACT_INFO.email.address}`}
                            className="px-6 py-3 bg-slate-100 text-slate-700 font-bold rounded-lg flex items-center gap-2 w-fit hover:bg-slate-200 transition-colors"
                         >
                            <FaEnvelope className="text-xl" /> Enviar Correo

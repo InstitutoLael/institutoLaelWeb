@@ -114,9 +114,9 @@ export default function Home() {
                         transition={{ delay: 0.8, duration: 1 }}
                         className="flex flex-col sm:flex-row gap-6 justify-center items-center"
                     >
-                        <a href="#catalog" className="group relative px-12 py-6 bg-amber-500 text-slate-950 font-black rounded-[2rem] text-xl shadow-2xl shadow-amber-500/20 hover:scale-[1.05] active:scale-95 transition-all duration-500 overflow-hidden">
+                        <a href="#catalog" className="group relative px-12 py-6 bg-amber-500 text-slate-950 font-black rounded-[2rem] text-xl shadow-2xl shadow-amber-500/20 hover:scale-[1.05] active:scale-95 transition-[transform,box-shadow] duration-500 overflow-hidden">
                             <span className="relative z-10 flex items-center gap-3">Explorar Oferta <FaArrowRight /></span>
-                            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-[opacity] duration-300"></div>
                         </a>
 
                         <Link to="/nosotros" className="px-12 py-6 rounded-[2rem] border border-white/10 text-white font-black text-xl hover:bg-white/5 backdrop-blur-md transition-all flex items-center gap-3 group">

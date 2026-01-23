@@ -157,7 +157,7 @@ export default function Business() {
          {/* ──────────────── 3. COTIZADOR EXPERIENCE 2.0 ──────────────── */}
          <section id="cotizador" className="py-32 bg-[#020617] relative">
             {/* Immersive Background */}
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.03]"></div>
+            <div className="absolute inset-0 bg-[url('/textures/carbon-fibre.png')] opacity-[0.03]"></div>
 
             <div className="container mx-auto px-6">
                <div className="max-w-7xl mx-auto">

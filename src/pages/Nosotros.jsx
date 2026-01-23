@@ -52,7 +52,7 @@ export default function About() {
             <div className="absolute inset-0 z-0">
                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_20%,_rgba(245,158,11,0.1),transparent)]"></div>
                <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_80%,_rgba(30,58,138,0.15),transparent)]"></div>
-               <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat"></div>
+               <div className="absolute inset-0 opacity-20 bg-[url('/textures/cubes.png')] bg-repeat"></div>
             </div>
 
             <div className="container mx-auto px-6 relative z-10 max-w-4xl">
@@ -331,7 +331,7 @@ export default function About() {
                      className="max-w-4xl w-full bg-slate-900 border border-white/10 rounded-[4rem] p-16 relative overflow-hidden shadow-2xl"
                   >
                      {/* Grain Effect */}
-                     <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/pinstripe-dark.png')]"></div>
+                     <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('/textures/pinstripe-dark.png')]"></div>
 
                      <button
                         onClick={() => setShowModal(false)}

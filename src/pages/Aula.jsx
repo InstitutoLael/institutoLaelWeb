@@ -129,7 +129,7 @@ export default function Aula() {
         <section className="mb-20">
           <div className="relative bg-slate-900 border border-white/10 rounded-[4rem] p-12 md:p-16 overflow-hidden shadow-2xl group">
             {/* Grid background */}
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 pointer-events-none"></div>
+            <div className="absolute inset-0 bg-[url('/textures/carbon-fibre.png')] opacity-10 pointer-events-none"></div>
             <div className="absolute -right-20 -top-20 w-96 h-96 bg-indigo-600/10 blur-[100px] rounded-full group-hover:bg-indigo-600/20 transition-all duration-700"></div>
 
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">

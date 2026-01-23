@@ -143,7 +143,7 @@ export default function Idiomas() {
       {/* ──────────────── 1. CINEMATIC HERO ──────────────── */}
       <header className="relative min-h-[95vh] flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)] pt-20">
         {/* Background Effects */}
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] z-0 mix-blend-overlay" />
+        <div className="absolute inset-0 bg-[url('/textures/cubes.png')] opacity-[0.03] z-0 mix-blend-overlay" />
 
         {/* Animated Orbs */}
         <motion.div

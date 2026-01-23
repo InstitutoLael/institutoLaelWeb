@@ -56,12 +56,12 @@ export default function PartnersMarquee({ height = 32, gap = 40, speed = 100 }) 
     .marquee__logo{
       display:block;
       height:${height}px; width:auto; object-fit:contain;
-      filter: drop-shadow(0 0 4px rgba(255,255,255,.9)); /* resalta logos oscuros */
+      filter: drop-shadow(0 0 2px rgba(255,255,255,.5));
       transition: transform .22s ease, filter .22s ease;
     }
     .marquee__logo:hover{
       transform: scale(1.05);
-      filter: drop-shadow(0 0 6px rgba(255,255,255,1));
+      filter: drop-shadow(0 0 4px rgba(255,255,255,1));
     }
 
     @keyframes marquee-scroll{

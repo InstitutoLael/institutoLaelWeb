@@ -12,9 +12,12 @@ import {
 import { initMercadoPago, Wallet } from '@mercadopago/sdk-react';
 
 // Initialize MP with Env Variable
-const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY;
+const MP_PUBLIC_KEY = import.meta.env.VITE_MP_PUBLIC_KEY || 'APP_USR-67c5644f-e9ec-448b-9144-9eb5ddc954bb';
 if (MP_PUBLIC_KEY) {
+    console.log("Initializing Mercado Pago with Key:", MP_PUBLIC_KEY.substring(0, 10) + "...");
     initMercadoPago(MP_PUBLIC_KEY, { locale: 'es-CL' });
+} else {
+    console.error("VITE_MP_PUBLIC_KEY is not defined in environment variables.");
 }
 
 const clp = (n) => Number(n || 0).toLocaleString("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
@@ -228,17 +231,20 @@ export default function Checkout() {
                 });
 
                 if (functionError) {
-                    console.error("Edge Function error:", functionError);
-                    throw functionError;
+                    console.error("Edge Function error detail:", functionError);
+                    throw new Error(`Error en el servidor de pagos: ${functionError.message || 'No se pudo contactar con la función de pago'}`);
                 }
 
-                console.log("Edge Function response:", data);
-                if (data?.init_point) {
+                console.log("Edge Function response received:", data);
+                if (data && data.init_point) {
+                    console.log("Redirecting to Mercado Pago:", data.init_point);
                     window.location.href = data.init_point;
-                } else if (data?.id) {
+                } else if (data && data.id) {
+                    console.log("Setting preference ID for Wallet brick:", data.id);
                     setPreferenceId(data.id);
                 } else {
-                    throw new Error("No se pudo generar el link de pago o la respuesta fue inválida.");
+                    console.error("Invalid response from Edge Function:", data);
+                    throw new Error("Mercado Pago no devolvió un punto de inicio de pago (init_point).");
                 }
             }
 

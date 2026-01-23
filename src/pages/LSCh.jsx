@@ -113,7 +113,7 @@ export default function Lsch() {
          {/* ──────────────── 1. HERO SECTION ──────────────── */}
          <header className="relative min-h-[95vh] flex items-center justify-center overflow-hidden py-24 bg-[radial-gradient(circle_at_50%_40%,_#164e63_0%,_#050505_80%)]">
             {/* Background Effects */}
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] z-0 mix-blend-overlay" />
+            <div className="absolute inset-0 bg-[url('/textures/cubes.png')] opacity-[0.03] z-0 mix-blend-overlay" />
 
             <div className="container mx-auto px-6 relative z-10 text-center max-w-4xl">
                <motion.div

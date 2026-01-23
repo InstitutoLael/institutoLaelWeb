@@ -1,5 +1,4 @@
 {
     "css.lint.unknownAtRules": "ignore",
-    "deno.enable": true,
-    "deno.unstable": true
+    "deno.enable": true
 }

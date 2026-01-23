@@ -27,9 +27,9 @@ export function computeLangBundle(countSelected) {
   const count = Math.max(0, Number(countSelected || 0));
 
   const PRICES = {
-    SINGLE: 17990,
-    DUO: 32990,
-    POLYGLOT: 45990
+    SINGLE: 24990,
+    DUO: 39990,
+    POLYGLOT: 54990
   };
 
   let totalMonthly = 0;

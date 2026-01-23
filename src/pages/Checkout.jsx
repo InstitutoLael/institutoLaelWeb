@@ -543,8 +543,8 @@ export default function Checkout() {
                                             <span className="font-bold text-white text-lg">{clp(total)}</span>
                                         </div>
                                         <div className="flex justify-between items-center text-emerald-500">
-                                            <span className="text-xs font-black uppercase tracking-widest italic">Matrícula Lael Digital</span>
-                                            <span className="font-black text-xs uppercase tracking-widest badge bg-emerald-500/10 px-2 py-1 rounded">Bonificada</span>
+                                            <span className="text-xs font-black uppercase tracking-widest italic">Beneficio Matrícula 2026</span>
+                                            <span className="font-black text-xs uppercase tracking-widest badge bg-emerald-500/10 px-2 py-1 rounded">Costo $0</span>
                                         </div>
                                     </div>
 

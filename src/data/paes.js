@@ -27,10 +27,10 @@ export function computePaesPrice(selectedIds = []) {
   const count = selectedIds.length;
 
   const TIER_PRICES = {
-    1: 9990,
-    2: 18990,
-    3: 27990,
-    FULL: 34990 // 4 o más ramos
+    1: 14990,
+    2: 24990,
+    3: 34990,
+    FULL: 44990 // 4 o más ramos
   };
 
   let totalMonthly = 0;

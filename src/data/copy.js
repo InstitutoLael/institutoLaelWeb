@@ -7,3 +7,8 @@ export const PAYMENTS = {
   email: "pagos@institutolael.cl",
   whatsappIntl: "56964626568",
 };
+
+export const PROMOS = {
+  enrollmentBonus: true, // Set to false to charge enrollment fee
+  enrollmentBonusText: "¡Bonificación Especial 2026: Matrícula $0!"
+};

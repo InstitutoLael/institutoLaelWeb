@@ -143,37 +143,37 @@ export default function Contacto() {
           </motion.div>
         </header>
 
-        {/* ──────────────── 2. GLOBAL INFO GRID (PRIORITIZED) ──────────────── */}
+        {/* ──────────────── 2. GLOBAL CONTACT HUB (PRIORITIZED) ──────────────── */}
         <section className="pb-24 bg-white/[0.01]">
-          <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
 
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex items-start gap-6 bg-white/[0.03] p-8 rounded-[2rem] border border-white/5">
-              <div className="w-14 h-14 shrink-0 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400 text-xl border border-indigo-500/20"><FaMapMarkerAlt /></div>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex flex-col items-center md:items-start gap-6 bg-white/[0.03] p-8 rounded-[2rem] border border-white/5">
+              <div className="w-14 h-14 shrink-0 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400 text-xl border border-indigo-500/20"><FaWhatsapp /></div>
               <div>
-                <h4 className="font-black text-white uppercase tracking-tighter text-lg mb-2">Presencia Regional</h4>
+                <h4 className="font-black text-white uppercase tracking-tighter text-lg mb-2">WhatsApp Directo</h4>
                 <p className="text-slate-500 text-xs leading-relaxed">
-                  {CONTACT_INFO.location.address} <br />
-                  <span className="text-[9px] font-black text-indigo-400 mt-2 block uppercase tracking-widest">Atención 100% Digital</span>
+                  Respuesta inmediata para consultas sobre Admisión y Pagos.
                 </p>
+                <a href={`https://wa.me/${CONTACT_INFO.whatsapp.number}`} target="_blank" className="text-xs font-black text-indigo-400 hover:text-white transition-colors uppercase tracking-[0.2em] mt-2 block">Hablar con Admisión</a>
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="flex items-start gap-6 bg-white/[0.03] p-8 rounded-[2rem] border border-white/5">
-              <div className="w-14 h-14 shrink-0 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 text-xl border border-amber-500/20"><FaClock /></div>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="flex flex-col items-center md:items-start gap-6 bg-white/[0.03] p-8 rounded-[2rem] border border-white/5">
+              <div className="w-14 h-14 shrink-0 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 text-xl border border-amber-500/20"><FaEnvelope /></div>
               <div>
-                <h4 className="font-black text-white uppercase tracking-tighter text-lg mb-2">Ciclo de Atención</h4>
+                <h4 className="font-black text-white uppercase tracking-tighter text-lg mb-2">Email Staff</h4>
                 <p className="text-slate-500 text-xs leading-relaxed">
-                  {CONTACT_INFO.schedule.week} <br />
-                  <span className="text-slate-400">{CONTACT_INFO.schedule.weekend}</span>
+                  Para envío de documentación, convenios y otros temas formales.
                 </p>
+                <a href={`mailto:${CONTACT_INFO.email}`} className="text-xs font-black text-amber-500 hover:text-white transition-colors uppercase tracking-[0.2em] mt-2 block">{CONTACT_INFO.email}</a>
               </div>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex items-start gap-6 bg-white/[0.03] p-8 rounded-[2rem] border border-white/5">
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-col items-center md:items-start gap-6 bg-white/[0.03] p-8 rounded-[2rem] border border-white/5">
               <div className="w-14 h-14 shrink-0 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 text-xl border border-emerald-500/20"><FaInstagram /></div>
               <div>
                 <h4 className="font-black text-white uppercase tracking-tighter text-lg mb-2">Comunidad</h4>
-                <p className="text-slate-500 text-xs leading-relaxed mb-3">Síguenos para novedades y tips diarios.</p>
+                <p className="text-slate-500 text-xs leading-relaxed mb-3">Síguenos para novedades y tips diarios de preparación.</p>
                 <a href={CONTACT_INFO.instagram.url} target="_blank" className="text-xs font-black text-indigo-400 hover:text-white transition-colors uppercase tracking-[0.2em]">@institutolael</a>
               </div>
             </motion.div>

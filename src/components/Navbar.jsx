@@ -83,7 +83,7 @@ export default function Navbar() {
         </Link>
 
         {/* === DESKTOP NAVIGATION (> 1024px) === */}
-        <nav className="hidden lg:flex items-center gap-6">
+        <nav className="hidden lg:flex items-center gap-10">
           {/* Main Links (Inicio) */}
           <NavLink to={NAVIGATION.main[0].path} className={({ isActive }) => `px-5 py-2.5 text-sm font-black rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
             {NAVIGATION.main[0].name}

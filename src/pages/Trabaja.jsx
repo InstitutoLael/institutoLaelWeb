@@ -35,7 +35,7 @@ export default function Trabaja() {
 
         {/* HERO SECTION */}
         <header className="career-hero">
-          <div className="pill-badge">Hiring Now</div>
+          <div className="pill-badge">Estamos Contratando</div>
           <h1>
             Enseña con <span className="text-gradient">Propósito.</span>
           </h1>

@@ -97,7 +97,7 @@ export default function EscuelaAdultos() {
       <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-indigo-500/30">
 
          {/* ──────────────── 1. HERO (EMPATHETIC) ──────────────── */}
-         <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 bg-[radial-gradient(circle_at_50%_40%,_#451a03_0%,_#050505_80%)]">
+         <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)]">
             {/* Warm Background Pattern */}
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-5 mix-blend-overlay"></div>
 
@@ -130,12 +130,12 @@ export default function EscuelaAdultos() {
                   </p>
                </motion.div>
 
-               <motion.button
+                <motion.button
                   initial="hidden" animate="visible" variants={fadeInUp}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={scrollToPlans}
-                  className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-full text-lg shadow-[0_10px_40px_rgba(234,88,12,0.4)] transition-all flex items-center justify-center gap-2 mx-auto"
+                  className="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-full text-lg shadow-[0_10px_40px_rgba(245,158,11,0.4)] transition-all flex items-center justify-center gap-2 mx-auto uppercase tracking-widest"
                >
                   <FaHandHoldingHeart /> Solicitar Cupo Social
                </motion.button>

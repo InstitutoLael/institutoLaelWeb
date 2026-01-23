@@ -7,7 +7,7 @@ import { BiWorld } from "react-icons/bi";
    DATA
    ────────────────────────────────────────────────────────────────────────── */
 const PARTNERS = [
-  { name: "INO", type: "Ortodoncia Nacional", color: "#3b82f6" },
+  { name: "INO", type: "Instituto Nacional de Ortodoncia", color: "#3b82f6" },
   { name: "Naamá Studio", type: "Potenciación Humana", color: "#fbbf24" },
   { name: "Los Olivos", type: "Homeschool", color: "#84cc16" },
 ];

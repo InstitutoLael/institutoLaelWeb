@@ -5,9 +5,26 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@300;400;600;800&display=swap");
 
 @layer base {
+  :root {
+    /* ─── COLOR PALETTE (LAEL TRUST 2026) ─── */
+    --lael-blue-deep: #050505;
+    --lael-blue-indigo: #1e1b4b;
+    --lael-gold: #f59e0b;
+    --lael-gold-alt: #fbbf24;
+    --lael-slate: #94a3b8;
+    --lael-white: #f8fafc;
+    
+    /* ─── TYPOGRAPHY SYSTEM ─── */
+    --font-title: "Space Grotesk", sans-serif;
+    --font-body: "Inter", sans-serif;
+    --font-accent: "Outfit", sans-serif;
+  }
+
   html {
     scroll-behavior: smooth;
-    font-family: "Inter", system-ui, Arial, sans-serif;
+    font-family: var(--font-body);
+    background-color: var(--lael-blue-deep);
+    color: var(--lael-white);
   }
 
   h1,
@@ -16,12 +33,13 @@
   h4,
   h5,
   h6 {
-    font-family: "Space Grotesk", system-ui, Arial, sans-serif;
+    font-family: var(--font-title);
     @apply tracking-tighter;
   }
 
   body {
-    @apply bg-bg text-text font-sans m-0;
+    @apply bg-bg text-text m-0;
+    font-family: var(--font-body);
     -webkit-tap-highlight-color: transparent;
   }
 

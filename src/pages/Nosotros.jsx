@@ -85,53 +85,7 @@ export default function About() {
             </div>
          </header>
 
-         {/* ──────────────── 2. TIMELINE: NUESTRA HISTORIA ──────────────── */}
-         <section ref={scrollRef} className="py-24 bg-[#020617] relative border-y border-white/5">
-            <div className="container mx-auto px-6">
-               <div className="flex flex-col lg:flex-row gap-20">
-                  <div className="lg:w-4/12 lg:sticky lg:top-40 lg:h-fit">
-                     <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Trayectoria Lael</span>
-                     <h2 className="text-5xl font-black text-white mb-8 leading-tight tracking-tighter uppercase">Nuestra línea <br />de Tiempo.</h2>
-                     <p className="text-slate-500 leading-relaxed max-w-sm font-light">
-                        Desde los primeros pasos hasta la visión 2026, cada año ha sido un ladrillo en la construcción de este ideal educativo.
-                     </p>
-                     <div className="mt-12 w-full h-1 bg-slate-900 rounded-full overflow-hidden relative">
-                        <motion.div style={{ scaleX: scrollYProgress }} className="absolute top-0 left-0 w-full h-full bg-amber-500 origin-left" />
-                     </div>
-                  </div>
-
-                  <div className="lg:w-8/12 space-y-32">
-                     {ABOUT_DATA.timeline.map((item, i) => (
-                        <motion.div
-                           key={i}
-                           initial={{ opacity: 0, x: 50 }}
-                           whileInView={{ opacity: 1, x: 0 }}
-                           viewport={{ once: true, margin: "-20%" }}
-                           transition={{ duration: 0.8 }}
-                           className="relative pl-12 border-l border-white/10 group pb-8"
-                        >
-                           <div className="absolute -left-3 top-0 w-6 h-6 rounded-full bg-slate-950 border border-white/20 flex items-center justify-center group-hover:border-amber-500 transition-colors">
-                              <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
-                           </div>
-                           <span className="text-8xl md:text-[10rem] font-black text-white/5 absolute -top-16 left-0 pointer-events-none select-none group-hover:text-white/10 transition-colors">
-                              {item.year}
-                           </span>
-                           <div className="relative z-10">
-                              <h4 className="text-3xl font-black text-white mb-4 group-hover:text-amber-400 transition-colors uppercase tracking-tight">
-                                 {item.title}
-                              </h4>
-                              <p className="text-xl text-slate-400 leading-relaxed max-w-2xl font-light">
-                                 {item.desc}
-                              </p>
-                           </div>
-                        </motion.div>
-                     ))}
-                  </div>
-               </div>
-            </div>
-         </section>
-
-         {/* ──────────────── 3. DNA: PILARES Y PRINCIPIOS ──────────────── */}
+         {/* ──────────────── 2. DNA: PILARES Y PRINCIPIOS (FILOSOFÍA) ──────────────── */}
          <section className="py-40 bg-slate-950">
             <div className="container mx-auto px-6 text-center mb-24">
                <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Nuestro ADN Estudiantil</span>
@@ -183,7 +137,7 @@ export default function About() {
             </div>
          </section>
 
-         {/* ──────────────── 4. EQUIPO: VISIÓN COMPARTIDA ──────────────── */}
+         {/* ──────────────── 3. EQUIPO: VISIÓN COMPARTIDA (DIRECTOR) ──────────────── */}
          <section className="py-40 bg-[#020617] relative overflow-hidden border-y border-white/5">
             <div className="container mx-auto px-6">
                <div className="bg-slate-900/50 border border-white/5 rounded-[4rem] overflow-hidden grid grid-cols-1 lg:grid-cols-2 shadow-2xl backdrop-blur-3xl">
@@ -217,6 +171,52 @@ export default function About() {
                            {ABOUT_DATA.founder.quote}
                         </p>
                      </div>
+                  </div>
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 4. TIMELINE: NUESTRA HISTORIA (TRAYECTORIA) ──────────────── */}
+         <section ref={scrollRef} className="py-24 bg-slate-950 relative border-y border-white/5">
+            <div className="container mx-auto px-6">
+               <div className="flex flex-col lg:flex-row gap-20">
+                  <div className="lg:w-4/12 lg:sticky lg:top-40 lg:h-fit">
+                     <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Trayectoria Lael</span>
+                     <h2 className="text-5xl font-black text-white mb-8 leading-tight tracking-tighter uppercase">Nuestra línea <br />de Tiempo.</h2>
+                     <p className="text-slate-500 leading-relaxed max-w-sm font-light">
+                        Desde los primeros pasos hasta la visión 2026, cada año ha sido un ladrillo en la construcción de este ideal educativo.
+                     </p>
+                     <div className="mt-12 w-full h-1 bg-slate-900 rounded-full overflow-hidden relative">
+                        <motion.div style={{ scaleX: scrollYProgress }} className="absolute top-0 left-0 w-full h-full bg-amber-500 origin-left" />
+                     </div>
+                  </div>
+
+                  <div className="lg:w-8/12 space-y-32">
+                     {ABOUT_DATA.timeline.map((item, i) => (
+                        <motion.div
+                           key={i}
+                           initial={{ opacity: 0, x: 50 }}
+                           whileInView={{ opacity: 1, x: 0 }}
+                           viewport={{ once: true, margin: "-20%" }}
+                           transition={{ duration: 0.8 }}
+                           className="relative pl-12 border-l border-white/10 group pb-8"
+                        >
+                           <div className="absolute -left-3 top-0 w-6 h-6 rounded-full bg-slate-950 border border-white/20 flex items-center justify-center group-hover:border-amber-500 transition-colors">
+                              <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
+                           </div>
+                           <span className="text-8xl md:text-[10rem] font-black text-white/5 absolute -top-16 left-0 pointer-events-none select-none group-hover:text-white/10 transition-colors">
+                              {item.year}
+                           </span>
+                           <div className="relative z-10">
+                              <h4 className="text-3xl font-black text-white mb-4 group-hover:text-amber-400 transition-colors uppercase tracking-tight">
+                                 {item.title}
+                              </h4>
+                              <p className="text-xl text-slate-400 leading-relaxed max-w-2xl font-light">
+                                 {item.desc}
+                              </p>
+                           </div>
+                        </motion.div>
+                     ))}
                   </div>
                </div>
             </div>

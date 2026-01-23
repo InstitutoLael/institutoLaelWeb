@@ -68,10 +68,7 @@ export default function Navbar() {
     }`;
 
   return (
-    <header
-      className={navClasses}
-      style={{ WebkitBackdropFilter: scrolled ? "blur(40px)" : "none" }}
-    >
+    <header className={navClasses}>
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
 
         {/* === LOGO === */}

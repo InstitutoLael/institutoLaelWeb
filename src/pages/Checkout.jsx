@@ -32,6 +32,14 @@ export default function Checkout() {
     const [searchParams] = useSearchParams();
     const [acceptedTerms, setAcceptedTerms] = useState(false);
 
+    const [formData, setFormData] = useState({
+        fullName: "",
+        email: "",
+        phone: "",
+        rut: "",
+        password: ""
+    });
+
     const [errors, setErrors] = useState({});
     const [authError, setAuthError] = useState("");
     const total = cart.reduce((acc, item) => acc + item.price, 0);

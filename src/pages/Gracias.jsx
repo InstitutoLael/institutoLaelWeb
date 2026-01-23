@@ -3,6 +3,8 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaCheckCircle, FaWhatsapp, FaUniversity, FaArrowRight, FaBookOpen } from "react-icons/fa";
 
+import { PAYMENTS } from "../data/copy";
+
 const clp = (n) => Number(n || 0).toLocaleString("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
 
 export default function Gracias() {
@@ -53,24 +55,24 @@ export default function Gracias() {
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-sm">
                 <div>
-                  <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">Banco</span>
-                  <span className="text-white font-bold">Banco Estado</span>
+                  <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">Nombre Entidad</span>
+                  <span className="text-white font-bold">{PAYMENTS.businessName}</span>
                 </div>
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">Tipo Cuenta</span>
-                  <span className="text-white font-bold">Chequera Electrónica</span>
+                  <span className="text-white font-bold">{PAYMENTS.accountType}</span>
                 </div>
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">Número</span>
-                  <span className="text-white font-bold">123456789</span>
+                  <span className="text-white font-bold">{PAYMENTS.accountNumber}</span>
                 </div>
                 <div>
                   <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">RUT</span>
-                  <span className="text-white font-bold">76.543.210-K</span>
+                  <span className="text-white font-bold">{PAYMENTS.rut}</span>
                 </div>
                 <div className="sm:col-span-2">
-                  <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">Nombre</span>
-                  <span className="text-white font-bold">Instituto Lael SpA</span>
+                  <span className="text-slate-500 block text-[10px] uppercase font-bold mb-1">Email para comprobante</span>
+                  <span className="text-white font-bold">{PAYMENTS.email}</span>
                 </div>
               </div>
             </motion.div>

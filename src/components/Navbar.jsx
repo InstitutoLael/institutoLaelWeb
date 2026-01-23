@@ -159,7 +159,7 @@ export default function Navbar() {
 
           {/* Mobile Toggle Button (Hamburger) */}
           <button
-            className="lg:hidden w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white transition-all active:scale-95"
+            className="lg:hidden w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white transition-all active:scale-95 touch-manipulation"
             onClick={() => setMobileOpen(true)}
           >
             <Icons.Menu />
@@ -198,7 +198,7 @@ export default function Navbar() {
                   </div>
                   <button
                     onClick={() => setMobileOpen(false)}
-                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-white hover:bg-white/10 active:scale-90 transition-all border border-white/10"
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-white hover:bg-white/10 active:scale-90 transition-all border border-white/10 touch-manipulation"
                     aria-label="Cerrar menú"
                   >
                     <Icons.X />

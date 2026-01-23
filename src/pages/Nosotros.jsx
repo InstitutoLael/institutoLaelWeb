@@ -283,8 +283,12 @@ export default function About() {
                      exit={{ scale: 0.9, opacity: 0 }}
                      className="max-w-4xl w-full bg-slate-900 border border-white/10 rounded-[3rem] p-10 md:p-16 relative overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
                   >
-                     <button onClick={() => setShowModal(false)} className="fixed md:absolute top-5 right-5 z-[110] p-4 bg-amber-500 text-slate-950 rounded-full shadow-2xl hover:scale-110 active:scale-90 transition-all">
-                        <FaTimes size={20} />
+                     <button 
+                        onClick={() => setShowModal(false)} 
+                        className="fixed top-6 right-6 z-[120] p-4 bg-amber-500 text-slate-950 rounded-full shadow-2xl hover:scale-110 active:scale-90 transition-all flex items-center justify-center border-4 border-slate-900"
+                        aria-label="Cerrar modal"
+                     >
+                        <FaTimes size={24} />
                      </button>
                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                         <div className="text-center lg:text-right pt-10">

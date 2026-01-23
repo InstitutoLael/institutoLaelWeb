@@ -83,9 +83,9 @@ export default function Navbar() {
         </Link>
 
         {/* === DESKTOP NAVIGATION (> 1024px) === */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden lg:flex items-center gap-6">
           {/* Main Links (Inicio) */}
-          <NavLink to={NAVIGATION.main[0].path} className={({ isActive }) => `px - 4 py - 2 text - sm font - medium rounded - full transition - all duration - 300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'} `}>
+          <NavLink to={NAVIGATION.main[0].path} className={({ isActive }) => `px-5 py-2.5 text-sm font-black rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
             {NAVIGATION.main[0].name}
           </NavLink>
 
@@ -121,7 +121,7 @@ export default function Navbar() {
 
           {/* Main Links Restantes (Empresas, Nosotros) */}
           {NAVIGATION.main.slice(1).map((link, idx) => (
-            <NavLink key={idx} to={link.path} className={({ isActive }) => `px - 4 py - 2 text - sm font - medium rounded - full transition - all duration - 300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'} `}>
+            <NavLink key={idx} to={link.path} className={({ isActive }) => `px-5 py-2.5 text-sm font-black rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
               {link.name}
             </NavLink>
           ))}
@@ -286,10 +286,10 @@ function MobileLink({ to, children }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `block py - 2 px - 3 rounded - lg text - base font - medium transition - all ${isActive
-          ? "bg-white/10 text-white border-l-2 border-indigo-500 pl-4"
-          : "text-slate-400 hover:text-white hover:bg-white/5"
-        } `
+        `block py-4 px-5 rounded-2xl text-lg font-black transition-all ${isActive
+          ? "bg-white/10 text-white border-l-4 border-indigo-500 pl-6 shadow-xl shadow-indigo-500/10"
+          : "text-slate-500 hover:text-white hover:bg-white/5"
+        }`
       }
     >
       {children}

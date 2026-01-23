@@ -94,7 +94,7 @@ export default function EscuelaAdultos() {
    };
 
    return (
-      <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-orange-500/30">
+      <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-indigo-500/30">
 
          {/* ──────────────── 1. HERO (EMPATHETIC) ──────────────── */}
          <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 bg-[radial-gradient(circle_at_50%_40%,_#451a03_0%,_#050505_80%)]">
@@ -106,10 +106,10 @@ export default function EscuelaAdultos() {
                   initial="hidden" animate="visible" variants={fadeInUp}
                   className="inline-flex flex-col items-center gap-2 mb-6"
                >
-                  <div className="bg-orange-500 text-white text-[10px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-full shadow-lg shadow-orange-500/20 mb-3 animate-pulse">
+                  <div className="bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-full shadow-lg shadow-indigo-500/20 mb-3 animate-pulse">
                      Admisión Pioneros | Lanzamiento 2026
                   </div>
-                  <span className="text-orange-400 font-bold tracking-widest uppercase text-xs border-b border-orange-500 pb-1">
+                  <span className="text-indigo-400 font-bold tracking-widest uppercase text-xs border-b border-indigo-500 pb-1">
                      {CAMINOS_CONTENT.subtitle}
                   </span>
                </motion.div>
@@ -125,7 +125,7 @@ export default function EscuelaAdultos() {
                   initial="hidden" animate="visible" variants={fadeInUp}
                   className="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-10 border border-white/5"
                >
-                  <p className="text-xl md:text-2xl text-stone-200 font-light italic leading-relaxed">
+                  <p className="text-xl md:text-2xl text-slate-200 font-light italic leading-relaxed">
                      "{CAMINOS_CONTENT.heroText}"
                   </p>
                </motion.div>
@@ -135,7 +135,7 @@ export default function EscuelaAdultos() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={scrollToPlans}
-                  className="px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-full text-lg shadow-[0_10px_40px_rgba(234,88,12,0.4)] transition-all flex items-center justify-center gap-2 mx-auto"
+                  className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-full text-lg shadow-[0_10px_40px_rgba(234,88,12,0.4)] transition-all flex items-center justify-center gap-2 mx-auto"
                >
                   <FaHandHoldingHeart /> Solicitar Cupo Social
                </motion.button>
@@ -148,7 +148,7 @@ export default function EscuelaAdultos() {
             <div className="container mx-auto px-6">
                <div className="flex flex-col md:flex-row gap-20 items-center mb-32">
                   <div className="md:w-1/2">
-                     <h2 className="text-4xl md:text-6xl font-black text-white mb-8 uppercase tracking-tighter">El modelo <span className="text-orange-500">"Robin Hood"</span></h2>
+                     <h2 className="text-4xl md:text-6xl font-black text-white mb-8 uppercase tracking-tighter">El modelo <span className="text-indigo-500">"Robin Hood"</span></h2>
                      <p className="text-xl text-slate-400 leading-relaxed mb-8">
                         {CAMINOS_CONTENT.impactQuote}
                      </p>
@@ -164,10 +164,10 @@ export default function EscuelaAdultos() {
                      </div>
                   </div>
                   <div className="md:w-1/2 relative bg-white/[0.02] backdrop-blur-3xl rounded-[3rem] p-12 border border-white/5 shadow-2xl overflow-hidden group">
-                     <div className="absolute top-0 right-0 p-8 text-orange-500/10 group-hover:text-orange-500/20 transition-colors">
+                     <div className="absolute top-0 right-0 p-8 text-indigo-500/10 group-hover:text-indigo-500/20 transition-colors">
                         <FaHeart size={120} />
                      </div>
-                     <h3 className="font-black uppercase tracking-widest text-xs text-orange-500 mb-8 relative z-10">Lo que dicen nuestros alumnos:</h3>
+                     <h3 className="font-black uppercase tracking-widest text-xs text-indigo-500 mb-8 relative z-10">Lo que dicen nuestros alumnos:</h3>
                      <blockquote className="italic text-slate-200 text-2xl font-light leading-relaxed mb-10 relative z-10">
                         "{CAMINOS_CONTENT.heroText.split('.')[0]}..."
                      </blockquote>
@@ -180,8 +180,8 @@ export default function EscuelaAdultos() {
 
                {/* CYCLES GRID */}
                <div className="text-center mb-12">
-                  <h3 className="text-2xl font-bold text-stone-800 mb-2">Ciclos Disponibles (Modalidad 2x1)</h3>
-                  <p className="text-stone-500">Terminas dos años en uno.</p>
+                  <h3 className="text-2xl font-bold text-slate-800 mb-2">Ciclos Disponibles (Modalidad 2x1)</h3>
+                  <p className="text-slate-500">Terminas dos años en uno.</p>
                </div>
 
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -192,11 +192,11 @@ export default function EscuelaAdultos() {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.1 }}
-                        className="bg-white/[0.03] p-10 rounded-3xl border border-white/5 hover:border-orange-500/30 transition-all text-center group backdrop-blur-3xl"
+                        className="bg-white/[0.03] p-10 rounded-3xl border border-white/5 hover:border-indigo-500/30 transition-all text-center group backdrop-blur-3xl"
                      >
                         <div className="text-6xl mb-6 grayscale group-hover:grayscale-0 transition-all group-hover:scale-110 duration-500">{cycle.icon}</div>
                         <h4 className="font-black text-white mb-2 uppercase tracking-tight text-xl">{cycle.name}</h4>
-                        <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.2em] bg-orange-500/10 px-4 py-1.5 rounded-full inline-block border border-orange-500/20">
+                        <span className="text-indigo-500 text-[10px] font-black uppercase tracking-[0.2em] bg-indigo-500/10 px-4 py-1.5 rounded-full inline-block border border-indigo-500/20">
                            {cycle.equivalence}
                         </span>
                      </motion.div>
@@ -211,7 +211,7 @@ export default function EscuelaAdultos() {
                <h2 className="text-3xl font-bold text-center mb-16">Tu Camino a la Licenciatura</h2>
                <div className="relative">
                   {/* Line */}
-                  <div className="hidden lg:block absolute top-1/2 left-0 w-full h-1 bg-stone-300 -translate-y-1/2 z-0"></div>
+                  <div className="hidden lg:block absolute top-1/2 left-0 w-full h-1 bg-slate-300 -translate-y-1/2 z-0"></div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 relative z-10">
                      {STEPS.map((step, i) => (
@@ -233,7 +233,7 @@ export default function EscuelaAdultos() {
             <div className="container mx-auto px-6">
                <div className="text-center mb-16">
                   <h2 className="text-4xl font-bold mb-4">Únete a la Causa</h2>
-                  <p className="text-stone-400">Elige cuánto puedes aportar. Nadie se queda fuera.</p>
+                  <p className="text-slate-400">Elige cuánto puedes aportar. Nadie se queda fuera.</p>
                </div>
 
                <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto items-stretch">
@@ -247,7 +247,7 @@ export default function EscuelaAdultos() {
                            key={plan.id}
                            whileHover={{ y: -10 }}
                            className={`relative rounded-[3rem] p-12 flex flex-col h-full border backdrop-blur-3xl transition-all duration-500
-                             ${isStandard ? 'bg-orange-600/10 border-orange-500/50 shadow-[0_0_40px_rgba(249,115,22,0.1)]' : 'bg-white/[0.02] border-white/5'}
+                             ${isStandard ? 'bg-indigo-600/10 border-indigo-500/50 shadow-[0_0_40px_rgba(249,115,22,0.1)]' : 'bg-white/[0.02] border-white/5'}
                              ${isPadrino ? 'bg-amber-600/10 border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.1)]' : ''}
                            `}
                         >
@@ -268,7 +268,7 @@ export default function EscuelaAdultos() {
                            <ul className="space-y-4 mb-12 flex-1">
                               {plan.features.map((f, i) => (
                                  <li key={i} className="flex items-start gap-4 text-sm font-medium text-slate-300">
-                                    <FaCheck className={`mt-1 shrink-0 ${isStandard ? 'text-orange-500' : isPadrino ? 'text-amber-500' : 'text-slate-500'}`} />
+                                    <FaCheck className={`mt-1 shrink-0 ${isStandard ? 'text-indigo-500' : isPadrino ? 'text-amber-500' : 'text-slate-500'}`} />
                                     <span>{f}</span>
                                  </li>
                               ))}
@@ -277,7 +277,7 @@ export default function EscuelaAdultos() {
                            <button
                               onClick={() => handleEnroll(plan.id)}
                               className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-2xl
-                                ${isStandard ? 'bg-orange-500 text-white hover:bg-orange-400 shadow-orange-500/20' : ''}
+                                ${isStandard ? 'bg-indigo-500 text-white hover:bg-indigo-400 shadow-indigo-500/20' : ''}
                                 ${isPadrino ? 'bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-amber-500/20' : ''}
                                 ${isSocial ? 'bg-white/5 text-white hover:bg-white/10 border border-white/10' : ''}
                               `}
@@ -294,7 +294,7 @@ export default function EscuelaAdultos() {
          {/* ──────────────── 5. PREGUNTAS FRECUENTES ──────────────── */}
          <section className="py-24 bg-[#050505]">
             <div className="container mx-auto px-6 max-w-3xl">
-               <h2 className="text-4xl font-black text-center mb-16 uppercase tracking-tighter">Preguntas <span className="text-orange-500">Frecuentes</span></h2>
+               <h2 className="text-4xl font-black text-center mb-16 uppercase tracking-tighter">Preguntas <span className="text-indigo-500">Frecuentes</span></h2>
 
                <div className="space-y-4">
                   {FAQS.map((faq, i) => (
@@ -324,8 +324,8 @@ export default function EscuelaAdultos() {
                   ))}
                </div>
 
-               <div className="mt-16 bg-orange-500/5 p-10 rounded-[2.5rem] flex md:flex-row flex-col items-center gap-8 text-center md:text-left border border-orange-500/10">
-                  <div className="w-16 h-16 bg-orange-500/10 text-orange-500 rounded-2xl flex items-center justify-center text-3xl shrink-0 border border-orange-500/20 shadow-2xl">
+               <div className="mt-16 bg-indigo-500/5 p-10 rounded-[2.5rem] flex md:flex-row flex-col items-center gap-8 text-center md:text-left border border-indigo-500/10">
+                  <div className="w-16 h-16 bg-indigo-500/10 text-indigo-500 rounded-2xl flex items-center justify-center text-3xl shrink-0 border border-indigo-500/20 shadow-2xl">
                      <FaInfoCircle />
                   </div>
                   <div className="flex-1">
@@ -347,12 +347,12 @@ export default function EscuelaAdultos() {
                >
                   <div className="container mx-auto px-8 flex justify-between items-center text-white">
                      <div>
-                        <strong className="text-orange-500 font-black uppercase tracking-widest text-xs block mb-1">Programa Caminos</strong>
+                        <strong className="text-indigo-500 font-black uppercase tracking-widest text-xs block mb-1">Programa Caminos</strong>
                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Nivelación de Estudios 2026</span>
                      </div>
                      <button
                         onClick={scrollToPlans}
-                        className="px-10 py-4 bg-orange-600 hover:bg-orange-500 text-white font-black rounded-2xl text-[10px] transition-all shadow-2xl shadow-orange-600/20 uppercase tracking-widest"
+                        className="px-10 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-2xl text-[10px] transition-all shadow-2xl shadow-indigo-600/20 uppercase tracking-widest"
                      >
                         Postular Ahora
                      </button>

@@ -61,8 +61,9 @@ export default function Programas() {
                     <span className="inline-block px-4 py-1.5 rounded-full border border-indigo-500/20 bg-indigo-500/5 text-indigo-400 font-black uppercase tracking-[0.3em] text-[10px] mb-6">
                         Catálogo Académico 2026
                     </span>
-                    <h1 className="text-6xl md:text-8xl font-black mb-8 leading-[0.85] tracking-tighter uppercase">
-                        Nuestros <span className="bg-gradient-to-r from-white via-indigo-200 to-indigo-500 bg-clip-text text-transparent italic">Programas</span>
+                    <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight tracking-tight uppercase">
+                        Nuestros <br className="md:hidden" />
+                        <span className="bg-gradient-to-r from-white via-indigo-200 to-indigo-500 bg-clip-text text-transparent italic px-2">Programas</span>
                     </h1>
                     <p className="text-xl text-slate-500 font-light max-w-2xl mx-auto leading-relaxed">
                         Explora una oferta educativa diseñada para transformar potencial en resultados, desde el ingreso a la universidad hasta la maestría de nuevos lenguajes.

@@ -91,35 +91,32 @@ export default function Academy() {
    };
 
    return (
-      <div className="min-h-screen bg-slate-50 text-slate-800 font-sans selection:bg-amber-200/50">
+      <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-amber-500/30 overflow-x-hidden">
 
          {/* ──────────────── 1. SOLEMN HERO ──────────────── */}
-         <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 bg-slate-900 text-white">
+         <header className="relative min-h-[95vh] flex items-center justify-center overflow-hidden py-24 bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)]">
             {/* Background Texture */}
-            <div className="absolute inset-0 bg-[url('/textures/dark-wood.png')] opacity-30 z-0 mix-blend-overlay"></div>
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 opacity-90 z-0"></div>
-
-            {/* Animated Dust/Particles could go here */}
+            <div className="absolute inset-0 bg-[url('/textures/cubes.png')] opacity-[0.03] z-0 mix-blend-overlay"></div>
 
             <div className="container mx-auto px-6 relative z-10 text-center max-w-4xl">
                <motion.div
                   initial="hidden" animate="visible" variants={fadeInUp}
-                  className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 px-5 py-2 rounded-full text-sm font-semibold mb-8 uppercase tracking-widest"
+                  className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.4em] mb-12 shadow-2xl"
                >
                   <FaBible /> Cosmovisión Cristiana & Excelencia
                </motion.div>
 
                <motion.h1
                   initial="hidden" animate="visible" variants={fadeInUp}
-                  className="text-5xl md:text-7xl font-serif font-bold mb-8 leading-tight"
+                  className="text-6xl md:text-8xl font-black mb-8 leading-[0.85] tracking-tighter uppercase"
                >
                   Más que profesores,<br />
-                  somos <span className="text-amber-400 italic font-serif">Mentores de Vida</span>.
+                  somos <span className="bg-gradient-to-r from-amber-200 via-amber-500 to-amber-700 bg-clip-text text-transparent italic px-2">Mentores de Vida.</span>
                </motion.h1>
 
                <motion.p
                   initial="hidden" animate="visible" variants={fadeInUp}
-                  className="text-xl text-blue-100/70 mb-12 max-w-2xl mx-auto leading-relaxed font-light"
+                  className="text-xl md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light"
                >
                   El Hub Académico para familias que buscan algo más.
                   Apoyo personalizado para <strong>Homeschoolers</strong> y refuerzo escolar,
@@ -128,51 +125,52 @@ export default function Academy() {
 
                <motion.div
                   initial="hidden" animate="visible" variants={fadeInUp}
-                  className="flex flex-col sm:flex-row gap-5 justify-center"
+                  className="flex flex-col sm:flex-row gap-6 justify-center"
                >
                   <button
                      onClick={() => scrollToSection('packs')}
-                     className="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-lg flex items-center justify-center gap-3 transition-all hover:-translate-y-1 shadow-[0_10px_30px_rgba(245,158,11,0.3)]"
+                     className="px-10 py-5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-2xl shadow-amber-500/20 transition-all flex items-center justify-center gap-3"
                   >
-                     <FaChalkboardTeacher /> Ver Packs de Clases
+                     <FaChalkboardTeacher className="text-lg" /> Ver Packs de Clases
                   </button>
                   <button
                      onClick={() => scrollToSection('identidad')}
-                     className="px-8 py-4 bg-transparent border border-white/20 hover:bg-white/5 text-white font-semibold rounded-lg flex items-center justify-center gap-3 transition-all"
+                     className="px-10 py-5 bg-white/5 border border-white/10 backdrop-blur-3xl rounded-2xl font-black text-[10px] uppercase tracking-widest text-white flex items-center justify-center gap-3 hover:border-white/30 transition-all"
                   >
-                     <FaDove /> Conoce Nuestra Identidad
+                     <FaDove className="text-lg text-amber-500" /> Nuestra Identidad
                   </button>
                </motion.div>
             </div>
          </header>
 
          {/* ──────────────── 2. IDENTITY SECTION (The Meaning) ──────────────── */}
-         <section id="identidad" className="py-24 bg-white relative">
-            <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-slate-900 to-transparent opacity-5 pointer-events-none"></div>
-            <div className="container mx-auto px-6">
+         <section id="identidad" className="py-32 bg-[#050505] relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-amber-900/5 to-transparent pointer-events-none" />
+            
+            <div className="container mx-auto px-6 relative z-10">
 
-               <div className="flex flex-col items-center justify-center mb-16 opacity-50">
-                  <div className="w-px h-12 bg-amber-500 mb-4"></div>
-                  <FaScroll className="text-2xl text-amber-600 mb-2" />
-                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-amber-700">Nuestra Esencia</span>
+               <div className="flex flex-col items-center justify-center mb-20 opacity-30">
+                  <div className="w-px h-16 bg-amber-500 mb-6"></div>
+                  <FaScroll className="text-3xl text-amber-600 mb-2" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em] text-amber-700">Nuestra Esencia</span>
                </div>
 
-               <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center text-center lg:text-left">
+               <div className="grid grid-cols-1 lg:grid-cols-3 gap-20 items-center text-center lg:text-left">
 
                   {/* Left Column: Meaning */}
                   <motion.div
                      initial={{ opacity: 0, x: -50 }}
                      whileInView={{ opacity: 1, x: 0 }}
                      viewport={{ once: true }}
-                     className="space-y-6 lg:text-right"
+                     className="space-y-8 lg:text-right"
                   >
                      <div>
-                        <h3 className="text-4xl font-serif font-bold text-slate-900 mb-1">
-                           Lael <span className="text-amber-600 text-3xl font-serif"> (לָאֵל)</span>
+                        <h3 className="text-4xl md:text-6xl font-black text-white mb-2 uppercase tracking-tighter">
+                           Lael <span className="text-amber-500 italic"> (לָאֵל)</span>
                         </h3>
-                        <p className="text-lg italic text-slate-500">Del hebreo: <strong className="text-slate-800">"Perteneciente a Dios"</strong>.</p>
+                        <p className="text-lg text-slate-400 font-light italic">Del hebreo: <strong className="text-white font-black uppercase tracking-tight">"Perteneciente a Dios"</strong>.</p>
                      </div>
-                     <p className="text-slate-600 leading-relaxed">
+                     <p className="text-slate-500 text-lg leading-relaxed font-light">
                         No educamos para el mundo, educamos para la eternidad. Entendemos que la mente
                         de tus hijos es un territorio sagrado. Nuestro nombre es nuestra declaración de principios.
                      </p>
@@ -180,10 +178,10 @@ export default function Academy() {
 
                   {/* Center: Logo */}
                   <div className="relative flex justify-center">
-                     <div className="w-64 h-64 rounded-full border border-slate-100 bg-slate-50 flex items-center justify-center relative z-10 shadow-2xl">
-                        <img src={logoLael} alt="Logo Lael" className="w-48 opacity-90" />
+                     <div className="w-64 h-64 rounded-[3rem] border border-white/5 bg-white/[0.02] backdrop-blur-3xl flex items-center justify-center relative z-10 shadow-2xl rotate-3">
+                        <img src={logoLael} alt="Logo Lael" className="w-48 filter brightness-150 grayscale group-hover:grayscale-0 transition-all" />
                      </div>
-                     <div className="absolute inset-0 bg-blue-500/5 rounded-full blur-3xl scale-110 -z-0"></div>
+                     <div className="absolute inset-0 bg-indigo-500/10 rounded-full blur-[100px] scale-110 -z-0"></div>
                   </div>
 
                   {/* Right: Symbols */}
@@ -191,25 +189,25 @@ export default function Academy() {
                      initial={{ opacity: 0, x: 50 }}
                      whileInView={{ opacity: 1, x: 0 }}
                      viewport={{ once: true }}
-                     className="space-y-8"
+                     className="space-y-12"
                   >
-                     <div className="flex items-start gap-4 lg:flex-row flex-col items-center lg:items-start text-center lg:text-left">
-                        <div className="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
-                           <FaDove />
+                     <div className="flex items-center gap-6 lg:flex-row flex-col text-center lg:text-left">
+                        <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-amber-500 shrink-0 shadow-2xl">
+                           <FaDove size={24} />
                         </div>
                         <div>
-                           <strong className="text-slate-900 text-lg block mb-1">La Paloma</strong>
-                           <p className="text-slate-600 text-sm">El Espíritu Santo, fuente de toda sabiduría e inteligencia (Éxodo 31:3).</p>
+                           <strong className="text-white text-xl font-black uppercase tracking-tight block mb-1">La Paloma</strong>
+                           <p className="text-slate-500 text-sm italic font-light">El Espíritu Santo, fuente de toda sabiduría e inteligencia.</p>
                         </div>
                      </div>
 
-                     <div className="flex items-start gap-4 lg:flex-row flex-col items-center lg:items-start text-center lg:text-left">
-                        <div className="w-12 h-12 bg-blue-900 rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
-                           <FaPenFancy />
+                     <div className="flex items-center gap-6 lg:flex-row flex-col text-center lg:text-left">
+                        <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-amber-500 shrink-0 shadow-2xl">
+                           <FaPenFancy size={24} />
                         </div>
                         <div>
-                           <strong className="text-slate-900 text-lg block mb-1">La "É" Acentuada</strong>
-                           <p className="text-slate-600 text-sm">Ponemos el acento donde importa: en el carácter y el corazón, no solo en la nota.</p>
+                           <strong className="text-white text-xl font-black uppercase tracking-tight block mb-1">La "É" Acentuada</strong>
+                           <p className="text-slate-500 text-sm italic font-light">Ponemos el acento donde importa: en el carácter y el corazón.</p>
                         </div>
                      </div>
                   </motion.div>
@@ -219,35 +217,36 @@ export default function Academy() {
          </section>
 
          {/* ──────────────── 3. ALLIANCE (LOS OLIVOS) ──────────────── */}
-         <section className="py-20 bg-blue-50 border-y border-blue-100">
+         <section className="py-32 bg-[#050505] border-y border-white/5">
             <div className="container mx-auto px-6">
-               <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-blue-100 flex flex-col-reverse md:flex-row gap-12 items-center">
+               <div className="bg-white/[0.01] backdrop-blur-3xl rounded-[4rem] p-12 md:p-20 border border-white/5 flex flex-col-reverse lg:flex-row gap-20 items-center shadow-2xl">
 
-                  <div className="flex-1 space-y-6">
-                     <div className="inline-block bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded uppercase tracking-wider">
-                        Alianza Estratégica
-                     </div>
-                     <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">
-                        Libertad Educativa,<br /> Respaldo Oficial.
+                  <div className="flex-1 space-y-10">
+                     <span className="inline-block bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-black px-5 py-2 rounded-full uppercase tracking-[0.3em]">
+                        Alianza Estratégica 2026
+                     </span>
+                     <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-none">
+                        Libertad Educativa,<br /> <span className="text-indigo-400">Respaldo Oficial.</span>
                      </h2>
-                     <p className="text-slate-600 text-lg leading-relaxed">
-                        Instituto Lael es tu equipo de entrenamiento académico (Tutores Expertos),
-                        y gracias a nuestra alianza con <strong>{ALLIANCE.name}</strong>, tus hijos
-                        pueden certificar sus estudios sin estrés.
+                     <p className="text-slate-400 text-xl font-light leading-relaxed">
+                        Instituto Lael es tu centro de mando académico con tutores expertos,
+                        y gracias a nuestra alianza con <strong className="text-white font-black uppercase tracking-tight">{ALLIANCE.name}</strong>, tus hijos
+                        pueden certificar sus estudios con total validez.
                      </p>
-                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
                         {ALLIANCE.benefits.map((b, i) => (
-                           <div key={i} className="flex items-center gap-2 text-blue-900 font-medium">
-                              <FaCheck className="text-blue-500" /> {b}
+                           <div key={i} className="flex items-center gap-4 text-slate-300 font-bold tracking-tight">
+                              <FaCheck className="text-indigo-500" /> {b}
                            </div>
                         ))}
                      </div>
                   </div>
 
-                  <div className="flex-1 flex flex-col items-center justify-center">
-                     <img src={logoPartner} alt="Los Olivos" className="max-w-[250px] drop-shadow-lg mb-6 mix-blend-multiply" />
-                     <div className="bg-white border border-slate-200 shadow-sm px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold text-slate-600">
-                        <MdOutlineVerifiedUser className="text-blue-500" /> Colegio Partner
+                  <div className="flex-1 flex flex-col items-center justify-center relative">
+                     <div className="absolute inset-0 bg-indigo-600/5 blur-[100px] rounded-full"></div>
+                     <img src={logoPartner} alt="Los Olivos" className="max-w-[300px] drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] mb-10 filter brightness-110 relative z-10" />
+                     <div className="bg-white/5 border border-white/10 px-6 py-2 rounded-2xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-slate-400 backdrop-blur-2xl relative z-10">
+                        <MdOutlineVerifiedUser className="text-indigo-400" /> Colegio Partner Certificado
                      </div>
                   </div>
 
@@ -256,36 +255,36 @@ export default function Academy() {
          </section>
 
          {/* ──────────────── 4. ACADEMIC CATALOG ──────────────── */}
-         <section className="py-24 bg-slate-50 relative">
+         <section className="py-32 bg-[#050505] relative">
             <div className="container mx-auto px-6">
 
-               <div className="text-center mb-16">
-                  <span className="text-slate-400 font-serif italic text-lg mb-2 block">Curriculum Flexible</span>
-                  <h2 className="text-4xl font-bold text-slate-900 mb-6">Áreas del Saber</h2>
-                  <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
-                     <BsShuffle /> ¡Mézclalas como quieras! (Ej: 2hrs Mate + 2hrs Inglés)
+               <div className="text-center mb-24">
+                  <span className="text-amber-500 font-black tracking-[0.3em] text-[10px] uppercase mb-4 block">Curriculum Flexible</span>
+                  <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mb-8">Áreas del <span className="text-amber-500">Saber</span></h2>
+                  <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 text-slate-400 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest backdrop-blur-xl">
+                     <BsShuffle className="text-amber-500" /> ¡Combina tus materias como quieras!
                   </div>
                </div>
 
-               <div className="flex justify-center flex-wrap gap-4 mb-16">
+               <div className="flex justify-center flex-wrap gap-4 mb-20">
                   {LEVELS.map(lvl => (
                      <button
                         key={lvl.id}
                         onClick={() => setActiveLevel(lvl.id)}
-                        className={`px-6 py-3 rounded-lg border-2 transition-all flex flex-col items-center text-center w-40
+                        className={`px-8 py-4 rounded-[1.5rem] border transition-all flex flex-col items-center text-center w-48
                    ${activeLevel === lvl.id
-                              ? 'bg-slate-900 border-slate-900 text-white shadow-lg scale-105'
-                              : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300'
-                           }
+                               ? 'bg-amber-600 border-amber-600 text-white shadow-2xl shadow-amber-600/20 scale-105'
+                               : 'bg-white/[0.02] border-white/5 text-slate-500 hover:border-white/20'
+                            }
                  `}
                      >
-                        <strong className="block text-lg leading-tight">{lvl.label}</strong>
-                        <span className={`text-xs ${activeLevel === lvl.id ? 'text-slate-400' : 'text-slate-400'}`}>{lvl.desc}</span>
+                        <strong className="block text-sm uppercase tracking-widest font-black leading-tight mb-1">{lvl.label}</strong>
+                        <span className={`text-[10px] font-bold uppercase tracking-widest ${activeLevel === lvl.id ? 'text-amber-200' : 'text-slate-600'}`}>{lvl.desc}</span>
                      </button>
                   ))}
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                   {SUBJECTS.map((sub, idx) => (
                      <motion.div
                         key={sub.id}
@@ -293,15 +292,16 @@ export default function Academy() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: idx * 0.1 }}
-                        className="bg-white p-6 rounded-xl border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all group relative overflow-hidden"
+                        className="bg-white/[0.02] p-10 rounded-[3rem] border border-white/5 hover:border-amber-500/30 transition-all duration-500 group relative overflow-hidden backdrop-blur-3xl"
                      >
-                        <div className="absolute top-0 left-0 w-1 h-full opacity-60 transition-opacity group-hover:opacity-100" style={{ backgroundColor: sub.color }}></div>
+                        {/* Highlight Orb */}
+                        <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 rounded-full blur-[50px] pointer-events-none" />
 
-                        <div className="text-4xl mb-4 grayscale group-hover:grayscale-0 transition-all duration-300 transform group-hover:scale-110 origin-left">
+                        <div className="text-6xl mb-8 grayscale group-hover:grayscale-0 transition-all duration-700 transform group-hover:scale-110 origin-left filter drop-shadow-2xl">
                            {sub.icon}
                         </div>
-                        <h4 className="text-xl font-bold text-slate-900 mb-2">{sub.name}</h4>
-                        <p className="text-slate-500 text-sm leading-relaxed">{sub.desc}</p>
+                        <h4 className="text-2xl font-black text-white mb-3 uppercase tracking-tight">{sub.name}</h4>
+                        <p className="text-slate-500 text-sm leading-relaxed font-light italic">"{sub.desc}"</p>
                      </motion.div>
                   ))}
                </div>
@@ -310,89 +310,87 @@ export default function Academy() {
          </section>
 
          {/* ──────────────── 5. PRICING PACKS ──────────────── */}
-         <section id="packs" className="py-24 bg-slate-900 text-white relative overflow-hidden">
-            {/* Decoration */}
-            <div className="absolute -top-40 -right-40 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px]"></div>
-            <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px]"></div>
+         <section id="packs" className="py-32 bg-[#050505] relative overflow-hidden">
+            {/* Ambient Lighting */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-96 bg-amber-600/5 blur-[150px] rounded-full"></div>
 
             <div className="container mx-auto px-6 relative z-10">
-               <div className="text-center max-w-2xl mx-auto mb-16">
-                  <h2 className="text-4xl font-serif font-bold mb-4">Packs de Horas Flexibles</h2>
-                  <p className="text-slate-400 text-lg">
-                     Tú decides cómo usar tus horas semana a semana.
-                     Ideales para preparar pruebas específicas o acompañamiento continuo.
-                  </p>
+               <div className="text-center max-w-3xl mx-auto mb-20">
+                  <h2 className="text-4xl md:text-8xl font-black mb-6 uppercase tracking-tighter leading-none text-white">Inversión en <br /> <span className="text-amber-500">Excelencia</span></h2>
+                  <p className="text-xl text-slate-400 font-light">Tú decides cómo usar tus horas. Flexibilidad total para tu éxito académico.</p>
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto items-end">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto items-stretch">
                   {PACKS.map((pack, idx) => {
                      const isFeatured = pack.badge != null;
                      return (
                         <motion.div
                            key={pack.id}
-                           initial={{ opacity: 0, y: 20 }}
-                           whileInView={{ opacity: 1, y: 0 }}
+                           initial={{ opacity: 0, scale: 0.9 }}
+                           whileInView={{ opacity: 1, scale: 1 }}
                            viewport={{ once: true }}
                            transition={{ delay: idx * 0.2 }}
-                           className={`relative rounded-2xl p-8 flex flex-col
+                           whileHover={{ y: -10 }}
+                           className={`relative rounded-[3rem] p-12 flex flex-col backdrop-blur-3xl transition-all duration-500
                        ${isFeatured
-                                 ? 'bg-gradient-to-b from-slate-800 to-slate-900 border-2 border-amber-500 shadow-[0_0_40px_rgba(245,158,11,0.15)] transform scale-105 z-10'
-                                 : 'bg-slate-900 border border-slate-700 hover:border-slate-600'
+                                 ? 'bg-amber-600/10 border-amber-500/50 shadow-2xl scale-105 z-10'
+                                 : 'bg-white/[0.02] border-white/5 hover:border-white/10'
                               }
                      `}
                         >
                            {isFeatured && (
-                              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-900 text-xs font-bold px-4 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                                 <BsStars /> {pack.badge}
+                              <div className="absolute top-0 right-10 bg-amber-500 text-slate-950 text-[10px] font-black px-6 py-2 rounded-b-2xl shadow-lg uppercase tracking-widest">
+                                 {pack.badge}
                               </div>
                            )}
 
-                           <div className="text-center mb-6">
-                              <h3 className="text-2xl font-bold mb-1">{pack.title}</h3>
-                              <p className="text-slate-500 text-sm">{pack.subtitle}</p>
+                           <div className="mb-10">
+                              <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">{pack.title}</h3>
+                              <p className="text-xs text-slate-500 font-medium uppercase tracking-[0.2em]">{pack.subtitle}</p>
                            </div>
 
-                           <div className="bg-slate-950/50 rounded-lg p-4 flex items-center justify-center gap-3 mb-6 border border-slate-800">
-                              <span className="text-4xl font-bold">{pack.hours}</span>
-                              <div className="flex flex-col text-left text-xs text-slate-500 uppercase font-bold tracking-wider">
+                           <div className="bg-white/5 rounded-[2rem] p-8 flex items-center justify-center gap-4 mb-10 border border-white/10">
+                              <span className="text-6xl font-black text-white tracking-tighter">{pack.hours}</span>
+                              <div className="flex flex-col text-left text-[10px] text-slate-500 font-black uppercase tracking-widest leading-tight">
                                  <span className="text-amber-500">Horas</span>
-                                 <span>Cronológicas</span>
+                                 <span>Docentes</span>
                               </div>
                            </div>
 
-                           <div className="text-center mb-8">
-                              <div className="text-3xl font-bold">{clp(pack.price)}</div>
+                           <div className="text-center mb-10">
+                              <div className="text-5xl font-black text-white tracking-tighter">{clp(pack.price)}</div>
                            </div>
 
-                           <ul className="space-y-3 mb-8 flex-1">
-                              <li className="flex items-start gap-3 text-sm text-slate-300">
-                                 <BsShuffle className="text-amber-500 mt-1 shrink-0" />
-                                 <strong>Multidisciplinario (Mix)</strong>
-                              </li>
+                           <div className="space-y-5 mb-12 flex-1">
+                              <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-amber-500/80">
+                                 <BsShuffle className="text-lg" />
+                                 <span>Malla Multidisciplinaria</span>
+                              </div>
                               {pack.features.map((f, i) => (
-                                 <li key={i} className="flex items-start gap-3 text-sm text-slate-300">
-                                    <FaCheck className="text-amber-500/50 mt-1 shrink-0" /> {f}
-                                 </li>
+                                 <div key={i} className="flex items-baseline gap-4 text-sm text-slate-400 font-medium">
+                                    <FaCheck className="text-amber-500 mt-1 shrink-0" />
+                                    <span className="leading-tight">{f}</span>
+                                 </div>
                               ))}
-                           </ul>
+                           </div>
 
                            <button
                               onClick={() => handleEnroll(pack)}
-                              className={`w-full py-3 rounded-lg font-bold transition-all
-                          ${isFeatured ? 'bg-amber-500 hover:bg-amber-400 text-slate-900' : 'bg-transparent border border-slate-600 text-white hover:bg-slate-800'}
+                              className={`w-full py-6 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-2xl
+                          ${isFeatured ? 'bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-amber-500/20' : 'bg-white/5 text-white hover:bg-white/10 border border-white/10'}
                         `}
                            >
-                              Agregar a la Mochila
+                              Adquirir Plan
                            </button>
                         </motion.div>
                      )
                   })}
                </div>
 
-               <div className="mt-12 text-center">
-                  <div className="inline-flex items-center gap-2 bg-amber-900/20 border border-amber-900/40 text-amber-500 px-4 py-2 rounded-lg text-sm">
-                     <BsShieldCheck className="text-lg" />
-                     <span>Matrícula Anual Familiar: <strong>{clp(ACADEMY_CONFIG.enrollmentFee)}</strong> (Se paga solo una vez al año).</span>
+               <div className="mt-20 text-center">
+                  <div className="inline-flex items-center gap-4 bg-white/[0.02] border border-white/10 text-slate-500 px-8 py-4 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest backdrop-blur-3xl">
+                     <BsShieldCheck className="text-amber-500 text-xl" />
+                     <span>Matrícula Anual Familiar: <strong className="text-white text-lg ml-2">{clp(ACADEMY_CONFIG.enrollmentFee)}</strong></span>
                   </div>
                </div>
 
@@ -400,43 +398,44 @@ export default function Academy() {
          </section>
 
          {/* ──────────────── 6. B2B / SCHOOL SERVICES ──────────────── */}
-         <section className="py-24 bg-white">
+         <section className="py-40 bg-[#050505] relative border-t border-white/5">
             <div className="container mx-auto px-6">
-               <div className="flex flex-col lg:flex-row gap-16 items-start">
+               <div className="flex flex-col lg:flex-row gap-24 items-start">
 
                   {/* Left Text */}
-                  <div className="lg:w-1/3">
-                     <div className="w-16 h-16 bg-blue-50 text-blue-900 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                  <div className="lg:w-1/3 sticky top-32">
+                     <div className="w-20 h-20 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-2xl flex items-center justify-center text-4xl mb-10 shadow-2xl shadow-indigo-500/10">
                         <FaUniversity />
                      </div>
-                     <h2 className="text-3xl font-bold text-slate-900 mb-4">Servicios para Colegios</h2>
-                     <p className="text-slate-600 mb-8 leading-relaxed">
-                        ¿Eres director o sostenedor? Llevamos la excelencia de Lael y nuestros tutores expertos a tu institución.
+                     <h2 className="text-4xl md:text-6xl font-black text-white mb-6 uppercase tracking-tighter">Área<br /><span className="text-indigo-500">Corporativa</span></h2>
+                     <p className="text-xl text-slate-500 mb-12 font-light leading-relaxed">
+                        Llevamos la excelencia de Lael y nuestros tutores expertos a tu colegio o institución educativa.
                      </p>
-                     <div className="flex flex-col gap-3">
+                     <div className="flex flex-col gap-4">
                         <a
                            href={`https://wa.me/${CONTACT_INFO.whatsapp.number}?text=Hola, soy representante de un colegio...`}
-                           className="px-6 py-3 bg-green-500 text-white font-bold rounded-lg flex items-center gap-2 w-fit hover:bg-green-600 transition-colors"
+                           className="px-8 py-5 bg-green-600 hover:bg-green-500 text-white font-black rounded-2xl flex items-center justify-center gap-3 transition-all shadow-2xl shadow-green-600/20 uppercase tracking-widest text-[10px]"
                         >
-                           <FaWhatsapp className="text-xl" /> Contactar por WhatsApp
+                           <FaWhatsapp className="text-lg" /> Contactar Consultor
                         </a>
                         <a
                            href={`mailto:${CONTACT_INFO.email.address}`}
-                           className="px-6 py-3 bg-slate-100 text-slate-700 font-bold rounded-lg flex items-center gap-2 w-fit hover:bg-slate-200 transition-colors"
+                           className="px-8 py-5 bg-white/5 border border-white/10 text-white font-black rounded-2xl flex items-center justify-center gap-3 hover:bg-white/10 transition-all uppercase tracking-widest text-[10px]"
                         >
-                           <FaEnvelope className="text-xl" /> Enviar Correo
+                           <FaEnvelope className="text-lg" /> Canal Oficial
                         </a>
                      </div>
                   </div>
 
                   {/* Right Grid */}
-                  <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-8">
                      {SCHOOL_SERVICES.map((serv) => (
-                        <div key={serv.id} className="bg-slate-50 p-6 rounded-xl border border-slate-200 hover:border-blue-300 transition-colors">
-                           <span className="text-3xl mb-4 block">{serv.icon}</span>
-                           <h4 className="font-bold text-slate-900 mb-2">{serv.title}</h4>
-                           <p className="text-sm text-slate-500 mb-4 h-10">{serv.desc}</p>
-                           <div className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-100 py-1 px-2 rounded w-fit">
+                        <div key={serv.id} className="bg-white/[0.01] p-12 rounded-[3.5rem] border border-white/5 hover:border-indigo-500/30 transition-all duration-500 group relative overflow-hidden backdrop-blur-3xl">
+                           <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 rounded-full blur-[50px] pointer-events-none" />
+                           <span className="text-5xl mb-8 block grayscale group-hover:grayscale-0 transition-all duration-700">{serv.icon}</span>
+                           <h4 className="text-2xl font-black text-white mb-4 uppercase tracking-tight">{serv.title}</h4>
+                           <p className="text-slate-500 text-sm mb-10 min-h-[48px] font-light italic leading-relaxed">"{serv.desc}"</p>
+                           <div className="text-[10px] font-black uppercase tracking-widest text-indigo-400 bg-indigo-500/10 py-2 px-6 rounded-full border border-indigo-500/20 w-fit">
                               {serv.priceRef}
                            </div>
                         </div>
@@ -454,18 +453,18 @@ export default function Academy() {
                   initial={{ y: 100 }}
                   animate={{ y: 0 }}
                   exit={{ y: 100 }}
-                  className="fixed bottom-0 left-0 w-full bg-slate-900/95 backdrop-blur-md border-t border-slate-800 z-50 py-3"
+                  className="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-3xl border-t border-white/10 z-50 py-6"
                >
-                  <div className="container mx-auto px-6 flex justify-between items-center text-white">
+                  <div className="container mx-auto px-8 flex justify-between items-center text-white">
                      <div>
-                        <strong className="text-amber-400 block font-serif">Lael Academy</strong>
-                        <span className="text-xs text-slate-400">Perteneciente a Dios</span>
+                        <strong className="text-amber-500 block text-xs font-black uppercase tracking-widest mb-1 leading-none">Lael Academy 2026</strong>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Perteneciente a Dios</span>
                      </div>
                      <button
                         onClick={() => scrollToSection('packs')}
-                        className="px-6 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold rounded-lg text-sm transition-colors shadow-lg"
+                        className="px-10 py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-[10px] transition-all shadow-2xl shadow-amber-500/20 uppercase tracking-widest"
                      >
-                        Ver Packs Disponibles
+                        Ver Planes
                      </button>
                   </div>
                </motion.div>

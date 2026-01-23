@@ -20,7 +20,9 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'system-ui', 'Arial', 'sans-serif'],
+        display: ['Space Grotesk', 'system-ui', 'Arial', 'sans-serif'],
+        accent: ['Outfit', 'system-ui', 'Arial', 'sans-serif'],
       },
       boxShadow: {
         lael: "0 8px 24px rgba(2,6,23,.25)",

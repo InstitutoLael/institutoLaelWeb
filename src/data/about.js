@@ -25,9 +25,9 @@ export const ABOUT_DATA = {
     founder: {
         name: "Diego Chaparro",
         role: "Fundador & Director",
-        bio: "Comenzó enseñando matemáticas con una pizarra en una habitación y hoy lidera la visión educativa. Cree firmemente que los números no son difíciles, solo están mal explicados.",
+        bio: "Comenzó enseñando matemáticas con una pizarra en una habitación y hoy potencia la visión educativa de toda la comunidad. Cree firmemente que los números no son difíciles, solo están mal explicados.",
         quote: "Aquí nadie es un número, todos tienen un propósito.",
-        tags: ["Liderazgo", "Matemáticas", "Visión"]
+        tags: ["Educación", "Matemáticas", "Visión 2026"]
     },
     values: [
         {

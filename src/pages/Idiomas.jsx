@@ -154,7 +154,7 @@ export default function Idiomas() {
         <motion.div
           animate={{ x: [0, -50, 0], y: [0, 40, 0], opacity: [0.2, 0.5, 0.2] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-pink-600/20 rounded-full blur-[100px] pointer-events-none"
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-cyan-600/20 rounded-full blur-[100px] pointer-events-none"
         />
 
         <div className="container mx-auto px-6 relative z-10 text-center max-w-4xl">
@@ -164,7 +164,7 @@ export default function Idiomas() {
             variants={fadeInUp}
             className="inline-flex items-center gap-2 bg-slate-800/50 backdrop-blur-md border border-slate-700/50 px-4 py-2 rounded-full text-sm font-medium text-blue-300 mb-8"
           >
-            <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,211,238,0.5)]"></span>
+            <span className="w-2 h-2 bg-blue-400 rounded-full animate-pulse shadow-[0_0_10px_rgba(37,99,235,0.5)]"></span>
             Matrículas Abiertas 2026
           </motion.div>
 
@@ -175,7 +175,7 @@ export default function Idiomas() {
             className="text-5xl md:text-8xl font-black tracking-tighter mb-8 leading-tight uppercase"
           >
             No estudies idiomas.<br />
-            <span className="bg-gradient-to-r from-blue-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-white via-blue-200 to-amber-200 bg-clip-text text-transparent italic">
               Vive la cultura.
             </span>
           </motion.h1>
@@ -202,7 +202,7 @@ export default function Idiomas() {
               onClick={scrollToBuilder}
               className="px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg flex items-center gap-2 shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.4)] transition-all"
             >
-              <FaPassport /> Obtener mi Pasaporte
+              <FaGraduationCap /> Empezar mi Plan
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
@@ -385,14 +385,14 @@ export default function Idiomas() {
 
                 <div className="relative z-10">
                   <div className="flex items-center justify-center gap-3 mb-10 pb-10 border-b border-white/5">
-                    <FaPassport className="text-blue-500 text-2xl" />
-                    <h3 className="font-black text-xl tracking-tighter uppercase text-white">Boarding Pass</h3>
+                    <FaGraduationCap className="text-amber-500 text-2xl" />
+                    <h3 className="font-black text-xl tracking-tighter uppercase text-white">Tu Plan Especial</h3>
                   </div>
 
                   {selectedIds.length === 0 ? (
                     <div className="text-center py-12 text-slate-600 italic">
                       <div className="text-6xl mb-6 opacity-20">🌍</div>
-                      <p className="font-medium text-sm">Selecciona tu próximo <br /> destino en el mapa</p>
+                      <p className="font-medium text-sm">Selecciona tu próximo <br /> desafío académico</p>
                     </div>
                   ) : (
                     <ul className="space-y-4 mb-10">
@@ -646,7 +646,7 @@ export default function Idiomas() {
           >
             <div className="container mx-auto px-8 flex justify-between items-center">
               <div>
-                <strong className="text-blue-500 font-black uppercase tracking-widest text-xs block mb-1">Pasaporte Cultural</strong>
+                <strong className="text-blue-500 font-black uppercase tracking-widest text-xs block mb-1">Plan Cultural</strong>
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">{pricing.label}</span>
               </div>
               <div className="flex items-center gap-10">

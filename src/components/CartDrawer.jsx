@@ -142,7 +142,7 @@ export default function CartDrawer() {
                                     </div>
                                 </div>
 
-                                <div className="space-y-3">
+                                <div className="space-y-3 pb-8 md:pb-0">
                                     <button
                                         onClick={() => {
                                             handleCheckout();
@@ -162,7 +162,7 @@ export default function CartDrawer() {
                                         <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
                                     </button>
 
-                                    <div className="flex justify-center items-center gap-6 mt-6">
+                                    <div className="flex justify-center items-center gap-6 mt-6 pb-4">
                                         <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                                             <FaShieldAlt className="text-emerald-500" /> WebPay Secure
                                         </div>

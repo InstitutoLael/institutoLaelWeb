@@ -16,8 +16,8 @@ export default function CartButton() {
     return () => clearTimeout(timer);
   }, [count]);
 
-  // Si no hay nada, no mostramos el botón (a menos que esté abierto el drawer)
-  if (count === 0 && !isCartOpen) return null;
+  // Si no hay nada, no mostramos el botón. Si el drawer está abierto, lo ocultamos para evitar overlap.
+  if (count === 0 || isCartOpen) return null;
 
   return (
     <>

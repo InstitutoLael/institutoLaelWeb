@@ -143,7 +143,45 @@ export default function Contacto() {
           </motion.div>
         </header>
 
-        {/* ──────────────── 2. INTERACTIVE DECISION TREE ──────────────── */}
+        {/* ──────────────── 2. GLOBAL INFO GRID (PRIORITIZED) ──────────────── */}
+        <section className="pb-24 bg-white/[0.01]">
+          <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex items-start gap-6 bg-white/[0.03] p-8 rounded-[2rem] border border-white/5">
+              <div className="w-14 h-14 shrink-0 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400 text-xl border border-indigo-500/20"><FaMapMarkerAlt /></div>
+              <div>
+                <h4 className="font-black text-white uppercase tracking-tighter text-lg mb-2">Presencia Regional</h4>
+                <p className="text-slate-500 text-xs leading-relaxed">
+                  {CONTACT_INFO.location.address} <br />
+                  <span className="text-[9px] font-black text-indigo-400 mt-2 block uppercase tracking-widest">Atención 100% Digital</span>
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="flex items-start gap-6 bg-white/[0.03] p-8 rounded-[2rem] border border-white/5">
+              <div className="w-14 h-14 shrink-0 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 text-xl border border-amber-500/20"><FaClock /></div>
+              <div>
+                <h4 className="font-black text-white uppercase tracking-tighter text-lg mb-2">Ciclo de Atención</h4>
+                <p className="text-slate-500 text-xs leading-relaxed">
+                  {CONTACT_INFO.schedule.week} <br />
+                  <span className="text-slate-400">{CONTACT_INFO.schedule.weekend}</span>
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex items-start gap-6 bg-white/[0.03] p-8 rounded-[2rem] border border-white/5">
+              <div className="w-14 h-14 shrink-0 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 text-xl border border-emerald-500/20"><FaInstagram /></div>
+              <div>
+                <h4 className="font-black text-white uppercase tracking-tighter text-lg mb-2">Comunidad</h4>
+                <p className="text-slate-500 text-xs leading-relaxed mb-3">Síguenos para novedades y tips diarios.</p>
+                <a href={CONTACT_INFO.instagram.url} target="_blank" className="text-xs font-black text-indigo-400 hover:text-white transition-colors uppercase tracking-[0.2em]">@institutolael</a>
+              </div>
+            </motion.div>
+
+          </div>
+        </section>
+
+        {/* ──────────────── 3. INTERACTIVE DECISION TREE ──────────────── */}
         <section className="container mx-auto px-6 pb-40 min-h-[600px]">
           <AnimatePresence mode="wait">
             {step === 1 && (
@@ -272,62 +310,8 @@ export default function Contacto() {
             )}
           </AnimatePresence>
         </section>
-
-        {/* ──────────────── 3. GLOBAL INFO GRID ──────────────── */}
-        <section className="py-32 bg-white/[0.01] border-y border-white/5">
-          <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-16">
-
-            <motion.div whileHover={{ y: -5 }} className="flex items-start gap-8">
-              <div className="w-16 h-16 shrink-0 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400 text-2xl border border-indigo-500/20"><FaMapMarkerAlt /></div>
-              <div>
-                <h4 className="font-black text-white uppercase tracking-tighter text-xl mb-3">Sede Central</h4>
-                <p className="text-slate-500 text-sm leading-relaxed">
-                  {CONTACT_INFO.location.address} <br />
-                  <span className="text-[10px] font-black text-indigo-400 mt-2 block uppercase tracking-widest">{CONTACT_INFO.location.note}</span>
-                </p>
-              </div>
-            </motion.div>
-
-            <motion.div whileHover={{ y: -5 }} className="flex items-start gap-8">
-              <div className="w-16 h-16 shrink-0 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 text-2xl border border-amber-500/20"><FaClock /></div>
-              <div>
-                <h4 className="font-black text-white uppercase tracking-tighter text-xl mb-3">Ciclo Operativo</h4>
-                <p className="text-slate-500 text-sm leading-relaxed">
-                  {CONTACT_INFO.schedule.week} <br />
-                  <span className="text-slate-400">{CONTACT_INFO.schedule.weekend}</span>
-                </p>
-              </div>
-            </motion.div>
-
-            <motion.div whileHover={{ y: -5 }} className="flex items-start gap-8">
-              <div className="w-16 h-16 shrink-0 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 text-2xl border border-emerald-500/20"><FaInstagram /></div>
-              <div>
-                <h4 className="font-black text-white uppercase tracking-tighter text-xl mb-3">Ecosistema Social</h4>
-                <p className="text-slate-500 text-sm leading-relaxed mb-4">Súmate a la comunidad para actualizaciones diarias.</p>
-                <a href={CONTACT_INFO.instagram.url} target="_blank" className="text-xs font-black text-indigo-400 hover:text-white transition-colors uppercase tracking-[0.2em]">@institutolael</a>
-              </div>
-            </motion.div>
-
-          </div>
-        </section>
-
-        {/* ──────────────── 4. DARK MAP EMBED ──────────────── */}
-        <section className="h-[600px] w-full relative group grayscale invert contrast-125 opacity-30 hover:opacity-100 transition-opacity duration-1000">
-          <iframe
-            src={CONTACT_INFO.location.mapEmbed}
-            className="w-full h-full border-none"
-            loading="lazy"
-            title="Mapa Lael 2.0"
-          ></iframe>
-          <div className="absolute inset-0 bg-indigo-900/10 pointer-events-none mix-blend-overlay"></div>
-          <div className="absolute bottom-12 left-12 z-10">
-            <div className="bg-slate-950/80 backdrop-blur-xl p-8 rounded-[2.5rem] border border-white/10 shadow-2xl">
-              <div className="flex items-center gap-4 text-white font-black uppercase tracking-tighter text-lg">
-                <MdVerified className="text-indigo-400 text-2xl" /> HQ Santiago de Chile
-              </div>
-            </div>
-          </div>
-        </section>
+      </div>
+    </div>
       </div>
     </div>
   );

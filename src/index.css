@@ -2,9 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=Space+Grotesk:wght@300;500;700&family=Outfit:wght@300;400;600;800&display=swap");
+
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-family: "Inter", system-ui, Arial, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Space Grotesk", system-ui, Arial, sans-serif;
+    @apply tracking-tighter;
   }
 
   body {
@@ -13,7 +26,7 @@
   }
 
   /* Tactile feedback for buttons and interactive elements */
-  button:active, 
+  button:active,
   a:active {
     transform: scale(0.97);
     transition: transform 0.1s ease;
@@ -29,5 +42,6 @@
   .glass {
     @apply backdrop-blur-xl bg-white/5 border border-white/10;
     -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
   }
 }

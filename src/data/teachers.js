@@ -10,7 +10,7 @@ export const teachers = [
     bio: "Fundador de Instituto Lael. Comenzó enseñando matemáticas con una pizarra y hoy lidera la visión educativa. Cree firmemente que los números no son difíciles, solo están mal explicados.",
     accent: "#F59E0B", // Gold
     img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=F59E0B&color=fff&size=200&bold=true",
-    tags: ["Liderazgo", "Matemáticas", "Estrategia"],
+    tags: ["Matemáticas", "Estrategia PAES", "Visión 2026"],
     social: { linkedin: "#", instagram: "#" },
     featured: true
   },
@@ -22,7 +22,7 @@ export const teachers = [
     bio: "Nuestra profesora nativa (Sorda) y Educadora de Párvulos profesional. Combina la cultura sorda con una pedagogía experta, paciente y estructurada.",
     accent: "#10B981", // Emerald
     img: "https://ui-avatars.com/api/?name=Fernanda+LSCh&background=10B981&color=fff&size=200&bold=true",
-    tags: ["Sorda Nativa", "Educ. Párvulos", "Cultura Sorda"],
+    tags: ["Educa. Sorda", "Educ. Párvulos", "Pedagogía LSCh"],
     featured: true
   },
   {

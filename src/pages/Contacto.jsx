@@ -312,7 +312,5 @@ export default function Contacto() {
         </section>
       </div>
     </div>
-      </div>
-    </div>
   );
 }

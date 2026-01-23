@@ -111,9 +111,15 @@ export default function SEOHead({
       <meta name="twitter:image" content={metaImage} />
 
       {/* Schema.org JSON-LD */}
-      <script type="application/ld+json">
-        {JSON.stringify(schemaOrg.filter(item => item && typeof item === 'object' && item['@context']))}
-      </script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": schemaOrg.filter(item => item && typeof item === 'object')
+          })
+        }}
+      />
     </Helmet>
   );
 }

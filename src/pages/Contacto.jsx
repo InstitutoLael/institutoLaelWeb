@@ -165,7 +165,7 @@ export default function Contacto() {
                 <p className="text-slate-500 text-xs leading-relaxed">
                   Para envío de documentación, convenios y otros temas formales.
                 </p>
-                <a href={`mailto:${CONTACT_INFO.email}`} className="text-xs font-black text-amber-500 hover:text-white transition-colors uppercase tracking-[0.2em] mt-2 block">{CONTACT_INFO.email}</a>
+                <a href={`mailto:${CONTACT_INFO.email.address}`} className="text-xs font-black text-amber-500 hover:text-white transition-colors uppercase tracking-[0.2em] mt-2 block">{CONTACT_INFO.email.address}</a>
               </div>
             </motion.div>
 

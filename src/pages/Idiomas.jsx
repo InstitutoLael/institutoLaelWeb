@@ -114,9 +114,14 @@ export default function Idiomas() {
       return;
     }
     const names = selectedIds.map(id => LANGUAGES.find(l => l.id === id).name).join(" + ");
-    const dbProduct = dbProducts.find(p => p.category === 'Idioma');
+    
+    // Improved matching: find the DB product that matches the calculated label
+    // e.g., "Plan Idiomas (1 Idioma)", "Plan Dúo Idiomas (2 Idiomas)", or "Plan Políglota (3+ Idiomas)"
+    const dbProduct = dbProducts.find(p => 
+      p.name.toLowerCase().includes(pricing.label.toLowerCase()) ||
+      (pricing.count >= 3 && p.name.includes("Políglota"))
+    );
 
-    // We use a custom ID for the bundle, but in the checkout we will associate it with DB products
     addToCart({
       id: `lang-bundle-${selectedIds.join('-')}`,
       db_id: dbProduct ? dbProduct.id : null,

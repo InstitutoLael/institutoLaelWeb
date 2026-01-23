@@ -33,6 +33,27 @@ export default function EscuelaAdultos() {
    const { addToCart, openCart } = useCart();
    const [activeFaq, setActiveFaq] = useState(null);
    const [showSticky, setShowSticky] = useState(false);
+   const [dbProducts, setDbProducts] = useState([]);
+   const [loading, setLoading] = useState(true);
+
+   // FETCH PRODUCTS
+   useEffect(() => {
+      const fetchProducts = async () => {
+         try {
+            const { data, error } = await supabase
+               .from('products')
+               .select('*')
+               .eq('category', 'NIVELACION');
+            if (error) throw error;
+            setDbProducts(data || []);
+         } catch (err) {
+            console.error("Error fetching Nivelación products:", err);
+         } finally {
+            setLoading(false);
+         }
+      };
+      fetchProducts();
+   }, []);
 
    // SCROLL DETECTION
    useEffect(() => {
@@ -43,8 +64,18 @@ export default function EscuelaAdultos() {
 
    const handleEnroll = (planId) => {
       const quote = getNivelacionQuote(planId);
+      
+      // Match with DB product
+      let matchName = "";
+      if (planId === 'social') matchName = "Cupo Social";
+      else if (planId === 'consciente') matchName = "Plan Estándar";
+      else if (planId === 'padrino') matchName = "Plan Padrino";
+
+      const dbProduct = dbProducts.find(p => p.name.includes(matchName));
+
       addToCart({
          id: `caminos-${quote.planId}`,
+         db_id: dbProduct ? dbProduct.id : null,
          title: `Programa Caminos: ${quote.title}`,
          price: quote.monthlyPrice,
          detail: quote.isFree ? 'Beca de Gratuidad (Cupo Social)' : 'Mensualidad Estándar',

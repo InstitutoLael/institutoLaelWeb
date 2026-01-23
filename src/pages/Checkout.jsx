@@ -116,23 +116,27 @@ export default function Checkout() {
         try {
             if (!user) {
                 try {
-                    await signUp({
+                    console.log("Signing up new user:", formData.email);
+                    const signupData = await signUp({
                         email: formData.email,
                         password: formData.password || "Lael2026!",
                         fullName: formData.fullName
                     });
+                    console.log("Signup successful:", signupData?.user?.id);
                 } catch (err) {
-                    if (err.message.includes("already registered")) {
-                        setAuthError("Ya tienes una cuenta. Por favor, inicia sesión o usa otro correo.");
-                        setLoading(false);
-                        return;
+                    if (err.message.includes("already registered") || err.message.includes("Users table violation")) {
+                        console.warn("User already exists or conflict:", err.message);
+                        // We continue because they might just need to sign in, 
+                        // or we can try to proceed as guest if the DB allows.
+                    } else {
+                        throw err;
                     }
-                    throw err;
                 }
             }
             setStep('summary');
         } catch (err) {
-            setAuthError(err.message);
+            console.error("Error in Step 1:", err);
+            setAuthError(err.message || "Error al procesar tus datos.");
         } finally {
             setLoading(false);
         }
@@ -142,37 +146,70 @@ export default function Checkout() {
         if (loading) return;
         setLoading(true);
         try {
+            console.log("Starting handleFinalize...");
+            console.log("Current user:", user?.id);
+            console.log("Payment method:", paymentMethod);
+
             const itemsSummary = cart.map(i => i.title).join(" + ");
 
+            // Ensure we have a user_id if required or handle anonymous
+            const orderData = {
+                user_id: user?.id || null,
+                total_amount: total,
+                payment_method: paymentMethod,
+                status: 'pending',
+                // These columns might not exist in the DB, so we'll check later
+                // If they don't, we should use a separate 'customer_data' table or metadata
+                customer_name: formData.fullName,
+                customer_email: formData.email,
+                customer_phone: formData.phone,
+                customer_rut: formData.rut,
+                items_summary: itemsSummary
+            };
+
+            console.log("Inserting order:", orderData);
             const { data: order, error: orderError } = await supabase
                 .from('orders')
-                .insert({
-                    user_id: user?.id || null,
-                    total_amount: total,
-                    payment_method: paymentMethod,
-                    status: 'pending',
-                    customer_name: formData.fullName,
-                    customer_email: formData.email,
-                    customer_phone: formData.phone,
-                    customer_rut: formData.rut,
-                    items_summary: itemsSummary
-                })
+                .insert(orderData)
                 .select()
                 .single();
 
-            if (orderError) throw orderError;
+            if (orderError) {
+                console.error("Order insertion error:", orderError);
+                if (orderError.code === '42703') {
+                    throw new Error("Error de base de datos: Faltan columnas en la tabla 'orders'. Por favor ejecuta el script de migración SQL.");
+                }
+                if (orderError.code === '23502') {
+                    throw new Error("Error: user_id no debe ser nulo. El usuario debe estar autenticado o la tabla debe permitir nulos.");
+                }
+                throw orderError;
+            }
+            console.log("Order created successfully:", order.id);
 
             const items = cart.map(item => ({
                 order_id: order.id,
-                product_id: item.db_id || null,
+                product_id: item.db_id, // We'll filter nulls next
                 price_at_purchase: item.price
-            }));
-            await supabase.from('order_items').insert(items);
+            })).filter(i => i.product_id); // CRITICAL: Avoid inserting null product_ids
+
+            if (items.length > 0) {
+                console.log("Inserting order items:", items);
+                const { error: itemsError } = await supabase.from('order_items').insert(items);
+                if (itemsError) {
+                    console.error("Items insertion error:", itemsError);
+                    // We don't necessarily want to fail the whole order if items fail to link, 
+                    // but it's good to know.
+                }
+            } else {
+                console.warn("No items with valid db_id found to insert into order_items.");
+            }
 
             if (paymentMethod === 'transfer') {
+                console.log("Transfer selected, clearing cart and navigating...");
                 clearCart();
                 navigate("/gracias", { state: { order, total, paymentMethod: 'transfer' } });
             } else {
+                console.log("Mercado Pago selected, calling Edge Function...");
                 const { data, error: functionError } = await supabase.functions.invoke('create-mp-preference', {
                     body: {
                         orderId: order.id,
@@ -190,8 +227,12 @@ export default function Checkout() {
                     }
                 });
 
-                if (functionError) throw functionError;
+                if (functionError) {
+                    console.error("Edge Function error:", functionError);
+                    throw functionError;
+                }
 
+                console.log("Edge Function response:", data);
                 if (data?.init_point) {
                     window.location.href = data.init_point;
                 } else if (data?.id) {
@@ -202,10 +243,11 @@ export default function Checkout() {
             }
 
         } catch (err) {
-            console.error(err);
-            alert("Hubo un problema al procesar tu solicitud. Por favor intenta nuevamente.");
+            console.error("CRITICAL ERROR in handleFinalize:", err);
+            alert(`Hubo un problema al procesar tu solicitud: ${err.message || "Error desconocido"}`);
             setAuthError("No pudimos guardar tu orden. Revisa tus datos e intenta de nuevo.");
         } finally {
+            console.log("handleFinalize finished.");
             setLoading(false);
         }
     };

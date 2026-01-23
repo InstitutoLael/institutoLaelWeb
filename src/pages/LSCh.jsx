@@ -47,6 +47,27 @@ export default function Lsch() {
    const [planType, setPlanType] = useState("group"); // 'group' | 'one2one'
    const [isChurch, setIsChurch] = useState(false);
    const [showSticky, setShowSticky] = useState(false);
+   const [dbProducts, setDbProducts] = useState([]);
+   const [loading, setLoading] = useState(true);
+
+   // FETCH PRODUCTS
+   useEffect(() => {
+      const fetchProducts = async () => {
+         try {
+            const { data, error } = await supabase
+               .from('products')
+               .select('*')
+               .eq('category', 'LSCH');
+            if (error) throw error;
+            setDbProducts(data || []);
+         } catch (err) {
+            console.error("Error fetching LSCh products:", err);
+         } finally {
+            setLoading(false);
+         }
+      };
+      fetchProducts();
+   }, []);
 
    // SCROLL LISTENER
    useEffect(() => {
@@ -60,8 +81,19 @@ export default function Lsch() {
       const calc = calculateLschPrice(planId, isChurch);
       const cartId = `lsch-${planId}-${isChurch ? 'church' : 'std'}`;
 
+      // Match with DB product
+      let matchName = "";
+      if (isChurch) matchName = "Convenio Iglesia";
+      else if (planId.includes('monthly')) matchName = "Mensual";
+      else if (planId.includes('quarter')) matchName = "Trimestral";
+      else if (planId === 'pack4') matchName = "4 Sesiones";
+      else if (planId === 'pack8') matchName = "8 Sesiones";
+
+      const dbProduct = dbProducts.find(p => p.name.includes(matchName));
+
       addToCart({
          id: cartId,
+         db_id: dbProduct ? dbProduct.id : null,
          title: isChurch ? `LSCh Social: ${calc.label}` : `LSCh: ${calc.label}`,
          price: calc.price,
          detail: isChurch ? 'Convenio Iglesia/Social' : (planId.includes('quarter') ? 'Plan Trimestral' : 'Plan Mensual'),

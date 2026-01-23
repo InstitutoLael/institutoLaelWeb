@@ -39,10 +39,27 @@ export default function Academy() {
    const { addToCart, openCart } = useCart();
    const [activeLevel, setActiveLevel] = useState("media");
    const [showSticky, setShowSticky] = useState(false);
+   const [dbProducts, setDbProducts] = useState([]);
+   const [loading, setLoading] = useState(true);
 
-   // CONTACT
-   const WHATSAPP_NUM = "56964626568";
-   const EMAIL_COORD = "coordinacion@institutolael.cl";
+   // FETCH PRODUCTS
+   useEffect(() => {
+      const fetchProducts = async () => {
+         try {
+            const { data, error } = await supabase
+               .from('products')
+               .select('*')
+               .eq('category', 'TALLER');
+            if (error) throw error;
+            setDbProducts(data || []);
+         } catch (err) {
+            console.error("Error fetching Academy products:", err);
+         } finally {
+            setLoading(false);
+         }
+      };
+      fetchProducts();
+   }, []);
 
    useEffect(() => {
       const handleScroll = () => setShowSticky(window.scrollY > 900);
@@ -51,8 +68,12 @@ export default function Academy() {
    }, []);
 
    const handleEnroll = (pack) => {
+      // Improved matching: find the DB product that matches the hours
+      const dbProduct = dbProducts.find(p => p.name.includes(`${pack.hours} hrs`));
+      
       addToCart({
          id: `academy-${pack.id}`,
+         db_id: dbProduct ? dbProduct.id : null,
          title: `Academy: ${pack.title}`,
          price: pack.price,
          detail: `${pack.hours} Horas Cronológicas - Asignaturas a elección (Mix)`,

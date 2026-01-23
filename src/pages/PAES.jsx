@@ -93,9 +93,14 @@ export default function Paes() {
     if (selectedIds.length === 0) return;
 
     // Find matching subjects in DB products to get their real IDs if available
-    // For now, we keep the custom plan logic, but using the calculated price.
     const names = selectedIds.map(id => PAES_SUBJECTS.find(s => s.id === id).name).join(", ");
-    const dbProduct = dbProducts.find(p => p.name.includes("PAES"));
+    
+    // Improved matching: find the DB product that matches the calculated label
+    // e.g., "Plan Monoramo PAES"
+    const dbProduct = dbProducts.find(p => 
+      p.name.toLowerCase().includes(pricing.label.toLowerCase()) || 
+      (pricing.count >= 4 && p.name.includes("Full Intensivo"))
+    );
 
     addToCart({
       id: `custom-paes-${selectedIds.join('-')}`,
@@ -109,8 +114,10 @@ export default function Paes() {
   };
 
   const handleAddCombo = (combo) => {
-    // Find the corresponding product in DB by name or matching criteria
-    const dbProduct = dbProducts.find(p => p.name.includes(combo.title));
+    // Improved matching for combos
+    const dbProduct = dbProducts.find(p => 
+      p.name.toLowerCase().includes(combo.title.toLowerCase())
+    );
 
     addToCart({
       id: dbProduct ? dbProduct.id : `combo-${combo.id}`,

@@ -71,7 +71,7 @@ export default function Footer() {
             </div>
 
             {/* BARRA INFERIOR */}
-            <div className="border-t border-white/5 py-8 bg-[#050505]">
+            <div className="border-t border-white/5 py-10 bg-[#050505]/80 backdrop-blur-xl">
                 <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-zinc-600">
                     <p>© {currentYear} Instituto Lael SpA. Todos los derechos reservados.</p>
                     <div className="flex gap-6">

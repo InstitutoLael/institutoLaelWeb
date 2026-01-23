@@ -93,7 +93,7 @@ export default function Home() {
                             <BsLightningChargeFill className="animate-pulse" /> Lael Experience 2.0
                         </motion.div>
 
-                        <h1 className="text-6xl md:text-8xl lg:text-[10rem] font-black text-white leading-[0.85] tracking-tighter mb-10 pb-4">
+                        <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black text-white leading-[0.85] tracking-tighter mb-10 pb-4">
                             Educar <br />
                             <span className="bg-gradient-to-r from-amber-200 via-amber-500 to-amber-700 bg-clip-text text-transparent italic">Sin Límites.</span>
                         </h1>

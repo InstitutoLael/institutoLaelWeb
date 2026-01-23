@@ -11,7 +11,7 @@ import { NAVIGATION } from "../data/navigation";
 const Icons = {
   ChevronDown: ({ className }) => <svg className={className} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>,
   Menu: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></svg>,
-  X: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 18 18" /></svg>,
+  X: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="4" x2="12" y2="20" /><line x1="6" y1="9" x2="18" y2="9" /></svg>,
   Bag: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>,
   WhatsApp: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.08-.13-.27-.2-.57-.35M12.05 21.78h-.01A9.87 9.87 0 017.01 20.4l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26C2.16 6.49 6.6 2.05 12.05 2.05c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.89 6.99c-.01 5.45-4.44 9.84-9.88 9.84" /></svg>,
   User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>,
@@ -63,12 +63,15 @@ export default function Navbar() {
 
   // Navbar Classes (Glass effect)
   const navClasses = `fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled
-    ? "bg-[#050505]/80 backdrop-blur-xl border-b border-white/10 shadow-lg py-3"
+    ? "bg-[#050505]/95 backdrop-blur-2xl border-b border-white/5 shadow-2xl py-3"
     : "bg-transparent py-5"
     }`;
 
   return (
-    <header className={navClasses}>
+    <header
+      className={navClasses}
+      style={{ WebkitBackdropFilter: scrolled ? "blur(40px)" : "none" }}
+    >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
 
         {/* === LOGO === */}
@@ -83,7 +86,7 @@ export default function Navbar() {
         {/* === DESKTOP NAVIGATION (> 1024px) === */}
         <nav className="hidden lg:flex items-center gap-1">
           {/* Main Links (Inicio) */}
-          <NavLink to={NAVIGATION.main[0].path} className={({ isActive }) => `px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}>
+          <NavLink to={NAVIGATION.main[0].path} className={({ isActive }) => `px - 4 py - 2 text - sm font - medium rounded - full transition - all duration - 300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'} `}>
             {NAVIGATION.main[0].name}
           </NavLink>
 
@@ -119,7 +122,7 @@ export default function Navbar() {
 
           {/* Main Links Restantes (Empresas, Nosotros) */}
           {NAVIGATION.main.slice(1).map((link, idx) => (
-            <NavLink key={idx} to={link.path} className={({ isActive }) => `px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'}`}>
+            <NavLink key={idx} to={link.path} className={({ isActive }) => `px - 4 py - 2 text - sm font - medium rounded - full transition - all duration - 300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-slate-300 hover:text-white hover:bg-white/5'} `}>
               {link.name}
             </NavLink>
           ))}
@@ -187,9 +190,16 @@ export default function Navbar() {
               {/* Drawer Content */}
               <div className="flex-1 overflow-y-auto p-6 space-y-8">
                 {/* Header & Close */}
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-white tracking-wide">Menú</span>
-                  <button onClick={() => setMobileOpen(false)} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-white hover:bg-white/10">
+                <div className="flex items-center justify-between pb-6 border-b border-white/5">
+                  <div className="flex flex-col">
+                    <span className="text-lg font-black text-white uppercase tracking-tighter">Instituto <span className="text-indigo-500">Lael</span></span>
+                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest leading-none">Menú de Navegación</span>
+                  </div>
+                  <button
+                    onClick={() => setMobileOpen(false)}
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-white hover:bg-white/10 active:scale-90 transition-all border border-white/10"
+                    aria-label="Cerrar menú"
+                  >
                     <Icons.X />
                   </button>
                 </div>
@@ -206,26 +216,34 @@ export default function Navbar() {
                 </Link>
 
                 {/* Navigation Links */}
-                <div className="space-y-4">
-                  <p className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Explorar</p>
-                  <MobileLink to={NAVIGATION.main[0].path}>{NAVIGATION.main[0].name}</MobileLink>
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 pl-2 opacity-60">Explorar</p>
+                    <div className="space-y-1">
+                      <MobileLink to={NAVIGATION.main[0].path}>{NAVIGATION.main[0].name}</MobileLink>
+                    </div>
+                  </div>
 
                   {/* Categorized Mobile Menu */}
                   {Object.entries(NAVIGATION.megaMenu).map(([category, items]) => (
-                    <div key={category} className="pl-2 border-l border-white/10 ml-2">
-                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 pl-2">{category}</p>
-                      {items.map((item, idx) => (
-                        <MobileLink key={idx} to={item.path}>{item.title}</MobileLink>
-                      ))}
+                    <div key={category}>
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 pl-2 opacity-60">{category}</p>
+                      <div className="space-y-1 pl-2 border-l border-white/10">
+                        {items.map((item, idx) => (
+                          <MobileLink key={idx} to={item.path}>{item.title}</MobileLink>
+                        ))}
+                      </div>
                     </div>
                   ))}
-                </div>
 
-                <div className="space-y-4">
-                  <p className="text-xs font-bold text-slate-500 uppercase tracking-widest pl-2">Nosotros</p>
-                  {NAVIGATION.main.slice(1).map((item, idx) => (
-                    <MobileLink key={idx} to={item.path}>{item.name}</MobileLink>
-                  ))}
+                  <div>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 pl-2 opacity-60">Nuestra Academia</p>
+                    <div className="space-y-1 pb-10">
+                      {NAVIGATION.main.slice(1).map((item, idx) => (
+                        <MobileLink key={idx} to={item.path}>{item.name}</MobileLink>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -256,7 +274,7 @@ export default function Navbar() {
 function MegaItem({ to, title, icon, color }) {
   return (
     <Link to={to} className="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
-      <span className={`${color} bg-white/5 p-2 rounded-md group-hover:scale-110 transition-transform`}>
+      <span className={`${color} bg - white / 5 p - 2 rounded - md group - hover: scale - 110 transition - transform`}>
         {icon}
       </span>
       <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">{title}</span>
@@ -269,10 +287,10 @@ function MobileLink({ to, children }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `block py-2 px-3 rounded-lg text-base font-medium transition-all ${isActive
+        `block py - 2 px - 3 rounded - lg text - base font - medium transition - all ${isActive
           ? "bg-white/10 text-white border-l-2 border-indigo-500 pl-4"
           : "text-slate-400 hover:text-white hover:bg-white/5"
-        }`
+        } `
       }
     >
       {children}

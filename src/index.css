@@ -28,5 +28,6 @@
 @layer utilities {
   .glass {
     @apply backdrop-blur-xl bg-white/5 border border-white/10;
+    -webkit-backdrop-filter: blur(20px);
   }
 }

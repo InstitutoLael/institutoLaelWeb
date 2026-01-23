@@ -59,19 +59,23 @@ export default function Checkout() {
 
     // MAGIC LINKS EFFECT: Read data from URL
     useEffect(() => {
-        const urlName = searchParams.get('name');
-        const urlEmail = searchParams.get('email');
-        const urlPhone = searchParams.get('phone');
-        const urlRut = searchParams.get('rut');
+        try {
+            const urlName = searchParams.get('name');
+            const urlEmail = searchParams.get('email');
+            const urlPhone = searchParams.get('phone');
+            const urlRut = searchParams.get('rut');
 
-        if (urlName || urlEmail || urlPhone || urlRut) {
-            setFormData(prev => ({
-                ...prev,
-                fullName: urlName || prev.fullName,
-                email: urlEmail || prev.email,
-                phone: urlPhone || prev.phone,
-                rut: urlRut || prev.rut
-            }));
+            if (urlName || urlEmail || urlPhone || urlRut) {
+                setFormData(prev => ({
+                    ...prev,
+                    fullName: urlName || prev.fullName,
+                    email: urlEmail || prev.email,
+                    phone: urlPhone || prev.phone,
+                    rut: urlRut || prev.rut
+                }));
+            }
+        } catch (err) {
+            console.error("Error parsing URL params:", err);
         }
     }, [searchParams]);
 
@@ -169,10 +173,8 @@ export default function Checkout() {
                 clearCart();
                 navigate("/gracias", { state: { order, total, paymentMethod: 'transfer' } });
             } else {
-                const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-mp-preference`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
+                const { data, error: functionError } = await supabase.functions.invoke('create-mp-preference', {
+                    body: {
                         orderId: order.id,
                         customer_email: formData.email,
                         items: cart.map(item => ({
@@ -185,16 +187,17 @@ export default function Checkout() {
                             failure: `${window.location.origin}/checkout`,
                             pending: `${window.location.origin}/gracias`
                         }
-                    })
+                    }
                 });
-                const data = await response.json();
 
-                if (data.init_point) {
+                if (functionError) throw functionError;
+
+                if (data?.init_point) {
                     window.location.href = data.init_point;
-                } else if (data.id) {
+                } else if (data?.id) {
                     setPreferenceId(data.id);
                 } else {
-                    throw new Error("No se pudo generar el link de pago.");
+                    throw new Error("No se pudo generar el link de pago o la respuesta fue inválida.");
                 }
             }
 

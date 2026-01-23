@@ -28,7 +28,7 @@ const MOTIVATIONAL_QUOTES = [
 
 // --- HELPERS ---
 function calculateDaysToPAES() {
-    const goal = new Date("2025-11-24");
+    const goal = new Date("2026-06-15"); // PAES Invierno 2026
     const now = new Date();
     const diff = goal - now;
     return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
@@ -64,7 +64,7 @@ export default function Home() {
                 <div className="absolute inset-0 z-0">
                     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-indigo-600/10 blur-[40px] md:blur-[60px] rounded-full"></div>
                     <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-amber-500/5 blur-[40px] md:blur-[60px] rounded-full"></div>
-                    <div className="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-repeat"></div>
+                    <div className="absolute inset-0 opacity-20 bg-[url('/textures/cubes.png')] bg-repeat"></div>
                 </div>
 
                 <div className="relative z-10 max-w-5xl mx-auto text-center">
@@ -167,13 +167,13 @@ export default function Home() {
                         {/* WIDGET 1: COUNTDOWN */}
                         <motion.div
                             whileHover={{ y: -10 }}
-                            className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-10 backdrop-blur-3xl flex flex-col justify-between group overflow-hidden relative"
+                            className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-10 backdrop-blur-xl flex flex-col justify-between group overflow-hidden relative"
                         >
                             <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
                                 <FaCalendarAlt size={120} />
                             </div>
                             <div>
-                                <span className="text-emerald-500 font-black text-[10px] uppercase tracking-widest block mb-4">Meta PAES 2025</span>
+                                <span className="text-emerald-500 font-black text-[10px] uppercase tracking-widest block mb-4">Meta PAES Invierno</span>
                                 <h3 className="text-5xl font-black text-white leading-none mb-2">{daysLeft}</h3>
                                 <p className="text-slate-500 font-bold uppercase text-xs tracking-widest">Días para el gran desafío</p>
                             </div>
@@ -226,13 +226,13 @@ export default function Home() {
                         ].map((link, idx) => (
                             <Link
                                 key={idx} to={link.to}
-                                className={`p-6 bg-white/5 border border-white/5 rounded-3xl flex items-center justify-between group transition-all duration-300 hover:bg-white/10 ${link.color}`}
+                                 className={`p-6 bg-white/5 border border-white/5 rounded-3xl flex items-center justify-between group transition-colors duration-300 hover:bg-white/10 ${link.color}`}
                             >
                                 <div className="flex items-center gap-4 font-black uppercase text-xs tracking-widest">
                                     <span className="text-xl opacity-60 group-hover:opacity-100 transition-opacity">{link.icon}</span>
                                     {link.label}
                                 </div>
-                                <FaArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                                 <FaArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-[opacity,transform] duration-300" />
                             </Link>
                         ))}
                     </div>
@@ -300,7 +300,7 @@ export default function Home() {
                                     <h3 className="text-4xl font-black text-white mb-4 uppercase tracking-tighter">Homeschooling</h3>
                                     <p className="text-slate-500 leading-relaxed font-light">Tutorías personalizadas y preparación para exámenes libres. Educación humana al ritmo de tu hijo.</p>
                                 </div>
-                                <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-rose-500 group-hover:border-rose-500 group-hover:text-black transition-all duration-500">
+                                 <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-rose-500 group-hover:border-rose-500 group-hover:text-black transition-[background-color,border-color,color,transform] duration-500">
                                     <FaArrowRight size={30} />
                                 </div>
                             </Link>

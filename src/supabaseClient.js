@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = 'https://oefelsnvxzlupztoxuii.supabase.co'
-const supabaseAnonKey = 'sb_publishable_wjd-l-RNFtk0f46UyUSOdg_fePpoaSy' // Corrected prefix from User Request
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.NEXT_PUBLIC_SUPABASE_URL || 'https://oefelsnvxzlupztoxuii.supabase.co'
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_wjd-l-RNFtk0f46UyUSOdg_fePpoaSy'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)

@@ -74,7 +74,7 @@ export default function Academy() {
          {/* ──────────────── 1. SOLEMN HERO ──────────────── */}
          <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 bg-slate-900 text-white">
             {/* Background Texture */}
-            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/dark-wood.png')] opacity-30 z-0 mix-blend-overlay"></div>
+            <div className="absolute inset-0 bg-[url('/textures/dark-wood.png')] opacity-30 z-0 mix-blend-overlay"></div>
             <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 opacity-90 z-0"></div>
 
             {/* Animated Dust/Particles could go here */}

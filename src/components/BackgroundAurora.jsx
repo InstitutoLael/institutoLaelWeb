@@ -14,7 +14,7 @@ export default function BackgroundAurora() {
       <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-lael-blue/20 rounded-full mix-blend-screen filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
       
       {/* Malla de ruido para textura (hace que no se vea plano) */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
+      <div className="absolute inset-0 bg-[url('/textures/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
     </div>
   );
 }

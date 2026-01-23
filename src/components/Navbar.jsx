@@ -78,6 +78,8 @@ export default function Navbar() {
             alt="Instituto Lael"
             fetchpriority="high"
             loading="eager"
+            width="140"
+            height="40"
             className="h-10 w-auto object-contain transition-[filter,transform,opacity] duration-300 group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]"
           />
         </Link>

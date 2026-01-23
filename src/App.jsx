@@ -154,18 +154,17 @@ export default function App() {
                 <Route path="/terminos" element={<Terminos />} />
                 <Route path="/privacidad" element={<Privacidad />} />
                 <Route path="/naama-studio" element={<NaamaStudio />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </main>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <Footer />
+          </Suspense>
+        </main>
 
-          {/* COMPONENTES FLOTANTES GLOBALES */}
-          <CartDrawer />
-          <CartButton />
-          <WhatsAppButton />
-
-          <Footer />
-        </div>
+        {/* COMPONENTES FLOTANTES GLOBALES */}
+        <CartDrawer />
+        <CartButton />
+        <WhatsAppButton />
+      </div>
       </CartProvider>
     </AuthProvider>
   );

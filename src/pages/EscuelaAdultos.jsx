@@ -99,7 +99,7 @@ export default function EscuelaAdultos() {
          {/* ──────────────── 1. HERO (EMPATHETIC) ──────────────── */}
          <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)]">
             {/* Warm Background Pattern */}
-            <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-5 mix-blend-overlay"></div>
+            <div className="absolute inset-0 bg-[url('/img/hero/adultos-hero.jpg')] bg-cover bg-center opacity-5 mix-blend-overlay"></div>
 
             <div className="container mx-auto px-6 relative z-10 text-center max-w-3xl">
                <motion.div

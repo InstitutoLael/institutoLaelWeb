@@ -146,7 +146,7 @@ export default function Paes() {
       {/* ──────────────── SECTION 1: HERO MASIVO ──────────────── */}
       <header className="relative min-h-[95vh] flex items-center justify-center pt-24 pb-20 overflow-hidden bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)]">
         {/* Ambient Effects */}
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-5 mix-blend-overlay"></div>
+        <div className="absolute inset-0 bg-[url('/img/hero/paes-hero.jpg')] bg-cover bg-center opacity-5 mix-blend-overlay"></div>
 
         <div className="relative z-10 container mx-auto px-6 text-center max-w-4xl">
           <div className="inline-flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full border border-white/10 text-indigo-300 text-sm font-bold mb-8 backdrop-blur-md animate-fade-in-up">

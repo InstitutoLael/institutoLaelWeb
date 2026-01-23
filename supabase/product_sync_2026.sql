@@ -1,24 +1,27 @@
--- product_sync_2026.sql
--- Run this to update your Catalog in Supabase
+-- product_sync_2026_fixed.sql
+-- Run this to update your Catalog in Supabase correctly
 
--- 1. PAES Products
-INSERT INTO products (id, name, price, category) VALUES
-('paes-1', 'PAES: 1 Asignatura', 14990, 'PAES'),
-('paes-2', 'PAES: 2 Asignaturas', 24990, 'PAES'),
-('paes-3', 'PAES: 3 Asignaturas', 34990, 'PAES'),
-('paes-full', 'PAES: Plan Full (4+)', 44990, 'PAES')
-ON CONFLICT (id) DO UPDATE SET price = EXCLUDED.price;
+-- 1. Clean up existing (by name to be safe)
+DELETE FROM products WHERE name IN (
+  'Plan Monoramo PAES', 'Plan Dúo Dinámico', 'Plan Trío Fundamental', '🏆 Plan Full Intensivo (Tarifa Plana)',
+  'Plan Mensual (1 Idioma)', 'Plan Dúo (Ahorro)', 'Plan Políglota (Tarifa Plana)',
+  'Plan Mensual Flexible', 'Plan Trimestral (Ahorro)', 'Convenio Iglesia/Ministerio'
+);
 
--- 2. Idiomas Products
-INSERT INTO products (id, name, price, category) VALUES
-('lang-single', 'Idioma: 1 Nivel', 24990, 'IDIOMAS'),
-('lang-duo', 'Idiomas: Pack Dúo', 39990, 'IDIOMAS'),
-('lang-poly', 'Idiomas: Plan Políglota', 54990, 'IDIOMAS')
-ON CONFLICT (id) DO UPDATE SET price = EXCLUDED.price;
+-- 2. Insert with correct names and categories for the Frontend logic
+INSERT INTO products (name, price, category) VALUES
+-- PAES (Category: PAES)
+('Plan Monoramo PAES', 14990, 'PAES'),
+('Plan Dúo Dinámico', 24990, 'PAES'),
+('Plan Trío Fundamental', 34990, 'PAES'),
+('🏆 Plan Full Intensivo (Tarifa Plana)', 44990, 'PAES'),
 
--- 3. LSCh Products
-INSERT INTO products (id, name, price, category) VALUES
-('lsch-monthly', 'LSCh: Plan Mensual', 24990, 'LSCH'),
-('lsch-quarter', 'LSCh: Plan Trimestral', 19990, 'LSCH'),
-('lsch-church', 'LSCh: Convenio Iglesia', 14990, 'LSCH')
-ON CONFLICT (id) DO UPDATE SET price = EXCLUDED.price;
+-- Idiomas (Category: Idioma)
+('Plan Mensual (1 Idioma)', 24990, 'Idioma'),
+('Plan Dúo (Ahorro)', 39990, 'Idioma'),
+('Plan Políglota (Tarifa Plana)', 54990, 'Idioma'),
+
+-- LSCh (Category: LSCH)
+('Plan Mensual Flexible', 24990, 'LSCH'),
+('Plan Trimestral (Ahorro)', 19990, 'LSCH'),
+('Convenio Iglesia/Ministerio', 14990, 'LSCH');

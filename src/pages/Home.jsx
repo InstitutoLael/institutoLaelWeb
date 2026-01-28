@@ -1,18 +1,13 @@
-import Link from "react-router-dom"; // Ensure Link is imported if not already, or keep existing imports
-import SEOHead from "../components/SEOHead.jsx";
-
-// ... existing imports
-
-export default function Home() {
-    // ... existing code
-    return (
-        <div className="bg-[#020617] text-slate-200 font-sans overflow-x-hidden selection:bg-amber-500/30">
-            <SEOHead title="Preuniversitario, Idiomas y Nivelación" description="Preuniversitario PAES, Cursos de Idiomas y Nivelación de Estudios. Educación online con acompañamiento real." />
-            
-            {/* ──────────────── 1. HERO SECTION "VIVA" ──────────────── */}
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+
+// Components
+import SEOHead from "../components/SEOHead.jsx";
 import PartnersMarquee from "../components/PartnersMarquee.jsx";
 import LiveActivityTicker from "../components/LiveActivityTicker.jsx";
+
+// Icons
 import {
     FaBolt, FaGlobe, FaHands, FaArrowRight, FaUniversity,
     FaBuilding, FaChalkboardTeacher, FaQuoteLeft, FaStar, FaUserGraduate,
@@ -24,6 +19,7 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import { IoSchoolOutline } from "react-icons/io5";
 import { MdVerified, MdDashboardCustomize } from "react-icons/md";
 
+// Data
 import { TESTIMONIALS } from "../data/testimonials";
 
 // --- QUOTES DATA ---
@@ -66,8 +62,8 @@ export default function Home() {
 
     return (
         <div className="bg-[#020617] text-slate-200 font-sans overflow-x-hidden selection:bg-amber-500/30">
+            <SEOHead title="Preuniversitario, Idiomas y Nivelación" description="Preuniversitario PAES, Cursos de Idiomas y Nivelación de Estudios. Educación online con acompañamiento real." />
 
-            {/* ──────────────── 1. HERO SECTION "VIVA" ──────────────── */}
             {/* ──────────────── 1. HERO SECTION "3 MUNDOS" (ECOSYSTEMS) ──────────────── */}
             <section className="relative min-h-screen flex flex-col items-center justify-center py-20 overflow-hidden px-6">
 

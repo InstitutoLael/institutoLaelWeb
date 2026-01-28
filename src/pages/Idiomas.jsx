@@ -1,34 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext.jsx";
 import SEOHead from "../components/SEOHead.jsx";
-
-// ... [rest of imports]
-
-// ... [component code]
-
-  return (
-    <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-blue-500/30">
-      <SEOHead title="Cursos de Inglés y Coreano" description="Aprende idiomas con metodología de inmersión cultural. Clases en vivo de Inglés y Coreano para la vida real." />
-
-      {/* ──────────────── 1. CINEMATIC HERO ──────────────── */}
-import { TESTIMONIALS } from "../data/testimonials.js";
-import { teachers } from "../data/teachers.js";
+import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "../supabaseClient";
 
 // Components
 import LanguagePlacementQuiz from "../components/LanguagePlacementQuiz.jsx";
 import VisualRoadmap from "../components/VisualRoadmap.jsx";
 
-const IDIOMAS_ROADMAP = [
-  { title: "Diagnóstico", desc: "Test de nivelación y objetivos.", subinfo: "Día 1", icon: <FaInfoCircle /> },
-  { title: "Inmersión", desc: "Clases 100% interactivas.", subinfo: "Semana 1+", icon: <FaGlobe /> },
-  { title: "Conversación", desc: "Storytelling y role-play.", subinfo: "Día 15+", icon: <FaUsers /> },
-  { title: "Fluidez", desc: "Dominio de estructuras reales.", subinfo: "Mes 3+", icon: <FaBolt /> },
-  { title: "Certificación", desc: "Preparación para exámenes intl.", subinfo: "Logro", icon: <FaTrophy /> },
-];
-import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "../supabaseClient";
-
-// ICONS
+// Icons
 import {
   FaCheck, FaGlobeAmericas, FaPlaneDeparture, FaPassport, FaHeadphones,
   FaWhatsapp, FaArrowRight, FaStar, FaLock, FaUsers, FaCertificate, FaVideo,
@@ -40,6 +20,8 @@ import { MdTranslate, MdOutlineFlightTakeoff, MdQuiz, MdOutlineSupportAgent } fr
 import { IoIosInfinite } from "react-icons/io";
 
 // DATA
+import { TESTIMONIALS } from "../data/testimonials.js";
+import { teachers } from "../data/teachers.js";
 import {
   LANGUAGES,
   LANG_FEATURES,
@@ -49,6 +31,14 @@ import {
   computeLangBundle,
   clp
 } from "../data/idiomas.js";
+
+const IDIOMAS_ROADMAP = [
+  { title: "Diagnóstico", desc: "Test de nivelación y objetivos.", subinfo: "Día 1", icon: <FaInfoCircle /> },
+  { title: "Inmersión", desc: "Clases 100% interactivas.", subinfo: "Semana 1+", icon: <FaGlobe /> },
+  { title: "Conversación", desc: "Storytelling y role-play.", subinfo: "Día 15+", icon: <FaUsers /> },
+  { title: "Fluidez", desc: "Dominio de estructuras reales.", subinfo: "Mes 3+", icon: <FaBolt /> },
+  { title: "Certificación", desc: "Preparación para exámenes intl.", subinfo: "Logro", icon: <FaTrophy /> },
+];
 
 // ANIMATIONS
 const fadeInUp = {

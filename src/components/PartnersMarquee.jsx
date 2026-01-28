@@ -58,6 +58,7 @@ export default function PartnersMarquee({ height = 32, gap = 40, speed = 100 }) 
       height:${height}px; width:auto; object-fit:contain;
       filter: drop-shadow(0 0 2px rgba(255,255,255,.5));
       transition: transform .22s ease, filter .22s ease;
+      will-change: transform;
     }
     .marquee__logo:hover{
       transform: scale(1.05);

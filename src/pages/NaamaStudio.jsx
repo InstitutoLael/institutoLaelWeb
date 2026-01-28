@@ -1,9 +1,10 @@
 import React, { useState, useMemo } from 'react';
 import { Search, User, Clock, Info, CheckCircle, Sparkles, Scissors, Heart } from 'lucide-react';
+import SEOHead from '../components/SEOHead';
 
 const NaamaStudio = () => {
-  // 1. ESTADOS
-  const [searchTerm, setSearchTerm] = useState('');
+    // 1. ESTADOS
+    const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('Todas');
 
   // 2. DATA (Asegúrate de que TODOS los servicios tengan este formato)

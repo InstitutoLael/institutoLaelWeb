@@ -176,7 +176,7 @@ export default function Docentes() {
                     <div className="flex justify-between items-start mb-10">
                       <div className="relative">
                         <div className="w-24 h-24 rounded-[2rem] p-1 bg-white/5 border border-white/10 overflow-hidden transform rotate-3 group-hover:rotate-0 transition-transform duration-500">
-                          <img src={t.img} alt={t.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
+                          <img src={t.img} alt={t.name} loading="lazy" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" />
                         </div>
                         <div className="absolute -bottom-2 -right-2 bg-slate-950 p-1.5 rounded-xl border border-white/10">
                           <MdVerified className="text-indigo-400 text-xl" />

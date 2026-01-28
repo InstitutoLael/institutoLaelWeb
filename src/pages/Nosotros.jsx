@@ -61,7 +61,7 @@ export default function About() {
                   transition={{ duration: 1.5, ease: "easeOut" }}
                   className="mb-12"
                >
-                  <img src={logoDorado} alt="Lael Logo" className="w-24 md:w-32 mx-auto drop-shadow-[0_0_30px_rgba(245,158,11,0.4)]" />
+                  <img src={logoDorado} alt="Lael Logo" loading="lazy" className="w-24 md:w-32 mx-auto drop-shadow-[0_0_30px_rgba(245,158,11,0.4)]" />
                </motion.div>
 
                <motion.h1

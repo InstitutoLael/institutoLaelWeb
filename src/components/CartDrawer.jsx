@@ -13,6 +13,11 @@ export default function CartDrawer() {
     const navigate = useNavigate();
     const drawerRef = useRef(null);
 
+    // Bundle Logic
+    const hasHistoria = cart.some(item => item.title.toLowerCase().includes("historia"));
+    const hasHumanista = cart.some(item => item.title.toLowerCase().includes("humanista"));
+    const showBundleSuggestion = hasHistoria && !hasHumanista;
+
     // Close on ESC
     useEffect(() => {
         const handleEsc = (e) => {
@@ -71,6 +76,28 @@ export default function CartDrawer() {
 
                         {/* BODY */}
                         <div className="flex-1 overflow-y-auto px-8 py-10">
+                            {/* UPSELL BANNER */}
+                            {showBundleSuggestion && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="mb-6 p-4 bg-gradient-to-r from-amber-500/10 to-transparent border-l-4 border-amber-500 rounded-r-xl"
+                                >
+                                    <h4 className="flex items-center gap-2 text-amber-500 font-bold text-sm uppercase tracking-wide mb-1">
+                                        <FaRocket /> Tip de Ahorro
+                                    </h4>
+                                    <p className="text-xs text-slate-300 mb-3">
+                                        Estás llevando <strong>Historia</strong>. El <strong>Pack Humanista</strong> incluye Historia + Lenguaje con un descuento especial.
+                                    </p>
+                                    <button
+                                        onClick={() => { closeCart(); navigate("/paes"); }}
+                                        className="text-[10px] bg-amber-500 text-slate-950 font-black px-3 py-1.5 rounded-lg uppercase tracking-widest hover:bg-amber-400 transition-colors"
+                                    >
+                                        Ver Pack Humanista
+                                    </button>
+                                </motion.div>
+                            )}
+
                             {cart.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
                                     <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center text-5xl mb-6">🎒</div>

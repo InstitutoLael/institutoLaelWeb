@@ -13,7 +13,7 @@ const ImageWithFallback = ({ src, alt, className }) => {
             </div>
         );
     }
-    return <img src={src} alt={alt} className={className} onError={() => setError(true)} />;
+    return <img src={src} alt={alt} loading="lazy" className={className} onError={() => setError(true)} />;
 };
 
 export default function Recursos() {

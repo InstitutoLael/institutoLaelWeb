@@ -3,14 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaUserCircle } from "react-icons/fa";
 
 const ACTIVITIES = [
-    "3 alumnos repasando Química ahora",
-    "Nuevos cupos disponibles para Inglés B1",
-    "Fernando acaba de agendar tutoría PAES",
-    "8 personas viendo el Plan para Empresas",
-    "Matrícula 2026: 85% de avance en Bio-Bío",
-    "Marta aprobó su examen de LSCh Nivel 1",
-    "5 empresas consultando por ROI 2.0",
-    "¡Nueva frase motivacional disponible!",
+    "30 personas viendo el programa PAES.",
+    "12 usuarios consultando por Idiomas.",
+    "Cupos limitados para matrícula 2026.",
+    "Alguien acaba de descargar el temario PAES.",
+    "15 personas explorando Escuela de Adultos.",
+    "Usuario de Santiago se inscribió en Inglés.",
 ];
 
 export default function LiveActivityTicker() {
@@ -19,7 +17,7 @@ export default function LiveActivityTicker() {
     useEffect(() => {
         const timer = setInterval(() => {
             setIndex((prev) => (prev + 1) % ACTIVITIES.length);
-        }, 4000);
+        }, 15000);
         return () => clearInterval(timer);
     }, []);
 

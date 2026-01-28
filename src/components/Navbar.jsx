@@ -86,43 +86,7 @@ export default function Navbar() {
 
         {/* === DESKTOP NAVIGATION (> 1024px) === */}
         <nav className="hidden lg:flex items-center gap-10">
-          {/* Main Links (Inicio) */}
-          <NavLink to={NAVIGATION.main[0].path} className={({ isActive }) => `px-5 py-2.5 text-sm font-black rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
-            {NAVIGATION.main[0].name}
-          </NavLink>
-
-          {/* Mega Menu Trigger */}
-          <div className="relative group/dropdown px-2 py-2">
-            <button className="flex items-center gap-1.5 text-sm font-medium text-slate-300 transition-colors group-hover/dropdown:text-white">
-              Programas
-              <Icons.ChevronDown className="opacity-70 transition-transform duration-300 group-hover/dropdown:rotate-180" />
-            </button>
-
-            {/* Mega Menu Dropdown */}
-            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[600px] p-6 bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl opacity-0 invisible translate-y-2 transition-all duration-300 group-hover/dropdown:opacity-100 group-hover/dropdown:visible group-hover/dropdown:translate-y-0 z-50">
-              <div className="grid grid-cols-3 gap-8">
-                {Object.entries(NAVIGATION.megaMenu).map(([category, items]) => (
-                  <div key={category}>
-                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 border-b border-white/5 pb-2">{category}</h4>
-                    <div className="flex flex-col gap-2">
-                      {items.map((item, idx) => (
-                        <MegaItem
-                          key={idx}
-                          to={item.path}
-                          title={item.title}
-                          icon={getIcon(item.icon)}
-                          color={item.color}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Main Links Restantes (Empresas, Nosotros) */}
-          {NAVIGATION.main.slice(1).map((link, idx) => (
+          {NAVIGATION.main.map((link, idx) => (
             <NavLink key={idx} to={link.path} className={({ isActive }) => `px-5 py-2.5 text-sm font-black rounded-full transition-all duration-300 ${isActive ? 'bg-white/10 text-white shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}>
               {link.name}
             </NavLink>
@@ -148,13 +112,7 @@ export default function Navbar() {
 
           {/* Desktop Only Actions */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link to={NAVIGATION.action.aula.path} className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 transition-all hover:bg-white/10 hover:text-white hover:scale-105" title={NAVIGATION.action.aula.name}>
-              <Icons.User />
-            </Link>
-
-            <Link to="/#catalog" className="px-6 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-amber-400 transition-colors shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-              Oferta Académica
-            </Link>
+             {/* Cleaned up as per requirements */}
           </div>
 
           {/* Mobile Toggle Button (Hamburger) */}

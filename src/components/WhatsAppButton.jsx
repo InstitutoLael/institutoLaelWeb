@@ -1,10 +1,24 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
 
+import { useLocation } from "react-router-dom";
+
 export default function WhatsAppButton() {
+    const location = useLocation();
     const phone = "56964626568";
-    const message = "Hola, estoy viendo la web y tengo una duda sobre los cursos...";
+
+    let message = "Hola, estoy viendo la web y tengo una duda sobre los cursos...";
+    
+    if (location.pathname.includes("paes")) {
+        message = "Hola, quiero info sobre el Preu PAES.";
+    } else if (location.pathname.includes("idiomas")) {
+        message = "Hola, me interesa aprender un idioma.";
+    } else if (location.pathname.includes("escuela-adultos")) {
+        message = "Hola, quiero terminar mis estudios (Escuela Adultos).";
+    }
+
     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 
     return (

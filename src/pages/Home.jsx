@@ -58,7 +58,8 @@ export default function Home() {
         <div className="bg-[#020617] text-slate-200 font-sans overflow-x-hidden selection:bg-amber-500/30">
 
             {/* ──────────────── 1. HERO SECTION "VIVA" ──────────────── */}
-            <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden px-6">
+            {/* ──────────────── 1. HERO SECTION "3 MUNDOS" (ECOSYSTEMS) ──────────────── */}
+            <section className="relative min-h-screen flex flex-col items-center justify-center py-20 overflow-hidden px-6">
 
                 {/* Immersive Background Layers */}
                 <div className="absolute inset-0 z-0">
@@ -67,177 +68,102 @@ export default function Home() {
                     <div className="absolute inset-0 opacity-20 bg-[url('/textures/cubes.png')] bg-repeat"></div>
                 </div>
 
-                <div className="relative z-10 max-w-5xl mx-auto text-center">
+                <div className="relative z-10 max-w-7xl mx-auto text-center w-full">
 
-                    {/* Live Component Integration */}
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
-                        className="mb-10"
+                        className="mb-8"
                     >
                         <LiveActivityTicker />
                     </motion.div>
 
-                    <motion.div
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-                    >
+                    <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4 leading-tight">
+                        Elige tu <span className="text-amber-500">Mundo.</span>
+                    </h1>
+                    <p className="text-xl text-slate-400 mb-16 max-w-2xl mx-auto">
+                        Tres caminos de excelencia educativa. Una sola calidad Lael.
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {/* MUNDO 1: PAES (Adolescente) */}
                         <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.5 }}
-                            className="inline-flex items-center gap-3 px-6 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-2xl text-amber-400 text-[10px] font-black uppercase tracking-[0.4em] mb-12 shadow-2xl"
+                            whileHover={{ y: -10 }}
+                            className="bg-indigo-600/10 border border-indigo-500/20 rounded-[2.5rem] p-8 md:p-12 hover:bg-indigo-600/20 hover:border-indigo-500/40 transition-all group relative overflow-hidden"
                         >
-                            <BsLightningChargeFill className="animate-pulse" /> Lael Experience 2.0
+                            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <FaRocket size={100} />
+                            </div>
+                            <div className="relative z-10 flex flex-col h-full justify-between items-start text-left">
+                                <div>
+                                    <div className="bg-indigo-500 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full mb-6 inline-block">Preuniversitario</div>
+                                    <h3 className="text-4xl font-black text-white mb-2 uppercase tracking-tighter">PAES 2026</h3>
+                                    <p className="text-sm text-slate-300 mb-8 leading-relaxed">
+                                        Entrenamiento de alto rendimiento para asegurar tu Puntaje Nacional. IA + Tutores expertos.
+                                    </p>
+                                </div>
+                                <Link to="/paes" className="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-600/20">
+                                    Entrar al Preu <FaArrowRight />
+                                </Link>
+                            </div>
                         </motion.div>
 
-                        <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-[10rem] font-black text-white leading-[0.85] tracking-tighter mb-10 pb-4">
-                            Educar <br />
-                            <span className="bg-gradient-to-r from-amber-200 via-amber-500 to-amber-700 bg-clip-text text-transparent italic">Sin Límites.</span>
-                        </h1>
-                    </motion.div>
+                        {/* MUNDO 2: IDIOMAS (Viajeros/Global) */}
+                        <motion.div
+                            whileHover={{ y: -10 }}
+                            className="bg-emerald-600/10 border border-emerald-500/20 rounded-[2.5rem] p-8 md:p-12 hover:bg-emerald-600/20 hover:border-emerald-500/40 transition-all group relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <FaGlobe size={100} />
+                            </div>
+                            <div className="relative z-10 flex flex-col h-full justify-between items-start text-left">
+                                <div>
+                                    <div className="bg-emerald-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-full mb-6 inline-block">Global Academy</div>
+                                    <h3 className="text-4xl font-black text-white mb-2 uppercase tracking-tighter">Idiomas</h3>
+                                    <p className="text-sm text-slate-300 mb-8 leading-relaxed">
+                                        Inglés y Coreano con inmersión total. Rompe fronteras y conecta con el mundo.
+                                    </p>
+                                </div>
+                                <Link to="/idiomas" className="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-600/20">
+                                    Aprender Idioma <FaArrowRight />
+                                </Link>
+                            </div>
+                        </motion.div>
 
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5, duration: 1 }}
-                        className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto mb-16 font-light leading-relaxed"
-                    >
-                        Bienvenido al futuro de la formación. No somos una web, somos tu <span className="text-white font-bold">centro de mando académico</span> diseñado para el éxito 2026.
-                    </motion.p>
+                        {/* MUNDO 3: ESCUELA ADULTOS (Oportunidad) */}
+                        <motion.div
+                            whileHover={{ y: -10 }}
+                            className="bg-amber-600/10 border border-amber-500/20 rounded-[2.5rem] p-8 md:p-12 hover:bg-amber-600/20 hover:border-amber-500/40 transition-all group relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <FaUserGraduate size={100} />
+                            </div>
+                            <div className="relative z-10 flex flex-col h-full justify-between items-start text-left">
+                                <div>
+                                    <div className="bg-amber-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-full mb-6 inline-block">2 en 1</div>
+                                    <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">Escuela Adultos</h3>
+                                    <p className="text-sm text-slate-300 mb-8 leading-relaxed">
+                                        Termina tu enseñanza media en tiempo récord y mejora tus oportunidades laborales.
+                                    </p>
+                                </div>
+                                <Link to="/escuela-adultos" className="w-full py-4 bg-amber-500 text-slate-950 font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/20">
+                                    Terminar Estudios <FaArrowRight />
+                                </Link>
+                            </div>
+                        </motion.div>
+                    </div>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8, duration: 1 }}
-                        className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-                    >
-                        <a href="#catalog" className="group relative px-12 py-6 bg-amber-500 text-slate-950 font-black rounded-[2rem] text-xl shadow-2xl shadow-amber-500/20 hover:scale-[1.05] active:scale-95 transition-[transform,box-shadow] duration-500 overflow-hidden">
-                            <span className="relative z-10 flex items-center gap-3">Explorar Oferta <FaArrowRight /></span>
-                            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-[opacity] duration-300"></div>
-                        </a>
-
-                        <Link to="/nosotros" className="px-12 py-6 rounded-[2rem] border border-white/10 text-white font-black text-xl hover:bg-white/5 backdrop-blur-md transition-all flex items-center gap-3 group">
-                            <BsPlayCircle className="text-amber-500 group-hover:rotate-12 transition-transform" /> Nuestra Visión
+                    <div className="mt-12 flex justify-center">
+                        <Link to="/homeschool" className="text-slate-400 hover:text-white text-sm font-bold uppercase tracking-widest flex items-center gap-2 transition-colors">
+                            <FaBookOpen /> Buscar Homeschooling (Niños) <FaArrowRight />
                         </Link>
-                    </motion.div>
+                    </div>
 
-                    {/* Stats (Experience 2.0 Style) */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 1.5 }}
-                        className="mt-20 flex justify-center flex-wrap gap-12 text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]"
-                    >
-                        <div className="flex flex-col gap-2">
-                            <span className="text-2xl text-white">+3K</span>
-                            <span>Alumnos</span>
-                        </div>
-                        <div className="w-px h-12 bg-white/5"></div>
-                        <div className="flex flex-col gap-2">
-                            <span className="text-2xl text-white">2026</span>
-                            <span>Visión Ready</span>
-                        </div>
-                        <div className="w-px h-12 bg-white/5"></div>
-                        <div className="flex flex-col gap-2">
-                            <span className="text-2xl text-white">4.9/5</span>
-                            <span>Calificación</span>
-                        </div>
-                    </motion.div>
                 </div>
             </section>
 
-            {/* ──────────────── 2. DASHBOARD PÚBLICO (SIMULATED INTRANET) ──────────────── */}
-            <section className="py-24 relative z-10 -mt-20">
-                <div className="container mx-auto px-6">
-                    <div className="mb-12 flex items-center gap-4">
-                        <div className="p-3 bg-indigo-500/20 rounded-2xl text-indigo-400 text-xl border border-indigo-500/30">
-                            <MdDashboardCustomize />
-                        </div>
-                        <div>
-                            <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Campus Virtual</h2>
-                            <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Dashboard de acceso rápido</p>
-                        </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[280px]">
-
-                        {/* WIDGET 1: COUNTDOWN */}
-                        <motion.div
-                            whileHover={{ y: -10 }}
-                            className="bg-slate-900/50 border border-white/10 rounded-[2.5rem] p-10 backdrop-blur-xl flex flex-col justify-between group overflow-hidden relative"
-                        >
-                            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                                <FaCalendarAlt size={120} />
-                            </div>
-                            <div>
-                                <span className="text-emerald-500 font-black text-[10px] uppercase tracking-widest block mb-4">Meta PAES Invierno</span>
-                                <h3 className="text-5xl font-black text-white leading-none mb-2">{daysLeft}</h3>
-                                <p className="text-slate-500 font-bold uppercase text-xs tracking-widest">Días para el gran desafío</p>
-                            </div>
-                            <Link to="/paes" className="w-fit px-6 py-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-slate-950 transition-all">
-                                Ver Cronograma
-                            </Link>
-                        </motion.div>
-
-                        {/* WIDGET 2: FRASE DEL DÍA */}
-                        <motion.div
-                            whileHover={{ y: -10 }}
-                            className="bg-gradient-to-br from-[#1e1b4b] to-[#0f172a] border border-white/10 rounded-[2.5rem] p-10 flex flex-col justify-between relative overflow-hidden"
-                        >
-                            <FaQuoteLeft className="text-3xl text-indigo-500/30" />
-                            <p className="text-xl text-slate-200 font-light italic leading-relaxed">
-                                "{quote}"
-                            </p>
-                            <div className="flex justify-between items-center">
-                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Inspiración Diaria</span>
-                                <FaQuoteRight className="text-indigo-500/30" />
-                            </div>
-                        </motion.div>
-
-                        {/* WIDGET 3: ACCESO RECURSOS */}
-                        <motion.div
-                            whileHover={{ y: -10 }}
-                            className="bg-[#080B14] border border-white/10 rounded-[2.5rem] p-10 flex flex-col justify-between group"
-                        >
-                            <div>
-                                <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center text-amber-500 text-2xl mb-6">
-                                    <FaBookOpen />
-                                </div>
-                                <h3 className="text-2xl font-black text-white mb-2 uppercase tracking-tighter">Mis Recursos</h3>
-                                <p className="text-slate-500 text-sm leading-relaxed">Accede a tus clases on-demand, guías y material exclusivo.</p>
-                            </div>
-                            <Link to="/recursos" className="flex items-center gap-2 text-amber-500 font-black text-[10px] uppercase tracking-widest hover:gap-4 transition-all">
-                                Explorar Material <FaArrowRight />
-                            </Link>
-                        </motion.div>
-
-                    </div>
-
-                    {/* FAST TRACK LINKS TO PHASE 1 PAGES */}
-                    <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {[
-                            { label: "Área Empresas", to: "/empresas", icon: <FaBuilding />, color: "hover:text-emerald-400" },
-                            { label: "Nuestra Historia", to: "/nosotros", icon: <FaUniversity />, color: "hover:text-indigo-400" },
-                            { label: "Staff Docente", to: "/docentes", icon: <MdVerified />, color: "hover:text-amber-400" },
-                            { label: "Centro de Ayuda", to: "/contacto", icon: <FaLifeRing />, color: "hover:text-rose-400" },
-                        ].map((link, idx) => (
-                            <Link
-                                key={idx} to={link.to}
-                                 className={`p-6 bg-white/5 border border-white/5 rounded-3xl flex items-center justify-between group transition-colors duration-300 hover:bg-white/10 ${link.color}`}
-                            >
-                                <div className="flex items-center gap-4 font-black uppercase text-xs tracking-widest">
-                                    <span className="text-xl opacity-60 group-hover:opacity-100 transition-opacity">{link.icon}</span>
-                                    {link.label}
-                                </div>
-                                 <FaArrowRight className="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-[opacity,transform] duration-300" />
-                            </Link>
-                        ))}
-                    </div>
-                </div>
-            </section>
 
             {/* ──────────────── 3. PARTNERS STRIP ──────────────── */}
             <section className="bg-black py-4 border-y border-white/5 relative z-20">
@@ -343,6 +269,7 @@ export default function Home() {
                                 <img
                                     src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&q=80&w=800"
                                     alt="YouTube Channel"
+                                    loading="lazy"
                                     className="w-full h-full object-cover grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
                                 />
                                 <div className="absolute inset-0 flex items-center justify-center">

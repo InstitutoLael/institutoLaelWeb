@@ -179,7 +179,7 @@ export default function Academy() {
                   {/* Center: Logo */}
                   <div className="relative flex justify-center">
                      <div className="w-64 h-64 rounded-[3rem] border border-white/5 bg-white/[0.02] backdrop-blur-3xl flex items-center justify-center relative z-10 shadow-2xl rotate-3">
-                        <img src={logoLael} alt="Logo Lael" className="w-48 filter brightness-150 grayscale group-hover:grayscale-0 transition-all" />
+                        <img src={logoLael} alt="Logo Lael" loading="lazy" className="w-48 filter brightness-150 grayscale group-hover:grayscale-0 transition-all" />
                      </div>
                      <div className="absolute inset-0 bg-indigo-500/10 rounded-full blur-[100px] scale-110 -z-0"></div>
                   </div>
@@ -244,7 +244,7 @@ export default function Academy() {
 
                   <div className="flex-1 flex flex-col items-center justify-center relative">
                      <div className="absolute inset-0 bg-indigo-600/5 blur-[100px] rounded-full"></div>
-                     <img src={logoPartner} alt="Los Olivos" className="max-w-[300px] drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] mb-10 filter brightness-110 relative z-10" />
+                     <img src={logoPartner} alt="Los Olivos" loading="lazy" className="max-w-[300px] drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] mb-10 filter brightness-110 relative z-10" />
                      <div className="bg-white/5 border border-white/10 px-6 py-2 rounded-2xl flex items-center gap-3 text-[10px] font-black uppercase tracking-widest text-slate-400 backdrop-blur-2xl relative z-10">
                         <MdOutlineVerifiedUser className="text-indigo-400" /> Colegio Partner Certificado
                      </div>

@@ -16,7 +16,7 @@ export default function Footer() {
                 {/* COLUMNA 1: MARCA */}
                 <div className="flex flex-col items-center lg:items-start gap-5">
                     <Link to="/" className="inline-block hover:opacity-80 transition-opacity">
-                        <img src={logo} alt="Instituto Lael" className="h-10 w-auto" width="160" height="40" />
+                        <img src={logo} alt="Instituto Lael" loading="lazy" className="h-10 w-auto" width="160" height="40" />
                     </Link>
                     <p className="text-sm leading-relaxed max-w-xs mx-auto lg:mx-0 opacity-80">
                         Transformamos el futuro a través de educación accesible, tecnológica y con valores.

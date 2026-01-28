@@ -10,7 +10,7 @@ import logoAmarillo from "./assets/img/Logos/lael-inst-amarillo.png";
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
 import WhatsAppButton from "./components/WhatsAppButton.jsx";
-import SearchOverlay from "./components/SearchOverlay.jsx";
+// import SearchOverlay from "./components/SearchOverlay.jsx";
 import CartButton from "./components/CartButton.jsx";
 import { Loader2 } from "lucide-react";
 
@@ -98,19 +98,7 @@ const ProtectedRoute = ({ children }) => {
 };
 
 export default function App() {
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  // Atajo Ctrl+K para buscar
-  useEffect(() => {
-    const handleKey = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setSearchOpen((prev) => !prev);
-      }
-    };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
-  }, []);
+  /* Search Logic Removed */
 
   return (
     <AuthProvider>
@@ -119,7 +107,7 @@ export default function App() {
 
         <div className="flex flex-col min-h-screen">
           {/* Buscador y Navegación */}
-          <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+          {/* SearchOverlay removed */}
           <Navbar />
 
           {/* Área principal */}
@@ -140,15 +128,15 @@ export default function App() {
                 <Route path="/trabaja" element={<Trabaja />} />
                 <Route path="/contacto" element={<Contacto />} />
                 <Route path="/docentes" element={<Docentes />} />
-                <Route path="/login" element={<Login />} />
-                <Route
+                {/* <Route path="/login" element={<Login />} /> */}
+                {/* <Route
                   path="/aula"
                   element={
                     <ProtectedRoute>
                       <Aula />
                     </ProtectedRoute>
                   }
-                />
+                /> */}
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/gracias" element={<Gracias />} />
                 <Route path="/terminos" element={<Terminos />} />

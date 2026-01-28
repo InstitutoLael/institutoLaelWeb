@@ -34,17 +34,44 @@ serve(async (req) => {
             full_name: data.full_name || 'Estudiante'
         };
     } else if (action === 'payment.created' || action === 'payment.updated') {
-        // Here we would normally fetch the payment from MP API using data.id and ACCESS_TOKEN
-        // However, since we don't have the token in the prompt context, we will skip the fetch for now
-        // and log the event.
-        // STOPGAP: If the user configures MP to hit this, we won't get the email details unless we fetch them.
-        console.log("MP Webhook received:", data.id);
-        
-        // Return 200 to MP specifically to avoid retries
-        return new Response(JSON.stringify({ message: "Webhook received" }), {
-            headers: { ...corsHeaders, "Content-Type": "application/json" },
-            status: 200,
-        });
+        try {
+            // Fetch Payment Details from Mercado Pago
+            const mpResponse = await fetch(`https://api.mercadopago.com/v1/payments/${data.id}`, {
+                headers: {
+                    "Authorization": `Bearer ${Deno.env.get("MP_ACCESS_TOKEN")}`,
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!mpResponse.ok) {
+                console.error("MP API Error:", await mpResponse.text());
+                // Return 200 to avoid indefinite retries if token is wrong, but log error
+                return new Response(JSON.stringify({ message: "MP Fetch Failed" }), { status: 200, headers: corsHeaders });
+            }
+
+            const payment = await mpResponse.json();
+            
+            // Only process approved payments
+            if (payment.status !== 'approved') {
+                 console.log("Payment not approved yet:", payment.status);
+                 return new Response(JSON.stringify({ message: "Payment status processed (not approved)" }), { status: 200, headers: corsHeaders });
+            }
+
+            orderData = {
+                id: String(payment.id),
+                status: payment.status,
+                email: payment.payer.email,
+                items: payment.additional_info?.items || [{ title: payment.description, unit_price: payment.transaction_amount, quantity: 1 }],
+                total: payment.transaction_amount,
+                full_name: payment.payer.first_name ? `${payment.payer.first_name} ${payment.payer.last_name}` : 'Estudiante'
+            };
+
+            console.log("Processing Order for:", orderData.email);
+
+        } catch (err) {
+            console.error("Error processing MP data:", err);
+            return new Response(JSON.stringify({ error: "Processing failed" }), { status: 200, headers: corsHeaders });
+        }
     } else {
          // Default Fallback
          throw new Error("Unknown event type");

@@ -1,16 +1,8 @@
-import { motion } from "framer-motion";
+import React from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaUserGraduate, FaExclamationTriangle } from "react-icons/fa";
+import { FaCompass, FaArrowLeft } from "react-icons/fa";
 
 export default function NotFound() {
-    return (
-        <div className="min-h-screen bg-[#020617] flex items-center justify-center px-6 overflow-hidden relative">
-            {/* Background Glows */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 blur-[120px] rounded-full"></div>
-            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-500/5 blur-[100px] rounded-full"></div>
-
-            <div className="relative z-10 max-w-2xl text-center">
-                <motion.div
                     initial={{ scale: 0, rotate: -20 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ type: "spring", damping: 15 }}

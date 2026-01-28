@@ -9,6 +9,7 @@ import logoAmarillo from "./assets/img/Logos/lael-inst-amarillo.png";
 /* ---------- Componentes Globales ---------- */
 import Navbar from "./components/Navbar.jsx";
 import Footer from "./components/Footer.jsx";
+import AnnouncementBar from "./components/AnnouncementBar.jsx";
 import WhatsAppButton from "./components/WhatsAppButton.jsx";
 // import SearchOverlay from "./components/SearchOverlay.jsx";
 import CartButton from "./components/CartButton.jsx";
@@ -117,6 +118,7 @@ export default function App() {
         <div className="flex flex-col min-h-screen">
           {/* Buscador y Navegación */}
           {/* SearchOverlay removed */}
+          <AnnouncementBar />
           <Navbar />
 
           {/* Área principal */}

@@ -12,7 +12,7 @@ import {
     FaBolt, FaGlobe, FaHands, FaArrowRight, FaUniversity,
     FaBuilding, FaChalkboardTeacher, FaQuoteLeft, FaStar, FaUserGraduate,
     FaCalendarAlt, FaQuoteRight, FaBookOpen, FaGamepad, FaChartLine, FaLifeRing,
-    FaYoutube, FaPlay
+    FaYoutube, FaPlay, FaRocket
 } from "react-icons/fa";
 import { BsStars, BsArrowRightCircleFill, BsPlayCircle, BsLightningChargeFill } from "react-icons/bs";
 import { HiOutlineUserGroup } from "react-icons/hi";

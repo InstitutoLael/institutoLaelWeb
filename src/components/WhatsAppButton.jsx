@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaWhatsapp } from "react-icons/fa";
 
-import { useLocation } from "react-router-dom";
+
 
 export default function WhatsAppButton() {
     const location = useLocation();

@@ -14,8 +14,15 @@ export default function CartDrawer() {
     const drawerRef = useRef(null);
 
     // Bundle Logic
-    const hasHistoria = cart.some(item => item.title.toLowerCase().includes("historia"));
-    const hasHumanista = cart.some(item => item.title.toLowerCase().includes("humanista"));
+    // Bundle Logic
+    const hasHistoria = cart.some(item => 
+        (item.title && item.title.toLowerCase().includes("historia")) || 
+        (item.detail && item.detail.toLowerCase().includes("historia"))
+    );
+    const hasHumanista = cart.some(item => 
+        (item.title && item.title.toLowerCase().includes("humanista")) || 
+        (item.detail && item.detail.toLowerCase().includes("humanista"))
+    );
     const showBundleSuggestion = hasHistoria && !hasHumanista;
 
     // Close on ESC

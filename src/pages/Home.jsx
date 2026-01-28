@@ -1,5 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import Link from "react-router-dom"; // Ensure Link is imported if not already, or keep existing imports
+import SEOHead from "../components/SEOHead.jsx";
+
+// ... existing imports
+
+export default function Home() {
+    // ... existing code
+    return (
+        <div className="bg-[#020617] text-slate-200 font-sans overflow-x-hidden selection:bg-amber-500/30">
+            <SEOHead title="Preuniversitario, Idiomas y Nivelación" description="Preuniversitario PAES, Cursos de Idiomas y Nivelación de Estudios. Educación online con acompañamiento real." />
+            
+            {/* ──────────────── 1. HERO SECTION "VIVA" ──────────────── */}
 import { motion, AnimatePresence } from "framer-motion";
 import PartnersMarquee from "../components/PartnersMarquee.jsx";
 import LiveActivityTicker from "../components/LiveActivityTicker.jsx";
@@ -80,10 +90,11 @@ export default function Home() {
                     </motion.div>
 
                     <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-4 leading-tight">
-                        Elige tu <span className="text-amber-500">Mundo.</span>
+                        Tu futuro no tiene que esperar. <br className="hidden md:block" />
+                        <span className="text-amber-500">Elige cómo quieres crecer hoy.</span>
                     </h1>
                     <p className="text-xl text-slate-400 mb-16 max-w-2xl mx-auto">
-                        Tres caminos de excelencia educativa. Una sola calidad Lael.
+                        En Instituto Lael unimos tecnología y educación para que logres tus metas, sin importar si tienes 17 o 50 años.
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -97,14 +108,14 @@ export default function Home() {
                             </div>
                             <div className="relative z-10 flex flex-col h-full justify-between items-start text-left">
                                 <div>
-                                    <div className="bg-indigo-500 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full mb-6 inline-block">Preuniversitario</div>
+                                    <div className="bg-indigo-500 text-white text-[10px] font-black uppercase px-3 py-1 rounded-full mb-6 inline-block">Preuniversitario PAES</div>
                                     <h3 className="text-4xl font-black text-white mb-2 uppercase tracking-tighter">PAES 2026</h3>
                                     <p className="text-sm text-slate-300 mb-8 leading-relaxed">
-                                        Entrenamiento de alto rendimiento para asegurar tu Puntaje Nacional. IA + Tutores expertos.
+                                        No estudies más, estudia mejor. Simuladores, estrategias y el puntaje que necesitas.
                                     </p>
                                 </div>
                                 <Link to="/paes" className="w-full py-4 bg-indigo-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-indigo-500 transition-colors shadow-lg shadow-indigo-600/20">
-                                    Entrar al Preu <FaArrowRight />
+                                    Ver Planes PAES <FaArrowRight />
                                 </Link>
                             </div>
                         </motion.div>
@@ -119,14 +130,14 @@ export default function Home() {
                             </div>
                             <div className="relative z-10 flex flex-col h-full justify-between items-start text-left">
                                 <div>
-                                    <div className="bg-emerald-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-full mb-6 inline-block">Global Academy</div>
+                                    <div className="bg-emerald-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-full mb-6 inline-block">Escuela de Idiomas</div>
                                     <h3 className="text-4xl font-black text-white mb-2 uppercase tracking-tighter">Idiomas</h3>
                                     <p className="text-sm text-slate-300 mb-8 leading-relaxed">
-                                        Inglés y Coreano con inmersión total. Rompe fronteras y conecta con el mundo.
+                                        Inglés, Coreano y Español. Rompe la barrera del idioma y conéctate con el mundo.
                                     </p>
                                 </div>
                                 <Link to="/idiomas" className="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-emerald-500 transition-colors shadow-lg shadow-emerald-600/20">
-                                    Aprender Idioma <FaArrowRight />
+                                    Elegir mi Idioma <FaArrowRight />
                                 </Link>
                             </div>
                         </motion.div>
@@ -141,14 +152,14 @@ export default function Home() {
                             </div>
                             <div className="relative z-10 flex flex-col h-full justify-between items-start text-left">
                                 <div>
-                                    <div className="bg-amber-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-full mb-6 inline-block">2 en 1</div>
+                                    <div className="bg-amber-500 text-slate-950 text-[10px] font-black uppercase px-3 py-1 rounded-full mb-6 inline-block">Escuela de Adultos (2en1)</div>
                                     <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tighter">Escuela Adultos</h3>
                                     <p className="text-sm text-slate-300 mb-8 leading-relaxed">
-                                        Termina tu enseñanza media en tiempo récord y mejora tus oportunidades laborales.
+                                        Recupera tu tiempo. Saca tu 4to medio y abre puertas laborales con nuestro programa de nivelación.
                                     </p>
                                 </div>
                                 <Link to="/escuela-adultos" className="w-full py-4 bg-amber-500 text-slate-950 font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/20">
-                                    Terminar Estudios <FaArrowRight />
+                                    Terminar mis Estudios <FaArrowRight />
                                 </Link>
                             </div>
                         </motion.div>

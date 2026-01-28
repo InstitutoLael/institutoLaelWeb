@@ -99,6 +99,15 @@ const ProtectedRoute = ({ children }) => {
 
 export default function App() {
   /* Search Logic Removed */
+  const location = useLocation();
+
+  useEffect(() => {
+    if (window.gtag) {
+      window.gtag("config", "G-MXGB4RTHNY", {
+        page_path: location.pathname + location.search,
+      });
+    }
+  }, [location]);
 
   return (
     <AuthProvider>

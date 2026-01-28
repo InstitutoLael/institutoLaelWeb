@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext.jsx";
+import SEOHead from "../components/SEOHead.jsx";
+
+// ... [rest of imports]
+
+// ... [component code]
+
+  return (
+    <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-blue-500/30">
+      <SEOHead title="Cursos de Inglés y Coreano" description="Aprende idiomas con metodología de inmersión cultural. Clases en vivo de Inglés y Coreano para la vida real." />
+
+      {/* ──────────────── 1. CINEMATIC HERO ──────────────── */}
 import { TESTIMONIALS } from "../data/testimonials.js";
 import { teachers } from "../data/teachers.js";
 

@@ -5,11 +5,23 @@ import { FaCheckCircle, FaWhatsapp, FaUniversity, FaArrowRight, FaBookOpen } fro
 
 import { PAYMENTS } from "../data/copy";
 
+import confetti from "canvas-confetti";
+
 const clp = (n) => Number(n || 0).toLocaleString("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
 
 export default function Gracias() {
   const location = useLocation();
   const { order, total, paymentMethod } = location.state || {};
+
+  // Confetti Effect on Load
+  React.useEffect(() => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#F59E0B', '#10B981', '#6366F1'] // Brand colors
+    });
+  }, []);
 
   // Si no hay datos, mostrar algo genérico o redirigir
   const orderId = order?.id?.slice(0, 8) || "N/A";
@@ -78,15 +90,44 @@ export default function Gracias() {
             </motion.div>
           )}
 
-          <div className="space-y-4">
+          <div className="bg-gradient-to-r from-emerald-500/10 to-emerald-900/10 p-6 rounded-3xl border border-emerald-500/20 mb-8">
+            <h3 className="text-emerald-400 font-bold uppercase tracking-widest text-xs mb-4 flex items-center gap-2">
+              <FaWhatsapp className="text-lg" /> Atención Prioritaria
+            </h3>
+            <p className="text-slate-300 text-sm mb-6">
+              Tu matrícula está confirmada. Envíanos un mensaje ahora para agilizar tu ingreso.
+            </p>
             <a
-              href={`https://wa.me/56964626568?text=Hola! He realizado la orden #${orderId} por ${clp(amount)}. Adjunto el comprobante de pago.`}
+              href="https://wa.me/56964626568?text=Hola,%20ya%20pagué%20mi%20curso,%20quiero%20empezar"
               target="_blank"
               rel="noreferrer"
-              className="w-full py-6 bg-emerald-600 text-white font-black rounded-2xl flex items-center justify-center gap-3 hover:bg-emerald-500 transition-all uppercase tracking-widest text-xs shadow-xl shadow-emerald-600/20"
+              className="w-full py-4 bg-emerald-600 text-white font-black rounded-xl flex items-center justify-center gap-2 hover:bg-emerald-500 transition-all uppercase tracking-widest text-xs shadow-lg shadow-emerald-600/20"
             >
-              <FaWhatsapp className="text-xl" /> Enviar Comprobante por WhatsApp
+              Hablar con Coordinación ahora
             </a>
+          </div>
+
+          {/* Feedback Flash Survey */}
+          <div className="mb-8 p-6 bg-white/5 rounded-3xl">
+             <label className="block text-slate-500 text-xs font-bold uppercase tracking-widest mb-3">
+               ¿Qué te hizo decidirte por nosotros hoy?
+             </label>
+             <input 
+                type="text" 
+                placeholder="Ej: La metodología, el precio, los profes..." 
+                className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors"
+                onBlur={(e) => {
+                   if(e.target.value.length > 3 && window.gtag) {
+                      window.gtag('event', 'post_purchase_feedback', {
+                        event_category: 'Feedback',
+                        event_label: e.target.value
+                      });
+                   }
+                }}
+             />
+          </div>
+
+          <div className="space-y-4">
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Link to="/aula" className="py-5 bg-white/5 border border-white/10 text-white font-black rounded-2xl hover:bg-white/10 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">

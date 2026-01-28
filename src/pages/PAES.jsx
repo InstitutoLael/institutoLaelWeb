@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext.jsx";
+import SEOHead from "../components/SEOHead.jsx";
+
+// ... [rest of imports]
+
+// ... [component code]
+
+  return (
+    <div className="bg-[#050505] text-white font-sans overflow-x-hidden selection:bg-indigo-500/30 pb-20">
+      <SEOHead title="Preuniversitario Online PAES" description="Prepara la PAES 2026 con Inteligencia Artificial y tutores expertos. Sube tu puntaje con nuestra metodología científica." />
+
+      {/* ──────────────── SECTION 1: HERO MASIVO ──────────────── */}
 import {
   FaCheck, FaTimes, FaInfoCircle, FaBookOpen, FaLaptopCode,
   FaWhatsapp, FaArrowRight, FaStar, FaUserGraduate, FaUniversity,

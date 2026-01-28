@@ -2,18 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 import SEOHead from "../components/SEOHead.jsx";
+import { supabase } from "../supabaseClient";
 
-// ... [rest of imports]
+// Components
 
-// ... [component code]
-
-   return (
-      <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-indigo-500/30">
-         <SEOHead title="Nivelación de Estudios 2en1" description="Termina tu 4to medio con nuestro programa 2x1. Cupos Sociales y Plan Padrino disponibles para apoyar tu educación." />
-
-         {/* ──────────────── 1. HERO (EMPATHETIC) ──────────────── */}
-
-// ICONS
+// Icons
 import {
    FaHandHoldingHeart, FaUserGraduate, FaChalkboardTeacher, FaRegCheckCircle,
    FaWhatsapp, FaInfoCircle, FaChevronDown, FaChevronUp, FaHeart, FaHandsHelping, FaCheck

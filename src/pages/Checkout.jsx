@@ -148,21 +148,28 @@ export default function Checkout() {
     const handleFinalize = async () => {
         if (loading) return;
         setLoading(true);
+        setAuthError(""); // Clear previous errors
+
+        // --- TIMEOUT PROTECTION ---
+        const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Tiempo de espera agotado. La base de datos no responde. Revisa tu conexión.")), 15000)
+        );
+
         try {
             console.log("Starting handleFinalize...");
-            console.log("Current user:", user?.id);
-            console.log("Payment method:", paymentMethod);
+            
+            // 1. Data Validation
+            if (!formData.fullName || !formData.email || cart.length === 0) {
+                throw new Error("Faltan datos críticos para procesar la inscripción.");
+            }
 
             const itemsSummary = cart.map(i => i.title).join(" + ");
 
-            // Ensure we have a user_id if required or handle anonymous
             const orderData = {
                 user_id: user?.id || null,
                 total_amount: total,
                 payment_method: paymentMethod,
                 status: 'pending',
-                // These columns might not exist in the DB, so we'll check later
-                // If they don't, we should use a separate 'customer_data' table or metadata
                 customer_name: formData.fullName,
                 customer_email: formData.email,
                 customer_phone: formData.phone,
@@ -171,57 +178,48 @@ export default function Checkout() {
             };
 
             console.log("Inserting order:", orderData);
-            const { data: order, error: orderError } = await supabase
-                .from('orders')
-                .insert(orderData)
-                .select()
-                .single();
+            
+            // Reemplazo del insert simple por uno con carrera (race) contra el timeout
+            const { data: order, error: orderError } = await Promise.race([
+                supabase.from('orders').insert(orderData).select().single(),
+                timeoutPromise
+            ]);
 
             if (orderError) {
                 console.error("Order insertion error:", orderError);
                 if (orderError.code === '42703') {
-                    throw new Error("Error de base de datos: Faltan columnas en la tabla 'orders'. Por favor ejecuta el script de migración SQL.");
+                    throw new Error("Error de base de datos: Faltan columnas en la tabla 'orders'. Por favor ejecuta el script de migración SQL en Supabase.");
                 }
-                if (orderError.code === '23502') {
-                    throw new Error("Error: user_id no debe ser nulo. El usuario debe estar autenticado o la tabla debe permitir nulos.");
+                if (orderError.code === 'PGRST116') {
+                    throw new Error("Error de permisos (RLS): No se pudo insertar la orden. Verifica las políticas de seguridad en Supabase.");
                 }
                 throw orderError;
             }
+
+            if (!order) throw new Error("No se recibió respuesta de la base de datos al crear la orden.");
             console.log("Order created successfully:", order.id);
 
             const items = cart.map(item => ({
                 order_id: order.id,
-                product_id: item.db_id, // We'll filter nulls next
+                product_id: item.db_id,
                 price_at_purchase: item.price
-            })).filter(i => i.product_id); // CRITICAL: Avoid inserting null product_ids
+            })).filter(i => i.product_id);
 
             if (items.length > 0) {
-                console.log("Inserting order items:", items);
                 const { error: itemsError } = await supabase.from('order_items').insert(items);
-                if (itemsError) {
-                    console.error("Items insertion error:", itemsError);
-                    // We don't necessarily want to fail the whole order if items fail to link, 
-                    // but it's good to know.
-                }
-            } else {
-                console.warn("No items with valid db_id found to insert into order_items.");
+                if (itemsError) console.error("Items insertion error:", itemsError);
             }
 
             if (paymentMethod === 'transfer') {
-                console.log("Transfer selected, clearing cart and navigating...");
                 clearCart();
                 navigate("/gracias", { state: { order, total, paymentMethod: 'transfer' } });
             } else {
-                console.log("Mercado Pago selected, calling Edge Function...");
-                const { data, error: functionError } = await supabase.functions.invoke('create-mp-preference', {
+                // Mercado Pago Implementation...
+                const { data: functionData, error: functionError } = await supabase.functions.invoke('create-mp-preference', {
                     body: {
                         orderId: order.id,
                         customer_email: formData.email,
-                        items: cart.map(item => ({
-                            title: item.title,
-                            unit_price: item.price,
-                            quantity: 1
-                        })),
+                        items: cart.map(item => ({ title: item.title, unit_price: item.price, quantity: 1 })),
                         back_urls: {
                             success: `${window.location.origin}/gracias`,
                             failure: `${window.location.origin}/checkout`,
@@ -230,28 +228,23 @@ export default function Checkout() {
                     }
                 });
 
-                if (functionError) {
-                    console.error("Edge Function error detail:", functionError);
-                    throw new Error(`Error en el servidor de pagos: ${functionError.message || 'No se pudo contactar con la función de pago'}`);
-                }
+                if (functionError) throw new Error(`Error en el servidor de pagos: ${functionError.message}`);
 
-                console.log("Edge Function response received:", data);
-                if (data && data.init_point) {
-                    console.log("Redirecting to Mercado Pago:", data.init_point);
-                    window.location.href = data.init_point;
-                } else if (data && data.id) {
-                    console.log("Setting preference ID for Wallet brick:", data.id);
-                    setPreferenceId(data.id);
+                if (functionData?.init_point) {
+                    window.location.href = functionData.init_point;
+                } else if (functionData?.id) {
+                    setPreferenceId(functionData.id);
                 } else {
-                    console.error("Invalid response from Edge Function:", data);
-                    throw new Error("Mercado Pago no devolvió un punto de inicio de pago (init_point).");
+                    throw new Error("Mercado Pago no devolvió un punto de inicio válido.");
                 }
             }
 
         } catch (err) {
             console.error("CRITICAL ERROR in handleFinalize:", err);
-            alert(`Hubo un problema al procesar tu solicitud: ${err.message || "Error desconocido"}`);
-            setAuthError("No pudimos guardar tu orden. Revisa tus datos e intenta de nuevo.");
+            // Mostrar error amigable al usuario
+            setAuthError(err.message || "No pudimos procesar tu solicitud. Intenta de nuevo en unos momentos.");
+            // Alerta visual agresiva para que el cliente no se quede esperando
+            alert(`⚠️ Error al procesar: ${err.message}`);
         } finally {
             console.log("handleFinalize finished.");
             setLoading(false);

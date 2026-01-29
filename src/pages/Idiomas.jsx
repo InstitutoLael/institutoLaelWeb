@@ -10,10 +10,10 @@ import VisualRoadmap from "../components/VisualRoadmap.jsx";
 // Icons
 import {
   FaCheck, FaUsers, FaVideo,
-  FaWhatsapp, FaGraduationCap
+  FaWhatsapp, FaGraduationCap, FaArrowRight
 } from "react-icons/fa";
 import { BiWorld, BiConversation } from "react-icons/bi";
-import { MdOutlineFlightTakeoff, MdQuiz } from "react-icons/md";
+import { MdOutlineFlightTakeoff, MdQuiz, MdOutlineSupportAgent } from "react-icons/md";
 import { IoIosInfinite } from "react-icons/io";
 
 // DATA
@@ -101,7 +101,33 @@ export default function Idiomas() {
 
   return (
     <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-blue-500/30 pb-20">
-      <SEOHead title="Cursos de Idiomas Online | Instituto Lael" description="Inglés y Coreano con metodología comunicativa." />
+      <SEOHead 
+        title="Cursos de Idiomas Online | Instituto Lael" 
+        description="Inglés y Coreano con metodología comunicativa."
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          "itemListElement": LANGUAGES.filter(l => !l.comingSoon).map((lang, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "Course",
+              "name": lang.name,
+              "description": lang.summary,
+              "provider": {
+                "@type": "EducationalOrganization",
+                "name": "Instituto Lael",
+                "sameAs": "https://institutolael.cl"
+              },
+              "offers": {
+                "@type": "Offer",
+                "price": "24990",
+                "priceCurrency": "CLP"
+              }
+            }
+          }))
+        }} 
+      />
 
       {/* ──────────────── SECCIÓN 1: HEADER (Aspiracional) ──────────────── */}
       <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-20">
@@ -177,39 +203,33 @@ export default function Idiomas() {
                   )
                })}
 
-               {/* KOREAN CARD */}
-               {LANGUAGES.filter(l => l.id === 'coreano').map(lang => {
-                  const isSelected = selectedIds.includes('coreano');
-                  return (
-                     <div 
-                        key={lang.id} 
-                        onClick={() => toggleLanguage('coreano', false)}
-                        className={`group relative p-10 rounded-[2.5rem] border-2 cursor-pointer transition-all overflow-hidden ${isSelected ? 'bg-amber-900/10 border-amber-500' : 'bg-white/[0.02] border-white/5 hover:border-amber-500/30'}`}
-                     >
-                        <div className="absolute top-4 right-6 text-6xl opacity-20 grayscale group-hover:grayscale-0 transition-grayscale">🇰🇷</div>
-                        <h3 className="text-3xl font-black text-white uppercase tracking-tight mb-2">Coreano</h3>
-                        <p className="text-xs font-black uppercase tracking-widest text-amber-400 mb-6">Idioma y Cultura</p>
-                        
-                        <ul className="space-y-3 mb-8">
-                           <li className="flex gap-3 text-slate-400 text-sm font-medium"><FaCheck className="text-amber-500 mt-1" /> Aprende Hangeul en 1 mes</li>
-                           <li className="flex gap-3 text-slate-400 text-sm font-medium"><FaCheck className="text-amber-500 mt-1" /> K-Pop y Cultura</li>
-                           <li className="flex gap-3 text-slate-400 text-sm font-medium"><FaCheck className="text-amber-500 mt-1" /> Profesores nativos/expertos</li>
-                        </ul>
+               {/* LSCh CARD (NEW PROMOTED) */}
+               <div 
+                  onClick={() => window.location.href = '/lsch'}
+                  className="group relative p-10 rounded-[2.5rem] border-2 cursor-pointer transition-all overflow-hidden bg-white/[0.02] border-white/5 hover:border-teal-500/30"
+               >
+                  <div className="absolute top-4 right-6 text-6xl opacity-20 grayscale group-hover:grayscale-0 transition-grayscale">🤟</div>
+                  <h3 className="text-3xl font-black text-white uppercase tracking-tight mb-2">Lengua de Señas</h3>
+                  <p className="text-xs font-black uppercase tracking-widest text-teal-400 mb-6">Inclusión Real</p>
+                  
+                  <ul className="space-y-3 mb-8">
+                     <li className="flex gap-3 text-slate-400 text-sm font-medium"><FaCheck className="text-teal-500 mt-1" /> Cultura Sorda (No mímica)</li>
+                     <li className="flex gap-3 text-slate-400 text-sm font-medium"><FaCheck className="text-teal-500 mt-1" /> Gramática Visual</li>
+                     <li className="flex gap-3 text-slate-400 text-sm font-medium"><FaCheck className="text-teal-500 mt-1" /> Docentes Nativos</li>
+                  </ul>
 
-                         <div className="text-right">
-                           <span className="block text-2xl font-black text-white tracking-tighter">{clp(35000)}</span>
-                           <span className="text-[10px] uppercase font-black tracking-widest text-slate-600">Mensual</span>
-                         </div>
+                  <div className="text-right">
+                     <span className="block text-xl font-bold text-white tracking-tight">Ver Programa</span>
+                     <span className="text-[10px] uppercase font-black tracking-widest text-slate-600">Ir a Sitio Exclusivo</span>
+                  </div>
 
-                         {isSelected && <div className="absolute bottom-6 left-6 text-amber-500"><FaCheck size={24} /></div>}
-                     </div>
-                  )
-               })}
+                  <div className="absolute bottom-6 left-6 text-teal-500 opacity-0 group-hover:opacity-100 transition-opacity"><FaArrowRight size={24} /></div>
+               </div>
             </div>
             
             {/* OTHER LANGUAGES (SMALLER) */}
             <div className="mt-8 flex justify-center gap-4 flex-wrap">
-               {LANGUAGES.filter(l => l.id !== 'ingles' && l.id !== 'coreano').map(lang => (
+               {LANGUAGES.filter(l => l.id !== 'ingles' && l.id !== 'coreano' && l.id !== 'lsch').map(lang => (
                    <div key={lang.id} className="px-6 py-3 rounded-xl border border-white/5 bg-white/[0.02] opacity-50 flex items-center gap-2 grayscale">
                       <span className="text-xl">{lang.emoji}</span>
                       <span className="text-xs font-bold uppercase text-slate-500">{lang.name} (Pronto)</span>

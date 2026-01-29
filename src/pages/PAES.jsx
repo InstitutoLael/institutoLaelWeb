@@ -102,7 +102,29 @@ export default function Paes() {
 
   return (
     <div className="bg-[#050505] text-white font-sans overflow-x-hidden selection:bg-indigo-500/30 pb-20">
-      <SEOHead title="Preuniversitario Online PAES" description="Domina la PAES. Asegura tu Universidad con estrategia y simuladores." />
+      <SEOHead 
+        title="Preuniversitario Online PAES" 
+        description="Domina la PAES. Asegura tu Universidad con estrategia y simuladores."
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Course",
+          "name": "Preuniversitario PAES 2026",
+          "description": "Programa intensivo online para la Prueba de Acceso a la Educación Superior (PAES).",
+          "provider": {
+            "@type": "EducationalOrganization",
+            "name": "Instituto Lael",
+            "sameAs": "https://institutolael.cl"
+          },
+          "offers": {
+            "@type": "Offer",
+            "category": "Paid",
+            "priceCurrency": "CLP",
+            "price": "34990",
+            "availability": "https://schema.org/InStock",
+            "url": "https://institutolael.cl/paes"
+          }
+        }}
+      />
 
       {/* ──────────────── SECCIÓN 1: HEADER (Venta Agresiva) ──────────────── */}
       <header className="relative pt-32 pb-20 px-6 text-center overflow-hidden">

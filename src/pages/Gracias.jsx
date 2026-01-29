@@ -9,9 +9,20 @@ import confetti from "canvas-confetti";
 
 const clp = (n) => Number(n || 0).toLocaleString("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
 
+import { supabase } from "../supabaseClient";
+import { FaStar } from "react-icons/fa";
+
+// ... (keep previous imports)
+
 export default function Gracias() {
   const location = useLocation();
   const { order, total, paymentMethod } = location.state || {};
+  
+  // Feedback State
+  const [rating, setRating] = React.useState(0);
+  const [comment, setComment] = React.useState("");
+  const [submitted, setSubmitted] = React.useState(false);
+  const [hoverRating, setHoverRating] = React.useState(0);
 
   // Confetti Effect on Load
   React.useEffect(() => {
@@ -22,6 +33,31 @@ export default function Gracias() {
       colors: ['#F59E0B', '#10B981', '#6366F1'] // Brand colors
     });
   }, []);
+
+  const handleFeedbackSubmit = async () => {
+     if(rating === 0) return;
+
+     try {
+       const userContact = order?.customer?.email || "anonymous";
+       const { error } = await supabase.from('feedback').insert({
+         rating,
+         comment,
+         contact_info: userContact
+       });
+
+       if(!error) {
+         setSubmitted(true);
+         if(window.gtag) {
+            window.gtag('event', 'feedback_submitted', {
+               event_category: 'Feedback',
+               event_label: `Rating: ${rating}`
+            });
+         }
+       }
+     } catch (err) {
+       console.error("Error submitting feedback:", err);
+     }
+  };
 
   // Si no hay datos, mostrar algo genérico o redirigir
   const orderId = order?.id?.slice(0, 8) || "N/A";
@@ -107,35 +143,57 @@ export default function Gracias() {
             </a>
           </div>
 
-          {/* Feedback Flash Survey */}
-          <div className="mb-8 p-6 bg-white/5 rounded-3xl">
-             <label className="block text-slate-500 text-xs font-bold uppercase tracking-widest mb-3">
-               ¿Qué te hizo decidirte por nosotros hoy?
-             </label>
-             <input 
-                type="text" 
-                placeholder="Ej: La metodología, el precio, los profes..." 
-                className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors"
-                onBlur={(e) => {
-                   if(e.target.value.length > 3 && window.gtag) {
-                      window.gtag('event', 'post_purchase_feedback', {
-                        event_category: 'Feedback',
-                        event_label: e.target.value
-                      });
-                   }
-                }}
-             />
-          </div>
+          {/* NATIVE FEEDBACK SYSTEM */}
+          {!submitted ? (
+            <div className="mb-8 p-8 bg-white/5 rounded-[2.5rem] border border-white/5">
+               <label className="block text-slate-400 text-xs font-bold uppercase tracking-widest mb-4">
+                 ¿Cómo fue tu experiencia de compra?
+               </label>
+               <div className="flex justify-center gap-2 mb-6">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button 
+                      key={star}
+                      onClick={() => setRating(star)}
+                      onMouseEnter={() => setHoverRating(star)}
+                      onMouseLeave={() => setHoverRating(0)}
+                      className={`text-4xl transition-colors ${ star <= (hoverRating || rating) ? 'text-amber-400' : 'text-slate-700' }`}
+                    >
+                      <FaStar />
+                    </button>
+                  ))}
+               </div>
+               {rating > 0 && (
+                 <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
+                    <textarea 
+                      placeholder="¿Algún comentario extra? (Opcional)" 
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      className="w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500 transition-colors mb-4 resize-none h-24"
+                    />
+                    <button 
+                      onClick={handleFeedbackSubmit}
+                      className="px-8 py-3 bg-white text-slate-950 font-black uppercase tracking-widest text-xs rounded-xl hover:scale-105 transition-transform"
+                    >
+                      Enviar Valoración
+                    </button>
+                 </motion.div>
+               )}
+            </div>
+          ) : (
+            <div className="mb-8 p-8 bg-emerald-900/10 rounded-[2.5rem] border border-emerald-500/20 flex flex-col items-center">
+               <FaCheckCircle className="text-emerald-500 text-3xl mb-2" />
+               <span className="text-emerald-400 font-black uppercase tracking-widest text-xs">¡Gracias por tu feedback!</span>
+            </div>
+          )}
 
           <div className="space-y-4">
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Link to="/aula" className="py-5 bg-white/5 border border-white/10 text-white font-black rounded-2xl hover:bg-white/10 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
                 <FaBookOpen /> Ir a Aula Virtual
               </Link>
-              <a href="https://typeform.com/" target="_blank" rel="noreferrer" className="py-5 bg-white text-slate-950 font-black rounded-2xl hover:bg-slate-100 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                Encuesta de Satisfacción <FaArrowRight />
-              </a>
+              <Link to="/" className="py-5 bg-white text-slate-950 font-black rounded-2xl hover:bg-slate-100 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                Volver al Inicio <FaArrowRight />
+              </Link>
             </div>
           </div>
         </div>

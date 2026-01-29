@@ -16,6 +16,7 @@ import { ABOUT_DATA } from "../data/about.js";
 
 // SEO
 import SEOHead from "../components/SEOHead.jsx";
+import TeachersSection from "../components/TeachersSection.jsx";
 
 // HELPERS FOR ICONS
 const IconMap = {
@@ -176,6 +177,9 @@ export default function About() {
                </div>
             </div>
          </section>
+
+         {/* ──────────────── 3.5. EQUIPO DOCENTE ──────────────── */}
+         <TeachersSection />
 
          {/* ──────────────── 4. TIMELINE: NUESTRA HISTORIA (TRAYECTORIA) ──────────────── */}
          <section ref={scrollRef} className="py-24 bg-slate-950 relative border-y border-white/5">

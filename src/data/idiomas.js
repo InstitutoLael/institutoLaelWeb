@@ -156,6 +156,21 @@ export const LANGUAGES = [
     ],
     levels: ["HSK 1", "HSK 2"],
     comingSoon: true,
+  },
+  {
+    id: "lsch",
+    name: "Lengua de Señas (LSCh)",
+    emoji: "🤟",
+    color: "#0891b2", // Cyan
+    badge: "Inclusión Real",
+    summary: "Rompe barreras de comunicación. Aprende LSCh desde la cultura Sorda y contribuye a una sociedad más inclusiva.",
+    features: [
+      "Docentes Sordos y Co-docentes oyentes",
+      "Cultura y Gramática Sorda",
+      "Vocabulario técnico y cotidiano"
+    ],
+    levels: ["A1 (Básico)", "A2 (Intermedio)", "B1 (Fluidez)"],
+    comingSoon: false,
   }
 ];
 

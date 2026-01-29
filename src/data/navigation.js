@@ -30,10 +30,11 @@ routesMap.forEach(item => {
 
 export const NAVIGATION = {
     main: [
+        { name: "Nosotros", path: "/nosotros" },
         { name: "PAES", path: "/paes" },
         { name: "Idiomas", path: "/idiomas" },
-        { name: "Escuela Adultos", path: "/escuela-adultos" },
-        { name: "Contacto", path: "/contacto" },
+        { name: "Adultos", path: "/escuela-adultos" },
+        { name: "Empresas", path: "/empresas" },
     ],
     // Hierarchical MegaMenu
     megaMenu: categorizedMenu,

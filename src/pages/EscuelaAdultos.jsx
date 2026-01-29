@@ -1,369 +1,127 @@
-import React, { useState, useEffect } from "react";
-import { useCart } from "../context/CartContext.jsx";
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
 import SEOHead from "../components/SEOHead.jsx";
-import { supabase } from "../supabaseClient";
-
-// Components
+import { motion } from "framer-motion";
 
 // Icons
 import {
-   FaHandHoldingHeart, FaUserGraduate, FaChalkboardTeacher, FaRegCheckCircle,
-   FaWhatsapp, FaInfoCircle, FaChevronDown, FaChevronUp, FaHeart, FaHandsHelping, FaCheck
+   FaRegCheckCircle,
+   FaWhatsapp, FaGraduationCap
 } from "react-icons/fa";
-import { MdOutlineWorkOutline, MdSchool, MdTimelapse, MdOutlineFamilyRestroom } from "react-icons/md";
-import { BiWorld, BiDonateHeart } from "react-icons/bi";
-import { BsArrowRight } from "react-icons/bs";
+import { BiBookHeart } from "react-icons/bi";
+import { MdSchool, MdOutlineWorkOutline, MdTimelapse } from "react-icons/md";
 
-// DATA
-import {
-   CAMINOS_CONTENT,
-   STUDY_CYCLES,
-   PLANS,
-   STEPS,
-   FAQS,
-   REQUIREMENTS,
-   getNivelacionQuote,
-   clp
-} from "../data/nivelacion.js";
-
-// ANIMATIONS
-const fadeInUp = {
-   hidden: { opacity: 0, y: 30 },
-   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-};
+// DATA (Import only what's needed or keep existing imports if used in logic I might re-add later, 
+// but for the "Sales Page" requested, I will simplify to focus on copy)
 
 export default function EscuelaAdultos() {
-   const { addToCart, openCart } = useCart();
-   const [activeFaq, setActiveFaq] = useState(null);
-   const [showSticky, setShowSticky] = useState(false);
-   const [dbProducts, setDbProducts] = useState([]);
-   const [loading, setLoading] = useState(true);
-
-   // FETCH PRODUCTS
-   useEffect(() => {
-      const fetchProducts = async () => {
-         try {
-            const { data, error } = await supabase
-               .from('products')
-               .select('*')
-               .eq('category', 'NIVELACION');
-            if (error) throw error;
-            setDbProducts(data || []);
-         } catch (err) {
-            console.error("Error fetching Nivelación products:", err);
-         } finally {
-            setLoading(false);
-         }
-      };
-      fetchProducts();
-   }, []);
-
-   // SCROLL DETECTION
-   useEffect(() => {
-      const handleScroll = () => setShowSticky(window.scrollY > 800);
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-   }, []);
-
-   const handleEnroll = (planId) => {
-      const quote = getNivelacionQuote(planId);
-      
-      // Match with DB product
-      let matchName = "";
-      if (planId === 'social') matchName = "Cupo Social";
-      else if (planId === 'consciente') matchName = "Plan Estándar";
-      else if (planId === 'padrino') matchName = "Plan Padrino";
-
-      const dbProduct = dbProducts.find(p => p.name.includes(matchName));
-
-      addToCart({
-         id: `caminos-${quote.planId}`,
-         db_id: dbProduct ? dbProduct.id : null,
-         title: `Programa Caminos: ${quote.title}`,
-         price: quote.monthlyPrice,
-         detail: quote.isFree ? 'Beca de Gratuidad (Cupo Social)' : 'Mensualidad Estándar',
-         type: 'course',
-         extraInfo: quote.isFree ? 'Requiere 80% Asistencia' : `+ Matrícula ${clp(quote.registration)}`
-      });
-      openCart();
-   };
-
-   const toggleFaq = (idx) => {
-      setActiveFaq(activeFaq === idx ? null : idx);
-   };
-
-   const scrollToPlans = () => {
-      document.getElementById("plans-section").scrollIntoView({ behavior: "smooth" });
-   };
-
+   
    return (
       <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-indigo-500/30">
+         <SEOHead title="Escuela de Adultos | 2 años en 1" description="Nunca es tarde para terminar el colegio. Programa 100% Online y válido MINEDUC." />
 
-         {/* ──────────────── 1. HERO (EMPATHETIC) ──────────────── */}
+         {/* ──────────────── 1. HEADER (Nunca es Tarde) ──────────────── */}
          <header className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-24 bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)]">
-            {/* Warm Background Pattern */}
-            <div className="absolute inset-0 bg-[url('/img/hero/adultos-hero.jpg')] bg-cover bg-center opacity-5 mix-blend-overlay"></div>
-
-            <div className="container mx-auto px-6 relative z-10 text-center max-w-3xl">
+            <div className="container mx-auto px-6 relative z-10 text-center max-w-4xl">
                <motion.div
-                  initial="hidden" animate="visible" variants={fadeInUp}
-                  className="inline-flex flex-col items-center gap-2 mb-6"
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8 }}
                >
-                  <div className="bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-full shadow-lg shadow-indigo-500/20 mb-3 animate-pulse">
-                     Admisión Pioneros | Lanzamiento 2026
-                  </div>
-                  <span className="text-indigo-400 font-bold tracking-widest uppercase text-xs border-b border-indigo-500 pb-1">
-                     {CAMINOS_CONTENT.subtitle}
+                  <span className="text-amber-500 font-bold tracking-[0.3em] uppercase text-[10px] mb-4 block">
+                     Admisión 2026 Abierta
                   </span>
-               </motion.div>
+                  
+                  <h1 className="text-5xl md:text-8xl font-black mb-8 leading-[1.1] tracking-tighter uppercase text-white">
+                     Nunca es tarde <br />
+                     <span className="text-indigo-400">para cumplir tus metas.</span>
+                  </h1>
 
-               <motion.h1
-                  initial="hidden" animate="visible" variants={fadeInUp}
-                  className="text-5xl md:text-8xl font-black mb-8 leading-tight tracking-tighter uppercase"
-               >
-                  {CAMINOS_CONTENT.title}
-               </motion.h1>
-
-               <motion.div
-                  initial="hidden" animate="visible" variants={fadeInUp}
-                  className="bg-white/10 backdrop-blur-md rounded-2xl p-6 mb-10 border border-white/5"
-               >
-                  <p className="text-xl md:text-2xl text-slate-200 font-light italic leading-relaxed">
-                     "{CAMINOS_CONTENT.heroText}"
+                  <p className="text-xl md:text-2xl text-slate-300 font-light leading-relaxed max-w-2xl mx-auto mb-12">
+                     Termina tu Enseñanza Media con nuestro programa <strong className="text-white font-bold">2 en 1</strong> (Dos cursos en un año).
+                     100% Online y compatible con tu trabajo.
                   </p>
+
+                  <a 
+                     href="https://wa.me/56964626568?text=Hola,%20necesito%20info%20sobre%20Escuela%20de%20Adultos"
+                     target="_blank"
+                     rel="noreferrer"
+                     className="inline-flex items-center gap-2 px-10 py-5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-full text-xs shadow-lg shadow-emerald-500/20 transition-all uppercase tracking-widest hover:scale-105"
+                  >
+                     <FaWhatsapp className="text-lg" /> Matricularme Ahora - Cupos 2026
+                  </a>
+
+                  {/* Bullet Points */}
+                  <div className="mt-16 flex flex-col md:flex-row justify-center gap-6 text-sm text-slate-400 font-medium">
+                      <div className="flex items-center gap-2"><FaRegCheckCircle className="text-emerald-500" /> Exámenes válidos ante el Mineduc</div>
+                      <div className="flex items-center gap-2"><FaRegCheckCircle className="text-emerald-500" /> Clases grabadas si no puedes asistir</div>
+                      <div className="flex items-center gap-2"><FaRegCheckCircle className="text-emerald-500" /> Apoyo constante de profes</div>
+                  </div>
                </motion.div>
-
-                <motion.button
-                  initial="hidden" animate="visible" variants={fadeInUp}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={scrollToPlans}
-                  className="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-full text-lg shadow-[0_10px_40px_rgba(245,158,11,0.4)] transition-all flex items-center justify-center gap-2 mx-auto uppercase tracking-widest"
-               >
-                  <FaHandHoldingHeart /> Solicitar Cupo Social
-               </motion.button>
-
             </div>
          </header>
 
-         {/* ──────────────── 2. MANIFESTO & CYCLES ──────────────── */}
-         <section className="py-24 bg-[#050505]">
-            <div className="container mx-auto px-6">
-               <div className="flex flex-col md:flex-row gap-20 items-center mb-32">
-                  <div className="md:w-1/2">
-                     <h2 className="text-4xl md:text-6xl font-black text-white mb-8 uppercase tracking-tighter">El modelo <span className="text-indigo-500">"Robin Hood"</span></h2>
-                     <p className="text-xl text-slate-400 leading-relaxed mb-8">
-                        {CAMINOS_CONTENT.impactQuote}
-                     </p>
-                     <p className="text-slate-500 leading-relaxed mb-10">
-                        Funciona así: quienes pueden pagar un precio justo (Plan Estándar) o solidario (Plan Padrino),
-                        subsidian directamente a quienes no tienen recursos (Cupo Social). Es una comunidad de apoyo real diseñada para cambiar destinos.
-                     </p>
-                     <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                        <div className="flex -space-x-4">
-                           {[1, 2, 3].map(i => <div key={i} className="w-12 h-12 bg-white/5 rounded-full border-2 border-[#050505]"></div>)}
-                        </div>
-                        +1.200 Vidas Transformadas
-                     </div>
-                  </div>
-                  <div className="md:w-1/2 relative bg-white/[0.02] backdrop-blur-3xl rounded-[3rem] p-12 border border-white/5 shadow-2xl overflow-hidden group">
-                     <div className="absolute top-0 right-0 p-8 text-indigo-500/10 group-hover:text-indigo-500/20 transition-colors">
-                        <FaHeart size={120} />
-                     </div>
-                     <h3 className="font-black uppercase tracking-widest text-xs text-indigo-500 mb-8 relative z-10">Lo que dicen nuestros alumnos:</h3>
-                     <blockquote className="italic text-slate-200 text-2xl font-light leading-relaxed mb-10 relative z-10">
-                        "{CAMINOS_CONTENT.heroText.split('.')[0]}..."
-                     </blockquote>
-                     <div className="text-right relative z-10">
-                        <strong className="block text-white font-black uppercase tracking-tight text-lg">Marta G.</strong>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Generación 2024</span>
-                     </div>
-                  </div>
-               </div>
-
-               {/* CYCLES GRID */}
-               <div className="text-center mb-12">
-                  <h3 className="text-2xl font-bold text-slate-800 mb-2">Ciclos Disponibles (Modalidad 2x1)</h3>
-                  <p className="text-slate-500">Terminas dos años en uno.</p>
-               </div>
-
-               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {STUDY_CYCLES.map((cycle, i) => (
-                     <motion.div
-                        key={i}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 }}
-                        className="bg-white/[0.03] p-10 rounded-3xl border border-white/5 hover:border-indigo-500/30 transition-all text-center group backdrop-blur-3xl"
-                     >
-                        <div className="text-6xl mb-6 grayscale group-hover:grayscale-0 transition-all group-hover:scale-110 duration-500">{cycle.icon}</div>
-                        <h4 className="font-black text-white mb-2 uppercase tracking-tight text-xl">{cycle.name}</h4>
-                        <span className="text-indigo-500 text-[10px] font-black uppercase tracking-[0.2em] bg-indigo-500/10 px-4 py-1.5 rounded-full inline-block border border-indigo-500/20">
-                           {cycle.equivalence}
-                        </span>
-                     </motion.div>
-                  ))}
-               </div>
-            </div>
+         {/* ──────────────── 2. LA GRAN DUDA (Validación) ──────────────── */}
+         <section className="py-24 bg-[#050505] border-y border-white/5">
+             <div className="container mx-auto px-6 text-center max-w-3xl">
+                 <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center text-3xl mx-auto mb-8 text-indigo-500 shadow-2xl">
+                     <FaGraduationCap />
+                 </div>
+                 <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-8">
+                     ¿Es válido mi certificado?
+                 </h2>
+                 <p className="text-xl md:text-3xl text-emerald-400 font-black leading-relaxed mb-6 uppercase tracking-tight">
+                     ¡SÍ, TOTALMENTE VALIDO!
+                 </p>
+                 <p className="text-lg text-slate-400 leading-relaxed font-light">
+                     Nuestro programa te prepara para rendir los <strong>Exámenes Libres</strong> válidos ante el <strong>MINEDUC</strong>. 
+                     Tu licencia de enseñanza media sirve para trabajar, estudiar una carrera técnica o entrar a la Universidad.
+                 </p>
+             </div>
          </section>
 
-         {/* ──────────────── 3. PROCESS TIMELINE ──────────────── */}
-         <section className="py-24 bg-white/[0.01] border-y border-white/5">
-            <div className="container mx-auto px-6">
-               <h2 className="text-3xl font-bold text-center mb-16">Tu Camino a la Licenciatura</h2>
-               <div className="relative">
-                  {/* Line */}
-                  <div className="hidden lg:block absolute top-1/2 left-0 w-full h-1 bg-slate-300 -translate-y-1/2 z-0"></div>
+         {/* ──────────────── 3. CÓMO FUNCIONA (Paso a Paso) ──────────────── */}
+         <section className="py-24 bg-[#020617]">
+             <div className="container mx-auto px-6">
+                 <div className="text-center mb-16">
+                     <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">Tu Camino al Éxito</h2>
+                     <p className="text-slate-500">Simple, claro y acompañado en todo momento.</p>
+                 </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 relative z-10">
-                     {STEPS.map((step, i) => (
-                        <div key={i} className="flex flex-col items-center text-center bg-white/[0.03] lg:bg-transparent p-10 lg:p-0 rounded-[2.5rem] border border-white/5 lg:border-none backdrop-blur-md">
-                           <div className="w-16 h-16 bg-white text-slate-950 rounded-2xl flex items-center justify-center font-black text-2xl mb-6 shadow-2xl shadow-white/20">
-                              {i + 1}
-                           </div>
-                           <strong className="text-lg text-white font-black uppercase tracking-tight block mb-3">{step.title}</strong>
-                           <p className="text-xs text-slate-500 font-medium leading-relaxed px-4">{step.text}</p>
-                        </div>
+                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                     {[
+                         { step: "01", title: "Matrícula Online", desc: "Te inscribes 100% online desde tu teléfono o computador.", icon: <BiBookHeart /> },
+                         { step: "02", title: "Clases Flexibles", desc: "Te conectas en la tarde. ¿Trabajas? Ves las grabaciones cuando quieras.", icon: <MdOutlineWorkOutline /> },
+                         { step: "03", title: "Inscripción Exámenes", desc: "Te guiamos paso a paso para inscribirte en el Mineduc.", icon: <MdSchool /> },
+                         { step: "04", title: "Licencia en Mano", desc: "Apruebas tus exámenes y recibes tu certificado oficial.", icon: <MdTimelapse /> }
+                     ].map((item, i) => (
+                         <div key={i} className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:bg-white/[0.04] transition-colors group">
+                             <div className="text-4xl text-slate-600 font-black mb-6 opacity-30 group-hover:text-amber-500 group-hover:opacity-100 transition-all">{item.step}</div>
+                             <div className="text-3xl text-indigo-500 mb-4">{item.icon}</div>
+                             <h3 className="text-xl font-black text-white uppercase tracking-tight mb-2">{item.title}</h3>
+                             <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
+                         </div>
                      ))}
-                  </div>
-               </div>
-            </div>
+                 </div>
+             </div>
          </section>
 
-         {/* ──────────────── 4. PRICING CARDS (ROBIN HOOD) ──────────────── */}
-         <section id="plans-section" className="py-32 bg-[#050505]">
-            <div className="container mx-auto px-6">
-               <div className="text-center mb-16">
-                  <h2 className="text-4xl font-bold mb-4">Únete a la Causa</h2>
-                  <p className="text-slate-400">Elige cuánto puedes aportar. Nadie se queda fuera.</p>
-               </div>
-
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-6xl mx-auto items-stretch">
-                  {PLANS.map((plan, idx) => {
-                     const isStandard = plan.id === 'consciente';
-                     const isSocial = plan.id === 'social';
-                     const isPadrino = plan.id === 'padrino';
-
-                     return (
-                        <motion.div
-                           key={plan.id}
-                           whileHover={{ y: -10 }}
-                           className={`relative rounded-[3rem] p-12 flex flex-col h-full border backdrop-blur-3xl transition-all duration-500
-                             ${isStandard ? 'bg-indigo-600/10 border-indigo-500/50 shadow-[0_0_40px_rgba(249,115,22,0.1)]' : 'bg-white/[0.02] border-white/5'}
-                             ${isPadrino ? 'bg-amber-600/10 border-amber-500/50 shadow-[0_0_40px_rgba(245,158,11,0.1)]' : ''}
-                           `}
-                        >
-                           <div className="bg-white/5 text-[10px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full w-fit mb-8 border border-white/10 text-slate-400">
-                              {plan.tag}
-                           </div>
-
-                           <h3 className="text-3xl font-black mb-3 uppercase tracking-tighter text-white">{plan.title}</h3>
-                           <div className="flex items-baseline gap-2 mb-8">
-                              <span className="text-5xl font-black text-white tracking-tighter">{clp(plan.price)}</span>
-                              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">/mes</span>
-                           </div>
-
-                           <p className="text-sm text-slate-400 mb-10 min-h-[60px] leading-relaxed font-medium">
-                              {plan.desc}
-                           </p>
-
-                           <ul className="space-y-4 mb-12 flex-1">
-                              {plan.features.map((f, i) => (
-                                 <li key={i} className="flex items-start gap-4 text-sm font-medium text-slate-300">
-                                    <FaCheck className={`mt-1 shrink-0 ${isStandard ? 'text-indigo-500' : isPadrino ? 'text-amber-500' : 'text-slate-500'}`} />
-                                    <span>{f}</span>
-                                 </li>
-                              ))}
-                           </ul>
-
-                           <button
-                              onClick={() => handleEnroll(plan.id)}
-                              className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all shadow-2xl
-                                ${isStandard ? 'bg-indigo-500 text-white hover:bg-indigo-400 shadow-indigo-500/20' : ''}
-                                ${isPadrino ? 'bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-amber-500/20' : ''}
-                                ${isSocial ? 'bg-white/5 text-white hover:bg-white/10 border border-white/10' : ''}
-                              `}
-                           >
-                              {plan.cta}
-                           </button>
-                        </motion.div>
-                     );
-                  })}
-               </div>
-            </div>
+         {/* ──────────────── 4. CTA FINAL ──────────────── */}
+         <section className="py-32 bg-[#050505] text-center border-t border-white/5">
+             <div className="container mx-auto px-6 max-w-2xl">
+                 <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-8">¿Listo para cambiar tu historia?</h2>
+                 <p className="text-slate-400 mb-10 text-lg">
+                     Nuestras coordinadoras te están esperando para orientarte y resolver todas tus dudas con cariño y paciencia.
+                 </p>
+                 <a 
+                     href="https://wa.me/56964626568?text=Hola,%20quiero%20terminar%20mi%20colegio"
+                     target="_blank"
+                     rel="noreferrer"
+                     className="block w-full sm:w-auto px-12 py-5 bg-white text-slate-950 font-black rounded-xl text-xs shadow-2xl transition-all hover:scale-105 uppercase tracking-widest flex items-center justify-center gap-2"
+                 >
+                     <FaWhatsapp className="text-[#25D366] text-xl" /> Hablar con Coordinadora
+                 </a>
+             </div>
          </section>
-
-         {/* ──────────────── 5. PREGUNTAS FRECUENTES ──────────────── */}
-         <section className="py-24 bg-[#050505]">
-            <div className="container mx-auto px-6 max-w-3xl">
-               <h2 className="text-4xl font-black text-center mb-16 uppercase tracking-tighter">Preguntas <span className="text-indigo-500">Frecuentes</span></h2>
-
-               <div className="space-y-4">
-                  {FAQS.map((faq, i) => (
-                     <div key={i} className="border border-white/5 rounded-2xl overflow-hidden bg-white/[0.02]">
-                        <button
-                           onClick={() => toggleFaq(i)}
-                           className="w-full flex justify-between items-center p-8 hover:bg-white/5 transition-colors text-left"
-                        >
-                           <span className="font-black text-white uppercase tracking-tight text-sm">{faq.q}</span>
-                           {activeFaq === i ? <FaChevronUp /> : <FaChevronDown className="text-slate-500" />}
-                        </button>
-                        <AnimatePresence>
-                           {activeFaq === i && (
-                              <motion.div
-                                 initial={{ height: 0 }}
-                                 animate={{ height: "auto" }}
-                                 exit={{ height: 0 }}
-                                 className="overflow-hidden bg-white/[0.01]"
-                              >
-                                 <div className="p-8 text-slate-400 leading-relaxed border-t border-white/5 text-sm font-medium">
-                                    {faq.a}
-                                 </div>
-                              </motion.div>
-                           )}
-                        </AnimatePresence>
-                     </div>
-                  ))}
-               </div>
-
-               <div className="mt-16 bg-indigo-500/5 p-10 rounded-[2.5rem] flex md:flex-row flex-col items-center gap-8 text-center md:text-left border border-indigo-500/10">
-                  <div className="w-16 h-16 bg-indigo-500/10 text-indigo-500 rounded-2xl flex items-center justify-center text-3xl shrink-0 border border-indigo-500/20 shadow-2xl">
-                     <FaInfoCircle />
-                  </div>
-                  <div className="flex-1">
-                     <h4 className="font-black text-white uppercase tracking-tight text-lg mb-2">Requisitos de Matrícula</h4>
-                     <p className="text-sm text-slate-500 font-medium">Solo necesitas tu Carnet de Identidad y Certificado de Estudios. Si no los tienes, te brindamos asesoría completa para obtenerlos sin costo.</p>
-                  </div>
-               </div>
-            </div>
-         </section>
-
-         {/* ──────────────── STICKY BAR ──────────────── */}
-         <AnimatePresence>
-            {showSticky && (
-               <motion.div
-                  initial={{ y: 100 }}
-                  animate={{ y: 0 }}
-                  exit={{ y: 100 }}
-                  className="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-2xl border-t border-white/10 z-50 py-5"
-               >
-                  <div className="container mx-auto px-8 flex justify-between items-center text-white">
-                     <div>
-                        <strong className="text-indigo-500 font-black uppercase tracking-widest text-xs block mb-1">Programa Caminos</strong>
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Nivelación de Estudios 2026</span>
-                     </div>
-                     <button
-                        onClick={scrollToPlans}
-                        className="px-10 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-2xl text-[10px] transition-all shadow-2xl shadow-indigo-600/20 uppercase tracking-widest"
-                     >
-                        Postular Ahora
-                     </button>
-                  </div>
-               </motion.div>
-            )}
-         </AnimatePresence>
 
       </div>
    );

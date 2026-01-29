@@ -70,8 +70,8 @@ export default function About() {
                   transition={{ delay: 0.5, duration: 1 }}
                   className="text-6xl md:text-9xl font-black mb-8 leading-[0.85] tracking-tighter uppercase"
                >
-                  Educar es <br />
-                  <span className="text-amber-400 italic">Trascender.</span>
+                  Somos <br />
+                  <span className="text-amber-400 italic">Instituto Lael.</span>
                </motion.h1>
 
                <motion.p
@@ -80,7 +80,8 @@ export default function About() {
                   transition={{ delay: 1.2, duration: 1 }}
                   className="text-xl md:text-2xl text-slate-400 leading-relaxed max-w-2xl mx-auto font-light"
                >
-                  {ABOUT_DATA.hero.subtitle}
+                  Nacimos para democratizar la educación de calidad. Creemos que la tecnología debe servir a las personas, no al revés. 
+                  Nuestro compromiso es acompañarte hasta que tengas tu certificado en mano.
                </motion.p>
             </div>
          </header>

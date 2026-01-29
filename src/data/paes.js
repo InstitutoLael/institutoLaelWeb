@@ -148,30 +148,31 @@ export const PAES_COMBOS = [
   {
     id: "humanista",
     title: "Pack Humanista",
-    subtitle: "Para Derecho, Psicología o Artes",
-    subjects: ["len", "his", "m1"],
-    price: 27990,
+    subtitle: "Lenguaje + Historia + Filosofía",
+    subjects: ["len", "his", "m1"], // M1 is usually mandatory, keeping for pricing structure
+    price: 34990,
     color: "amber",
-    features: ["M1 + Lenguaje + Historia", "Ensayos semanales", "Taller de ansiedad"]
+    tag: "Oferta Lanzamiento",
+    features: ["Lenguaje + Historia", "Módulo Filosofía Incan", "Ensayo Semanal", "Clases en Vivo"]
   },
   {
-    id: "salud",
-    title: "Pack Salud",
-    subtitle: "Para Medicina o Enfermería",
-    subjects: ["len", "m1", "m2", "bio", "qui"],
+    id: "cientifico",
+    title: "Pack Científico",
+    subtitle: "Matemáticas + Ciencias + Biología/Física",
+    subjects: ["m1", "m2", "bio", "fis"], 
     price: 34990,
     color: "teal",
-    tag: "Más Completo",
-    features: ["Plan Full (5 Ramos)", "Biología + Química intensivo", "Preparación M2"]
+    tag: "Más Popular",
+    features: ["M1 + M2 (Matemáticas)", "Elige Biología o Física", "Ciencias Común", "Ensayo Semanal"]
   },
   {
-    id: "ingenieria",
-    title: "Pack Ingeniería",
-    subtitle: "Para Civiles y Ciencias Exactas",
-    subjects: ["len", "m1", "m2", "fis"],
-    price: 34990,
+    id: "full",
+    title: "Pack 4 Medios (Full)",
+    subtitle: "Todas las asignaturas para asegurar",
+    subjects: ["len", "m1", "m2", "his", "bio"],
+    price: 44990,
     color: "indigo",
-    features: ["Física + M1 + M2", "Estrategias de rapidez", "Foco en resolución"]
+    features: ["Acceso a TODO", "Orientación Vocacional", "Taller Manejo Ansiedad", "Garantía de Puntaje"]
   }
 ];
 

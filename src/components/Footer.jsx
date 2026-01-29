@@ -19,7 +19,7 @@ export default function Footer() {
                         <img src={logo} alt="Instituto Lael" loading="lazy" className="h-10 w-auto" width="160" height="40" />
                     </Link>
                     <p className="text-sm leading-relaxed max-w-xs mx-auto lg:mx-0 opacity-80">
-                        Transformamos el futuro a través de educación accesible, tecnológica y con valores.
+                        Somos Instituto Lael. Tecnología al servicio de la educación humana.
                     </p>
                     <div className="flex gap-4 mt-2">
                         {NAVIGATION.social.map((social, idx) => (
@@ -65,7 +65,7 @@ export default function Footer() {
                         <a href="mailto:contacto@institutolael.cl" className="hover:text-white transition-colors">
                             contacto@institutolael.cl
                         </a>
-                        <span>San Joaquín, Región Metropolitana</span>
+                        <span>Lunes a Viernes 09:00 - 19:00 hrs</span>
                     </div>
                 </div>
             </div>

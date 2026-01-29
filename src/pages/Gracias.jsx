@@ -131,11 +131,11 @@ export default function Gracias() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Link to="/aula" className="py-5 bg-white/5 border border-white/10 text-white font-black rounded-2xl hover:bg-white/10 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                <FaBookOpen /> Ir a mi Aula
+                <FaBookOpen /> Ir a Aula Virtual
               </Link>
-              <Link to="/" className="py-5 bg-white text-slate-950 font-black rounded-2xl hover:bg-slate-100 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
-                Volver al Inicio <FaArrowRight />
-              </Link>
+              <a href="https://typeform.com/" target="_blank" rel="noreferrer" className="py-5 bg-white text-slate-950 font-black rounded-2xl hover:bg-slate-100 transition-all uppercase tracking-widest text-xs flex items-center justify-center gap-2">
+                Encuesta de Satisfacción <FaArrowRight />
+              </a>
             </div>
           </div>
         </div>

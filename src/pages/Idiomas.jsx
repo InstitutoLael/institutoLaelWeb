@@ -10,10 +10,10 @@ import VisualRoadmap from "../components/VisualRoadmap.jsx";
 // Icons
 import {
   FaCheck, FaUsers, FaVideo,
-  FaWhatsapp, FaGraduationCap, FaArrowRight
+  FaWhatsapp, FaGraduationCap, FaArrowRight, FaHeadset
 } from "react-icons/fa";
 import { BiWorld, BiConversation } from "react-icons/bi";
-import { MdOutlineFlightTakeoff, MdQuiz, MdOutlineSupportAgent } from "react-icons/md";
+import { MdOutlineFlightTakeoff, MdQuiz } from "react-icons/md";
 import { IoIosInfinite } from "react-icons/io";
 
 // DATA
@@ -272,10 +272,7 @@ export default function Idiomas() {
                No usamos apps automáticas. Aquí tienes un <strong className="text-white font-bold">profesor real</strong> y compañeros con quienes practicar. El idioma se vive, no se programa.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
-               <div className="bg-white/[0.02] p-6 rounded-2xl border border-white/5">
-                  <h4 className="font-bold text-white mb-2 flex items-center gap-2"><MdOutlineSupportAgent className="text-blue-500"/> Feedback Real</h4>
-                  <p className="text-sm text-slate-500">Correcciones al instante sobre tu pronunciación y gramática.</p>
-               </div>
+                  <h4 className="font-bold text-white mb-2 flex items-center gap-2"><FaHeadset className="text-blue-500"/> Feedback Real</h4>
                <div className="bg-white/[0.02] p-6 rounded-2xl border border-white/5">
                   <h4 className="font-bold text-white mb-2 flex items-center gap-2"><FaUsers className="text-amber-500"/> Comunidad</h4>
                   <p className="text-sm text-slate-500">Practica con pares de tu mismo nivel en un ambiente seguro.</p>

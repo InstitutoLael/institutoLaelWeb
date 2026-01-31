@@ -1,227 +1,249 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
-// Components
-import SEOHead from "../components/SEOHead.jsx";
-
 // Icons
-import {
-  FaRocket, FaGlobe, FaUserGraduate, FaHandsHelping, FaLaptopCode,
-  FaArrowRight, FaPlay, FaStar, FaVideo, FaGraduationCap, FaDove
+import { 
+  FaRocket, 
+  FaGlobeAmericas, 
+  FaLaptopCode, 
+  FaUserGraduate, 
+  FaCheckCircle, 
+  FaWhatsapp,
+  FaArrowRight
 } from "react-icons/fa";
-import { BiWorld } from "react-icons/bi";
-import { MdVerified } from "react-icons/md";
-import { BsLightningChargeFill } from "react-icons/bs";
 
 // Assets
 import logoDorado from "../assets/img/Logos/lael-inst-amarillo.png";
 
-const BentoItem = ({ to, className, children, delay = 0 }) => (
+const BentoCard = ({ to, title, description, icon, className, delay = 0, size = "small" }) => (
   <motion.div
-    initial={{ opacity: 0, scale: 0.95 }}
-    animate={{ opacity: 1, scale: 1 }}
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5, delay }}
-    whileHover={{ scale: 1.02 }}
-    className={`relative overflow-hidden rounded-[2rem] border border-white/5 bg-slate-900/50 backdrop-blur-xl group hover:border-white/20 transition-all cursor-pointer ${className}`}
+    whileHover={{ scale: 1.02, borderColor: "rgba(99, 102, 241, 0.4)" }}
+    className={`relative group overflow-hidden rounded-[2.5rem] border border-white/5 bg-slate-900/40 backdrop-blur-xl p-8 flex flex-col justify-between transition-all cursor-pointer ${className}`}
   >
-    <Link to={to} className="block w-full h-full p-8 relative z-10 flex flex-col justify-between">
-      {children}
-    </Link>
-    {/* Hover Glow */}
-    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+    <Link to={to} className="absolute inset-0 z-10" />
+    <div className="relative z-0">
+      <div className={`mb-6 p-4 rounded-2xl inline-flex items-center justify-center bg-white/5 text-2xl group-hover:bg-indigo-500/20 group-hover:text-indigo-400 transition-colors`}>
+        {icon}
+      </div>
+      <h3 className={`font-black text-white uppercase tracking-tighter mb-2 ${size === "large" ? "text-3xl md:text-4xl" : "text-xl"}`}>
+        {title}
+      </h3>
+      <p className="text-slate-400 font-medium leading-relaxed">
+        {description}
+      </p>
+    </div>
+    <div className="mt-8 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity">
+      Explorar Mundo <FaArrowRight />
+    </div>
+    {/* Hover Glow Effect */}
+    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
   </motion.div>
 );
 
 export default function Home() {
-  const [ticketCount, setTicketCount] = useState(1284);
-
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Simulate live numbers
-    const interval = setInterval(() => {
-      setTicketCount(prev => prev + Math.floor(Math.random() * 3));
-    }, 5000);
-    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-indigo-500/30 pb-20">
-      <SEOHead
-        title="Instituto Lael | Tu Centro de Mando Educativo"
-        description="Plataforma educativa integral: Preuniversitario, Idiomas, Escuela 2x1 y Homeschool. El futuro comienza aquí."
-      />
+    <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-indigo-500/30 overflow-x-hidden">
+      
+      {/* ──────────────── A. TOP BANNER (URGENCY) ──────────────── */}
+      <div className="fixed top-0 left-0 w-full z-[100] bg-gradient-to-r from-pink-600 to-rose-600 py-3 px-4 shadow-lg shadow-pink-600/20">
+        <p className="text-center text-white text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">
+          🔥 MATRÍCULAS 2026 ABIERTAS | Descuento Early Bird por tiempo limitado.
+        </p>
+      </div>
 
-      {/* ──────────────── HEADER / STATUS BAR ──────────────── */}
-      <header className="pt-8 px-6 container mx-auto flex justify-between items-center mb-12">
-        <div className="flex items-center gap-3">
-          <img src={logoDorado} alt="Lael" className="w-10 opacity-80" />
-          <div className="hidden md:block">
-             <span className="block text-xs font-black uppercase tracking-widest text-slate-500">Sistema Operativo</span>
-             <span className="block text-sm font-bold text-white">LaelOS v2.6 <span className="text-emerald-500 text-[10px] ml-1">● ONLINE</span></span>
-          </div>
+      {/* ──────────────── B. HERO SECTION (LA PROMESA) ──────────────── */}
+      <header className="relative pt-32 pb-20 px-6 overflow-hidden">
+        {/* Abstract Background Shapes */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-600/10 blur-[120px] rounded-full" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-pink-600/10 blur-[100px] rounded-full" />
         </div>
-        <div className="flex items-center gap-4">
-             <div className="px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                </span>
-                <span className="text-[10px] font-black uppercase tracking-widest text-indigo-300">{ticketCount} Alumnos Activos</span>
-             </div>
-        </div>
-      </header>
 
-      {/* ──────────────── HERO ──────────────── */}
-      <div className="container mx-auto px-6 text-center max-w-4xl mb-16">
-         <motion.h1 
+        <div className="container mx-auto max-w-5xl text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-10 flex justify-center"
+          >
+            <img src={logoDorado} alt="Instituto Lael" className="w-16 md:w-20 drop-shadow-[0_0_20px_rgba(99,102,241,0.3)]" />
+          </motion.div>
+
+          <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-8xl font-black text-white tracking-tighter uppercase leading-none mb-6"
-         >
+            className="text-6xl md:text-9xl font-black text-white tracking-tighter uppercase leading-[0.85] mb-8"
+          >
             El Futuro <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-white to-amber-200">Es Tuyo.</span>
-         </motion.h1>
-         <motion.p 
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-white to-pink-400">
+              Es Tuyo.
+            </span>
+          </motion.h1>
+
+          <motion.p 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-xl text-slate-400 font-light max-w-2xl mx-auto"
-         >
-            Selecciona tu destino. Bienvenido al ecosistema educativo más avanzado de Chile.
-         </motion.p>
-      </div>
+            className="text-lg md:text-2xl text-slate-400 font-light max-w-3xl mx-auto mb-12 leading-relaxed"
+          >
+            No somos solo un instituto. Somos el ecosistema educativo más avanzado de Chile. 
+            Preuniversitario, Idiomas, Colegio Online y Capacitación en un solo lugar.
+          </motion.p>
 
-      {/* ──────────────── MISION CONTROL (BENTO GRID) ──────────────── */}
-      <div className="container mx-auto px-6 max-w-7xl">
-        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-3 gap-6 h-auto md:h-[800px]">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="flex justify-center"
+          >
+            <a 
+              href="https://wa.me/56931379968" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="group relative px-10 py-5 bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-2xl transition-all shadow-2xl shadow-indigo-600/30 uppercase tracking-widest text-sm flex items-center gap-3"
+            >
+              <FaWhatsapp className="text-xl group-hover:rotate-12 transition-transform" />
+              Hablar con un Asesor
+            </a>
+          </motion.div>
+        </div>
+      </header>
 
-          {/* 1. PAES (MAIN LEFT) - Tall (2x2) */}
-          <BentoItem to="/paes" className="md:col-span-2 md:row-span-2 bg-indigo-950/20 hover:border-indigo-500/50" delay={0.1}>
-             <div className="absolute top-0 right-0 p-32 bg-indigo-600/20 blur-[100px] rounded-full" />
-             <div className="flex justify-between items-start mb-10">
-                <div className="p-4 bg-indigo-500/20 rounded-2xl text-indigo-400 text-3xl"><FaRocket /></div>
-                <span className="px-3 py-1 bg-white/5 rounded-full text-[10px] font-black uppercase tracking-widest text-slate-400 border border-white/10">Adms. 2026</span>
-             </div>
-             <div>
-                <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-2">Preu PAES</h3>
-                <p className="text-indigo-200 text-lg font-light leading-relaxed mb-6">
-                   El único preuniversitario con simuladores de IA y coaching estratégico.
-                   <br/><strong className="text-white">Asegura tu puntaje.</strong>
-                </p>
-                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-indigo-400 group-hover:gap-4 transition-all">
-                   Explorar Programa <FaArrowRight />
-                </div>
-             </div>
-          </BentoItem>
+      {/* ──────────────── C. THE BENTO GRID (PRODUCTOS) ──────────────── */}
+      <section className="container mx-auto px-6 max-w-7xl mb-32">
+        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-3 gap-6 auto-rows-[minmax(200px,auto)]">
+          
+          {/* Tarjeta 1 (Grande - Focus Principal): PREU PAES */}
+          <BentoCard 
+            to="/paes"
+            title="Preu PAES"
+            description="Asegura tu puntaje con Simuladores IA y Coaching Estratégico."
+            icon={<FaRocket />}
+            className="md:col-span-2 md:row-span-2 border-indigo-500/20 bg-indigo-900/10"
+            size="large"
+            delay={0.1}
+          />
 
-          {/* 2. IDIOMAS (TOP RIGHT) - Wide (2x1) */}
-          <BentoItem to="/idiomas" className="md:col-span-2 bg-emerald-950/20 hover:border-emerald-500/50" delay={0.2}>
-             <div className="absolute bottom-0 left-0 p-24 bg-emerald-600/10 blur-[80px] rounded-full" />
-             <div className="flex items-center gap-6 h-full">
-                <div className="flex-1">
-                   <div className="flex items-center gap-3 mb-4">
-                      <div className="p-3 bg-emerald-500/20 rounded-xl text-emerald-400 text-2xl"><FaGlobe /></div>
-                      <h3 className="text-2xl font-black text-white uppercase tracking-tight">Idiomas</h3>
-                   </div>
-                   <p className="text-slate-400 text-sm mb-4">
-                      Viaja, trabaja y conecta. <span className="text-white font-bold">Inglés y Coreano</span> con nativos.
-                   </p>
-                   <div className="flex gap-2">
-                      <span className="text-2xl grayscale hover:grayscale-0 transition-all cursor-help" title="USA">🇺🇸</span>
-                      <span className="text-2xl grayscale hover:grayscale-0 transition-all cursor-help" title="Korea">🇰🇷</span>
-                   </div>
-                </div>
-                <div className="hidden sm:flex flex-col gap-2">
-                   <div className="px-4 py-2 bg-black/40 rounded-lg text-[10px] font-mono text-emerald-400 border border-emerald-500/20 flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Speaking Club
-                   </div>
-                   <div className="px-4 py-2 bg-black/40 rounded-lg text-[10px] font-mono text-pink-400 border border-pink-500/20 flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-pink-500"></span> K-Pop Culture
-                   </div>
-                </div>
-             </div>
-          </BentoItem>
+          {/* Tarjeta 2 (Mediana): IDIOMAS */}
+          <BentoCard 
+            to="/idiomas"
+            title="Idiomas"
+            description="Inglés y Coreano. Viaja, conecta y trabaja sin fronteras."
+            icon={<FaGlobeAmericas />}
+            className="md:col-span-2 border-emerald-500/20 bg-emerald-900/10"
+            delay={0.2}
+          />
 
-          {/* 3. LSCH (MIDDLE CENTER) - Single (1x1) */}
-          <BentoItem to="/lsch" className="bg-teal-950/20 hover:border-teal-500/50" delay={0.3}>
-             <div className="text-right mb-4">
-                <span className="text-4xl">🤟</span>
-             </div>
-             <h3 className="text-xl font-black text-white uppercase tracking-tight mb-2">LSCh</h3>
-             <p className="text-xs text-slate-400 leading-relaxed mb-4">
-                Rompe la barrera del sonido. Cultura Sorda y gramática visual.
-             </p>
-             <div className="mt-auto text-[10px] font-black uppercase text-teal-400 flex items-center gap-2">
-                Ver Curso <FaArrowRight />
-             </div>
-          </BentoItem>
+          {/* Tarjeta 3 (Mediana): LAEL ACADEMY */}
+          <BentoCard 
+            to="/homeschool"
+            title="Lael Academy"
+            description="Homeschool Cristiano & Refuerzo Académico. Valores + Excelencia."
+            icon={<FaUserGraduate />}
+            className="md:col-span-2 border-amber-500/20 bg-amber-900/10"
+            delay={0.3}
+          />
 
-          {/* 4. EMPRESAS (MIDDLE RIGHT) - Single (1x1) */}
-          <BentoItem to="/empresas" className="bg-slate-800/20 hover:border-slate-500/50" delay={0.4}>
-             <div className="flex justify-between items-start mb-4">
-                <div className="p-2 bg-slate-700/30 rounded-lg text-slate-300"><FaLaptopCode /></div>
-                <div className="px-2 py-0.6 bg-amber-500 text-slate-950 text-[9px] font-black uppercase rounded">B2B</div>
-             </div>
-             <h3 className="text-xl font-black text-white uppercase tracking-tight mb-1">Empresas</h3>
-             <p className="text-xs text-slate-400 leading-relaxed">
-                Capacitación corporativa con ROI medible.
-             </p>
-          </BentoItem>
+          {/* Tarjeta 4 (Pequeña): LSCh */}
+          <BentoCard 
+            to="/lsch"
+            title="LSCh"
+            description="Cultura Sorda y Gramática Visual."
+            icon={<FaCheckCircle />}
+            className="md:col-span-1 border-teal-500/20 bg-teal-900/10"
+            delay={0.4}
+          />
 
-          {/* 5. HOMESCHOOL (BOTTOM LEFT) - Wide (2x1) */}
-          <BentoItem to="/homeschool" className="md:col-span-2 bg-amber-900/10 hover:border-amber-500/50" delay={0.5}>
-             <div className="flex items-center gap-6">
-                <div className="p-4 bg-amber-500/20 rounded-2xl text-amber-500 text-3xl"><FaDove /></div>
-                <div>
-                   <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-2">Lael Academy</h3>
-                   <p className="text-slate-400 text-sm font-light">
-                      Homeschool Cristiano & Refuerzo Académico. <br/>
-                      <span className="text-amber-500 font-bold">Valores + Excelencia.</span>
-                   </p>
-                </div>
-             </div>
-          </BentoItem>
+          {/* Tarjeta 5 (Pequeña): ESCUELA 2x1 */}
+          <BentoCard 
+            to="/escuela-adultos"
+            title="Escuela 2x1"
+            description="Termina tu 4to medio 100% Online."
+            icon={<FaUserGraduate />}
+            className="md:col-span-1 border-blue-500/20 bg-blue-900/10"
+            delay={0.5}
+          />
 
-          {/* 6. ADULTOS (BOTTOM RIGHT) - Wide (2x1) */}
-          <BentoItem to="/escuela-adultos" className="md:col-span-2 bg-blue-900/10 hover:border-blue-500/50" delay={0.6}>
-             <div className="flex justify-between items-center h-full">
-                <div>
-                   <div className="flex items-center gap-2 mb-2">
-                      <FaUserGraduate className="text-blue-400" />
-                      <span className="text-xs font-black uppercase tracking-widest text-blue-400">Escuela 2x1</span>
-                   </div>
-                   <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-2">Termina tu 4to Medio</h3>
-                   <p className="text-slate-400 text-sm max-w-xs">Nunca es tarde. Modalidad 100% Online y flexible.</p>
-                </div>
-                <div className="hidden sm:block">
-                   <div className="w-16 h-16 rounded-full border-4 border-blue-500/20 flex items-center justify-center text-xl font-black text-white">
-                      100%
-                   </div>
-                </div>
-             </div>
-          </BentoItem>
+          {/* Tarjeta 6 (Pequeña): EMPRESAS */}
+          <BentoCard 
+            to="/empresas"
+            title="Empresas"
+            description="Capacitación B2B con ROI medible."
+            icon={<FaLaptopCode />}
+            className="md:col-span-2 border-slate-500/20 bg-slate-800/20"
+            delay={0.6}
+          />
 
         </div>
-      </div>
+      </section>
 
-      {/* ──────────────── FOOTER TICKER ──────────────── */}
-      <div className="fixed bottom-0 left-0 w-full bg-slate-950 border-t border-white/5 py-2 px-6 overflow-hidden hidden md:flex gap-8 items-center z-50">
-         <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 whitespace-nowrap">
-            Últimas Actualizaciones:
-         </div>
-         <div className="flex gap-12 animate-marquee whitespace-nowrap">
-            <span className="text-xs text-slate-400 flex items-center gap-2">
-               <span className="text-pink-500">●</span> Nuevo curso de Coreano disponible
-            </span>
-            <span className="text-xs text-slate-400 flex items-center gap-2">
-               <span className="text-indigo-500">●</span> Admisiones PAES 2026 Abiertas
-            </span>
-            <span className="text-xs text-slate-400 flex items-center gap-2">
-               <span className="text-emerald-500">●</span> Speaking Club: Jueves 19:00 hrs
-            </span>
-         </div>
-      </div>
+      {/* ──────────────── D. SECCIÓN DE CONFIANZA (SOCIAL PROOF) ──────────────── */}
+      <section className="py-24 bg-slate-900/50 border-y border-white/5 relative">
+        <div className="container mx-auto px-6 max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center text-center"
+            >
+              <div className="mb-6 text-5xl text-indigo-500"><FaLaptopCode /></div>
+              <h4 className="text-xl font-black text-white uppercase tracking-widest mb-4">Tecnología</h4>
+              <p className="text-slate-400 leading-relaxed">
+                Plataforma propia con <strong className="text-indigo-400">Inteligencia Artificial</strong> diseñada para optimizar tu aprendizaje.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="flex flex-col items-center text-center"
+            >
+              <div className="mb-6 text-5xl text-pink-500"><FaGlobeAmericas /></div>
+              <h4 className="text-xl font-black text-white uppercase tracking-widest mb-4">Flexibilidad</h4>
+              <p className="text-slate-400 leading-relaxed">
+                Estudia a tu ritmo, <strong className="text-pink-400">100% Online o Híbrido</strong>. Sin horarios rígidos que frenen tu vida.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="flex flex-col items-center text-center"
+            >
+              <div className="mb-6 text-5xl text-emerald-500"><FaCheckCircle /></div>
+              <h4 className="text-xl font-black text-white uppercase tracking-widest mb-4">Comunidad</h4>
+              <p className="text-slate-400 leading-relaxed">
+                Más de <strong className="text-emerald-400">+1200 Alumnos activos</strong> transformando su realidad educativa hoy mismo.
+              </p>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────── E. FOOTER SIMPLE ──────────────── */}
+      <footer className="py-12 bg-[#020617] text-center border-t border-white/5">
+        <div className="container mx-auto px-6">
+          <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mb-6">
+            © 2026 Instituto Lael. Todos los derechos reservados.
+          </p>
+          <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black uppercase tracking-widest">
+            <Link to="/legal" className="text-slate-400 hover:text-white transition-colors">Términos y Condiciones</Link>
+            <Link to="/privacidad" className="text-slate-400 hover:text-white transition-colors">Política de Privacidad</Link>
+            <Link to="/contacto" className="text-indigo-400 hover:text-indigo-300 transition-colors">Soporte Técnico</Link>
+          </div>
+        </div>
+      </footer>
 
     </div>
   );

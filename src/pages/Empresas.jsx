@@ -89,12 +89,12 @@ export default function Business() {
                   </div>
 
                   <h1 className="text-6xl md:text-8xl font-serif font-black mb-6 leading-[0.9] tracking-tight">
-                     Inversión en <br />
-                     <span className="bg-gradient-to-r from-white via-indigo-200 to-indigo-500 bg-clip-text text-transparent">Capital Humano.</span>
+                     Tu Equipo, <br />
+                     <span className="bg-gradient-to-r from-white via-indigo-200 to-indigo-500 bg-clip-text text-transparent">Tu Activo.</span>
                   </h1>
 
                   <p className="text-xl text-slate-400 mb-10 leading-relaxed max-w-xl">
-                     No vendemos cursos; optimizamos el rendimiento corporativo a través de la formación especializada y beneficios con alto retorno social.
+                     Capacitación corporativa que se paga sola. Aumenta la retención, mejora el clima laboral y maximiza la productividad con beneficios tributarios (SENCE).
                   </p>
 
                   <div className="flex flex-wrap gap-4">

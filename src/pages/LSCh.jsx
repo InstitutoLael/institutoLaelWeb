@@ -171,8 +171,60 @@ export default function Lsch() {
             </div>
          </header>
 
-         {/* ──────────────── 2. IMPACT SECTION ──────────────── */}
-         <section className="py-32 bg-[#050505] border-y border-white/5">
+         {/* ──────────────── 2. TEACHER SECTION (MOVED UP) ──────────────── */}
+         <section className="py-32 bg-[#050505] border-b border-white/5">
+            <div className="container mx-auto px-6">
+               <div className="flex flex-col lg:flex-row gap-20 items-center">
+
+                  <div className="flex-1 flex justify-center">
+                     <div className="relative w-72 h-72 md:w-96 md:h-96">
+                        <div className="absolute inset-0 bg-amber-500/20 rounded-[4rem] rotate-6 transform blur-2xl"></div>
+                        <div className="absolute inset-0 bg-white/[0.02] rounded-[4.5rem] -rotate-3 transform flex items-center justify-center border border-white/5 shadow-2xl z-10 overflow-hidden backdrop-blur-3xl">
+                           <div className="text-[12rem] filter drop-shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700">{TEACHER_PROFILE.img}</div>
+                        </div>
+                        {/* Badge */}
+                        <div className="absolute -bottom-8 -right-8 bg-white text-slate-950 px-8 py-4 rounded-3xl font-black shadow-2xl rotate-3 z-20 flex items-center gap-3 uppercase tracking-widest text-[10px] border border-white/10">
+                           <FaAward className="text-indigo-500 text-lg" /> Educadora Titulada
+                        </div>
+                     </div>
+                  </div>
+
+                  <div className="flex-1 text-center lg:text-left">
+                     <span className="text-indigo-500 font-black tracking-[0.3em] text-[10px] uppercase mb-4 block">Maestra y Guía</span>
+                     <h2 className="text-4xl md:text-7xl font-black mb-8 uppercase tracking-tighter text-white">Conoce a <span className="text-indigo-500">{TEACHER_PROFILE.name}</span></h2>
+
+                     <div className="flex gap-3 flex-wrap mb-10 justify-center lg:justify-start">
+                        {TEACHER_PROFILE.badges.map((b, i) => (
+                           <span key={i} className="px-5 py-2 bg-white/[0.03] border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400">
+                              {b}
+                           </span>
+                        ))}
+                     </div>
+
+                     <div className="border-l-4 border-indigo-600 pl-10 mb-12 py-2">
+                        <p className="text-2xl text-slate-400 font-light italic leading-relaxed">
+                           "{TEACHER_PROFILE.bio}"
+                        </p>
+                     </div>
+
+                     <div className="flex gap-12 justify-center lg:justify-start">
+                        <div className="text-center lg:text-left">
+                           <strong className="text-5xl font-black text-white block tracking-tighter">100%</strong>
+                           <span className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em]">Nativa</span>
+                        </div>
+                        <div className="text-center lg:text-left">
+                           <strong className="text-5xl font-black text-white block tracking-tighter">5+</strong>
+                           <span className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em]">Años</span>
+                        </div>
+                     </div>
+                  </div>
+
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 3. IMPACT SECTION (MOVED DOWN) ──────────────── */}
+         <section className="py-32 bg-[#050505]">
             <div className="container mx-auto px-6">
                <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
 
@@ -223,58 +275,6 @@ export default function Lsch() {
                         <strong className="text-xl block mb-2 text-white font-black uppercase tracking-tight">Inclusión Real</strong>
                         <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Conexión Humana</span>
                      </motion.div>
-                  </div>
-
-               </div>
-            </div>
-         </section>
-
-         {/* ──────────────── 3. TEACHER SECTION ──────────────── */}
-         <section className="py-32 bg-[#050505]">
-            <div className="container mx-auto px-6">
-               <div className="flex flex-col lg:flex-row gap-20 items-center">
-
-                  <div className="flex-1 flex justify-center">
-                     <div className="relative w-72 h-72 md:w-96 md:h-96">
-                        <div className="absolute inset-0 bg-amber-500/20 rounded-[4rem] rotate-6 transform blur-2xl"></div>
-                        <div className="absolute inset-0 bg-white/[0.02] rounded-[4.5rem] -rotate-3 transform flex items-center justify-center border border-white/5 shadow-2xl z-10 overflow-hidden backdrop-blur-3xl">
-                           <div className="text-[12rem] filter drop-shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700">{TEACHER_PROFILE.img}</div>
-                        </div>
-                        {/* Badge */}
-                        <div className="absolute -bottom-8 -right-8 bg-white text-slate-950 px-8 py-4 rounded-3xl font-black shadow-2xl rotate-3 z-20 flex items-center gap-3 uppercase tracking-widest text-[10px] border border-white/10">
-                           <FaAward className="text-indigo-500 text-lg" /> Educadora Titulada
-                        </div>
-                     </div>
-                  </div>
-
-                  <div className="flex-1 text-center lg:text-left">
-                     <span className="text-indigo-500 font-black tracking-[0.3em] text-[10px] uppercase mb-4 block">Maestra y Guía</span>
-                     <h2 className="text-4xl md:text-7xl font-black mb-8 uppercase tracking-tighter text-white">Conoce a <span className="text-indigo-500">{TEACHER_PROFILE.name}</span></h2>
-
-                     <div className="flex gap-3 flex-wrap mb-10 justify-center lg:justify-start">
-                        {TEACHER_PROFILE.badges.map((b, i) => (
-                           <span key={i} className="px-5 py-2 bg-white/[0.03] border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400">
-                              {b}
-                           </span>
-                        ))}
-                     </div>
-
-                     <div className="border-l-4 border-indigo-600 pl-10 mb-12 py-2">
-                        <p className="text-2xl text-slate-400 font-light italic leading-relaxed">
-                           "{TEACHER_PROFILE.bio}"
-                        </p>
-                     </div>
-
-                     <div className="flex gap-12 justify-center lg:justify-start">
-                        <div className="text-center lg:text-left">
-                           <strong className="text-5xl font-black text-white block tracking-tighter">100%</strong>
-                           <span className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em]">Nativa</span>
-                        </div>
-                        <div className="text-center lg:text-left">
-                           <strong className="text-5xl font-black text-white block tracking-tighter">5+</strong>
-                           <span className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em]">Años</span>
-                        </div>
-                     </div>
                   </div>
 
                </div>

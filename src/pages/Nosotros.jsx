@@ -87,7 +87,54 @@ export default function About() {
             </div>
          </header>
 
-         {/* ──────────────── 2. DNA: PILARES Y PRINCIPIOS (FILOSOFÍA) ──────────────── */}
+
+         {/* ──────────────── 2. ORIGEN: LA PROFUNDIDAD DE LAEL (MOVED UP) ──────────────── */}
+         <section className="py-40 bg-slate-950 relative overflow-hidden border-b border-white/5">
+            <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+               <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+                  <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-6 block">Etimología de Marca</span>
+                  <h2 className="text-5xl md:text-7xl font-black mb-10 leading-tight uppercase tracking-tighter text-white">
+                     Una identidad con <br /><span className="text-amber-500 italic">Raíces.</span>
+                  </h2>
+                  <div
+                     onClick={() => setShowModal(true)}
+                     className="group cursor-pointer relative p-12 bg-white/[0.02] border border-amber-500/20 rounded-[3rem] overflow-hidden hover:border-amber-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/10"
+                  >
+                     <div className="flex flex-col gap-2 relative z-10 text-center">
+                        <span className="text-8xl md:text-9xl font-serif text-white group-hover:scale-110 transition-transform duration-700">לָאֵל</span>
+                        <span className="text-amber-400 font-black text-2xl uppercase tracking-[0.2em] mt-6">
+                           Significado de Lael
+                        </span>
+                        <div className="flex items-center justify-center gap-2 text-slate-500 text-[10px] mt-6 uppercase tracking-widest font-black animate-pulse group-hover:text-amber-500 transition-colors">
+                           Pincha para descubrir <FaArrowRight />
+                        </div>
+                     </div>
+                  </div>
+               </motion.div>
+               <div className="space-y-6">
+                  {ABOUT_DATA.origin.cards.map((card, i) => (
+                     <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.1 }}
+                        className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] flex items-center gap-8 hover:bg-slate-900 transition-all group"
+                     >
+                        <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center text-3xl text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
+                           {IconMap[card.icon]}
+                        </div>
+                        <div>
+                           <h4 className="text-xl font-black text-white mb-1 uppercase tracking-tight">{card.title}</h4>
+                           <p className="text-slate-500 text-sm leading-relaxed font-light">{card.desc}</p>
+                        </div>
+                     </motion.div>
+                  ))}
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 3. DNA: PILARES Y PRINCIPIOS (FILOSOFÍA) ──────────────── */}
          <section className="py-40 bg-slate-950">
             <div className="container mx-auto px-6 text-center mb-24">
                <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Nuestro ADN Estudiantil</span>
@@ -227,51 +274,7 @@ export default function About() {
             </div>
          </section>
 
-         {/* ──────────────── 5. ORIGEN: LA PROFUNDIDAD DE LAEL ──────────────── */}
-         <section className="py-40 bg-slate-950 relative overflow-hidden">
-            <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-               <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                  <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-6 block">Etimología de Marca</span>
-                  <h2 className="text-5xl md:text-7xl font-black mb-10 leading-tight uppercase tracking-tighter text-white">
-                     Una identidad con <br /><span className="text-amber-500 italic">Raíces.</span>
-                  </h2>
-                  <div
-                     onClick={() => setShowModal(true)}
-                     className="group cursor-pointer relative p-12 bg-white/[0.02] border border-amber-500/20 rounded-[3rem] overflow-hidden hover:border-amber-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/10"
-                  >
-                     <div className="flex flex-col gap-2 relative z-10 text-center">
-                        <span className="text-8xl md:text-9xl font-serif text-white group-hover:scale-110 transition-transform duration-700">לָאֵל</span>
-                        <span className="text-amber-400 font-black text-2xl uppercase tracking-[0.2em] mt-6">
-                           Significado de Lael
-                        </span>
-                        <div className="flex items-center justify-center gap-2 text-slate-500 text-[10px] mt-6 uppercase tracking-widest font-black animate-pulse group-hover:text-amber-500 transition-colors">
-                           Pincha para descubrir <FaArrowRight />
-                        </div>
-                     </div>
-                  </div>
-               </motion.div>
-               <div className="space-y-6">
-                  {ABOUT_DATA.origin.cards.map((card, i) => (
-                     <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 }}
-                        className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] flex items-center gap-8 hover:bg-slate-900 transition-all group"
-                     >
-                        <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center text-3xl text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
-                           {IconMap[card.icon]}
-                        </div>
-                        <div>
-                           <h4 className="text-xl font-black text-white mb-1 uppercase tracking-tight">{card.title}</h4>
-                           <p className="text-slate-500 text-sm leading-relaxed font-light">{card.desc}</p>
-                        </div>
-                     </motion.div>
-                  ))}
-               </div>
-            </div>
-         </section>
+
 
          {/* ──────────────── 6. MODAL: EXÉGESIS HEBREA ──────────────── */}
          <AnimatePresence>

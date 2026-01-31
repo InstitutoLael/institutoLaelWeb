@@ -284,6 +284,36 @@ export default function Idiomas() {
                   )
                })}
 
+               {/* KOREAN CARD (NEW) */}
+               {LANGUAGES.filter(l => l.id === 'coreano').map(lang => {
+                  const isSelected = selectedIds.includes('coreano');
+                  return (
+                     <div 
+                        key={lang.id} 
+                        onClick={() => toggleLanguage('coreano', false)}
+                        className={`group relative p-10 rounded-[2.5rem] border-2 cursor-pointer transition-all overflow-hidden ${isSelected ? 'bg-pink-900/10 border-pink-500' : 'bg-white/[0.02] border-white/5 hover:border-pink-500/30'}`}
+                     >
+                        <div className="absolute top-4 right-6 text-6xl opacity-20 grayscale group-hover:grayscale-0 transition-grayscale">🇰🇷</div>
+                        <h3 className="text-3xl font-black text-white uppercase tracking-tight mb-2">Coreano</h3>
+                        <p className="text-xs font-black uppercase tracking-widest text-pink-400 mb-6">Cultura & K-Pop</p>
+                        
+                        <ul className="space-y-3 mb-8">
+                           <li className="flex gap-3 text-slate-400 text-sm font-medium"><FaCheck className="text-pink-500 mt-1" /> Hangul desde Cero</li>
+                           <li className="flex gap-3 text-slate-400 text-sm font-medium"><FaCheck className="text-pink-500 mt-1" /> Dinámicas con K-Dramas</li>
+                           <li className="flex gap-3 text-slate-400 text-sm font-medium"><FaCheck className="text-pink-500 mt-1" /> Preparación TOPIK</li>
+                        </ul>
+
+                        <div className="text-right">
+                           {/* Using static price from data for display, logic uses state */}
+                           <span className="block text-2xl font-black text-white tracking-tighter">{clp(35000)}</span>
+                           <span className="text-[10px] uppercase font-black tracking-widest text-slate-600">Mensual</span>
+                        </div>
+
+                        {isSelected && <div className="absolute bottom-6 left-6 text-pink-500"><FaCheck size={24} /></div>}
+                     </div>
+                  )
+               })}
+
                {/* LSCh CARD (NEW PROMOTED) */}
                <div 
                   onClick={() => window.location.href = '/lsch'}

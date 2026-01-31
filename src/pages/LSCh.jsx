@@ -1,613 +1,381 @@
 import React, { useState, useEffect } from "react";
-import { useCart } from "../context/CartContext.jsx";
 import { motion, AnimatePresence } from "framer-motion";
-
-// ICONS
 import {
-   FaSignLanguage, FaHandsHelping, FaUniversalAccess, FaUserGraduate,
-   FaChurch, FaVideo, FaWhatsapp, FaCheck, FaStar, FaAward, FaBuilding,
-   FaUsers, FaLaptopHouse, FaRegLightbulb, FaBookReader, FaInfoCircle
+  FaSignLanguage,
+  FaHandsHelping,
+  FaUniversalAccess,
+  FaWhatsapp,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaArrowRight,
+  FaInfoCircle,
+  FaUsers,
+  FaChurch,
+  FaGraduationCap,
+  FaEye,
+  FaBrain
 } from "react-icons/fa";
-import {
-   MdOutlineHearingDisabled, MdRecordVoiceOver, MdOutlinePsychology,
-   MdSchool, MdWorkspacePremium, MdGTranslate
-} from "react-icons/md";
-import { BiWorld, BiBody, BiHappyBeaming } from "react-icons/bi";
-import { IoIosInfinite, IoMdCheckmarkCircleOutline } from "react-icons/io";
 
 // DATA
 import {
-   LSCH_MODULES,
-   LSCH_GROUP_PLANS,
-   LSCH_ONE2ONE_PLANS,
-   LSCH_WHY_US,
-   TEACHER_PROFILE,
-   COMPARISON_DATA,
-   ENROLLMENT_FEE,
-   CHURCH_PRICE,
-   calculateLschPrice,
-   clp
+  LSCH_MODULES,
+  LSCH_GROUP_PLANS,
+  TEACHER_PROFILE,
+  COMPARISON_DATA,
+  CHURCH_PRICE,
+  clp
 } from "../data/lsch.js";
 
-// ANIMATIONS
-const fadeIn = {
-   hidden: { opacity: 0, y: 30 },
-   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-};
-
-const stagger = {
-   visible: { transition: { staggerChildren: 0.1 } }
-};
+// SEO
+import SEOHead from "../components/SEOHead.jsx";
 
 export default function Lsch() {
-   const { addToCart, openCart } = useCart();
+  const [isChurchMember, setIsChurchMember] = useState(false);
 
-   // STATES
-   const [activeModule, setActiveModule] = useState(0);
-   const [planType, setPlanType] = useState("group"); // 'group' | 'one2one'
-   const [isChurch, setIsChurch] = useState(false);
-   const [showSticky, setShowSticky] = useState(false);
-   const [dbProducts, setDbProducts] = useState([]);
-   const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-   // FETCH PRODUCTS
-   useEffect(() => {
-      const fetchProducts = async () => {
-         try {
-            const { data, error } = await supabase
-               .from('products')
-               .select('*')
-               .eq('category', 'LSCH');
-            if (error) throw error;
-            setDbProducts(data || []);
-         } catch (err) {
-            console.error("Error fetching LSCh products:", err);
-         } finally {
-            setLoading(false);
-         }
-      };
-      fetchProducts();
-   }, []);
+  const waLink = (text) => `https://wa.me/56964626568?text=${encodeURIComponent(text)}`;
 
-   // SCROLL LISTENER
-   useEffect(() => {
-      const handleScroll = () => setShowSticky(window.scrollY > 900);
-      window.addEventListener("scroll", handleScroll);
-      return () => window.removeEventListener("scroll", handleScroll);
-   }, []);
+  const scrollToSection = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-   // CART HANDLER
-   const handleEnroll = (planId) => {
-      const calc = calculateLschPrice(planId, isChurch);
-      const cartId = `lsch-${planId}-${isChurch ? 'church' : 'std'}`;
+  return (
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-purple-500/30 overflow-x-hidden">
+      <SEOHead 
+        title="Lengua de Señas Chilena (LSCh) | Instituto Lael" 
+        description="Aprende LSCh con una instructora sorda nativa. Inmersión cultural, gramática visual y empatía real."
+      />
 
-      // Match with DB product
-      let matchName = "";
-      if (isChurch) matchName = "Convenio Iglesia";
-      else if (planId.includes('monthly')) matchName = "Mensual";
-      else if (planId.includes('quarter')) matchName = "Trimestral";
-      else if (planId === 'pack4') matchName = "4 Sesiones";
-      else if (planId === 'pack8') matchName = "8 Sesiones";
+      {/* ──────────────── A. HERO SECTION (EL PODER DEL SILENCIO) ──────────────── */}
+      <section className="relative min-[90vh] flex items-center justify-center pt-32 pb-24 px-6 overflow-hidden">
+        {/* Soft Background Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-slate-950 to-slate-950 z-0" />
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-cyan-600/10 blur-[130px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/10 blur-[110px] rounded-full pointer-events-none" />
 
-      const dbProduct = dbProducts.find(p => p.name.includes(matchName));
+        <div className="container mx-auto max-w-4xl text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400 mb-8"
+          >
+             <FaUniversalAccess className="animate-pulse" />
+             Educación Accesible para todos 2026
+          </motion.div>
 
-      addToCart({
-         id: cartId,
-         db_id: dbProduct ? dbProduct.id : null,
-         title: isChurch ? `LSCh Social: ${calc.label}` : `LSCh: ${calc.label}`,
-         price: calc.price,
-         detail: isChurch ? 'Convenio Iglesia/Social' : (planId.includes('quarter') ? 'Plan Trimestral' : 'Plan Mensual'),
-         type: 'course',
-         extraInfo: calc.enrollment > 0 ? `+ Matrícula ${clp(calc.enrollment)}` : 'Matrícula Gratis'
-      });
-      openCart();
-   };
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-6xl md:text-9xl font-black text-white tracking-tighter uppercase leading-[0.85] mb-8"
+          >
+            ROMPE LA BARRERA<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-white to-cyan-400 uppercase">
+               DEL SONIDO.
+            </span>
+          </motion.h1>
 
-   const scrollToPricing = () => {
-      document.getElementById("pricing-anchor").scrollIntoView({ behavior: "smooth" });
-   };
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-lg md:text-2xl text-slate-400 font-light max-w-3xl mx-auto mb-12 leading-relaxed"
+          >
+            Aprender LSCh no es solo mover las manos. Es abrir los ojos a una cultura <br className="hidden md:block" />
+            que ha estado <strong className="text-white">invisible frente a ti.</strong>
+          </motion.p>
 
-   return (
-      <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-indigo-500/30">
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            onClick={() => scrollToSection('planes')}
+            className="px-10 py-5 bg-purple-600 hover:bg-purple-500 text-white font-black rounded-2xl transition-all shadow-2xl shadow-purple-600/30 uppercase tracking-widest text-sm"
+          >
+            EMPEZAR EL VIAJE
+          </motion.button>
+        </div>
+      </section>
 
-         {/* ──────────────── 1. HERO SECTION ──────────────── */}
-         <header className="relative min-h-[95vh] flex items-center justify-center overflow-hidden py-24 bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)]">
-            {/* Background Effects */}
-            <div className="absolute inset-0 bg-[url('/textures/cubes.png')] opacity-[0.03] z-0 mix-blend-overlay" />
-
-            <div className="container mx-auto px-6 relative z-10 text-center max-w-4xl">
-               <motion.div
-                  initial="hidden" animate="visible" variants={fadeIn}
-                  className="inline-flex flex-col items-center gap-2 mb-8"
-               >
-                  <div className="bg-indigo-500 text-slate-950 text-[10px] font-black uppercase tracking-[0.3em] px-4 py-1.5 rounded-full shadow-lg shadow-indigo-500/20 mb-3 animate-pulse">
-                     Matrículas Abiertas 2026
-                  </div>
-                  <span className="text-amber-500 font-black tracking-widest uppercase text-xs border-b border-indigo-500 pb-1">
-                     Lengua de Señas Chilena
-                  </span>
-               </motion.div>
-
-               <motion.h1
-                  initial="hidden" animate="visible" variants={fadeIn}
-                  className="text-5xl md:text-8xl font-black mb-8 leading-tight tracking-tighter uppercase"
-               >
-                  Rompe la barrera del <br className="hidden md:block" />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-amber-200 to-blue-400">
-                     Sonido.
-                  </span>
-               </motion.h1>
-
-               <motion.p
-                  initial="hidden" animate="visible" variants={fadeIn}
-                  className="text-xl md:text-2xl text-slate-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light"
-               >
-                  Aprende <strong className="text-white font-black">Lengua de Señas Chilena (LSCh)</strong> con Fernanda, nuestra educadora nativa.
-                  Deja de usar "gestos" y empieza a comunicarte con gramática, cultura y respeto real.
-               </motion.p>
-
-               <motion.div
-                  initial="hidden" animate="visible" variants={stagger}
-                  className="flex flex-col sm:flex-row gap-6 justify-center items-center"
-               >
-                  <motion.button
-                     variants={fadeIn}
-                     whileHover={{ scale: 1.05 }}
-                     whileTap={{ scale: 0.95 }}
-                     onClick={scrollToPricing}
-                     className="px-10 py-5 bg-amber-500 hover:bg-indigo-500 text-white font-black rounded-2xl text-xs uppercase tracking-widest shadow-2xl shadow-indigo-600/20 transition-all flex items-center gap-3"
-                  >
-                     <FaSignLanguage className="text-lg" /> Ver Planes y Horarios
-                  </motion.button>
-                  <motion.button
-                     variants={fadeIn}
-                     whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.05)" }}
-                     whileTap={{ scale: 0.95 }}
-                     className="px-10 py-5 bg-white/5 border border-white/10 backdrop-blur-3xl rounded-2xl font-black text-xs uppercase tracking-widest text-white flex items-center gap-3 hover:border-white/30 transition-all"
-                  >
-                     <FaVideo className="text-lg text-amber-500" /> Clase de Muestra
-                  </motion.button>
-               </motion.div>
-            </div>
-         </header>
-
-         {/* ──────────────── 2. TEACHER SECTION (MOVED UP) ──────────────── */}
-         <section className="py-32 bg-[#050505] border-b border-white/5">
-            <div className="container mx-auto px-6">
-               <div className="flex flex-col lg:flex-row gap-20 items-center">
-
-                  <div className="flex-1 flex justify-center">
-                     <div className="relative w-72 h-72 md:w-96 md:h-96">
-                        <div className="absolute inset-0 bg-amber-500/20 rounded-[4rem] rotate-6 transform blur-2xl"></div>
-                        <div className="absolute inset-0 bg-white/[0.02] rounded-[4.5rem] -rotate-3 transform flex items-center justify-center border border-white/5 shadow-2xl z-10 overflow-hidden backdrop-blur-3xl">
-                           <div className="text-[12rem] filter drop-shadow-2xl grayscale group-hover:grayscale-0 transition-all duration-700">{TEACHER_PROFILE.img}</div>
-                        </div>
-                        {/* Badge */}
-                        <div className="absolute -bottom-8 -right-8 bg-white text-slate-950 px-8 py-4 rounded-3xl font-black shadow-2xl rotate-3 z-20 flex items-center gap-3 uppercase tracking-widest text-[10px] border border-white/10">
-                           <FaAward className="text-indigo-500 text-lg" /> Educadora Titulada
-                        </div>
-                     </div>
-                  </div>
-
-                  <div className="flex-1 text-center lg:text-left">
-                     <span className="text-indigo-500 font-black tracking-[0.3em] text-[10px] uppercase mb-4 block">Maestra y Guía</span>
-                     <h2 className="text-4xl md:text-7xl font-black mb-8 uppercase tracking-tighter text-white">Conoce a <span className="text-indigo-500">{TEACHER_PROFILE.name}</span></h2>
-
-                     <div className="flex gap-3 flex-wrap mb-10 justify-center lg:justify-start">
-                        {TEACHER_PROFILE.badges.map((b, i) => (
-                           <span key={i} className="px-5 py-2 bg-white/[0.03] border border-white/5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400">
-                              {b}
-                           </span>
-                        ))}
-                     </div>
-
-                     <div className="border-l-4 border-indigo-600 pl-10 mb-12 py-2">
-                        <p className="text-2xl text-slate-400 font-light italic leading-relaxed">
-                           "{TEACHER_PROFILE.bio}"
-                        </p>
-                     </div>
-
-                     <div className="flex gap-12 justify-center lg:justify-start">
-                        <div className="text-center lg:text-left">
-                           <strong className="text-5xl font-black text-white block tracking-tighter">100%</strong>
-                           <span className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em]">Nativa</span>
-                        </div>
-                        <div className="text-center lg:text-left">
-                           <strong className="text-5xl font-black text-white block tracking-tighter">5+</strong>
-                           <span className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em]">Años</span>
-                        </div>
-                     </div>
-                  </div>
-
-               </div>
-            </div>
-         </section>
-
-         {/* ──────────────── 3. IMPACT SECTION (MOVED DOWN) ──────────────── */}
-         <section className="py-32 bg-[#050505]">
-            <div className="container mx-auto px-6">
-               <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-
-                  <div>
-                     <h2 className="text-4xl md:text-6xl font-black mb-8 text-white uppercase tracking-tighter">No es mímica.<br /><span className="text-indigo-500">Es Idioma.</span></h2>
-                     <p className="text-xl text-slate-400 mb-8 leading-relaxed font-light">
-                        Mucha gente cree que la lengua de señas es universal o que basta con mover las manos.
-                        La realidad es que la LSCh tiene su propia sintaxis, gramática espacial y cultura.
-                     </p>
-                     <p className="text-xl text-slate-300 font-bold mb-10 tracking-tight">
-                        En el <span className="text-indigo-500">Instituto Lael</span>, no solo aprendes vocabulario; aprendes a
-                        <strong className="text-white block mt-2 text-2xl uppercase font-black tracking-tighter">Pensar Visualmente.</strong>
-                     </p>
-                     <ul className="space-y-6">
-                        {[
-                           "Abandona el 'español señado' (mal visto).",
-                           "Domina la expresión facial (parte de la gramática).",
-                           "Entiende la cultura sorda desde adentro."
-                        ].map((item, i) => (
-                           <li key={i} className="flex items-center gap-4 text-slate-400 font-medium">
-                              <FaCheck className="text-indigo-500 shrink-0" /> {item}
-                           </li>
-                        ))}
-                     </ul>
-                  </div>
-
-                  <div className="relative h-[500px] flex items-center justify-center bg-white/[0.01] rounded-[3rem] border border-white/5 shadow-2xl overflow-hidden">
-                     <div className="absolute top-0 right-0 p-8 text-indigo-500/10 pointer-events-none">
-                        <FaSignLanguage size={200} />
-                     </div>
-                     {/* Floating Cards Animation */}
-                     <motion.div
-                        animate={{ y: [0, -20, 0] }}
-                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute top-12 left-12 bg-white/[0.03] backdrop-blur-3xl border border-white/10 p-10 rounded-[2.5rem] w-72 text-center shadow-2xl z-10"
-                     >
-                        <MdOutlineHearingDisabled className="text-6xl text-indigo-500 mx-auto mb-6" />
-                        <strong className="text-xl block mb-2 text-white font-black uppercase tracking-tight">Cultura Sorda</strong>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Respeto e Identidad</span>
-                     </motion.div>
-
-                     <motion.div
-                        animate={{ y: [0, -20, 0] }}
-                        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                        className="absolute bottom-12 right-12 bg-white/[0.03] backdrop-blur-3xl border border-white/10 p-10 rounded-[2.5rem] w-72 text-center shadow-2xl z-20"
-                     >
-                        <FaHandsHelping className="text-6xl text-blue-500 mx-auto mb-6" />
-                        <strong className="text-xl block mb-2 text-white font-black uppercase tracking-tight">Inclusión Real</strong>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Conexión Humana</span>
-                     </motion.div>
-                  </div>
-
-               </div>
-            </div>
-         </section>
-
-         {/* ──────────────── 4. SYLLABUS UI ──────────────── */}
-         <section className="py-24 bg-[#050505]">
-            <div className="container mx-auto px-6">
-               <div className="text-center mb-20">
-                  <h2 className="text-4xl md:text-6xl font-black mb-4 uppercase tracking-tighter">Malla <span className="text-indigo-500">Curricular</span></h2>
-                  <p className="text-xl text-slate-500 font-light">Un viaje estructurado desde lo básico hasta la fluidez profesional.</p>
+      {/* ──────────────── B. CONDUCTORA (AUTHORITY BOOST) ──────────────── */}
+      <section className="py-24 bg-slate-900/20 border-y border-white/5">
+         <div className="container mx-auto px-6 max-w-6xl">
+            <div className="bg-slate-900/50 rounded-[3rem] p-12 md:p-20 border border-white/5 flex flex-col lg:flex-row gap-16 items-center shadow-2xl overflow-hidden relative">
+               {/* Abstract background shape for the card */}
+               <div className="absolute top-0 right-0 w-64 h-64 bg-purple-600/5 blur-[80px] rounded-full pointer-events-none" />
+               
+               <div className="w-48 h-48 md:w-64 md:h-64 rounded-[2.5rem] bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-white/10 flex items-center justify-center text-[8rem] shadow-xl relative z-10 overflow-hidden">
+                  <div className="absolute inset-0 bg-white/5 backdrop-blur-sm" />
+                  <span className="relative z-20 grayscale group-hover:grayscale-0 transition-all duration-700">{TEACHER_PROFILE.img}</span>
                </div>
 
-               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 max-w-7xl mx-auto">
-
-                  {/* Navigation (Left 4/12) */}
-                  <div className="lg:col-span-4 flex flex-col gap-4">
-                     {LSCH_MODULES.map((mod, idx) => (
-                        <button
-                           key={mod.id}
-                           onClick={() => setActiveModule(idx)}
-                           className={`text-left p-8 rounded-[2rem] border transition-all flex items-center gap-6 group relative overflow-hidden
-                        ${activeModule === idx
-                                 ? 'bg-white/[0.03] border-indigo-500/50 shadow-2xl'
-                                 : 'bg-white/[0.01] border-white/5 hover:border-white/10'
-                              }
-                      `}
-                        >
-                           <span className={`text-4xl transition-all duration-500 ${activeModule === idx ? 'scale-110 grayscale-0' : 'grayscale opacity-30'}`}>{mod.icon}</span>
-                           <div className="relative z-10">
-                              <span className={`text-[10px] font-black uppercase tracking-[0.2em] block mb-1 ${activeModule === idx ? 'text-amber-500' : 'text-slate-600'}`}>{mod.tag}</span>
-                              <strong className={`block text-lg uppercase tracking-tight ${activeModule === idx ? 'text-white' : 'text-slate-500'}`}>{mod.name}</strong>
-                           </div>
-                           {activeModule === idx && (
-                              <motion.div layoutId="activeMod" className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500" />
-                           )}
-                        </button>
+               <div className="flex-1 relative z-10">
+                  <span className="text-cyan-500 font-black tracking-[0.3em] text-[10px] uppercase mb-4 block">Tu Instructora</span>
+                  <h2 className="text-5xl font-black text-white uppercase tracking-tighter mb-6">{TEACHER_PROFILE.name}</h2>
+                  
+                  <div className="flex flex-wrap gap-2 mb-8">
+                     {TEACHER_PROFILE.badges.map((b, i) => (
+                        <span key={i} className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest text-purple-300">
+                           {b}
+                        </span>
                      ))}
                   </div>
 
-                  {/* Content Display (Right 8/12) */}
-                  <div className="lg:col-span-8 bg-white/[0.01] border border-white/5 rounded-[3rem] p-10 lg:p-16 relative overflow-hidden backdrop-blur-3xl shadow-2xl">
-                     <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none"></div>
-
-                     <AnimatePresence mode="wait">
-                        <motion.div
-                           key={activeModule}
-                           initial={{ opacity: 0, x: 20 }}
-                           animate={{ opacity: 1, x: 0 }}
-                           exit={{ opacity: 0, x: -20 }}
-                           transition={{ duration: 0.4 }}
-                        >
-                           <div className="flex flex-col md:flex-row items-start justify-between gap-6 mb-10">
-                              <div>
-                                 <h3 className="text-4xl font-black text-white uppercase tracking-tighter mb-2">{LSCH_MODULES[activeModule].name}</h3>
-                                 <span className="text-indigo-500 font-black uppercase tracking-[0.2em] text-[10px] bg-indigo-500/10 px-4 py-1.5 rounded-full border border-indigo-500/20">
-                                    Nivel Oficial {activeModule + 1}
-                                 </span>
-                              </div>
-                              <div className="bg-white/5 text-white px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest border border-white/10 flex items-center gap-2">
-                                 ⏳ {LSCH_MODULES[activeModule].duration}
-                              </div>
-                           </div>
-
-                           <p className="text-xl text-slate-400 mb-12 leading-relaxed font-light">
-                              {LSCH_MODULES[activeModule].desc}
-                           </p>
-
-                           <div className="bg-white/[0.02] rounded-[2.5rem] p-10 border border-white/5">
-                              <h4 className="flex items-center gap-3 text-amber-500 font-black uppercase tracking-widest text-xs mb-8">
-                                 <BiBody className="text-xl" /> Objetivos de Aprendizaje:
-                              </h4>
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                 {LSCH_MODULES[activeModule].outcomes.map((out, i) => (
-                                    <div key={i} className="flex gap-4 text-slate-400 text-sm font-medium leading-relaxed">
-                                       <IoMdCheckmarkCircleOutline className="text-indigo-500 text-lg shrink-0" />
-                                       {out}
-                                    </div>
-                                 ))}
-                              </div>
-                           </div>
-
-                           <div className="mt-12 flex items-center gap-3 text-slate-600 text-[10px] font-black uppercase tracking-widest">
-                              <FaInfoCircle className="text-indigo-500" /> Certificación disponible al completar este nivel.
-                           </div>
-
-                        </motion.div>
-                     </AnimatePresence>
+                  <div className="border-l-4 border-purple-600 pl-8 mb-8">
+                     <p className="text-xl md:text-2xl text-slate-300 font-light italic leading-relaxed">
+                        "Combinación única: <strong className="text-white">Paciencia de Educadora de Párvulos</strong> + <strong className="text-white">Autoridad Cultural de una Persona Sorda</strong>."
+                     </p>
                   </div>
 
+                  <p className="text-slate-400 leading-relaxed font-light mb-8 max-w-2xl">
+                     {TEACHER_PROFILE.bio}
+                  </p>
                </div>
             </div>
-         </section>
+         </div>
+      </section>
 
-         {/* ──────────────── 5. COMPARISON TABLE ──────────────── */}
-         <section className="py-24 bg-[#050505] border-t border-white/5">
-            <div className="container mx-auto px-6">
-               <div className="text-center mb-20">
-                  <h2 className="text-4xl md:text-6xl font-black mb-4 uppercase tracking-tighter">¿Por qué <span className="text-indigo-500">Lael</span>?</h2>
-                  <p className="text-xl text-slate-500 font-light">Transparencia y calidad en cada seña.</p>
-               </div>
-               <div className="overflow-x-auto">
-                  <table className="w-full min-w-[700px] border-collapse bg-white/[0.01] rounded-[2.5rem] overflow-hidden">
-                     <thead>
-                        <tr className="border-b border-white/5 bg-white/[0.02]">
-                           <th className="text-left p-10 text-slate-500 font-black uppercase tracking-widest text-[10px]">Característica</th>
-                           <th className="text-left p-10 text-indigo-500 font-black uppercase tracking-widest text-xs bg-indigo-500/5">Instituto Lael</th>
-                           <th className="text-left p-10 text-slate-600 font-black uppercase tracking-widest text-[10px]">Otros Cursos</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        {COMPARISON_DATA.map((row, i) => (
-                           <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
-                              <td className="p-10 font-black uppercase tracking-tight text-white text-sm group-hover:text-amber-500 transition-colors">{row.feature}</td>
-                              <td className="p-10 font-bold text-white bg-indigo-500/[0.02] relative">
-                                 <div className="flex items-center gap-3">
-                                    <FaCheck className="text-indigo-500 text-lg" />
-                                    {row.us}
-                                 </div>
-                              </td>
-                              <td className="p-10 text-slate-500 font-medium">{row.others}</td>
-                           </tr>
+      {/* ──────────────── C. CAMINO DE APRENDIZAJE ──────────────── */}
+      <section className="py-32 relative">
+         <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-24">
+               <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-4">Tu Ruta hacia la <span className="text-cyan-500">Fluidez</span></h2>
+               <p className="text-slate-500 font-light">Estructura académica diseñada para resultados reales.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+               {/* Vertical line connector for desktop */}
+               <div className="hidden md:block absolute top-[10%] bottom-[10%] left-1/2 -translate-x-1/2 w-px bg-white/5" />
+               
+               {LSCH_MODULES.map((mod, i) => (
+                  <motion.div 
+                     key={mod.id}
+                     initial={{ opacity: 0, y: 20 }}
+                     whileInView={{ opacity: 1, y: 0 }}
+                     transition={{ delay: i * 0.1 }}
+                     className="bg-white/[0.02] border border-white/5 p-10 rounded-[2.5rem] hover:border-purple-500/30 transition-all group relative z-10 backdrop-blur-xl"
+                  >
+                     <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform duration-500" style={{ color: mod.color }}>
+                        {i === 0 ? <FaSignLanguage /> : i === 1 ? <FaEye /> : <FaBrain />}
+                     </div>
+                     
+                     <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 mb-2 block">{mod.tag}</span>
+                     <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4">{mod.name}</h3>
+                     <p className="text-sm text-slate-400 leading-relaxed font-light mb-8">
+                        {mod.desc}
+                     </p>
+
+                     <div className="space-y-4 border-t border-white/5 pt-8">
+                        <span className="text-[10px] font-black uppercase text-cyan-500 tracking-widest block mb-4">Lo que logras:</span>
+                        {mod.outcomes.map((item, j) => (
+                           <div key={j} className="flex gap-3 text-xs text-slate-300 font-medium">
+                              <FaCheckCircle className="text-cyan-600 mt-0.5 shrink-0" /> {item}
+                           </div>
                         ))}
-                     </tbody>
-                  </table>
-               </div>
-            </div>
-         </section>
-
-         {/* ──────────────── 6. PRICING SECTION ──────────────── */}
-         <section id="pricing-anchor" className="py-32 bg-[#050505] relative overflow-hidden">
-            <div className="container mx-auto px-6 relative z-10">
-               <div className="text-center max-w-3xl mx-auto mb-20">
-                  <h2 className="text-4xl md:text-8xl font-black mb-6 uppercase tracking-tighter leading-none">Inversión en <br /> <span className="text-indigo-500">Inclusión</span></h2>
-                  <p className="text-xl text-slate-400 font-light">Clases en vivo, acceso a grabaciones y material digital incluido.</p>
-               </div>
-
-               {/* CONTROLS */}
-               <div className="flex flex-col items-center gap-10 mb-20">
-                  <div className="bg-white/[0.02] p-1.5 rounded-3xl border border-white/5 flex shadow-2xl backdrop-blur-3xl">
-                     <button
-                        onClick={() => { setPlanType('group'); setIsChurch(false); }}
-                        className={`px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 transition-all ${planType === 'group' ? 'bg-amber-500 text-white shadow-xl shadow-indigo-600/20' : 'text-slate-500 hover:text-white'}`}
-                     >
-                        <FaUsers className="text-lg" /> Clases Grupales
-                     </button>
-                     <button
-                        onClick={() => { setPlanType('one2one'); setIsChurch(false); }}
-                        className={`px-10 py-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 transition-all ${planType === 'one2one' ? 'bg-amber-500 text-white shadow-xl shadow-indigo-600/20' : 'text-slate-500 hover:text-white'}`}
-                     >
-                        <FaUserGraduate className="text-lg" /> Personalizado (1 a 1)
-                     </button>
-                  </div>
-
-                  {planType === 'group' && (
-                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        onClick={() => setIsChurch(!isChurch)}
-                        className={`cursor-pointer border-2 px-8 py-5 rounded-[2rem] flex items-center gap-6 transition-all select-none shadow-2xl
-                  ${isChurch ? 'bg-indigo-500/10 border-indigo-500/50 text-indigo-300' : 'bg-transparent border-white/5 text-slate-500 hover:border-white/10'}
-                `}
-                     >
-                        <div className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${isChurch ? 'bg-indigo-500 border-indigo-500 text-white' : 'border-white/20'}`}>
-                           {isChurch && <FaCheck className="text-xs" />}
-                        </div>
-                        <span className="text-sm font-black uppercase tracking-widest leading-none">Soy de una <strong className="text-white">Iglesia / Fundación</strong></span>
-                     </motion.div>
-                  )}
-               </div>
-
-               {/* PLANS GRID */}
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-                  {isChurch ? (
-                     <div className="md:col-span-2 bg-gradient-to-br from-indigo-950/40 to-slate-950 border-2 border-indigo-500/50 rounded-[3rem] p-16 relative shadow-2xl overflow-hidden group">
-                        <div className="absolute -top-20 -right-20 w-80 h-80 bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-700"></div>
-
-                        <div className="text-center mb-12 relative z-10">
-                           <div className="w-20 h-20 bg-indigo-500/20 rounded-3xl flex items-center justify-center text-4xl mx-auto text-amber-500 mb-6 border border-indigo-500/30">
-                              <FaChurch />
-                           </div>
-                           <h3 className="text-4xl font-black text-white mb-2 uppercase tracking-tighter">Plan Social</h3>
-                           <p className="text-indigo-300 text-[10px] font-black uppercase tracking-[0.3em]">Convenio para Instituciones</p>
-                        </div>
-
-                        <div className="text-center mb-12 relative z-10">
-                           <span className="text-7xl font-black text-white tracking-tighter">{clp(CHURCH_PRICE)}</span>
-                           <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest ml-2">/mes</span>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 relative z-10">
-                           {[
-                              "Matrícula Exonerada ($0)",
-                              "Acceso completo a niveles",
-                              "Certificado Oficial Lael",
-                              "Enfoque en Ministerio de Sordos",
-                              "Acceso a grabaciones 24/7",
-                              "Material digital premium"
-                           ].map((f, i) => (
-                              <div key={i} className="flex items-center gap-4 text-slate-300 text-sm font-medium">
-                                 <div className="w-5 h-5 bg-indigo-500/20 rounded-full flex items-center justify-center shrink-0">
-                                    <FaCheck className="text-indigo-500 text-[10px]" />
-                                 </div>
-                                 {f}
-                              </div>
-                           ))}
-                        </div>
-
-                        <button
-                           onClick={() => handleEnroll('church-promo')}
-                           className="w-full py-6 rounded-2xl font-black uppercase tracking-widest text-xs bg-amber-500 hover:bg-indigo-500 text-white transition-all shadow-2xl shadow-indigo-600/20 relative z-10"
-                        >
-                           Solicitar Cupo Social
-                        </button>
                      </div>
-                  ) : (
-                     (planType === 'group' ? LSCH_GROUP_PLANS : LSCH_ONE2ONE_PLANS).map((plan) => (
-                        <motion.div
-                           key={plan.id}
-                           initial={{ opacity: 0, y: 20 }}
-                           whileInView={{ opacity: 1, y: 0 }}
-                           className={`relative bg-white/[0.01] rounded-[3rem] p-12 border transition-all flex flex-col group overflow-hidden
-                       ${plan.highlight ? 'border-indigo-500/50 shadow-2xl bg-white/[0.03]' : 'border-white/5 hover:border-white/10'}
-                     `}
-                        >
-                           {plan.highlight && (
-                              <div className="absolute top-0 right-0 bg-indigo-500 text-slate-950 text-[10px] font-black px-6 py-2 rounded-bl-3xl shadow-lg uppercase tracking-widest">
-                                 {plan.badge}
-                              </div>
-                           )}
 
-                           <div className="mb-10">
-                              <h3 className="text-3xl font-black text-white mb-3 uppercase tracking-tighter">{plan.title}</h3>
-                              <p className="text-xs text-slate-500 font-medium leading-relaxed min-h-[40px]">{plan.desc}</p>
-                           </div>
-
-                           <div className="mb-10">
-                              <div className="flex items-baseline gap-2">
-                                 <span className="text-5xl font-black text-white tracking-tighter">{clp(plan.price)}</span>
-                                 <span className="text-slate-600 text-[10px] font-black uppercase tracking-widest">
-                                    {planType === 'group' ? '/mes' : '/pack'}
-                                 </span>
-                              </div>
-                              {plan.totalPayment && (
-                                 <div className="mt-4 inline-block px-4 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full text-green-400 text-[10px] font-black uppercase tracking-widest">
-                                    Total {clp(plan.totalPayment)}
-                                 </div>
-                              )}
-                           </div>
-
-                           <div className="space-y-5 mb-12 flex-1">
-                              {plan.features.map((f, i) => (
-                                 <div key={i} className="flex items-start gap-4 text-sm text-slate-400 font-medium">
-                                    <FaCheck className="text-indigo-500 mt-1 shrink-0" />
-                                    <span className="leading-tight">{f}</span>
-                                 </div>
-                              ))}
-                           </div>
-
-                           {/* Enrollment Info */}
-                           {planType === 'group' && (
-                              <div className={`mb-8 p-5 rounded-2xl flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-widest border transition-colors ${plan.enrollmentWaived ? 'bg-green-500/10 border-green-500/20 text-green-400' : 'bg-white/5 border-white/5 text-slate-500'}`}>
-                                 {plan.enrollmentWaived ? (
-                                    <>¡Matrícula Gratis!</>
-                                 ) : (
-                                    <>+ {clp(ENROLLMENT_FEE)} Matrícula</>
-                                 )}
-                              </div>
-                           )}
-
-                           <button
-                              onClick={() => handleEnroll(plan.id)}
-                              className={`w-full py-6 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all
-                         ${plan.highlight ? 'bg-amber-500 hover:bg-indigo-500 text-white shadow-2xl shadow-indigo-600/20' : 'bg-white/5 border border-white/10 text-white hover:bg-white/10'}
-                       `}
-                           >
-                              {planType === 'group' ? 'Inscribirme Ahora' : 'Comprar Pack'}
-                           </button>
-                        </motion.div>
-                     ))
-                  )}
-               </div>
-
-               <p className="text-center mt-20 text-slate-600 text-[10px] font-black uppercase tracking-[0.2em]">
-                  * Todos los planes incluyen Campus Virtual, material PDF y clases grabadas.
-               </p>
-            </div>
-         </section>
-
-         {/* ──────────────── 7. VALUES SECTION ──────────────── */}
-         <section className="py-32 border-t border-white/5 bg-[#050505] relative overflow-hidden">
-            <div className="container mx-auto px-6 relative z-10">
-               <h2 className="text-2xl font-black mb-16 text-center text-slate-500 uppercase tracking-[0.3em]">Compromiso <span className="text-white">LSCh Lael</span></h2>
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-                  {LSCH_WHY_US.map((val, i) => (
-                     <div key={i} className="bg-white/[0.01] p-10 rounded-[2.5rem] border border-white/5 hover:border-indigo-500/30 transition-all duration-500 group">
-                        <div className="text-5xl mb-8 text-indigo-600 group-hover:scale-110 group-hover:text-amber-500 transition-all">
-                           {i === 0 ? <BiWorld /> : i === 1 ? <FaBuilding /> : <FaAward />}
-                        </div>
-                        <h3 className="text-xl font-black text-white mb-4 uppercase tracking-tight">{val.title}</h3>
-                        <p className="text-slate-500 text-sm leading-relaxed font-medium">{val.desc}</p>
+                     <div className="mt-10 flex items-center justify-between text-[10px] font-bold text-slate-600 uppercase tracking-widest">
+                        <span>Duración</span>
+                        <span className="text-white">{mod.duration}</span>
                      </div>
-                  ))}
-               </div>
+                  </motion.div>
+               ))}
             </div>
-         </section>
+         </div>
+      </section>
 
-         {/* ──────────────── STICKY BAR ──────────────── */}
-         <AnimatePresence>
-            {showSticky && (
-               <motion.div
-                  initial={{ y: 100 }}
-                  animate={{ y: 0 }}
-                  exit={{ y: 100 }}
-                  className="fixed bottom-0 left-0 w-full bg-[#050505]/95 backdrop-blur-3xl border-t border-white/5 z-50 py-6"
+      {/* ──────────────── D. COMPARATIVA ──────────────── */}
+      <section className="py-24 bg-slate-900/40 border-y border-white/5">
+         <div className="container mx-auto px-6 max-w-4xl">
+            <div className="text-center mb-16">
+               <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">¿Por qué estudiar con nosotros?</h2>
+               <p className="text-slate-400 font-light italic">"La Verdad Incómoda" del aprendizaje de LSCh.</p>
+            </div>
+
+            <div className="overflow-x-auto">
+               <table className="w-full text-left border-collapse">
+                  <thead>
+                     <tr className="border-b border-white/10">
+                        <th className="py-6 px-4 text-xs font-black uppercase text-slate-500">Diferencia</th>
+                        <th className="py-6 px-8 text-center bg-purple-600/10 rounded-t-3xl border-x border-t border-purple-500/20 text-white font-black uppercase tracking-widest text-xs">Instituto Lael</th>
+                        <th className="py-6 px-4 text-center text-slate-500 font-black uppercase text-[10px]">Cursos Tradicionales</th>
+                     </tr>
+                  </thead>
+                  <tbody className="text-sm font-medium">
+                     {COMPARISON_DATA.map((row, i) => (
+                        <tr key={i} className="border-b border-white/5">
+                           <td className="py-6 px-4 text-slate-300">{row.feature}</td>
+                           <td className="py-6 px-8 text-center bg-purple-600/5 border-x border-purple-500/10 text-white font-bold">
+                              {row.us}
+                           </td>
+                           <td className="py-6 px-4 text-center text-slate-500 opacity-50">
+                              {row.others}
+                           </td>
+                        </tr>
+                     ))}
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </section>
+
+      {/* ──────────────── E. PRICING SECTION (CON TOGGLE) ──────────────── */}
+      <section id="planes" className="py-32 relative">
+         <div className="container mx-auto px-6 max-w-5xl">
+            <div className="text-center mb-16">
+               <h2 className="text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mb-6">Elige tu <span className="text-purple-500">Modalidad.</span></h2>
+               <p className="text-slate-400 font-light">Clases en vivo, acceso a grabaciones y comunidad exclusiva.</p>
+            </div>
+
+            {/* Toggle Switch */}
+            <div className="flex flex-col items-center mb-20 gap-8">
+               <div 
+                  onClick={() => setIsChurchMember(!isChurchMember)}
+                  className="flex items-center gap-6 cursor-pointer group"
                >
-                  <div className="container mx-auto px-8 flex justify-between items-center">
-                     <div>
-                        <strong className="text-indigo-500 block text-xs font-black uppercase tracking-widest mb-1">LSCh con Fernanda</strong>
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">{isChurch ? 'Convenio Social Activo' : 'Admisión 2026'}</span>
-                     </div>
-                     <button
-                        onClick={scrollToPricing}
-                        className="px-10 py-4 bg-amber-500 hover:bg-indigo-500 text-white font-black uppercase tracking-widest text-[10px] rounded-xl transition-all shadow-2xl shadow-indigo-600/20"
-                     >
-                        Ver Planes
-                     </button>
+                  <span className={`text-xs font-black uppercase tracking-widest transition-colors ${!isChurchMember ? 'text-white' : 'text-slate-600'}`}>General</span>
+                  <div className="w-16 h-8 bg-white/5 border border-white/10 rounded-full relative p-1 transition-all group-hover:border-purple-500/50">
+                     <motion.div 
+                        animate={{ x: isChurchMember ? 32 : 0 }}
+                        className="w-6 h-6 bg-purple-500 rounded-full"
+                     />
                   </div>
-               </motion.div>
-            )}
-         </AnimatePresence>
+                  <span className={`text-xs font-black uppercase tracking-widest transition-colors ${isChurchMember ? 'text-white' : 'text-slate-600'}`}>Iglesia / Ministerio</span>
+               </div>
+               
+               {isChurchMember && (
+                  <motion.div 
+                     initial={{ opacity: 0, y: -10 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     className="px-6 py-2 bg-purple-600/10 border border-purple-500/20 rounded-full text-purple-400 text-[10px] font-black uppercase tracking-[0.2em]"
+                  >
+                     Precio Social Convenio Activo
+                  </motion.div>
+               )}
+            </div>
 
-      </div>
-   );
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+               
+               {isChurchMember ? (
+                  /* Single Church Card (Highlighted) */
+                  <div className="md:col-span-2 max-w-2xl mx-auto w-full">
+                     <PricingCard 
+                        title="Convenio Social"
+                        price={CHURCH_PRICE}
+                        desc="Para ministerios de sordos, fundaciones e iglesias."
+                        features={[
+                           "Suscripción mensual protegida",
+                           "Matrícula 100% Bonificada ($0)",
+                           "Acceso a todos los niveles",
+                           "Certificación Ministerial Lael",
+                           "Material PDF incluido"
+                        ]}
+                        highlight
+                        isChurch
+                     />
+                  </div>
+               ) : (
+                  /* Standard Plans */
+                  <>
+                     <PricingCard 
+                        title={LSCH_GROUP_PLANS[0].title}
+                        price={LSCH_GROUP_PLANS[0].price}
+                        desc={LSCH_GROUP_PLANS[0].desc}
+                        features={LSCH_GROUP_PLANS[0].features}
+                        badge={LSCH_GROUP_PLANS[0].badge}
+                     />
+                     <PricingCard 
+                        title={LSCH_GROUP_PLANS[1].title}
+                        price={LSCH_GROUP_PLANS[1].price}
+                        desc={LSCH_GROUP_PLANS[1].desc}
+                        features={LSCH_GROUP_PLANS[1].features}
+                        badge={LSCH_GROUP_PLANS[1].badge}
+                        highlight
+                     />
+                  </>
+               )}
+
+            </div>
+         </div>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="py-32 bg-gradient-to-t from-slate-900 to-slate-950 text-center px-6 border-t border-white/5">
+         <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+         >
+            <FaHandsHelping className="text-7xl text-purple-500 mx-auto mb-10" />
+            <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-10 leading-none">
+               TU VOZ <br /> EN TUS MANOS.
+            </h2>
+            <p className="text-slate-500 font-medium mb-12 max-w-xl mx-auto">
+               Inicia hoy tu formación en LSCh y sé parte de la solución de inclusión en Chile.
+            </p>
+            <a 
+               href={waLink(`Hola, quiero información sobre el curso de LSCh (${isChurchMember ? 'Convenio Iglesia' : 'General'}).`)} 
+               target="_blank"
+               rel="noopener noreferrer"
+               className="inline-flex items-center gap-4 px-12 py-6 bg-purple-600 text-white font-black rounded-[2rem] hover:bg-purple-500 transition-all shadow-2xl shadow-purple-600/30 uppercase tracking-widest text-xs group"
+            >
+               Hablar con Fernanda
+               <FaWhatsapp size={20} className="group-hover:scale-110 transition-transform" />
+            </a>
+         </motion.div>
+      </section>
+
+    </div>
+  );
 }
+
+// ──────────────── SUB-COMPONENTS ────────────────
+
+const PricingCard = ({ title, price, desc, features, badge, highlight, isChurch }) => (
+   <div className={`relative p-12 rounded-[3rem] border transition-all flex flex-col h-full bg-white/[0.01] ${highlight ? 'border-purple-500/50 shadow-2xl bg-white/[0.03]' : 'border-white/5'}`}>
+      {badge && (
+         <div className="absolute top-0 right-10 -translate-y-1/2 bg-purple-600 text-white px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest shadow-xl">
+            {badge}
+         </div>
+      )}
+      
+      <div className="mb-10">
+         <h3 className="text-3xl font-black text-white uppercase tracking-tight mb-2">{title}</h3>
+         <p className="text-xs text-slate-500 font-medium">{desc}</p>
+      </div>
+
+      <div className="mb-10">
+         <span className="text-6xl font-black text-white tracking-tighter">{clp(price)}</span>
+         <span className="text-[10px] font-black uppercase text-slate-600 ml-2">/Mes</span>
+         {!isChurch && !highlight && (
+            <div className="mt-4 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+               + Matrícula Anual
+            </div>
+         )}
+         {highlight && !isChurch && (
+            <div className="mt-4 text-[10px] font-black text-cyan-500 uppercase tracking-widest flex items-center gap-2">
+               <FaCheckCircle /> Matrícula $0
+            </div>
+         )}
+      </div>
+
+      <div className="space-y-5 flex-1 mb-12">
+         {features.map((f, i) => (
+            <div key={i} className="flex gap-4 text-sm text-slate-400 font-medium leading-tight">
+               <FaCheckCircle className="text-purple-600 mt-1 shrink-0" /> {f}
+            </div>
+         ))}
+      </div>
+
+      <a 
+         href={`https://wa.me/56964626568?text=Hola, quiero matricularme en LSCh: ${title}`}
+         target="_blank"
+         rel="noopener noreferrer"
+         className={`w-full py-6 rounded-2xl font-black uppercase tracking-widest text-[10px] text-center transition-all ${highlight ? 'bg-purple-600 hover:bg-purple-500 text-white' : 'bg-white/5 text-white border border-white/10 hover:bg-white/10'}`}
+      >
+         Solicitar Matrícula
+      </a>
+   </div>
+);

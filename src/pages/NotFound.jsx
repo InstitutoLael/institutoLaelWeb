@@ -26,7 +26,7 @@ export default function NotFound() {
           to="/"
           className="inline-flex items-center gap-3 px-8 py-4 bg-white text-slate-950 font-black rounded-xl hover:bg-slate-200 transition-all uppercase tracking-widest text-xs shadow-lg shadow-white/10"
         >
-          <FaArrowLeft /> Volver al Inicio
+          <FaArrowLeft /> Volver al Centro de Mando
         </Link>
       </div>
     </div>

@@ -251,6 +251,7 @@ export default function Academy() {
                      </div>
                   </div>
             </div>
+         </div>
          </section>
 
          {/* ──────────────── 3.5. MENOTORES DE EXCELENCIA ──────────────── */}

@@ -217,7 +217,9 @@ export default function Paes() {
                </div>
             </div>
          </div>
-      </section>* ──────────────── SECCIÓN 3: EQUIPO DOCENTE (NUEVO) ──────────────── */}
+      </section>
+      
+      {/* ──────────────── SECCIÓN 3: EQUIPO DOCENTE (NUEVO) ──────────────── */}
       <section className="py-24 bg-[#050505]">
          <div className="container mx-auto px-6">
             <div className="text-center mb-16">

@@ -1,492 +1,431 @@
 import React, { useState, useEffect } from "react";
-import { useCart } from "../context/CartContext.jsx";
-import SEOHead from "../components/SEOHead.jsx";
-import { supabase } from "../supabaseClient";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Icons
 import {
-  FaCheck, FaArrowRight, FaStar, FaUserGraduate, FaUniversity,
-  FaWhatsapp, FaPlayCircle, FaShieldAlt
+  FaCheckCircle,
+  FaTimesCircle,
+  FaWhatsapp,
+  FaRobot,
+  FaBrain,
+  FaChartLine,
+  FaChevronDown,
+  FaPlus,
+  FaMinus,
+  FaArrowRight
 } from "react-icons/fa";
-import { MdQuiz, MdOutlineSupportAgent } from "react-icons/md";
-import { BiChalkboard } from "react-icons/bi";
 
 // Centralized Data Imports
 import {
   PAES_SUBJECTS,
   PAES_COMBOS,
+  PAES_FEATURES,
+  PAES_COMPARISON,
+  PAES_FAQS,
   computePaesPrice,
   clp
 } from "../data/paes.js";
-import { TESTIMONIALS } from "../data/testimonials.js";
 
-import PaesSimulator from "../components/PaesSimulator.jsx";
-import VisualRoadmap from "../components/VisualRoadmap.jsx";
-
-const ROADMAP_STEPS = [
-  { title: "Inscripción", desc: "Matrícula digital y diagnóstico inicial.", subinfo: "Paso 1", icon: <FaUserGraduate /> },
-  { title: "Diagnóstico", desc: "Evaluamos tu base para nivelación.", subinfo: "Semana 1", icon: <FaPlayCircle /> },
-  { title: "Nivelación", desc: "Clases base para cerrar brechas.", subinfo: "Mes 1-2", icon: <BiChalkboard /> },
-  { title: "Estrategia", desc: "Dominio de temario y atajos PAES.", subinfo: "Mes 3-8", icon: <MdQuiz /> },
-  { title: "Simulacros", desc: "Ensayos intensivos reales.", subinfo: "Final", icon: <FaUniversity /> },
-];
+// SEO
+import SEOHead from "../components/SEOHead.jsx";
 
 export default function Paes() {
-  const { addToCart, openCart } = useCart();
-
-  // --- ESTADOS ---
-  const [dbProducts, setDbProducts] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [pricing, setPricing] = useState(computePaesPrice([]));
-  const [showSticky, setShowSticky] = useState(false);
+  const [activeFaq, setActiveFaq] = useState(null);
 
-  // --- EFECTOS ---
   useEffect(() => {
-    fetchProducts();
+    window.scrollTo(0, 0);
   }, []);
-
-  const fetchProducts = async () => {
-    try {
-      const { data, error } = await supabase.from('products').select('*').eq('category', 'PAES');
-      if (!error) setDbProducts(data || []);
-    } catch (err) {
-      console.error("Error fetching PAES:", err);
-    }
-  };
 
   useEffect(() => {
     setPricing(computePaesPrice(selectedIds));
   }, [selectedIds]);
 
-  useEffect(() => {
-    const handleScroll = () => setShowSticky(window.scrollY > 600);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // --- HANDLERS ---
   const toggleSubject = (id) => {
-    setSelectedIds(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
+    setSelectedIds(prev => 
+      prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
+    );
   };
 
-  const handleAddCustom = () => {
-    if (selectedIds.length === 0) return;
-    const names = selectedIds.map(id => PAES_SUBJECTS.find(s => s.id === id).name).join(", ");
-    const dbProduct = dbProducts.find(p => p.name.toLowerCase().includes(pricing.label.toLowerCase()) || (pricing.count >= 4 && p.name.includes("Full Intensivo")));
-    
-    addToCart({
-      id: `custom-paes-${selectedIds.join('-')}`,
-      db_id: dbProduct ? dbProduct.id : null,
-      title: `${pricing.label} (${selectedIds.length} ramos)`,
-      price: pricing.totalMonthly,
-      detail: names,
-      type: 'plan'
-    });
-    openCart();
+  const scrollToSection = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleAddCombo = (combo) => {
-    const dbProduct = dbProducts.find(p => p.name.toLowerCase().includes(combo.title.toLowerCase()));
-    addToCart({
-      id: dbProduct ? dbProduct.id : `combo-${combo.id}`,
-      db_id: dbProduct ? dbProduct.id : null,
-      title: dbProduct ? dbProduct.name : combo.title,
-      price: dbProduct ? dbProduct.price : combo.price,
-      detail: dbProduct ? dbProduct.description : combo.features.join(", "),
-      type: 'pack'
-    });
-    openCart();
-  };
-
-  const scrollToBuilder = () => document.getElementById('planes').scrollIntoView({ behavior: 'smooth' });
+  const waLink = (text) => `https://wa.me/56964626568?text=${encodeURIComponent(text)}`;
 
   return (
-    <div className="bg-[#050505] text-white font-sans overflow-x-hidden selection:bg-indigo-500/30 pb-20">
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-indigo-500/30 overflow-x-hidden">
       <SEOHead 
-        title="Preuniversitario Online PAES" 
-        description="Domina la PAES. Asegura tu Universidad con estrategia y simuladores."
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "Course",
-          "name": "Preuniversitario PAES 2026",
-          "description": "Programa intensivo online para la Prueba de Acceso a la Educación Superior (PAES).",
-          "provider": {
-            "@type": "EducationalOrganization",
-            "name": "Instituto Lael",
-            "sameAs": "https://institutolael.cl"
-          },
-          "offers": {
-            "@type": "Offer",
-            "category": "Paid",
-            "priceCurrency": "CLP",
-            "price": "34990",
-            "availability": "https://schema.org/InStock",
-            "url": "https://institutolael.cl/paes"
-          }
-        }}
+        title="PAES 2026 | Domina la Prueba con IA y Estrategia" 
+        description="Asegura tu universidad con nuestro Preuniversitario especializado. Simuladores IA, coaching estratégico y resultados reales."
       />
 
-      {/* ──────────────── SECCIÓN 1: HEADER (Venta Agresiva) ──────────────── */}
-      <header className="relative pt-32 pb-20 px-6 text-center overflow-hidden">
-        {/* Background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[150px] rounded-full pointer-events-none"></div>
-        
-        <div className="relative z-10 max-w-4xl mx-auto">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-sm font-bold uppercase tracking-widest mb-6">
-            Admisión 2026 Abierta
-          </div>
-          <h1 className="text-5xl md:text-7xl font-black mb-6 leading-[1.1] tracking-tighter">
-            Domina la PAES. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-indigo-400">
-              Asegura tu Universidad.
+      {/* ──────────────── A. HERO SECTION (LA PROMESA) ──────────────── */}
+      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
+        {/* Abstract Background Shapes */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-violet-600/10 blur-[100px] rounded-full" />
+        </div>
+
+        <div className="container mx-auto max-w-5xl text-center relative z-10">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-6xl md:text-9xl font-black text-white tracking-tighter uppercase leading-[0.85] mb-8"
+          >
+            DOMINA LA PAES. <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-violet-400">
+               ASEGURA TU U.
             </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed font-light">
-            Olvídate de los preus aburridos. Aquí estudias con estrategia, simuladores y profesores que sí te entienden.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onClick={scrollToBuilder} className="px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-full text-lg shadow-lg shadow-indigo-600/30 transition-all uppercase tracking-widest">
-              Ver Planes 2026
+          </motion.h1>
+
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-lg md:text-2xl text-slate-400 font-light max-w-3xl mx-auto mb-12 leading-relaxed"
+          >
+            Olvídate de memorizar. Aquí hackeamos la prueba con 
+            <strong className="text-white"> Estrategia + Inteligencia Artificial</strong>.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="flex flex-col items-center gap-6"
+          >
+            <button 
+              onClick={() => scrollToSection('pricing')}
+              className="px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-2xl transition-all shadow-2xl shadow-blue-600/30 uppercase tracking-widest text-sm"
+            >
+              VER PLANES 2026
             </button>
-            <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-bold rounded-full text-lg border border-white/10 transition-all flex items-center gap-2 justify-center">
-              <FaWhatsapp /> Hablar con Profe
-            </a>
+            <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">
+               ⭐ +1200 Alumnos ingresaron en 2025
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ──────────────── B. PROBLEM/SOLUTION (LA DIFERENCIA) ──────────────── */}
+      <section className="py-24 bg-slate-900/40 relative border-y border-white/5">
+        <div className="container mx-auto px-6 max-w-6xl">
+          <div className="text-center mb-20">
+             <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                ¿Por qué Preu Lael?
+             </h2>
+             <p className="text-slate-400 max-w-xl mx-auto font-light">
+                No somos un preu tradicional. Somos un centro de alto rendimiento educativo.
+             </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            
+            <FeatureCard 
+              icon={<FaRobot />}
+              title="Simuladores IA"
+              desc="Practica con dificultad adaptativa real que se ajusta a tu nivel automáticamente."
+              color="text-blue-500"
+            />
+
+            <FeatureCard 
+              icon={<FaBrain />}
+              title="Estrategia, no memoria"
+              desc="Te enseñamos a pensar, identificar patrones y descartar como un experto."
+              color="text-violet-500"
+            />
+
+            <FeatureCard 
+              icon={<FaChartLine />}
+              title="Resultados Reales"
+              desc="Seguimiento personalizado de tu puntaje proyectado clase a clase."
+              color="text-emerald-500"
+            />
+
           </div>
         </div>
-      </header>
-
-      {/* ──────────────── SECCIÓN 2: MUNDOS DE ESTUDIO (SUBJECT CLUSTERS) ──────────────── */}
-      <section className="py-20 bg-[#020617] border-y border-white/5">
-         <div className="container mx-auto px-6">
-            <div className="text-center mb-16">
-               <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
-                  Explora tus <span className="text-indigo-500">Mundos</span>
-               </h2>
-               <p className="text-xl text-slate-400 font-light">
-                  Cada área tiene su propia estrategia. Descubre cómo abordamos cada desafío.
-               </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-               {/* Mundo Matemático */}
-               <div className="bg-gradient-to-br from-indigo-900/10 to-indigo-900/0 border border-indigo-500/20 p-8 rounded-[2.5rem] relative overflow-hidden group hover:border-indigo-500/50 transition-all">
-                  <div className="absolute top-0 right-0 p-8 opacity-10 text-9xl group-hover:scale-110 transition-transform">📐</div>
-                  <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4 flex items-center gap-3">
-                     <span className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-sm">M</span>
-                     Matemática
-                  </h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                     Olvídate de memorizar fórmulas. Aquí aprendes lógica, patrones y atajos para resolver en 2 minutos.
-                  </p>
-                  <ul className="space-y-2 mb-8">
-                     <li className="flex items-center gap-2 text-indigo-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> M1: Fundamentos</li>
-                     <li className="flex items-center gap-2 text-indigo-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> M2: Ingeniería</li>
-                  </ul>
-               </div>
-
-               {/* Mundo Ciencias */}
-               <div className="bg-gradient-to-br from-teal-900/10 to-teal-900/0 border border-teal-500/20 p-8 rounded-[2.5rem] relative overflow-hidden group hover:border-teal-500/50 transition-all">
-                  <div className="absolute top-0 right-0 p-8 opacity-10 text-9xl group-hover:scale-110 transition-transform">🧬</div>
-                  <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4 flex items-center gap-3">
-                     <span className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center text-sm">C</span>
-                     Ciencias
-                  </h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                     Biología, Física y Química integradas. Entiende el fenómeno, no solo el dato de memoria.
-                  </p>
-                  <ul className="space-y-2 mb-8">
-                     <li className="flex items-center gap-2 text-teal-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> Mención Biología</li>
-                     <li className="flex items-center gap-2 text-teal-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> Mención Física</li>
-                  </ul>
-               </div>
-
-               {/* Mundo Lenguaje */}
-               <div className="bg-gradient-to-br from-amber-900/10 to-amber-900/0 border border-amber-500/20 p-8 rounded-[2.5rem] relative overflow-hidden group hover:border-amber-500/50 transition-all">
-                  <div className="absolute top-0 right-0 p-8 opacity-10 text-9xl group-hover:scale-110 transition-transform">📚</div>
-                  <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4 flex items-center gap-3">
-                     <span className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-sm">L</span>
-                     Lenguaje
-                  </h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                     Comprensión lectora estratégica. Aprende a filtrar información y encontrar la respuesta correcta.
-                  </p>
-                  <ul className="space-y-2 mb-8">
-                     <li className="flex items-center gap-2 text-amber-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> Lectura Crítica</li>
-                     <li className="flex items-center gap-2 text-amber-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> Vocabulario</li>
-                  </ul>
-               </div>
-            </div>
-         </div>
-      </section>
-      
-      {/* ──────────────── SECCIÓN 3: EQUIPO DOCENTE (NUEVO) ──────────────── */}
-      <section className="py-24 bg-[#050505]">
-         <div className="container mx-auto px-6">
-            <div className="text-center mb-16">
-               <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
-                  Profesores <span className="text-indigo-500">Expertos</span>
-               </h2>
-               <p className="text-xl text-slate-400 font-light">
-                  No te enseñan estudiantes universitarios. <strong className="text-white">Te enseñan profesionales.</strong>
-               </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-               {/* Diego (Math) */}
-               <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:border-indigo-500/30 transition-all group">
-                  <div className="flex items-center gap-4 mb-6">
-                     <div className="w-16 h-16 rounded-full bg-indigo-500/20 flex items-center justify-center text-2xl border border-indigo-500/30">
-                        👨🏻‍🏫
-                     </div>
-                     <div>
-                        <h4 className="text-xl font-black text-white uppercase tracking-tight">Diego Chaparro</h4>
-                        <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest">Director & Matemáticas</span>
-                     </div>
-                  </div>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                     "Más que fórmulas, te enseño estrategia. La PAES es un juego de lógica y vamos a hackearlo juntos."
-                  </p>
-                  <div className="flex gap-2 flex-wrap">
-                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Estrategia M1/M2</span>
-                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Ingeniería</span>
-                  </div>
-               </div>
-
-               {/* Martín (Science) */}
-               <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:border-blue-500/30 transition-all group">
-                  <div className="flex items-center gap-4 mb-6">
-                     <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center text-2xl border border-blue-500/30">
-                        🧬
-                     </div>
-                     <div>
-                        <h4 className="text-xl font-black text-white uppercase tracking-tight">Martín</h4>
-                        <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">Ciencias (Bio/Quim)</span>
-                     </div>
-                  </div>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                     "Transformamos materias complejas en historias simples. Entender el 'por qué' es la clave para no memorizar."
-                  </p>
-                  <div className="flex gap-2 flex-wrap">
-                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Biología</span>
-                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Química</span>
-                  </div>
-               </div>
-
-               {/* Javiera (Lenguaje - Placeholder based on teachers.js) */}
-               <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:border-amber-500/30 transition-all group">
-                  <div className="flex items-center gap-4 mb-6">
-                     <div className="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center text-2xl border border-amber-500/30">
-                        📚
-                     </div>
-                     <div>
-                        <h4 className="text-xl font-black text-white uppercase tracking-tight">Javiera Paz</h4>
-                        <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">Lenguaje & Redacción</span>
-                     </div>
-                  </div>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                     "Te enseñaré a leer entre líneas. La comprensión lectora es la habilidad #1 para la universidad y la vida."
-                  </p>
-                  <div className="flex gap-2 flex-wrap">
-                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Lectura Crítica</span>
-                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Vocabulario</span>
-                  </div>
-               </div>
-            </div>
-         </div>
       </section>
 
-      {/* ──────────────── SECCIÓN 3: PRECIOS Y PLANES (PACKS FIRST) ──────────────── */}
-      <section id="planes" className="py-24 bg-[#050505]">
-        <div className="container mx-auto px-6">
-          
+      {/* ──────────────── C. COMPARATIVA (LA TABLA DE LA VERDAD) ──────────────── */}
+      <section className="py-24 relative overflow-hidden">
+        <div className="container mx-auto px-6 max-w-5xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl font-black text-white mb-4 uppercase tracking-tighter">
-              Elige tu <span className="text-indigo-500">Pack de Carrera</span>
-            </h2>
-            <p className="text-slate-400 text-lg">Combinaciones optimizadas para asegurar tu puntaje.</p>
+             <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                La comparativa real
+             </h2>
+             <p className="text-slate-400 font-light">No todas las preparaciones son iguales.</p>
           </div>
 
-          {/* PACKS GRID */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-32">
-            {PAES_COMBOS.map((combo) => {
-              const gradients = {
-                humanista: "from-amber-500/20 to-amber-900/0 border-amber-500/50",
-                salud: "from-teal-500/20 to-teal-900/0 border-teal-500/50",
-                ingenieria: "from-indigo-500/20 to-indigo-900/0 border-indigo-500/50",
-              };
-              
-              // Custom copy override based on User Request
-              let customSubtitle = combo.subtitle;
-              if (combo.id === 'humanista') customSubtitle = "Lenguaje + Historia + Filosofía";
-              if (combo.id === 'salud' || combo.id === 'cientifico') customSubtitle = "Matemáticas + Ciencias + Biología/Física";
-
-              return (
-                <div key={combo.id} className={`relative bg-gradient-to-b ${gradients[combo.id] || "from-white/10"} p-10 rounded-[2.5rem] border backdrop-blur-md group hover:-translate-y-2 transition-transform duration-500`}>
-                  <div className="absolute top-0 right-0 p-4">
-                     <span className="bg-white/10 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full text-white">Recomendado</span>
-                  </div>
-                  
-                  <div className="mt-4 mb-8">
-                    <h3 className="text-3xl font-black text-white mb-2 uppercase tracking-tight">{combo.title}</h3>
-                    <p className="text-sm font-bold text-slate-300 uppercase tracking-wide min-h-[40px]">{customSubtitle || combo.features[0]}</p>
-                  </div>
-
-                  <div className="mb-8">
-                    <span className="text-5xl font-black text-white tracking-tighter">{clp(combo.price)}</span>
-                    <span className="text-xs font-black uppercase tracking-widest text-slate-500 ml-2">/mes</span>
-                  </div>
-
-                  <ul className="space-y-4 mb-10">
-                     {combo.features.map((f, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm text-slate-400 font-medium">
-                           <FaCheck className="text-emerald-500 mt-1 shrink-0" /> {f}
-                        </li>
-                     ))}
-                  </ul>
-
-                  <button 
-                    onClick={() => handleAddCombo(combo)}
-                    className="w-full py-4 bg-white text-slate-950 font-black rounded-xl uppercase tracking-widest text-xs hover:scale-[1.02] transition-transform shadow-xl"
-                  >
-                    Elegir Pack
-                  </button>
-                </div>
-              );
-            })}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-white/10">
+                  <th className="py-6 px-4 text-xs font-black uppercase text-slate-500">Beneficio</th>
+                  <th className="py-6 px-8 text-center bg-blue-600/10 rounded-t-3xl border-x border-t border-blue-500/20 text-white font-black uppercase tracking-widest text-xs">Instituto Lael</th>
+                  <th className="py-6 px-4 text-center text-slate-500 font-black uppercase text-[10px]">Preu Tradicional</th>
+                  <th className="py-6 px-4 text-center text-slate-500 font-black uppercase text-[10px]">Prof. Particular</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm">
+                {PAES_COMPARISON.map((row, i) => (
+                  <tr key={i} className="border-b border-white/5 group">
+                    <td className="py-6 px-4 font-bold text-slate-300">{row.feature}</td>
+                    <td className="py-6 px-8 text-center bg-blue-600/5 border-x border-blue-500/10 font-black text-white">
+                       {typeof row.lael === 'boolean' ? (row.lael ? <FaCheckCircle className="inline text-emerald-500 text-xl" /> : <FaTimesCircle className="inline text-rose-500 text-xl" />) : row.lael}
+                    </td>
+                    <td className="py-6 px-4 text-center text-slate-500">
+                       {typeof row.other === 'boolean' ? (row.other ? <FaCheckCircle className="inline opacity-20 text-xl" /> : <FaTimesCircle className="inline text-rose-500/30 text-xl" />) : row.other}
+                    </td>
+                    <td className="py-6 px-4 text-center text-slate-500">
+                       {typeof row.tutor === 'boolean' ? (row.tutor ? <FaCheckCircle className="inline opacity-20 text-xl" /> : <FaTimesCircle className="inline text-rose-500/30 text-xl" />) : row.tutor}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-
-          {/* BUILDER (RAMOS SUELTOS) */}
-          <div id="builder-section" className="bg-[#0f172a]/50 rounded-[3rem] border border-white/5 p-8 md:p-16">
-            <div className="text-center mb-12">
-               <h3 className="text-3xl md:text-4xl font-black text-white mb-4 uppercase tracking-tighter">¿Prefieres armar tu horario?</h3>
-               <p className="text-slate-400">Selecciona tus ramos sueltos a medida.</p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                 {/* SELECTOR */}
-                 <div className="lg:col-span-3 space-y-4">
-                    {PAES_SUBJECTS.map((sub) => {
-                       const isActive = selectedIds.includes(sub.id);
-                       return (
-                          <div 
-                             key={sub.id} 
-                             onClick={() => toggleSubject(sub.id)}
-                             className={`flex items-center gap-6 p-6 rounded-[2rem] border transition-all cursor-pointer ${isActive ? 'bg-indigo-500/20 border-indigo-500' : 'bg-white/[0.02] border-white/5 hover:bg-white/5'}`}
-                          >
-                             <div className="text-2xl">{sub.icon}</div>
-                             <div className="flex-1">
-                                <h4 className="text-lg font-black text-white uppercase">{sub.name}</h4>
-                                <span className="text-[10px] uppercase font-black tracking-widest text-slate-500">{sub.category}</span>
-                             </div>
-                             <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${isActive ? 'bg-indigo-500 border-indigo-500 text-white' : 'border-slate-600 text-slate-600'}`}>
-                                {isActive ? <FaCheck size={12} /> : '+'}
-                             </div>
-                          </div>
-                       )
-                    })}
-                 </div>
-
-                 {/* TICKET */}
-                 <div className="lg:col-span-2">
-                    <div className="bg-[#050505] p-8 rounded-[2rem] border border-white/10 sticky top-10">
-                       <h4 className="text-xs font-black uppercase tracking-widest text-slate-500 mb-6">Tu Configuración</h4>
-                       
-                       {pricing.count > 0 ? (
-                          <ul className="space-y-2 mb-6 text-sm text-slate-300">
-                             {selectedIds.map(id => <li key={id}>• {PAES_SUBJECTS.find(s=>s.id===id).name}</li>)}
-                          </ul>
-                       ) : (
-                          <p className="text-slate-600 italic mb-6 text-sm">Selecciona asignaturas...</p>
-                       )}
-
-                       <div className="pt-6 border-t border-white/10 flex justify-between items-end mb-6">
-                          <span className="text-xs font-black uppercase tracking-widest text-slate-500">Total Mensual</span>
-                          <span className="text-3xl font-black text-white tracking-tighter">{clp(pricing.totalMonthly)}</span>
-                       </div>
-
-                       <button 
-                          onClick={handleAddCustom}
-                          disabled={pricing.count === 0}
-                          className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black rounded-xl uppercase tracking-widest text-xs transition-colors"
-                       >
-                          Inscribir Ramos
-                       </button>
-                    </div>
-                 </div>
-            </div>
-          </div>
-
         </div>
       </section>
 
-      {/* ──────────────── SECCIÓN 4: MURO DE ÉXITO (TESTIMONIOS) ──────────────── */}
-      <section className="py-24 bg-[#020617] border-t border-white/5">
-         <div className="container mx-auto px-6">
-            <div className="text-center mb-16">
-               <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
-                  Resultados <span className="text-emerald-500">Reales</span>
-               </h2>
-               <p className="text-xl text-slate-400 font-light">
-                  Nuestros alumnos hoy están en la Chile, la Cato, la USACH y más.
-               </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-               {TESTIMONIALS.filter(t => t.tags?.includes('paes') || t.program.includes('PAES')).map((t, i) => (
-                  <div key={i} className="bg-white/[0.02] p-8 rounded-[2rem] border border-white/5 relative overflow-hidden">
-                     <div className="absolute top-0 right-0 p-6 opacity-10 text-6xl text-white font-serif">"</div>
-                     <div className="flex items-center gap-2 mb-4">
-                        {[...Array(5)].map((_, stars) => <FaStar key={stars} className="text-amber-500 text-xs" />)}
-                     </div>
-                     <p className="text-slate-300 text-sm leading-relaxed mb-6 font-medium relative z-10">"{t.quote}"</p>
-                     
-                     <div className="flex items-center gap-4 border-t border-white/5 pt-4">
-                        <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold text-xs text-white">
-                           {t.name.substring(0,2)}
-                        </div>
-                        <div>
-                           <strong className="block text-white text-sm font-black uppercase tracking-wide">{t.name}</strong>
-                           <span className="text-xs text-slate-500">{t.program} {t.score && `• ${t.score}`}</span>
-                        </div>
-                     </div>
-                  </div>
-               ))}
-            </div>
-         </div>
+      {/* ──────────────── D. PRICING (LA OFERTA IRRESISTIBLE) ──────────────── */}
+      <section id="pricing" className="py-32 bg-slate-900/20 border-y border-white/5">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
+             <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-4">
+                ELIGE TU <span className="text-blue-500">PACK DE CARRERA</span>
+             </h2>
+             <p className="text-slate-400 font-light">Seleccionamos los ramos ideales para tu objetivo.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+             {PAES_COMBOS.map((combo, i) => (
+                <PricingCard 
+                  key={combo.id}
+                  combo={combo}
+                  recommended={combo.id === 'cientifico' || combo.id === 'full'}
+                  waLink={waLink}
+                  index={i}
+                />
+             ))}
+          </div>
+        </div>
       </section>
 
-      {/* ──────────────── SECCIÓN 5: FAQ (PREGUNTAS) ──────────────── */}
-      <section className="py-24 bg-[#020617] border-t border-white/5">
-         <div className="container mx-auto px-6 max-w-2xl">
-            <h2 className="text-3xl font-black text-center text-white uppercase tracking-tighter mb-12">Preguntas Frecuentes</h2>
-            
-            <div className="space-y-4">
-               {[
-                  { q: "¿Las clases quedan grabadas?", a: "Sí, acceso 24/7 a través de tu Aula Virtual para que repases cuando quieras." },
-                  { q: "¿Cómo pago?", a: "Tarjeta de Crédito, Débito o Transferencia vía Mercado Pago. Seguro y rápido." },
-                  { q: "¿Cuándo empiezan?", a: "Marzo 2026. ¡Las inscripciones ya están abiertas y los cupos vuelan!" },
-                  { q: "¿Tienen material propio?", a: "Sí. Guías, ensayos y libros digitales exclusivos de Instituto Lael incluidos en tu plan." } 
-               ].map((faq, i) => (
-                  <details key={i} className="group bg-white/[0.02] border border-white/5 rounded-2xl overflow-hidden open:bg-white/[0.05] transition-colors">
-                     <summary className="flex justify-between items-center p-6 cursor-pointer list-none font-bold text-white text-sm uppercase tracking-wide select-none">
-                        {faq.q}
-                        <span className="transition-transform group-open:rotate-180 text-indigo-500">▼</span>
-                     </summary>
-                     <p className="px-6 pb-6 text-slate-400 text-sm leading-relaxed">{faq.a}</p>
-                  </details>
-               ))}
-            </div>
-         </div>
+      {/* ──────────────── E. CALCULADORA (ARMA TU HORARIO) ──────────────── */}
+      <section className="py-32 relative">
+        <div className="container mx-auto px-6 max-w-6xl">
+          <div className="text-center mb-16">
+             <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">
+                Arma tu horario a medida
+             </h2>
+             <p className="text-slate-400 font-light">¿Necesitas algo específico? Selecciona tus ramos y el descuento se aplicará solo.</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+             
+             {/* Subjects List */}
+             <div className="lg:col-span-2 space-y-4">
+                {PAES_SUBJECTS.map((sub, i) => {
+                   const isSelected = selectedIds.includes(sub.id);
+                   return (
+                      <motion.div
+                        key={sub.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        onClick={() => toggleSubject(sub.id)}
+                        className={`group relative p-6 rounded-3xl border-2 transition-all cursor-pointer flex items-center gap-6 ${isSelected ? 'bg-blue-600/10 border-blue-500 shadow-lg shadow-blue-500/10' : 'bg-white/[0.02] border-white/5 hover:border-white/20'}`}
+                      >
+                         <div className={`text-4xl transition-transform group-hover:scale-110 ${isSelected ? 'grayscale-0' : 'grayscale'}`}>{sub.icon}</div>
+                         <div className="flex-1">
+                            <h4 className="text-xl font-black text-white uppercase tracking-tight">{sub.name}</h4>
+                            <p className="text-xs text-slate-500 font-medium">{sub.category}</p>
+                         </div>
+                         <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${isSelected ? 'bg-blue-500 border-blue-500 text-white' : 'border-slate-700 text-slate-700 group-hover:border-slate-500'}`}>
+                            {isSelected ? <FaMinus size={12} /> : <FaPlus size={12} />}
+                         </div>
+                      </motion.div>
+                   );
+                })}
+             </div>
+
+             {/* Calculation Summary */}
+             <div className="sticky top-24">
+                <div className="bg-slate-900 border border-white/10 rounded-[2.5rem] p-10 shadow-2xl overflow-hidden relative">
+                   <div className="absolute top-0 right-0 p-12 bg-blue-600/5 blur-[60px] rounded-full pointer-events-none" />
+                   
+                   <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-8">Resumen de Selección</h3>
+                   
+                   {selectedIds.length > 0 ? (
+                      <div className="space-y-4 mb-10 relative z-10">
+                         {selectedIds.map(id => {
+                            const s = PAES_SUBJECTS.find(x => x.id === id);
+                            return (
+                               <div key={id} className="flex justify-between items-center text-sm">
+                                  <span className="text-slate-300 font-bold">• {s.name}</span>
+                                  <span className="text-slate-500 text-xs">{clp(14990)}</span>
+                               </div>
+                            );
+                         })}
+                      </div>
+                   ) : (
+                      <div className="py-12 text-center text-slate-600 italic text-sm mb-4">
+                         Selecciona una o más asignaturas para ver el plan...
+                      </div>
+                   )}
+
+                   <div className="border-t border-white/10 pt-8 space-y-4 relative z-10">
+                      <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-slate-500">
+                         <span>Subtotal</span>
+                         <span>{clp(selectedIds.length * 14990)}</span>
+                      </div>
+                      {pricing.saving > 0 && (
+                         <div className="flex justify-between items-center text-xs font-black uppercase tracking-widest text-emerald-500">
+                            <span>Descuento Pack</span>
+                            <span>-{clp(pricing.saving)}</span>
+                         </div>
+                      )}
+                      <div className="flex justify-between items-end pt-4">
+                         <span className="text-xs font-black uppercase tracking-widest text-white">Total Mensual</span>
+                         <span className="text-4xl font-black text-white tracking-tighter">{clp(pricing.totalMonthly)}</span>
+                      </div>
+                   </div>
+
+                   <a 
+                      href={waLink(`Hola, quiero armar mi horario con: ${selectedIds.map(id => PAES_SUBJECTS.find(s=>s.id===id).name).join(", ")}`)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`block w-full mt-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs text-center transition-all ${selectedIds.length > 0 ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}`}
+                   >
+                      INICIAR MATRÍCULA
+                   </a>
+                </div>
+             </div>
+
+          </div>
+        </div>
       </section>
 
-      {/* Call to Action Final */}
-      <div className="text-center py-20 bg-[#050505]">
-         <p className="text-slate-500 mb-6 font-medium">¿Aún con dudas?</p>
-         <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-emerald-400 font-black uppercase tracking-widest hover:text-emerald-300 transition-colors">
-            <FaWhatsapp text-xl /> Háblanos al WhatsApp
+      {/* ──────────────── F. FAQ (ELIMINAR OBJECIONES) ──────────────── */}
+      <section className="py-32 bg-slate-950 border-t border-white/5">
+        <div className="container mx-auto px-6 max-w-3xl">
+          <div className="text-center mb-16">
+             <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">
+                Despeja tus dudas
+             </h2>
+             <p className="text-slate-400 font-light">Todo lo que necesitas saber antes de dar el primer paso.</p>
+          </div>
+
+          <div className="space-y-4">
+             {PAES_FAQS.map((faq, i) => (
+                <div 
+                   key={i} 
+                   className={`border rounded-3xl transition-all ${activeFaq === i ? 'bg-white/5 border-white/10' : 'bg-transparent border-white/5 hover:border-white/10'}`}
+                >
+                   <button 
+                      onClick={() => setActiveFaq(activeFaq === i ? null : i)}
+                      className="w-full flex items-center justify-between p-7 text-left select-none"
+                   >
+                      <span className="text-lg font-bold text-white uppercase tracking-tight">{faq.q}</span>
+                      <FaChevronDown className={`transition-transform duration-300 text-blue-500 ${activeFaq === i ? 'rotate-180' : ''}`} />
+                   </button>
+                   <AnimatePresence>
+                      {activeFaq === i && (
+                         <motion.div 
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                         >
+                            <p className="px-7 pb-7 text-slate-400 leading-relaxed font-light">
+                               {faq.a}
+                            </p>
+                         </motion.div>
+                      )}
+                   </AnimatePresence>
+                </div>
+             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Strip */}
+      <section className="py-32 bg-gradient-to-b from-slate-950 to-blue-900/20 text-center px-6">
+         <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-10 leading-none">
+            TU CUPO <br /> TE ESPERA.
+         </h2>
+         <a 
+            href={waLink("Hola, quiero información sobre el Preuniversitario PAES 2026")} 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-4 px-12 py-6 bg-white text-slate-950 font-black rounded-[2rem] hover:bg-blue-400 hover:text-white transition-all shadow-2xl uppercase tracking-widest text-xs group"
+         >
+            Consultar Cupos Disponibles
+            <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
          </a>
-      </div>
+      </section>
 
     </div>
   );
 }
+
+// ──────────────── SUB-COMPONENTS ────────────────
+
+const FeatureCard = ({ icon, title, desc, color }) => (
+  <motion.div 
+    initial={{ opacity: 0, y: 10 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-10 hover:border-white/20 transition-all flex flex-col items-center text-center group"
+  >
+    <div className={`text-6xl mb-8 ${color} group-hover:scale-110 transition-transform`}>{icon}</div>
+    <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">{title}</h3>
+    <p className="text-slate-500 leading-relaxed font-light">{desc}</p>
+  </motion.div>
+);
+
+const PricingCard = ({ combo, recommended, waLink, index }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ delay: index * 0.1 }}
+    className={`relative p-12 rounded-[3rem] border-2 transition-all flex flex-col ${recommended ? 'bg-blue-600/10 border-blue-500 scale-105 shadow-2xl shadow-blue-500/10 z-10' : 'bg-slate-900/40 border-white/5'}`}
+  >
+    {recommended && (
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.3em] shadow-lg">
+         EL MÁS VOTADO
+      </div>
+    )}
+
+    <div className="mb-10">
+       <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-2">{combo.title}</h3>
+       <p className="text-xs font-black uppercase tracking-widest text-blue-400">{combo.subtitle}</p>
+    </div>
+
+    <div className="mb-10">
+       <span className="text-6xl font-black text-white tracking-tighter">{clp(combo.price)}</span>
+       <span className="text-xs font-black uppercase tracking-widest text-slate-600 ml-2">Men / Plan</span>
+    </div>
+
+    <ul className="space-y-4 mb-12 flex-1">
+       {combo.features.map((f, i) => (
+          <li key={i} className="flex items-start gap-4 text-slate-300 font-medium text-sm">
+             <FaCheckCircle className="text-blue-500 mt-1 shrink-0" /> {f}
+          </li>
+       ))}
+    </ul>
+
+    <a 
+      href={waLink(`Hola, quiero el ${combo.title}`)}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-xs text-center transition-all ${recommended ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20' : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'}`}
+    >
+      ELEGIR PACK
+    </a>
+  </motion.div>
+);

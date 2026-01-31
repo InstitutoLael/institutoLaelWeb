@@ -32,6 +32,7 @@ export const NAVIGATION = {
     main: [
         { name: "Nosotros", path: "/nosotros" },
         { name: "PAES", path: "/paes" },
+        { name: "LSCh", path: "/lsch" },
         { name: "Idiomas", path: "/idiomas" },
         { name: "Adultos", path: "/escuela-adultos" },
         { name: "Empresas", path: "/empresas" },

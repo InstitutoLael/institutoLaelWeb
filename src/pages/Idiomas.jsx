@@ -22,6 +22,7 @@ import {
   computeLangBundle,
   clp
 } from "../data/idiomas.js";
+import { TESTIMONIALS } from "../data/testimonials.js";
 
 const IDIOMAS_ROADMAP = [
   { title: "Diagnóstico", desc: "Test de nivelación y objetivos.", subinfo: "Día 1", icon: <BiWorld /> },
@@ -163,7 +164,87 @@ export default function Idiomas() {
         </div>
       </header>
 
-      {/* ──────────────── SECCIÓN 2: SELECTOR VISUAL ──────────────── */}
+      {/* ──────────────── SECCIÓN 2: TEACHERS (EXPERTOS) ──────────────── */}
+      <section className="py-20 bg-[#050505] border-b border-white/5">
+         <div className="container mx-auto px-6">
+            <div className="text-center mb-16">
+               <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                  Expertos <span className="text-blue-500">Nativos</span>
+               </h2>
+               <p className="text-xl text-slate-400 font-light max-w-2xl mx-auto">
+                  Aprende la cultura, no solo el idioma. Nuestros docentes viven lo que enseñan.
+               </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               {/* Javiera - English */}
+               <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:border-blue-500/30 transition-all group">
+                  <div className="flex items-center gap-4 mb-6">
+                     <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center text-3xl border border-blue-500/30">
+                        👩🏼‍🏫
+                     </div>
+                     <div>
+                        <h4 className="text-xl font-black text-white uppercase tracking-tight">Javiera</h4>
+                        <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">Head of English 🇺🇸</span>
+                     </div>
+                  </div>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                     "Mi foco es que pierdas el miedo. Corregimos pronunciación desde el día 1 para que suenes profesional, no como robot."
+                  </p>
+               </div>
+
+               {/* Fernanda - Korean */}
+               <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:border-pink-500/30 transition-all group">
+                  <div className="flex items-center gap-4 mb-6">
+                     <div className="w-16 h-16 rounded-full bg-pink-500/20 flex items-center justify-center text-3xl border border-pink-500/30">
+                        👩🏻‍🏫
+                     </div>
+                     <div>
+                        <h4 className="text-xl font-black text-white uppercase tracking-tight">Fernanda</h4>
+                        <span className="text-xs font-bold text-pink-400 uppercase tracking-widest">Lead Korean 🇰🇷</span>
+                     </div>
+                  </div>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                     "Usamos K-Pop y Dramas para entender el contexto real. El Coreano es jerarquía y respeto, y eso se enseña viviendo la cultura."
+                  </p>
+               </div>
+
+               {/* Diego - Spanish */}
+               <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:border-amber-500/30 transition-all group">
+                  <div className="flex items-center gap-4 mb-6">
+                     <div className="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center text-3xl border border-amber-500/30">
+                        👨🏻‍🏫
+                     </div>
+                     <div>
+                        <h4 className="text-xl font-black text-white uppercase tracking-tight">Diego</h4>
+                        <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">Spanish Coach 🇨🇱</span>
+                     </div>
+                  </div>
+                  <p className="text-slate-400 text-sm leading-relaxed">
+                     "Chilean Spanish is tricky. I'll help you navigate 'modismos', survive the Metro, and master business etiquette in Santiago."
+                  </p>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      {/* ──────────────── SECCIÓN 3: ROADMAP (TU VIAJE) ──────────────── */}
+      <section className="py-20 bg-[#020617] border-b border-white/5">
+         <div className="container mx-auto px-6">
+             <div className="text-center mb-16">
+               <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                  Tu Ruta de <span className="text-amber-500">Fluidez</span>
+               </h2>
+               <p className="text-slate-500">Metodología paso a paso sin rellenos.</p>
+            </div>
+            
+            <div className="max-w-4xl mx-auto">
+               <VisualRoadmap steps={IDIOMAS_ROADMAP} color="blue" />
+            </div>
+         </div>
+      </section>
+
+      {/* ──────────────── SECCIÓN 4: SELECTOR VISUAL ──────────────── */}
       <section id="lang-builder" className="py-24 bg-[#050505] border-t border-white/5">
          <div className="container mx-auto px-6">
             <div className="text-center mb-16">
@@ -261,31 +342,41 @@ export default function Idiomas() {
          </div>
       </section>
 
-      {/* ──────────────── SECCIÓN 3: POR QUÉ NOSOTROS ──────────────── */}
-      <section className="py-24 bg-[#020617] border-t border-white/5">
-         <div className="container mx-auto px-6 relative max-w-4xl text-center">
-            <div className="inline-block p-4 rounded-full bg-white/5 mb-6 text-4xl">🤝</div>
-            <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-8">
-               No estudies solo.
-            </h2>
-            <p className="text-xl md:text-2xl text-slate-400 font-light leading-relaxed mb-12">
-               No usamos apps automáticas. Aquí tienes un <strong className="text-white font-bold">profesor real</strong> y compañeros con quienes practicar. El idioma se vive, no se programa.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-left max-w-2xl mx-auto">
-               <div className="bg-white/[0.02] p-6 rounded-2xl border border-white/5">
-                  <h4 className="font-bold text-white mb-2 flex items-center gap-2"><FaHeadset className="text-blue-500"/> Feedback Real</h4>
-                  <p className="text-sm text-slate-500">Correcciones al instante sobre tu pronunciación y gramática.</p>
-               </div>
-               <div className="bg-white/[0.02] p-6 rounded-2xl border border-white/5">
-                  <h4 className="font-bold text-white mb-2 flex items-center gap-2"><FaUsers className="text-amber-500"/> Comunidad</h4>
-                  <p className="text-sm text-slate-500">Practica con pares de tu mismo nivel en un ambiente seguro.</p>
-               </div>
-            </div>
-         </div>
-      </section>
+       {/* ──────────────── SECCIÓN 5: RESULTADOS REALES ──────────────── */}
+       <section className="py-24 bg-[#020617] border-t border-white/5">
+          <div className="container mx-auto px-6">
+             <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                   Ellos ya <span className="text-blue-500">Hablan</span>
+                </h2>
+                <p className="text-xl text-slate-400 font-light">
+                   No te quedes con la duda. Mira lo que nuestros alumnos han logrado.
+                </p>
+             </div>
+
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {TESTIMONIALS.filter(t => t.tags?.includes('idiomas')).slice(0, 3).map((t, i) => (
+                   <div key={i} className="bg-white/[0.02] p-8 rounded-[2rem] border border-white/5 relative overflow-hidden flex flex-col">
+                      <div className="flex text-amber-500 mb-4 text-lg">
+                         {[...Array(t.rating)].map((_, i) => <FaStar key={i} />)}
+                      </div>
+                      <p className="text-slate-300 text-sm leading-relaxed mb-6 italic flex-1">"{t.quote}"</p>
+                      <div className="flex items-center gap-4 mt-auto">
+                         <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-xs font-black text-blue-400 border border-blue-500/30">
+                            {t.name.charAt(0)}
+                         </div>
+                         <div>
+                            <strong className="block text-white text-sm uppercase tracking-tight">{t.name}</strong>
+                            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t.program}</span>
+                         </div>
+                      </div>
+                   </div>
+                ))}
+             </div>
+          </div>
+       </section>
 
       <div className="pb-20"></div>
 
     </div>
   );
-}

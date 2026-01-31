@@ -111,66 +111,6 @@ export const LANGUAGES = [
     ],
     levels: ["A1 (Survival)", "A2", "B1 (Fluent)"],
     comingSoon: false,
-  },
-  {
-    id: "japones",
-    name: "Japonés Nihongo",
-    emoji: "🇯🇵",
-    color: "#dc2626", // Red
-    badge: "Próximamente",
-    summary: "Un viaje a través del Hiragana, Katakana y el fascinante mundo de los Kanji. Ideal para fans del anime y cultura nipona.",
-    features: [
-      "Escritura y caligrafía básica",
-      "Preparación examen JLPT N5",
-      "Cultura y tradiciones"
-    ],
-    levels: ["Inicial N5", "Básico N4"],
-    comingSoon: true,
-  },
-  {
-    id: "portugues",
-    name: "Portugués Brasil",
-    emoji: "🇧🇷",
-    color: "#22c55e", // Green
-    badge: "Próximamente",
-    summary: "Aprende el idioma más alegre del mundo. Enfocado en turismo, negocios en Latinoamérica y fluidez comunicativa.",
-    features: [
-      "Pronunciación y ritmo brasileño",
-      "Portugués para negocios",
-      "Diferencias con el español"
-    ],
-    levels: ["A1/A2 (Iniciación)", "B1 (Fluidez)"],
-    comingSoon: true,
-  },
-  {
-    id: "chino",
-    name: "Mandarín Negocios",
-    emoji: "🇨🇳",
-    color: "#ef4444", // Light Red
-    badge: "Próximamente",
-    summary: "Domina el idioma con mayor proyección comercial del mundo. Enfoque en tonos, pinyin y caracteres clave.",
-    features: [
-      "Sistema de tonos simplificado",
-      "Vocabulario de importaciones",
-      "Preparación examen HSK"
-    ],
-    levels: ["HSK 1", "HSK 2"],
-    comingSoon: true,
-  },
-  {
-    id: "lsch",
-    name: "Lengua de Señas (LSCh)",
-    emoji: "🤟",
-    color: "#0891b2", // Cyan
-    badge: "Inclusión Real",
-    summary: "Rompe barreras de comunicación. Aprende LSCh desde la cultura Sorda y contribuye a una sociedad más inclusiva.",
-    features: [
-      "Docentes Sordos y Co-docentes oyentes",
-      "Cultura y Gramática Sorda",
-      "Vocabulario técnico y cotidiano"
-    ],
-    levels: ["A1 (Básico)", "A2 (Intermedio)", "B1 (Fluidez)"],
-    comingSoon: false,
   }
 ];
 

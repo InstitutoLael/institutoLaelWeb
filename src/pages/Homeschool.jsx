@@ -20,6 +20,7 @@ import logoPartner from "../assets/img/Partners/LosOlivos.png";
 
 // DATA
 import { CONTACT_INFO } from "../data/contact.js";
+import { teachers } from "../data/teachers.js";
 import {
    ACADEMY_CONFIG,
    ALLIANCE,
@@ -249,7 +250,32 @@ export default function Academy() {
                         <MdOutlineVerifiedUser className="text-indigo-400" /> Colegio Partner Certificado
                      </div>
                   </div>
+            </div>
+         </section>
 
+         {/* ──────────────── 3.5. MENOTORES DE EXCELENCIA ──────────────── */}
+         <section className="py-24 bg-[#050505]">
+            <div className="container mx-auto px-6">
+               <div className="text-center mb-16">
+                  <span className="text-amber-500 font-bold tracking-[0.3em] uppercase text-[10px] mb-4 block">Equipo Docente</span>
+                  <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                     Mentores de <span className="text-amber-500">Vida</span>
+                  </h2>
+                  <p className="text-xl text-slate-400 font-light max-w-2xl mx-auto">
+                     Seleccionamos tutores que no solo dominan su materia, sino que comparten nuestros principios.
+                  </p>
+               </div>
+
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {teachers.filter(t => t.tags?.includes('paes') || t.tags?.includes('homeschool') || t.id === 'diego').slice(0, 4).map((t, i) => (
+                     <div key={i} className="bg-white/[0.02] border border-white/5 p-6 rounded-[2rem] hover:border-amber-500/30 transition-all group text-center">
+                        <div className="w-20 h-20 mx-auto rounded-full bg-white/5 flex items-center justify-center text-4xl mb-6 group-hover:scale-110 transition-transform">
+                           {t.id === 'diego' ? '👨🏻‍🏫' : t.id === 'javiera' ? '👩🏼‍🏫' : '🧑🏻‍🏫'}
+                        </div>
+                        <h4 className="text-lg font-black text-white uppercase tracking-tight mb-1">{t.name}</h4>
+                        <span className="text-[10px] font-bold text-amber-500 uppercase tracking-widest block mb-4">{t.subject || t.role}</span>
+                     </div>
+                  ))}
                </div>
             </div>
          </section>

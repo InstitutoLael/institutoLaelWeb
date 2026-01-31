@@ -14,6 +14,9 @@ import { MdSchool, MdOutlineWorkOutline, MdTimelapse } from "react-icons/md";
 
 // DATA
 import { PLANS, REGISTRATION_FEE, clp } from "../data/nivelacion.js";
+import { TESTIMONIALS } from "../data/testimonials.js";
+import { teachers } from "../data/teachers.js";
+import { FaStar } from "react-icons/fa";
 
 export default function EscuelaAdultos() {
    const { addToCart, openCart } = useCart();
@@ -129,7 +132,63 @@ export default function EscuelaAdultos() {
          </section>
 
          {/* ──────────────── 4. CTA FINAL ──────────────── */}
-         {/* ──────────────── 5. PRECIOS Y MATRÍCULA ──────────────── */}
+         {/* ──────────────── 4. MENTORES (EMPATÍA) ──────────────── */}
+         <section className="py-24 bg-[#050505] border-t border-white/5">
+            <div className="container mx-auto px-6">
+               <div className="text-center mb-16">
+                  <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                     Profes que te <span className="text-indigo-500">Entienden</span>
+                  </h2>
+                  <p className="text-xl text-slate-400 font-light max-w-2xl mx-auto">
+                     Sabemos que llevas años sin estudiar. No te preocupes, tenemos paciencia infinita.
+                  </p>
+               </div>
+
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                  {teachers.filter(t => t.tags?.includes('adultos') || t.name === 'Diego Chaparro' || t.name === 'Martín').slice(0, 2).map((t, i) => (
+                     <div key={i} className="bg-white/[0.02] border border-white/5 p-8 rounded-[2.5rem] flex items-center gap-6 group hover:border-indigo-500/30 transition-all">
+                        <div className="w-20 h-20 rounded-full bg-indigo-500/20 flex items-center justify-center text-4xl border border-indigo-500/30 shrink-0">
+                           {t.id === 'diego' ? '👨🏻‍🏫' : '🧑🏻‍🏫'}
+                        </div>
+                        <div>
+                           <h4 className="text-xl font-black text-white uppercase tracking-tight">{t.name}</h4>
+                           <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest block mb-2">{t.role}</span>
+                           <p className="text-slate-400 text-xs italic">"{t.bio.substring(0, 80)}..."</p>
+                        </div>
+                     </div>
+                  ))}
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 5. HISTORIAS DE ÉXITO ──────────────── */}
+         <section className="py-24 bg-[#020617] border-y border-white/5">
+            <div className="container mx-auto px-6">
+                <div className="text-center mb-16">
+                  <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                     Sí se puede.
+                  </h2>
+                  <p className="text-slate-500">Muchos pensaron que no podrían. Hoy tienen su licencia.</p>
+               </div>
+
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {TESTIMONIALS.filter(t => t.tags?.includes('adultos') || t.program.includes('Laboral')).slice(0, 3).map((t, i) => (
+                     <div key={i} className="bg-white/[0.02] p-8 rounded-[2rem] border border-white/5 relative overflow-hidden flex flex-col hover:bg-white/[0.04] transition-colors">
+                        <div className="flex text-amber-500 mb-4 text-xs">
+                           {[...Array(5)].map((_, i) => <FaStar key={i} />)}
+                        </div>
+                        <p className="text-slate-300 text-sm leading-relaxed mb-6 italic flex-1">"{t.quote}"</p>
+                        <div className="border-t border-white/5 pt-4">
+                           <strong className="block text-white text-sm uppercase tracking-tight">{t.name}</strong>
+                           <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{t.program}</span>
+                        </div>
+                     </div>
+                  ))}
+               </div>
+            </div>
+         </section>
+
+         {/* ──────────────── 6. PRECIOS Y MATRÍCULA ──────────────── */}
          <section id="planes" className="py-24 bg-[#050505] relative border-t border-white/5">
              <div className="container mx-auto px-6">
                  <div className="text-center mb-16 max-w-3xl mx-auto">

@@ -155,35 +155,142 @@ export default function Paes() {
         </div>
       </header>
 
-      {/* ──────────────── SECCIÓN 2: METODOLOGÍA (3 ICONOS) ──────────────── */}
+      {/* ──────────────── SECCIÓN 2: MUNDOS DE ESTUDIO (SUBJECT CLUSTERS) ──────────────── */}
       <section className="py-20 bg-[#020617] border-y border-white/5">
-        <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
-          {[
-            { 
-              icon: <BiChalkboard />, 
-              title: "Clases en Vivo", 
-              desc: "Interactúa en tiempo real. Si faltas, todo queda grabado en tu Aula Virtual." 
-            },
-            { 
-              icon: <MdQuiz />, 
-              title: "Ensayos y Simulacros", 
-              desc: "Plataforma idéntica a la real. Mide tu puntaje y detecta tus fallas." 
-            },
-            { 
-              icon: <FaUserGraduate />, 
-              title: "Orientación Vocacional", 
-              desc: "No solo te preparamos para la prueba, te ayudamos a elegir tu carrera." 
-            }
-          ].map((item, i) => (
-            <div key={i} className="text-center p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-indigo-500/30 transition-all group">
-              <div className="w-20 h-20 mx-auto mb-6 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-4xl text-indigo-400 group-hover:scale-110 transition-transform">
-                {item.icon}
-              </div>
-              <h3 className="text-xl font-black text-white mb-3 uppercase tracking-tight">{item.title}</h3>
-              <p className="text-slate-400 leading-relaxed">{item.desc}</p>
+         <div className="container mx-auto px-6">
+            <div className="text-center mb-16">
+               <h2 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                  Explora tus <span className="text-indigo-500">Mundos</span>
+               </h2>
+               <p className="text-xl text-slate-400 font-light">
+                  Cada área tiene su propia estrategia. Descubre cómo abordamos cada desafío.
+               </p>
             </div>
-          ))}
-        </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               {/* Mundo Matemático */}
+               <div className="bg-gradient-to-br from-indigo-900/10 to-indigo-900/0 border border-indigo-500/20 p-8 rounded-[2.5rem] relative overflow-hidden group hover:border-indigo-500/50 transition-all">
+                  <div className="absolute top-0 right-0 p-8 opacity-10 text-9xl group-hover:scale-110 transition-transform">📐</div>
+                  <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4 flex items-center gap-3">
+                     <span className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-sm">M</span>
+                     Matemática
+                  </h3>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                     Olvídate de memorizar fórmulas. Aquí aprendes lógica, patrones y atajos para resolver en 2 minutos.
+                  </p>
+                  <ul className="space-y-2 mb-8">
+                     <li className="flex items-center gap-2 text-indigo-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> M1: Fundamentos</li>
+                     <li className="flex items-center gap-2 text-indigo-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> M2: Ingeniería</li>
+                  </ul>
+               </div>
+
+               {/* Mundo Ciencias */}
+               <div className="bg-gradient-to-br from-teal-900/10 to-teal-900/0 border border-teal-500/20 p-8 rounded-[2.5rem] relative overflow-hidden group hover:border-teal-500/50 transition-all">
+                  <div className="absolute top-0 right-0 p-8 opacity-10 text-9xl group-hover:scale-110 transition-transform">🧬</div>
+                  <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4 flex items-center gap-3">
+                     <span className="w-10 h-10 rounded-full bg-teal-500 flex items-center justify-center text-sm">C</span>
+                     Ciencias
+                  </h3>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                     Biología, Física y Química integradas. Entiende el fenómeno, no solo el dato de memoria.
+                  </p>
+                  <ul className="space-y-2 mb-8">
+                     <li className="flex items-center gap-2 text-teal-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> Mención Biología</li>
+                     <li className="flex items-center gap-2 text-teal-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> Mención Física</li>
+                  </ul>
+               </div>
+
+               {/* Mundo Lenguaje */}
+               <div className="bg-gradient-to-br from-amber-900/10 to-amber-900/0 border border-amber-500/20 p-8 rounded-[2.5rem] relative overflow-hidden group hover:border-amber-500/50 transition-all">
+                  <div className="absolute top-0 right-0 p-8 opacity-10 text-9xl group-hover:scale-110 transition-transform">📚</div>
+                  <h3 className="text-2xl font-black text-white uppercase tracking-tight mb-4 flex items-center gap-3">
+                     <span className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-sm">L</span>
+                     Lenguaje
+                  </h3>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                     Comprensión lectora estratégica. Aprende a filtrar información y encontrar la respuesta correcta.
+                  </p>
+                  <ul className="space-y-2 mb-8">
+                     <li className="flex items-center gap-2 text-amber-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> Lectura Crítica</li>
+                     <li className="flex items-center gap-2 text-amber-300 text-xs font-bold uppercase tracking-widest"><FaCheck /> Vocabulario</li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </section>* ──────────────── SECCIÓN 3: EQUIPO DOCENTE (NUEVO) ──────────────── */}
+      <section className="py-24 bg-[#050505]">
+         <div className="container mx-auto px-6">
+            <div className="text-center mb-16">
+               <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                  Profesores <span className="text-indigo-500">Expertos</span>
+               </h2>
+               <p className="text-xl text-slate-400 font-light">
+                  No te enseñan estudiantes universitarios. <strong className="text-white">Te enseñan profesionales.</strong>
+               </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+               {/* Diego (Math) */}
+               <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:border-indigo-500/30 transition-all group">
+                  <div className="flex items-center gap-4 mb-6">
+                     <div className="w-16 h-16 rounded-full bg-indigo-500/20 flex items-center justify-center text-2xl border border-indigo-500/30">
+                        👨🏻‍🏫
+                     </div>
+                     <div>
+                        <h4 className="text-xl font-black text-white uppercase tracking-tight">Diego Chaparro</h4>
+                        <span className="text-xs font-bold text-indigo-400 uppercase tracking-widest">Director & Matemáticas</span>
+                     </div>
+                  </div>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                     "Más que fórmulas, te enseño estrategia. La PAES es un juego de lógica y vamos a hackearlo juntos."
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Estrategia M1/M2</span>
+                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Ingeniería</span>
+                  </div>
+               </div>
+
+               {/* Martín (Science) */}
+               <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:border-blue-500/30 transition-all group">
+                  <div className="flex items-center gap-4 mb-6">
+                     <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center text-2xl border border-blue-500/30">
+                        🧬
+                     </div>
+                     <div>
+                        <h4 className="text-xl font-black text-white uppercase tracking-tight">Martín</h4>
+                        <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">Ciencias (Bio/Quim)</span>
+                     </div>
+                  </div>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                     "Transformamos materias complejas en historias simples. Entender el 'por qué' es la clave para no memorizar."
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Biología</span>
+                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Química</span>
+                  </div>
+               </div>
+
+               {/* Javiera (Lenguaje - Placeholder based on teachers.js) */}
+               <div className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] hover:border-amber-500/30 transition-all group">
+                  <div className="flex items-center gap-4 mb-6">
+                     <div className="w-16 h-16 rounded-full bg-amber-500/20 flex items-center justify-center text-2xl border border-amber-500/30">
+                        📚
+                     </div>
+                     <div>
+                        <h4 className="text-xl font-black text-white uppercase tracking-tight">Javiera Paz</h4>
+                        <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">Lenguaje & Redacción</span>
+                     </div>
+                  </div>
+                  <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                     "Te enseñaré a leer entre líneas. La comprensión lectora es la habilidad #1 para la universidad y la vida."
+                  </p>
+                  <div className="flex gap-2 flex-wrap">
+                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Lectura Crítica</span>
+                     <span className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-black uppercase text-slate-500">Vocabulario</span>
+                  </div>
+               </div>
+            </div>
+         </div>
       </section>
 
       {/* ──────────────── SECCIÓN 3: PRECIOS Y PLANES (PACKS FIRST) ──────────────── */}
@@ -310,7 +417,43 @@ export default function Paes() {
         </div>
       </section>
 
-      {/* ──────────────── SECCIÓN 4: FAQ (PREGUNTAS) ──────────────── */}
+      {/* ──────────────── SECCIÓN 4: MURO DE ÉXITO (TESTIMONIOS) ──────────────── */}
+      <section className="py-24 bg-[#020617] border-t border-white/5">
+         <div className="container mx-auto px-6">
+            <div className="text-center mb-16">
+               <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                  Resultados <span className="text-emerald-500">Reales</span>
+               </h2>
+               <p className="text-xl text-slate-400 font-light">
+                  Nuestros alumnos hoy están en la Chile, la Cato, la USACH y más.
+               </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+               {TESTIMONIALS.filter(t => t.tags?.includes('paes') || t.program.includes('PAES')).map((t, i) => (
+                  <div key={i} className="bg-white/[0.02] p-8 rounded-[2rem] border border-white/5 relative overflow-hidden">
+                     <div className="absolute top-0 right-0 p-6 opacity-10 text-6xl text-white font-serif">"</div>
+                     <div className="flex items-center gap-2 mb-4">
+                        {[...Array(5)].map((_, stars) => <FaStar key={stars} className="text-amber-500 text-xs" />)}
+                     </div>
+                     <p className="text-slate-300 text-sm leading-relaxed mb-6 font-medium relative z-10">"{t.quote}"</p>
+                     
+                     <div className="flex items-center gap-4 border-t border-white/5 pt-4">
+                        <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-bold text-xs text-white">
+                           {t.name.substring(0,2)}
+                        </div>
+                        <div>
+                           <strong className="block text-white text-sm font-black uppercase tracking-wide">{t.name}</strong>
+                           <span className="text-xs text-slate-500">{t.program} {t.score && `• ${t.score}`}</span>
+                        </div>
+                     </div>
+                  </div>
+               ))}
+            </div>
+         </div>
+      </section>
+
+      {/* ──────────────── SECCIÓN 5: FAQ (PREGUNTAS) ──────────────── */}
       <section className="py-24 bg-[#020617] border-t border-white/5">
          <div className="container mx-auto px-6 max-w-2xl">
             <h2 className="text-3xl font-black text-center text-white uppercase tracking-tighter mb-12">Preguntas Frecuentes</h2>

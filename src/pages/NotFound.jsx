@@ -13,12 +13,13 @@ export default function NotFound() {
           <FaCompass className="text-4xl text-indigo-400 animate-pulse" />
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase">
-          ¡Ups! <span className="text-indigo-500">Te perdiste</span> en el campus
+        <h1 className="text-4xl md:text-5xl font-black mb-4 tracking-tighter uppercase leading-tight">
+          Te has salido de la <span className="text-indigo-500">Órbita</span>
         </h1>
         
         <p className="text-slate-400 text-lg mb-10 leading-relaxed">
-          La página que buscas no existe o se ha movido de aula. Pero no te preocupes, siempre hay un camino de vuelta.
+          Esta coordenada no existe en nuestro sistema solar educativo. 
+          Vuelve al Centro de Mando antes de que te pierdas en el espacio profundo.
         </p>
 
         <Link

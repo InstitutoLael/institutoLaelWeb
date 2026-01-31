@@ -1,57 +1,62 @@
-import { routesMap } from "./routesMap";
 import {
     FaGraduationCap, FaGlobeAmericas, FaHandsHelping, FaBookReader, FaRocket,
-    FaInstagram, FaYoutube, FaLinkedin
+    FaInstagram, FaYoutube, FaLinkedin, FaShieldAlt, FaBriefcase, FaUsers, FaInfoCircle
 } from "react-icons/fa";
-
-// UI Metadata for styling the menu
-const UI_META = {
-    "/paes": { icon: "FaGraduationCap", color: "text-cyan-400" },
-    "/aula": { icon: "FaBookReader", color: "text-blue-400" },
-    "/homeschool": { icon: "FaRocket", color: "text-rose-400" },
-    "/idiomas": { icon: "FaGlobeAmericas", color: "text-emerald-400" },
-    "/lsch": { icon: "FaHandsHelping", color: "text-purple-400" },
-    "/escuela-adultos": { icon: "FaBookReader", color: "text-amber-400" },
-    "/empresas": { icon: "FaRocket", color: "text-slate-400" }
-};
-
-// Categorize routes for MegaMenu
-const categorizedMenu = {};
-routesMap.forEach(item => {
-    // Skip if not in UI_META (safety) or explicit exclusions
-    if (!categorizedMenu[item.category]) {
-        categorizedMenu[item.category] = [];
-    }
-    categorizedMenu[item.category].push({
-        ...item,
-        ...UI_META[item.path]
-    });
-});
 
 export const NAVIGATION = {
     main: [
-        { name: "Nosotros", path: "/nosotros" },
+        { name: "Inicio", path: "/" },
         { name: "PAES", path: "/paes" },
-        { name: "LSCh", path: "/lsch" },
         { name: "Idiomas", path: "/idiomas" },
-        { name: "Adultos", path: "/escuela-adultos" },
+        { name: "Inclusión", path: "/lsch" },
+        { name: "Nivelación", path: "/nivelacion" },
         { name: "Empresas", path: "/empresas" },
     ],
-    // Hierarchical MegaMenu
-    megaMenu: categorizedMenu,
+    
+    // Categorized for Mobile Menu or MegaMenu
+    categories: {
+        academic: [
+            { name: "Preu PAES", path: "/paes", icon: FaGraduationCap },
+            { name: "Idiomas", path: "/idiomas", icon: FaGlobeAmericas },
+            { name: "Signos (LSCh)", path: "/lsch", icon: FaHandsHelping },
+            { name: "Nivelación Adultos", path: "/nivelacion", icon: FaBookReader },
+            { name: "Homeschool", path: "/homeschool", icon: FaRocket },
+            { name: "Catálogo", path: "/programas", icon: FaBookReader },
+        ],
+        institutional: [
+            { name: "Sobre Nosotros", path: "/nosotros", icon: FaInfoCircle },
+            { name: "Convenios", path: "/convenios", icon: FaShieldAlt },
+            { name: "Trabaja con Nosotros", path: "/trabaja", icon: FaBriefcase },
+            { name: "Cuerpo Docente", path: "/docentes", icon: FaUsers },
+            { name: "Recursos", path: "/recursos", icon: FaBookReader },
+        ],
+        support: [
+            { name: "Contacto", path: "/contacto" },
+            { name: "Aula Virtual", path: "/aula" },
+            { name: "Términos y Condiciones", path: "/terminos" },
+            { name: "Privacidad", path: "/privacidad" }
+        ]
+    },
 
     footer: {
-        programs: routesMap.map(r => ({ name: r.title, path: r.path })), // All programs
-        institution: [
-            { name: "Nuestra Historia", path: "/nosotros" },
-            { name: "Servicios Empresas", path: "/empresas" },
-            { name: "Alianzas y Convenios", path: "/convenios" },
-            { name: "Bolsa de Trabajo", path: "/trabaja" },
-            { name: "Soporte y Ayuda", path: "/contacto" },
+        programs: [
+            { name: "Preu PAES", path: "/paes" },
+            { name: "Idiomas", path: "/idiomas" },
+            { name: "LSCh Inclusión", path: "/lsch" },
+            { name: "Nivelación Estudios", path: "/nivelacion" },
+            { name: "Project Homeschool", path: "/homeschool" },
+        ],
+        company: [
+            { name: "Nosotros", path: "/nosotros" },
+            { name: "Empresas", path: "/empresas" },
+            { name: "Convenios", path: "/convenios" },
+            { name: "Docentes", path: "/docentes" },
+            { name: "Trabaja con nosotros", path: "/trabaja" },
         ],
         legal: [
-            { name: "Términos", path: "/terminos" },
-            { name: "Privacidad", path: "/privacidad" },
+            { name: "Términos y Condiciones", path: "/terminos" },
+            { name: "Políticas de Privacidad", path: "/privacidad" },
+            { name: "Soporte", path: "/contacto" },
         ]
     },
 
@@ -63,6 +68,6 @@ export const NAVIGATION = {
 
     action: {
         aula: { name: "Aula Virtual", path: "/aula" },
-        whatsapp: { url: "https://wa.me/56964626568", label: "Consultas" }
+        whatsapp: { url: "https://wa.me/56964626568", label: "WhatsApp Directo" }
     }
 };

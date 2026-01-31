@@ -140,15 +140,15 @@ export default function App() {
                 <Route path="/trabaja" element={<Trabaja />} />
                 <Route path="/contacto" element={<Contacto />} />
                 <Route path="/docentes" element={<Docentes />} />
-                {/* <Route path="/login" element={<Login />} /> */}
-                {/* <Route
+                <Route path="/login" element={<Login />} />
+                <Route
                   path="/aula"
                   element={
                     <ProtectedRoute>
                       <Aula />
                     </ProtectedRoute>
                   }
-                /> */}
+                />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/gracias" element={<Gracias />} />
                 <Route path="/terminos" element={<Terminos />} />

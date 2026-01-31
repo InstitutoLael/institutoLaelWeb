@@ -1,455 +1,435 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-   FaBuilding, FaChartLine, FaHandshake, FaUserTie,
-   FaWhatsapp, FaEnvelope, FaCalculator, FaArrowRight,
-   FaAward, FaTrophy, FaRocket, FaCheckCircle, FaMoneyBillWave,
-   FaUsers, FaHeartbeat, FaLeaf
+import { 
+  FaBuilding, 
+  FaChartLine, 
+  FaHandshake, 
+  FaCalculator, 
+  FaWhatsapp, 
+  FaArrowRight, 
+  FaCheckCircle, 
+  FaUsers, 
+  FaRocket, 
+  FaFileAlt,
+  FaShieldAlt,
+  FaChartBar,
+  FaCogs,
+  FaBriefcase
 } from "react-icons/fa";
-import { MdVerified, MdCompareArrows } from "react-icons/md";
-import { BsLightningChargeFill, BsArrowRepeat } from "react-icons/bs";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, AreaChart, Area } from "recharts";
-import SEOHead from "../components/SEOHead.jsx";
-
-// ASSETS
-import logoBlanco from "../assets/img/Logos/lael-inst-blanco.png";
+import { MdVerified, MdBusinessCenter } from "react-icons/md";
 
 // DATA
-import {
-   SERVICE_LINES,
-   EMP_PACKS,
-   WAPP_INTL,
-   calcQuote,
-   clp
+import { 
+  SERVICE_LINES, 
+  EMP_PACKS, 
+  calcQuote, 
+  clp, 
+  WAPP_INTL 
 } from "../data/empresas.js";
 
-// ANIMATIONS
-const fadeInUp = {
-   hidden: { opacity: 0, y: 30 },
-   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-};
+// COMPONENTS
+import SEOHead from "../components/SEOHead.jsx";
 
+export default function Empresas() {
+  // Configurator State
+  const [selectedServiceId, setSelectedServiceId] = useState("ingles");
+  const [headcount, setHeadcount] = useState(10);
+  const [months, setMonths] = useState(3);
+  const [modality, setModality] = useState("online");
+  const [quote, setQuote] = useState(null);
 
-export default function Business() {
-   // Calculator State
-   const [selectedServiceId, setSelectedServiceId] = useState("ingles");
-   const [headcount, setHeadcount] = useState(10);
-   const [months, setMonths] = useState(3);
-   const [modality, setModality] = useState("online");
-   const [quote, setQuote] = useState(null);
-   const [viewMode, setViewMode] = useState("financial"); // 'financial' | 'impact'
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-   useEffect(() => { window.scrollTo(0, 0); }, []);
+  // Recalculate quote
+  useEffect(() => {
+    const result = calcQuote({
+      lineId: selectedServiceId,
+      headcount: Number(headcount),
+      durationMonths: Number(months),
+      modality: modality
+    });
+    setQuote(result);
+  }, [selectedServiceId, headcount, months, modality]);
 
-   // Recalculate whenever inputs change
-   useEffect(() => {
-      const result = calcQuote({
-         lineId: selectedServiceId,
-         headcount: Number(headcount),
-         durationMonths: Number(months),
-         modality: modality
-      });
-      setQuote(result);
-   }, [selectedServiceId, headcount, months, modality]);
+  const handleWappClick = (customMsg = null) => {
+    if (!quote && !customMsg) return;
+    
+    let msg = customMsg;
+    if (!msg) {
+      msg = `Hola Lael Corporate. Me interesa una propuesta para:\n\n` +
+            `📌 Servicio: ${quote.service.label}\n` +
+            `👥 Equipo: ${headcount} personas\n` +
+            `⏳ Plazo: ${months} meses (${modality})\n` +
+            `💰 Inversión mensual p/p: ${clp(quote.financials.perPersonMonth)}\n` +
+            `🚀 ROI Proyectado: ${quote.impact.totalROI.toFixed(1)}x\n\n` +
+            `Quedo atento a su contacto técnico.`;
+    }
+    
+    window.open(`https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(msg)}`, '_blank');
+  };
 
-   const handleWappClick = () => {
-      if (!quote) return;
-      const msg = `Hola Lael Corporate. Cotización Web Experience 2.0:%0A%0A` +
-         `📌 *Servicio:* ${quote.service.label}%0A` +
-         `👥 *Equipo:* ${headcount} p.%0A` +
-         `⏳ *Duración:* ${months} meses (${modality})%0A` +
-         `💰 *Total Estimado:* ${clp(quote.financials.total)} + IVA%0A` +
-         `🚀 *ROI Proyectado:* ${(quote.impact.totalROI).toFixed(1)}x%0A` +
-         `Deseo agendar una consultoría de impacto.`;
-      window.open(`https://wa.me/${WAPP_INTL}?text=${msg}`, '_blank');
-   };
+  const scrollToSection = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-   const scrollToCalculator = () => {
-      document.getElementById('cotizador').scrollIntoView({ behavior: 'smooth' });
-   };
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-indigo-500/30 overflow-x-hidden">
+      <SEOHead 
+        title="Lael Corporate | Capacitación B2B con ROI Medible" 
+        description="Soluciones de capacitación para empresas con franquicia SENCE. Inglés, LSCh y Beneficios Familiares con retorno inversión garantizado."
+      />
 
-   return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30 overflow-x-hidden">
-         <SEOHead title="Lael Corporate | B2B Experience 2.0" description="ROI proyectado, capacitación de élite y beneficios educativos de alto impacto." />
+      {/* ──────────────── 1. HERO SECTION (B2B TECH) ──────────────── */}
+      <section className="relative min-h-[90vh] flex items-center justify-center pt-32 pb-24 px-6 overflow-hidden bg-slate-950">
+        {/* Deep Slate/Indigo Background */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#020617_100%)] z-0" />
+        <div className="absolute top-0 right-0 w-full h-full bg-[url('/textures/grid.svg')] opacity-10 pointer-events-none" />
+        
+        <div className="container mx-auto max-w-5xl text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-10 shadow-xl"
+          >
+             <MdVerified className="animate-pulse" /> Soluciones B2B de Alto Impacto
+          </motion.div>
 
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-6xl md:text-9xl font-black text-white tracking-tighter uppercase leading-[0.85] mb-8"
+          >
+            POTENCIA TU <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-white to-emerald-400">
+               CAPITAL HUMANO.
+            </span>
+          </motion.h1>
 
-         {/* ──────────────── 1. HERO RE-ENGINEERED ──────────────── */}
-         <header className="relative min-h-[90vh] flex items-center overflow-hidden">
-            {/* Background Architecture */}
-            <div className="absolute inset-0 z-0">
-               <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_20%,_rgba(99,102,241,0.15),transparent)]"></div>
-               <div className="absolute bottom-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_80%,_rgba(251,191,36,0.05),transparent)]"></div>
-               <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]"></div>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-lg md:text-2xl text-slate-400 font-light max-w-3xl mx-auto mb-12 leading-relaxed"
+          >
+            Capacitación estratégica con franquicia SENCE y ROI medible. <br className="hidden md:block" />
+            Optimizamos el rendimiento de tu equipo con resultados basados en datos.
+          </motion.p>
+
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            <motion.button
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              onClick={() => scrollToSection('cotizador')}
+              className="px-10 py-5 bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-2xl transition-all shadow-2xl shadow-indigo-600/30 uppercase tracking-widest text-sm w-full md:w-auto"
+            >
+              SIMULAR PRESUPUESTO
+            </motion.button>
+            
+            {/* Trust Badges */}
+            <div className="flex items-center gap-8 text-[9px] font-black uppercase tracking-widest text-slate-500 border-l border-white/10 pl-8">
+               <div className="flex flex-col items-center gap-2">
+                  <FaFileAlt className="text-lg text-slate-400" />
+                  Factura Exenta
+               </div>
+               <div className="flex flex-col items-center gap-2">
+                  <FaShieldAlt className="text-lg text-slate-400" />
+                  Código SENCE
+               </div>
+               <div className="flex flex-col items-center gap-2">
+                  <FaChartBar className="text-lg text-slate-400" />
+                  Reportes ROI
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────── 2. GRID DE SOLUCIONES (SERVICES) ──────────────── */}
+      <section className="py-32 bg-white">
+         <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-24">
+               <h2 className="text-4xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter mb-4">Soluciones de <span className="text-indigo-600">Aprendizaje</span></h2>
+               <p className="text-slate-500 font-medium text-lg">Programas diseñados para el mundo corporativo moderno.</p>
             </div>
 
-            <div className="container mx-auto px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center pt-10">
-               <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-                  <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-[0.2em] mb-8">
-                     <MdVerified className="animate-pulse" /> Corporate Solution 2.0
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+               {SERVICE_LINES.map((service, i) => (
+                  <motion.div 
+                     key={service.id}
+                     initial={{ opacity: 0, y: 20 }}
+                     whileInView={{ opacity: 1, y: 0 }}
+                     transition={{ delay: i * 0.1 }}
+                     className="group bg-slate-50 border border-slate-200 p-10 rounded-[2.5rem] hover:bg-white hover:shadow-2xl hover:shadow-slate-200 transition-all border-b-4"
+                     style={{ borderBottomColor: service.brandColor }}
+                  >
+                     <div className="text-5xl mb-8 grayscale group-hover:grayscale-0 transition-all duration-500">{service.icon}</div>
+                     <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight mb-4 group-hover:text-indigo-600 transition-colors">{service.label}</h3>
+                     <p className="text-sm text-slate-500 leading-relaxed font-medium">
+                        {service.desc}
+                     </p>
+                     <div className="mt-10 pt-8 border-t border-slate-200 flex items-center justify-between">
+                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Capacitación Pro</span>
+                        <FaArrowRight className="text-slate-300 group-hover:text-indigo-500 group-hover:translate-x-2 transition-all" />
+                     </div>
+                  </motion.div>
+               ))}
+            </div>
+         </div>
+      </section>
+
+      {/* ──────────────── 3. EL COTIZADOR (JOY RECENT) ──────────────── */}
+      <section id="cotizador" className="py-32 bg-slate-900 relative">
+         <div className="absolute inset-0 bg-[url('/textures/noise.png')] opacity-20 pointer-events-none" />
+         
+         <div className="container mx-auto px-6 max-w-7xl">
+            <div className="text-center mb-20 relative z-10">
+               <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-4">Explorador de <span className="text-emerald-500">Valor</span></h2>
+               <p className="text-slate-400 font-medium">Simula tu presupuesto y proyecta el impacto en tu organización.</p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
+               
+               {/* CONTROLS (LEFT PANEL) */}
+               <div className="lg:col-span-5 bg-white/5 backdrop-blur-3xl border border-white/10 p-10 md:p-14 rounded-[3rem] shadow-2xl">
+                  <div className="space-y-12">
+                     {/* 1. Selector de Servicio */}
+                     <div>
+                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6">Línea de Servicio</label>
+                        <div className="grid grid-cols-2 gap-3">
+                           {SERVICE_LINES.map(s => (
+                              <button
+                                 key={s.id}
+                                 onClick={() => setSelectedServiceId(s.id)}
+                                 className={`p-4 rounded-xl border text-left transition-all ${selectedServiceId === s.id ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg' : 'bg-white/5 border-white/5 text-slate-400 hover:border-white/10'}`}
+                              >
+                                 <div className="text-xl mb-1">{s.icon}</div>
+                                 <div className="text-[10px] font-black uppercase leading-tight">{s.label}</div>
+                              </button>
+                           ))}
+                        </div>
+                     </div>
+
+                     {/* 2. Slider de Personas */}
+                     <div>
+                        <div className="flex justify-between items-center mb-4">
+                           <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Headcount</label>
+                           <span className="text-2xl font-black text-white">{headcount} <span className="text-[10px] text-slate-500">PERS.</span></span>
+                        </div>
+                        <input 
+                           type="range" min="5" max="100" step="1" 
+                           value={headcount}
+                           onChange={(e) => setHeadcount(e.target.value)}
+                           className="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-indigo-500"
+                        />
+                        <div className="flex justify-between mt-2 text-[9px] font-black text-slate-600 uppercase">
+                           <span>5 min.</span>
+                           <span>100+ corporativo</span>
+                        </div>
+                     </div>
+
+                     {/* 3. Slider de Duración */}
+                     <div>
+                        <div className="flex justify-between items-center mb-4">
+                           <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Duración</label>
+                           <span className="text-2xl font-black text-white">{months} <span className="text-[10px] text-slate-500">MESES</span></span>
+                        </div>
+                        <input 
+                           type="range" min="1" max="12" step="1" 
+                           value={months}
+                           onChange={(e) => setMonths(e.target.value)}
+                           className="w-full h-1.5 bg-white/10 rounded-full appearance-none cursor-pointer accent-emerald-500"
+                        />
+                        <div className="flex justify-between mt-2 text-[9px] font-black text-slate-600 uppercase">
+                           <span>1 mes</span>
+                           <span>Anual</span>
+                        </div>
+                     </div>
+
+                     {/* 4. Modalidad Toggle */}
+                     <div>
+                        <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Modalidad</label>
+                        <div className="flex p-1 bg-black/40 rounded-xl border border-white/5">
+                           {['online', 'onsite'].map(m => (
+                              <button
+                                 key={m}
+                                 onClick={() => setModality(m)}
+                                 className={`flex-1 py-3 rounded-lg text-[10px] font-black uppercase transition-all ${modality === m ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                              >
+                                 {m === 'online' ? 'Remoto / Zoom' : 'Presencial / In-house'}
+                              </button>
+                           ))}
+                        </div>
+                     </div>
                   </div>
+               </div>
 
-                  <h1 className="text-6xl md:text-8xl font-serif font-black mb-6 leading-[0.9] tracking-tight">
-                     Tu Equipo, <br />
-                     <span className="bg-gradient-to-r from-white via-indigo-200 to-indigo-500 bg-clip-text text-transparent">Tu Activo.</span>
-                  </h1>
+               {/* FACTURA PROYECTADA (RIGHT PANEL) */}
+               <div className="lg:col-span-7 bg-white p-10 md:p-16 rounded-[3rem] shadow-2xl flex flex-col justify-between h-full border border-slate-200">
+                  <AnimatePresence mode="wait">
+                     {quote && (
+                        <motion.div
+                           key={`${selectedServiceId}-${headcount}-${months}-${modality}`}
+                           initial={{ opacity: 0, x: 20 }}
+                           animate={{ opacity: 1, x: 0 }}
+                           exit={{ opacity: 0, x: -20 }}
+                           className="w-full"
+                        >
+                           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 pb-12 border-b border-slate-100">
+                              <div>
+                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-2">Presupuesto Estimado</span>
+                                 <h3 className="text-xl font-black text-slate-900 uppercase">{quote.service.label}</h3>
+                              </div>
+                              <div className="text-right">
+                                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-1">Costo p/p Mes</span>
+                                 <div className="text-3xl font-black text-indigo-600">{clp(quote.financials.perPersonMonth)}</div>
+                              </div>
+                           </div>
 
-                  <p className="text-xl text-slate-400 mb-10 leading-relaxed max-w-xl">
-                     Capacitación corporativa que se paga sola. Aumenta la retención, mejora el clima laboral y maximiza la productividad con beneficios tributarios (SENCE).
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+                              <div>
+                                 <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-6">Detalle Financiero</span>
+                                 <div className="space-y-4">
+                                    <div className="flex justify-between text-sm font-medium">
+                                       <span className="text-slate-500">Inversión Bruta</span>
+                                       <span className="text-slate-900 line-through opacity-40">{clp(quote.financials.totalBeforeDiscount)}</span>
+                                    </div>
+                                    <div className="flex justify-between text-sm font-black">
+                                       <span className="text-emerald-600">Ahorro Vol. ({quote.financials.discountPercent}%)</span>
+                                       <span className="text-emerald-600">-{clp(quote.financials.discountAmount)}</span>
+                                    </div>
+                                    <div className="pt-4 border-t border-slate-100 flex justify-between items-end">
+                                       <span className="text-xs font-black uppercase text-slate-900">Total Neto</span>
+                                       <span className="text-4xl font-black text-slate-900 tracking-tighter">{clp(quote.financials.total)}</span>
+                                    </div>
+                                 </div>
+                              </div>
+
+                              <div className="bg-emerald-50 p-8 rounded-3xl border border-emerald-100">
+                                 <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest block mb-6 flex items-center gap-2">
+                                    <FaChartLine /> Impacto ROI Proyectado
+                                 </span>
+                                 <div className="space-y-4">
+                                    <div className="flex justify-between items-center text-xs font-bold text-slate-700">
+                                       <span>Ahorro en Retención</span>
+                                       <span className="text-emerald-600">+{clp(quote.impact.retentionSavings)}</span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-xs font-bold text-slate-700">
+                                       <span>Productividad Estimada</span>
+                                       <span className="text-emerald-600">+{clp(quote.impact.productivityGain)}</span>
+                                    </div>
+                                    <div className="pt-4 mt-4 border-t border-emerald-200 flex justify-between items-center">
+                                       <span className="text-[10px] font-black text-emerald-800 uppercase">Retorno Mín.</span>
+                                       <span className="text-2xl font-black text-emerald-700">{quote.impact.totalROI.toFixed(1)}x</span>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </motion.div>
+                     )}
+                  </AnimatePresence>
+
+                  <button
+                     onClick={() => handleWappClick()}
+                     className="w-full py-6 bg-slate-900 hover:bg-slate-800 text-white font-black rounded-2xl shadow-2xl transition-all flex items-center justify-center gap-4 uppercase tracking-widest text-xs group"
+                  >
+                     <FaWhatsapp className="text-xl text-emerald-400 group-hover:scale-110 transition-transform" />
+                     SOLICITAR COTIZACIÓN FORMAL
+                  </button>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      {/* ──────────────── 4. PACKS DE ENTRADA RÁPIDA ──────────────── */}
+      <section className="py-32 bg-stone-50">
+         <div className="container mx-auto px-6 max-w-6xl">
+            <div className="text-center mb-24">
+               <h2 className="text-4xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter mb-4">Soluciones <span className="text-amber-600">Express</span></h2>
+               <p className="text-slate-500 font-medium text-lg">Formatos cerrados para decisiones ágiles y resultados inmediatos.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               {EMP_PACKS.map((pack, i) => (
+                  <div key={pack.id} className="bg-slate-900 p-10 rounded-[2.5rem] text-white flex flex-col justify-between shadow-xl hover:scale-[1.02] transition-all">
+                     <div>
+                        <span className="text-[10px] font-black text-amber-500 uppercase tracking-widest block mb-4">Pack Destacado</span>
+                        <h3 className="text-2xl font-black uppercase tracking-tight mb-2">{pack.title}</h3>
+                        <p className="text-sm text-slate-400 mb-8 font-medium">{pack.subtitle}</p>
+                        
+                        <ul className="space-y-4 mb-12">
+                           {pack.bullets.map((b, j) => (
+                              <li key={j} className="flex gap-3 text-xs font-bold text-slate-300">
+                                 <FaCheckCircle className="text-amber-500 shrink-0 mt-0.5" />
+                                 {b}
+                              </li>
+                           ))}
+                        </ul>
+                     </div>
+
+                     <div className="pt-8 border-t border-white/10 text-center">
+                        <div className="text-xl font-black text-white mb-6">{pack.priceLabel}</div>
+                        <button 
+                           onClick={() => handleWappClick(`Hola! Me interesa el pack express: ${pack.title}.`)}
+                           className="w-full py-4 border-2 border-white/20 hover:border-white/50 text-white font-black rounded-xl text-[10px] uppercase tracking-widest transition-all"
+                        >
+                           Comprar Pack
+                        </button>
+                     </div>
+                  </div>
+               ))}
+            </div>
+         </div>
+      </section>
+
+      {/* ──────────────── 5. SENCE & CIERRE ──────────────── */}
+      <section className="py-32 bg-indigo-600 text-white overflow-hidden relative">
+         <div className="absolute top-0 left-0 w-full h-full bg-black/10 z-0" />
+         
+         <div className="container mx-auto px-6 max-w-6xl relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+               <div>
+                  <h2 className="text-4xl md:text-7xl font-black uppercase tracking-tighter leading-none mb-8">Gestión <br />Estratégica SENCE.</h2>
+                  <p className="text-xl md:text-2xl text-indigo-100 font-light leading-relaxed mb-10">
+                     No pierdas tu inversión tributaria. <br />
+                     Ayudamos a las empresas a maximizar el uso de su <strong className="text-white font-bold">Franquicia Tributaria</strong> mediante códigos SENCE vigentes y facturación exenta.
                   </p>
-
-                  <div className="flex flex-wrap gap-4">
-                     <button
-                        onClick={scrollToCalculator}
-                        className="group px-10 py-5 bg-white text-slate-950 font-black rounded-2xl hover:bg-indigo-500 hover:text-white transition-all duration-500 shadow-[0_20px_50px_rgba(255,255,255,0.05)] flex items-center gap-3 active:scale-95"
+                  
+                  <div className="flex flex-col sm:flex-row gap-6">
+                     <button 
+                        onClick={() => handleWappClick("Hola! Quiero agendar una reunión comercial para mi empresa.")}
+                        className="px-10 py-6 bg-white text-indigo-600 font-black rounded-2xl shadow-2xl uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-slate-50 transition-all"
                      >
-                        <FaCalculator className="group-hover:rotate-12 transition-transform" />
-                        Proyectar ROI
-                        <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
-                     </button>
-                     <button
-                        className="px-10 py-5 bg-slate-900/50 border border-white/10 text-white font-bold rounded-2xl hover:bg-white/5 transition-all"
-                     >
-                        Brochure PDF
+                        <FaHandshake /> AGENDAR REUNIÓN EJECUTIVA
                      </button>
                   </div>
-               </motion.div>
-
-               {/* Visual: The Glass Dashboard Preview */}
-               <motion.div
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 1, delay: 0.2 }}
-                  className="hidden lg:block relative"
-               >
-                  <div className="relative z-10 bg-white/5 border border-white/10 p-8 rounded-[2.5rem] backdrop-blur-3xl shadow-2xl rotate-3 hover:rotate-0 transition-transform duration-1000 group">
-                     <div className="flex justify-between items-center mb-8">
-                        <div className="flex gap-2">
-                           <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-                           <div className="w-3 h-3 rounded-full bg-amber-500/50"></div>
-                           <div className="w-3 h-3 rounded-full bg-emerald-500/50"></div>
-                        </div>
-                        <div className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">Analytics Dashboard_v2</div>
-                     </div>
-                     <div className="space-y-6">
-                        <div className="h-24 bg-indigo-500/10 rounded-2xl border border-white/5 flex items-center px-6 gap-6 group-hover:bg-indigo-500/20 transition-colors">
-                           <div className="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center text-indigo-400"><FaChartLine /></div>
-                           <div>
-                              <div className="text-[10px] text-slate-500 font-bold uppercase">Proyección ROI</div>
-                              <div className="text-2xl font-black">+340%</div>
-                           </div>
-                        </div>
-                        <div className="h-24 bg-emerald-500/10 rounded-2xl border border-white/5 flex items-center px-6 gap-6 group-hover:bg-emerald-500/20 transition-colors">
-                           <div className="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400"><FaHandshake /></div>
-                           <div>
-                              <div className="text-[10px] text-slate-500 font-bold uppercase">Employee Retention</div>
-                              <div className="text-2xl font-black">+25%</div>
-                           </div>
-                        </div>
-                     </div>
-                     {/* Floating Glow */}
-                     <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-indigo-500/30 blur-[60px] rounded-full group-hover:scale-150 transition-transform duration-1000"></div>
-                  </div>
-               </motion.div>
-            </div>
-         </header>
-
-
-         {/* ──────────────── 3. COTIZADOR EXPERIENCE 2.0 ──────────────── */}
-         <section id="cotizador" className="py-32 bg-[#020617] relative">
-            {/* Immersive Background */}
-            <div className="absolute inset-0 bg-[url('/textures/carbon-fibre.png')] opacity-[0.03]"></div>
-
-            <div className="container mx-auto px-6">
-               <div className="max-w-7xl mx-auto">
-
-                  {/* Grid Layout */}
-                  <div className="bg-slate-900/40 border border-white/10 rounded-[3rem] overflow-hidden backdrop-blur-xl shadow-[0_40px_100px_rgba(0,0,0,0.5)] grid grid-cols-1 lg:grid-cols-12 min-h-[700px]">
-
-                     {/* LEFT PANEL: CONFIGURATOR (4 Cols) */}
-                     <div className="lg:col-span-5 p-12 lg:p-16 bg-slate-900/50 border-b lg:border-b-0 lg:border-r border-white/5">
-                        <div className="flex items-center gap-3 mb-12">
-                           <div className="p-3 bg-indigo-500/10 rounded-xl text-indigo-400"><FaCalculator /></div>
-                           <h3 className="font-black uppercase tracking-widest text-sm">Configurador Pro</h3>
-                        </div>
-
-                        <div className="space-y-10">
-                           {/* 1. Service Selection with Visual Radio Icons */}
-                           <div>
-                              <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-6">Vertical de Impacto</label>
-                              <div className="grid grid-cols-2 gap-3">
-                                 {SERVICE_LINES.map(s => (
-                                    <button
-                                       key={s.id}
-                                       onClick={() => setSelectedServiceId(s.id)}
-                                       className={`p-4 rounded-2xl border text-left transition-all duration-300 flex flex-col gap-2
-                                          ${selectedServiceId === s.id
-                                             ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg'
-                                             : 'bg-white/5 border-white/5 text-slate-400 hover:border-white/20'
-                                          }
-                                       `}
-                                    >
-                                       <span className="text-xl">{s.icon}</span>
-                                       <span className="text-[11px] font-bold leading-tight">{s.label}</span>
-                                    </button>
-                                 ))}
-                              </div>
-                           </div>
-
-                           {/* 2. Headcount Interactive Slider */}
-                           <div className="p-8 bg-black/30 rounded-[2rem] border border-white/5 shadow-inner">
-                              <div className="flex justify-between items-end mb-6">
-                                 <div>
-                                    <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1">Equipo</label>
-                                    <span className="text-3xl font-black text-white">{headcount}</span>
-                                    <span className="text-slate-500 font-bold ml-2">Pers.</span>
-                                 </div>
-                                 <div className="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-2 py-1 rounded">
-                                    {(headcount >= 10) ? 'VOLUMEN APL.' : 'MIN.'}
-                                 </div>
-                              </div>
-                              <input
-                                 type="range" min="1" max="100" step="1"
-                                 value={headcount}
-                                 onChange={(e) => setHeadcount(e.target.value)}
-                                 className="w-full h-1.5 bg-slate-800 rounded-full appearance-none cursor-pointer accent-indigo-500"
-                              />
-                           </div>
-
-                           {/* 3. Time & Modality */}
-                           <div className="grid grid-cols-2 gap-6">
-                              <div>
-                                 <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Plazo</label>
-                                 <div className="flex p-1 bg-black/40 rounded-xl border border-white/5">
-                                    {[3, 6, 12].map(m => (
-                                       <button
-                                          key={m}
-                                          onClick={() => setMonths(m)}
-                                          className={`flex-1 py-2 rounded-lg text-xs font-black transition-all
-                                             ${months === m ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}
-                                          `}
-                                       >
-                                          {m}M
-                                       </button>
-                                    ))}
-                                 </div>
-                              </div>
-                              <div>
-                                 <label className="block text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4">Modalidad</label>
-                                 <div className="flex p-1 bg-black/40 rounded-xl border border-white/5">
-                                    {['online', 'onsite'].map(mod => (
-                                       <button
-                                          key={mod}
-                                          onClick={() => setModality(mod)}
-                                          className={`flex-1 py-2 rounded-lg text-[10px] font-black uppercase transition-all
-                                             ${modality === mod ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}
-                                          `}
-                                       >
-                                          {mod === 'online' ? 'Global' : 'Local'}
-                                       </button>
-                                    ))}
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-
-                     {/* RIGHT PANEL: DUAL DASHBOARD (7 Cols) */}
-                     <div className="lg:col-span-7 bg-slate-950 flex flex-col relative overflow-hidden">
-
-                        {/* Selector de Modo (Financial vs Impact) */}
-                        <div className="flex border-b border-white/5">
-                           <button
-                              onClick={() => setViewMode('financial')}
-                              className={`flex-1 py-6 text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-2 transition-all
-                                 ${viewMode === 'financial' ? 'bg-indigo-500/10 text-indigo-400 border-b-2 border-indigo-500' : 'text-slate-600 hover:text-slate-400'}
-                              `}
-                           >
-                              <FaMoneyBillWave /> Vista Financiera
-                           </button>
-                           <button
-                              onClick={() => setViewMode('impact')}
-                              className={`flex-1 py-6 text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-2 transition-all
-                                 ${viewMode === 'impact' ? 'bg-emerald-500/10 text-emerald-400 border-b-2 border-emerald-500' : 'text-slate-600 hover:text-slate-400'}
-                              `}
-                           >
-                              <FaHeartbeat /> Impacto ROI
-                           </button>
-                        </div>
-
-                        <div className="flex-1 p-12 relative">
-                           <AnimatePresence mode="wait">
-                              {quote && viewMode === 'financial' && (
-                                 <motion.div
-                                    key="financial"
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    className="space-y-12"
-                                 >
-                                    <div className="text-center">
-                                       <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4">Investment Total_Final</span>
-                                       <div className="text-6xl md:text-8xl font-black text-white tracking-tighter mb-2">
-                                          {clp(quote.financials.total)}
-                                       </div>
-                                       <span className="text-slate-600 font-mono text-xs">+ IVA / Período {months}M</span>
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-6">
-                                       <div className="p-8 bg-slate-900/50 rounded-3xl border border-white/5">
-                                          <div className="text-[10px] font-black text-slate-500 uppercase mb-2">Costo Mensual Unitario</div>
-                                          <div className="text-3xl font-black text-white">{clp(quote.financials.perPersonMonth)}</div>
-                                       </div>
-                                       <div className="p-8 bg-slate-900/50 rounded-3xl border border-white/5">
-                                          <div className="text-[10px] font-black text-slate-500 uppercase mb-2">Descuento Volumen</div>
-                                          <div className="text-3xl font-black text-emerald-400">-{quote.financials.discountPercent}%</div>
-                                       </div>
-                                    </div>
-
-                                    {/* Financial Mini Chart */}
-                                    <div className="h-40 w-full mt-8 bg-black/40 rounded-3xl border border-white/5 p-6 shadow-inner">
-                                       <ResponsiveContainer width="100%" height="100%">
-                                          <AreaChart data={[
-                                             { x: 0, y: 0 },
-                                             { x: 1, y: quote.financials.total * 0.4 },
-                                             { x: 2, y: quote.financials.total * 0.7 },
-                                             { x: 3, y: quote.financials.total }
-                                          ]}>
-                                             <defs>
-                                                <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                                                   <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
-                                                   <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
-                                                </linearGradient>
-                                             </defs>
-                                             <Area type="monotone" dataKey="y" stroke="#6366f1" fillOpacity={1} fill="url(#colorPrice)" strokeWidth={3} />
-                                          </AreaChart>
-                                       </ResponsiveContainer>
-                                    </div>
-                                 </motion.div>
-                              )}
-
-                              {quote && viewMode === 'impact' && (
-                                 <motion.div
-                                    key="impact"
-                                    initial={{ opacity: 0, x: 20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: -20 }}
-                                    className="space-y-12"
-                                 >
-                                    <div className="text-center">
-                                       <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-4">ROI Proyectado del Proyecto</span>
-                                       <div className="text-6xl md:text-8xl font-black text-emerald-400 tracking-tighter mb-2">
-                                          {(quote.impact.totalROI).toFixed(1)}x
-                                       </div>
-                                       <span className="text-slate-600 font-mono text-xs">Retorno mínimo estimado sobre la inversión</span>
-                                    </div>
-
-                                    <div className="space-y-6">
-                                       <div className="flex justify-between items-center p-6 bg-emerald-500/10 rounded-2xl border border-emerald-500/20">
-                                          <div className="flex items-center gap-4">
-                                             <div className="p-3 bg-emerald-500/20 rounded-lg text-emerald-400"><BsArrowRepeat className="animate-spin-slow" /></div>
-                                             <div>
-                                                <div className="text-xs font-bold text-white">Ahorro x Retención</div>
-                                                <div className="text-[10px] text-slate-500">Reducción de rotación estimada</div>
-                                             </div>
-                                          </div>
-                                          <div className="text-2xl font-black text-emerald-400">+{clp(quote.impact.retentionSavings)}</div>
-                                       </div>
-                                       <div className="flex justify-between items-center p-6 bg-blue-500/10 rounded-2xl border border-blue-500/20">
-                                          <div className="flex items-center gap-4">
-                                             <div className="p-3 bg-blue-500/20 rounded-lg text-blue-400"><FaRocket /></div>
-                                             <div>
-                                                <div className="text-xs font-bold text-white">Ganancia Productividad</div>
-                                                <div className="text-[10px] text-slate-500">Efectividad operacional proyectada</div>
-                                             </div>
-                                          </div>
-                                          <div className="text-2xl font-black text-blue-400">+{clp(quote.impact.productivityGain)}</div>
-                                       </div>
-                                    </div>
-
-                                    <p className="text-[10px] text-slate-600 font-mono text-center">
-                                       *Cálculos basados en estándares de la industria (SHRM & ROI Institute) adaptados al mercado local.
-                                    </p>
-                                 </motion.div>
-                              )}
-                           </AnimatePresence>
-                        </div>
-
-                        {/* FINAL CTA ACTION */}
-                        <div className="p-12 border-t border-white/5">
-                           <button
-                              onClick={handleWappClick}
-                              className="w-full py-6 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-3xl shadow-[0_20px_50px_rgba(16,185,129,0.2)] transition-all flex items-center justify-center gap-3 group overflow-hidden relative"
-                           >
-                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                              <FaWhatsapp className="text-2xl" />
-                              Solicitar Consultoría de Impacto
-                              <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
-                           </button>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </section>
-
-         {/* ──────────────── 4. VALUE PROPOSITION: WHY LAEL? ──────────────── */}
-         <section className="py-32 bg-slate-950">
-            <div className="container mx-auto px-6">
-               <div className="max-w-4xl mb-20">
-                  <h2 className="text-4xl md:text-6xl font-black text-white mb-6 tracking-tighter">¿Por qué confiar <br />en Lael?</h2>
-                  <p className="text-xl text-slate-400">Construimos puentes entre el potencial humano y los objetivos de negocio.</p>
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               <div className="grid grid-cols-2 gap-4">
                   {[
-                     {
-                        title: "Medición de Impacto Real",
-                        desc: "No solo entregamos certificados; entregamos reportes de ROI basados en productividad y retención.",
-                        icon: <FaChartLine className="text-indigo-400" />
-                     },
-                     {
-                        title: "Cultura de Aprendizaje",
-                        desc: "Transformamos la capacitación en un beneficio aspiracional que eleva el orgullo de pertenencia.",
-                        icon: <FaUsers className="text-emerald-400" />
-                     },
-                     {
-                        title: "Personalización Extrema",
-                        desc: "Diseñamos el contenido en base a los desafíos específicos de tu industria y KPIs.",
-                        icon: <FaRocket className="text-amber-400" />
-                     }
+                     { label: "Cumplimiento 100%", icon: <FaShieldAlt /> },
+                     { label: "Reportes Digitales", icon: <FaFileAlt /> },
+                     { label: "Control Asistencia", icon: <FaUsers /> },
+                     { label: "Escalabilidad", icon: <FaCogs /> }
                   ].map((item, i) => (
-                     <div key={i} className="bg-slate-900/50 border border-white/5 p-10 rounded-[2.5rem] hover:border-white/20 transition-all">
-                        <div className="text-3xl mb-6">{item.icon}</div>
-                        <h3 className="text-xl font-black text-white mb-4 uppercase tracking-tighter">{item.title}</h3>
-                        <p className="text-slate-400 leading-relaxed text-sm">{item.desc}</p>
+                     <div key={i} className="bg-white/10 backdrop-blur-md border border-white/20 p-8 rounded-3xl flex flex-col items-center text-center">
+                        <div className="text-3xl mb-4 opacity-50">{item.icon}</div>
+                        <span className="text-[10px] font-black uppercase tracking-widest">{item.label}</span>
                      </div>
                   ))}
                </div>
             </div>
-         </section>
-
-         {/* ──────────────── 5. FINAL DECISION ──────────────── */}
-         <section className="py-40 bg-indigo-600 relative overflow-hidden">
-            <div className="absolute inset-0 bg-black/20"></div>
-            <div className="container mx-auto px-6 relative z-10 text-center text-white">
-               <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-12">¿Listo para elevar <br />el estándar?</h2>
-               <div className="flex flex-col md:flex-row gap-6 justify-center">
-                  <button
-                     onClick={handleWappClick}
-                     className="px-12 py-6 bg-white text-slate-950 font-black rounded-2xl hover:bg-slate-100 transition-all flex items-center justify-center gap-3"
-                  >
-                     <FaHandshake /> Agenda Sesión Comercial
-                  </button>
-                  <a
-                     href="mailto:corporate@institutolael.cl"
-                     className="px-12 py-6 bg-transparent border-2 border-white/30 text-white font-black rounded-2xl hover:bg-white/10 transition-all"
-                  >
-                     Solicitar Factibilidad SENCE
-                  </a>
-               </div>
+            
+            <div className="mt-24 pt-12 border-t border-white/10 text-center text-indigo-200">
+               <p className="text-[10px] font-black uppercase tracking-[0.3em]">
+                  Estás en el área corporativa de Instituto Lael • No somos SENCE • Somos Organismo Capacitador
+               </p>
             </div>
-         </section>
+         </div>
+      </section>
 
-      </div>
-   );
+    </div>
+  );
 }

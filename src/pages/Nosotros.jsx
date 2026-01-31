@@ -1,351 +1,201 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import {
-   FaBible, FaLightbulb, FaGraduationCap, FaHeart, FaArrowRight, FaChalkboardTeacher, FaQuoteRight,
-   FaHistory, FaGlobeAmericas, FaStar, FaEye, FaTimes
-} from "react-icons/fa";
-import { BsStars, BsChatQuote } from "react-icons/bs";
-import { RiDoubleQuotesL } from "react-icons/ri";
-import { MdVerified } from "react-icons/md";
-
-// ASSETS
-import logoDorado from "../assets/img/Logos/lael-inst-amarillo.png";
-
-// DATA
-import { ABOUT_DATA } from "../data/about.js";
-
-// SEO
+import React, { useEffect } from "react";
+import { motion } from "framer-motion";
+import { FaArrowRight, FaUsers, FaLightbulb, FaHeart } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import SEOHead from "../components/SEOHead.jsx";
-import TeachersSection from "../components/TeachersSection.jsx";
+import { MANIFESTO, STATS, VALUES, TEAM_ROLES, THE_NAME } from "../data/nosotros.js";
 
-// HELPERS FOR ICONS
-const IconMap = {
-   FaBible: <FaBible />,
-   BsStars: <BsStars />,
-   FaHeart: <FaHeart />,
-   FaChalkboardTeacher: <FaChalkboardTeacher />,
-   FaLightbulb: <FaLightbulb />,
-   FaGraduationCap: <FaGraduationCap />
-};
+export default function Nosotros() {
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
-export default function About() {
-   const [activeValue, setActiveValue] = useState(0);
-   const [showModal, setShowModal] = useState(false);
-   const scrollRef = useRef(null);
+  const fadeIn = {
+    initial: { opacity: 0, y: 20 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true },
+    transition: { duration: 0.6 }
+  };
 
-   const { scrollYProgress } = useScroll({
-      target: scrollRef,
-      offset: ["start end", "end start"]
-   });
+  return (
+    <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-indigo-500/30 overflow-x-hidden">
+      <SEOHead 
+        title="Nosotros | Instituto Lael" 
+        description="Conoce nuestra misión, valores y el equipo detrás de la democratización de la educación de calidad." 
+      />
 
-   useEffect(() => { window.scrollTo(0, 0); }, []);
+      {/* ──────────────── 1. HERO SECTION (TYPOGRAPHIC) ──────────────── */}
+      <section className="relative pt-40 pb-24 px-6 overflow-hidden">
+        {/* Abstract Background Effects */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(circle_at_center,_rgba(99,102,241,0.08)_0%,_transparent_70%)] pointer-events-none" />
+        
+        <div className="container mx-auto max-w-5xl text-center relative z-10">
+          <motion.span 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="inline-block text-xs font-black uppercase tracking-[0.4em] text-indigo-400 mb-6"
+          >
+            {MANIFESTO.tagline}
+          </motion.span>
+          
+          <motion.h1 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-black mb-10 leading-[0.9] tracking-tighter uppercase"
+          >
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-indigo-200 to-cyan-400">
+              {MANIFESTO.title}
+            </span>
+          </motion.h1>
 
-   return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-amber-500/30 overflow-x-hidden">
-         <SEOHead
-            title="Nuestra Historia | Instituto Lael Experience 2.0"
-            description="Educar es trascender. Conoce el origen, los valores y la visión 2026 de Instituto Lael."
-         />
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-base md:text-xl lg:text-2xl text-slate-400 font-light leading-relaxed max-w-3xl mx-auto"
+          >
+            {MANIFESTO.description}
+          </motion.p>
+        </div>
+      </section>
 
-         {/* ──────────────── 1. HERO: MANIFIESTO DINÁMICO ──────────────── */}
-         <header className="relative min-h-[80vh] flex items-center justify-center text-center overflow-hidden">
-            <div className="absolute inset-0 z-0">
-               <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_20%,_rgba(245,158,11,0.1),transparent)]"></div>
-               <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_80%_80%,_rgba(30,58,138,0.15),transparent)]"></div>
-               <div className="absolute inset-0 opacity-20 bg-[url('/textures/cubes.png')] bg-repeat"></div>
+      {/* ──────────────── 1.5 EL SIGNIFICADO (THE NAME) ──────────────── */}
+      <section className="py-24 bg-white/[0.02] border-y border-white/5 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-64 h-64 bg-indigo-500/5 blur-[100px] rounded-full -translate-x-1/2 -translate-y-1/2" />
+        
+        <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
+          <motion.div {...fadeIn}>
+            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-8 italic">El significado de nuestra identidad</h2>
+            
+            <div className="mb-10">
+              <span className="text-5xl md:text-7xl font-black text-indigo-400 block mb-2">{THE_NAME.term}</span>
+              <span className="text-2xl md:text-3xl font-light text-white tracking-widest uppercase">{THE_NAME.definition}</span>
             </div>
 
-            <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-               <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                  className="mb-12"
-               >
-                  <img src={logoDorado} alt="Lael Logo" loading="lazy" className="w-24 md:w-32 mx-auto drop-shadow-[0_0_30px_rgba(245,158,11,0.4)]" />
-               </motion.div>
-
-               <motion.h1
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 1 }}
-                  className="text-6xl md:text-9xl font-black mb-8 leading-[0.85] tracking-tighter uppercase"
-               >
-                  Somos <br />
-                  <span className="text-amber-400 italic">Instituto Lael.</span>
-               </motion.h1>
-
-               <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.2, duration: 1 }}
-                  className="text-xl md:text-2xl text-slate-400 leading-relaxed max-w-2xl mx-auto font-light"
-               >
-                  Nacimos para democratizar la educación de calidad. Creemos que la tecnología debe servir a las personas, no al revés. 
-                  Nuestro compromiso es acompañarte hasta que tengas tu certificado en mano.
-               </motion.p>
+            <div className="max-w-2xl mx-auto">
+              <p className="text-lg text-slate-400 leading-relaxed mb-6 font-medium italic">
+                "{THE_NAME.description}"
+              </p>
+              <span className="inline-block px-4 py-1.5 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-[10px] font-black text-indigo-300 uppercase tracking-widest">
+                Ref: {THE_NAME.biblicalRef}
+              </span>
             </div>
-         </header>
+          </motion.div>
+        </div>
+      </section>
 
+      {/* ──────────────── 2. STATS BAR ──────────────── */}
+      <section className="py-12 border-y border-white/5 bg-white/[0.01]">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-white/5 border-x border-white/5">
+            {STATS.map((stat) => (
+              <motion.div 
+                key={stat.id}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="p-8 text-center"
+              >
+                <div className="text-3xl md:text-5xl font-black text-white mb-2 tracking-tighter">{stat.value}</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-slate-500">{stat.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-         {/* ──────────────── 2. ORIGEN: LA PROFUNDIDAD DE LAEL (MOVED UP) ──────────────── */}
-         <section className="py-40 bg-slate-950 relative overflow-hidden border-b border-white/5">
-            <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-               <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                  <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-6 block">Etimología de Marca</span>
-                  <h2 className="text-5xl md:text-7xl font-black mb-10 leading-tight uppercase tracking-tighter text-white">
-                     Una identidad con <br /><span className="text-amber-500 italic">Raíces.</span>
-                  </h2>
-                  <div
-                     onClick={() => setShowModal(true)}
-                     className="group cursor-pointer relative p-12 bg-white/[0.02] border border-amber-500/20 rounded-[3rem] overflow-hidden hover:border-amber-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/10"
-                  >
-                     <div className="flex flex-col gap-2 relative z-10 text-center">
-                        <span className="text-8xl md:text-9xl font-serif text-white group-hover:scale-110 transition-transform duration-700">לָאֵל</span>
-                        <span className="text-amber-400 font-black text-2xl uppercase tracking-[0.2em] mt-6">
-                           Significado de Lael
-                        </span>
-                        <div className="flex items-center justify-center gap-2 text-slate-500 text-[10px] mt-6 uppercase tracking-widest font-black animate-pulse group-hover:text-amber-500 transition-colors">
-                           Pincha para descubrir <FaArrowRight />
-                        </div>
-                     </div>
-                  </div>
-               </motion.div>
-               <div className="space-y-6">
-                  {ABOUT_DATA.origin.cards.map((card, i) => (
-                     <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 }}
-                        className="bg-white/[0.02] border border-white/5 p-8 rounded-[2rem] flex items-center gap-8 hover:bg-slate-900 transition-all group"
-                     >
-                        <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center text-3xl text-amber-500 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
-                           {IconMap[card.icon]}
-                        </div>
-                        <div>
-                           <h4 className="text-xl font-black text-white mb-1 uppercase tracking-tight">{card.title}</h4>
-                           <p className="text-slate-500 text-sm leading-relaxed font-light">{card.desc}</p>
-                        </div>
-                     </motion.div>
-                  ))}
-               </div>
+      {/* ──────────────── 3. VALUES SECTION ──────────────── */}
+      <section className="py-32 bg-slate-950">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <motion.div {...fadeIn} className="text-center mb-20">
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-4">Nuestro ADN</h2>
+            <p className="text-slate-500 font-medium">Lo que nos impulsa a mejorar cada día.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {VALUES.map((value, i) => (
+              <motion.div 
+                key={value.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                viewport={{ once: true }}
+                className="group bg-slate-900/40 border border-white/5 p-10 rounded-[3rem] hover:bg-slate-900/60 hover:border-indigo-500/30 transition-all shadow-xl"
+              >
+                <div className="text-5xl mb-8 group-hover:scale-110 transition-transform inline-block">{value.icon}</div>
+                <h3 className="text-xl font-black text-white uppercase tracking-tight mb-4 group-hover:text-indigo-400 transition-colors">{value.title}</h3>
+                <p className="text-base text-slate-400 leading-relaxed font-medium">
+                  {value.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────── 4. TEAM SECTION (ABSTRACT) ──────────────── */}
+      <section className="py-32 bg-slate-900/30 overflow-hidden relative">
+        {/* Decorative Light */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-500/5 blur-[120px] rounded-full pointer-events-none" />
+        
+        <div className="container mx-auto px-4 max-w-6xl relative z-10">
+          <motion.div {...fadeIn} className="text-center mb-20">
+            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-4">El Equipo de Impacto</h2>
+            <p className="text-slate-500 font-medium">Talento comprometido con tu crecimiento.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {TEAM_ROLES.map((role, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                viewport={{ once: true }}
+                className="bg-white/[0.02] border border-white/5 p-10 rounded-[2.5rem] flex flex-col items-center text-center group hover:border-white/10 transition-colors"
+              >
+                <div className={`w-20 h-20 rounded-2xl ${role.color} flex items-center justify-center text-2xl font-black mb-8 group-hover:scale-110 transition-transform`}>
+                  {role.initials}
+                </div>
+                <h3 className="text-lg font-black text-white uppercase tracking-tight mb-3">{role.role}</h3>
+                <p className="text-sm text-slate-500 leading-relaxed max-w-[200px] font-medium">
+                  {role.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────── 5. CTA FINAL ──────────────── */}
+      <section className="py-32">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[4rem] p-12 md:p-20 text-center shadow-2xl relative overflow-hidden"
+          >
+            {/* Glossy overlay */}
+            <div className="absolute top-0 left-0 w-full h-full bg-white/5 opacity-40 pointer-events-none" />
+            
+            <div className="relative z-10">
+              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white mb-10">
+                ¿LISTO PARA <br /> EMPEZAR?
+              </h2>
+              <Link 
+                to="/programas"
+                className="inline-flex items-center gap-4 px-10 py-6 bg-white text-indigo-600 font-black rounded-2xl shadow-xl hover:bg-slate-50 transition-all uppercase tracking-widest text-sm group"
+              >
+                VER TODOS LOS CURSOS
+                <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
-         </section>
+          </motion.div>
+        </div>
+      </section>
 
-         {/* ──────────────── 3. DNA: PILARES Y PRINCIPIOS (FILOSOFÍA) ──────────────── */}
-         <section className="py-40 bg-slate-950">
-            <div className="container mx-auto px-6 text-center mb-24">
-               <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Nuestro ADN Estudiantil</span>
-               <h2 className="text-6xl font-black text-white uppercase tracking-tighter">Pilares 2026.</h2>
-            </div>
-            <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl">
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {ABOUT_DATA.values.map((val, idx) => (
-                     <button
-                        key={idx}
-                        onClick={() => setActiveValue(idx)}
-                        className={`text-left p-8 rounded-[2.5rem] border transition-all duration-500 flex flex-col gap-6 group relative overflow-hidden
-                           ${activeValue === idx
-                              ? 'bg-amber-500 border-amber-400 text-slate-950 shadow-2xl scale-[1.05] z-10'
-                              : 'bg-white/[0.02] border-white/5 text-slate-400 hover:bg-slate-900 hover:text-white'
-                           }
-                        `}
-                     >
-                        <span className="text-4xl group-hover:scale-110 transition-transform">
-                           {IconMap[val.iconName]}
-                        </span>
-                        <span className="font-black text-xl uppercase tracking-tighter leading-none">{val.title}</span>
-                        {activeValue === idx && <div className="absolute top-4 right-4 animate-pulse"><FaStar /></div>}
-                     </button>
-                  ))}
-               </div>
-               <div className="bg-slate-900 border border-white/10 rounded-[4rem] p-16 min-h-[450px] flex flex-col items-center justify-center text-center relative overflow-hidden">
-                  <AnimatePresence mode="wait">
-                     <motion.div
-                        key={activeValue}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 1.1 }}
-                        transition={{ duration: 0.5 }}
-                        className="relative z-10"
-                     >
-                        <div className="text-7xl text-amber-500 mb-10 mx-auto w-fit drop-shadow-[0_0_20px_rgba(245,158,11,0.3)]">
-                           {IconMap[ABOUT_DATA.values[activeValue].iconName]}
-                        </div>
-                        <h3 className="text-4xl font-black text-white mb-6 uppercase tracking-tight">
-                           {ABOUT_DATA.values[activeValue].title}
-                        </h3>
-                        <p className="text-2xl text-slate-300 max-w-lg mx-auto leading-relaxed font-light italic">
-                           "{ABOUT_DATA.values[activeValue].desc}"
-                        </p>
-                     </motion.div>
-                  </AnimatePresence>
-               </div>
-            </div>
-         </section>
-
-         {/* ──────────────── 3. EQUIPO: VISIÓN COMPARTIDA (DIRECTOR) ──────────────── */}
-         <section className="py-40 bg-[#020617] relative overflow-hidden border-y border-white/5">
-            <div className="container mx-auto px-6">
-               <div className="bg-slate-900/50 border border-white/5 rounded-[4rem] overflow-hidden grid grid-cols-1 lg:grid-cols-2 shadow-2xl backdrop-blur-3xl">
-                  <div className="relative min-h-[500px] bg-[#0c0f1d] flex items-center justify-center overflow-hidden group">
-                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-amber-500/10 blur-[100px] rounded-full group-hover:scale-150 transition-transform duration-1000"></div>
-                     <div className="relative z-10 text-center">
-                        <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-amber-600 rounded-3xl mx-auto flex items-center justify-center text-4xl text-slate-950 shadow-2xl shadow-amber-500/50 mb-6">
-                           <FaChalkboardTeacher />
-                        </div>
-                        <span className="text-xs font-black text-amber-500 uppercase tracking-[0.4em]">Visión Educativa 2026</span>
-                     </div>
-                  </div>
-                  <div className="p-16 flex flex-col justify-center">
-                     <div className="inline-flex items-center gap-2 bg-amber-500/10 px-4 py-2 rounded-xl mb-8 w-fit text-amber-500 border border-amber-500/20">
-                        <MdVerified /> <span className="text-[10px] uppercase font-black tracking-widest">Fundador & Director</span>
-                     </div>
-                     <h3 className="text-5xl font-black text-white mb-6 uppercase tracking-tighter">{ABOUT_DATA.founder.name}</h3>
-                     <div className="flex flex-wrap gap-2 mb-10">
-                        {ABOUT_DATA.founder.tags.map(tag => (
-                           <span key={tag} className="px-4 py-1 rounded-full bg-white/5 border border-white/10 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                              {tag}
-                           </span>
-                        ))}
-                     </div>
-                     <p className="text-xl text-slate-400 leading-relaxed italic border-l-2 border-amber-500 pl-8 font-light mb-12">
-                        "{ABOUT_DATA.founder.bio}"
-                     </p>
-                     <div className="bg-slate-950/80 p-8 rounded-3xl border border-white/5 flex items-start gap-6 shadow-inner">
-                        <RiDoubleQuotesL className="text-5xl text-amber-500/50" />
-                        <p className="text-lg text-slate-300 leading-relaxed italic font-light">
-                           {ABOUT_DATA.founder.quote}
-                        </p>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </section>
-
-         {/* ──────────────── 3.5. EQUIPO DOCENTE ──────────────── */}
-         <TeachersSection />
-
-         {/* ──────────────── 4. TIMELINE: NUESTRA HISTORIA (TRAYECTORIA) ──────────────── */}
-         <section ref={scrollRef} className="py-24 bg-slate-950 relative border-y border-white/5">
-            <div className="container mx-auto px-6">
-               <div className="flex flex-col lg:flex-row gap-20">
-                  <div className="lg:w-4/12 lg:sticky lg:top-40 lg:h-fit">
-                     <span className="text-amber-500 font-black uppercase tracking-[0.3em] text-xs mb-4 block">Trayectoria Lael</span>
-                     <h2 className="text-5xl font-black text-white mb-8 leading-tight tracking-tighter uppercase">Nuestra línea <br />de Tiempo.</h2>
-                     <p className="text-slate-500 leading-relaxed max-w-sm font-light">
-                        Desde los primeros pasos hasta la visión 2026, cada año ha sido un ladrillo en la construcción de este ideal educativo.
-                     </p>
-                     <div className="mt-12 w-full h-1 bg-slate-900 rounded-full overflow-hidden relative">
-                        <motion.div style={{ scaleX: scrollYProgress }} className="absolute top-0 left-0 w-full h-full bg-amber-500 origin-left" />
-                     </div>
-                  </div>
-
-                  <div className="lg:w-8/12 space-y-32">
-                     {ABOUT_DATA.timeline.map((item, i) => (
-                        <motion.div
-                           key={i}
-                           initial={{ opacity: 0, x: 50 }}
-                           whileInView={{ opacity: 1, x: 0 }}
-                           viewport={{ once: true, margin: "-20%" }}
-                           transition={{ duration: 0.8 }}
-                           className="relative pl-12 border-l border-white/10 group pb-8"
-                        >
-                           <div className="absolute -left-3 top-0 w-6 h-6 rounded-full bg-slate-950 border border-white/20 flex items-center justify-center group-hover:border-amber-500 transition-colors">
-                              <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></div>
-                           </div>
-                           <span className="text-8xl md:text-[10rem] font-black text-white/5 absolute -top-16 left-0 pointer-events-none select-none group-hover:text-white/10 transition-colors">
-                              {item.year}
-                           </span>
-                           <div className="relative z-10">
-                              <h4 className="text-3xl font-black text-white mb-4 group-hover:text-amber-400 transition-colors uppercase tracking-tight">
-                                 {item.title}
-                              </h4>
-                              <p className="text-xl text-slate-400 leading-relaxed max-w-2xl font-light">
-                                 {item.desc}
-                              </p>
-                           </div>
-                        </motion.div>
-                     ))}
-                  </div>
-               </div>
-            </div>
-         </section>
-
-
-
-         {/* ──────────────── 6. MODAL: EXÉGESIS HEBREA ──────────────── */}
-         <AnimatePresence>
-            {showModal && (
-               <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="fixed inset-0 z-[100] flex items-center justify-center p-4 backdrop-blur-3xl bg-slate-950/95"
-               >
-                  <motion.div
-                     initial={{ scale: 0.9, opacity: 0 }}
-                     animate={{ scale: 1, opacity: 1 }}
-                     exit={{ scale: 0.9, opacity: 0 }}
-                     className="max-w-4xl w-full bg-slate-900 border border-white/10 rounded-[3rem] p-10 md:p-16 relative overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto"
-                  >
-                     <button 
-                        onClick={() => setShowModal(false)} 
-                        className="fixed top-6 right-6 z-[120] p-4 bg-amber-500 text-slate-950 rounded-full shadow-2xl hover:scale-110 active:scale-90 transition-all flex items-center justify-center border-4 border-slate-900"
-                        aria-label="Cerrar modal"
-                     >
-                        <FaTimes size={24} />
-                     </button>
-                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                        <div className="text-center lg:text-right pt-10">
-                           <span className="text-[12rem] md:text-[18rem] font-serif text-white block leading-none select-none">לָאֵל</span>
-                           <h3 className="text-4xl font-black text-amber-500 uppercase mt-4 tracking-[0.3em]">LA-EL</h3>
-                        </div>
-                        <div className="space-y-6">
-                           <div className="inline-flex items-center gap-2 text-[10px] font-black text-amber-500 uppercase tracking-[0.3em] border border-amber-500/20 bg-amber-500/5 px-4 py-2 rounded-full">
-                              Etimología Bíblica
-                           </div>
-                           <p className="text-2xl text-slate-200 leading-relaxed font-light">
-                              En hebreo, el término **Lael** significa literalmente *"Para Dios"* o *"Hacia la Fuerza"*.
-                           </p>
-                           <p className="text-lg text-slate-500 leading-relaxed font-light italic">
-                              Reconocemos que cada talento y cada mente que pasa por nuestras aulas tiene un origen y un destino trascendente. No solo enseñamos, preparamos propósitos.
-                           </p>
-                           <div className="grid grid-cols-2 gap-4 pt-6">
-                              <div className="p-6 bg-white/5 rounded-2xl border border-white/10 text-center">
-                                 <div className="text-amber-500 font-black text-3xl mb-1">LA</div>
-                                 <div className="text-[10px] text-slate-600 uppercase font-black tracking-widest">Dirección</div>
-                              </div>
-                              <div className="p-6 bg-white/5 rounded-2xl border border-white/10 text-center">
-                                 <div className="text-amber-500 font-black text-3xl mb-1">EL</div>
-                                 <div className="text-[10px] text-slate-600 uppercase font-black tracking-widest">El Fuerte</div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </motion.div>
-               </motion.div>
-            )}
-         </AnimatePresence>
-
-         {/* ──────────────── 7. CTA: EL FUTURO SE ESCRIBE HOY ──────────────── */}
-         <section className="py-40 bg-slate-950 text-center border-t border-white/5">
-            <div className="container mx-auto px-6">
-               <h2 className="text-6xl md:text-8xl font-black text-white mb-16 tracking-tighter uppercase leading-[0.8] max-w-5xl mx-auto">
-                  Escribamos el <br /><span className="text-amber-500 italic opacity-20">Siguiente Capítulo.</span>
-               </h2>
-               <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                  <a href="/programas" className="px-12 py-6 bg-white text-slate-950 font-black rounded-2xl hover:bg-amber-400 transition-all shadow-xl shadow-white/5 uppercase tracking-widest text-xs">
-                     Explorar Programas
-                  </a>
-                  <a href="/contacto" className="px-12 py-6 bg-slate-900 text-white font-black rounded-2xl hover:bg-slate-800 border border-white/5 transition-all uppercase tracking-widest text-xs">
-                     Hablar con Admisión
-                  </a>
-               </div>
-            </div>
-         </section>
-      </div>
-   );
+    </div>
+  );
 }

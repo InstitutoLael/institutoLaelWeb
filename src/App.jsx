@@ -7,8 +7,9 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import logoAmarillo from "./assets/img/Logos/lael-inst-amarillo.png";
 
 /* ---------- Componentes Globales ---------- */
-import Navbar from "./components/Navbar.jsx";
-import Footer from "./components/Footer.jsx";
+/* ---------- Componentes Globales ---------- */
+import Navbar from "./components/layout/Navbar.jsx";
+import Footer from "./components/layout/Footer.jsx";
 import AnnouncementBar from "./components/AnnouncementBar.jsx";
 import WhatsAppButton from "./components/WhatsAppButton.jsx";
 // import SearchOverlay from "./components/SearchOverlay.jsx";
@@ -132,7 +133,7 @@ export default function App() {
                 <Route path="/idiomas" element={<Idiomas />} />
                 <Route path="/lsch" element={<LSCh />} />
                 <Route path="/homeschool" element={<Homeschool />} />
-                <Route path="/escuela-adultos" element={<EscuelaAdultos />} />
+                <Route path="/nivelacion" element={<EscuelaAdultos />} />
                 <Route path="/empresas" element={<Empresas />} />
                 <Route path="/nosotros" element={<Nosotros />} />
                 <Route path="/convenios" element={<Convenios />} />

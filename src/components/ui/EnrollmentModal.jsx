@@ -16,6 +16,25 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
     interest_pay: false
   });
   const [success, setSuccess] = useState(false);
+  const [connectionError, setConnectionError] = useState(null);
+
+  // Diagnostic: Check connection on mount
+  React.useEffect(() => {
+    const checkConnection = async () => {
+      try {
+        const { error } = await supabase.from('leads').select('id').limit(1);
+        if (error && error.code !== 'PGRST116') { // Ignore "no rows" errors
+            console.error("Connection check failed:", error);
+            setConnectionError(`Error de conexión: ${error.message}`);
+        }
+      } catch (err) {
+        setConnectionError("No se pudo conectar con el servidor de base de datos.");
+      }
+    };
+    if (isOpen) {
+        checkConnection();
+    }
+  }, [isOpen]);
 
   if (!plan) return null;
 
@@ -45,41 +64,66 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
 
     // Timeout protection: 15 seconds
     const timeout = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error("La base de datos no respondió a tiempo. Revisa tu conexión.")), 15000)
+      setTimeout(() => reject(new Error("La base de datos no respondió a tiempo. Revisa si tu proyecto en Supabase está 'Paused' o si tu conexión a internet es estable.")), 15000)
     );
 
     try {
       console.log("Submitting leadData:", leadData);
       
-      const submitPromise = supabase.from("leads").insert([leadData]);
-      const { error } = await Promise.race([submitPromise, timeout]);
+      // 1. Save Lead
+      const submitPromise = supabase.from("leads").insert([leadData]).select().single();
+      const { data: order, error: orderError } = await Promise.race([submitPromise, timeout]);
 
-      if (error) {
-        console.error("Supabase error:", error);
-        throw new Error(error.message || "Error al guardar los datos en Supabase.");
+      if (orderError) {
+        console.error("Supabase error:", orderError);
+        throw new Error(orderError.message || "Error al guardar los datos en Supabase.");
       }
 
       setSuccess(true);
       toast.success("¡Inscripción recibida con éxito!");
       
+      // 2. Handle Payment Redirect via Edge Function
       if (formData.interest_pay) {
-        if (plan.paymentUrl) {
-          toast.loading("Redirigiendo al pago...");
-          setTimeout(() => {
-            window.location.href = plan.paymentUrl;
-          }, 2000);
-        } else {
-          toast("El link de pago se enviará por WhatsApp", { icon: '📱' });
+        try {
+            toast.loading("Generando link de pago seguro...");
+            const { data: functionData, error: functionError } = await supabase.functions.invoke('create-mp-preference', {
+                body: {
+                    orderId: order.id,
+                    customer_email: formData.email,
+                    items: [{ title: plan.name, unit_price: plan.price || 100, quantity: 1 }], // Placeholder price if not in plan
+                    back_urls: {
+                        success: `${window.location.origin}/gracias`,
+                        failure: window.location.href,
+                        pending: `${window.location.origin}/gracias`
+                    }
+                }
+            });
+
+            if (functionError) throw functionError;
+            
+            if (functionData?.init_point) {
+                window.location.href = functionData.init_point;
+            } else {
+                // Fallback to static URL if function fails
+                if (plan.paymentUrl) {
+                    window.location.href = plan.paymentUrl;
+                } else {
+                    toast("Link de pago manual se enviará por WhatsApp", { icon: '📱' });
+                }
+            }
+        } catch (payErr) {
+            console.error("Payment error:", payErr);
+            toast.error("No pudimos generar el link de pago automático. Te contactaremos por WhatsApp.");
         }
       }
       
       // Auto close after success if not redirecting
-      if (!formData.interest_pay || !plan.paymentUrl) {
+      if (!formData.interest_pay) {
         setTimeout(() => {
           onClose();
           setSuccess(false);
           setFormData({ name: "", email: "", phone: "", rut: "", interest_pay: false });
-        }, 3000);
+        }, 5000);
       }
     } catch (error) {
       console.error("Error saving lead:", error);
@@ -127,6 +171,14 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
                 <FaTimes size={20} />
               </button>
             </div>
+
+            {/* Connection Error Alert */}
+            {connectionError && (
+              <div className="mx-8 mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 text-red-500 text-xs shadow-lg shadow-red-500/5">
+                <FaTimes size={14} className="shrink-0" />
+                <p><strong>Aviso de Conexión:</strong> {connectionError}. Revisa si tu proyecto en Supabase está 'Active' o tu internet.</p>
+              </div>
+            )}
 
             {/* Content Switcher: Form or Success */}
             <AnimatePresence mode="wait">

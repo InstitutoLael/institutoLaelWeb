@@ -29,6 +29,8 @@ import {
 
 // COMPONENTS
 import SEOHead from "../components/SEOHead.jsx";
+import supabaseClient from "../lib/supabaseClient.js";
+import toast from "react-hot-toast";
 
 export default function Empresas() {
   // Configurator State
@@ -37,6 +39,7 @@ export default function Empresas() {
   const [months, setMonths] = useState(3);
   const [modality, setModality] = useState("online");
   const [quote, setQuote] = useState(null);
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -53,21 +56,50 @@ export default function Empresas() {
     setQuote(result);
   }, [selectedServiceId, headcount, months, modality]);
 
-  const handleWappClick = (customMsg = null) => {
+  const handleWappClick = async (customMsg = null) => {
     if (!quote && !customMsg) return;
     
-    let msg = customMsg;
-    if (!msg) {
-      msg = `Hola Lael Corporate. Me interesa una propuesta para:\n\n` +
+    // Si es una consulta rápida desde un pack o el hero
+    if (customMsg) {
+      window.open(`https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(customMsg)}`, '_blank');
+      return;
+    }
+
+    // Si es desde el cotizador, primero guardamos el lead en Supabase
+    setIsSending(true);
+    try {
+      const { error } = await supabaseClient.from('leads').insert([{
+        name: 'Lead Corporativo (Simulación)',
+        email: 'pendiente@empresa.com',
+        phone: 'pendiente',
+        type: 'quote',
+        plan_id: selectedServiceId,
+        plan_name: quote.service.label,
+        headcount: parseInt(headcount),
+        duration_months: parseInt(months),
+        modality: modality,
+        estimated_quote: quote.financials.total,
+        status: 'nuevo'
+      }]);
+
+      if (error) throw error;
+      toast.success('Simulación guardada. Redirigiendo a WhatsApp...');
+    } catch (err) {
+      console.error("Supabase error:", err);
+      // No bloqueamos el WhatsApp si falla Supabase, pero avisamos
+    } finally {
+      setIsSending(false);
+      
+      const msg = `Hola Lael Corporate. Me interesa una propuesta para:\n\n` +
             `📌 Servicio: ${quote.service.label}\n` +
             `👥 Equipo: ${headcount} personas\n` +
             `⏳ Plazo: ${months} meses (${modality})\n` +
             `💰 Inversión mensual p/p: ${clp(quote.financials.perPersonMonth)}\n` +
             `🚀 ROI Proyectado: ${quote.impact.totalROI.toFixed(1)}x\n\n` +
             `Quedo atento a su contacto técnico.`;
+      
+      window.open(`https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(msg)}`, '_blank');
     }
-    
-    window.open(`https://wa.me/${WAPP_INTL}?text=${encodeURIComponent(msg)}`, '_blank');
   };
 
   const scrollToSection = (id) => {

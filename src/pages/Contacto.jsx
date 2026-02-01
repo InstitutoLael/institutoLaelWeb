@@ -19,20 +19,34 @@ export default function Contacto() {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSending(true);
     
-    // Simulación visual
-    console.log("Formulario enviado:", form);
-    
-    setTimeout(() => {
+    try {
+      const { error } = await supabaseClient.from('leads').insert([{
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        message: form.message,
+        subject: form.subject,
+        type: 'contact',
+        status: 'nuevo'
+      }]);
+
+      if (error) throw error;
+
       setIsSending(false);
       setSentSuccess(true);
+      toast.success('¡Mensaje enviado con éxito!');
       setForm({ name: "", email: "", phone: "", subject: "general", message: "" });
       
       setTimeout(() => setSentSuccess(false), 5000);
-    }, 1500);
+    } catch (error) {
+      console.error("Error al enviar el mensaje:", error);
+      toast.error('Hubo un problema al enviar tu mensaje. Intenta por WhatsApp.');
+      setIsSending(false);
+    }
   };
 
   const copyEmail = () => {

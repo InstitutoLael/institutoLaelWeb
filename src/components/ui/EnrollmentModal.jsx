@@ -15,6 +15,7 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
     rut: "",
     interest_pay: false
   });
+  const [success, setSuccess] = useState(false);
 
   if (!plan) return null;
 
@@ -38,31 +39,51 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
       plan_id: plan.id,
       plan_name: plan.name,
       interest_pay: formData.interest_pay,
-      type: 'enrollment', // CRITICAL: Missing type in previous version
+      type: 'enrollment',
       created_at: new Date().toISOString()
     };
 
+    // Timeout protection: 15 seconds
+    const timeout = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error("La base de datos no respondió a tiempo. Revisa tu conexión.")), 15000)
+    );
+
     try {
-      const { error } = await supabase.from("leads").insert([leadData]);
+      console.log("Submitting leadData:", leadData);
+      
+      const submitPromise = supabase.from("leads").insert([leadData]);
+      const { error } = await Promise.race([submitPromise, timeout]);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error:", error);
+        throw new Error(error.message || "Error al guardar los datos en Supabase.");
+      }
 
+      setSuccess(true);
       toast.success("¡Inscripción recibida con éxito!");
       
-      if (formData.interest_pay && plan.paymentUrl) {
-        toast.loading("Redirigiendo al pago...");
-        setTimeout(() => {
-          window.location.href = plan.paymentUrl;
-        }, 1500);
-      } else {
+      if (formData.interest_pay) {
+        if (plan.paymentUrl) {
+          toast.loading("Redirigiendo al pago...");
+          setTimeout(() => {
+            window.location.href = plan.paymentUrl;
+          }, 2000);
+        } else {
+          toast("El link de pago se enviará por WhatsApp", { icon: '📱' });
+        }
+      }
+      
+      // Auto close after success if not redirecting
+      if (!formData.interest_pay || !plan.paymentUrl) {
         setTimeout(() => {
           onClose();
+          setSuccess(false);
           setFormData({ name: "", email: "", phone: "", rut: "", interest_pay: false });
-        }, 2000);
+        }, 3000);
       }
     } catch (error) {
       console.error("Error saving lead:", error);
-      toast.error("Error al procesar tu solicitud. Intenta nuevamente.");
+      toast.error(error.message || "Error al procesar tu solicitud. Intenta nuevamente.");
     } finally {
       setLoading(false);
     }
@@ -107,8 +128,17 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
               </button>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="p-8 pt-4 space-y-6">
+            {/* Content Switcher: Form or Success */}
+            <AnimatePresence mode="wait">
+              {!success ? (
+                <motion.form
+                  key="enroll-form"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onSubmit={handleSubmit}
+                  className="p-8 pt-4 space-y-6"
+                >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest text-slate-500 ml-1">Nombre Completo</label>
@@ -200,7 +230,36 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
               <p className="text-[9px] text-center text-slate-500 uppercase font-black tracking-widest">
                 Tus datos están protegidos bajo nuestras políticas de privacidad.
               </p>
-            </form>
+                </motion.form>
+              ) : (
+                <motion.div
+                  key="success-view"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="p-12 text-center space-y-6"
+                >
+                  <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-emerald-500/20">
+                    <FaCheckCircle className="text-emerald-500 text-4xl" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-2">¡Todo listo!</h3>
+                    <p className="text-slate-400 text-sm">
+                      {formData.interest_pay && plan.paymentUrl 
+                        ? "Te estamos redirigiendo a la pasarela de pago segura..." 
+                        : "Hemos recibido tu información. Un coordinador te contactará a la brevedad."}
+                    </p>
+                  </div>
+                  <div className="pt-4">
+                    <button
+                      onClick={onClose}
+                      className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-all"
+                    >
+                      Cerrar Ventana
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </div>
       )}

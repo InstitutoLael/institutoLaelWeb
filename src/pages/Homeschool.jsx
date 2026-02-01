@@ -54,7 +54,8 @@ export default function Academy() {
             const { data, error } = await supabase
                .from('products')
                .select('*')
-               .eq('category', 'TALLER');
+               .not('category', 'eq', 'NAAMA STUDIO') // Excluye el estudio
+               .not('category', 'eq', 'NAAMA');        // Excluye la categoría base si existe
             if (error) throw error;
             setDbProducts(data || []);
          } catch (err) {

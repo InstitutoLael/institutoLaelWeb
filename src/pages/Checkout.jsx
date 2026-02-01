@@ -2,8 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { supabase } from "../supabaseClient";
+// import { supabase } from "../supabaseClient"; // DEPRECATED: Usamos lib/supabaseClient
 import { motion, AnimatePresence } from "framer-motion";
+
+/**
+ * @deprecated
+ * Esta página es parte del flujo antiguo de e-commerce.
+ * Ahora utilizamos el EnrollmentModal para capturar leads y redirigir a pago directo.
+ */
 import {
     FaShoppingCart, FaCreditCard, FaUniversity, FaWhatsapp,
     FaArrowLeft, FaShieldAlt, FaUser, FaLock, FaEnvelope,

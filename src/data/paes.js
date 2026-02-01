@@ -154,7 +154,7 @@ export const PAES_COMBOS = [
     color: "amber",
     tag: "Oferta Lanzamiento",
     features: ["Lenguaje + Historia", "Módulo Filosofía Incan", "Ensayo Semanal", "Clases en Vivo"],
-    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-humanista"
+    paymentUrl: "" // Pegar link de Mercado Pago aquí
   },
   {
     id: "combo-cientifico",
@@ -165,7 +165,7 @@ export const PAES_COMBOS = [
     color: "teal",
     tag: "Más Popular",
     features: ["M1 + M2 (Matemáticas)", "Elige Biología o Física", "Ciencias Común", "Ensayo Semanal"],
-    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-cientifico"
+    paymentUrl: "" // Pegar link de Mercado Pago aquí
   },
   {
     id: "combo-full",
@@ -175,7 +175,7 @@ export const PAES_COMBOS = [
     price: 44990,
     color: "indigo",
     features: ["Acceso a TODO", "Orientación Vocacional", "Taller Manejo Ansiedad", "Garantía de Puntaje"],
-    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-full"
+    paymentUrl: "" // Pegar link de Mercado Pago aquí
   }
 ];
 

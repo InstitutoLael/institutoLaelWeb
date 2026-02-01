@@ -81,7 +81,7 @@ export const LANGUAGES = [
     ],
     levels: ["A1 (Básico)", "A2", "B1", "B2 (Avanzado)"],
     comingSoon: false,
-    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-ingles"
+    paymentUrl: "" // Pegar link aquí
   },
   {
     id: "plan-coreano",
@@ -97,7 +97,7 @@ export const LANGUAGES = [
     ],
     levels: ["Nivel 1 (Inicial)", "Nivel 2", "Nivel 3"],
     comingSoon: false,
-    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-coreano"
+    paymentUrl: "" // Pegar link aquí
   },
   {
     id: "plan-espanol",
@@ -113,7 +113,7 @@ export const LANGUAGES = [
     ],
     levels: ["A1 (Survival)", "A2", "B1 (Fluent)"],
     comingSoon: false,
-    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-espanol"
+    paymentUrl: "" // Pegar link aquí
   }
 ];
 

@@ -97,7 +97,7 @@ export const PLANS = [
     ],
     cta: "Inscribirme con Plan Estándar",
     isPopular: true,
-    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-adultos-estandar"
+    paymentUrl: "" // Pegar link aquí
   },
   {
     id: "adultos-padrino",
@@ -115,7 +115,7 @@ export const PLANS = [
     ],
     cta: "Ser Padrino Educativo",
     isPopular: false,
-    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-adultos-padrino"
+    paymentUrl: "" // Pegar link aquí
   },
 ];
 

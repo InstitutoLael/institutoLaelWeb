@@ -70,7 +70,7 @@ export const LSCH_GROUP_PLANS = [
       "Acceso a grabaciones por 7 días",
       "Diploma de participación"
     ],
-    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-lsch-month"
+    paymentUrl: "" // Pegar link aquí
   },
   {
     id: "lsch-g-quarter",
@@ -87,7 +87,7 @@ export const LSCH_GROUP_PLANS = [
       "Certificado de Nivel aprobado"
     ],
     highlight: true,
-    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-lsch-quarter"
+    paymentUrl: "" // Pegar link aquí
   },
 ];
 

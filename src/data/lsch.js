@@ -58,7 +58,7 @@ export const LSCH_MODULES = [
    ────────────────────────────────────────────────────────────────────────── */
 export const LSCH_GROUP_PLANS = [
   {
-    id: "g-month",
+    id: "lsch-g-month",
     title: "Plan Mensual Flexible",
     desc: "Ideal para ir a tu propio ritmo.",
     price: 24990,
@@ -70,9 +70,10 @@ export const LSCH_GROUP_PLANS = [
       "Acceso a grabaciones por 7 días",
       "Diploma de participación"
     ],
+    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-lsch-month"
   },
   {
-    id: "g-quarter",
+    id: "lsch-g-quarter",
     title: "Plan Trimestral (Ahorro)",
     desc: "Compromiso real con el aprendizaje.",
     price: 19990, // Precio por mes pagando el trimestre
@@ -86,6 +87,7 @@ export const LSCH_GROUP_PLANS = [
       "Certificado de Nivel aprobado"
     ],
     highlight: true,
+    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-lsch-quarter"
   },
 ];
 

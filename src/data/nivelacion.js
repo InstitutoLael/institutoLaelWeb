@@ -64,7 +64,7 @@ export const STUDY_CYCLES = [
    ────────────────────────────────────────────────────────────────────────── */
 export const PLANS = [
   {
-    id: "social",
+    id: "adultos-social",
     tag: "Beca 100%", 
     title: "Cupo Social",
     price: 0,
@@ -78,10 +78,11 @@ export const PLANS = [
       "Contrato de Asistencia (Mín. 80%)"
     ],
     cta: "Postular a Gratuidad",
-    isPopular: false
+    isPopular: false,
+    paymentUrl: null // Gratuidad se gestiona manual
   },
   {
-    id: "consciente",
+    id: "adultos-estandar",
     tag: "Precio Justo",
     title: "Plan Estándar",
     price: 12990, 
@@ -95,10 +96,11 @@ export const PLANS = [
       "Sin requisito mínimo de asistencia"
     ],
     cta: "Inscribirme con Plan Estándar",
-    isPopular: true
+    isPopular: true,
+    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-adultos-estandar"
   },
   {
-    id: "padrino",
+    id: "adultos-padrino",
     tag: "Héroe Lael",
     title: "Plan Padrino",
     price: 25000, 
@@ -112,7 +114,8 @@ export const PLANS = [
       "Acceso a todos los cursos de soft-skills"
     ],
     cta: "Ser Padrino Educativo",
-    isPopular: false
+    isPopular: false,
+    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-adultos-padrino"
   },
 ];
 

@@ -27,9 +27,11 @@ import {
 
 // COMPONENTS
 import SEOHead from "../components/SEOHead.jsx";
+import EnrollmentModal from "../components/ui/EnrollmentModal.jsx";
 
 export default function EscuelaAdultos() {
   const [openFaq, setOpenFaq] = useState(null);
+  const [enrollPlan, setEnrollPlan] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -46,6 +48,12 @@ export default function EscuelaAdultos() {
       <SEOHead 
         title="Escuela de Adultos | Programa Caminos | Instituto Lael" 
         description="Termina tu 4to medio con el Programa Caminos. Modelo solidario 'Robin Hood' para que nadie se quede fuera."
+      />
+
+      <EnrollmentModal 
+        isOpen={!!enrollPlan} 
+        onClose={() => setEnrollPlan(null)} 
+        plan={enrollPlan} 
       />
 
       {/* ──────────────── 1. HERO SECTION (SEGUNDA OPORTUNIDAD) ──────────────── */}
@@ -115,7 +123,7 @@ export default function EscuelaAdultos() {
       <section id="precios" className="py-32 bg-stone-50 overflow-hidden">
          <div className="container mx-auto px-6 max-w-6xl">
             <div className="text-center mb-20">
-               <h2 className="text-4xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter mb-4">Una Educación <span className="text-amber-600">Solidaria</span></h2>
+               <h2 className="text-4xl md:text-6xl font-black text-slate-900 uppercase tracking-tighter mb-4"> Una Educación <span className="text-amber-600">Solidaria</span></h2>
                <p className="text-slate-500 text-lg max-w-xl mx-auto font-medium">Elige tu compromiso. Nadie se queda fuera por dinero.</p>
             </div>
 
@@ -158,14 +166,12 @@ export default function EscuelaAdultos() {
                         ))}
                      </div>
 
-                     <a
-                        href={waLink(`Hola! Estoy interesado en el Programa Caminos. Quiero saber más sobre el ${plan.title}.`)}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                     <button
+                        onClick={() => setEnrollPlan({ id: plan.id, name: plan.title, paymentUrl: plan.paymentUrl })}
                         className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] text-center transition-all ${plan.isPopular ? 'bg-amber-600 hover:bg-amber-500 text-white shadow-lg shadow-amber-600/30' : 'bg-slate-900 hover:bg-slate-800 text-white shadow-lg shadow-slate-900/30'}`}
                      >
                         {plan.cta}
-                     </a>
+                     </button>
                   </motion.div>
                ))}
             </div>
@@ -322,14 +328,12 @@ export default function EscuelaAdultos() {
                <h3 className="text-2xl font-black text-white uppercase tracking-tighter">¿Listo para el cambio?</h3>
                <p className="text-amber-100 font-medium">Hablemos por WhatsApp y aseguremos tu cupo social.</p>
             </div>
-            <a 
-               href={waLink("Hola! Quiero inscribirme en el Programa Caminos y terminar mi colegio.")}
-               target="_blank"
-               rel="noopener noreferrer"
+            <button 
+               onClick={() => setEnrollPlan({ id: 'adultos-general', name: 'Nivelación Adultos General', paymentUrl: null })} 
                className="px-10 py-5 bg-white text-slate-900 font-black rounded-2xl transition-all shadow-2xl hover:bg-stone-100 uppercase tracking-widest text-[10px] flex items-center gap-3"
             >
                <FaWhatsapp className="text-lg text-emerald-600" /> CONTACTAR COORDINACIÓN
-            </a>
+            </button>
          </div>
       </section>
 

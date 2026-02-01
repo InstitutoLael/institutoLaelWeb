@@ -26,11 +26,13 @@ import {
 
 // SEO
 import SEOHead from "../components/SEOHead.jsx";
+import EnrollmentModal from "../components/ui/EnrollmentModal.jsx";
 
 export default function Idiomas() {
   const [selectedIds, setSelectedIds] = useState([]);
   const [activeSyllabus, setActiveSyllabus] = useState("ingles");
   const [pricing, setPricing] = useState(computeLangBundle(0));
+  const [enrollPlan, setEnrollPlan] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -57,6 +59,12 @@ export default function Idiomas() {
       <SEOHead 
         title="Idiomas 2026 | Conecta con el Mundo | Inglés y Coreano" 
         description="Aprende Inglés, Coreano o Español con clases en vivo, grupos reducidos y enfoque cultural real."
+      />
+
+      <EnrollmentModal 
+        isOpen={!!enrollPlan} 
+        onClose={() => setEnrollPlan(null)} 
+        plan={enrollPlan} 
       />
 
       {/* ──────────────── A. HERO SECTION (CONECTA) ──────────────── */}
@@ -160,7 +168,7 @@ export default function Idiomas() {
                   </div>
 
                   <div className="space-y-12">
-                     {SYLLABUS_PREVIEW[activeSyllabus].map((phase, i) => (
+                     {SYLLABUS_PREVIEW[activeSyllabus === "plan-ingles" ? "ingles" : activeSyllabus === "plan-coreano" ? "coreano" : "espanol"].map((phase, i) => (
                         <motion.div 
                            key={i}
                            initial={{ opacity: 0, x: -20 }}
@@ -343,14 +351,17 @@ export default function Idiomas() {
                         </div>
                      </div>
 
-                     <a 
-                        href={waLink(`Hola, quiero iniciar mi inscripción en el Plan Idiomas. Los destinos elegidos son: ${selectedIds.map(id => id.toUpperCase()).join(", ")}`)}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                     <button 
+                        disabled={selectedIds.length === 0}
+                        onClick={() => setEnrollPlan({
+                          id: `idiomas-bundle-${selectedIds.join("-")}`,
+                          name: `Pack Idiomas (${selectedIds.length})`,
+                          paymentUrl: null
+                        })}
                         className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-xs text-center transition-all flex items-center justify-center gap-3 ${selectedIds.length > 0 ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
                      >
-                        <FaWhatsapp size={18} /> MATRÍCULA ONLINE
-                     </a>
+                        MATRÍCULA ONLINE
+                     </button>
                   </div>
                </div>
             </div>
@@ -368,21 +379,90 @@ export default function Idiomas() {
                HABLA SIN <br /> LÍMITES.
             </h2>
             <p className="text-slate-500 font-medium mb-10">Cupos limitados por sección para garantizar calidad.</p>
-            <a 
-               href={waLink("Hola, quiero información sobre los cursos de Idiomas")} 
-               target="_blank"
-               rel="noopener noreferrer"
+            <button 
+               onClick={() => setEnrollPlan({ id: 'idiomas-general', name: 'Cursos de Idiomas 2026', paymentUrl: null })} 
                className="inline-flex items-center gap-4 px-12 py-6 bg-white text-slate-950 font-black rounded-[2rem] hover:bg-blue-500 hover:text-white transition-all shadow-2xl uppercase tracking-widest text-xs group"
             >
                Hablar con Coordinación
                <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
-            </a>
+            </button>
          </motion.div>
       </section>
 
     </div>
   );
 }
+
+// ──────────────── SUB-COMPONENTS ────────────────
+
+const LanguagePoster = ({ lang, index, toggleLanguage, isSelected }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ delay: index * 0.1 }}
+    onClick={() => toggleLanguage(lang.id)}
+    className={`relative aspect-[3/4] rounded-[2.5rem] overflow-hidden group cursor-pointer border-2 transition-all duration-500 ${isSelected ? 'border-blue-500 ring-4 ring-blue-500/20' : 'border-white/5 hover:border-white/20'}`}
+  >
+    {/* Background Image/Gradient */}
+    <div className="absolute inset-0 bg-slate-900">
+       <div className="absolute inset-0 opacity-40 mix-blend-overlay bg-gradient-to-b from-transparent via-black/50 to-black" />
+       <div className="absolute inset-0 transition-opacity duration-700 opacity-20 group-hover:opacity-40" style={{ background: `radial-gradient(circle at 50% 10%, ${lang.color}, transparent 80%)` }} />
+    </div>
+
+    {/* Header Info */}
+    <div className="absolute top-8 left-8 right-8 flex justify-between items-start z-10">
+       <span className="bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-white">
+          {lang.badge}
+       </span>
+       <span className="text-5xl drop-shadow-2xl transition-transform group-hover:scale-110 duration-500">{lang.emoji}</span>
+    </div>
+
+    {/* Content */}
+    <div className="absolute bottom-8 left-8 right-8 z-10">
+       <h3 className="text-3xl font-black text-white uppercase tracking-tighter mb-3 leading-tight">{lang.name}</h3>
+       <p className="text-xs text-slate-400 font-medium leading-relaxed mb-6 group-hover:text-slate-200 transition-colors uppercase tracking-wide">
+          {lang.summary}
+       </p>
+       
+       <div className="flex gap-2 flex-wrap mb-6">
+          {lang.features.slice(0, 2).map((f, i) => (
+             <span key={i} className="px-3 py-1 bg-white/5 rounded-lg text-[10px] font-bold text-slate-500 uppercase tracking-widest whitespace-nowrap">
+                {f}
+             </span>
+          ))}
+       </div>
+
+       <button className={`w-full py-3 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all ${isSelected ? 'bg-blue-500 text-white' : 'bg-white/10 text-white backdrop-blur-md hover:bg-white/20'}`}>
+          {isSelected ? 'DESTINO ELEGIDO' : 'AÑADIR A MI PLAN'}
+       </button>
+    </div>
+
+    {/* Selection Overlay */}
+    <AnimatePresence>
+       {isSelected && (
+          <motion.div 
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             exit={{ opacity: 0 }}
+             className="absolute inset-0 bg-blue-600/10 pointer-events-none z-20"
+          />
+       )}
+    </AnimatePresence>
+  </motion.div>
+);
+
+const BundleOption = ({ title, desc, count, total, saving, isSelected, recommended, onClick }) => (
+   <div className={`flex-1 relative p-8 rounded-[2.5rem] border-2 transition-all flex flex-col justify-center text-center ${recommended ? 'bg-blue-600/10 border-blue-500 md:scale-105 z-10 shadow-2xl shadow-blue-500/10' : 'bg-slate-900/40 border-white/5 opacity-80'}`}>
+      {recommended && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">Recomendado</div>}
+      <h3 className="text-lg font-black text-white uppercase tracking-tight mb-2">{title}</h3>
+      <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-4">{desc}</p>
+      <div className="mb-2">
+         <span className="text-3xl font-black text-white tracking-tighter">{total}</span>
+         <span className="text-[10px] font-black uppercase text-slate-600 ml-1">/Mes</span>
+      </div>
+      {saving && <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Ahorras {saving}</span>}
+   </div>
+);
 
 // ──────────────── SUB-COMPONENTS ────────────────
 

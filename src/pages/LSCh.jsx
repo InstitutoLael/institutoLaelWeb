@@ -28,9 +28,11 @@ import {
 
 // SEO
 import SEOHead from "../components/SEOHead.jsx";
+import EnrollmentModal from "../components/ui/EnrollmentModal.jsx";
 
 export default function Lsch() {
   const [isChurchMember, setIsChurchMember] = useState(false);
+  const [enrollPlan, setEnrollPlan] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -47,6 +49,12 @@ export default function Lsch() {
       <SEOHead 
         title="Lengua de Señas Chilena (LSCh) | Instituto Lael" 
         description="Aprende LSCh con una instructora sorda nativa. Inmersión cultural, gramática visual y empatía real."
+      />
+
+      <EnrollmentModal 
+        isOpen={!!enrollPlan} 
+        onClose={() => setEnrollPlan(null)} 
+        plan={enrollPlan} 
       />
 
       {/* ──────────────── A. HERO SECTION (EL PODER DEL SILENCIO) ──────────────── */}
@@ -274,6 +282,7 @@ export default function Lsch() {
                         ]}
                         highlight
                         isChurch
+                        onEnroll={() => setEnrollPlan({ id: 'lsch-church', name: 'LSCh Convenio Iglesia', paymentUrl: null })}
                      />
                   </div>
                ) : (
@@ -285,6 +294,7 @@ export default function Lsch() {
                         desc={LSCH_GROUP_PLANS[0].desc}
                         features={LSCH_GROUP_PLANS[0].features}
                         badge={LSCH_GROUP_PLANS[0].badge}
+                        onEnroll={() => setEnrollPlan({ id: LSCH_GROUP_PLANS[0].id, name: LSCH_GROUP_PLANS[0].title, paymentUrl: LSCH_GROUP_PLANS[0].paymentUrl })}
                      />
                      <PricingCard 
                         title={LSCH_GROUP_PLANS[1].title}
@@ -293,6 +303,7 @@ export default function Lsch() {
                         features={LSCH_GROUP_PLANS[1].features}
                         badge={LSCH_GROUP_PLANS[1].badge}
                         highlight
+                        onEnroll={() => setEnrollPlan({ id: LSCH_GROUP_PLANS[1].id, name: LSCH_GROUP_PLANS[1].title, paymentUrl: LSCH_GROUP_PLANS[1].paymentUrl })}
                      />
                   </>
                )}
@@ -315,15 +326,13 @@ export default function Lsch() {
             <p className="text-slate-500 font-medium mb-12 max-w-xl mx-auto">
                Inicia hoy tu formación en LSCh y sé parte de la solución de inclusión en Chile.
             </p>
-            <a 
-               href={waLink(`Hola, quiero información sobre el curso de LSCh (${isChurchMember ? 'Convenio Iglesia' : 'General'}).`)} 
-               target="_blank"
-               rel="noopener noreferrer"
+            <button 
+               onClick={() => setEnrollPlan({ id: 'lsch-general', name: 'Curso LSCh General', paymentUrl: null })} 
                className="inline-flex items-center gap-4 px-12 py-6 bg-purple-600 text-white font-black rounded-[2rem] hover:bg-purple-500 transition-all shadow-2xl shadow-purple-600/30 uppercase tracking-widest text-xs group"
             >
                Hablar con Fernanda
                <FaWhatsapp size={20} className="group-hover:scale-110 transition-transform" />
-            </a>
+            </button>
          </motion.div>
       </section>
 
@@ -333,7 +342,7 @@ export default function Lsch() {
 
 // ──────────────── SUB-COMPONENTS ────────────────
 
-const PricingCard = ({ title, price, desc, features, badge, highlight, isChurch }) => (
+const PricingCard = ({ title, price, desc, features, badge, highlight, isChurch, onEnroll }) => (
    <div className={`relative p-12 rounded-[3rem] border transition-all flex flex-col h-full bg-white/[0.01] ${highlight ? 'border-purple-500/50 shadow-2xl bg-white/[0.03]' : 'border-white/5'}`}>
       {badge && (
          <div className="absolute top-0 right-10 -translate-y-1/2 bg-purple-600 text-white px-5 py-2 rounded-full text-[9px] font-black uppercase tracking-widest shadow-xl">
@@ -369,13 +378,11 @@ const PricingCard = ({ title, price, desc, features, badge, highlight, isChurch 
          ))}
       </div>
 
-      <a 
-         href={`https://wa.me/56964626568?text=Hola, quiero matricularme en LSCh: ${title}`}
-         target="_blank"
-         rel="noopener noreferrer"
+      <button 
+         onClick={onEnroll}
          className={`w-full py-6 rounded-2xl font-black uppercase tracking-widest text-[10px] text-center transition-all ${highlight ? 'bg-purple-600 hover:bg-purple-500 text-white' : 'bg-white/5 text-white border border-white/10 hover:bg-white/10'}`}
       >
          Solicitar Matrícula
-      </a>
+      </button>
    </div>
 );

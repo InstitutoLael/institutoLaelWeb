@@ -68,7 +68,7 @@ export function computeLangBundle(countSelected) {
    ────────────────────────────────────────────────────────────────────────── */
 export const LANGUAGES = [
   {
-    id: "ingles",
+    id: "plan-ingles",
     name: "English Booster",
     emoji: "🇺🇸",
     color: "#3b82f6", // Blue
@@ -81,9 +81,10 @@ export const LANGUAGES = [
     ],
     levels: ["A1 (Básico)", "A2", "B1", "B2 (Avanzado)"],
     comingSoon: false,
+    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-ingles"
   },
   {
-    id: "coreano",
+    id: "plan-coreano",
     name: "Coreano + Cultura",
     emoji: "🇰🇷",
     color: "#ec4899", // Pink
@@ -96,9 +97,10 @@ export const LANGUAGES = [
     ],
     levels: ["Nivel 1 (Inicial)", "Nivel 2", "Nivel 3"],
     comingSoon: false,
+    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-coreano"
   },
   {
-    id: "espanol",
+    id: "plan-espanol",
     name: "Spanish for Expats",
     emoji: "🇨🇱",
     color: "#f59e0b", // Amber
@@ -111,6 +113,7 @@ export const LANGUAGES = [
     ],
     levels: ["A1 (Survival)", "A2", "B1 (Fluent)"],
     comingSoon: false,
+    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-espanol"
   }
 ];
 

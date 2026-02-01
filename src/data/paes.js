@@ -146,33 +146,36 @@ export const PAES_SUBJECTS = [
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_COMBOS = [
   {
-    id: "humanista",
+    id: "combo-humanista",
     title: "Pack Humanista",
     subtitle: "Lenguaje + Historia + Filosofía",
-    subjects: ["len", "his", "m1"], // M1 is usually mandatory, keeping for pricing structure
+    subjects: ["len", "his", "m1"], 
     price: 34990,
     color: "amber",
     tag: "Oferta Lanzamiento",
-    features: ["Lenguaje + Historia", "Módulo Filosofía Incan", "Ensayo Semanal", "Clases en Vivo"]
+    features: ["Lenguaje + Historia", "Módulo Filosofía Incan", "Ensayo Semanal", "Clases en Vivo"],
+    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-humanista"
   },
   {
-    id: "cientifico",
+    id: "combo-cientifico",
     title: "Pack Científico",
     subtitle: "Matemáticas + Ciencias + Biología/Física",
     subjects: ["m1", "m2", "bio", "fis"], 
     price: 34990,
     color: "teal",
     tag: "Más Popular",
-    features: ["M1 + M2 (Matemáticas)", "Elige Biología o Física", "Ciencias Común", "Ensayo Semanal"]
+    features: ["M1 + M2 (Matemáticas)", "Elige Biología o Física", "Ciencias Común", "Ensayo Semanal"],
+    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-cientifico"
   },
   {
-    id: "full",
+    id: "combo-full",
     title: "Pack 4 Medios (Full)",
     subtitle: "Todas las asignaturas para asegurar",
     subjects: ["len", "m1", "m2", "his", "bio"],
     price: 44990,
     color: "indigo",
-    features: ["Acceso a TODO", "Orientación Vocacional", "Taller Manejo Ansiedad", "Garantía de Puntaje"]
+    features: ["Acceso a TODO", "Orientación Vocacional", "Taller Manejo Ansiedad", "Garantía de Puntaje"],
+    paymentUrl: "https://www.mercadopago.cl/checkout/v1/redirect?pref_id=placeholder-full"
   }
 ];
 

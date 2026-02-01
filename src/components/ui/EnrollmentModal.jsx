@@ -4,6 +4,8 @@ import { FaTimes, FaWhatsapp, FaCreditCard, FaUser, FaEnvelope, FaPhone, FaCheck
 import { supabase } from "../../lib/supabaseClient";
 import toast from "react-hot-toast";
 
+import { formatRUT, formatPhone } from "../../utils/formatters";
+
 export default function EnrollmentModal({ isOpen, onClose, plan }) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -15,6 +17,14 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
   });
 
   if (!plan) return null;
+
+  const handleRUTChange = (e) => {
+    setFormData({ ...formData, rut: formatRUT(e.target.value) });
+  };
+
+  const handlePhoneChange = (e) => {
+    setFormData({ ...formData, phone: formatPhone(e.target.value) });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +38,7 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
       plan_id: plan.id,
       plan_name: plan.name,
       interest_pay: formData.interest_pay,
+      type: 'enrollment', // CRITICAL: Missing type in previous version
       created_at: new Date().toISOString()
     };
 
@@ -121,7 +132,7 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
                     placeholder="12.345.678-9"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-4 text-white focus:border-indigo-500 transition-all outline-none"
                     value={formData.rut}
-                    onChange={(e) => setFormData({...formData, rut: e.target.value})}
+                    onChange={handleRUTChange}
                   />
                 </div>
               </div>
@@ -152,7 +163,7 @@ export default function EnrollmentModal({ isOpen, onClose, plan }) {
                       placeholder="+56 9"
                       className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white focus:border-indigo-500 transition-all outline-none"
                       value={formData.phone}
-                      onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      onChange={handlePhoneChange}
                     />
                   </div>
                 </div>

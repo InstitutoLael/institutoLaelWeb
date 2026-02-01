@@ -9,6 +9,8 @@ import { CONTACT_INFO, CONTACT_SUBJECTS } from "../data/contact.js";
 import { supabase } from "../lib/supabaseClient";
 import toast from "react-hot-toast";
 
+import { formatPhone } from "../utils/formatters";
+
 export default function Contacto() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "general", message: "" });
   const [isSending, setIsSending] = useState(false);
@@ -18,7 +20,8 @@ export default function Contacto() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    const finalValue = name === "phone" ? formatPhone(value) : value;
+    setForm(prev => ({ ...prev, [name]: finalValue }));
   };
 
   const handleSubmit = async (e) => {

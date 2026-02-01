@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { Toaster } from "react-hot-toast";
 import logoAmarillo from "./assets/img/Logos/lael-inst-amarillo.png";
 
 /* ---------- Componentes Globales ---------- */
@@ -114,6 +115,7 @@ export default function App() {
   return (
     <AuthProvider>
       <CartProvider>
+        <Toaster position="top-right" reverseOrder={false} />
         <ScrollToTop />
 
         <div className="flex flex-col min-h-screen">

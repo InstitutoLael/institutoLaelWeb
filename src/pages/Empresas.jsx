@@ -29,7 +29,7 @@ import {
 
 // COMPONENTS
 import SEOHead from "../components/SEOHead.jsx";
-import supabaseClient from "../lib/supabaseClient.js";
+import { supabase } from "../lib/supabaseClient.js";
 import toast from "react-hot-toast";
 
 export default function Empresas() {
@@ -68,7 +68,7 @@ export default function Empresas() {
     // Si es desde el cotizador, primero guardamos el lead en Supabase
     setIsSending(true);
     try {
-      const { error } = await supabaseClient.from('leads').insert([{
+      const { error } = await supabase.from('leads').insert([{
         name: 'Lead Corporativo (Simulación)',
         email: 'pendiente@empresa.com',
         phone: 'pendiente',

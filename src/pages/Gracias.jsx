@@ -9,7 +9,7 @@ import confetti from "canvas-confetti";
 
 const clp = (n) => Number(n || 0).toLocaleString("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
 
-import { supabase } from "../supabaseClient";
+import { supabase } from "../lib/supabaseClient";
 import { FaStar } from "react-icons/fa";
 
 // ... (keep previous imports)

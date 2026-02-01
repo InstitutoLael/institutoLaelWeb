@@ -6,6 +6,8 @@ import {
 } from "react-icons/fa";
 import SEOHead from "../components/SEOHead.jsx";
 import { CONTACT_INFO, CONTACT_SUBJECTS } from "../data/contact.js";
+import { supabase } from "../lib/supabaseClient";
+import toast from "react-hot-toast";
 
 export default function Contacto() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "general", message: "" });
@@ -24,7 +26,7 @@ export default function Contacto() {
     setIsSending(true);
     
     try {
-      const { error } = await supabaseClient.from('leads').insert([{
+      const { error } = await supabase.from('leads').insert([{
         name: form.name,
         email: form.email,
         phone: form.phone,

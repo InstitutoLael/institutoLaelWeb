@@ -14,7 +14,7 @@ import {
 import { BsStars, BsShieldCheck, BsShuffle, BsFillLightningChargeFill } from "react-icons/bs";
 import { IoLibrary } from "react-icons/io5";
 import EnrollmentModal from "../components/ui/EnrollmentModal.jsx";
-import supabaseClient from "../lib/supabaseClient.js";
+import { supabase } from "../lib/supabaseClient.js";
 
 // IMAGES (Using imports for reliable bundling)
 import logoLael from "../assets/img/Logos/lael-inst-azul.png";
@@ -51,7 +51,7 @@ export default function Academy() {
    useEffect(() => {
       const fetchProducts = async () => {
          try {
-            const { data, error } = await supabaseClient
+            const { data, error } = await supabase
                .from('products')
                .select('*')
                .eq('category', 'TALLER');

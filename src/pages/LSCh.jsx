@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "../context/CartContext";
 import {
   FaSignLanguage,
   FaHandsHelping,
@@ -28,11 +28,11 @@ import {
 
 // SEO
 import SEOHead from "../components/SEOHead.jsx";
-import EnrollmentModal from "../components/ui/EnrollmentModal.jsx";
+      {/* Enrollment Modal removed in favor of Cart */}
 
 export default function Lsch() {
   const [isChurchMember, setIsChurchMember] = useState(false);
-  const [enrollPlan, setEnrollPlan] = useState(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -49,12 +49,6 @@ export default function Lsch() {
       <SEOHead 
         title="Lengua de Señas Chilena (LSCh) | Instituto Lael" 
         description="Aprende LSCh con una instructora sorda nativa. Inmersión cultural, gramática visual y empatía real."
-      />
-
-      <EnrollmentModal 
-        isOpen={!!enrollPlan} 
-        onClose={() => setEnrollPlan(null)} 
-        plan={enrollPlan} 
       />
 
       {/* ──────────────── A. HERO SECTION (EL PODER DEL SILENCIO) ──────────────── */}
@@ -303,7 +297,12 @@ export default function Lsch() {
                         features={LSCH_GROUP_PLANS[1].features}
                         badge={LSCH_GROUP_PLANS[1].badge}
                         highlight
-                        onEnroll={() => setEnrollPlan({ id: LSCH_GROUP_PLANS[1].id, name: LSCH_GROUP_PLANS[1].title, paymentUrl: LSCH_GROUP_PLANS[1].paymentUrl })}
+                        onEnroll={() => addToCart({ 
+                           id: LSCH_GROUP_PLANS[1].id, 
+                           title: LSCH_GROUP_PLANS[1].title, 
+                           price: LSCH_GROUP_PLANS[1].price,
+                           type: 'Curso LSCh'
+                        })}
                      />
                   </>
                )}
@@ -327,7 +326,7 @@ export default function Lsch() {
                Inicia hoy tu formación en LSCh y sé parte de la solución de inclusión en Chile.
             </p>
             <button 
-               onClick={() => setEnrollPlan({ id: 'lsch-general', name: 'Curso LSCh General', paymentUrl: null })} 
+               onClick={() => addToCart({ id: 'lsch-consulting', title: 'Consultoría Especializada LSCh', price: 15000, type: 'LSCh' })} 
                className="inline-flex items-center gap-4 px-12 py-6 bg-purple-600 text-white font-black rounded-[2rem] hover:bg-purple-500 transition-all shadow-2xl shadow-purple-600/30 uppercase tracking-widest text-xs group"
             >
                Hablar con Fernanda

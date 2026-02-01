@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "../context/CartContext";
 import { 
   FaHandHoldingHeart, 
   FaCheckCircle, 
@@ -31,7 +31,7 @@ import EnrollmentModal from "../components/ui/EnrollmentModal.jsx";
 
 export default function EscuelaAdultos() {
   const [openFaq, setOpenFaq] = useState(null);
-  const [enrollPlan, setEnrollPlan] = useState(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -329,7 +329,7 @@ export default function EscuelaAdultos() {
                <p className="text-amber-100 font-medium">Hablemos por WhatsApp y aseguremos tu cupo social.</p>
             </div>
             <button 
-               onClick={() => setEnrollPlan({ id: 'adultos-general', name: 'Nivelación Adultos General', paymentUrl: null })} 
+            onClick={() => addToCart({ id: 'adultos-consulting', title: 'Consultoría Adultos', price: 10000, type: 'Adultos' })} 
                className="px-10 py-5 bg-white text-slate-900 font-black rounded-2xl transition-all shadow-2xl hover:bg-stone-100 uppercase tracking-widest text-[10px] flex items-center gap-3"
             >
                <FaWhatsapp className="text-lg text-emerald-600" /> CONTACTAR COORDINACIÓN

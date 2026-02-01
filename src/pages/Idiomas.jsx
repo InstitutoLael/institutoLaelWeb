@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "../context/CartContext";
 
 // Icons
 import {
@@ -32,7 +33,7 @@ export default function Idiomas() {
   const [selectedIds, setSelectedIds] = useState([]);
   const [activeSyllabus, setActiveSyllabus] = useState("ingles");
   const [pricing, setPricing] = useState(computeLangBundle(0));
-  const [enrollPlan, setEnrollPlan] = useState(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -60,12 +61,7 @@ export default function Idiomas() {
         title="Idiomas 2026 | Conecta con el Mundo | Inglés y Coreano" 
         description="Aprende Inglés, Coreano o Español con clases en vivo, grupos reducidos y enfoque cultural real."
       />
-
-      <EnrollmentModal 
-        isOpen={!!enrollPlan} 
-        onClose={() => setEnrollPlan(null)} 
-        plan={enrollPlan} 
-      />
+      {/* Enrollment Modal removed in favor of CartDrawer */}
 
       {/* ──────────────── A. HERO SECTION (CONECTA) ──────────────── */}
       <section className="relative pt-32 pb-24 px-6 overflow-hidden">
@@ -353,12 +349,13 @@ export default function Idiomas() {
 
                      <button 
                         disabled={selectedIds.length === 0}
-                        onClick={() => setEnrollPlan({
-                          id: `idiomas-bundle-${selectedIds.join("-")}`,
-                          name: `Pack Idiomas (${selectedIds.length})`,
-                          paymentUrl: null
-                        })}
-                        className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-xs text-center transition-all flex items-center justify-center gap-3 ${selectedIds.length > 0 ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
+                        onClick={() => addToCart({
+                        id: `pack-idiomas-${selectedIds.join("-")}`,
+                        title: `Pack Idiomas (${selectedIds.length})`,
+                        price: pricing.totalMonthly,
+                        type: 'Idiomas'
+                      })}
+  className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-xs text-center transition-all flex items-center justify-center gap-3 ${selectedIds.length > 0 ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
                      >
                         MATRÍCULA ONLINE
                      </button>
@@ -380,7 +377,7 @@ export default function Idiomas() {
             </h2>
             <p className="text-slate-500 font-medium mb-10">Cupos limitados por sección para garantizar calidad.</p>
             <button 
-               onClick={() => setEnrollPlan({ id: 'idiomas-general', name: 'Cursos de Idiomas 2026', paymentUrl: null })} 
+            onClick={() => addToCart({ id: 'idiomas-general', title: 'Consultoría Idiomas', price: 44990, type: 'Idiomas' })} 
                className="inline-flex items-center gap-4 px-12 py-6 bg-white text-slate-950 font-black rounded-[2rem] hover:bg-blue-500 hover:text-white transition-all shadow-2xl uppercase tracking-widest text-xs group"
             >
                Hablar con Coordinación

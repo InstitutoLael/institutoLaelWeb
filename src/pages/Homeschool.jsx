@@ -13,7 +13,6 @@ import {
 } from "react-icons/md";
 import { BsStars, BsShieldCheck, BsShuffle, BsFillLightningChargeFill } from "react-icons/bs";
 import { IoLibrary } from "react-icons/io5";
-import EnrollmentModal from "../components/ui/EnrollmentModal.jsx";
 import { supabase } from "../lib/supabaseClient.js";
 
 // IMAGES (Using imports for reliable bundling)
@@ -45,7 +44,6 @@ export default function Academy() {
    const [showSticky, setShowSticky] = useState(false);
    const [dbProducts, setDbProducts] = useState([]);
    const [loading, setLoading] = useState(true);
-   const [enrollPlan, setEnrollPlan] = useState(null);
 
    // FETCH PRODUCTS
    useEffect(() => {
@@ -74,26 +72,20 @@ export default function Academy() {
    }, []);
 
    const handleEnroll = (pack) => {
-      setEnrollPlan({
+      addToCart({
          id: pack.id,
-         name: `Academy: ${pack.title}`,
-         paymentUrl: pack.id === 'academy-p12' 
-            ? 'https://buy.stripe.com/test_id_premium' // Placeholder o real si lo tienes
-            : 'https://buy.stripe.com/test_id_standard'
+         title: pack.title,
+         price: pack.price,
+         type: 'Academy Plan'
       });
    };
-
    const scrollToSection = (id) => {
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
    };
 
    return (
       <div className="min-h-screen bg-[#050505] text-slate-200 font-sans selection:bg-amber-500/30 overflow-x-hidden">
-         <EnrollmentModal 
-            isOpen={!!enrollPlan} 
-            onClose={() => setEnrollPlan(null)} 
-            plan={enrollPlan} 
-         />
+         {/* Enrollment Modal removed in favor of CartDrawer */}
 
          {/* ──────────────── 1. SOLEMN HERO ──────────────── */}
          <header className="relative min-h-[95vh] flex items-center justify-center overflow-hidden py-24 bg-[radial-gradient(circle_at_50%_40%,_#1e1b4b_0%,_#050505_80%)]">

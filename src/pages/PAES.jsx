@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useCart } from "../context/CartContext";
 
 // Icons
 import {
@@ -35,7 +36,7 @@ export default function Paes() {
   const [selectedIds, setSelectedIds] = useState([]);
   const [pricing, setPricing] = useState(computePaesPrice([]));
   const [activeFaq, setActiveFaq] = useState(null);
-  const [enrollPlan, setEnrollPlan] = useState(null);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -64,12 +65,7 @@ export default function Paes() {
         description="Asegura tu universidad con nuestro Preuniversitario especializado. Simuladores IA, coaching estratégico y resultados reales."
       />
 
-      {/* Enrollment Modal */}
-      <EnrollmentModal 
-        isOpen={!!enrollPlan} 
-        onClose={() => setEnrollPlan(null)} 
-        plan={enrollPlan} 
-      />
+      {/* Enrollment Modal removed in favor of CartDrawer */}
 
       {/* ──────────────── A. HERO SECTION (LA PROMESA) ──────────────── */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden">
@@ -216,10 +212,11 @@ export default function Paes() {
                   key={combo.id}
                   combo={combo}
                   recommended={combo.id === 'cientifico' || combo.id === 'full'}
-                  onEnroll={() => setEnrollPlan({
+                  onEnroll={() => addToCart({
                     id: combo.id,
-                    name: combo.title,
-                    paymentUrl: combo.paymentUrl
+                    title: combo.title,
+                    price: combo.price,
+                    type: 'Pack PAES'
                   })}
                   index={i}
                 />
@@ -310,10 +307,11 @@ export default function Paes() {
 
                    <button 
                       disabled={selectedIds.length === 0}
-                      onClick={() => setEnrollPlan({
+                       onClick={() => addToCart({
                         id: `custom-paes-${selectedIds.join("-")}`,
-                        name: "Plan PAES Personalizado",
-                        paymentUrl: null // Se gestiona manual o vía link genérico
+                        title: "Plan PAES Personalizado",
+                        price: pricing.totalMonthly,
+                        type: 'Plan PAES'
                       })}
                       className={`block w-full mt-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs text-center transition-all ${selectedIds.length > 0 ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}`}
                    >
@@ -374,8 +372,8 @@ export default function Paes() {
          <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-10 leading-none">
             TU CUPO <br /> TE ESPERA.
          </h2>
-         <button 
-            onClick={() => setEnrollPlan({ id: 'paes-general', name: 'Preuniversitario PAES 2026', paymentUrl: null })} 
+          <button 
+            onClick={() => addToCart({ id: 'paes-general', title: 'Consultoría PAES 2026', price: 14990, type: 'PAES' })} 
             className="inline-flex items-center gap-4 px-12 py-6 bg-white text-slate-950 font-black rounded-[2rem] hover:bg-blue-400 hover:text-white transition-all shadow-2xl uppercase tracking-widest text-xs group"
          >
             Consultar Cupos Disponibles

@@ -6,9 +6,9 @@ import { supabase } from "../lib/supabaseClient";
 import { motion, AnimatePresence } from "framer-motion";
 
 /**
- * @deprecated
- * Esta página es parte del flujo antiguo de e-commerce.
- * Ahora utilizamos el EnrollmentModal para capturar leads y redirigir a pago directo.
+ * @page Checkout
+ * Página centralizada para la inscripción y pago de múltiples cursos.
+ * Utiliza el Lead Capture 2.0 y el sistema de diagnóstico inteligente.
  */
 import {
     FaShoppingCart, FaCreditCard, FaUniversity, FaWhatsapp,
@@ -40,6 +40,7 @@ export default function Checkout() {
     const [preferenceId, setPreferenceId] = useState(null);
     const [searchParams] = useSearchParams();
     const [acceptedTerms, setAcceptedTerms] = useState(false);
+    const [serverStatus, setServerStatus] = useState('checking'); // 'ok' | 'error' | 'checking'
 
     const [formData, setFormData] = useState({
         fullName: "",
@@ -87,6 +88,21 @@ export default function Checkout() {
             console.error("Error parsing URL params:", err);
         }
     }, [searchParams]);
+
+    // 1. Connection Diagnostic (Pre-flight)
+    useEffect(() => {
+        const checkConn = async () => {
+            try {
+                const { error } = await supabase.from('leads').select('id').limit(1);
+                if (error) throw error;
+                setServerStatus('ok');
+            } catch (err) {
+                console.error("Supabase Connectivity Error:", err);
+                setServerStatus('error');
+            }
+        };
+        checkConn();
+    }, []);
 
     // Redirect if cart is empty
     useEffect(() => {
@@ -154,23 +170,40 @@ export default function Checkout() {
     const handleFinalize = async () => {
         if (loading) return;
         setLoading(true);
-        setAuthError(""); // Clear previous errors
+        setAuthError("");
 
-        // --- TIMEOUT PROTECTION ---
         const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Tiempo de espera agotado. La base de datos no responde. Revisa tu conexión.")), 15000)
+            setTimeout(() => reject(new Error("Tiempo de espera agotado (12s). Revisa tu conexión.")), 12000)
         );
 
         try {
-            console.log("Starting handleFinalize...");
-            
-            // 1. Data Validation
-            if (!formData.fullName || !formData.email || cart.length === 0) {
-                throw new Error("Faltan datos críticos para procesar la inscripción.");
+            console.log("🚀 Starting Robust Checkout Finalize...");
+
+            // --- 1. PRE-FLIGHT CHECK ---
+            if (serverStatus === 'error') {
+                throw new Error("El servidor de inscripciones está temporalmente fuera de línea. Por favor, intenta por WhatsApp.");
             }
 
+            // --- 2. LEAD CAPTURE (Persistent Record) ---
             const itemsSummary = cart.map(i => i.title).join(" + ");
+            const leadData = {
+                name: formData.fullName,
+                email: formData.email,
+                phone: formData.phone,
+                rut: formData.rut,
+                type: 'checkout',
+                plan_name: itemsSummary,
+                estimated_quote: total,
+                interest_pay: paymentMethod === 'mercadopago',
+                status: 'checkout_initiated'
+            };
 
+            await Promise.race([
+                supabase.from('leads').insert(leadData),
+                timeoutPromise
+            ]);
+
+            // --- 3. ORDER & ITEMS ---
             const orderData = {
                 user_id: user?.id || null,
                 total_amount: total,
@@ -183,76 +216,61 @@ export default function Checkout() {
                 items_summary: itemsSummary
             };
 
-            console.log("Inserting order:", orderData);
-            
-            // Reemplazo del insert simple por uno con carrera (race) contra el timeout
             const { data: order, error: orderError } = await Promise.race([
                 supabase.from('orders').insert(orderData).select().single(),
                 timeoutPromise
             ]);
 
-            if (orderError) {
-                console.error("Order insertion error:", orderError);
-                if (orderError.code === '42703') {
-                    throw new Error("Error de base de datos: Faltan columnas en la tabla 'orders'. Por favor ejecuta el script de migración SQL en Supabase.");
-                }
-                if (orderError.code === 'PGRST116') {
-                    throw new Error("Error de permisos (RLS): No se pudo insertar la orden. Verifica las políticas de seguridad en Supabase.");
-                }
-                throw orderError;
-            }
-
-            if (!order) throw new Error("No se recibió respuesta de la base de datos al crear la orden.");
-            console.log("Order created successfully:", order.id);
+            if (orderError) throw orderError;
+            if (!order) throw new Error("No se pudo crear la orden maestra.");
 
             const items = cart.map(item => ({
                 order_id: order.id,
-                product_id: item.db_id,
+                product_id: item.db_id || item.id, // Fallback to item.id if no db_id
                 price_at_purchase: item.price
-            })).filter(i => i.product_id);
+            }));
 
-            if (items.length > 0) {
-                const { error: itemsError } = await supabase.from('order_items').insert(items);
-                if (itemsError) console.error("Items insertion error:", itemsError);
-            }
+            const { error: itemsError } = await supabase.from('order_items').insert(items);
+            if (itemsError) console.error("Non-critical error: Order items not saved.", itemsError);
 
+            // --- 4. PAYMENT REDIRECTION ---
             if (paymentMethod === 'transfer') {
                 clearCart();
                 navigate("/gracias", { state: { order, total, paymentMethod: 'transfer' } });
             } else {
-                // Mercado Pago Implementation...
-                const { data: functionData, error: functionError } = await supabase.functions.invoke('create-mp-preference', {
-                    body: {
-                        orderId: order.id,
-                        customer_email: formData.email,
-                        items: cart.map(item => ({ title: item.title, unit_price: item.price, quantity: 1 })),
-                        back_urls: {
-                            success: `${window.location.origin}/gracias`,
-                            failure: `${window.location.origin}/checkout`,
-                            pending: `${window.location.origin}/gracias`
+                console.log("Invoke create-mp-preference...");
+                const { data: functionData, error: functionError } = await Promise.race([
+                    supabase.functions.invoke('create-mp-preference', {
+                        body: {
+                            orderId: order.id,
+                            customer_email: formData.email,
+                            items: cart.map(item => ({ title: item.title, unit_price: item.price, quantity: 1 })),
+                            back_urls: {
+                                success: `${window.location.origin}/gracias`,
+                                failure: `${window.location.origin}/checkout`,
+                                pending: `${window.location.origin}/gracias`
+                            }
                         }
-                    }
-                });
+                    }),
+                    timeoutPromise
+                ]);
 
-                if (functionError) throw new Error(`Error en el servidor de pagos: ${functionError.message}`);
+                if (functionError) throw new Error(`Pasarela de pago no responde: ${functionError.message}`);
 
                 if (functionData?.init_point) {
                     window.location.href = functionData.init_point;
                 } else if (functionData?.id) {
                     setPreferenceId(functionData.id);
                 } else {
-                    throw new Error("Mercado Pago no devolvió un punto de inicio válido.");
+                    throw new Error("No se pudo generar el link de pago seguro.");
                 }
             }
 
         } catch (err) {
-            console.error("CRITICAL ERROR in handleFinalize:", err);
-            // Mostrar error amigable al usuario
-            setAuthError(err.message || "No pudimos procesar tu solicitud. Intenta de nuevo en unos momentos.");
-            // Alerta visual agresiva para que el cliente no se quede esperando
-            alert(`⚠️ Error al procesar: ${err.message}`);
+            console.error("❌ Checkout CRITICAL:", err);
+            setAuthError(err.message || "Error fatal en el proceso.");
+            alert(`⚠️ Error Crítico: ${err.message}\n\nPuedes contactarnos por WhatsApp para terminar tu inscripción.`);
         } finally {
-            console.log("handleFinalize finished.");
             setLoading(false);
         }
     };

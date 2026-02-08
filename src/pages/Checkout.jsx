@@ -172,19 +172,19 @@ export default function Checkout() {
         setLoading(true);
         setAuthError("");
 
-        const timeoutPromise = new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Tiempo de espera agotado (12s). Revisa tu conexión.")), 12000)
+        const timeoutPromise = (seconds) => new Promise((_, reject) =>
+            setTimeout(() => reject(new Error(`Tiempo de espera agotado (${seconds}s). Revisa tu conexión.`)), seconds * 1000)
         );
 
         try {
-            console.log("🚀 Starting Robust Checkout Finalize...");
+            console.log("🚀 Starting Finalize Process...");
 
             // --- 1. PRE-FLIGHT CHECK ---
             if (serverStatus === 'error') {
-                throw new Error("El servidor de inscripciones está temporalmente fuera de línea. Por favor, intenta por WhatsApp.");
+                throw new Error("El servidor de inscripciones está temporalmente fuera de línea.");
             }
 
-            // --- 2. LEAD CAPTURE (Persistent Record) ---
+            // --- 2. LEAD CAPTURE ---
             const itemsSummary = cart.map(i => i.title).join(" + ");
             const leadData = {
                 name: formData.fullName,
@@ -198,10 +198,12 @@ export default function Checkout() {
                 status: 'checkout_initiated'
             };
 
+            console.log("📝 Step 1: Saving Lead...");
             await Promise.race([
                 supabase.from('leads').insert(leadData),
-                timeoutPromise
+                timeoutPromise(30)
             ]);
+            console.log("✅ Lead saved.");
 
             // --- 3. ORDER & ITEMS ---
             const orderData = {
@@ -216,29 +218,36 @@ export default function Checkout() {
                 items_summary: itemsSummary
             };
 
+            console.log("📝 Step 2: Creating Order...");
             const { data: order, error: orderError } = await Promise.race([
                 supabase.from('orders').insert(orderData).select().single(),
-                timeoutPromise
+                timeoutPromise(30)
             ]);
 
-            if (orderError) throw orderError;
-            if (!order) throw new Error("No se pudo crear la orden maestra.");
+            if (orderError) {
+                console.error("Order Error:", orderError);
+                throw new Error(`Error al crear orden: ${orderError.message}`);
+            }
+            if (!order) throw new Error("No se pudo crear la orden.");
+            console.log("✅ Order created:", order.id);
 
             const items = cart.map(item => ({
                 order_id: order.id,
-                product_id: item.db_id || item.id, // Fallback to item.id if no db_id
+                product_id: item.db_id || item.id,
                 price_at_purchase: item.price
             }));
 
+            console.log("📝 Step 3: Saving Order Items...");
             const { error: itemsError } = await supabase.from('order_items').insert(items);
-            if (itemsError) console.error("Non-critical error: Order items not saved.", itemsError);
+            if (itemsError) console.warn("Aviso: No se guardaron los items detallados.");
 
             // --- 4. PAYMENT REDIRECTION ---
             if (paymentMethod === 'transfer') {
+                console.log("🏁 Completing via Transfer...");
                 clearCart();
                 navigate("/gracias", { state: { order, total, paymentMethod: 'transfer' } });
             } else {
-                console.log("Invoke create-mp-preference...");
+                console.log("💳 Invoking Mercado Pago Function...");
                 const { data: functionData, error: functionError } = await Promise.race([
                     supabase.functions.invoke('create-mp-preference', {
                         body: {
@@ -252,24 +261,24 @@ export default function Checkout() {
                             }
                         }
                     }),
-                    timeoutPromise
+                    timeoutPromise(30)
                 ]);
 
-                if (functionError) throw new Error(`Pasarela de pago no responde: ${functionError.message}`);
+                if (functionError) throw new Error(`Pasarela no responde: ${functionError.message}`);
 
                 if (functionData?.init_point) {
                     window.location.href = functionData.init_point;
                 } else if (functionData?.id) {
                     setPreferenceId(functionData.id);
                 } else {
-                    throw new Error("No se pudo generar el link de pago seguro.");
+                    throw new Error("No se pudo generar el link de pago.");
                 }
             }
 
         } catch (err) {
-            console.error("❌ Checkout CRITICAL:", err);
-            setAuthError(err.message || "Error fatal en el proceso.");
-            alert(`⚠️ Error Crítico: ${err.message}\n\nPuedes contactarnos por WhatsApp para terminar tu inscripción.`);
+            console.error("❌ Checkout Error:", err);
+            setAuthError(err.message);
+            alert(`Error: ${err.message}\n\nDime qué sale en la consola (F12) para poder ayudarte.`);
         } finally {
             setLoading(false);
         }

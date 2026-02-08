@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Diagnóstico Supabase - Instituto Lael</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #050505;
+        color: white;
+        padding: 40px;
+      }
+      .card {
+        background: #111;
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      pre {
+        background: black;
+        padding: 15px;
+        border-radius: 10px;
+        overflow-x: auto;
+        font-size: 12px;
+        border: 1px solid #222;
+      }
+      button {
+        background: #6366f1;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .status {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 10px;
+      }
+      .success {
+        background: #064e3b;
+        color: #6ee7b7;
+        border: 1px solid #065f46;
+      }
+      .error {
+        background: #7f1d1d;
+        color: #fca5a5;
+        border: 1px solid #991b1b;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>🛠️ Probador de Conexión</h1>
+      <p>
+        Esta herramienta prueba la conexión a Supabase directamente desde tu
+        navegador, sin usar React ni Vite.
+      </p>
+
+      <div id="output"></div>
+      <button id="btnTest">Ejecutar Prueba</button>
+
+      <div id="result" class="status" style="display: none"></div>
+    </div>
+
+    <script>
+      const CONFIG = {
+        url: "https://oefelsnvxzlupztoxuii.supabase.co",
+        key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9lZmVsc252eHpsdXB6dG94dWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxMDI5MDQsImV4cCI6MjA4NDY3ODkwNH0.NEBmwovZkq_dbwH-Yw5BH8pFVDS2YbgALIMPYituXWM",
+      };
+
+      const log = (msg) => {
+        const out = document.getElementById("output");
+        out.innerHTML += `<pre>> ${msg}</pre>`;
+      };
+
+      document.getElementById("btnTest").onclick = async () => {
+        document.getElementById("output").innerHTML = "";
+        document.getElementById("result").style.display = "none";
+
+        log("Iniciando prueba...");
+        log("URL: " + CONFIG.url);
+        log("Key (primeros 10): " + CONFIG.key.substring(0, 10) + "...");
+
+        try {
+          log('Enviando petición a la tabla "leads"...');
+          const response = await fetch(
+            `${CONFIG.url}/rest/v1/leads?select=id&limit=1`,
+            {
+              headers: {
+                apikey: CONFIG.key,
+                Authorization: `Bearer ${CONFIG.key}`,
+              },
+            },
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+            document.getElementById("result").className = "status success";
+            document.getElementById("result").innerHTML =
+              "✅ <strong>¡ÉXITO!</strong> Tu navegador se conectó correctamente a Supabase. <br><br>Si el sitio web sigue fallando, es porque <strong>Vite no ha actualizado tu archivo .env</strong>. Debes detener el servidor y volver a iniciarlo.";
+            document.getElementById("result").style.display = "block";
+            log("Respuesta recibida: " + JSON.stringify(data));
+          } else {
+            throw new Error(
+              `Error HTTP: ${response.status} ${response.statusText}`,
+            );
+          }
+        } catch (err) {
+          document.getElementById("result").className = "status error";
+          document.getElementById("result").innerHTML =
+            "❌ <strong>ERROR:</strong> " + err.message;
+          document.getElementById("result").style.display = "block";
+          log("Error: " + err.message);
+        }
+      };
+    </script>
+  </body>
+</html>

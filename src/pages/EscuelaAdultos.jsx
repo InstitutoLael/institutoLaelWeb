@@ -32,6 +32,7 @@ import EnrollmentModal from "../components/ui/EnrollmentModal.jsx";
 
 export default function EscuelaAdultos() {
   const [openFaq, setOpenFaq] = useState(null);
+  const [enrollPlan, setEnrollPlan] = useState(null);
   const { addToCart } = useCart();
 
   useEffect(() => {

@@ -277,7 +277,12 @@ export default function Lsch() {
                         ]}
                         highlight
                         isChurch
-                        onEnroll={() => setEnrollPlan({ id: 'lsch-church', name: 'LSCh Convenio Iglesia', paymentUrl: null })}
+                        onEnroll={() => addToCart({ 
+                           id: 'lsch-church', 
+                           title: 'LSCh Convenio Iglesia', 
+                           price: CHURCH_PRICE, 
+                           type: 'LSCh' 
+                        })}
                      />
                   </div>
                ) : (
@@ -289,7 +294,12 @@ export default function Lsch() {
                         desc={LSCH_GROUP_PLANS[0].desc}
                         features={LSCH_GROUP_PLANS[0].features}
                         badge={LSCH_GROUP_PLANS[0].badge}
-                        onEnroll={() => setEnrollPlan({ id: LSCH_GROUP_PLANS[0].id, name: LSCH_GROUP_PLANS[0].title, paymentUrl: LSCH_GROUP_PLANS[0].paymentUrl })}
+                        onEnroll={() => addToCart({ 
+                           id: LSCH_GROUP_PLANS[0].id, 
+                           title: LSCH_GROUP_PLANS[0].title, 
+                           price: LSCH_GROUP_PLANS[0].price,
+                           type: 'Curso LSCh'
+                        })}
                      />
                      <PricingCard 
                         title={LSCH_GROUP_PLANS[1].title}

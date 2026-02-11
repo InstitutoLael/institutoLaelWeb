@@ -214,7 +214,7 @@ export default function Empresas() {
 
       {/* ──────────────── 3. EL COTIZADOR (JOY RECENT) ──────────────── */}
       <section id="cotizador" className="py-32 bg-slate-900 relative">
-         <div className="absolute inset-0 bg-[url('/textures/noise.png')] opacity-20 pointer-events-none" />
+         <div className="absolute inset-0 bg-[url('/textures/noise.svg')] opacity-20 pointer-events-none" />
          
          <div className="container mx-auto px-6 max-w-7xl">
             <div className="text-center mb-20 relative z-10">

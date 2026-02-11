@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
 
+// UI Components
+import Button from "../components/ui/Button";
+import BackgroundAurora from "../components/BackgroundAurora";
+
 // Icons
 import {
   FaCheckCircle,
@@ -27,7 +31,6 @@ import {
 
 // SEO
 import SEOHead from "../components/SEOHead.jsx";
-import EnrollmentModal from "../components/ui/EnrollmentModal.jsx";
 
 export default function Idiomas() {
   const [selectedIds, setSelectedIds] = useState([]);
@@ -53,24 +56,17 @@ export default function Idiomas() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const waLink = (text) => `https://wa.me/56964626568?text=${encodeURIComponent(text)}`;
-
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-blue-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-blue-500/30 overflow-x-hidden relative">
       <SEOHead 
         title="Idiomas 2026 | Conecta con el Mundo | Inglés y Coreano" 
         description="Aprende Inglés, Coreano o Español con clases en vivo, grupos reducidos y enfoque cultural real."
       />
-      {/* Enrollment Modal removed in favor of CartDrawer */}
+      
+      <BackgroundAurora />
 
       {/* ──────────────── A. HERO SECTION (CONECTA) ──────────────── */}
-      <section className="relative pt-32 pb-24 px-6 overflow-hidden">
-        {/* Abstract Background */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[130px] rounded-full" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-amber-600/10 blur-[110px] rounded-full" />
-        </div>
-
+      <section className="relative pt-32 pb-24 px-6 overflow-hidden min-h-[85vh] flex flex-col justify-center">
         <div className="container mx-auto max-w-5xl text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -108,12 +104,13 @@ export default function Idiomas() {
             transition={{ delay: 0.5 }}
             className="flex flex-col items-center gap-6"
           >
-            <button 
+            <Button 
               onClick={() => scrollToSection('catalogo')}
-              className="px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-2xl transition-all shadow-2xl shadow-blue-600/30 uppercase tracking-widest text-sm"
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-500 shadow-blue-600/30"
             >
               ELEGIR DESTINO
-            </button>
+            </Button>
             <Link 
                to="/lsch"
                className="text-[11px] font-bold uppercase tracking-widest text-slate-500 hover:text-blue-400 transition-colors flex items-center gap-2 group"
@@ -125,7 +122,7 @@ export default function Idiomas() {
       </section>
 
       {/* ──────────────── B. CATALOGO (NETFLIX STYLE) ──────────────── */}
-      <section id="catalogo" className="py-24 bg-slate-900/20 border-y border-white/5">
+      <section id="catalogo" className="py-24 bg-slate-900/20 border-y border-white/5 backdrop-blur-sm">
         <div className="container mx-auto px-6 max-w-6xl">
            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {LANGUAGES.map((lang, i) => (
@@ -147,7 +144,7 @@ export default function Idiomas() {
             <div className="flex flex-col lg:flex-row rounded-[3rem] overflow-hidden border border-white/5 shadow-2xl">
                
                {/* LADO IZQUIERDO: SYLLABUS */}
-               <div className="w-full lg:w-3/5 bg-slate-900/50 p-12 md:p-20">
+               <div className="w-full lg:w-3/5 bg-slate-900/50 p-12 md:p-20 backdrop-blur-md">
                   <div className="mb-12">
                      <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">¿Qué aprenderás?</h2>
                      <div className="flex gap-4">
@@ -185,7 +182,7 @@ export default function Idiomas() {
                </div>
 
                {/* LADO DERECHO: TEACHERS */}
-               <div className="w-full lg:w-2/5 bg-blue-600/5 p-12 md:p-20 border-l border-white/5">
+               <div className="w-full lg:w-2/5 bg-blue-600/5 p-12 md:p-20 border-l border-white/5 backdrop-blur-sm">
                   <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">Aprende con <br /> Expertos</h2>
                   <p className="text-slate-400 font-light mb-12">No solo te enseñan un idioma, te enseñan su uso profesional y cotidiano.</p>
                   
@@ -241,9 +238,9 @@ export default function Idiomas() {
                   </thead>
                   <tbody className="text-sm font-medium">
                      {COMPARISON_DATA.map((row, i) => (
-                        <tr key={i} className="border-b border-white/5">
+                        <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
                            <td className="py-6 px-4 text-slate-300">{row.feature}</td>
-                           <td className="py-6 px-8 text-center bg-blue-600/5 border-x border-blue-500/10 text-white font-bold">
+                           <td className="py-6 px-8 text-center bg-blue-600/5 border-x border-blue-500/10 text-white font-bold group-hover:bg-blue-600/10 transition-colors">
                               {typeof row.lael === 'boolean' ? (row.lael ? <FaCheckCircle className="inline text-emerald-500 text-xl" /> : '—') : row.lael}
                            </td>
                            <td className="py-6 px-4 text-center text-slate-500 italic">
@@ -305,7 +302,7 @@ export default function Idiomas() {
             </div>
 
             {/* Final Calculator Integration Visual */}
-            <div className="bg-slate-900 border border-white/10 rounded-[2.5rem] p-12 max-w-4xl mx-auto shadow-2xl relative overflow-hidden">
+            <div className="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-12 max-w-4xl mx-auto shadow-2xl relative overflow-hidden">
                <div className="absolute top-0 right-0 p-32 bg-blue-600/5 blur-[90px] rounded-full" />
                
                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
@@ -347,7 +344,7 @@ export default function Idiomas() {
                         </div>
                      </div>
 
-                     <button 
+                     <Button 
                         disabled={selectedIds.length === 0}
                         onClick={() => addToCart({
                         id: `pack-idiomas-${selectedIds.join("-")}`,
@@ -355,10 +352,10 @@ export default function Idiomas() {
                         price: pricing.totalMonthly,
                         type: 'Idiomas'
                       })}
-  className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-xs text-center transition-all flex items-center justify-center gap-3 ${selectedIds.length > 0 ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20' : 'bg-slate-800 text-slate-600 cursor-not-allowed'}`}
+                      className={`w-full ${selectedIds.length > 0 ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-600/20' : 'bg-slate-800 text-slate-600 opacity-50'}`}
                      >
                         MATRÍCULA ONLINE
-                     </button>
+                     </Button>
                   </div>
                </div>
             </div>
@@ -376,13 +373,15 @@ export default function Idiomas() {
                HABLA SIN <br /> LÍMITES.
             </h2>
             <p className="text-slate-500 font-medium mb-10">Cupos limitados por sección para garantizar calidad.</p>
-            <button 
-            onClick={() => addToCart({ id: 'idiomas-general', title: 'Consultoría Idiomas', price: 44990, type: 'Idiomas' })} 
-               className="inline-flex items-center gap-4 px-12 py-6 bg-white text-slate-950 font-black rounded-[2rem] hover:bg-blue-500 hover:text-white transition-all shadow-2xl uppercase tracking-widest text-xs group"
+            <Button 
+               onClick={() => addToCart({ id: 'idiomas-general', title: 'Consultoría Idiomas', price: 44990, type: 'Idiomas' })} 
+               variant="secondary"
+               size="lg"
+               className="group"
             >
                Hablar con Coordinación
-               <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
-            </button>
+               <FaArrowRight className="ml-2 group-hover:translate-x-2 transition-transform" />
+            </Button>
          </motion.div>
       </section>
 
@@ -429,9 +428,12 @@ const LanguagePoster = ({ lang, index, toggleLanguage, isSelected }) => (
           ))}
        </div>
 
-       <button className={`w-full py-3 rounded-xl font-black uppercase tracking-widest text-[10px] transition-all ${isSelected ? 'bg-blue-500 text-white' : 'bg-white/10 text-white backdrop-blur-md hover:bg-white/20'}`}>
+       <Button 
+          className={`w-full ${isSelected ? 'bg-blue-500 text-white' : 'bg-white/10 text-white backdrop-blur-md hover:bg-white/20'}`}
+          size="sm"
+       >
           {isSelected ? 'DESTINO ELEGIDO' : 'AÑADIR A MI PLAN'}
-       </button>
+       </Button>
     </div>
 
     {/* Selection Overlay */}
@@ -449,7 +451,7 @@ const LanguagePoster = ({ lang, index, toggleLanguage, isSelected }) => (
 );
 
 const BundleOption = ({ title, desc, count, total, saving, isSelected, recommended, onClick }) => (
-   <div className={`flex-1 relative p-8 rounded-[2.5rem] border-2 transition-all flex flex-col justify-center text-center ${recommended ? 'bg-blue-600/10 border-blue-500 md:scale-105 z-10 shadow-2xl shadow-blue-500/10' : 'bg-slate-900/40 border-white/5 opacity-80'}`}>
+   <div className={`flex-1 relative p-8 rounded-[2.5rem] border-2 transition-all flex flex-col justify-center text-center ${recommended ? 'bg-blue-600/10 border-blue-500 md:scale-105 z-10 shadow-2xl shadow-blue-500/10 backdrop-blur-xl' : 'bg-slate-900/40 border-white/5 opacity-80 backdrop-blur-md'}`}>
       {recommended && <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest">Recomendado</div>}
       <h3 className="text-lg font-black text-white uppercase tracking-tight mb-2">{title}</h3>
       <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest mb-4">{desc}</p>

@@ -1,5 +1,6 @@
 // src/context/CartContext.jsx
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { trackAddToCart, trackRemoveFromCart } from "../lib/analytics";
 
 const CartContext = createContext();
 
@@ -36,11 +37,19 @@ export function CartProvider({ children }) {
       }
       return [...prev, product];
     });
+    // Track Analytics
+    trackAddToCart(product);
+    
     // ¡Truco UX! Abrimos el carrito automáticamente al agregar algo
     openCart();
   };
 
   const removeFromCart = (id) => {
+    // Find item for tracking before removing
+    const itemToRemove = cart.find(item => item.id === id);
+    if (itemToRemove) {
+      trackRemoveFromCart(itemToRemove);
+    }
     setCart((prev) => prev.filter((item) => item.id !== id));
   };
 

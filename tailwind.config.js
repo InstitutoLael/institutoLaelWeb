@@ -15,6 +15,7 @@ export default {
         lael: {
           blue: "#5850EC",
           gold: "#FFCC33",
+          pink: "#EC4899", // Added pink
           dark: "#0b1220",
           soft: "#101a2f",
         },
@@ -26,6 +27,25 @@ export default {
       },
       boxShadow: {
         lael: "0 8px 24px rgba(2,6,23,.25)",
+      },
+      animation: {
+        blob: "blob 7s infinite",
+      },
+      keyframes: {
+        blob: {
+          "0%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+          "33%": {
+            transform: "translate(30px, -50px) scale(1.1)",
+          },
+          "66%": {
+            transform: "translate(-20px, 20px) scale(0.9)",
+          },
+          "100%": {
+            transform: "translate(0px, 0px) scale(1)",
+          },
+        },
       },
     },
   },

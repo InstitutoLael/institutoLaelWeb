@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCart } from "../context/CartContext";
 
+// UI Components
+import Button from "../components/ui/Button";
+import BackgroundAurora from "../components/BackgroundAurora";
+
 // Icons
 import {
   FaCheckCircle,
@@ -30,7 +34,6 @@ import {
 
 // SEO
 import SEOHead from "../components/SEOHead.jsx";
-import EnrollmentModal from "../components/ui/EnrollmentModal.jsx";
 
 export default function Paes() {
   const [selectedIds, setSelectedIds] = useState([]);
@@ -56,25 +59,17 @@ export default function Paes() {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const waLink = (text) => `https://wa.me/56964626568?text=${encodeURIComponent(text)}`;
-
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-indigo-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-indigo-500/30 overflow-x-hidden relative">
       <SEOHead 
         title="PAES 2026 | Domina la Prueba con IA y Estrategia" 
         description="Asegura tu universidad con nuestro Preuniversitario especializado. Simuladores IA, coaching estratégico y resultados reales."
       />
 
-      {/* Enrollment Modal removed in favor of CartDrawer */}
+      <BackgroundAurora />
 
       {/* ──────────────── A. HERO SECTION (LA PROMESA) ──────────────── */}
-      <section className="relative pt-32 pb-20 px-6 overflow-hidden">
-        {/* Abstract Background Shapes */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none z-0">
-          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full" />
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-violet-600/10 blur-[100px] rounded-full" />
-        </div>
-
+      <section className="relative pt-32 pb-20 px-6 overflow-hidden min-h-[85vh] flex flex-col justify-center">
         <div className="container mx-auto max-w-5xl text-center relative z-10">
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
@@ -91,7 +86,7 @@ export default function Paes() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-lg md:text-2xl text-slate-400 font-light max-w-3xl mx-auto mb-12 leading-relaxed"
+            className="text-lg md:text-2xl text-slate-300 font-light max-w-3xl mx-auto mb-12 leading-relaxed"
           >
             Olvídate de memorizar. Aquí hackeamos la prueba con 
             <strong className="text-white"> Estrategia + Inteligencia Artificial</strong>.
@@ -103,12 +98,13 @@ export default function Paes() {
             transition={{ delay: 0.5 }}
             className="flex flex-col items-center gap-6"
           >
-            <button 
+            <Button 
               onClick={() => scrollToSection('pricing')}
-              className="px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-2xl transition-all shadow-2xl shadow-blue-600/30 uppercase tracking-widest text-sm"
+              size="lg"
+              className="bg-blue-600 hover:bg-blue-500 shadow-blue-600/30"
             >
               VER PLANES 2026
-            </button>
+            </Button>
             <p className="text-xs font-black uppercase tracking-[0.3em] text-slate-500">
                ⭐ +1200 Alumnos ingresaron en 2025
             </p>
@@ -117,7 +113,7 @@ export default function Paes() {
       </section>
 
       {/* ──────────────── B. PROBLEM/SOLUTION (LA DIFERENCIA) ──────────────── */}
-      <section className="py-24 bg-slate-900/40 relative border-y border-white/5">
+      <section className="py-24 bg-slate-900/40 relative border-y border-white/5 backdrop-blur-sm">
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-20">
              <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
@@ -129,28 +125,24 @@ export default function Paes() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            
             <FeatureCard 
               icon={<FaRobot />}
               title="Simuladores IA"
               desc="Practica con dificultad adaptativa real que se ajusta a tu nivel automáticamente."
               color="text-blue-500"
             />
-
             <FeatureCard 
               icon={<FaBrain />}
               title="Estrategia, no memoria"
               desc="Te enseñamos a pensar, identificar patrones y descartar como un experto."
               color="text-violet-500"
             />
-
             <FeatureCard 
               icon={<FaChartLine />}
               title="Resultados Reales"
               desc="Seguimiento personalizado de tu puntaje proyectado clase a clase."
               color="text-emerald-500"
             />
-
           </div>
         </div>
       </section>
@@ -177,9 +169,9 @@ export default function Paes() {
               </thead>
               <tbody className="text-sm">
                 {PAES_COMPARISON.map((row, i) => (
-                  <tr key={i} className="border-b border-white/5 group">
+                  <tr key={i} className="border-b border-white/5 group hover:bg-white/[0.02] transition-colors">
                     <td className="py-6 px-4 font-bold text-slate-300">{row.feature}</td>
-                    <td className="py-6 px-8 text-center bg-blue-600/5 border-x border-blue-500/10 font-black text-white">
+                    <td className="py-6 px-8 text-center bg-blue-600/5 border-x border-blue-500/10 font-black text-white group-hover:bg-blue-600/10 transition-colors">
                        {typeof row.lael === 'boolean' ? (row.lael ? <FaCheckCircle className="inline text-emerald-500 text-xl" /> : <FaTimesCircle className="inline text-rose-500 text-xl" />) : row.lael}
                     </td>
                     <td className="py-6 px-4 text-center text-slate-500">
@@ -197,7 +189,7 @@ export default function Paes() {
       </section>
 
       {/* ──────────────── D. PRICING (LA OFERTA IRRESISTIBLE) ──────────────── */}
-      <section id="pricing" className="py-32 bg-slate-900/20 border-y border-white/5">
+      <section id="pricing" className="py-32 bg-slate-900/20 border-y border-white/5 backdrop-blur-sm">
         <div className="container mx-auto px-6">
           <div className="text-center mb-20">
              <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-4">
@@ -265,13 +257,13 @@ export default function Paes() {
 
              {/* Calculation Summary */}
              <div className="sticky top-24">
-                <div className="bg-slate-900 border border-white/10 rounded-[2.5rem] p-10 shadow-2xl overflow-hidden relative">
+                <div className="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-[2.5rem] p-10 shadow-2xl overflow-hidden relative">
                    <div className="absolute top-0 right-0 p-12 bg-blue-600/5 blur-[60px] rounded-full pointer-events-none" />
                    
                    <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-500 mb-8">Resumen de Selección</h3>
                    
                    {selectedIds.length > 0 ? (
-                      <div className="space-y-4 mb-10 relative z-10">
+                      <div className="space-y-4 mb-10 relative z-10 transition-all">
                          {selectedIds.map(id => {
                             const s = PAES_SUBJECTS.find(x => x.id === id);
                             return (
@@ -305,18 +297,18 @@ export default function Paes() {
                       </div>
                    </div>
 
-                   <button 
+                   <Button 
                       disabled={selectedIds.length === 0}
-                       onClick={() => addToCart({
+                      onClick={() => addToCart({
                         id: `custom-paes-${selectedIds.join("-")}`,
                         title: "Plan PAES Personalizado",
                         price: pricing.totalMonthly,
                         type: 'Plan PAES'
                       })}
-                      className={`block w-full mt-10 py-5 rounded-2xl font-black uppercase tracking-widest text-xs text-center transition-all ${selectedIds.length > 0 ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20' : 'bg-slate-800 text-slate-500 cursor-not-allowed'}`}
+                      className={`w-full mt-10 ${selectedIds.length > 0 ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-600/20' : 'bg-slate-800 text-slate-500 opacity-50'}`}
                    >
                       INICIAR MATRÍCULA
-                   </button>
+                   </Button>
                 </div>
              </div>
 
@@ -325,7 +317,7 @@ export default function Paes() {
       </section>
 
       {/* ──────────────── F. FAQ (ELIMINAR OBJECIONES) ──────────────── */}
-      <section className="py-32 bg-slate-950 border-t border-white/5">
+      <section className="py-32 bg-slate-950/80 border-t border-white/5">
         <div className="container mx-auto px-6 max-w-3xl">
           <div className="text-center mb-16">
              <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">
@@ -372,13 +364,15 @@ export default function Paes() {
          <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-10 leading-none">
             TU CUPO <br /> TE ESPERA.
          </h2>
-          <button 
+          <Button 
             onClick={() => addToCart({ id: 'paes-general', title: 'Consultoría PAES 2026', price: 14990, type: 'PAES' })} 
-            className="inline-flex items-center gap-4 px-12 py-6 bg-white text-slate-950 font-black rounded-[2rem] hover:bg-blue-400 hover:text-white transition-all shadow-2xl uppercase tracking-widest text-xs group"
+            variant="secondary"
+            size="lg"
+            className="group"
          >
             Consultar Cupos Disponibles
-            <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
-         </button>
+            <FaArrowRight className="ml-2 group-hover:translate-x-2 transition-transform" />
+         </Button>
       </section>
 
     </div>
@@ -392,7 +386,7 @@ const FeatureCard = ({ icon, title, desc, color }) => (
     initial={{ opacity: 0, y: 10 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true }}
-    className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-10 hover:border-white/20 transition-all flex flex-col items-center text-center group"
+    className="bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-10 hover:border-white/20 transition-all flex flex-col items-center text-center group backdrop-blur-sm"
   >
     <div className={`text-6xl mb-8 ${color} group-hover:scale-110 transition-transform`}>{icon}</div>
     <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">{title}</h3>
@@ -405,7 +399,7 @@ const PricingCard = ({ combo, recommended, onEnroll, index }) => (
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ delay: index * 0.1 }}
-    className={`relative p-12 rounded-[3rem] border-2 transition-all flex flex-col ${recommended ? 'bg-blue-600/10 border-blue-500 scale-105 shadow-2xl shadow-blue-500/10 z-10' : 'bg-slate-900/40 border-white/5'}`}
+    className={`relative p-12 rounded-[3rem] border-2 transition-all flex flex-col ${recommended ? 'bg-blue-600/10 border-blue-500 scale-105 shadow-2xl shadow-blue-500/10 z-10 backdrop-blur-xl' : 'bg-slate-900/40 border-white/5 backdrop-blur-md'}`}
   >
     {recommended && (
       <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-500 text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.3em] shadow-lg">
@@ -431,11 +425,11 @@ const PricingCard = ({ combo, recommended, onEnroll, index }) => (
        ))}
     </ul>
 
-    <button 
+    <Button 
       onClick={onEnroll}
-      className={`w-full py-5 rounded-2xl font-black uppercase tracking-widest text-xs text-center transition-all ${recommended ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-xl shadow-blue-600/20' : 'bg-white/5 hover:bg-white/10 text-white border border-white/10'}`}
+      className={`w-full ${recommended ? 'bg-blue-600 hover:bg-blue-500 shadow-blue-600/20' : 'bg-white/5 border-white/10'}`}
     >
       ELEGIR PACK
-    </button>
+    </Button>
   </motion.div>
 );

@@ -105,3 +105,12 @@ export const SCHOOL_SERVICES = [
     desc: 'Profesores expertos Lael para cubrir licencias.', icon: '👨‍🏫', priceRef: 'Valor hora'
   }
 ];
+
+// ❓ PREGUNTAS FRECUENTES
+export const HOMESCHOOL_FAQS = [
+  { q: "¿Son clases todos los días?", a: "Depende del plan. El Plan Full tiene clases diarias de lunes a viernes. Los planes parciales se ajustan a tu horario y necesidades." },
+  { q: "¿Cómo valido los estudios ante el Mineduc?", a: "Nosotros te asesoramos en todo el proceso de Exámenes Libres. Además, gracias a nuestra alianza con Colegio Los Olivos, puedes optar a certificación directa (cupos limitados)." },
+  { q: "¿Es educación religiosa?", a: "Somos una institución con principios cristianos. No somos una iglesia, pero nuestros valores bíblicos transversales (integridad, excelencia, servicio) permean toda nuestra enseñanza." },
+  { q: "¿Qué tecnología necesito?", a: "Solo un computador o tablet con conexión estable a internet, cámara y micrófono. Usamos Zoom y nuestra Aula Virtual propia." },
+  { q: "¿Aceptan postulaciones a mitad de año?", a: "Sí, tenemos matrícula abierta todo el año sujetos a cupo. Hacemos un diagnóstico inicial para nivelar al estudiante." }
+];

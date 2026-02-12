@@ -14,17 +14,36 @@
     --lael-slate: #94a3b8;
     --lael-white: #f8fafc;
 
+    /* Semantic Variables (Light Mode Default) */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --border-color: #e2e8f0;
+
     /* ─── TYPOGRAPHY SYSTEM ─── */
     --font-title: "Space Grotesk", sans-serif;
     --font-body: "Inter", sans-serif;
     --font-accent: "Outfit", sans-serif;
   }
 
+  .dark {
+    /* Semantic Variables (Dark Mode Override) */
+    --bg-primary: #050505; /* Matches --lael-blue-deep */
+    --bg-secondary: #0b1220;
+    --text-primary: #f8fafc; /* Matches --lael-white */
+    --text-secondary: #94a3b8; /* Matches --lael-slate */
+    --border-color: #1e293b;
+  }
+
   html {
     scroll-behavior: smooth;
     font-family: var(--font-body);
-    background-color: var(--lael-blue-deep);
-    color: var(--lael-white);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
   }
 
   h1,

@@ -163,3 +163,14 @@ export const TEACHERS_LIST = [
   { name: "Fernanda", origin: "🇰🇷", role: "Lead Korean Tutor", bio: "Enseña con K-Pop y situaciones de la vida real.", img: "👩🏻‍🏫" },
   { name: "Diego", origin: "🇨🇱", role: "Spanish Coach", bio: "Lingüista experto en dialectología chilena.", img: "👨🏻‍🏫" }
 ];
+
+/* ──────────────────────────────────────────────────────────────────────────
+   7. FAQS (PREGUNTAS FRECUENTES)
+   ────────────────────────────────────────────────────────────────────────── */
+export const IDIOMAS_FAQS = [
+  { q: "¿En cuánto tiempo podré hablar fluido?", a: "Depende de tu dedicación, pero nuestro método está diseñado para que tengas tus primeras conversaciones básicas desde el primer mes. Un nivel completo (ej. A1) toma aprox. 4 a 5 meses." },
+  { q: "¿Las clases quedan grabadas?", a: "¡Sí! Todas las sesiones en vivo se graban y suben a tu aula virtual para que repases cuando quieras." },
+  { q: "¿Entregan algún certificado?", a: "Al finalizar y aprobar cada nivel, recibes un Certificado Digital de Instituto Lael verificable por código QR." },
+  { q: "¿Qué pasa si falto a una clase?", a: "No te preocupes. Puedes ver la grabación y contactar a tu tutor por WhatsApp para resolver dudas puntuales." },
+  { q: "¿Sirve para niños?", a: "Nuestros programas están enfocados en Jóvenes y Adultos (14+ años). Para niños menores recomendamos clases particulares, consúltanos." }
+];

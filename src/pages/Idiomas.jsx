@@ -6,6 +6,9 @@ import { useCart } from "../context/CartContext";
 // UI Components
 import Button from "../components/ui/Button";
 import BackgroundAurora from "../components/BackgroundAurora";
+import Breadcrumbs from "../components/Breadcrumbs";
+import FAQAccordion from "../components/FAQAccordion";
+import PlanComparator from "../components/PlanComparator";
 
 // Icons
 import {
@@ -26,7 +29,8 @@ import {
   COMPARISON_DATA,
   TEACHERS_LIST,
   computeLangBundle,
-  clp
+  clp,
+  IDIOMAS_FAQS
 } from "../data/idiomas.js";
 
 // SEO
@@ -68,6 +72,9 @@ export default function Idiomas() {
       {/* ──────────────── A. HERO SECTION (CONECTA) ──────────────── */}
       <section className="relative pt-32 pb-24 px-6 overflow-hidden min-h-[85vh] flex flex-col justify-center">
         <div className="container mx-auto max-w-5xl text-center relative z-10">
+          <div className="flex justify-center mb-4">
+             <Breadcrumbs />
+          </div>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -219,43 +226,21 @@ export default function Idiomas() {
       </section>
 
       {/* ──────────────── D. TABLA COMPARATIVA (LA VERDAD) ──────────────── */}
-      <section className="py-24 relative">
-         <div className="container mx-auto px-6 max-w-4xl">
-            <div className="text-center mb-16">
-               <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">Comparativa Directa</h2>
-               <p className="text-slate-400 font-light">Más que una app, somos una academia de alto rendimiento.</p>
-            </div>
+      <PlanComparator 
+        title="Comparativa Directa" 
+        subtitle="Más que una app, somos una academia de alto rendimiento."
+        headers={["Característica", "Instituto Lael", "Aprende Solo (Apps)", "Tradicional"]}
+        data={COMPARISON_DATA}
+        keys={["feature", "lael", "app", "institute"]}
+        highlightColumn={1}
+      />
 
-            <div className="overflow-x-auto">
-               <table className="w-full text-left border-collapse">
-                  <thead>
-                     <tr className="border-b border-white/10">
-                        <th className="py-6 px-4 text-xs font-black uppercase text-slate-500">Característica</th>
-                        <th className="py-6 px-8 text-center bg-blue-600/10 rounded-t-3xl border-x border-t border-blue-500/20 text-white font-black uppercase tracking-widest text-xs">Instituto Lael</th>
-                        <th className="py-6 px-4 text-center text-slate-500 font-black uppercase text-[10px]">Aprende Solo (Apps)</th>
-                        <th className="py-6 px-4 text-center text-slate-500 font-black uppercase text-[10px]">Tradicional</th>
-                     </tr>
-                  </thead>
-                  <tbody className="text-sm font-medium">
-                     {COMPARISON_DATA.map((row, i) => (
-                        <tr key={i} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
-                           <td className="py-6 px-4 text-slate-300">{row.feature}</td>
-                           <td className="py-6 px-8 text-center bg-blue-600/5 border-x border-blue-500/10 text-white font-bold group-hover:bg-blue-600/10 transition-colors">
-                              {typeof row.lael === 'boolean' ? (row.lael ? <FaCheckCircle className="inline text-emerald-500 text-xl" /> : '—') : row.lael}
-                           </td>
-                           <td className="py-6 px-4 text-center text-slate-500 italic">
-                              {typeof row.app === 'boolean' ? (row.app ? 'Si' : 'No') : row.app}
-                           </td>
-                           <td className="py-6 px-4 text-center text-slate-500 italic">
-                              {typeof row.institute === 'boolean' ? (row.institute ? 'Si' : 'Tratando') : row.institute}
-                           </td>
-                        </tr>
-                     ))}
-                  </tbody>
-               </table>
-            </div>
-         </div>
-      </section>
+      {/* ──────────────── D2. FAQS ──────────────── */}
+      <FAQAccordion 
+        title="Preguntas Frecuentes" 
+        subtitle="Resuelve tus dudas sobre nuestra metodología." 
+        items={IDIOMAS_FAQS} 
+      />
 
       {/* ──────────────── E. PRICING BUNDLE (INTELIGENTE) ──────────────── */}
       <section id="pricing" className="py-32 bg-[#020617] relative border-t border-white/5">

@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "programs": "Programas",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "blog": "Blog"
+  },
+  "hero": {
+    "title": "EL FUTURO ES TUYO",
+    "subtitle": "Ecosistema educativo de alto rendimiento.",
+    "cta": "Hablar con un Asesor"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados."
+  }
+}

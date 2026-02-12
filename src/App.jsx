@@ -1,13 +1,14 @@
 import React, { useEffect, useState, Suspense, lazy } from "react";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import PageTransition from "./components/PageTransition";
 
 import { CartProvider } from "./context/CartContext";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import { Toaster } from "react-hot-toast";
 import logoAmarillo from "./assets/img/Logos/lael-inst-amarillo.png";
 
-/* ---------- Componentes Globales ---------- */
 /* ---------- Componentes Globales ---------- */
 import Navbar from "./components/layout/Navbar.jsx";
 import Footer from "./components/layout/Footer.jsx";
@@ -34,6 +35,8 @@ const Trabaja = lazy(() => import("./pages/Trabaja.jsx"));
 const Contacto = lazy(() => import("./pages/Contacto.jsx"));
 const Docentes = lazy(() => import("./pages/Docentes.jsx"));
 const Aula = lazy(() => import("./pages/Aula.jsx"));
+const Blog = lazy(() => import("./pages/Blog.jsx"));
+const BlogPost = lazy(() => import("./pages/BlogPost.jsx"));
 const Login = lazy(() => import("./pages/Login.jsx"));
 const Gracias = lazy(() => import("./pages/Gracias.jsx"));
 const Terminos = lazy(() => import("./pages/Terminos.jsx"));
@@ -112,7 +115,8 @@ export default function App() {
   }, [location]);
 
   return (
-    <AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
       <CartProvider>
         <Toaster position="top-right" reverseOrder={false} />
         <ScrollToTop />
@@ -126,38 +130,39 @@ export default function App() {
           {/* Área principal */}
           <main className="flex-1 relative">
             <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/programas" element={<Programas />} />
-                <Route path="/recursos" element={<Recursos />} />
-                <Route path="/paes" element={<PAES />} />
-                <Route path="/idiomas" element={<Idiomas />} />
-                <Route path="/lsch" element={<LSCh />} />
-                <Route path="/homeschool" element={<Homeschool />} />
-                <Route path="/nivelacion" element={<EscuelaAdultos />} />
-                <Route path="/empresas" element={<Empresas />} />
-                <Route path="/nosotros" element={<Nosotros />} />
-                <Route path="/convenios" element={<Convenios />} />
-                <Route path="/trabaja" element={<Trabaja />} />
-                <Route path="/contacto" element={<Contacto />} />
-                <Route path="/docentes" element={<Docentes />} />
-                <Route path="/login" element={<Login />} />
-                <Route
-                  path="/aula"
-                  element={
-                    <ProtectedRoute>
-                      <Aula />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/gracias" element={<Gracias />} />
-                <Route path="/terminos" element={<Terminos />} />
-                <Route path="/privacidad" element={<Privacidad />} />
-                <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Footer />
-          </Suspense>
+              <AnimatePresence mode="wait">
+                <Routes location={location} key={location.pathname}>
+                  <Route path="/" element={<PageTransition><Home /></PageTransition>} />
+                  <Route path="/programas" element={<PageTransition><Programas /></PageTransition>} />
+                  <Route path="/recursos" element={<PageTransition><Recursos /></PageTransition>} />
+                  <Route path="/paes" element={<PageTransition><PAES /></PageTransition>} />
+                  <Route path="/idiomas" element={<PageTransition><Idiomas /></PageTransition>} />
+                  <Route path="/lsch" element={<PageTransition><LSCh /></PageTransition>} />
+                  <Route path="/homeschool" element={<PageTransition><Homeschool /></PageTransition>} />
+                  <Route path="/nivelacion" element={<PageTransition><EscuelaAdultos /></PageTransition>} />
+                  <Route path="/empresas" element={<PageTransition><Empresas /></PageTransition>} />
+                  <Route path="/nosotros" element={<PageTransition><Nosotros /></PageTransition>} />
+                  <Route path="/convenios" element={<PageTransition><Convenios /></PageTransition>} />
+                  <Route path="/trabaja" element={<PageTransition><Trabaja /></PageTransition>} />
+                  <Route path="/contacto" element={<PageTransition><Contacto /></PageTransition>} />
+                  <Route path="/docentes" element={<PageTransition><Docentes /></PageTransition>} />
+                  <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
+                  <Route
+                    path="/aula"
+                    element={
+                      <ProtectedRoute>
+                        <PageTransition><Aula /></PageTransition>
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/checkout" element={<PageTransition><Checkout /></PageTransition>} />
+                  <Route path="/gracias" element={<PageTransition><Gracias /></PageTransition>} />
+                  <Route path="/terminos" element={<PageTransition><Terminos /></PageTransition>} />
+                  <Route path="/privacidad" element={<PageTransition><Privacidad /></PageTransition>} />
+                  <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
+                </Routes>
+              </AnimatePresence>
+            </Suspense>
         </main>
 
         {/* COMPONENTES FLOTANTES GLOBALES */}
@@ -166,6 +171,7 @@ export default function App() {
         <WhatsAppButton />
       </div>
       </CartProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }

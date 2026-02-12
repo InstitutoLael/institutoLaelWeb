@@ -6,6 +6,8 @@ import { HelmetProvider } from "react-helmet-async"; // SEO
 
 // Tus estilos globales
 import "./index.css";
+// i18n config
+import "./i18n";
 
 // Tu aplicación principal
 import App from "./App.jsx";

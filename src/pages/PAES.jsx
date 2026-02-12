@@ -6,6 +6,9 @@ import { useCart } from "../context/CartContext";
 // UI Components
 import Button from "../components/ui/Button";
 import BackgroundAurora from "../components/BackgroundAurora";
+import Breadcrumbs from "../components/Breadcrumbs";
+import FAQAccordion from "../components/FAQAccordion";
+import PlanComparator from "../components/PlanComparator";
 
 // Icons
 import {
@@ -38,7 +41,6 @@ import SEOHead from "../components/SEOHead.jsx";
 export default function Paes() {
   const [selectedIds, setSelectedIds] = useState([]);
   const [pricing, setPricing] = useState(computePaesPrice([]));
-  const [activeFaq, setActiveFaq] = useState(null);
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -71,6 +73,9 @@ export default function Paes() {
       {/* ──────────────── A. HERO SECTION (LA PROMESA) ──────────────── */}
       <section className="relative pt-32 pb-20 px-6 overflow-hidden min-h-[85vh] flex flex-col justify-center">
         <div className="container mx-auto max-w-5xl text-center relative z-10">
+          <div className="flex justify-center mb-8">
+            <Breadcrumbs />
+          </div>
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -148,45 +153,14 @@ export default function Paes() {
       </section>
 
       {/* ──────────────── C. COMPARATIVA (LA TABLA DE LA VERDAD) ──────────────── */}
-      <section className="py-24 relative overflow-hidden">
-        <div className="container mx-auto px-6 max-w-5xl">
-          <div className="text-center mb-16">
-             <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
-                La comparativa real
-             </h2>
-             <p className="text-slate-400 font-light">No todas las preparaciones son iguales.</p>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-white/10">
-                  <th className="py-6 px-4 text-xs font-black uppercase text-slate-500">Beneficio</th>
-                  <th className="py-6 px-8 text-center bg-blue-600/10 rounded-t-3xl border-x border-t border-blue-500/20 text-white font-black uppercase tracking-widest text-xs">Instituto Lael</th>
-                  <th className="py-6 px-4 text-center text-slate-500 font-black uppercase text-[10px]">Preu Tradicional</th>
-                  <th className="py-6 px-4 text-center text-slate-500 font-black uppercase text-[10px]">Prof. Particular</th>
-                </tr>
-              </thead>
-              <tbody className="text-sm">
-                {PAES_COMPARISON.map((row, i) => (
-                  <tr key={i} className="border-b border-white/5 group hover:bg-white/[0.02] transition-colors">
-                    <td className="py-6 px-4 font-bold text-slate-300">{row.feature}</td>
-                    <td className="py-6 px-8 text-center bg-blue-600/5 border-x border-blue-500/10 font-black text-white group-hover:bg-blue-600/10 transition-colors">
-                       {typeof row.lael === 'boolean' ? (row.lael ? <FaCheckCircle className="inline text-emerald-500 text-xl" /> : <FaTimesCircle className="inline text-rose-500 text-xl" />) : row.lael}
-                    </td>
-                    <td className="py-6 px-4 text-center text-slate-500">
-                       {typeof row.other === 'boolean' ? (row.other ? <FaCheckCircle className="inline opacity-20 text-xl" /> : <FaTimesCircle className="inline text-rose-500/30 text-xl" />) : row.other}
-                    </td>
-                    <td className="py-6 px-4 text-center text-slate-500">
-                       {typeof row.tutor === 'boolean' ? (row.tutor ? <FaCheckCircle className="inline opacity-20 text-xl" /> : <FaTimesCircle className="inline text-rose-500/30 text-xl" />) : row.tutor}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+      <PlanComparator 
+        title="La comparativa real" 
+        subtitle="No todas las preparaciones son iguales."
+        headers={["Beneficio", "Instituto Lael", "Preu Tradicional", "Prof. Particular"]}
+        data={PAES_COMPARISON}
+        keys={["feature", "lael", "other", "tutor"]}
+        highlightColumn={1}
+      />
 
       {/* ──────────────── D. PRICING (LA OFERTA IRRESISTIBLE) ──────────────── */}
       <section id="pricing" className="py-32 bg-slate-900/20 border-y border-white/5 backdrop-blur-sm">
@@ -317,47 +291,11 @@ export default function Paes() {
       </section>
 
       {/* ──────────────── F. FAQ (ELIMINAR OBJECIONES) ──────────────── */}
-      <section className="py-32 bg-slate-950/80 border-t border-white/5">
-        <div className="container mx-auto px-6 max-w-3xl">
-          <div className="text-center mb-16">
-             <h2 className="text-4xl font-black text-white uppercase tracking-tighter mb-4">
-                Despeja tus dudas
-             </h2>
-             <p className="text-slate-400 font-light">Todo lo que necesitas saber antes de dar el primer paso.</p>
-          </div>
-
-          <div className="space-y-4">
-             {PAES_FAQS.map((faq, i) => (
-                <div 
-                   key={i} 
-                   className={`border rounded-3xl transition-all ${activeFaq === i ? 'bg-white/5 border-white/10' : 'bg-transparent border-white/5 hover:border-white/10'}`}
-                >
-                   <button 
-                      onClick={() => setActiveFaq(activeFaq === i ? null : i)}
-                      className="w-full flex items-center justify-between p-7 text-left select-none"
-                   >
-                      <span className="text-lg font-bold text-white uppercase tracking-tight">{faq.q}</span>
-                      <FaChevronDown className={`transition-transform duration-300 text-blue-500 ${activeFaq === i ? 'rotate-180' : ''}`} />
-                   </button>
-                   <AnimatePresence>
-                      {activeFaq === i && (
-                         <motion.div 
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden"
-                         >
-                            <p className="px-7 pb-7 text-slate-400 leading-relaxed font-light">
-                               {faq.a}
-                            </p>
-                         </motion.div>
-                      )}
-                   </AnimatePresence>
-                </div>
-             ))}
-          </div>
-        </div>
-      </section>
+      <FAQAccordion 
+        title="Despeja tus dudas" 
+        subtitle="Todo lo que necesitas saber antes de dar el primer paso."
+        items={PAES_FAQS}
+      />
 
       {/* Final CTA Strip */}
       <section className="py-32 bg-gradient-to-b from-slate-950 to-blue-900/20 text-center px-6">

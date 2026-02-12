@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "programs": "Programs",
+    "about": "About Us",
+    "contact": "Contact",
+    "blog": "Blog"
+  },
+  "hero": {
+    "title": "THE FUTURE IS YOURS",
+    "subtitle": "High-performance educational ecosystem.",
+    "cta": "Talk to an Advisor"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  }
+}

@@ -4,14 +4,15 @@ export default {
     "./index.html",
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        bg: "#0b1220",
-        card: "#0e1424",
-        text: "#e5e7eb",
-        muted: "#9ca3af",
-        bd: "#1f2a44",
+        bg: "var(--bg-primary)",
+        card: "var(--bg-secondary)",
+        text: "var(--text-primary)",
+        muted: "var(--text-secondary)",
+        bd: "var(--border-color)",
         lael: {
           blue: "#5850EC",
           gold: "#FFCC33",
@@ -30,6 +31,7 @@ export default {
       },
       animation: {
         blob: "blob 7s infinite",
+        marquee: "marquee 25s linear infinite",
       },
       keyframes: {
         blob: {
@@ -45,6 +47,10 @@ export default {
           "100%": {
             transform: "translate(0px, 0px) scale(1)",
           },
+        },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         },
       },
     },

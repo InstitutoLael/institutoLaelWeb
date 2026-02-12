@@ -18,101 +18,86 @@ export default function Privacidad() {
   };
 
   return (
-    <div className="legal-page">
+    <div className="min-h-screen bg-[#020617] text-slate-50 font-sans pt-32 pb-20 relative overflow-x-hidden">
       <SEOHead title="Política de Privacidad | Instituto Lael" description="Compromiso de protección de datos personales." />
-      <style>{css}</style>
-
+      
       {/* Luces Ambientales (Verde Seguridad) */}
-      <div className="legal-glow glow-1"></div>
-      <div className="legal-glow glow-2"></div>
+      <div className="absolute top-[-200px] right-[-100px] w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-0 left-[-100px] w-[600px] h-[600px] bg-emerald-400/10 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="container legal-grid">
+      <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-12 items-start relative z-10">
 
         {/* SIDEBAR DE NAVEGACIÓN */}
-        <aside className="legal-sidebar">
-          <div className="sidebar-sticky">
-            <span className="sidebar-title">Índice de Privacidad</span>
-            <nav>
-              <button onClick={() => scrollTo('p1')} className={activeSection === 'p1' ? 'active' : ''}>1. Datos Recopilados</button>
-              <button onClick={() => scrollTo('p2')} className={activeSection === 'p2' ? 'active' : ''}>2. Uso de Info</button>
-              <button onClick={() => scrollTo('p3')} className={activeSection === 'p3' ? 'active' : ''}>3. Seguridad (Pagos)</button>
-              <button onClick={() => scrollTo('p4')} className={activeSection === 'p4' ? 'active' : ''}>4. Cookies</button>
-              <button onClick={() => scrollTo('p5')} className={activeSection === 'p5' ? 'active' : ''}>5. Tus Derechos</button>
-            </nav>
-            <Link to="/" className="btn-home">← Volver al Inicio</Link>
-          </div>
+        <aside className="hidden lg:block sticky top-32">
+          <span className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Índice de Privacidad</span>
+          <nav className="space-y-1 border-l-2 border-white/5">
+            {[
+              { id: 'p1', label: '1. Datos Recopilados' },
+              { id: 'p2', label: '2. Uso de Info' },
+              { id: 'p3', label: '3. Seguridad (Pagos)' },
+              { id: 'p4', label: '4. Cookies' },
+              { id: 'p5', label: '5. Tus Derechos' }
+            ].map((item) => (
+              <button 
+                key={item.id}
+                onClick={() => scrollTo(item.id)} 
+                className={`block w-full text-left py-2 px-4 text-sm transition-all border-l-2 -ml-[2px]
+                  ${activeSection === item.id 
+                    ? 'text-emerald-400 border-emerald-400 font-bold' 
+                    : 'text-slate-400 border-transparent hover:text-white hover:border-white/30'}`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
+          <Link to="/" className="inline-block mt-8 text-sm text-slate-300 border border-white/10 px-4 py-2 rounded-lg hover:bg-white/5 transition-colors">
+            ← Volver al Inicio
+          </Link>
         </aside>
 
         {/* DOCUMENTO PRINCIPAL */}
-        <main className="legal-doc">
-          <header className="doc-header">
-            <h1>Política de Privacidad</h1>
-            <div className="meta-info">
+        <main className="bg-[#0f172a] border border-white/5 rounded-3xl p-8 md:p-16 shadow-2xl relative">
+          <header className="border-b border-white/5 pb-8 mb-10">
+            <h1 className="text-3xl md:text-5xl font-black mb-4 tracking-tight">Política de Privacidad</h1>
+            <div className="flex items-center gap-3 text-sm text-slate-400">
               <span>Compromiso de Seguridad</span>
-              <span className="dot"></span>
+              <span className="w-1 h-1 bg-white/20 rounded-full"></span>
               <span>Actualizado: Dic 2025</span>
             </div>
           </header>
 
-          <div className="doc-body">
-            <p className="intro-text">
+          <div className="prose prose-invert max-w-none">
+            <p className="text-lg text-slate-300 leading-relaxed mb-10">
               En <strong>Instituto Lael</strong>, tu confianza es nuestro activo más valioso. Esta política explica de forma transparente qué hacemos con tus datos y, más importante aún, qué <strong>NO</strong> hacemos con ellos.
             </p>
 
-            <section id="p1" className="term-section">
-              <h3><FaDatabase className="icon" /> 1. Recopilación de Información</h3>
-              <p>
-                Solo recopilamos los datos estrictamente necesarios para formalizar tu matrícula y brindarte el servicio educativo:
-                <strong> Nombre completo, RUT, correo electrónico y teléfono de contacto</strong>.
-                Estos datos son entregados voluntariamente por ti al completar nuestros formularios de inscripción.
-              </p>
-            </section>
+            {[
+              { id: 'p1', icon: <FaDatabase />, title: '1. Recopilación de Información', content: 'Solo recopilamos los datos estrictamente necesarios para formalizar tu matrícula y brindarte el servicio educativo: <strong>Nombre completo, RUT, correo electrónico y teléfono de contacto</strong>. Estos datos son entregados voluntariamente por ti al completar nuestros formularios de inscripción.' },
+              { id: 'p2', icon: <FaUserCheck />, title: '2. Uso de la Información', content: 'Tus datos personales son utilizados exclusivamente para fines académicos y administrativos internos:', list: ['Creación de tus credenciales para el <strong>Aula Virtual</strong> y Zoom.', 'Envío de material pedagógico, resultados de ensayos y comunicados oficiales.', 'Gestión de pagos y emisión de comprobantes.', '<strong>Jamás</strong> vendemos ni alquilamos bases de datos a terceros para publicidad.'] },
+              { id: 'p3', icon: <FaShieldAlt />, title: '3. Protección Financiera', content: 'Nos tomamos la seguridad muy en serio. Instituto Lael <strong>NO almacena</strong> los datos de tu tarjeta de crédito o débito en nuestros servidores. Todas las transacciones son procesadas a través de pasarelas de pago externas certificadas y encriptadas (como <strong>Webpay Plus</strong> o <strong>Mercado Pago</strong>), que cumplen con los más altos estándares de seguridad bancaria (PCI-DSS).' },
+              { id: 'p4', icon: <FaCookieBite />, title: '4. Cookies y Analítica', content: 'Utilizamos cookies técnicas esenciales para que el sitio funcione correctamente y cookies de análisis (Google Analytics) para entender cómo mejorar nuestra plataforma. Estas estadísticas son anónimas y no rastrean tu identidad personal fuera de nuestro sitio.' },
+              { id: 'p5', icon: <FaLock />, title: '5. Tus Derechos (ARCO)', content: 'Tú eres el dueño de tus datos. Tienes derecho a solicitar el Acceso, Rectificación, Cancelación u Oposición de tu información personal en cualquier momento. Si deseas darte de baja de nuestra base de datos o corregir algún error, solo debes solicitarlo formalmente al canal oficial.' }
+            ].map((section, idx) => (
+              <section key={idx} id={section.id} className="mb-12 scroll-mt-36">
+                <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-3">
+                  <span className="text-emerald-400">{section.icon}</span> {section.title}
+                </h3>
+                <p className="text-slate-400 leading-relaxed text-base" dangerouslySetInnerHTML={{ __html: section.content }}></p>
+                {section.list && (
+                  <ul className="list-disc list-inside mt-4 space-y-2 text-slate-400 border-l-2 border-white/5 pl-4 ml-2">
+                    {section.list.map((li, i) => (
+                      <li key={i} className="pl-2" dangerouslySetInnerHTML={{ __html: li }}></li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
 
-            <section id="p2" className="term-section">
-              <h3><FaUserCheck className="icon" /> 2. Uso de la Información</h3>
-              <p>
-                Tus datos personales son utilizados exclusivamente para fines académicos y administrativos internos:
-              </p>
-              <ul>
-                <li>Creación de tus credenciales para el <strong>Aula Virtual</strong> y Zoom.</li>
-                <li>Envío de material pedagógico, resultados de ensayos y comunicados oficiales.</li>
-                <li>Gestión de pagos y emisión de comprobantes.</li>
-                <li><strong>Jamás</strong> vendemos ni alquilamos bases de datos a terceros para publicidad.</li>
-              </ul>
-            </section>
-
-            <section id="p3" className="term-section">
-              <h3><FaShieldAlt className="icon" /> 3. Protección Financiera</h3>
-              <p>
-                Nos tomamos la seguridad muy en serio. Instituto Lael <strong>NO almacena</strong> los datos de tu tarjeta de crédito o débito en nuestros servidores.
-              </p>
-              <p>
-                Todas las transacciones son procesadas a través de pasarelas de pago externas certificadas y encriptadas (como <strong>Webpay Plus</strong> o <strong>Mercado Pago</strong>), que cumplen con los más altos estándares de seguridad bancaria (PCI-DSS).
-              </p>
-            </section>
-
-            <section id="p4" className="term-section">
-              <h3><FaCookieBite className="icon" /> 4. Cookies y Analítica</h3>
-              <p>
-                Utilizamos cookies técnicas esenciales para que el sitio funcione correctamente y cookies de análisis (Google Analytics) para entender cómo mejorar nuestra plataforma. Estas estadísticas son anónimas y no rastrean tu identidad personal fuera de nuestro sitio.
-              </p>
-            </section>
-
-            <section id="p5" className="term-section">
-              <h3><FaLock className="icon" /> 5. Tus Derechos (ARCO)</h3>
-              <p>
-                Tú eres el dueño de tus datos. Tienes derecho a solicitar el Acceso, Rectificación, Cancelación u Oposición de tu información personal en cualquier momento.
-              </p>
-              <p>
-                Si deseas darte de baja de nuestra base de datos o corregir algún error, solo debes solicitarlo formalmente al canal oficial.
-              </p>
-            </section>
-
-            <div className="contact-box privacy-mode">
-              <FaEnvelope className="c-icon" />
+            <div className="mt-16 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-6 flex gap-4 items-center">
+              <FaEnvelope className="text-2xl text-emerald-500 flex-shrink-0" />
               <div>
-                <strong>¿Consultas sobre tus datos?</strong>
-                <p>Contacta al Oficial de Privacidad: <a href="mailto:contacto@institutolael.cl">contacto@institutolael.cl</a></p>
+                <strong className="block text-white mb-1">¿Consultas sobre tus datos?</strong>
+                <p className="text-sm text-slate-400 m-0">Contacta al Oficial de Privacidad: <a href="mailto:contacto@institutolael.cl" className="text-emerald-400 hover:text-emerald-300 font-bold underline">contacto@institutolael.cl</a></p>
               </div>
             </div>
 
@@ -122,101 +107,3 @@ export default function Privacidad() {
     </div>
   );
 }
-
-/* ──────────────────────────────────────────────────────────────────────────
-   CSS - "SECURE DOC" STYLE
-   ────────────────────────────────────────────────────────────────────────── */
-const css = `
-:root {
-  --bg-deep: #020617;
-  --bg-card: #0f172a;
-  --text-main: #F8FAFC;
-  --text-muted: #94A3B8;
-  --border: rgba(255, 255, 255, 0.08);
-  
-  /* CAMBIO PRINCIPAL: Color Esmeralda para Privacidad */
-  --primary: #10B981; 
-  --accent: #34d399;
-}
-
-.legal-page {
-  background-color: var(--bg-deep);
-  color: var(--text-main);
-  min-height: 100vh;
-  font-family: 'Inter', sans-serif;
-  padding: 120px 0 100px;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Background FX */
-.legal-glow {
-  position: absolute; width: 600px; height: 600px; border-radius: 50%;
-  filter: blur(120px); opacity: 0.12; pointer-events: none;
-}
-.glow-1 { top: -200px; right: -100px; background: var(--primary); }
-.glow-2 { bottom: 0; left: -100px; background: var(--accent); }
-
-/* Grid Layout */
-.legal-grid {
-  display: grid; grid-template-columns: 250px 1fr; gap: 60px; align-items: start;
-}
-@media (max-width: 900px) { .legal-grid { grid-template-columns: 1fr; } }
-
-/* Sidebar */
-.legal-sidebar { display: block; }
-@media (max-width: 900px) { .legal-sidebar { display: none; } }
-
-.sidebar-sticky { position: sticky; top: 120px; }
-.sidebar-title { 
-  display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; 
-  color: var(--text-muted); margin-bottom: 15px; font-weight: 700;
-}
-.legal-sidebar nav button {
-  display: block; width: 100%; text-align: left; background: none; border: none;
-  color: var(--text-muted); padding: 10px 0; font-size: 0.95rem; border-left: 2px solid transparent;
-  padding-left: 15px; transition: 0.2s; cursor: pointer;
-}
-.legal-sidebar nav button:hover { color: white; border-left-color: rgba(255,255,255,0.3); }
-.legal-sidebar nav button.active { color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
-
-.btn-home {
-  display: inline-block; margin-top: 30px; font-size: 0.9rem; color: var(--text-main); 
-  text-decoration: none; border: 1px solid var(--border); padding: 8px 16px; border-radius: 8px;
-  transition: 0.2s;
-}
-.btn-home:hover { background: rgba(255,255,255,0.05); }
-
-/* Document Card */
-.legal-doc {
-  background: var(--bg-card); border: 1px solid var(--border); border-radius: 24px;
-  padding: 60px; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-}
-@media (max-width: 768px) { .legal-doc { padding: 30px 20px; } }
-
-.doc-header { border-bottom: 1px solid var(--border); padding-bottom: 30px; margin-bottom: 40px; }
-.doc-header h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 15px; }
-.meta-info { display: flex; gap: 10px; align-items: center; color: var(--text-muted); font-size: 0.9rem; }
-.dot { width: 4px; height: 4px; background: var(--border); border-radius: 50%; }
-
-.intro-text { font-size: 1.1rem; line-height: 1.7; color: #cbd5e1; margin-bottom: 40px; }
-
-.term-section { margin-bottom: 40px; scroll-margin-top: 140px; }
-.term-section h3 { 
-  font-size: 1.4rem; color: white; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; 
-}
-.term-section .icon { color: var(--primary); font-size: 1.2rem; }
-.term-section p { color: var(--text-muted); line-height: 1.7; margin-bottom: 15px; font-size: 1rem; }
-.term-section ul { list-style: none; padding-left: 20px; border-left: 2px solid var(--border); }
-.term-section li { color: var(--text-muted); margin-bottom: 10px; font-size: 0.95rem; }
-.term-section strong { color: #e2e8f0; }
-
-/* Contact Box (Privacy Variant) */
-.contact-box {
-  margin-top: 60px; border: 1px solid var(--border);
-  border-radius: 12px; padding: 20px; display: flex; gap: 15px; align-items: center;
-}
-.contact-box.privacy-mode { background: rgba(16, 185, 129, 0.1); border-color: var(--primary); }
-.c-icon { font-size: 1.5rem; color: var(--primary); }
-.contact-box a { color: var(--primary); font-weight: 600; text-decoration: underline; }
-`;

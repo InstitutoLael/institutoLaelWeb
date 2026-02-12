@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "programs": "项目",
+    "about": "关于我们",
+    "contact": "联系我们",
+    "blog": "博客"
+  },
+  "hero": {
+    "title": "未来属于你",
+    "subtitle": "高性能教育生态系统。",
+    "cta": "咨询顾问"
+  },
+  "footer": {
+    "rights": "版权所有。"
+  }
+}

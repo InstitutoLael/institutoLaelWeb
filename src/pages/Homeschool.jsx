@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext.jsx";
 import { motion, AnimatePresence } from "framer-motion";
+import FAQAccordion from "../components/FAQAccordion";
 
 // ICONS
 import {
@@ -29,7 +30,9 @@ import {
    LEVELS,
    PACKS,
    SCHOOL_SERVICES,
-   clp
+   SCHOOL_SERVICES,
+   clp,
+   HOMESCHOOL_FAQS
 } from "../data/homeschool.js";
 
 // ANIMATIONS
@@ -466,7 +469,14 @@ export default function Academy() {
             </div>
          </section>
 
-         {/* ──────────────── STICKY BAR ──────────────── */}
+         {/* ──────────────── 7. FAQS ──────────────── */}
+      <FAQAccordion 
+        title="Preguntas Frecuentes" 
+        subtitle="Resuelve tus dudas sobre el Homeschool." 
+        items={HOMESCHOOL_FAQS} 
+      />
+
+      {/* ──────────────── STICKY BAR ──────────────── */}
          <AnimatePresence>
             {showSticky && (
                <motion.div

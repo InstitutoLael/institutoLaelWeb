@@ -1,20 +1,24 @@
+```
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 // Components
 import BackgroundAurora from "../components/BackgroundAurora";
+import Testimonials from "../components/Testimonials";
+import ActivityTicker from "../components/ActivityTicker";
 
-// Icons
+// Icons (Lucide React)
 import { 
-  FaRocket, 
-  FaGlobeAmericas, 
-  FaLaptopCode, 
-  FaUserGraduate, 
-  FaCheckCircle, 
-  FaWhatsapp,
-  FaArrowRight
-} from "react-icons/fa";
+  Rocket, 
+  Globe, 
+  Laptop, 
+  GraduationCap, 
+  CheckCircle, 
+  MessageCircle, // Replacing FaWhatsapp
+  ArrowRight,
+  BookOpen
+} from "lucide-react";
 
 // Assets
 import logoDorado from "../assets/img/Logos/lael-inst-amarillo.png";
@@ -48,8 +52,10 @@ const BentoCard = ({ to, title, description, icon, className, size = "small" }) 
   >
     <Link to={to} className="absolute inset-0 z-10" />
     <div className="relative z-0">
-      <div className={`mb-6 p-4 rounded-2xl inline-flex items-center justify-center bg-white/5 text-2xl group-hover:bg-indigo-500/20 group-hover:text-indigo-400 transition-colors`}>
-        {icon}
+      <div className={`mb-6 p-4 rounded-2xl inline-flex items-center justify-center bg-white/5 text-indigo-400 group-hover:bg-indigo-500/20 group-hover:text-indigo-400 transition-colors`}>
+        {/* Render Icon Clone with Size */
+         React.cloneElement(icon, { size: size === "large" ? 40 : 28 })
+        }
       </div>
       <h3 className={`font-black text-white uppercase tracking-tighter mb-2 ${size === "large" ? "text-3xl md:text-4xl" : "text-xl"}`}>
         {title}
@@ -59,7 +65,7 @@ const BentoCard = ({ to, title, description, icon, className, size = "small" }) 
       </p>
     </div>
     <div className="mt-8 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity">
-      Explorar Mundo <FaArrowRight />
+      Explorar Mundo <ArrowRight size={14} />
     </div>
     {/* Hover Glow Effect */}
     <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
@@ -143,8 +149,9 @@ export default function Home() {
                 rel="noopener noreferrer"
                 className="group relative px-10 py-5 bg-indigo-600 hover:bg-indigo-500 text-white font-black rounded-2xl transition-all shadow-2xl shadow-indigo-600/30 uppercase tracking-widest text-sm flex items-center gap-3 hover:-translate-y-1"
               >
-                <FaWhatsapp className="text-xl group-hover:rotate-12 transition-transform" />
-                Hablar con un Asesor
+                <div className="absolute inset-0 bg-white/20 rounded-2xl blur-lg opacity-0 group-hover:opacity-50 transition-opacity" />
+                <MessageCircle className="text-xl group-hover:rotate-12 transition-transform relative z-10" />
+                <span className="relative z-10">Hablar con un Asesor</span>
               </a>
             </motion.div>
           </motion.div>
@@ -167,7 +174,7 @@ export default function Home() {
             to="/paes"
             title="Preu PAES"
             description="Asegura tu puntaje con Simuladores IA y Coaching Estratégico."
-            icon={<FaRocket />}
+            icon={<Rocket />}
             className="md:col-span-2 md:row-span-2 border-indigo-500/20 bg-indigo-900/10"
             size="large"
           />
@@ -177,7 +184,7 @@ export default function Home() {
             to="/idiomas"
             title="Idiomas"
             description="Inglés y Coreano. Viaja, conecta y trabaja sin fronteras."
-            icon={<FaGlobeAmericas />}
+            icon={<Globe />}
             className="md:col-span-2 border-emerald-500/20 bg-emerald-900/10"
           />
 
@@ -186,7 +193,7 @@ export default function Home() {
             to="/homeschool"
             title="Lael Academy"
             description="Homeschool Cristiano & Refuerzo Académico. Valores + Excelencia."
-            icon={<FaUserGraduate />}
+            icon={<GraduationCap />}
             className="md:col-span-2 border-amber-500/20 bg-amber-900/10"
           />
 
@@ -195,7 +202,7 @@ export default function Home() {
             to="/lsch"
             title="LSCh"
             description="Cultura Sorda y Gramática Visual."
-            icon={<FaCheckCircle />}
+            icon={<CheckCircle />}
             className="md:col-span-1 border-teal-500/20 bg-teal-900/10"
           />
 
@@ -204,7 +211,7 @@ export default function Home() {
             to="/escuela-adultos"
             title="Escuela 2x1"
             description="Termina tu 4to medio 100% Online."
-            icon={<FaUserGraduate />}
+            icon={<BookOpen />}
             className="md:col-span-1 border-blue-500/20 bg-blue-900/10"
           />
 
@@ -213,7 +220,7 @@ export default function Home() {
             to="/empresas"
             title="Empresas"
             description="Capacitación B2B con ROI medible."
-            icon={<FaLaptopCode />}
+            icon={<Laptop />}
             className="md:col-span-2 border-slate-500/20 bg-slate-800/20"
           />
 
@@ -233,7 +240,9 @@ export default function Home() {
               viewport={{ once: true }}
               className="flex flex-col items-center text-center group"
             >
-              <div className="mb-6 text-5xl text-indigo-500 group-hover:scale-110 transition-transform duration-300"><FaLaptopCode /></div>
+              <div className="mb-6 p-4 rounded-full bg-indigo-500/10 text-indigo-500 group-hover:scale-110 transition-transform duration-300">
+                <Laptop size={48} />
+              </div>
               <h4 className="text-xl font-black text-white uppercase tracking-widest mb-4">Tecnología</h4>
               <p className="text-slate-400 leading-relaxed">
                 Plataforma propia con <strong className="text-indigo-400">Inteligencia Artificial</strong> diseñada para optimizar tu aprendizaje.
@@ -247,7 +256,9 @@ export default function Home() {
               viewport={{ once: true }}
               className="flex flex-col items-center text-center group"
             >
-              <div className="mb-6 text-5xl text-pink-500 group-hover:scale-110 transition-transform duration-300"><FaGlobeAmericas /></div>
+              <div className="mb-6 p-4 rounded-full bg-pink-500/10 text-pink-500 group-hover:scale-110 transition-transform duration-300">
+                <Globe size={48} />
+              </div>
               <h4 className="text-xl font-black text-white uppercase tracking-widest mb-4">Flexibilidad</h4>
               <p className="text-slate-400 leading-relaxed">
                 Estudia a tu ritmo, <strong className="text-pink-400">100% Online o Híbrido</strong>. Sin horarios rígidos que frenen tu vida.
@@ -261,7 +272,9 @@ export default function Home() {
               viewport={{ once: true }}
               className="flex flex-col items-center text-center group"
             >
-              <div className="mb-6 text-5xl text-emerald-500 group-hover:scale-110 transition-transform duration-300"><FaCheckCircle /></div>
+              <div className="mb-6 p-4 rounded-full bg-emerald-500/10 text-emerald-500 group-hover:scale-110 transition-transform duration-300">
+                <CheckCircle size={48} />
+              </div>
               <h4 className="text-xl font-black text-white uppercase tracking-widest mb-4">Comunidad</h4>
               <p className="text-slate-400 leading-relaxed">
                 Más de <strong className="text-emerald-400">+1200 Alumnos activos</strong> transformando su realidad educativa hoy mismo.

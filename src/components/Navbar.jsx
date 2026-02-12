@@ -4,36 +4,12 @@ import { useCart } from "../context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "../assets/img/Logos/lael-inst-blanco.png";
 import { NAVIGATION } from "../data/navigation";
-
-/* ─── ICONOS SVG (Lucide-like optimizados) ─── */
-// Nota: Para este refactor mantengo los SVG inline por rendimiento y estilo visual específico
-// aunque NAVIGATION use react-icons. Los íconos del MegaMenu se mapean visualmente aquí.
-const Icons = {
-  ChevronDown: ({ className }) => <svg className={className} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>,
-  Menu: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></svg>,
-  X: () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="4" x2="12" y2="20" /><line x1="6" y1="9" x2="18" y2="9" /></svg>,
-  Bag: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" /></svg>,
-  WhatsApp: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.22 3.08.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.69.25-1.29.17-1.41-.08-.13-.27-.2-.57-.35M12.05 21.78h-.01A9.87 9.87 0 017.01 20.4l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 01-1.51-5.26C2.16 6.49 6.6 2.05 12.05 2.05c2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 012.89 6.99c-.01 5.45-4.44 9.84-9.88 9.84" /></svg>,
-  User: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>,
-  // Icon mapping helpers for MegaMenu
-  Grad: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>,
-  World: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></svg>,
-  Hand: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0" /><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" /><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" /><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></svg>,
-  Book: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>,
-  Rocket: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" /><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" /><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" /><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" /></svg>,
-};
-
-// Helper para mapear string icon a componente
-const getIcon = (name) => {
-  const map = {
-    "FaGraduationCap": <Icons.Grad />,
-    "FaGlobeAmericas": <Icons.World />,
-    "FaHandsHelping": <Icons.Hand />,
-    "FaBookReader": <Icons.Book />,
-    "FaRocket": <Icons.Rocket />
-  };
-  return map[name] || <Icons.Book />;
-};
+import { 
+  Menu, X, ShoppingBag, User, MessageCircle, 
+  GraduationCap, Globe, HandHeart, BookOpen, Rocket, Shield, Briefcase, Info, Users
+} from "lucide-react";
+import ThemeToggle from "../components/ThemeToggle";
+import LanguageSwitcher from "../components/LanguageSwitcher";
 
 /* ─── COMPONENTE NAVBAR ─── */
 export default function Navbar() {
@@ -107,13 +83,16 @@ export default function Navbar() {
         {/* === ACTION BUTTONS === */}
         <div className="flex items-center gap-3 z-[60]">
 
+          <LanguageSwitcher />
+          <ThemeToggle />
+
           {/* Carrito */}
           <button
             onClick={toggleCart}
             className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-slate-300 transition-all hover:bg-white/10 hover:text-white hover:scale-105 relative"
             aria-label="Carrito"
           >
-            <Icons.Bag />
+            <ShoppingBag size={20} />
             {cartCount > 0 && (
               <span className="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold rounded-full shadow-sm">
                 {cartCount}
@@ -121,17 +100,12 @@ export default function Navbar() {
             )}
           </button>
 
-          {/* Desktop Only Actions */}
-          <div className="hidden lg:flex items-center gap-3">
-             {/* Cleaned up as per requirements */}
-          </div>
-
           {/* Mobile Toggle Button (Hamburger) */}
           <button
             className="lg:hidden w-10 h-10 flex items-center justify-center rounded-full bg-white/5 border border-white/10 text-white transition-all active:scale-95 touch-manipulation"
             onClick={() => setMobileOpen(true)}
           >
-            <Icons.Menu />
+            <Menu size={24} />
           </button>
         </div>
       </div>
@@ -170,14 +144,14 @@ export default function Navbar() {
                     className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-white hover:bg-white/10 active:scale-90 transition-all border border-white/10 touch-manipulation"
                     aria-label="Cerrar menú"
                   >
-                    <Icons.X />
+                    <X size={24} />
                   </button>
                 </div>
 
                 {/* User Access Card */}
                 <Link to={NAVIGATION.action.aula.path} className="flex items-center gap-4 p-4 rounded-xl bg-gradient-to-r from-white/5 to-transparent border border-white/5 hover:border-white/20 transition-all">
                   <div className="w-10 h-10 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center">
-                    <Icons.User />
+                    <User size={20} />
                   </div>
                   <div>
                     <h4 className="text-white font-bold text-sm">Aula Virtual</h4>
@@ -195,25 +169,33 @@ export default function Navbar() {
                   </div>
 
                   {/* Categorized Mobile Menu */}
-                  {Object.entries(NAVIGATION.megaMenu).map(([category, items]) => (
+                  {Object.entries(NAVIGATION.categories || {}).map(([category, items]) => (
                     <div key={category}>
-                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 pl-2 opacity-60">{category}</p>
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 pl-2 opacity-60">
+                        {category === 'academic' ? 'Académico' : category === 'institutional' ? 'Institucional' : 'Soporte'}
+                      </p>
                       <div className="space-y-1 pl-2 border-l border-white/10">
                         {items.map((item, idx) => (
-                          <MobileLink key={idx} to={item.path}>{item.title}</MobileLink>
+                           // Note: Using a simpler link here since we don't need the icon in the list for now, 
+                           // or we could add it. The original code didn't use icons in the list loop.
+                          <MobileLink key={idx} to={item.path}>{item.name}</MobileLink>
                         ))}
                       </div>
                     </div>
                   ))}
-
-                  <div>
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 pl-2 opacity-60">Nuestra Academia</p>
-                    <div className="space-y-1 pb-10">
-                      {NAVIGATION.main.slice(1).map((item, idx) => (
-                        <MobileLink key={idx} to={item.path}>{item.name}</MobileLink>
-                      ))}
+                  
+                  {/* Fallback for main links if categories missing */}
+                  {!NAVIGATION.categories && (
+                    <div>
+                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mb-4 pl-2 opacity-60">Nuestra Academia</p>
+                         <div className="space-y-1 pb-10">
+                           {NAVIGATION.main.slice(1).map((item, idx) => (
+                             <MobileLink key={idx} to={item.path}>{item.name}</MobileLink>
+                           ))}
+                         </div>
                     </div>
-                  </div>
+                  )}
+
                 </div>
               </div>
 
@@ -227,7 +209,7 @@ export default function Navbar() {
                 </button>
                 <div className="mt-4 text-center">
                   <a href={NAVIGATION.action.whatsapp.url} className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors inline-flex items-center gap-2">
-                    <Icons.WhatsApp />
+                    <MessageCircle size={20} />
                     ¿Consultas vía WhatsApp?
                   </a>
                 </div>
@@ -237,18 +219,6 @@ export default function Navbar() {
         )}
       </AnimatePresence>
     </header>
-  );
-}
-
-/* ─── HELPER COMPONENTS ─── */
-function MegaItem({ to, title, icon, color }) {
-  return (
-    <Link to={to} className="group flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
-      <span className={`${color} bg - white / 5 p - 2 rounded - md group - hover: scale - 110 transition - transform`}>
-        {icon}
-      </span>
-      <span className="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">{title}</span>
-    </Link>
   );
 }
 

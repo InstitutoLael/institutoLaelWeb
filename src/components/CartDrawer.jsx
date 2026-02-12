@@ -1,19 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-    FaTimes, FaTrashAlt, FaArrowRight, FaShoppingBag,
-    FaLock, FaRocket, FaShieldAlt, FaUniversity, FaCreditCard, FaCopy
-} from "react-icons/fa";
-import { MdEmail, MdWhatsapp } from "react-icons/md";
+    X, Trash2, ArrowRight, ShoppingBag,
+    Rocket, Shield, CreditCard
+} from "lucide-react";
 
 export default function CartDrawer() {
     const { cart, removeFromCart, clearCart, cartTotal, formatPrice, isCartOpen, closeCart } = useCart();
     const navigate = useNavigate();
     const drawerRef = useRef(null);
 
-    // Bundle Logic
     // Bundle Logic
     const hasHistoria = cart.some(item => 
         (item.title && item.title.toLowerCase().includes("historia")) || 
@@ -66,7 +64,7 @@ export default function CartDrawer() {
                         <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
                             <div className="flex items-center gap-4">
                                 <div className="p-3 bg-amber-500 rounded-2xl text-slate-950 shadow-lg shadow-amber-500/20">
-                                    <FaShoppingBag size={20} />
+                                    <ShoppingBag size={20} />
                                 </div>
                                 <div>
                                     <h2 className="text-xl font-black text-white uppercase tracking-tighter">Tu Mochila</h2>
@@ -75,9 +73,10 @@ export default function CartDrawer() {
                             </div>
                             <button
                                 onClick={closeCart}
+                                aria-label="Cerrar carrito"
                                 className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white transition-all transform hover:rotate-90"
                             >
-                                <FaTimes size={20} />
+                                <X size={20} />
                             </button>
                         </div>
 
@@ -91,7 +90,7 @@ export default function CartDrawer() {
                                     className="mb-6 p-4 bg-gradient-to-r from-amber-500/10 to-transparent border-l-4 border-amber-500 rounded-r-xl"
                                 >
                                     <h4 className="flex items-center gap-2 text-amber-500 font-bold text-sm uppercase tracking-wide mb-1">
-                                        <FaRocket /> Tip de Ahorro
+                                        <Rocket size={16} /> Tip de Ahorro
                                     </h4>
                                     <p className="text-xs text-slate-300 mb-3">
                                         Estás llevando <strong>Historia</strong>. El <strong>Pack Humanista</strong> incluye Historia + Lenguaje con un descuento especial.
@@ -138,9 +137,10 @@ export default function CartDrawer() {
                                                 </div>
                                                 <button
                                                     onClick={() => removeFromCart(item.id)}
+                                                    aria-label={`Eliminar ${item.title}`}
                                                     className="w-10 h-10 flex items-center justify-center rounded-xl bg-red-500/10 text-red-500 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 hover:text-white"
                                                 >
-                                                    <FaTrashAlt size={14} />
+                                                    <Trash2 size={14} />
                                                 </button>
                                             </div>
                                             <div className="flex justify-between items-center">
@@ -148,7 +148,7 @@ export default function CartDrawer() {
                                                     {formatPrice(item.price)}
                                                 </div>
                                                 <div className="flex items-center gap-1 text-[10px] text-slate-500 font-bold uppercase">
-                                                    <FaRocket className="text-amber-500/50" /> Cupo Asegurado
+                                                    <Rocket size={12} className="text-amber-500/50" /> Cupo Asegurado
                                                 </div>
                                             </div>
                                         </motion.div>
@@ -193,12 +193,12 @@ export default function CartDrawer() {
                                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
                                         <span>Pagar Matrícula</span>
-                                        <FaArrowRight className="group-hover:translate-x-2 transition-transform" />
+                                        <ArrowRight className="group-hover:translate-x-2 transition-transform" />
                                     </button>
 
                                     <div className="flex justify-center items-center gap-6 mt-6 pb-4">
                                         <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                                            <FaShieldAlt className="text-emerald-500" /> WebPay Secure
+                                            <Shield size={12} className="text-emerald-500" /> WebPay Secure
                                         </div>
                                         <div className="w-px h-3 bg-white/10"></div>
                                         <button

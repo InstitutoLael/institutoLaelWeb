@@ -1,7 +1,9 @@
+// src/data/navigation.js
 import {
-    FaGraduationCap, FaGlobeAmericas, FaHandsHelping, FaBookReader, FaRocket,
-    FaInstagram, FaYoutube, FaLinkedin, FaShieldAlt, FaBriefcase, FaUsers, FaInfoCircle
-} from "react-icons/fa";
+    GraduationCap, Globe, HandHeart, BookOpen, Rocket,
+    Instagram, Youtube, Linkedin, Shield, Briefcase, Users, Info,
+    Phone, MessageCircle
+} from "lucide-react";
 
 export const NAVIGATION = {
     main: [
@@ -11,30 +13,31 @@ export const NAVIGATION = {
         { name: "Inclusión", path: "/lsch" },
         { name: "Nivelación", path: "/nivelacion" },
         { name: "Empresas", path: "/empresas" },
+        { name: "Blog", path: "/blog" },
     ],
     
     // Categorized for Mobile Menu or MegaMenu
     categories: {
         academic: [
-            { name: "Preu PAES", path: "/paes", icon: FaGraduationCap },
-            { name: "Idiomas", path: "/idiomas", icon: FaGlobeAmericas },
-            { name: "Signos (LSCh)", path: "/lsch", icon: FaHandsHelping },
-            { name: "Nivelación Adultos", path: "/nivelacion", icon: FaBookReader },
-            { name: "Homeschool", path: "/homeschool", icon: FaRocket },
-            { name: "Catálogo", path: "/programas", icon: FaBookReader },
+            { name: "Preu PAES", path: "/paes", icon: <GraduationCap size={20} /> },
+            { name: "Idiomas", path: "/idiomas", icon: <Globe size={20} /> },
+            { name: "Signos (LSCh)", path: "/lsch", icon: <HandHeart size={20} /> },
+            { name: "Nivelación Adultos", path: "/nivelacion", icon: <BookOpen size={20} /> },
+            { name: "Homeschool", path: "/homeschool", icon: <Rocket size={20} /> },
+            { name: "Catálogo", path: "/programas", icon: <BookOpen size={20} /> },
         ],
         institutional: [
-            { name: "Sobre Nosotros", path: "/nosotros", icon: FaInfoCircle },
-            { name: "Convenios", path: "/convenios", icon: FaShieldAlt },
-            { name: "Trabaja con Nosotros", path: "/trabaja", icon: FaBriefcase },
-            { name: "Cuerpo Docente", path: "/docentes", icon: FaUsers },
-            { name: "Recursos", path: "/recursos", icon: FaBookReader },
+            { name: "Sobre Nosotros", path: "/nosotros", icon: <Info size={20} /> },
+            { name: "Convenios", path: "/convenios", icon: <Shield size={20} /> },
+            { name: "Trabaja con Nosotros", path: "/trabaja", icon: <Briefcase size={20} /> },
+            { name: "Cuerpo Docente", path: "/docentes", icon: <Users size={20} /> },
+            { name: "Blog / Recursos", path: "/blog", icon: <BookOpen size={20} /> },
         ],
         support: [
-            { name: "Contacto", path: "/contacto" },
-            { name: "Aula Virtual", path: "/aula" },
-            { name: "Términos y Condiciones", path: "/terminos" },
-            { name: "Privacidad", path: "/privacidad" }
+            { name: "Contacto", path: "/contacto", icon: <MessageCircle size={20} /> },
+            { name: "Aula Virtual", path: "/aula", icon: <Users size={20} /> },
+            { name: "Términos y Condiciones", path: "/terminos", icon: <Shield size={20} /> },
+            { name: "Privacidad", path: "/privacidad", icon: <Shield size={20} /> }
         ]
     },
 
@@ -61,9 +64,9 @@ export const NAVIGATION = {
     },
 
     social: [
-        { name: "Instagram", url: "https://instagram.com/institutolael", icon: FaInstagram },
-        { name: "YouTube", url: "https://www.youtube.com/channel/UCl0JuF0HlFpQEWPV_tIxV2g", icon: FaYoutube },
-        { name: "LinkedIn", url: "https://linkedin.com/company/instituto-lael", icon: FaLinkedin },
+        { name: "Instagram", url: "https://instagram.com/institutolael", icon: <Instagram size={20} /> },
+        { name: "YouTube", url: "https://www.youtube.com/channel/UCl0JuF0HlFpQEWPV_tIxV2g", icon: <Youtube size={20} /> },
+        { name: "LinkedIn", url: "https://linkedin.com/company/instituto-lael", icon: <Linkedin size={20} /> },
     ],
 
     action: {

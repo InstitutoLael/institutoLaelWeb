@@ -1,4 +1,3 @@
-```
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -53,9 +52,8 @@ const BentoCard = ({ to, title, description, icon, className, size = "small" }) 
     <Link to={to} className="absolute inset-0 z-10" />
     <div className="relative z-0">
       <div className={`mb-6 p-4 rounded-2xl inline-flex items-center justify-center bg-white/5 text-indigo-400 group-hover:bg-indigo-500/20 group-hover:text-indigo-400 transition-colors`}>
-        {/* Render Icon Clone with Size */
-         React.cloneElement(icon, { size: size === "large" ? 40 : 28 })
-        }
+        {/* Render Icon Clone with Size */}
+        {React.cloneElement(icon, { size: size === "large" ? 40 : 28 })}
       </div>
       <h3 className={`font-black text-white uppercase tracking-tighter mb-2 ${size === "large" ? "text-3xl md:text-4xl" : "text-xl"}`}>
         {title}

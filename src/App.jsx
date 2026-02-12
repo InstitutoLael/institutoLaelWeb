@@ -148,10 +148,10 @@ export default function App() {
                   <Route path="/docentes" element={<PageTransition><Docentes /></PageTransition>} />
                   <Route path="/login" element={<PageTransition><Login /></PageTransition>} />
                   <Route
-                    path="/aula"
+                    path="/aula/*"
                     element={
                       <ProtectedRoute>
-                        <PageTransition><Aula /></PageTransition>
+                        <Aula />
                       </ProtectedRoute>
                     }
                   />

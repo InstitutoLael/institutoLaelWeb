@@ -30,7 +30,6 @@ import {
    LEVELS,
    PACKS,
    SCHOOL_SERVICES,
-   SCHOOL_SERVICES,
    clp,
    HOMESCHOOL_FAQS
 } from "../data/homeschool.js";

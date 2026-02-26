@@ -283,20 +283,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ──────────────── E. FOOTER SIMPLE ──────────────── */}
-      <footer className="py-12 bg-[#020617] text-center border-t border-white/5 relative z-10">
-        <div className="container mx-auto px-6">
-          <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mb-6">
-            © 2026 Instituto Lael. Todos los derechos reservados.
-          </p>
-          <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black uppercase tracking-widest">
-            <Link to="/legal" className="text-slate-400 hover:text-white transition-colors">Términos y Condiciones</Link>
-            <Link to="/privacidad" className="text-slate-400 hover:text-white transition-colors">Política de Privacidad</Link>
-            <Link to="/contacto" className="text-indigo-400 hover:text-indigo-300 transition-colors">Soporte Técnico</Link>
-          </div>
-        </div>
-      </footer>
-
     </div>
   );
 }

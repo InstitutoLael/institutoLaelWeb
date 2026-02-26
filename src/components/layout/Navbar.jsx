@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaBars, FaTimes, FaWhatsapp, FaShoppingCart, FaUserCircle, FaChevronDown } from "react-icons/fa";
+import { Menu, X, MessageCircle, ShoppingCart, UserCircle, ChevronDown } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import logoBlanco from "../../assets/img/Logos/lael-inst-blanco.png";
 import { NAVIGATION } from "../../data/navigation";
@@ -82,7 +82,7 @@ export default function Navbar() {
               className="text-slate-300 hover:text-indigo-400 transition-colors flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
               title="Acceso Aula Virtual"
             >
-              <FaUserCircle size={18} />
+              <UserCircle size={18} />
               <span className="hidden xl:inline">Aula </span>
             </Link>
 
@@ -92,7 +92,7 @@ export default function Navbar() {
               className="relative p-2 text-slate-300 hover:text-white transition-colors"
               aria-label="Abrir Carrito"
             >
-              <FaShoppingCart size={20} />
+              <ShoppingCart size={20} />
               {cartCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-indigo-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center animate-pulse">
                   {cartCount}
@@ -116,7 +116,7 @@ export default function Navbar() {
             onClick={toggleCart}
             className="relative p-2 text-white"
           >
-            <FaShoppingCart size={22} />
+            <ShoppingCart size={22} />
             {cartCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-indigo-500 text-white text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center">
                 {cartCount}
@@ -128,7 +128,7 @@ export default function Navbar() {
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Menu"
           >
-            {isOpen ? <FaTimes size={28} /> : <FaBars size={28} />}
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </div>
@@ -172,7 +172,7 @@ export default function Navbar() {
                   <div className="grid grid-cols-1 gap-4">
                     {NAVIGATION.categories.academic.map((item) => (
                       <Link key={item.path} to={item.path} className="flex items-center gap-4 text-slate-400 font-bold hover:text-white transition-colors">
-                        <item.icon className="text-indigo-500" size={18} />
+                        {typeof item.icon === 'function' ? <item.icon className="text-indigo-500" size={18} /> : React.cloneElement(item.icon, { className: "text-indigo-500", size: 18 })}
                         <span className="text-sm uppercase tracking-widest">{item.name}</span>
                       </Link>
                     ))}
@@ -203,7 +203,7 @@ export default function Navbar() {
                   to={NAVIGATION.action.aula.path}
                   className="w-full py-5 bg-white/5 border border-white/10 text-white text-center font-black uppercase tracking-[0.2em] rounded-2xl flex items-center justify-center gap-3"
                 >
-                  <FaUserCircle size={20} /> Aula Virtual
+                  <UserCircle size={20} /> Aula Virtual
                 </Link>
               </div>
 
@@ -216,8 +216,8 @@ export default function Navbar() {
                       <s.icon size={20} />
                     </a>
                   ))}
-                  <a href={NAVIGATION.action.whatsapp.url} target="_blank" className="text-emerald-500">
-                    <FaWhatsapp size={20} />
+                  <a href={NAVIGATION.action.whatsapp.url} target="_blank" className="text-emerald-500" aria-label="WhatsApp">
+                    <MessageCircle size={20} />
                   </a>
                 </div>
               </div>

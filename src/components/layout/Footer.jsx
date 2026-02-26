@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaInstagram, FaWhatsapp, FaYoutube, FaLinkedin, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { MessageCircle, Mail, MapPin } from "lucide-react";
 import { NAVIGATION } from "../../data/navigation";
 import logoAmarillo from "../../assets/img/Logos/lael-inst-amarillo.png";
 
@@ -63,11 +63,11 @@ export default function Footer() {
             <div>
               <h4 className="text-white font-black uppercase tracking-[0.3em] text-[10px] mb-6">Conexión Directa</h4>
               <div className="flex flex-col items-center md:items-start gap-4">
-                <a href={NAVIGATION.action.whatsapp.url} target="_blank" className="flex items-center gap-3 text-emerald-500 font-black uppercase tracking-widest text-xs hover:text-emerald-400 transition-colors">
-                  <FaWhatsapp size={20} /> {NAVIGATION.action.whatsapp.label}
+                <a href={NAVIGATION.action.whatsapp.url} target="_blank" rel="noreferrer" className="flex items-center gap-3 text-emerald-500 font-black uppercase tracking-widest text-xs hover:text-emerald-400 transition-colors" aria-label="WhatsApp">
+                  <MessageCircle size={20} /> {NAVIGATION.action.whatsapp.label}
                 </a>
-                <a href="mailto:contacto@institutolael.cl" className="flex items-center gap-3 text-slate-400 font-bold text-xs hover:text-white transition-colors">
-                  <FaEnvelope size={18} /> contacto@institutolael.cl
+                <a href="mailto:contacto@institutolael.cl" className="flex items-center gap-3 text-slate-400 font-bold text-xs hover:text-white transition-colors" aria-label="Email">
+                  <Mail size={18} /> contacto@institutolael.cl
                 </a>
               </div>
             </div>
@@ -76,8 +76,8 @@ export default function Footer() {
               <h4 className="text-white font-black uppercase tracking-[0.3em] text-[10px] mb-6">Síguenos</h4>
               <div className="flex justify-center md:justify-start gap-4">
                 {NAVIGATION.social.map((s, i) => (
-                  <a key={i} href={s.url} target="_blank" className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-center text-slate-500 hover:bg-white hover:text-black hover:-translate-y-1 transition-all duration-300">
-                    <s.icon size={18} />
+                  <a key={i} href={s.url} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/5 flex items-center justify-center text-slate-500 hover:bg-white hover:text-black hover:-translate-y-1 transition-all duration-300" aria-label={s.name}>
+                    {React.isValidElement(s.icon) ? React.cloneElement(s.icon, { size: 18 }) : <s.icon size={18} />}
                   </a>
                 ))}
               </div>

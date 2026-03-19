@@ -795,19 +795,8 @@ body::after {
 
 
 /* ── IG STORY OVERLAY ── */
-#ig-overlay {
-  display:none; position:fixed; inset:0; z-index:999999;
-  background: linear-gradient(135deg, #05020d, #3b0764, #1e3a8a);
-  flex-direction:column; justify-content:center; align-items:center;
-  text-align:center; padding: 2rem;
-}
-#ig-overlay::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at center, transparent, #000 90%); opacity:0.6; }
-.ig-content { position:relative; z-index:2; animation: qslide 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
-.ig-title { font-family:'Syne',sans-serif; font-size:3.5rem; font-weight:800; color:var(--text); text-shadow:0 0 30px rgba(167,139,250,0.8); line-height:1; margin-bottom:0.5rem; }
-.ig-rank { font-family:'DM Mono',monospace; font-size:1.5rem; color:var(--c4); filter:drop-shadow(0 0 10px var(--c4)); margin-bottom:2rem; letter-spacing:4px;}
-.ig-pts { font-family:'Syne',sans-serif; font-size:5rem; font-weight:800; background:linear-gradient(to right,var(--c1),var(--c3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 10px 20px rgba(126,232,250,0.5)); line-height:1;}
-.ig-footer { position:absolute; bottom:3rem; left:0; right:0; text-align:center; font-family:'Syne',sans-serif; color:var(--text3); font-size:0.8rem; letter-spacing:2px; z-index:2; }
-.ig-close { position:absolute; top:2rem; right:2rem; width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:50%; color:#fff; font-size:1.5rem; border:none; cursor:pointer; z-index:3; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(10px); }
+
+
 
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; }
@@ -1557,10 +1546,10 @@ function dOutlier(){
   const sd=[...data,out];const sdata=shuffle(sd);
   const mw=fmt(sdata.reduce((a,b)=>a+b,0)/sdata.length);
   const mwo=fmt(data.reduce((a,b)=>a+b,0)/data.length);
-  const opts=['Dejaste el promedio por el suelo','Casi no le hace nada al promedio','Solo afecta la moda','Mejora el promedio de todo el curso'];
+  const opts=shuffle(['Dejaste el promedio por el suelo','Casi no le hace nada al promedio','Solo afecta la moda','Mejora el promedio de todo el curso']);
   return{type:'mc',visual:'Tus notas: [ '+sdata.map(n=>n.toFixed(1)).join(' , ')+' ]',
     text:`Ese <strong style="color:var(--c5)">${out.toFixed(1)}</strong> de la prueba sorpresa... ¿Qué le hace a tu promedio matemático?`,
-    options:opts,correct:0,
+    options:opts,correct:opts.indexOf('Dejaste el promedio por el suelo'),
     explanation:`Sin ese rojo tu promedio sería ~${mwo.toFixed(1)}. Con él bajaste a ~${mw.toFixed(1)}. ¡Los valores extremos (outliers) tiran el promedio lejos!`};
 }
 function dWhich(){
@@ -1571,8 +1560,10 @@ function dWhich(){
     {text:'Quieres saber la diferencia en lucas entre el arriendo más caro y más barato en Santiago Centro.',c:3,e:'El <strong>rango</strong> mide exactamente la amplitud entre el máximo y mínimo.'},
   ];
   const s=choose(casos);
+  const rawOpts = ['La media (Promedio)','La mediana','La moda','El rango'];
+  const opts = shuffle(rawOpts);
   return{type:'mc',text:s.text,
-    options:['La media (Promedio)','La mediana','La moda','El rango'],correct:s.c,explanation:s.e};
+    options:opts,correct:opts.indexOf(rawOpts[s.c]),explanation:s.e};
 }
 
 /* ═══════════════════════════════════════════
@@ -1591,7 +1582,8 @@ function lEje(){
     c:0,e:'Una caída de 0.2% es ínfima y muchas veces margen de error. Al cortar el eje, engañan al ojo humano.'},
   ];
   const s=choose(casos);
-  return{type:'mc',visual:s.vis.replace(/\n/g,'<br>'),text:s.q,options:s.opts,correct:s.c,explanation:s.e};
+  const opts = shuffle(s.opts);
+  return{type:'mc',visual:s.vis.replace(/\n/g,'<br>'),text:s.q,options:opts,correct:opts.indexOf(s.opts[s.c]),explanation:s.e};
 }
 function lMuestra(){
   const casos=[
@@ -1601,9 +1593,11 @@ function lMuestra(){
     c:0,e:'Entrevistaste justo a los que se saltaron la clase. Es una muestra hiper reducida y sesgada.'},
   ];
   const s=choose(casos);
+  const rawOpts = ['La muestra está completamente sesgada y no representa el total','El 95% está mal calculado','Las encuestas en la calle son ilegales','Nadie ama el reggaetón tanto'];
+  const opts = shuffle(rawOpts);
   return{type:'mc',text:'Detecta el truco estadístico: <em>'+s.text+'</em>',
-    options:['La muestra está completamente sesgada y no representa el total','El 95% está mal calculado','Las encuestas en la calle son ilegales','Nadie ama el reggaetón tanto'],
-    correct:0,explanation:s.e};
+    options:opts,
+    correct:opts.indexOf(rawOpts[s.c]),explanation:s.e};
 }
 function lPromedio(){
   const salaries=Array.from({length:5},()=>rand(400,600)*1000);
@@ -1626,7 +1620,8 @@ function lPorcentaje(){
     c:0,e:'1 accidente extra significa un aumento del 100%. Genera pánico artificial, pero en casos reales siguen siendo poquísimos.'},
   ];
   const s=choose(casos);
-  return{type:'mc',visual:s.vis,text:s.q,options:s.opts,correct:s.c,explanation:s.e};
+  const opts = shuffle(s.opts);
+  return{type:'mc',visual:s.vis,text:s.q,options:opts,correct:opts.indexOf(s.opts[s.c]),explanation:s.e};
 }
 function lCausalidad(){
   const pares=[
@@ -1634,11 +1629,13 @@ function lCausalidad(){
     {a:'Zapatillas más caras',b:'llegar temprano',causa:'el nivel socioeconómico/movilización',text:'Alumnos con zapatillas de 100 lucas llegan más temprano que los que usan de 20 lucas. ¿La zapatilla te hace caminar más rápido?'},
   ];
   const p=choose(pares);
+  const rawOpts = [`Falso. Están correlacionados pero algo de fondo causa ambos (${p.causa})`,'Verdadero. Si prohíbes los helados no hay asaltos','Verdadero. Las zapatillas dan velocidad','Falso, los datos deben estar malos'];
+  const opts = shuffle(rawOpts);
   return{type:'mc',
     visual:`📈 Falsa Correlación: ${p.a} causan ${p.b}`,
     text:p.text,
-    options:[`Falso. Están correlacionados pero algo de fondo causa ambos (${p.causa})`,'Verdadero. Si prohíbes los helados no hay asaltos','Verdadero. Las zapatillas dan velocidad','Falso, los datos deben estar malos'],
-    correct:0,
+    options:opts,
+    correct:opts.indexOf(rawOpts[0]),
     explanation:`Es el clásico error de <strong>Correlación ≠ Causalidad</strong>. Siempre pregúntate si hay una tercera variable mágica escondida.`};
 }
 
@@ -1711,30 +1708,35 @@ function exJob(){
     {q:'Vives con tus papás (0 gastos fijos) y quieres hacer plata rápida como comisionista experto.',c:mA>mB?0:1,e:`<strong>${high}</strong> tiene mayor promedio (${fm(Math.max(mA,mB))}). Mucho riesgo (DE alta), pero potencial de ganar jugoso.`},
   ];
   const s=choose(casos);
+  const rawOpts = ['Trabajo A','Trabajo B','Tiro una moneda','Cualquiera sirve'];
+  const opts = shuffle(rawOpts);
   return{type:'mc',
     visual:`Trabajo A (Fijo) → Media: ${fm(mA)} | DE: ${fm(sdA)}<br>Trabajo B (Comisiones) → Media: ${fm(mB)} | DE: ${fm(sdB)}`,
-    text:s.q,options:['Trabajo A','Trabajo B','Tiro una moneda','Cualquiera sirve'],
-    correct:s.c,explanation:s.e};
+    text:s.q,options:opts,
+    correct:opts.indexOf(rawOpts[s.c]),explanation:s.e};
 }
 function exInvest(){
   const mA=rand(400,500), sdA=rand(30,50);
   const mB=mA+rand(10,40), sdB=rand(100,200);
+  const rawOpts = ['Que la enseñanza no le llega a todos por igual (mucha desigualdad)','Que son excelentes enseñando a todos','Que el promedio es artificial','No sirve de nada ese dato'];
+  const opts = shuffle(rawOpts);
   return{type:'mc',
     visual:`Preu A → Media ensayo: ${mA} | DE: ${sdA}<br>Preu B → Media ensayo: ${mB} | DE: ${sdB}`,
     text:`Ambos preuniversitarios tienen promedios SIMILARES. Pero en el Preu B hay gente con ${mB+200} y gente con ${Math.max(100,mB-300)} pts. ¿Qué te dice la Desviación Estándar alta del B?`,
-    options:['Que la enseñanza no le llega a todos por igual (mucha desigualdad)','Que son excelentes enseñando a todos','Que el promedio es artificial','No sirve de nada ese dato'],
-    correct:0,explanation:`Altísima DE en el Preu B significa resultados brutales en los extremos. A unos les va excelente y otros reprueban duro. El Preu A es más parejo pedagógicamente.`};
+    options:opts,correct:opts.indexOf(rawOpts[0]),explanation:`Altísima DE en el Preu B significa resultados brutales en los extremos. A unos les va excelente y otros reprueban duro. El Preu A es más parejo pedagógicamente.`};
 }
 function exScores(){
   const A=Array.from({length:5},()=>rand(55,65));
   const B=[rand(20,40),rand(20,40),rand(80,100),rand(80,100),rand(40,55)];
   const mA=fmt(A.reduce((a,b)=>a+b,0)/A.length),mB=fmt(B.reduce((a,b)=>a+b,0)/B.length);
   const sdA=fmt(stdev(A)),sdB=fmt(stdev(B));
+  const rawOpts = ['El Liceo A (menor desviación estándar)','El Liceo B (porque hay gente con 100%)','Son idénticos en desempeño','La DE es inútil aquí'];
+  const opts = shuffle(rawOpts);
   return{type:'mc',
     visual:`Liceo A: [ ${A.join('% , ')}% ] | DE ${sdA}<br>Liceo B: [ ${B.join('% , ')}% ] | DE ${sdB}`,
     text:'Porcentajes de asistencia en marzo. ¿Qué liceo tuvo una asistencia más equitativa y controlada?',
-    options:['El Liceo A (menor desviación estándar)','El Liceo B (porque hay gente con 100%)','Son idénticos en desempeño','La DE es inútil aquí'],
-    correct:0,
+    options:opts,
+    correct:opts.indexOf(rawOpts[0]),
     explanation:`El Liceo B tiene una crisis en algunos cursos (gente con 20%). El Liceo A logró sostener la barra pareja para todos (DE=${sdA}).`};
 }
 
@@ -1794,7 +1796,8 @@ function pConcept(){
     {text:'Lanzas una moneda "honesta" (50% sello, 50% cara) y sacas 3 caras seguidas. A la cuarta tienes la guata apretada de que esta vez FIJO sale sello. ¿Qué dice el Profe Chaparro de eso?',opts:['Las monedas no tienen memoria, la probabilidad sigue siendo 50% (Independencia)','Que tienes razón empírica (Ley de los Promedios)','Que saldrá cara de nuevo por inercia','Que el aire desgasta la moneda'],c:0,e:'<strong>Eventos independientes.</strong> Llorarle a la "Ley de los Promedios" a corto plazo es la Falacia del Jugador. Siempre será 50%.'},
   ];
   const s=choose(qs);
-  return{type:'mc',text:s.text,options:s.opts,correct:s.c,explanation:s.e};
+  const opts = shuffle(s.opts);
+  return{type:'mc',text:s.text,options:opts,correct:opts.indexOf(s.opts[s.c]),explanation:s.e};
 }
 
 

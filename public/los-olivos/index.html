@@ -1150,502 +1150,298 @@ function showComplete(){
 }
 
 /* ═══════════════════════════════════════════
-   ZONA 1 — DIAGNÓSTICO
+   ZONA 1 — DIAGNÓSTICO (CHILENIZADA)
 ═══════════════════════════════════════════ */
 function genDiag(){
   return choose([dMean,dMedian,dMode,dRange,dOutlier,dWhich])();
 }
 function dMean(){
-  const n=rand(5,8),data=Array.from({length:n},()=>rand(10,90));
+  const n=rand(4,6), data=Array.from({length:n},()=>rand(40,70)/10);
   const mean=fmt(data.reduce((a,b)=>a+b,0)/n);
-  const wrong=[fmt(mean+rand(5,15)),fmt(mean-rand(4,10)),fmt(mean*1.1)];
+  const wrong=[fmt(mean+rand(5,15)/10), fmt(mean-rand(4,10)/10), fmt(mean*1.1)];
   const opts=shuffle([mean,...wrong.slice(0,3)]);
-  return{type:'mc',visual:'[ '+data.join(' , ')+' ]',
-    text:'Calcula el <strong>promedio (media aritmética)</strong> de estos datos.',
-    options:opts.map(String),correct:opts.indexOf(mean),
-    explanation:`Suma = ${data.reduce((a,b)=>a+b,0)} ÷ ${n} = <strong>${mean}</strong>`};
+  return{type:'mc',visual:'Notas: [ '+data.map(n=>n.toFixed(1)).join(' , ')+' ]',
+    text:'Calcula el <strong>promedio (media aritmética)</strong> de estas notas del semestre.',
+    options:opts.map(n=>Number(n).toFixed(1)),correct:opts.indexOf(mean),
+    explanation:`Suma = ${fmt(data.reduce((a,b)=>a+b,0))} ÷ ${n} notas = <strong>${mean.toFixed(1)}</strong>`};
 }
 function dMedian(){
   const n=rand(3,4)*2-1;
-  const data=Array.from({length:n},()=>rand(5,95));
+  const data=Array.from({length:n},()=>rand(400,950));
   const sorted=[...data].sort((a,b)=>a-b);
   const med=sorted[Math.floor(n/2)];
   const wrong=[sorted[0],sorted[n-1],fmt((sorted[0]+sorted[n-1])/2)];
   const opts=shuffle([med,...wrong.slice(0,3)]);
-  return{type:'mc',visual:'Ordenados: [ '+sorted.join(' , ')+' ]',
-    text:'¿Cuál es la <strong>mediana</strong>?',
+  return{type:'mc',visual:'Puntajes PAES: [ '+sorted.join(' , ')+' ]',
+    text:'¿Cuál es la <strong>mediana</strong> de estos puntajes PAES?',
     options:opts.map(String),correct:opts.indexOf(med),
-    explanation:`Con ${n} datos, el valor central es el de la posición ${Math.floor(n/2)+1}: <strong>${med}</strong>`};
+    explanation:`Con ${n} puntajes ordenados, el central es el de la posición ${Math.floor(n/2)+1}: <strong>${med}</strong>`};
 }
 function dMode(){
-  const base=Array.from({length:4},()=>rand(10,50));
+  const base=Array.from({length:4},()=>rand(1,6)*100);
   const rep=choose(base);
-  const data=shuffle([...base,rep,rand(51,90)]);
-  const wrong=[base.find(x=>x!==rep)||rand(10,50),rand(10,50),'No hay moda'];
+  const data=shuffle([...base,rep,rand(7,9)*100]);
+  const wrong=[base.find(x=>x!==rep)||rand(1,6)*100,rand(3,8)*100,'No hay moda'];
   const opts=shuffle([rep,...wrong.slice(0,3)]);
-  return{type:'mc',visual:'[ '+data.join(' , ')+' ]',
-    text:'¿Cuál es la <strong>moda</strong>?',
+  return{type:'mc',visual:'Precios de Sopaipillas ($): [ '+data.join(' , ')+' ]',
+    text:'Afuera del metro venden sopaipillas. ¿Cuál es la <strong>moda</strong> de estos precios?',
     options:opts.map(String),correct:opts.indexOf(rep),
-    explanation:`<strong>${rep}</strong> aparece 2 veces, más que cualquier otro valor.`};
+    explanation:`<strong>$${rep}</strong> es el precio que más se repite.`};
 }
 function dRange(){
-  const data=Array.from({length:6},()=>rand(5,80));
+  const data=Array.from({length:6},()=>rand(15,90));
   const range=Math.max(...data)-Math.min(...data);
   const opts=shuffle([range,range+rand(5,15),range-rand(2,8),Math.max(...data)]);
-  return{type:'mc',visual:'[ '+data.join(' , ')+' ]',
-    text:'¿Cuál es el <strong>rango</strong>?',
+  return{type:'mc',visual:'Tiempos esperando la micro (min): [ '+data.join(' , ')+' ]',
+    text:'¿Cuál es el <strong>rango</strong> de tiempo que esperaste la micro en la semana?',
     options:opts.map(String),correct:opts.indexOf(range),
-    explanation:`Rango = ${Math.max(...data)} − ${Math.min(...data)} = <strong>${range}</strong>`};
+    explanation:`Rango = ${Math.max(...data)} (máx) − ${Math.min(...data)} (mín) = <strong>${range} min</strong>`};
 }
 function dOutlier(){
-  const data=Array.from({length:5},()=>rand(40,60));
-  const out=rand(0,1)?rand(100,130):rand(1,15);
+  const data=Array.from({length:4},()=>rand(45,55)/10);
+  const out=2.0;
   const sd=[...data,out];const sdata=shuffle(sd);
   const mw=fmt(sdata.reduce((a,b)=>a+b,0)/sdata.length);
   const mwo=fmt(data.reduce((a,b)=>a+b,0)/data.length);
-  const opts=['Sube mucho el promedio','Baja mucho el promedio','No afecta el promedio','Solo afecta la moda'];
-  const correct=out>60?0:1;
-  return{type:'mc',visual:'[ '+sdata.join(' , ')+' ]',
-    text:`El valor <strong>${out}</strong> parece muy diferente. ¿Qué le hace al promedio?`,
-    options:opts,correct,
-    explanation:`Sin ese valor el promedio sería ~${mwo}. Con él es ~${mw}. Los valores extremos distorsionan el promedio.`};
+  const opts=['Dejaste el promedio por el suelo','Casi no le hace nada al promedio','Solo afecta la moda','Mejora el promedio de todo el curso'];
+  return{type:'mc',visual:'Tus notas: [ '+sdata.map(n=>n.toFixed(1)).join(' , ')+' ]',
+    text:`Ese <strong style="color:var(--c5)">${out.toFixed(1)}</strong> de la prueba sorpresa... ¿Qué le hace a tu promedio matemático?`,
+    options:opts,correct:0,
+    explanation:`Sin ese rojo tu promedio sería ~${mwo.toFixed(1)}. Con él bajaste a ~${mw.toFixed(1)}. ¡Los valores extremos (outliers) tiran el promedio lejos!`};
 }
 function dWhich(){
   const casos=[
-    {text:'Quieres saber cuánto gana "la persona del medio" en un país con millonarios y personas pobres.',c:1,e:'La <strong>mediana</strong> ignora extremos. Perfecta cuando hay outliers como sueldos muy altos o muy bajos.'},
-    {text:'Quieres el promedio exacto de las notas de 30 alumnos.',c:0,e:'La <strong>media aritmética</strong> es el promedio clásico: suma todo y divide.'},
-    {text:'Una tienda quiere saber qué talla de zapato comprar en mayor cantidad.',c:2,e:'La <strong>moda</strong> es el valor más frecuente. Ideal para decisiones de stock.'},
-    {text:'Quieres saber cuánto varía el precio de un producto entre su mínimo y máximo.',c:3,e:'El <strong>rango</strong> = máximo − mínimo. Mide amplitud total.'},
+    {text:'Llegaste a un preu nuevo y quieres saber cómo le va a "la persona del medio", ignorando al mateo nacional y al que sacó 150 puntos.',c:1,e:'La <strong>mediana</strong> ignora los puntajes extremos.'},
+    {text:'El colegio quiere postular al SNED (excelencia académica) calculando la nota de TODOS sumada y dividida.',c:0,e:'La <strong>media aritmética</strong> es el promedio clásico de notas.'},
+    {text:'La tía del kiosko quiere saber qué sabor de bebida encargar más para los recreos.',c:2,e:'La <strong>moda</strong> manda en ventas: es lo que más se repite o prefiere la mayoría.'},
+    {text:'Quieres saber la diferencia en lucas entre el arriendo más caro y más barato en Santiago Centro.',c:3,e:'El <strong>rango</strong> mide exactamente la amplitud entre el máximo y mínimo.'},
   ];
   const s=choose(casos);
   return{type:'mc',text:s.text,
-    options:['La media','La mediana','La moda','El rango'],correct:s.c,explanation:s.e};
+    options:['La media (Promedio)','La mediana','La moda','El rango'],correct:s.c,explanation:s.e};
 }
 
 /* ═══════════════════════════════════════════
-   ZONA 2 — TRAMPAS
+   ZONA 2 — TRAMPAS (CHILENIZADA)
 ═══════════════════════════════════════════ */
 function genLies(){return choose([lEje,lMuestra,lPromedio,lPorcentaje,lCausalidad])();}
 function lEje(){
   const casos=[
-    {vis:'📊 Titular: "Las ventas subieron 300%"\n⚠ Eje Y va de 980 a 1000. Las ventas pasaron de 980 a 1000 unidades.',
-    q:'¿Qué hace engañoso este gráfico?',
-    opts:['El eje Y no empieza en 0, exagerando el cambio','Los datos son inventados','El gráfico usa mal los colores','No tiene eje X'],
-    c:0,e:'Eje Y truncado: hace que cambios pequeños parezcan enormes. Siempre verifica desde dónde parte el eje.'},
-    {vis:'📊 Titular: "El crimen cayó a mínimos históricos"\n⚠ Eje Y va de 95 a 100. Casos: 100 → 97.',
-    q:'¿Qué hace engañoso este gráfico?',
-    opts:['El eje empieza en 95, haciendo parecer una caída enorme','Los datos son incorrectos','El gráfico está al revés','Faltan los años'],
-    c:0,e:'Una caída de 3 casos parece catastrófica con eje truncado. Siempre mira si el eje parte en 0.'},
+    {vis:'📊 Matinal de la TV: "¡La delincuencia se disparó en las comunas!"
+⚠ Eje Y va de 980 a 1000. Hubo 980 casos en enero y 1000 en febrero.',
+    q:'¿Qué trampa visual hicieron en el matinal para asustarte?',
+    opts:['Cortaron el eje Y (no empieza en 0) exagerando un salto mínimo','Son datos falsos seguro','Usaron colores rojos para dar miedo','Se les olvidó poner porcentaje'],
+    c:0,e:'Eje Y truncado: visualmente la barra de 1000 se ve gigantesca al lado de la de 980, pero el salto real apenas es del 2%.'},
+    {vis:'📊 Titular Político: "Desempleo cae a cifras nunca vistas"
+⚠ Eje Y empieza en 6.0%. El desempleo pasó de 6.3% a 6.1%.',
+    q:'¿Cómo manipula este gráfico tu percepción?',
+    opts:['El eje empieza muy alto, haciendo que el 0.2% de caída parezca un precipicio','La muestra de encuestados es falsa','Invirtieron los meses a propósito','No dice la encuesta que usaron'],
+    c:0,e:'Una caída de 0.2% es ínfima y muchas veces margen de error. Al cortar el eje, engañan al ojo humano.'},
   ];
   const s=choose(casos);
-  return{type:'mc',visual:s.vis.replace(/\n/g,'<br>'),text:s.q,options:s.opts,correct:s.c,explanation:s.e};
+  return{type:'mc',visual:s.vis.replace(/
+/g,'<br>'),text:s.q,options:s.opts,correct:s.c,explanation:s.e};
 }
 function lMuestra(){
   const casos=[
-    {text:'"El 90% de nuestros clientes recomienda el producto." — Encuesta a 10 personas en la tienda.',
-    c:0,e:'10 personas en la tienda son pocas y sesgadas (ya son clientes satisfechos). La muestra debe ser representativa.'},
-    {text:'"Los alumnos de esta escuela son los más felices del país." — Encuesta online respondida por 15 estudiantes.',
-    c:0,e:'Solo respondieron 15 de cientos, probablemente los más motivados. Sesgo de autoselección.'},
+    {text:'"El 95% de los chilenos ama el reggaetón." — (Encuesta hecha a las 3 AM afuera de una disco en Bellavista).',
+    c:0,e:'El lugar y la hora sesgan completamente la muestra (Sesgo de selección). No representa a "los chilenos".'},
+    {text:'"Los alumnos de tercero medio no están ni ahí con estudiar." — (Conclusión sacada entrevistando a los 5 que se saltaron la clase en la plaza).',
+    c:0,e:'Entrevistaste justo a los que se saltaron la clase. Es una muestra hiper reducida y sesgada.'},
   ];
   const s=choose(casos);
-  return{type:'mc',text:'Detecta el problema estadístico: <em>'+s.text+'</em>',
-    options:['La muestra es muy pequeña y/o sesgada','El porcentaje está mal calculado','Las encuestas nunca son válidas','El dato debería ser mayor'],
+  return{type:'mc',text:'Detecta el truco estadístico: <em>'+s.text+'</em>',
+    options:['La muestra está completamente sesgada y no representa el total','El 95% está mal calculado','Las encuestas en la calle son ilegales','Nadie ama el reggaetón tanto'],
     correct:0,explanation:s.e};
 }
 function lPromedio(){
-  const salaries=Array.from({length:5},()=>rand(400,600));
-  const boss=rand(8000,15000);
+  const salaries=Array.from({length:5},()=>rand(400,600)*1000);
+  const boss=rand(10,20)*1000000; // gerente general chupasangre
   const all=[...salaries,boss];
   const mean=fmt(all.reduce((a,b)=>a+b,0)/all.length);
   const med=[...salaries].sort((a,b)=>a-b)[2];
-  const opts=shuffle([`El promedio ($${mean}) se distorsiona por el sueldo del jefe`,`La mediana ($${med}) no es representativa`,`Todos ganan igual`,`El cálculo es incorrecto`]);
+  const fm=n=>'$'+n.toLocaleString('es-CL');
+  const opts=shuffle([`El promedio (${fm(mean)}) es un espejismo por las lucas del dueño`,`La mediana (${fm(med)}) es un dato erróneo`,`Todos ganan súper bien`,`A los trabajadores les subieron el sueldo`]);
   return{type:'mc',
-    visual:`Sueldos: $${salaries.join(' — $')} — $${boss} (jefe)<br>Promedio: $${mean} | Mediana: $${med}`,
-    text:`La empresa dice: <em>"El sueldo promedio es $${mean}."</em> ¿Qué problema tiene?`,
-    options:opts,correct:opts.indexOf(`El promedio ($${mean}) se distorsiona por el sueldo del jefe`),
-    explanation:`El sueldo del jefe ($${boss}) infla el promedio. La mediana ($${med}) representa mejor a la mayoría.`};
+    visual:`Sueldos de una PYME: ${salaries.map(fm).join(' — ')} — ${fm(boss)} (Dueño)<br>Promedio: ${fm(mean)} | Mediana: ${fm(med)}`,
+    text:`El dueño sale en la revista diciendo: <em>"En mi PYME el sueldo promedio es brutal: ${fm(mean)}."</em> ¿Cual es la trampa?`,
+    options:opts,correct:opts.indexOf(`El promedio (${fm(mean)}) es un espejismo por las lucas del dueño`),
+    explanation:`El mega-sueldo del dueño infla el promedio. La <strong>mediana</strong> (${fm(med)}) es la pura y dura realidad salarial del negocio.`};
 }
 function lPorcentaje(){
   const casos=[
-    {vis:`📰 "Accidentes de avión subieron ${rand(50,200)}%" — Pasaron de 2 a 3.`,q:'¿Por qué este porcentaje puede ser engañoso?',
-    opts:['Porcentaje grande sobre base muy pequeña (2 casos)','El porcentaje está mal calculado','Los aviones no pueden accidentarse','Los datos no son comparables'],
-    c:0,e:'Un porcentaje impresionante sobre una base mínima crea alarma innecesaria. 2→3 casos = 50% de aumento, pero sigue siendo rarísimo.'},
-    {vis:`📰 "Nuestro medicamento reduce el riesgo en un ${rand(40,60)}%." — El riesgo bajó de 0.2% a 0.1%.`,
-    q:'¿Qué información crítica falta?',
-    opts:['El riesgo absoluto: bajó de 0.2% a 0.1%, una diferencia mínima','El nombre del medicamento','El precio','La dosis exacta'],
-    c:0,e:'Reducción relativa del 50% suena enorme. Pero 0.2% → 0.1% cambia muy poco en términos absolutos. Siempre pide los números reales.'},
+    {vis:`📰 "Los atropellos de scooters eléctricos en Providencia aumentaron un 100% este mes"`,q:'Luego lees la letra chica: "El mes pasado hubo 1, y este mes 2".',
+    opts:['Un porcentaje gigante engaña cuando la cantidad base (n) es muy bajita','Están usando mal la regla de tres','Falta saber cuántos autos chocaron','No se pueden usar porcentajes en accidentes'],
+    c:0,e:'1 accidente extra significa un aumento del 100%. Genera pánico artificial, pero en casos reales siguen siendo poquísimos.'},
   ];
   const s=choose(casos);
   return{type:'mc',visual:s.vis,text:s.q,options:s.opts,correct:s.c,explanation:s.e};
 }
 function lCausalidad(){
   const pares=[
-    {a:'Consumo de helado',b:'ahogamientos',causa:'la temperatura',text:'Cuando sube el consumo de helado, también suben los ahogamientos. ¿Los helados causan ahogamientos?'},
-    {a:'Número de hospitales',b:'muertes hospitalarias',causa:'la gravedad de los pacientes',text:'Ciudades con más hospitales tienen más muertes. ¿Los hospitales causan muertes?'},
-    {a:'Ventas de paraguas',b:'resfríos',causa:'la lluvia y el frío',text:'Cuando suben las ventas de paraguas, también suben los resfríos. ¿Los paraguas causan resfríos?'},
+    {a:'Venta de helados Bórex',b:'asaltos en la playa',causa:'el verano y la cantidad de gente',text:'En enero suben las ventas de helados en Viña, y suben los asaltos. ¿Vender helados genera delincuencia?'},
+    {a:'Zapatillas más caras',b:'llegar temprano',causa:'el nivel socioeconómico/movilización',text:'Alumnos con zapatillas de 100 lucas llegan más temprano que los que usan de 20 lucas. ¿La zapatilla te hace caminar más rápido?'},
   ];
   const p=choose(pares);
   return{type:'mc',
-    visual:`📈 Correlación: ${p.a} ↔ ${p.b}`,
+    visual:`📈 Falsa Correlación: ${p.a} causan ${p.b}`,
     text:p.text,
-    options:[`Están correlacionados pero la causa real es ${p.causa}`,'La correlación prueba causalidad directa','Los datos están mal medidos','Son eventos independientes'],
+    options:[`Falso. Están correlacionados pero algo de fondo causa ambos (${p.causa})`,'Verdadero. Si prohíbes los helados no hay asaltos','Verdadero. Las zapatillas dan velocidad','Falso, los datos deben estar malos'],
     correct:0,
-    explanation:`<strong>Correlación ≠ Causalidad.</strong> Ambas variables pueden moverse juntas por una tercera causa (${p.causa}).`};
+    explanation:`Es el clásico error de <strong>Correlación ≠ Causalidad</strong>. Siempre pregúntate si hay una tercera variable mágica escondida.`};
 }
 
 /* ═══════════════════════════════════════════
-   ZONA 3 — DISPERSIÓN
+   ZONA 3 — DISPERSIÓN (CHILENIZADA)
 ═══════════════════════════════════════════ */
 function genDisp(){return choose([dispCalc,dispCompare,dispConcept,dispInput])();}
 function dispCalc(){
-  const data=Array.from({length:5},()=>rand(10,50));
+  const data=Array.from({length:5},()=>rand(40,65)/10);
   const v=fmt(variance(data)),sd=fmt(stdev(data));
   const mean=fmt(data.reduce((a,b)=>a+b,0)/data.length);
   const askSD=rand(0,1)===0;
   const ans=askSD?sd:v;
-  const opts=shuffle([ans,fmt(ans+rand(3,10)),fmt(Math.abs(ans-rand(2,8))),fmt(ans*1.2)]);
+  const opts=shuffle([ans,fmt(ans+0.5),fmt(Math.abs(ans-0.3)),fmt(ans*1.5)]);
   return{type:'mc',
-    visual:'[ '+data.join(' , ')+' ]<br>Media = '+mean,
-    text:askSD?'Calcula la <strong>desviación estándar</strong> aproximada.':'Calcula la <strong>varianza</strong> aproximada.',
+    visual:'Tus notas: [ '+data.map(n=>n.toFixed(1)).join(' , ')+' ]<br>Promedio = '+mean.toFixed(1),
+    text:askSD?'Tu profesor te pide calcular la <strong>Desviación Estándar</strong> aproximada de tus notas.':'Calcula la <strong>Varianza</strong> aproximada de tu rendimiento.',
     options:opts.map(String),correct:opts.indexOf(ans),
     explanation:askSD?`Varianza = ${v} → DE = √${v} ≈ <strong>${sd}</strong>`:
-      `Varianza = promedio de (dato − media)² ≈ <strong>${v}</strong>`};
+      `Varianza = promedio de (Nota − Promedio)² ≈ <strong>${v}</strong>`};
 }
 function dispCompare(){
-  const A=Array.from({length:5},()=>rand(45,55));
-  const B=[rand(10,30),rand(30,50),rand(50,70),rand(70,85),rand(15,40)];
+  const A=Array.from({length:5},()=>rand(55,60)/10);
+  const B=[rand(20,35)/10, rand(35,50)/10, rand(60,70)/10, rand(65,70)/10, rand(20,40)/10];
   const sdA=fmt(stdev(A)),sdB=fmt(stdev(B));
   const mA=fmt(A.reduce((a,b)=>a+b,0)/A.length),mB=fmt(B.reduce((a,b)=>a+b,0)/B.length);
   const betterA=sdA<sdB;
   return{type:'mc',
-    visual:`Grupo A: [ ${A.join(' , ')} ] → media ≈ ${mA}<br>Grupo B: [ ${B.join(' , ')} ] → media ≈ ${mB}`,
-    text:'¿Cuál grupo es más <strong>consistente</strong> (menos disperso)?',
-    options:['Grupo A (menor desviación)','Grupo B (mayor desviación)','Son igual de consistentes','No se puede comparar'],
+    visual:`Alumno A: [ ${A.join(', ')} ] → prox. ${mA}<br>Alumno B: [ ${B.join(', ')} ] → prox. ${mB}`,
+    text:'¿Qué alumno es más "parejito" (más consistente / menos disperso)?',
+    options:['Alumno A (sus notas casi no se alejan de su promedio)','Alumno B (se saca rojos y sietes extremos)','Ambos son igual de consistentes','No hay cómo saberlo'],
     correct:betterA?0:1,
-    explanation:`DE del Grupo A ≈ ${sdA} | DE del Grupo B ≈ ${sdB}. El grupo con menor DE es más consistente.`};
+    explanation:`La DE del Alumno A es  ${sdA} vs la de B que es gigantesca (${sdB}). Menor DE = más consistencia histórica.`};
 }
 function dispConcept(){
   const qs=[
-    {text:'¿Qué mide la <strong>desviación estándar</strong>?',opts:['Qué tan alejados están los datos de su promedio','El valor más alto menos el más bajo','La suma de todos los datos','El dato más frecuente'],c:0,e:'La DE es el "alejamiento típico" de cada dato respecto al promedio.'},
-    {text:'Si la varianza de un conjunto es <strong>0</strong>, ¿qué significa?',opts:['Todos los datos son iguales','No hay datos','El promedio es 0','Los datos son negativos'],c:0,e:'Varianza = 0 → no hay dispersión alguna. Todos los valores son idénticos.'},
-    {text:'Dos grupos tienen el <strong>mismo promedio</strong>. ¿Pueden ser muy distintos?',opts:['Sí, si tienen distinta dispersión','No, igual promedio = grupos idénticos','Solo si tienen diferente cantidad de datos','Nunca'],c:0,e:'El promedio no cuenta toda la historia. Igual media puede esconder dispersiones muy distintas.'},
-    {text:'¿Por qué se elevan al cuadrado las diferencias para calcular la varianza?',opts:['Para eliminar los negativos y penalizar más los extremos','Porque es más fácil','Para evitar dividir por cero','El promedio ya lo hace'],c:0,e:'Sin elevar al cuadrado, los negativos y positivos se cancelarían dando 0. El cuadrado también amplifica los valores extremos.'},
+    {text:'A simple vista, ¿qué nos dice la maldita <strong>desviación estándar</strong>?',opts:['En promedio, qué tan lejos está cada dato respecto de la media','El valor máximo alcanzable en la PAES','Cuántas personas reprobaron el ramo','La diferencia entre la mejor nota y el peor rojo'],c:0,e:'Es tal cual: nos chismosea si los datos están agrupados protegiendo el promedio, o si andan todos desparramados.'},
+    {text:'Si las estaturas de un curso de educación física tienen Varianza = 0, ¿qué significa?',opts:['Literally todos miden exactamente lo mismo','Clonaron a un cabro de 1.70m','El promedio de estatura es cero (no existen)','El profe midió pésimo'],c:0,e:'Varianza 0 implica cero dispersión. Aunque suene falso, significaría que hasta el último milímetro todos empatan.'},
   ];
   const s=choose(qs);
   return{type:'mc',text:s.text,options:s.opts,correct:s.c,explanation:s.e};
 }
 function dispInput(){
-  const data=Array.from({length:4},()=>rand(5,25)*2);
+  const data=[rand(5,8), rand(5,8), rand(15,20), rand(15,20)];
   const sd=fmt(stdev(data));
   const mean=fmt(data.reduce((a,b)=>a+b,0)/data.length);
   return{type:'input',
-    visual:`[ ${data.join(' , ')} ]<br>Media = ${mean}`,
-    text:'Calcula la <strong>desviación estándar</strong> (redondea a 2 decimales).',
+    visual:`Tiempos esperando colectivos (min): [ ${data.join(' , ')} ]<br>Media = ${mean} min`,
+    text:'Calcula la <strong>desviación estándar</strong> exacta (usa 2 decimales y punto).',
     placeholder:`Ej: ${sd}`,
     check:val=>{const n=parseFloat(val);return !isNaN(n)&&Math.abs(n-sd)<0.6;},
-    explanation:`DE = √Varianza. Resultado correcto: <strong>${sd}</strong>`};
+    explanation:`Pasos: 1) Diferencias a la media al cuadrado. 2) Promédialos (Varianza). 3) Saca la Raíz (DE ≈ <strong>${sd}</strong>).`};
 }
 
 /* ═══════════════════════════════════════════
-   ZONA 4 — DECISIONES
+   ZONA 4 — DECISIONES (CHILENIZADA)
 ═══════════════════════════════════════════ */
-function genExcel(){return choose([exJob,exInvest,exScores,exConcept])();}
+function genExcel(){return choose([exJob,exInvest,exScores])();}
 function exJob(){
-  const mA=rand(800,1200),sdA=rand(20,80);
-  const mB=mA+rand(-150,200),sdB=rand(200,500);
-  const stable=sdA<sdB?'Empresa A':'Empresa B';
-  const high=mA>mB?'Empresa A':'Empresa B';
+  const mA=rand(550,600)*1000,sdA=rand(10,20)*1000;
+  const mB=mA+rand(50,150)*1000,sdB=rand(150,250)*1000;
+  const fm=n=>'$'+(n/1000).toFixed(0)+'k';
+  const stable=sdA<sdB?'El Trabajo A':'El Trabajo B';
+  const high=mA>mB?'El Trabajo A':'El Trabajo B';
   const casos=[
-    {q:'Necesitas sueldo fijo para pagar arriendo. ¿Cuál empresa?',c:sdA<sdB?0:1,e:`<strong>${stable}</strong> tiene menor DE ($${Math.min(sdA,sdB)}): sueldos más predecibles.`},
-    {q:'Quieres maximizar el sueldo promedio aunque varíe. ¿Cuál empresa?',c:mA>mB?0:1,e:`<strong>${high}</strong> tiene mayor promedio ($${Math.max(mA,mB)}). Más retorno, mayor variabilidad.`},
+    {q:'Estudias de noche y necesitas pagar arriendo sí o sí. No puedes arriesgar tu sueldo. ¿Cuál tomas?',c:sdA<sdB?0:1,e:`<strong>${stable}</strong> tiene menor DE (${fm(Math.min(sdA,sdB))}): pagan siempre casi lo mismo. Sin sustos a fin de mes.`},
+    {q:'Vives con tus papás (0 gastos fijos) y quieres hacer plata rápida como comisionista experto.',c:mA>mB?0:1,e:`<strong>${high}</strong> tiene mayor promedio (${fm(Math.max(mA,mB))}). Mucho riesgo (DE alta), pero potencial de ganar jugoso.`},
   ];
   const s=choose(casos);
   return{type:'mc',
-    visual:`Empresa A → Media: $${mA} | DE: $${sdA}<br>Empresa B → Media: $${mB} | DE: $${sdB}`,
-    text:s.q,options:['Empresa A','Empresa B','Son equivalentes','Depende de otros factores'],
+    visual:`Trabajo A (Fijo) → Media: ${fm(mA)} | DE: ${fm(sdA)}<br>Trabajo B (Comisiones) → Media: ${fm(mB)} | DE: ${fm(sdB)}`,
+    text:s.q,options:['Trabajo A','Trabajo B','Tiro una moneda','Cualquiera sirve'],
     correct:s.c,explanation:s.e};
 }
 function exInvest(){
-  const fA={ret:rand(8,12),sd:rand(1,4)};
-  const fB={ret:rand(11,18),sd:rand(15,30)};
-  const casos=[
-    {q:'Eres joven y toleras riesgo. Buscas máxima rentabilidad esperada.',c:1,e:`Fondo B tiene mayor retorno (${fB.ret}%). El riesgo es tolerable con horizonte largo.`},
-    {q:'Te jubilas en 2 años. No puedes perder.',c:0,e:`Fondo A tiene DE muy baja (${fA.sd}%). Menos retorno, casi sin riesgo. Prioritario al jubilarse.`},
-  ];
-  const s=choose(casos);
+  const mA=rand(400,500), sdA=rand(30,50);
+  const mB=mA+rand(10,40), sdB=rand(100,200);
   return{type:'mc',
-    visual:`Fondo A → Retorno: ${fA.ret}% | Riesgo (DE): ${fA.sd}%<br>Fondo B → Retorno: ${fB.ret}% | Riesgo (DE): ${fB.sd}%`,
-    text:s.q,options:['Fondo A','Fondo B','Son equivalentes','No hay info suficiente'],
-    correct:s.c,explanation:s.e};
+    visual:`Preu A → Media ensayo: ${mA} | DE: ${sdA}<br>Preu B → Media ensayo: ${mB} | DE: ${sdB}`,
+    text:`Ambos preuniversitarios tienen promedios SIMILARES. Pero en el Preu B hay gente con ${mB+200} y gente con ${Math.max(100,mB-300)} pts. ¿Qué te dice la Desviación Estándar alta del B?`,
+    options:['Que la enseñanza no le llega a todos por igual (mucha desigualdad)','Que son excelentes enseñando a todos','Que el promedio es artificial','No sirve de nada ese dato'],
+    correct:0,explanation:`Altísima DE en el Preu B significa resultados brutales en los extremos. A unos les va excelente y otros reprueban duro. El Preu A es más parejo pedagógicamente.`};
 }
 function exScores(){
-  const A=Array.from({length:5},()=>rand(55,75));
-  const B=[rand(20,45),rand(20,45),rand(80,100),rand(80,100),rand(45,60)];
-  const mA=fmt(A.reduce((a,b)=>a+b,0)/A.length);
-  const mB=fmt(B.reduce((a,b)=>a+b,0)/B.length);
+  const A=Array.from({length:5},()=>rand(55,65));
+  const B=[rand(20,40),rand(20,40),rand(80,100),rand(80,100),rand(40,55)];
+  const mA=fmt(A.reduce((a,b)=>a+b,0)/A.length),mB=fmt(B.reduce((a,b)=>a+b,0)/B.length);
   const sdA=fmt(stdev(A)),sdB=fmt(stdev(B));
   return{type:'mc',
-    visual:`Curso A: [ ${A.join(' , ')} ] → media ${mA} | DE ${sdA}<br>Curso B: [ ${B.join(' , ')} ] → media ${mB} | DE ${sdB}`,
-    text:'¿En cuál curso el conocimiento quedó más <strong>parejo</strong>?',
-    options:['Curso A (todos aprendieron similar)','Curso B (alta variabilidad)','Son idénticos','No se puede saber'],
+    visual:`Liceo A: [ ${A.join('% , ')}% ] | DE ${sdA}<br>Liceo B: [ ${B.join('% , ')}% ] | DE ${sdB}`,
+    text:'Porcentajes de asistencia en marzo. ¿Qué liceo tuvo una asistencia más equitativa y controlada?',
+    options:['El Liceo A (menor desviación estándar)','El Liceo B (porque hay gente con 100%)','Son idénticos en desempeño','La DE es inútil aquí'],
     correct:0,
-    explanation:`Curso A: DE = ${sdA} vs Curso B: DE = ${sdB}. El Curso A es mucho más homogéneo.`};
-}
-function exConcept(){
-  const qs=[
-    {text:'¿Cuándo importa más la DE que el promedio?',opts:['Cuando hay mucha variabilidad y el promedio puede engañar','Cuando todos los datos son iguales','Cuando hay pocos datos','Cuando el promedio es cero'],c:0,e:'Si los datos son dispersos, el promedio no representa a nadie. La DE revela cuánto confiar en él.'},
-    {text:'Un proceso industrial tiene media 100 y DE 0.3. ¿Qué significa?',opts:['El proceso es muy preciso y consistente','El proceso es impredecible','El promedio no es confiable','Los datos están mal medidos'],c:0,e:'DE muy pequeña = proceso extremadamente consistente. En manufactura o medicina, eso es lo ideal.'},
-  ];
-  const s=choose(qs);
-  return{type:'mc',text:s.text,options:s.opts,correct:s.c,explanation:s.e};
+    explanation:`El Liceo B tiene una crisis en algunos cursos (gente con 20%). El Liceo A logró sostener la barra pareja para todos (DE=${sdA}).`};
 }
 
 /* ═══════════════════════════════════════════
-   ZONA 5 — PROBABILIDAD
+   ZONA 5 — PROBABILIDAD (CHILENIZADA)
 ═══════════════════════════════════════════ */
 function genProb(){return choose([pBasic,pConditional,pTree,pComplement,pConcept])();}
 function pBasic(){
   const total=rand(10,20)*2,fav=rand(2,total-2);
   const prob=fmt(fav/total);
-  const opts=shuffle([prob,fmt((fav+1)/total),fmt(fav/(total+2)),fmt((total-fav)/total)]);
+  const opts=shuffle([prob,fmt((fav+1)/total),fmt(Math.abs(fav-1)/(total)),fmt((total-fav)/total)]);
   const scenarios=[
-    `Una bolsa tiene ${total} caramelos: ${fav} rojos y ${total-fav} azules. Sacas uno al azar. ¿Probabilidad de sacar uno <strong>rojo</strong>?`,
-    `Un dado especial tiene ${total} caras. ${fav} de ellas son ganadoras. ¿Probabilidad de ganar?`,
-    `En una caja hay ${total} fichas numeradas. ${fav} son ganadoras. ¿Probabilidad de sacar una ganadora?`,
+    `Estás en el metro y pasan ${total} trenes en una hora: ${fav} van vacíos y el resto repletos hasta la puerta. ¿Probabilidad de que el primero venga vacío?`,
+    `Tu playlist de Spotify tiene ${total} canciones perreo. De esas, ${fav} son de Bad Bunny. Aprietas "Shuffle". ¿Prob. de que suene el conejo?`,
+    `De ${total} sopaipillas en el carrito, ${fav} están pasadas y te quemas. Sacas una al azar. ¿Probabilidad de quemarte?`,
   ];
   return{type:'mc',text:choose(scenarios),options:opts.map(String),correct:opts.indexOf(prob),
-    explanation:`P = casos favorables / total = ${fav} / ${total} = <strong>${prob}</strong>`};
+    explanation:`Casos favorables / Totales = ${fav} / ${total} = <strong>${prob}</strong>`};
 }
 function pConditional(){
-  const total=rand(80,120);
-  const con=rand(20,40),sin=total-con;
-  const posC=Math.round(con*(rand(85,95)/100));
-  const posS=Math.round(sin*(rand(5,15)/100));
+  const total=100;
+  const con=rand(30,50),sin=total-con;
+  const posC=Math.round(con*(rand(85,95)/100)); // Estudiaron y pasaron
+  const posS=Math.round(sin*(rand(5,15)/100)); // No estudiaron, chamullaron y pasaron
   const totalPos=posC+posS;
   const ans=fmt(posC/totalPos);
   const opts=shuffle([ans,fmt(posC/total),fmt(con/total),fmt(totalPos/total)]);
   return{type:'mc',
-    visual:`De ${total} personas:<br>— ${con} tienen la enfermedad → ${posC} dan positivo<br>— ${sin} sanas → ${posS} falso positivo<br>Total positivos: ${totalPos}`,
-    text:'Una persona da <strong>positivo</strong>. ¿Probabilidad de que realmente esté enferma?',
+    visual:`De 100 estudiantes:<br>— ${con} estudiaron de verdad → ${posC} aprobaron el examen.<br>— ${sin} no estudiaron nada → ${posS} le achuntaron (chamullo) y aprobaron.<br>Total aprobados: ${totalPos}`,
+    text:'Entrevistas a <strong>un estudiante X que acaba de avisar que Aprobó.</strong> ¿Probabilidad de que sí haya estudiado?',
     options:opts.map(String),correct:opts.indexOf(ans),
-    explanation:`P(enfermedad | positivo) = ${posC} / ${totalPos} = <strong>${ans}</strong>. Los falsos positivos son clave.`};
+    explanation:`Regla del sabio (Prob. Condicionada): P(Estudió | Aprobó) = ${posC} / ${totalPos} aprobados totales = <strong>${ans}</strong>.`};
 }
 function pTree(){
-  const pA=rand(3,7)/10,pBgivenA=rand(5,9)/10,pBgivenNA=rand(1,4)/10;
+  const pA=rand(3,6)/10,pBgivenA=rand(6,9)/10,pBgivenNA=rand(1,3)/10;
   const ans=fmt(pA*pBgivenA);
   const opts=shuffle([ans,fmt(pA*pBgivenNA),fmt((1-pA)*pBgivenA),fmt(pBgivenA)]);
   return{type:'mc',
-    visual:`P(lluvia) = ${pA}<br>P(paraguas | lluvia) = ${pBgivenA}<br>P(paraguas | no lluvia) = ${pBgivenNA}`,
-    text:'¿Probabilidad de que llueva <strong>Y</strong> alguien lleve paraguas?',
+    visual:`P(Profe envíe tarea sorpresa) = ${pA}<br>P(Tú te mueras de sueño | hay tarea) = ${pBgivenA}<br>P(Tú te mueras de sueño | NO hay tarea) = ${pBgivenNA}`,
+    text:'¿Probabilidad exacta de que el Profe DEJE tarea y tú a las 2AM ESTÉS muerto de sueño?',
     options:opts.map(String),correct:opts.indexOf(ans),
-    explanation:`P(lluvia ∩ paraguas) = ${pA} × ${pBgivenA} = <strong>${ans}</strong>`};
+    explanation:`Árbol de probabilidad: Vas por la rama "Hay Tarea" (${pA}) y luego rama "Muerto de Sueño" (${pBgivenA}). Multiplicas: <strong>${ans}</strong>.`};
 }
 function pComplement(){
   const p=rand(2,8)/10;const comp=fmt(1-p);
   const qs=[
-    {text:`P(ganar) = ${p}. ¿P(no ganar)?`,ans:comp,e:`Complemento: 1 − ${p} = <strong>${comp}</strong>`},
-    {text:`Un evento tiene P = ${p}. ¿P(no ocurra)?`,ans:comp,e:`P(no A) = 1 − P(A) = 1 − ${p} = <strong>${comp}</strong>`},
+    {text:`Juegas un Loto. P(ganar al menos $1000) = ${p}. ¿Cuál es P(no ganar NADA)?`,ans:comp,e:`Si es el complemento: 1 − ${p} = <strong>${comp}</strong> (Puta mala cuea).`},
+    {text:`Tienes una Probabilidad de ${p} (un ${p*100}%) de quedarte dormido mañana. ¿Probabilidad de despertar bien?`,ans:comp,e:`Prob(Despertar) = 1 − Prob(Quedarse dormido). 1 − ${p} = <strong>${comp}</strong>.`},
   ];
   const s=choose(qs);
-  const opts=shuffle([s.ans,fmt(s.ans+0.1),fmt(p),fmt(Math.abs(s.ans-0.1))]);
+  const opts=shuffle([s.ans,fmt(s.ans+0.05),fmt(p),fmt(Math.abs(s.ans-0.1))]);
   return{type:'mc',text:s.text,options:opts.map(String),correct:opts.indexOf(s.ans),explanation:s.e};
 }
 function pConcept(){
   const qs=[
-    {text:'¿Qué significa P(A|B)?',opts:['Probabilidad de A dado que B ya ocurrió','A más B','P(A) o P(B)','Ninguno ocurre'],c:0,e:'P(A|B) = probabilidad de A <em>sabiendo que</em> B ocurrió. El conocimiento de B actualiza la probabilidad.'},
-    {text:'Si P(A) = 0.4 y P(A|B) = 0.8, ¿qué implica?',opts:['Saber que B ocurrió hace A más probable (son dependientes)','B es imposible','A y B son independientes','A no ocurre sin B'],c:0,e:'P(A|B) ≠ P(A) → los eventos son <strong>dependientes</strong>: B aporta información sobre A.'},
-    {text:'Dos eventos son <strong>independientes</strong> cuando:',opts:['P(A|B) = P(A)','P(A|B) = 0','P(A)+P(B)=1','Nunca ocurren juntos'],c:0,e:'Independencia = conocer B no cambia la probabilidad de A.'},
+    {text:'En estadistica de 3ro Medio, ¿qué es P(A|B)? (Ej: P(aprobar | me mate estudiando))',opts:['Probabilidad de que apruebes DADO QUE ya sabemos que te mataste estudiando','La suma de aprobar y estudiar','Probabilidad de que estemos fritos','Son cosas independientes'],c:0,e:'P(A|B) es la bendita <strong>probabilidad condicional</strong>. La información que adquieres en "B" cambia totalmente tus chances del futuro "A".'},
+    {text:'Lanzas una moneda "honesta" (50% sello, 50% cara) y sacas 3 caras seguidas. A la cuarta tienes la guata apretada de que esta vez FIJO sale sello. ¿Qué dice el Profe Chaparro de eso?',opts:['Las monedas no tienen memoria, la probabilidad sigue siendo 50% (Independencia)','Que tienes razón empírica (Ley de los Promedios)','Que saldrá cara de nuevo por inercia','Que el aire desgasta la moneda'],c:0,e:'<strong>Eventos independientes.</strong> Llorarle a la "Ley de los Promedios" a corto plazo es la Falacia del Jugador. Siempre será 50%.'},
   ];
   const s=choose(qs);
   return{type:'mc',text:s.text,options:s.opts,correct:s.c,explanation:s.e};
 }
-
-/* ═══════════════════════════════════════════
-   ZONA 6 — MONTY HALL
-═══════════════════════════════════════════ */
-function genMH(){return choose([mhPlay,mhConcept,mhSim,mhCalc])();}
-
-function mhPlay(){
-  const carPos=rand(0,2);
-  let chosen=null,revealed=null,stage='pick';
-  const bulbs = Array.from({length:9}).map(()=>'<div class="mh-bulb"></div>').join('');
-  const html=`
-    <div class="mh-stage">
-      <div class="mh-arena">
-        <div class="mh-lights-top">${bulbs}</div>
-        <div class="mh-doors-row" id="mhrow">
-          ${[0,1,2].map(i=>`<div class="mh-door" id="mhd-${i}" onclick="mhPick(${i})">
-            <div class="door-num">${i+1}</div>
-            <div class="door-knob"></div>
-            <div class="door-lbl">puerta</div>
-          </div>`).join('')}
-        </div>
-        <div class="mh-msg" id="mhmsg">&#127914; Toca una puerta para empezar</div>
-        <div class="mh-btn-row" id="mhbtns" style="display:none"></div>
-      </div>
-    </div>`;
-  return{type:'special',
-    text:'🎮 <strong>Juega una ronda real.</strong> Elige puerta → Monty revela una cabra → ¿Te quedas o cambias?',
-    html,
-    setup(card,fb,btnNext){
-      window.mhPick=function(i){
-        if(stage!=='pick')return;
-        stage='decide';chosen=i;
-        document.getElementById('mhd-'+i).classList.add('is-chosen','no-hover');
-        let cands=[0,1,2].filter(x=>x!==chosen&&x!==carPos);
-        revealed=choose(cands);
-        const rd=document.getElementById('mhd-'+revealed);
-        rd.classList.add('is-revealed','no-hover');
-        rd.innerHTML='<div class="door-content">🐐</div><div class="door-lbl">¡Cabra!</div>';
-        document.getElementById('mhmsg').textContent=`Monty abre la Puerta ${revealed+1}. ¿Te quedas con la Puerta ${chosen+1} o cambias?`;
-        const other=[0,1,2].find(x=>x!==chosen&&x!==revealed);
-        document.getElementById('mhbtns').style.display='flex';
-        document.getElementById('mhbtns').innerHTML=`
-          <button class="mh-btn stay" onclick="mhDecide('stay')">🚪 Quedarme (${chosen+1})</button>
-          <button class="mh-btn swap" onclick="mhDecide('swap',${other})">🔄 Cambiar (${other+1})</button>`;
-        [0,1,2].forEach(x=>document.getElementById('mhd-'+x).classList.add('no-hover'));
-      };
-      window.mhDecide=function(choice,other){
-        if(stage!=='decide')return;stage='done';
-        const final=choice==='swap'?other:chosen;
-        const won=final===carPos;
-        [0,1,2].forEach(x=>{
-          const d=document.getElementById('mhd-'+x);
-          d.classList.add('no-hover');
-          d.innerHTML=x===carPos?'<div class="door-content">🚗</div>':'<div class="door-content">🐐</div>';
-        });
-        document.getElementById('mhd-'+final).classList.add(won?'is-winner':'is-loser');
-        document.getElementById('mhbtns').style.display='none';
-        document.getElementById('mhmsg').innerHTML=won
-          ?`<span style="color:var(--c4)">¡Ganaste! 🎉 El auto estaba en la Puerta ${carPos+1}.</span>`
-          :`<span style="color:var(--c5)">Perdiste. El auto estaba en la Puerta ${carPos+1}.</span>`;
-        doScore(won);
-        fb.style.display='block';
-        fb.className='feedback '+(won?'correct-fb':'wrong-fb');
-        fb.innerHTML=choice==='swap'
-          ?(won?'<strong>¡Cambiaste y ganaste!</strong> Cambiar gana el 66% de las veces.':'<strong>Cambiaste pero perdiste.</strong> Igual es la estrategia correcta — gana 2 de cada 3.')
-          :(won?'<strong>¡Te quedaste y ganaste!</strong> Pero quedarse solo gana el 33%.':'<strong>Te quedaste y perdiste.</strong> Cambiar tenía el doble de probabilidad de ganar.');
-        btnNext.style.display='block';
-      };
-    }};
-}
-function mhConcept(){
-  const qs=[
-    {text:'¿Cuál es la probabilidad de ganar si <strong>siempre cambias</strong>?',opts:['2/3 ≈ 66.7%','1/2 = 50%','1/3 ≈ 33.3%','3/4 = 75%'],c:0,e:'Al cambiar, ganas siempre que tu primera elección fue una cabra (probabilidad 2/3).'},
-    {text:'¿Por qué la probabilidad NO es 50/50 cuando quedan 2 puertas?',opts:['Porque Monty sabe dónde está el auto y siempre abre una cabra intencionalmente','Porque el auto se mueve','Porque quedan solo 2 puertas','Porque Monty elige al azar'],c:0,e:'Monty <strong>nunca</strong> revela el auto. Su elección aporta información real que cambia las probabilidades.'},
-    {text:'¿Cuál es la probabilidad de ganar si <strong>nunca cambias</strong>?',opts:['1/3 ≈ 33.3%','1/2 = 50%','2/3 ≈ 66.7%','Depende del número de puertas'],c:0,e:'Si nunca cambias, solo ganas si tu primera elección fue correcta: probabilidad 1/3.'},
-    {text:'¿Qué tipo de probabilidad se aplica en el Problema de Monty Hall?',opts:['Probabilidad condicional (la información de Monty actualiza las probabilidades)','Probabilidad clásica simple','Probabilidad frecuencial','Probabilidad subjective'],c:0,e:'Es probabilidad <strong>condicional</strong>: cuando Monty abre una puerta, actualiza toda la distribución de probabilidades.'},
-  ];
-  const s=choose(qs);
-  return{type:'mc',text:s.text,options:s.opts,correct:s.c,explanation:s.e};
-}
-function mhSim(){
-  const n=rand(60,150);
-  const sw=Math.round(n*(0.62+Math.random()*0.08));
-  const st=n-sw;
-  const swp=fmt(sw/n*100),stp=fmt(st/n*100);
-  return{type:'mc',
-    visual:`Simulación de ${n} rondas:<br>— Estrategia "quedarse": ${st} victorias (${stp}%)<br>— Estrategia "cambiar": ${sw} victorias (${swp}%)`,
-    text:'Basándote en la simulación, ¿qué estrategia recomendarías?',
-    options:['Siempre cambiar (más victorias históricas)','Siempre quedarse','Son equivalentes','Depende de la suerte'],
-    correct:0,
-    explanation:`Los datos confirman la teoría: cambiar gana ~66% del tiempo. Con ${n} rondas ya es visible claramente.`};
-}
-function mhCalc(){
-  const doors=rand(4,6);
-  const pSwap=fmt((doors-1)/doors/(doors-2));
-  const opts=shuffle([pSwap,fmt(1/(doors-1)),fmt(0.5),fmt(1/(doors-2))].filter(x=>x>0));
-  return{type:'mc',
-    visual:`Variación: ${doors} puertas, 1 auto, Monty abre 1 cabra`,
-    text:`Con <strong>${doors} puertas</strong>, Monty abre una con cabra. ¿Probabilidad de ganar al cambiar a una de las ${doors-2} restantes?`,
-    options:opts.map(String),correct:opts.indexOf(pSwap),
-    explanation:`P(cambiar y ganar) = (1 − 1/${doors}) / ${doors-2} = ${fmt((doors-1)/doors)} / ${doors-2} ≈ <strong>${pSwap}</strong>`};
-}
-
-
-/* ═══════════════════════════════════════════
-   EXTRA FEATURES (CARNET, CONFETTI, KEYS)
-═══════════════════════════════════════════ */
-function resetProgress() {
-  if(confirm('¿Estás seguro de borrar todo tu progreso? Esto no se puede deshacer.')) {
-    localStorage.removeItem('statArcadeSave');
-    location.reload();
-  }
-}
-
-function showCarnet() {
-  document.getElementById('c-pts').textContent = G.pts;
-  const histAcc = G.histTotal>0 ? Math.round(G.histCorrect/G.histTotal*100) : 0;
-  const histErr = 100 - histAcc;
-  document.getElementById('c-acc').textContent = histAcc + '%';
-  document.getElementById('c-err').textContent = histErr + '%';
-  const totalStars = Object.values(G.stars).reduce((a,b)=>a+b,0);
-  document.getElementById('c-stars').textContent = totalStars + '/18';
-  
-  let rank = 'NOVATO';
-  if(G.pts > 500) rank = 'ESTUDIANTE';
-  if(G.pts > 1500) rank = 'ANALISTA';
-  if(G.pts > 3000) rank = 'CIENTÍFICO';
-  if(G.pts > 5000) rank = 'MAESTRO DE DATOS';
-  document.getElementById('c-rank').textContent = rank;
-  
-  const msg = encodeURIComponent('🎮 ¡Llegué a rango ' + rank + ' con ' + G.pts + ' pts en el Stat Arcade del Profe Diego! 👨‍🏫 ¿Puedes superarme? institutolael.cl/los-olivos');
-  document.getElementById('wa-share').href = 'https://wa.me/?text=' + msg;
-  
-  document.getElementById('carnet-modal').style.display = 'flex';
-}
-function hideCarnet(e) {
-  if(!e || e.target.id === 'carnet-modal' || !e.target.closest) {
-    document.getElementById('carnet-modal').style.display = 'none';
-  }
-}
-
-function shootConfetti() {
-  const c = document.getElementById('confetti-container');
-  c.innerHTML = '';
-  const colors = ['var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)','var(--c6)'];
-  for(let i=0; i<60; i++) {
-    const p = document.createElement('div');
-    p.className = 'piece';
-    p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
-    p.style.left = Math.random()*100 + 'vw';
-    p.style.animation = `fall ${Math.random()*1.5+1}s linear forwards`;
-    p.style.animationDelay = Math.random() * 0.5 + 's';
-    c.appendChild(p);
-  }
-  setTimeout(()=>c.innerHTML='', 3000);
-}
-
-document.addEventListener('keydown', (e) => {
-  if (document.activeElement.tagName === 'INPUT') return;
-  const gs = document.getElementById('game-screen');
-  if (gs.style.display !== 'block') return;
-
-  const key = e.key.toLowerCase();
-  
-  // Enter para siguiente/verificar
-  if (key === 'enter') {
-    const nextBtn = document.querySelector('.btn-next');
-    if (nextBtn && nextBtn.style.display !== 'none') {
-      nextBtn.click();
-      return;
-    }
-    const zcBtn = document.querySelector('.btn-zc.outline');
-    if (zcBtn && document.querySelector('.zone-complete')) {
-      backToHub();
-      return;
-    }
-  }
-
-  // Opciones A, B, C, D o 1, 2, 3, 4
-  const map = {'a':0,'1':0,'b':1,'2':1,'c':2,'3':2,'d':3,'4':3};
-  if (map[key] !== undefined) {
-    const opts = document.querySelectorAll('.opt');
-    if (opts && opts[map[key]] && !opts[map[key]].disabled) {
-      opts[map[key]].click();
-    }
-  }
-});
 
 /* ── EASTER EGG ── */
 let _eggClicks=0, _eggTimer=null;

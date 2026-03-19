@@ -1179,7 +1179,20 @@ function showIG() {
   document.getElementById('ig-emo').textContent = G.emoji || '😎';
   const rank = G.pts>=3000 ? 'MAESTRO DE DATOS' : G.pts>=2000 ? 'CIENTÍFICO' : G.pts>=1000 ? 'ANALISTA' : G.pts>=400 ? 'ESTUDIANTE' : 'NOVATO';
   document.getElementById('ig-rk').textContent = rank;
-  showToast('¡Toma un pantallazo (Screenshot) y súbelo a Instagram!');
+  showToast('Generando imagen, espera un par de segundos...');
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+  script.onload = () => {
+    html2canvas(overlay, {backgroundColor: '#05020d'}).then(canvas => {
+      const a = document.createElement('a');
+      a.href = canvas.toDataURL('image/jpeg', 0.9);
+      a.download = `Credencial_${G.agente||'Agente'}.jpg`;
+      a.click();
+      overlay.style.display = 'none';
+      showToast('¡Credencial descargada!');
+    });
+  };
+  document.head.appendChild(script);
 }
 
 function showCarnet() {
@@ -1195,6 +1208,7 @@ function showCarnet() {
   document.getElementById('c-stars').textContent = countStars();
   
   const agt = G.agente || 'ANÓNIMO';
+  const emo = G.emoji || '😎';
   document.querySelector('.carnet-logo').textContent = `${emo} AGENTE [${agt}]`;
   
   const url = encodeURIComponent('institutolael.cl/los-olivos');
@@ -1317,6 +1331,17 @@ function renderQ(q){
   const meta=document.createElement('div');meta.className='q-meta';
   meta.innerHTML=`<span class="q-num">Pregunta ${G.zoneQ} / ${ZONE_LEN}</span><div class="q-dot"></div><span class="q-zone-tag">${ZONE_NAMES[G.zone].split('—')[1].trim()}</span>`;
   card.appendChild(meta);
+
+  // GOLD QUESTION
+  const isGold = Math.random() < 0.15 && G.pts >= 200 && G.zone !== 'montyhall' && q.type !== 'special';
+  if(isGold) {
+    card.style.boxShadow = '0 0 40px -5px rgba(251,191,36,0.6)';
+    card.style.borderColor = '#fbbf24';
+    const g=document.createElement('div');
+    g.innerHTML = '⭐ ¡PREGUNTA DE ORO! (x3 Puntos si aciertas, -300 si fallas)';
+    g.style.color='#fbbf24'; g.style.fontWeight='800'; g.style.textAlign='center'; g.style.marginBottom='1rem'; g.style.fontSize='0.85rem';
+    card.appendChild(g);
+  }
 
   // visual
   if(q.visual){
@@ -1908,10 +1933,12 @@ function easterEgg(){
 const elChk = document.getElementById('chk-hardcore');
 if(elChk) elChk.checked = G.hardcore;
 
-if(!G.agente) {
+if(!G.agente || !G.emoji) {
   setTimeout(()=>{
-    const p = prompt("ACCESO AL BÚNKER DE DATOS\\n\\nIngresa tu Nombre de Agente (Alias):");
+    const p = prompt("ACCESO AL BÚNKER DE DATOS\\n\\nIngresa tu Nombre de Agente (Alias):", G.agente||"");
+    const e = prompt("🎮 Elige UN emoji que te represente (Ej: 👾, 👻, 🤠):", G.emoji||"😎");
     G.agente = p ? p.toUpperCase().substring(0,12) : "NOVATO";
+    G.emoji = e ? e.substring(0,2) : "😎";
     saveGame();
     updateHUD();
   }, 500);

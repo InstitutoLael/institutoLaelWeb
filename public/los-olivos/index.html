@@ -466,75 +466,80 @@ body::after {
 }
 .btn-next:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
-/* MONTY HALL DOORS */
-.mh-stage {
-  text-align: center;
+/* MONTY HALL — FERIA / STRANGER THINGS */
+.mh-stage { text-align: center; }
+.mh-arena {
+  background: #05020d;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 1.5rem 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
 }
-.mh-doors-row {
-  display: flex; justify-content: center; gap: 1rem;
-  margin: 1rem 0;
+.mh-arena::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.015) 3px, rgba(255,255,255,0.015) 4px);
+  pointer-events: none; z-index: 0;
 }
+.mh-lights-top {
+  display: flex; justify-content: center; gap: 12px;
+  margin-bottom: 1rem; position: relative; z-index: 1;
+}
+.mh-bulb { width: 10px; height: 10px; border-radius: 50%; animation: bulb-pulse 1.2s infinite alternate; }
+@keyframes bulb-pulse { from{opacity:.3;transform:scale(.8)} to{opacity:1;transform:scale(1.1)} }
+.mh-bulb:nth-child(3n+1) { background:#f97316; box-shadow:0 0 8px #f97316; animation-delay:0s; }
+.mh-bulb:nth-child(3n+2) { background:#a78bfa; box-shadow:0 0 8px #a78bfa; animation-delay:.4s; }
+.mh-bulb:nth-child(3n+3) { background:#7ee8fa; box-shadow:0 0 8px #7ee8fa; animation-delay:.8s; }
+.mh-doors-row { display: flex; justify-content: center; gap: 1rem; margin: 0.5rem 0; position: relative; z-index: 1; }
 .mh-door {
-  width: 90px; height: 130px;
-  background: var(--surf2);
-  border: 2px solid var(--border2);
-  border-radius: 10px 10px 4px 4px;
+  width: 85px; height: 135px;
+  background: linear-gradient(160deg, #1a0a30 0%, #0d0520 100%);
+  border: 2px solid #6b21a8; border-radius: 10px 10px 4px 4px;
   cursor: pointer; position: relative;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 0.3rem;
-  transition: transform .2s, border-color .2s, box-shadow .2s;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem;
+  transition: transform .25s cubic-bezier(.4,0,.2,1), border-color .25s, box-shadow .25s;
+  box-shadow: 0 0 12px -4px rgba(167,139,250,0.4), inset 0 1px 0 rgba(255,255,255,0.07);
+}
+.mh-door::before {
+  content: ''; position: absolute; top: -2px; left: -2px; right: -2px; height: 5px;
+  background: linear-gradient(90deg, #a78bfa, #7ee8fa, #a78bfa);
+  border-radius: 10px 10px 0 0; opacity: 0.7;
 }
 .mh-door:hover:not(.no-hover) {
-  transform: translateY(-5px);
-  border-color: var(--c1);
-  box-shadow: 0 8px 24px -6px rgba(126,232,250,0.3);
+  transform: translateY(-8px) scale(1.04); border-color: #c4b5fd;
+  box-shadow: 0 0 30px -4px rgba(167,139,250,0.7), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 .mh-door .door-num {
-  font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800;
-  color: var(--c1); line-height: 1;
+  font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1;
+  background: linear-gradient(90deg, #a78bfa, #7ee8fa);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 .mh-door .door-knob {
   width: 8px; height: 8px; border-radius: 50%;
-  background: var(--c6); position: absolute;
-  right: 18%; top: 52%;
+  background: #fbbf24; box-shadow: 0 0 4px #fbbf24;
+  position: absolute; right: 18%; top: 52%;
 }
-.mh-door .door-content {
-  font-size: 2.2rem;
+.mh-door .door-content { font-size: 2.4rem; animation: reveal-pop .4s cubic-bezier(.4,0,.2,1); }
+@keyframes reveal-pop { from{opacity:0;transform:scale(.4)} to{opacity:1;transform:scale(1)} }
+.mh-door .door-lbl { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(167,139,250,0.6); }
+.mh-door.is-chosen { border-color: #fbbf24 !important; box-shadow: 0 0 25px -4px rgba(251,191,36,0.6) !important; transform: translateY(-4px) scale(1.02); }
+.mh-door.is-revealed { opacity: 0.45; filter: saturate(0.4); transform: translateY(0) scale(0.95) !important; }
+.mh-door.is-winner { border-color: #34d399 !important; box-shadow: 0 0 35px -4px rgba(52,211,153,0.8) !important; animation: winner-glow 0.6s ease infinite alternate; }
+@keyframes winner-glow {
+  from { box-shadow: 0 0 20px -4px rgba(52,211,153,0.5); }
+  to   { box-shadow: 0 0 45px -2px rgba(52,211,153,0.9); }
 }
-.mh-door .door-lbl {
-  font-size: 0.58rem; letter-spacing: 1px;
-  text-transform: uppercase; color: var(--text3);
-}
-.mh-door.is-chosen {
-  border-color: var(--c6);
-  box-shadow: 0 0 20px -5px rgba(251,191,36,0.4);
-}
-.mh-door.is-revealed { opacity: 0.5; }
-.mh-door.is-winner { border-color: var(--c4); box-shadow: 0 0 20px -5px rgba(52,211,153,0.4); }
-.mh-door.is-loser  { border-color: var(--c5); }
-.mh-door.no-hover  { cursor: default; }
-
-.mh-msg {
-  font-size: 0.88rem; color: var(--text2);
-  min-height: 2rem; line-height: 1.5;
-  margin: 0.5rem 0;
-}
-.mh-btn-row {
-  display: flex; gap: 0.6rem; justify-content: center;
-  flex-wrap: wrap; margin-top: 0.6rem;
-}
-.mh-btn {
-  padding: 0.6rem 1.2rem;
-  border-radius: var(--r-sm);
-  font-family: 'Syne', sans-serif; font-size: 0.75rem;
-  font-weight: 700; letter-spacing: 1px; cursor: pointer;
-  border: 1.5px solid; transition: all .15s;
-}
+.mh-door.is-loser { border-color: #fb7185 !important; opacity: 0.6; }
+.mh-door.no-hover { cursor: default; }
+.mh-msg { font-family: 'DM Mono', monospace; font-size: 0.82rem; color: #c4b5fd; min-height: 2.2rem; line-height: 1.6; margin: 0.6rem 0; position: relative; z-index: 1; text-shadow: 0 0 8px rgba(167,139,250,0.5); }
+.mh-btn-row { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-top: 0.6rem; position: relative; z-index: 1; }
+.mh-btn { padding: 0.7rem 1.4rem; border-radius: var(--r-sm); font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; cursor: pointer; border: 1.5px solid; transition: all .15s; }
 .mh-btn.stay { border-color: var(--c5); color: var(--c5); background: rgba(251,113,133,0.08); }
-.mh-btn.stay:hover { background: rgba(251,113,133,0.15); }
+.mh-btn.stay:hover { background: rgba(251,113,133,0.18); transform: scale(1.03); }
 .mh-btn.swap { border-color: var(--c4); color: var(--c4); background: rgba(52,211,153,0.08); }
-.mh-btn.swap:hover { background: rgba(52,211,153,0.15); }
+.mh-btn.swap:hover { background: rgba(52,211,153,0.18); transform: scale(1.03); }
 
 /* DATA CHIPS */
 .data-chips {
@@ -678,7 +683,7 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
       <span class="school-name">Los Olivos HomeSchool</span>
       <span class="school-sub">Tercero Medio · Estadística &amp; Probabilidad</span>
     </div>
-    <div class="teacher-badge">
+    <div class="teacher-badge" id="teacher-badge" onclick="easterEgg()">
       <div class="teacher-avatar">DC</div>
       <div class="teacher-name">Profe <strong>Diego Chaparro</strong></div>
     </div>
@@ -825,11 +830,16 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
           <span class="carnet-stats-lbl">PRECISIÓN</span>
         </div>
         <div>
+          <span style="color:var(--c5)" id="c-err">0%</span><br>
+          <span class="carnet-stats-lbl">% ERROR</span>
+        </div>
+        <div>
           <span style="color:var(--c1)" id="c-stars">0</span><br>
           <span class="carnet-stats-lbl">ESTRELLAS</span>
         </div>
       </div>
     </div>
+    <a id="wa-share" href="#" target="_blank" rel="noopener" style="display:block;width:calc(100% - 4rem);margin:0 auto 0.8rem;background:#25D366;color:#fff;border:none;padding:0.8rem;border-radius:var(--r-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:1px;text-align:center;text-decoration:none;">📲 Desafiar al grupo (WhatsApp)</a>
     <button class="btn-close-carnet" onclick="hideCarnet()">Cerrar</button>
   </div>
 </div>
@@ -858,25 +868,40 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
 (function(){
   const cv = document.getElementById('bg-canvas');
   const ctx = cv.getContext('2d');
-  let W, H, pts = [];
+  let W, H, pts = [], mouse = {x:-9999,y:-9999};
   const resize = () => {
     W = cv.width = window.innerWidth;
     H = cv.height = window.innerHeight;
   };
   resize();
   window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', e => { mouse.x=e.clientX; mouse.y=e.clientY; });
+  /* gyroscope for mobile */
+  window.addEventListener('deviceorientation', e => {
+    if(e.gamma!=null) { mouse.x = W/2 + e.gamma*8; mouse.y = H/2 + (e.beta||0)*4; }
+  });
   const N = 60;
   for(let i=0;i<N;i++){
     pts.push({
       x: Math.random()*1200, y: Math.random()*800,
       vx: (Math.random()-.5)*.3, vy: (Math.random()-.5)*.3,
-      r: Math.random()*1.5+.3,
-      a: Math.random()
+      r: Math.random()*1.5+.3, a: Math.random()
     });
   }
   function draw(){
     ctx.clearRect(0,0,W,H);
     pts.forEach(p=>{
+      const dx = p.x - mouse.x, dy = p.y - mouse.y;
+      const dist = Math.sqrt(dx*dx+dy*dy);
+      if(dist < 100) {
+        const force = (100-dist)/100 * 1.2;
+        p.vx += (dx/dist)*force*0.08;
+        p.vy += (dy/dist)*force*0.08;
+      }
+      p.vx *= 0.97; p.vy *= 0.97;
+      const spd = Math.sqrt(p.vx*p.vx+p.vy*p.vy);
+      if(spd > 2) { p.vx = p.vx/spd*2; p.vy = p.vy/spd*2; }
+      if(spd < 0.1) { p.vx += (Math.random()-.5)*0.15; p.vy += (Math.random()-.5)*0.15; }
       p.x += p.vx; p.y += p.vy;
       if(p.x<0)p.x=W; if(p.x>W)p.x=0;
       if(p.y<0)p.y=H; if(p.y>H)p.y=0;
@@ -885,7 +910,6 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
       ctx.fillStyle = `rgba(126,232,250,${p.a*0.35})`;
       ctx.fill();
     });
-    // connections
     for(let i=0;i<pts.length;i++){
       for(let j=i+1;j<pts.length;j++){
         const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
@@ -895,8 +919,7 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
           ctx.moveTo(pts[i].x,pts[i].y);
           ctx.lineTo(pts[j].x,pts[j].y);
           ctx.strokeStyle=`rgba(126,232,250,${(1-d/120)*0.06})`;
-          ctx.lineWidth=1;
-          ctx.stroke();
+          ctx.lineWidth=1; ctx.stroke();
         }
       }
     }
@@ -912,15 +935,21 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
 const defaultG = {
   pts:0, streak:0, correct:0, total:0,
   zoneQ:0, zonePts:0, zone:null,
-  stars:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0}
+  stars:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0},
+  /* historical accumulators — never reset on zone repeat */
+  histCorrect:0, histTotal:0,
+  zoneBests:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0}
 };
 const savedG = localStorage.getItem('statArcadeSave');
-const G = savedG ? JSON.parse(savedG) : { ...defaultG };
+const G = savedG ? Object.assign({...defaultG}, JSON.parse(savedG)) : { ...defaultG };
 
 function saveGame() {
-  localStorage.setItem('statArcadeSave', JSON.stringify({
-    pts: G.pts, streak: G.streak, correct: G.correct, total: G.total, stars: G.stars
-  }));
+  const payload = {
+    pts: G.pts, streak: G.streak, correct: G.correct, total: G.total,
+    stars: G.stars, histCorrect: G.histCorrect, histTotal: G.histTotal,
+    zoneBests: G.zoneBests
+  };
+  localStorage.setItem('statArcadeSave', JSON.stringify(payload));
 }
 
 const ZONE_LEN = 6;
@@ -1079,14 +1108,14 @@ function renderQ(q){
 function doScore(ok){
   G.total++;
   if(ok){
-    G.correct++;G.streak++;
+    G.correct++;G.streak++;G.histCorrect++;G.histTotal++;
     saveGame();
     const bonus=G.streak>=3?20:0;
     const pts=100+bonus;
     G.pts+=pts;G.zonePts+=pts;
     document.getElementById('gs-pts').textContent=G.zonePts;
     if(G.streak>=3) showToast(`🔥 ¡Racha x${G.streak}! +${bonus} pts bonus`);
-  } else { G.streak=0; document.querySelector('.q-card').classList.remove('shake'); void document.querySelector('.q-card').offsetWidth; document.querySelector('.q-card').classList.add('shake'); saveGame(); }
+  } else { G.streak=0; G.histTotal++; document.querySelector('.q-card').classList.remove('shake'); void document.querySelector('.q-card').offsetWidth; document.querySelector('.q-card').classList.add('shake'); saveGame(); }
   updateHUD();
 }
 
@@ -1095,17 +1124,24 @@ function showComplete(){
   const pct=Math.round(G.zonePts/(ZONE_LEN*100)*100);
   updateStars(G.zone,pct);
   if(pct>=80) shootConfetti();
+  /* update zone best */
+  if(pct > (G.zoneBests[G.zone]||0)) { G.zoneBests[G.zone]=pct; saveGame(); }
+  const best = G.zoneBests[G.zone]||pct;
   const stars=['○○○','★○○','★★○','★★★'][G.stars[G.zone]];
   const icon=pct>=80?'🏆':pct>=50?'⚡':'🔄';
   const title=pct>=80?'¡Zona dominada!':pct>=50?'¡Buen trabajo!':'Sigue intentando';
+  const histErrPct = G.histTotal>0 ? Math.round((1 - G.histCorrect/G.histTotal)*100) : 0;
   const body=document.getElementById('gs-body');
   body.innerHTML=`
     <div class="zone-complete">
       <div class="zc-icon">${icon}</div>
       <div class="zc-title">${title}</div>
       <div class="zc-stars">${stars}</div>
-      <div class="zc-sub">Puntos en esta zona: <strong style="color:var(--c6)">${G.zonePts}</strong><br>
-      Precisión total: <strong style="color:var(--c1)">${G.total>0?Math.round(G.correct/G.total*100):0}%</strong></div>
+      <div class="zc-sub">
+        Esta ronda: <strong style="color:var(--c6)">${G.zonePts} pts</strong> · ${pct}% correcto<br>
+        Tu mejor en esta zona: <strong style="color:var(--c1)">${best}%</strong><br>
+        <span style="color:var(--c5);font-size:0.8rem">% error histórico global: ${histErrPct}%</span>
+      </div>
       <div class="zc-btns">
         <button class="btn-zc primary" onclick="backToHub()">← Volver al Hub</button>
         <button class="btn-zc outline" onclick="enterZone('${G.zone}')">↺ Repetir zona</button>
@@ -1432,17 +1468,21 @@ function genMH(){return choose([mhPlay,mhConcept,mhSim,mhCalc])();}
 function mhPlay(){
   const carPos=rand(0,2);
   let chosen=null,revealed=null,stage='pick';
+  const bulbs = Array.from({length:9}).map(()=>'<div class="mh-bulb"></div>').join('');
   const html=`
     <div class="mh-stage">
-      <div class="mh-doors-row" id="mhrow">
-        ${[0,1,2].map(i=>`<div class="mh-door" id="mhd-${i}" onclick="mhPick(${i})">
-          <div class="door-num">${i+1}</div>
-          <div class="door-knob"></div>
-          <div class="door-lbl">puerta</div>
-        </div>`).join('')}
+      <div class="mh-arena">
+        <div class="mh-lights-top">${bulbs}</div>
+        <div class="mh-doors-row" id="mhrow">
+          ${[0,1,2].map(i=>`<div class="mh-door" id="mhd-${i}" onclick="mhPick(${i})">
+            <div class="door-num">${i+1}</div>
+            <div class="door-knob"></div>
+            <div class="door-lbl">puerta</div>
+          </div>`).join('')}
+        </div>
+        <div class="mh-msg" id="mhmsg">&#127914; Toca una puerta para empezar</div>
+        <div class="mh-btn-row" id="mhbtns" style="display:none"></div>
       </div>
-      <div class="mh-msg" id="mhmsg">Toca una puerta para empezar</div>
-      <div class="mh-btn-row" id="mhbtns" style="display:none"></div>
     </div>`;
   return{type:'special',
     text:'🎮 <strong>Juega una ronda real.</strong> Elige puerta → Monty revela una cabra → ¿Te quedas o cambias?',
@@ -1535,7 +1575,10 @@ function resetProgress() {
 
 function showCarnet() {
   document.getElementById('c-pts').textContent = G.pts;
-  document.getElementById('c-acc').textContent = G.total>0 ? Math.round(G.correct/G.total*100)+'%' : '0%';
+  const histAcc = G.histTotal>0 ? Math.round(G.histCorrect/G.histTotal*100) : 0;
+  const histErr = 100 - histAcc;
+  document.getElementById('c-acc').textContent = histAcc + '%';
+  document.getElementById('c-err').textContent = histErr + '%';
   const totalStars = Object.values(G.stars).reduce((a,b)=>a+b,0);
   document.getElementById('c-stars').textContent = totalStars + '/18';
   
@@ -1545,6 +1588,9 @@ function showCarnet() {
   if(G.pts > 3000) rank = 'CIENTÍFICO';
   if(G.pts > 5000) rank = 'MAESTRO DE DATOS';
   document.getElementById('c-rank').textContent = rank;
+  
+  const msg = encodeURIComponent('🎮 ¡Llegué a rango ' + rank + ' con ' + G.pts + ' pts en el Stat Arcade del Profe Diego! 👨‍🏫 ¿Puedes superarme? institutolael.cl/los-olivos');
+  document.getElementById('wa-share').href = 'https://wa.me/?text=' + msg;
   
   document.getElementById('carnet-modal').style.display = 'flex';
 }
@@ -1600,6 +1646,27 @@ document.addEventListener('keydown', (e) => {
     }
   }
 });
+
+/* ── EASTER EGG ── */
+let _eggClicks=0, _eggTimer=null;
+function easterEgg(){
+  _eggClicks++;
+  clearTimeout(_eggTimer);
+  _eggTimer=setTimeout(()=>_eggClicks=0, 1500);
+  if(_eggClicks>=5){
+    _eggClicks=0;
+    G.pts+=500; G.histCorrect+=5; G.histTotal+=5; saveGame(); updateHUD();
+    const badge=document.getElementById('teacher-badge');
+    badge.style.transition='all 0.3s';
+    badge.style.background='linear-gradient(135deg,#fbbf24,#f97316)';
+    badge.style.boxShadow='0 0 20px rgba(251,191,36,0.6)';
+    showToast('🥚 ¡Secreto del Profe! +500 pts 🎉');
+    setTimeout(()=>{
+      badge.style.background='';
+      badge.style.boxShadow='';
+    }, 3000);
+  }
+}
 
 /* INIT */
 updateHUD();

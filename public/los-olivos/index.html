@@ -734,6 +734,23 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
   box-shadow: 0 0 40px -10px var(--accent) !important;
 }
 
+
+/* ── UI PREMIUM: FLOATING DMG ── */
+.dmg-text {
+  position: fixed; pointer-events: none; z-index: 9999;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.8rem;
+  color: #34d399; text-shadow: 0 0 15px rgba(52,211,153,0.9);
+  animation: floatUp 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+.dmg-text.bad {
+  color: #fb7185; text-shadow: 0 0 15px rgba(251,113,133,0.9); font-size: 1.4rem;
+}
+@keyframes floatUp {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.5); }
+  30% { transform: translate(-50%, -100%) scale(1.1); }
+  100% { opacity: 0; transform: translate(-50%, -180%) scale(1); }
+}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg2); }
@@ -815,11 +832,17 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
   </div>
 
   
+  
   <p class="zones-label">Elige tu zona</p>
   <div class="hub-actions">
     <button class="btn-hub" onclick="showCarnet()">🪪 Ver mi Carnet</button>
     <button class="btn-hub danger" onclick="resetProgress()">🗑️ Borrar Progreso</button>
   </div>
+  <label style="display:flex;align-items:center;gap:0.7rem;cursor:pointer;background:var(--surf2);padding:0.6rem 1.2rem;border-radius:var(--r-sm);border:1px solid var(--border2);margin:0 auto 1.5rem;width:fit-content;backdrop-filter:blur(10px);">
+    <input type="checkbox" id="chk-hardcore" onchange="G.hardcore=this.checked;saveGame();">
+    <span style="font-size:0.9rem;font-weight:700;color:var(--c1)">💀 Modo Contra el Reloj (15s por pregunta, Puntos x2)</span>
+  </label>
+
 
 
   <div class="zone-grid">
@@ -894,10 +917,21 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
       <div class="zone-tag">monty hall</div>
       <div class="zone-arrow">↗</div>
     </div>
+
+    <div class="zone-card" id="z7-card" data-c="7" onclick="if(countStars()>=6) enterZone('final')">
+      <div class="zone-num">
+        <span>Zona 7</span>
+        <span class="zone-stars-display" id="zs-final">🔒</span>
+      </div>
+      <div class="zone-icon-wrap" id="z7-icon" style="filter:grayscale(1)">💀</div>
+      <div class="zone-title">Prueba Final</div>
+      <div class="zone-desc" id="z7-desc">Bloqueada. Consigue al menos 6 estrellas en total para desbloquear este Boss.</div>
+      <div class="zone-tag" style="background:var(--c5)">EXTREMO</div>
+      <div class="zone-arrow">↗</div>
+    </div>
   </div>
 
 </div>
-
 
 <!-- CARNET MODAL -->
 <div id="carnet-modal" onclick="hideCarnet(event)">
@@ -1023,7 +1057,7 @@ const defaultG = {
   stars:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0},
   /* historical accumulators — never reset on zone repeat */
   histCorrect:0, histTotal:0,
-  zoneBests:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0}
+  zoneBests:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0,final:0}, agente:null, hardcore:false
 };
 const savedG = localStorage.getItem('statArcadeSave');
 const G = savedG ? Object.assign({...defaultG}, JSON.parse(savedG)) : { ...defaultG };
@@ -1070,6 +1104,77 @@ function stopTimer() {
   return Math.floor((Date.now() - zoneStartTime)/1000);
 }
 
+
+/* ── EL PAQUETE DEFINITIVO JS ── */
+const msgsGood = ["¡Eres máquina mastodonte!", "¡Ese es mi alumno!", "Tráiganle la NASA a este", "¡Maquinola!", "Puntaje Nacional a la vista", "¡Seco!"];
+const msgsBad = ["Fue pura suerte al revés...", "¿Dejaste el cerebro en la casa?", "A leer de nuevo el enunciado...", "Me va a dar un infarto", "¿En serio?", "Por favor concéntrate..."];
+
+function showDamage(e, text, isBad=false) {
+  if(!e || !e.clientX) return;
+  const d = document.createElement('div');
+  d.className = 'dmg-text' + (isBad ? ' bad' : '');
+  d.textContent = text;
+  d.style.left = e.clientX + 'px';
+  d.style.top = e.clientY + 'px';
+  document.body.appendChild(d);
+  setTimeout(()=>d.remove(), 1000);
+}
+
+function showCarnet() {
+  document.getElementById('carnet-modal').style.display = 'flex';
+  const rank = G.pts>=3000 ? 'MAESTRO DE DATOS' : G.pts>=2000 ? 'CIENTÍFICO' : G.pts>=1000 ? 'ANALISTA' : G.pts>=400 ? 'ESTUDIANTE' : 'NOVATO';
+  document.getElementById('c-rank').textContent = rank;
+  document.getElementById('c-pts').textContent = G.pts;
+  
+  const err = G.histTotal>0 ? Math.round((1 - G.histCorrect/G.histTotal)*100) : 0;
+  const acc = G.histTotal>0 ? Math.round((G.histCorrect/G.histTotal)*100) : 0;
+  document.getElementById('c-acc').textContent = acc + '%';
+  document.getElementById('c-err').textContent = err + '%';
+  document.getElementById('c-stars').textContent = countStars();
+  
+  const agt = G.agente || 'ANÓNIMO';
+  document.querySelector('.carnet-logo').textContent = `AGENTE [${agt}]`;
+  
+  const url = encodeURIComponent('institutolael.cl/los-olivos');
+  const txt = encodeURIComponent(`🎮 ¡El Agente [${agt}] llegó a rango ${rank} con ${G.pts} pts en EL BÚNKER DE DATOS del Profe Diego! 👨‍🏫 ¿Puedes superarme? ${decodeURIComponent(url)}`);
+  document.getElementById('wa-share').href = `https://wa.me/?text=${txt}`;
+}
+
+function hideCarnet(e) {
+  if(e && e.target.id !== 'carnet-modal') return;
+  document.getElementById('carnet-modal').style.display = 'none';
+}
+
+function countStars() {
+  return Object.values(G.stars).reduce((a,b)=>a+b,0);
+}
+
+function resetProgress() {
+  if(confirm("¿Seguro que quieres borrar todo tu progreso y estrellas?")) {
+    localStorage.removeItem('statArcadeSave');
+    location.reload();
+  }
+}
+
+function shootConfetti() {
+  const c = document.getElementById('confetti-container');
+  c.innerHTML = '';
+  const colors = ['#f43f5e','#3b82f6','#10b981','#f59e0b','#8b5cf6'];
+  for(let i=0;i<60;i++){
+    const d=document.createElement('div');
+    d.className='confetti-piece';
+    d.style.left=Math.random()*100+'%';
+    d.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
+    d.style.animationDelay=Math.random()*0.4+'s';
+    d.style.animationDuration=(1+Math.random()*1.5)+'s';
+    c.appendChild(d);
+  }
+}
+
+let hcTimerInt;
+const ZONE_COLORS_ALL = {...ZONE_COLORS, final:'var(--c5)'};
+const ZONE_NAMES_ALL = {...ZONE_NAMES, final:'Zona 07 — Prueba Final'};
+
 /* ═══════════════════════════════════════════
    HUD
 ═══════════════════════════════════════════ */
@@ -1082,7 +1187,7 @@ function updateHUD(){
 }
 function updateStars(zone, pct){
   const s = pct>=80?3:pct>=50?2:1;
-  if(s>G.stars[zone]) { G.stars[zone]=s; saveGame(); }
+  if(s>G.stars[zone]) { G.stars[zone] = G.stars[zone] || 0; G.stars[zone]=s; saveGame(); }
   const icons=['○○○','★○○','★★○','★★★'];
   const el=document.getElementById('zs-'+zone);
   if(el) el.textContent=icons[G.stars[zone]];
@@ -1109,10 +1214,10 @@ function enterZone(zone){
   const gs=document.getElementById('game-screen');
   gs.style.display='block';
   gs.scrollTop=0;
-  document.getElementById('gs-zname').textContent=ZONE_NAMES[zone];
+  document.getElementById('gs-zname').textContent=ZONE_NAMES_ALL[zone];
   document.getElementById('gs-pts').textContent=0;
   // set accent
-  document.getElementById('game-screen').style.setProperty('--accent',ZONE_COLORS[zone]);
+  document.getElementById('game-screen').style.setProperty('--accent',ZONE_COLORS_ALL[zone]);
   startTimer();
   nextQuestion();
 }
@@ -1130,7 +1235,7 @@ function nextQuestion(){
   const prog=(G.zoneQ/ZONE_LEN)*100;
   document.getElementById('gs-prog').style.width=prog+'%';
   if(G.zoneQ>=ZONE_LEN){showComplete();return;}
-  const gen={diagnosis:genDiag,lies:genLies,dispersion:genDisp,excel:genExcel,probability:genProb,montyhall:genMH};
+  const gen={diagnosis:genDiag,lies:genLies,dispersion:genDisp,excel:genExcel,probability:genProb,montyhall:genMH,final:function(){return choose([genDiag,genLies,genDisp,genExcel,genProb,genMH])();}};
   renderQ(gen[G.zone]());
 }
 
@@ -1172,13 +1277,20 @@ function renderQ(q){
       b.onclick=function(){
         if(navigator.vibrate) navigator.vibrate(30);
         opts.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+        
+        clearInterval(hcTimerInt);
         const ok=i===q.correct;
         b.classList.add(ok?'correct':'wrong');
         if(!ok) opts.querySelectorAll('.opt')[q.correct].classList.add('correct');
         doScore(ok);
+        if(ok) showDamage(arguments[0], '+'+((100+(G.streak>=3?20:0))*(G.hardcore?2:1))+' pts');
+        else showDamage(arguments[0], 'Fallo', true);
         fb.style.display='block';
         fb.className='feedback '+(ok?'correct-fb':'wrong-fb');
-        fb.innerHTML=(ok?'<strong>¡Correcto! </strong>':'<strong>No esta vez. </strong>')+q.explanation;
+        const msgGood = "<strong>" + choose(msgsGood) + " </strong>";
+        const msgBad = "<strong>" + choose(msgsBad) + " </strong>";
+        fb.innerHTML=(ok?msgGood:msgBad)+q.explanation;
+
         btnNext.style.display='block';
       };
       opts.appendChild(b);
@@ -1191,14 +1303,21 @@ function renderQ(q){
     const chk=document.createElement('button');chk.className='btn-check';chk.textContent='✓ Verificar';
     chk.onclick=function(){
       if(navigator.vibrate) navigator.vibrate(30);
+      
+      clearInterval(hcTimerInt);
       const v=inp.value.trim().replace(',','.');
       const ok=q.check(v);
       inp.disabled=true;chk.disabled=true;
       inp.classList.add(ok?'correct':'wrong');
       doScore(ok);
+      if(ok) showDamage(arguments[0], '+'+((100+(G.streak>=3?20:0))*(G.hardcore?2:1))+' pts');
+      else showDamage(arguments[0], 'Fallo', true);
       fb.style.display='block';
       fb.className='feedback '+(ok?'correct-fb':'wrong-fb');
-      fb.innerHTML=(ok?'<strong>¡Correcto! </strong>':'<strong>No esta vez. </strong>')+q.explanation;
+      const msgGood = "<strong>" + choose(msgsGood) + " </strong>";
+      const msgBad = "<strong>" + choose(msgsBad) + " </strong>";
+      fb.innerHTML=(ok?msgGood:msgBad)+q.explanation;
+
       btnNext.style.display='block';
     };
     inp.addEventListener('keydown',e=>{if(e.key==='Enter')chk.click();});
@@ -1213,6 +1332,32 @@ function renderQ(q){
   card.appendChild(fb);card.appendChild(btnNext);
   body.appendChild(card);
   if(q.type==='special'&&q.setup) q.setup(card,fb,btnNext);
+  clearInterval(hcTimerInt);
+  if(G.hardcore && G.zone !== 'montyhall' && q.type !== 'special') {
+    let timeLeft = 15;
+    document.getElementById('h-time').textContent = '00:'+timeLeft;
+    document.getElementById('h-time').style.color = 'var(--c5)';
+    document.getElementById('timer-chip').style.display = 'block';
+    hcTimerInt = setInterval(()=>{
+      timeLeft--;
+      document.getElementById('h-time').textContent = '00:' + String(timeLeft).padStart(2,'0');
+      if(timeLeft <= 0) {
+        clearInterval(hcTimerInt);
+        document.getElementById('h-time').textContent = '☠️';
+        if(navigator.vibrate) navigator.vibrate([50, 50, 100]);
+        G.streak=0; G.histTotal++; saveGame(); updateHUD();
+        document.querySelector('.q-card').classList.add('shake');
+        fb.style.display='block';
+        fb.className='feedback wrong-fb';
+        fb.innerHTML='<strong>¡TIEMPO AGOTADO! ☠️ </strong>' + q.explanation;
+        if(q.type==='mc') opts.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+        if(q.type==='input') { document.querySelector('.ans-input').disabled=true; document.querySelector('.btn-check').disabled=true; }
+        btnNext.style.display='block';
+      }
+    }, 1000);
+  } else if(!G.hardcore) {
+    if(document.getElementById('timer-chip').style.display === 'none') startTimer();
+  }
 }
 
 function doScore(ok){
@@ -1221,7 +1366,7 @@ function doScore(ok){
     G.correct++;G.streak++;G.histCorrect++;G.histTotal++;
     saveGame();
     const bonus=G.streak>=3?20:0;
-    const pts=100+bonus;
+    const pts=(100+bonus)*(G.hardcore?2:1);
     G.pts+=pts;G.zonePts+=pts;
     document.getElementById('gs-pts').textContent=G.zonePts;
     if(G.streak>=3) showToast(`🔥 ¡Racha x${G.streak}! +${bonus} pts bonus`);
@@ -1678,8 +1823,29 @@ function easterEgg(){
   }
 }
 
+
 /* INIT */
+const elChk = document.getElementById('chk-hardcore');
+if(elChk) elChk.checked = G.hardcore;
+
+if(!G.agente) {
+  setTimeout(()=>{
+    const p = prompt("ACCESO AL BÚNKER DE DATOS\\n\\nIngresa tu Nombre de Agente (Alias):");
+    G.agente = p ? p.toUpperCase().substring(0,12) : "NOVATO";
+    saveGame();
+    updateHUD();
+  }, 500);
+}
+if(countStars()>=6) {
+  const z7 = document.getElementById('z7-card');
+  if(z7) {
+    z7.querySelector('.zone-icon-wrap').style.filter = 'drop-shadow(0 0 10px var(--c5))';
+    z7.querySelector('.zone-desc').innerHTML = "¡DESBLOQUEADO! Examen final randomizado. Supera El Búnker para graduarte.";
+    z7.querySelector('#zs-final').textContent = ['○○○','★○○','★★○','★★★'][G.stars.final||0];
+  }
+}
 updateHUD();
+
 </script>
 </body>
 </html>

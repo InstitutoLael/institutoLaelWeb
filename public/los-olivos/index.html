@@ -1307,11 +1307,11 @@ function renderQ(q){
   body.innerHTML='';
   const card=document.createElement('div');
   card.className='q-card';
-  card.style.setProperty('--accent',ZONE_COLORS[G.zone]);
+  card.style.setProperty('--accent',ZONE_COLORS_ALL[G.zone]);
 
   // meta
   const meta=document.createElement('div');meta.className='q-meta';
-  meta.innerHTML=`<span class="q-num">Pregunta ${G.zoneQ} / ${ZONE_LEN}</span><div class="q-dot"></div><span class="q-zone-tag">${ZONE_NAMES[G.zone].split('—')[1].trim()}</span>`;
+  meta.innerHTML=`<span class="q-num">Pregunta ${G.zoneQ} / ${ZONE_LEN}</span><div class="q-dot"></div><span class="q-zone-tag">${ZONE_NAMES_ALL[G.zone].split('—')[1].trim()}</span>`;
   card.appendChild(meta);
 
   // GOLD QUESTION
@@ -1546,10 +1546,10 @@ function dOutlier(){
   const sd=[...data,out];const sdata=shuffle(sd);
   const mw=fmt(sdata.reduce((a,b)=>a+b,0)/sdata.length);
   const mwo=fmt(data.reduce((a,b)=>a+b,0)/data.length);
-  const opts=shuffle(['Dejaste el promedio por el suelo','Casi no le hace nada al promedio','Solo afecta la moda','Mejora el promedio de todo el curso']);
+  const opts=shuffle(['El dato extremo arrastra la media aritmética hacia abajo de forma significativa','La media se mantiene estable ya que es una medida de tendencia central robusta','El outlier solo genera una distorsión visual en el rango pero no afecta al promedio','La presencia de una nota baja mejora la representatividad de la muestra']);
   return{type:'mc',visual:'Tus notas: [ '+sdata.map(n=>n.toFixed(1)).join(' , ')+' ]',
     text:`Ese <strong style="color:var(--c5)">${out.toFixed(1)}</strong> de la prueba sorpresa... ¿Qué le hace a tu promedio matemático?`,
-    options:opts,correct:opts.indexOf('Dejaste el promedio por el suelo'),
+    options:opts,correct:opts.indexOf('El dato extremo arrastra la media aritmética hacia abajo de forma significativa'),
     explanation:`Sin ese rojo tu promedio sería ~${mwo.toFixed(1)}. Con él bajaste a ~${mw.toFixed(1)}. ¡Los valores extremos (outliers) tiran el promedio lejos!`};
 }
 function dWhich(){
@@ -1574,11 +1574,11 @@ function lEje(){
   const casos=[
     {vis:'📊 Matinal de la TV: "¡La delincuencia se disparó en las comunas!"<br>⚠ Eje Y va de 980 a 1000. Hubo 980 casos en enero y 1000 en febrero.',
     q:'¿Qué trampa visual hicieron en el matinal para asustarte?',
-    opts:['Cortaron el eje Y (no empieza en 0) exagerando un salto mínimo','Son datos falsos seguro','Usaron colores rojos para dar miedo','Se les olvidó poner porcentaje'],
+    opts:['Se truncó el eje vertical para que una variación porcentual mínima parezca un cambio drástico','Los datos presentados carecen de una fuente oficial verificable para el espectador','El uso de simbología de alerta influye en la percepción del error estadístico','La omisión de la frecuencia relativa impide calcular el impacto real de la noticia'],
     c:0,e:'Eje Y truncado: visualmente la barra de 1000 se ve gigantesca al lado de la de 980, pero el salto real apenas es del 2%.'},
     {vis:'📊 Titular Político: "Desempleo cae a cifras nunca vistas"<br>⚠ Eje Y empieza en 6.0%. El desempleo pasó de 6.3% a 6.1%.',
     q:'¿Cómo manipula este gráfico tu percepción?',
-    opts:['El eje empieza muy alto, haciendo que el 0.2% de caída parezca un precipicio','La muestra de encuestados es falsa','Invirtieron los meses a propósito','No dice la encuesta que usaron'],
+    opts:['El eje empieza muy alto, haciendo que el 0.2% de caída parezca un precipicio','La metodología de recolección de datos presenta un margen de error desconocido','Se invirtió la escala de tiempo para favorecer la interpretación de la tendencia','La muestra seleccionada no es representativa de la población activa nacional'],
     c:0,e:'Una caída de 0.2% es ínfima y muchas veces margen de error. Al cortar el eje, engañan al ojo humano.'},
   ];
   const s=choose(casos);
@@ -1593,7 +1593,7 @@ function lMuestra(){
     c:0,e:'Entrevistaste justo a los que se saltaron la clase. Es una muestra hiper reducida y sesgada.'},
   ];
   const s=choose(casos);
-  const rawOpts = ['La muestra está completamente sesgada y no representa el total','El 95% está mal calculado','Las encuestas en la calle son ilegales','Nadie ama el reggaetón tanto'];
+  const rawOpts = ['La muestra presenta un sesgo de selección crítico y no tiene validez para generalizar al total','Existe un error de cálculo masivo en el intervalo de confianza de la proporción presentada','La metodología de recolección de datos en espacios públicos invalida el resultado final','El tamaño de la muestra es insuficiente para determinar una tendencia cultural real'];
   const opts = shuffle(rawOpts);
   return{type:'mc',text:'Detecta el truco estadístico: <em>'+s.text+'</em>',
     options:opts,
@@ -1616,7 +1616,7 @@ function lPromedio(){
 function lPorcentaje(){
   const casos=[
     {vis:`📰 "Los atropellos de scooters eléctricos en Providencia aumentaron un 100% este mes"`,q:'Luego lees la letra chica: "El mes pasado hubo 1, y este mes 2".',
-    opts:['Un porcentaje gigante engaña cuando la cantidad base (n) es muy bajita','Están usando mal la regla de tres','Falta saber cuántos autos chocaron','No se pueden usar porcentajes en accidentes'],
+    opts:['Un incremento porcentual masivo suele esconder una frecuencia absoluta inicial demasiado pequeña','Se aplicó una fórmula de interés compuesto errónea para determinar la tasa de crecimiento','La ausencia de un grupo de control impide validar el aumento de la siniestralidad','Las variables cualitativas no permiten obtener conclusiones sobre el impacto real del mes'],
     c:0,e:'1 accidente extra significa un aumento del 100%. Genera pánico artificial, pero en casos reales siguen siendo poquísimos.'},
   ];
   const s=choose(casos);
@@ -1629,7 +1629,7 @@ function lCausalidad(){
     {a:'Zapatillas más caras',b:'llegar temprano',causa:'el nivel socioeconómico/movilización',text:'Alumnos con zapatillas de 100 lucas llegan más temprano que los que usan de 20 lucas. ¿La zapatilla te hace caminar más rápido?'},
   ];
   const p=choose(pares);
-  const rawOpts = [`Falso. Están correlacionados pero algo de fondo causa ambos (${p.causa})`,'Verdadero. Si prohíbes los helados no hay asaltos','Verdadero. Las zapatillas dan velocidad','Falso, los datos deben estar malos'];
+  const rawOpts = [`Existe una correlación estadística fuerte, pero el factor causal real es externo: ${p.causa}`,'Se confirma la causalidad directa ya que el aumento de uno precede al otro en el tiempo','La precisión del calzado influye directamente en la eficiencia biomecánica del estudiante','Los datos son inconsistentes debido a una falla en la recolección de la variable dependiente'];
   const opts = shuffle(rawOpts);
   return{type:'mc',
     visual:`📈 Falsa Correlación: ${p.a} causan ${p.b}`,
@@ -1672,8 +1672,8 @@ function dispCompare(){
 }
 function dispConcept(){
   const qs=[
-    {text:'A simple vista, ¿qué nos dice la maldita <strong>desviación estándar</strong>?',opts:['En promedio, qué tan lejos está cada dato respecto de la media','El valor máximo alcanzable en la PAES','Cuántas personas reprobaron el ramo','La diferencia entre la mejor nota y el peor rojo'],c:0,e:'Es tal cual: nos chismosea si los datos están agrupados protegiendo el promedio, o si andan todos desparramados.'},
-    {text:'Si las estaturas de un curso de educación física tienen Varianza = 0, ¿qué significa?',opts:['Literally todos miden exactamente lo mismo','Clonaron a un cabro de 1.70m','El promedio de estatura es cero (no existen)','El profe midió pésimo'],c:0,e:'Varianza 0 implica cero dispersión. Aunque suene falso, significaría que hasta el último milímetro todos empatan.'},
+    {text:'A simple vista, ¿qué nos dice la maldita <strong>desviación estándar</strong>?',opts:['Indica, en promedio, el nivel de dispersión o distancia de los datos con respecto a la media','Representa el límite superior estadístico para el cálculo de probabilidades PAES','Determina la frecuencia absoluta de casos que se encuentran bajo el umbral de aprobación','Mide la amplitud térmica de la muestra considerando exclusivamente los valores extremos'],c:0,e:'Es tal cual: nos chismosea si los datos están agrupados protegiendo el promedio, o si andan todos desparramados.'},
+    {text:'Si las estaturas de un curso de educación física tienen Varianza = 0, ¿qué significa?',opts:['Literally todos miden exactamente lo mismo (cero dispersión en la muestra)','Se aplicó una técnica de clonación que igualó las medidas de tendencia central','El promedio de estatura es nulo y la muestra no posee validez estadística real','El instrumento de medición presentó un error de calibración sistémico e irreversible'],c:0,e:'Varianza 0 implica cero dispersión. Aunque suene falso, significaría que hasta el último milímetro todos empatan.'},
   ];
   const s=choose(qs);
   return{type:'mc',text:s.text,options:s.opts,correct:s.c,explanation:s.e};
@@ -1792,8 +1792,8 @@ function pComplement(){
 }
 function pConcept(){
   const qs=[
-    {text:'En estadistica de 3ro Medio, ¿qué es P(A|B)? (Ej: P(aprobar | me mate estudiando))',opts:['Probabilidad de que apruebes DADO QUE ya sabemos que te mataste estudiando','La suma de aprobar y estudiar','Probabilidad de que estemos fritos','Son cosas independientes'],c:0,e:'P(A|B) es la bendita <strong>probabilidad condicional</strong>. La información que adquieres en "B" cambia totalmente tus chances del futuro "A".'},
-    {text:'Lanzas una moneda "honesta" (50% sello, 50% cara) y sacas 3 caras seguidas. A la cuarta tienes la guata apretada de que esta vez FIJO sale sello. ¿Qué dice el Profe Chaparro de eso?',opts:['Las monedas no tienen memoria, la probabilidad sigue siendo 50% (Independencia)','Que tienes razón empírica (Ley de los Promedios)','Que saldrá cara de nuevo por inercia','Que el aire desgasta la moneda'],c:0,e:'<strong>Eventos independientes.</strong> Llorarle a la "Ley de los Promedios" a corto plazo es la Falacia del Jugador. Siempre será 50%.'},
+    {text:'En estadistica de 3ro Medio, ¿qué es P(A|B)? (Ej: P(aprobar | me mate estudiando))',opts:['Determina la probabilidad de un evento A sabiendo que ya ha ocurrido un evento condicionante B','Calcula la intersección de dos conjuntos disjuntos dentro del espacio muestral total','Indica que la ocurrencia de un evento es independiente de cualquier condición previa','Representa la adición de probabilidades para eventos que no son mutuamente excluyentes'],c:0,e:'P(A|B) es la bendita <strong>probabilidad condicional</strong>. La información que adquieres en "B" cambia totalmente tus chances del futuro "A".'},
+    {text:'Lanzas una moneda "honesta" (50% sello, 50% cara) y sacas 3 caras seguidas. A la cuarta tienes la guata apretada de que esta vez FIJO sale sello. ¿Qué dice el Profe Chaparro de eso?',opts:['Los eventos son independientes y el azar no tiene memoria: la probabilidad sigue siendo un 50%','Se aplica la Ley de los Grandes Números que asegura una compensación inmediata del azar','La inercia probabilística garantiza que la tendencia ganadora se mantendrá constante','Existe un desgaste físico en el material que sesga el resultado hacia el lado opuesto'],c:0,e:'<strong>Eventos independientes.</strong> Llorarle a la "Ley de los Promedios" a corto plazo es la Falacia del Jugador. Siempre será 50%.'},
   ];
   const s=choose(qs);
   const opts = shuffle(s.opts);

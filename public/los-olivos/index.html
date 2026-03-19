@@ -1440,6 +1440,109 @@ function pConcept(){
   return{type:'mc',text:s.text,options:s.opts,correct:s.c,explanation:s.e};
 }
 
+
+/* ═══════════════════════════════════════════
+   ZONA 6 — MONTY HALL (RESTORED)
+═══════════════════════════════════════════ */
+function genMH(){return choose([mhPlay,mhConcept,mhSim,mhCalc])();}
+
+function mhPlay(){
+  const carPos=rand(0,2);
+  let chosen=null,revealed=null,stage='pick';
+  const bulbs = Array.from({length:9}).map(()=>'<div class="mh-bulb"></div>').join('');
+  const html=`
+    <div class="mh-stage">
+      <div class="mh-arena">
+        <div class="mh-lights-top">${bulbs}</div>
+        <div class="mh-doors-row" id="mhrow">
+          ${[0,1,2].map(i=>`<div class="mh-door" id="mhd-${i}" onclick="mhPick(${i})">
+            <div class="door-num">${i+1}</div>
+            <div class="door-knob"></div>
+            <div class="door-lbl">puerta</div>
+          </div>`).join('')}
+        </div>
+        <div class="mh-msg" id="mhmsg">&#127914; Toca una puerta para empezar</div>
+        <div class="mh-btn-row" id="mhbtns" style="display:none"></div>
+      </div>
+    </div>`;
+  return{type:'special',
+    text:'🎮 <strong>Juega una ronda real.</strong> Elige puerta → Monty revela una cabra → ¿Te quedas o cambias?',
+    html,
+    setup(card,fb,btnNext){
+      window.mhPick=function(i){
+        if(stage!=='pick')return;
+        stage='decide';chosen=i;
+        document.getElementById('mhd-'+i).classList.add('is-chosen','no-hover');
+        let cands=[0,1,2].filter(x=>x!==chosen&&x!==carPos);
+        revealed=choose(cands);
+        const rd=document.getElementById('mhd-'+revealed);
+        rd.classList.add('is-revealed','no-hover');
+        rd.innerHTML='<div class="door-content">🐐</div><div class="door-lbl">¡Cabra!</div>';
+        document.getElementById('mhmsg').innerHTML=`😈 <strong>Monty abre la Puerta ${revealed+1}.</strong> ¿Te quedas con la <span style='color:var(--c6)'>Puerta ${chosen+1}</span> o cambias?`;
+        const other=[0,1,2].find(x=>x!==chosen&&x!==revealed);
+        document.getElementById('mhbtns').style.display='flex';
+        document.getElementById('mhbtns').innerHTML=`
+          <button class="mh-btn stay" onclick="mhDecide('stay')">🚪 Quedarme (${chosen+1})</button>
+          <button class="mh-btn swap" onclick="mhDecide('swap',${other})">🔄 Cambiar (${other+1})</button>`;
+        [0,1,2].forEach(x=>document.getElementById('mhd-'+x).classList.add('no-hover'));
+      };
+      window.mhDecide=function(choice,other){
+        if(stage!=='decide')return;stage='done';
+        const final=choice==='swap'?other:chosen;
+        const won=final===carPos;
+        [0,1,2].forEach(x=>{
+          const d=document.getElementById('mhd-'+x);
+          d.classList.add('no-hover');
+          d.innerHTML=x===carPos?'<div class="door-content">🚗</div>':'<div class="door-content">🐐</div>';
+        });
+        document.getElementById('mhd-'+final).classList.add(won?'is-winner':'is-loser');
+        document.getElementById('mhbtns').style.display='none';
+        document.getElementById('mhmsg').innerHTML=won
+          ?`<span style="color:var(--c4)">🏆 ¡Ganaste! El auto estaba en la Puerta ${carPos+1}. ¡Tu instinto matemático es correcto!</span>`
+          :`<span style="color:var(--c5)">🐐 Perdiste esta vez. El auto estaba en la Puerta ${carPos+1}. ¡La matemática dice: cambia siempre!</span>`;
+        doScore(won);
+        fb.style.display='block';
+        fb.className='feedback '+(won?'correct-fb':'wrong-fb');
+        fb.innerHTML=choice==='swap'
+          ?(won?'<strong>¡Cambiaste y ganaste!</strong> Cambiar gana el 66% de las veces.':'<strong>Cambiaste pero perdiste.</strong> Igual es la estrategia correcta — gana 2 de cada 3.')
+          :(won?'<strong>¡Te quedaste y ganaste!</strong> Pero quedarse solo gana el 33%.':'<strong>Te quedaste y perdiste.</strong> Cambiar tenía el doble de probabilidad de ganar.');
+        btnNext.style.display='block';
+      };
+    }};
+}
+function mhConcept(){
+  const qs=[
+    {text:'¿Cuál es la probabilidad empírica de ganar si <strong>siempre cambias</strong> de puerta?',opts:['2/3 ≈ 66.7%','1/2 = 50%','1/3 ≈ 33.3%','3/4 = 75%'],c:0,e:'Al cambiar, ganas siempre que tu primera elección fue una cabra (probabilidad original de 2/3).'},
+    {text:'¿Por qué la probabilidad NO es 50/50 cuando quedan solo 2 puertas?',opts:['Porque Monty sabe dónde está el auto y siempre abre una cabra intencionalmente','Porque el auto se mueve','Porque quedan solo 2 puertas','Porque Monty elige al azar'],c:0,e:'La acción de Monty <strong>nunca es al azar</strong>. Su elección filtra información real que condensa la probabilidad en la otra puerta.'},
+    {text:'¿Cuál es la probabilidad de ganar si le haces caso a tu guata y <strong>nunca cambias</strong>?',opts:['1/3 ≈ 33.3%','1/2 = 50%','2/3 ≈ 66.7%','Depende de cuantas cabras hayan'],c:0,e:'Si nunca cambias de opinión, dependes de haberle achuntado de pura suerte a la primera (1/3).'},
+    {text:'¿Qué concepto estadístico representa Monty Hall?',opts:['Probabilidad condicional','Probabilidad frecuencial clásica','Probabilidad subjetiva','Varianza'],c:0,e:'Es probabilidad <strong>condicional</strong> pura: cuando Monty abre la puerta, inyecta información nueva que actualiza las reglas del juego.'},
+  ];
+  const s=choose(qs);
+  return{type:'mc',text:s.text,options:s.opts,correct:s.c,explanation:s.e};
+}
+function mhSim(){
+  const n=rand(60,150);
+  const sw=Math.round(n*(0.62+Math.random()*0.08));
+  const st=n-sw;
+  const swp=fmt(sw/n*100),stp=fmt(st/n*100);
+  return{type:'mc',
+    visual:`Un casino online simuló ${n} rondas:<br>— Jugadores que se quedaron con su puerta: ${st} victorias (${stp}%)<br>— Jugadores que siempre cambiaron: ${sw} victorias (${swp}%)`,
+    text:'Basándote en estos datos reales de la simulación, ¿qué decisión tomas?',
+    options:['Siempre cambiar de puerta (supera el 60%)','Quedarse firme (la lealtad paga)','Tirar una moneda al aire 50/50','Depende de la suerte mística'],
+    correct:0,
+    explanation:`La matemática de Probabilidad no miente. Simularlo cientas de veces confirma que cambiar te da ventaja masiva (~66%).`};
+}
+function mhCalc(){
+  const doors=rand(4,6);
+  const pSwap=fmt((doors-1)/doors/(doors-2));
+  const opts=shuffle([pSwap,fmt(1/(doors-1)),fmt(0.5),fmt(1/(doors-2))].filter(x=>x>0));
+  return{type:'mc',
+    visual:`Feria local: Tienen ${doors} puertas, 1 peluche gigante. Monty abre 1 puerta falsa.`,
+    text:`Con <strong>${doors} puertas</strong>, Monty abre una con premio falso. ¿Probabilidad de llevarte el peluche si decides cambiar a una de las ${doors-2} restantes?`,
+    options:opts.map(String),correct:opts.indexOf(pSwap),
+    explanation:`Ojo al cálculo matemático: P(cambiar y ganar) = (1 − 1/${doors}) / ${doors-2} = ${fmt((doors-1)/doors)} / ${doors-2} ≈ <strong>${pSwap}</strong>.`};
+}
+
 /* ── EASTER EGG ── */
 let _eggClicks=0, _eggTimer=null;
 function easterEgg(){

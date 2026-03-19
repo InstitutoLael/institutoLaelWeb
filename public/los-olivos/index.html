@@ -1227,20 +1227,17 @@ function dWhich(){
 function genLies(){return choose([lEje,lMuestra,lPromedio,lPorcentaje,lCausalidad])();}
 function lEje(){
   const casos=[
-    {vis:'📊 Matinal de la TV: "¡La delincuencia se disparó en las comunas!"
-⚠ Eje Y va de 980 a 1000. Hubo 980 casos en enero y 1000 en febrero.',
+    {vis:'📊 Matinal de la TV: "¡La delincuencia se disparó en las comunas!"<br>⚠ Eje Y va de 980 a 1000. Hubo 980 casos en enero y 1000 en febrero.',
     q:'¿Qué trampa visual hicieron en el matinal para asustarte?',
     opts:['Cortaron el eje Y (no empieza en 0) exagerando un salto mínimo','Son datos falsos seguro','Usaron colores rojos para dar miedo','Se les olvidó poner porcentaje'],
     c:0,e:'Eje Y truncado: visualmente la barra de 1000 se ve gigantesca al lado de la de 980, pero el salto real apenas es del 2%.'},
-    {vis:'📊 Titular Político: "Desempleo cae a cifras nunca vistas"
-⚠ Eje Y empieza en 6.0%. El desempleo pasó de 6.3% a 6.1%.',
+    {vis:'📊 Titular Político: "Desempleo cae a cifras nunca vistas"<br>⚠ Eje Y empieza en 6.0%. El desempleo pasó de 6.3% a 6.1%.',
     q:'¿Cómo manipula este gráfico tu percepción?',
     opts:['El eje empieza muy alto, haciendo que el 0.2% de caída parezca un precipicio','La muestra de encuestados es falsa','Invirtieron los meses a propósito','No dice la encuesta que usaron'],
     c:0,e:'Una caída de 0.2% es ínfima y muchas veces margen de error. Al cortar el eje, engañan al ojo humano.'},
   ];
   const s=choose(casos);
-  return{type:'mc',visual:s.vis.replace(/
-/g,'<br>'),text:s.q,options:s.opts,correct:s.c,explanation:s.e};
+  return{type:'mc',visual:s.vis.replace(/\n/g,'<br>'),text:s.q,options:s.opts,correct:s.c,explanation:s.e};
 }
 function lMuestra(){
   const casos=[

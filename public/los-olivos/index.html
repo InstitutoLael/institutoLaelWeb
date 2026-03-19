@@ -588,6 +588,68 @@ body::after {
 }
 #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+
+/* ── CARNET MODAL & CONFETTI & SHAKE ── */
+.shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+input { font-size: 16px !important; } /* Prevent iOS zoom */
+
+.hub-actions {
+  display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;
+}
+.btn-hub {
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border2);
+  color: var(--text); padding: 0.6rem 1.2rem; border-radius: var(--r-sm);
+  font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 1px; cursor: pointer; transition: all .2s;
+}
+.btn-hub:hover { background: rgba(255,255,255,0.1); border-color: var(--c1); color: var(--c1); }
+.btn-hub.danger:hover { border-color: var(--c5); color: var(--c5); }
+
+#carnet-modal {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(8,11,20,0.85); backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center; padding: 1rem;
+  animation: fadeIn .2s ease;
+}
+.carnet-card {
+  background: var(--surface); border: 2px solid var(--border2);
+  border-radius: var(--r-lg); width: 100%; max-width: 400px;
+  overflow: hidden; position: relative; box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+  animation: qslide .3s cubic-bezier(.4,0,.2,1);
+}
+.carnet-top {
+  background: linear-gradient(135deg, var(--c1), var(--c3));
+  padding: 1.5rem; text-align: center; color: var(--bg);
+}
+.carnet-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; letter-spacing: -1px; }
+.carnet-rank { font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-top: 0.5rem; }
+.carnet-body { padding: 2rem; text-align: center; }
+.carnet-pts { font-family: 'DM Mono', monospace; font-size: 3rem; color: var(--c6); line-height: 1; margin-bottom: 0.5rem; }
+.carnet-lbl { font-size: 0.7rem; color: var(--text3); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 1.5rem; }
+.carnet-stats { display: flex; justify-content: space-around; font-family: 'DM Mono', monospace; font-size: 1.2rem; }
+.carnet-stats-lbl { font-family: 'Figtree', sans-serif; font-size: 0.65rem; color: var(--text2); letter-spacing: 1px; }
+.btn-close-carnet {
+  display: block; width: calc(100% - 4rem); margin: 0 auto 2rem;
+  background: var(--bg2); border: 1px solid var(--border); color: var(--text);
+  padding: 0.8rem; border-radius: var(--r-sm); font-weight: 600; cursor: pointer;
+}
+.btn-close-carnet:hover { background: var(--surface); }
+
+/* Confetti */
+.confetti { position: fixed; inset: 0; pointer-events: none; z-index: 150; overflow: hidden; }
+.piece { position: absolute; width: 10px; height: 10px; opacity: 0; }
+@keyframes fall {
+  0% { opacity: 1; transform: translateY(-10vh) rotateZ(0deg); }
+  100% { opacity: 0; transform: translateY(100vh) rotateZ(360deg); }
+}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg2); }
@@ -662,7 +724,13 @@ body::after {
     </div>
   </div>
 
+  
   <p class="zones-label">Elige tu zona</p>
+  <div class="hub-actions">
+    <button class="btn-hub" onclick="showCarnet()">🪪 Ver mi Carnet</button>
+    <button class="btn-hub danger" onclick="resetProgress()">🗑️ Borrar Progreso</button>
+  </div>
+
 
   <div class="zone-grid">
     <div class="zone-card" data-c="1" onclick="enterZone('diagnosis')">
@@ -740,6 +808,32 @@ body::after {
 
 </div>
 
+
+<!-- CARNET MODAL -->
+<div id="carnet-modal" onclick="hideCarnet(event)">
+  <div class="carnet-card" id="carnet-card" onclick="event.stopPropagation()">
+    <div class="carnet-top">
+      <div class="carnet-logo">STAT ARCADE</div>
+      <div class="carnet-rank" id="c-rank">NOVATO</div>
+    </div>
+    <div class="carnet-body">
+      <div class="carnet-pts" id="c-pts">0</div>
+      <div class="carnet-lbl">PUNTOS TOTALES</div>
+      <div class="carnet-stats">
+        <div>
+          <span style="color:var(--c4)" id="c-acc">0%</span><br>
+          <span class="carnet-stats-lbl">PRECISIÓN</span>
+        </div>
+        <div>
+          <span style="color:var(--c1)" id="c-stars">0</span><br>
+          <span class="carnet-stats-lbl">ESTRELLAS</span>
+        </div>
+      </div>
+    </div>
+    <button class="btn-close-carnet" onclick="hideCarnet()">Cerrar</button>
+  </div>
+</div>
+<div id="confetti-container" class="confetti"></div>
 <!-- ══════════════════════════════════════
      GAME SCREEN
 ══════════════════════════════════════ -->
@@ -814,11 +908,21 @@ body::after {
 /* ═══════════════════════════════════════════
    GLOBAL STATE
 ═══════════════════════════════════════════ */
-const G = {
+
+const defaultG = {
   pts:0, streak:0, correct:0, total:0,
   zoneQ:0, zonePts:0, zone:null,
   stars:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0}
 };
+const savedG = localStorage.getItem('statArcadeSave');
+const G = savedG ? JSON.parse(savedG) : { ...defaultG };
+
+function saveGame() {
+  localStorage.setItem('statArcadeSave', JSON.stringify({
+    pts: G.pts, streak: G.streak, correct: G.correct, total: G.total, stars: G.stars
+  }));
+}
+
 const ZONE_LEN = 6;
 const ZONE_COLORS = {diagnosis:'var(--c1)',lies:'var(--c5)',dispersion:'var(--c6)',excel:'var(--c4)',probability:'var(--c3)',montyhall:'var(--c2)'};
 const ZONE_NAMES  = {diagnosis:'Zona 01 — Diagnóstico',lies:'Zona 02 — Trampas',dispersion:'Zona 03 — Dispersión',excel:'Zona 04 — Decisiones',probability:'Zona 05 — Probabilidad',montyhall:'Zona 06 — Monty Hall'};
@@ -842,7 +946,7 @@ function updateHUD(){
 }
 function updateStars(zone, pct){
   const s = pct>=80?3:pct>=50?2:1;
-  if(s>G.stars[zone]) G.stars[zone]=s;
+  if(s>G.stars[zone]) { G.stars[zone]=s; saveGame(); }
   const icons=['○○○','★○○','★★○','★★★'];
   const el=document.getElementById('zs-'+zone);
   if(el) el.textContent=icons[G.stars[zone]];
@@ -976,12 +1080,13 @@ function doScore(ok){
   G.total++;
   if(ok){
     G.correct++;G.streak++;
+    saveGame();
     const bonus=G.streak>=3?20:0;
     const pts=100+bonus;
     G.pts+=pts;G.zonePts+=pts;
     document.getElementById('gs-pts').textContent=G.zonePts;
     if(G.streak>=3) showToast(`🔥 ¡Racha x${G.streak}! +${bonus} pts bonus`);
-  } else { G.streak=0; }
+  } else { G.streak=0; document.querySelector('.q-card').classList.remove('shake'); void document.querySelector('.q-card').offsetWidth; document.querySelector('.q-card').classList.add('shake'); saveGame(); }
   updateHUD();
 }
 
@@ -989,6 +1094,7 @@ function showComplete(){
   document.getElementById('gs-prog').style.width='100%';
   const pct=Math.round(G.zonePts/(ZONE_LEN*100)*100);
   updateStars(G.zone,pct);
+  if(pct>=80) shootConfetti();
   const stars=['○○○','★○○','★★○','★★★'][G.stars[G.zone]];
   const icon=pct>=80?'🏆':pct>=50?'⚡':'🔄';
   const title=pct>=80?'¡Zona dominada!':pct>=50?'¡Buen trabajo!':'Sigue intentando';
@@ -1415,6 +1521,85 @@ function mhCalc(){
     options:opts.map(String),correct:opts.indexOf(pSwap),
     explanation:`P(cambiar y ganar) = (1 − 1/${doors}) / ${doors-2} = ${fmt((doors-1)/doors)} / ${doors-2} ≈ <strong>${pSwap}</strong>`};
 }
+
+
+/* ═══════════════════════════════════════════
+   EXTRA FEATURES (CARNET, CONFETTI, KEYS)
+═══════════════════════════════════════════ */
+function resetProgress() {
+  if(confirm('¿Estás seguro de borrar todo tu progreso? Esto no se puede deshacer.')) {
+    localStorage.removeItem('statArcadeSave');
+    location.reload();
+  }
+}
+
+function showCarnet() {
+  document.getElementById('c-pts').textContent = G.pts;
+  document.getElementById('c-acc').textContent = G.total>0 ? Math.round(G.correct/G.total*100)+'%' : '0%';
+  const totalStars = Object.values(G.stars).reduce((a,b)=>a+b,0);
+  document.getElementById('c-stars').textContent = totalStars + '/18';
+  
+  let rank = 'NOVATO';
+  if(G.pts > 500) rank = 'ESTUDIANTE';
+  if(G.pts > 1500) rank = 'ANALISTA';
+  if(G.pts > 3000) rank = 'CIENTÍFICO';
+  if(G.pts > 5000) rank = 'MAESTRO DE DATOS';
+  document.getElementById('c-rank').textContent = rank;
+  
+  document.getElementById('carnet-modal').style.display = 'flex';
+}
+function hideCarnet(e) {
+  if(!e || e.target.id === 'carnet-modal' || !e.target.closest) {
+    document.getElementById('carnet-modal').style.display = 'none';
+  }
+}
+
+function shootConfetti() {
+  const c = document.getElementById('confetti-container');
+  c.innerHTML = '';
+  const colors = ['var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)','var(--c6)'];
+  for(let i=0; i<60; i++) {
+    const p = document.createElement('div');
+    p.className = 'piece';
+    p.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.animation = `fall ${Math.random()*1.5+1}s linear forwards`;
+    p.style.animationDelay = Math.random() * 0.5 + 's';
+    c.appendChild(p);
+  }
+  setTimeout(()=>c.innerHTML='', 3000);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (document.activeElement.tagName === 'INPUT') return;
+  const gs = document.getElementById('game-screen');
+  if (gs.style.display !== 'block') return;
+
+  const key = e.key.toLowerCase();
+  
+  // Enter para siguiente/verificar
+  if (key === 'enter') {
+    const nextBtn = document.querySelector('.btn-next');
+    if (nextBtn && nextBtn.style.display !== 'none') {
+      nextBtn.click();
+      return;
+    }
+    const zcBtn = document.querySelector('.btn-zc.outline');
+    if (zcBtn && document.querySelector('.zone-complete')) {
+      backToHub();
+      return;
+    }
+  }
+
+  // Opciones A, B, C, D o 1, 2, 3, 4
+  const map = {'a':0,'1':0,'b':1,'2':1,'c':2,'3':2,'d':3,'4':3};
+  if (map[key] !== undefined) {
+    const opts = document.querySelectorAll('.opt');
+    if (opts && opts[map[key]] && !opts[map[key]].disabled) {
+      opts[map[key]].click();
+    }
+  }
+});
 
 /* INIT */
 updateHUD();

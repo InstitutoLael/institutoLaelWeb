@@ -751,6 +751,31 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
   100% { opacity: 0; transform: translate(-50%, -180%) scale(1); }
 }
 
+
+/* ── COMODÍN & LOGROS ── */
+.btn-comodin {
+  background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(245,158,11,0.4));
+  border: 1px solid var(--c6); color: var(--c6);
+  border-radius: 8px; font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700;
+  padding: 0.6rem 1rem; cursor: pointer; float: right; margin-top: 0.8rem;
+  transition: all 0.2s; border-bottom: 3px solid #b45309;
+}
+.btn-comodin:active { transform: translateY(2px); border-bottom-width: 1px; }
+
+.carnet-logros {
+  display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;
+  margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);
+}
+.logro {
+  background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.2); font-size: 0.75rem; padding: 0.4rem 0.6rem;
+  border-radius: 8px; filter: grayscale(1); font-weight: 700;
+}
+.logro.unlocked {
+  background: rgba(52,211,153,0.1); color: #34d399;
+  border-color: #34d399; filter: grayscale(0); box-shadow: 0 0 10px rgba(52,211,153,0.3);
+}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg2); }
@@ -956,6 +981,13 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
           <span style="color:var(--c1)" id="c-stars">0</span><br>
           <span class="carnet-stats-lbl">ESTRELLAS</span>
         </div>
+      
+      </div>
+      <div class="carnet-logros">
+        <div class="logro ${G.logros.intocable?'unlocked':''}" title="Racha de 10">🔥 Intocable</div>
+        <div class="logro ${G.logros.relampago?'unlocked':''}" title="Gana una zona en < 45s">⚡ Relámpago</div>
+        <div class="logro ${G.logros.elegido?'unlocked':''}" title="Ganarle a Monty Hall sin cambiar">🚪 El Elegido</div>
+        <div class="logro ${G.logros.masoquista?'unlocked':''}" title="Dominar modo Contra el Reloj">💀 Masoquista</div>
       </div>
     </div>
     <a id="wa-share" href="#" target="_blank" rel="noopener" style="display:block;width:calc(100% - 4rem);margin:0 auto 0.8rem;background:#25D366;color:#fff;border:none;padding:0.8rem;border-radius:var(--r-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:1px;text-align:center;text-decoration:none;">📲 Desafiar al grupo (WhatsApp)</a>
@@ -1057,7 +1089,7 @@ const defaultG = {
   stars:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0},
   /* historical accumulators — never reset on zone repeat */
   histCorrect:0, histTotal:0,
-  zoneBests:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0,final:0}, agente:null, hardcore:false
+  zoneBests:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}
 };
 const savedG = localStorage.getItem('statArcadeSave');
 const G = savedG ? Object.assign({...defaultG}, JSON.parse(savedG)) : { ...defaultG };
@@ -1209,7 +1241,7 @@ function showToast(msg){
    NAVIGATION
 ═══════════════════════════════════════════ */
 function enterZone(zone){
-  G.zone=zone; G.zoneQ=0; G.zonePts=0;
+  G.zone=zone; G.zoneQ=0; G.zonePts=0; G.jokers=0;
   document.getElementById('hub').style.display='none';
   const gs=document.getElementById('game-screen');
   gs.style.display='block';
@@ -1369,6 +1401,7 @@ function doScore(ok){
     const pts=(100+bonus)*(G.hardcore?2:1);
     G.pts+=pts;G.zonePts+=pts;
     document.getElementById('gs-pts').textContent=G.zonePts;
+    if(G.streak>=10 && !G.logros.intocable) { G.logros.intocable=true; showToast('🏆 MODO DIOS: ¡INTOCABLE! (+1000 pts)'); G.pts+=1000; saveGame(); updateHUD(); }
     if(G.streak>=3) showToast(`🔥 ¡Racha x${G.streak}! +${bonus} pts bonus`);
   } else { if(navigator.vibrate) navigator.vibrate([50, 50, 100]);
     G.streak=0; G.histTotal++; document.querySelector('.q-card').classList.remove('shake'); void document.querySelector('.q-card').offsetWidth; document.querySelector('.q-card').classList.add('shake'); saveGame(); }
@@ -1749,6 +1782,7 @@ function mhPlay(){
         if(stage!=='decide')return;stage='done';
         const final=choice==='swap'?other:chosen;
         const won=final===carPos;
+        if(won && choice==='stay' && !G.logros.elegido) { G.logros.elegido=true; showToast('🚪 LOGRO: ¡EL ELEGIDO!'); saveGame(); }
         [0,1,2].forEach(x=>{
           const d=document.getElementById('mhd-'+x);
           d.classList.add('no-hover');

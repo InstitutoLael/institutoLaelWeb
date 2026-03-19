@@ -45,6 +45,7 @@ const Programas = lazy(() => import("./pages/Programas.jsx"));
 const Recursos = lazy(() => import("./pages/Recursos.jsx"));
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
 const Checkout = lazy(() => import("./pages/Checkout.jsx"));
+const PageLosOlivos = lazy(() => import("./pages/PageLosOlivos.jsx"));
 
 /* ---------- UTILIDAD: Scroll al inicio al cambiar ruta ---------- */
 function ScrollToTop() {
@@ -159,6 +160,7 @@ export default function App() {
                   <Route path="/gracias" element={<PageTransition><Gracias /></PageTransition>} />
                   <Route path="/terminos" element={<PageTransition><Terminos /></PageTransition>} />
                   <Route path="/privacidad" element={<PageTransition><Privacidad /></PageTransition>} />
+                  <Route path="/los-olivos" element={<PageTransition><PageLosOlivos /></PageTransition>} />
                   <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
                 </Routes>
               </AnimatePresence>

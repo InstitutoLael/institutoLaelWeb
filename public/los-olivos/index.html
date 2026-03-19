@@ -776,6 +776,22 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
   border-color: #34d399; filter: grayscale(0); box-shadow: 0 0 10px rgba(52,211,153,0.3);
 }
 
+
+/* ── IG STORY OVERLAY ── */
+#ig-overlay {
+  display:none; position:fixed; inset:0; z-index:999999;
+  background: linear-gradient(135deg, #05020d, #3b0764, #1e3a8a);
+  flex-direction:column; justify-content:center; align-items:center;
+  text-align:center; padding: 2rem;
+}
+#ig-overlay::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at center, transparent, #000 90%); opacity:0.6; }
+.ig-content { position:relative; z-index:2; animation: qslide 0.5s cubic-bezier(0.25, 1, 0.5, 1); }
+.ig-title { font-family:'Syne',sans-serif; font-size:3.5rem; font-weight:800; color:var(--text); text-shadow:0 0 30px rgba(167,139,250,0.8); line-height:1; margin-bottom:0.5rem; }
+.ig-rank { font-family:'DM Mono',monospace; font-size:1.5rem; color:var(--c4); filter:drop-shadow(0 0 10px var(--c4)); margin-bottom:2rem; letter-spacing:4px;}
+.ig-pts { font-family:'Syne',sans-serif; font-size:5rem; font-weight:800; background:linear-gradient(to right,var(--c1),var(--c3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; filter:drop-shadow(0 10px 20px rgba(126,232,250,0.5)); line-height:1;}
+.ig-footer { position:absolute; bottom:3rem; left:0; right:0; text-align:center; font-family:'Syne',sans-serif; color:var(--text3); font-size:0.8rem; letter-spacing:2px; z-index:2; }
+.ig-close { position:absolute; top:2rem; right:2rem; width:40px; height:40px; background:rgba(255,255,255,0.1); border-radius:50%; color:#fff; font-size:1.5rem; border:none; cursor:pointer; z-index:3; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(10px); }
+
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg2); }
@@ -990,7 +1006,8 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
         <div class="logro ${G.logros.masoquista?'unlocked':''}" title="Dominar modo Contra el Reloj">💀 Masoquista</div>
       </div>
     </div>
-    <a id="wa-share" href="#" target="_blank" rel="noopener" style="display:block;width:calc(100% - 4rem);margin:0 auto 0.8rem;background:#25D366;color:#fff;border:none;padding:0.8rem;border-radius:var(--r-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.78rem;letter-spacing:1px;text-align:center;text-decoration:none;">📲 Desafiar al grupo (WhatsApp)</a>
+        <a id="wa-share" href="#" target="_blank" rel="noopener" style="display:block;width:calc(100% - 4rem);margin:0 auto 0.8rem;background:#25D366;color:#fff;border:none;padding:0.8rem;border-radius:var(--r-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:1px;text-align:center;text-decoration:none;">📲 Desafiar grupo (WA)</a>
+    <button onclick="showIG()" style="display:block;width:calc(100% - 4rem);margin:0 auto 1.5rem;background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);color:#fff;border:none;padding:0.8rem;border-radius:var(--r-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 15px rgba(220,39,67,0.4); border-bottom:3px solid #6d1020;">📸 Credencial IG (Descargar)</button>
     <button class="btn-close-carnet" onclick="hideCarnet()">Cerrar</button>
   </div>
 </div>
@@ -1089,7 +1106,7 @@ const defaultG = {
   stars:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0},
   /* historical accumulators — never reset on zone repeat */
   histCorrect:0, histTotal:0,
-  zoneBests:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}
+  zoneBests:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}, emoji:null
 };
 const savedG = localStorage.getItem('statArcadeSave');
 const G = savedG ? Object.assign({...defaultG}, JSON.parse(savedG)) : { ...defaultG };
@@ -1152,6 +1169,19 @@ function showDamage(e, text, isBad=false) {
   setTimeout(()=>d.remove(), 1000);
 }
 
+
+function showIG() {
+  document.getElementById('carnet-modal').style.display='none';
+  const overlay = document.getElementById('ig-overlay');
+  overlay.style.display = 'flex';
+  document.getElementById('ig-name').innerHTML = `AGENTE<br>${G.agente||'ANÓNIMO'}`;
+  document.getElementById('ig-pt').textContent = parseInt(G.pts).toLocaleString('en-US');
+  document.getElementById('ig-emo').textContent = G.emoji || '😎';
+  const rank = G.pts>=3000 ? 'MAESTRO DE DATOS' : G.pts>=2000 ? 'CIENTÍFICO' : G.pts>=1000 ? 'ANALISTA' : G.pts>=400 ? 'ESTUDIANTE' : 'NOVATO';
+  document.getElementById('ig-rk').textContent = rank;
+  showToast('¡Toma un pantallazo (Screenshot) y súbelo a Instagram!');
+}
+
 function showCarnet() {
   document.getElementById('carnet-modal').style.display = 'flex';
   const rank = G.pts>=3000 ? 'MAESTRO DE DATOS' : G.pts>=2000 ? 'CIENTÍFICO' : G.pts>=1000 ? 'ANALISTA' : G.pts>=400 ? 'ESTUDIANTE' : 'NOVATO';
@@ -1165,7 +1195,7 @@ function showCarnet() {
   document.getElementById('c-stars').textContent = countStars();
   
   const agt = G.agente || 'ANÓNIMO';
-  document.querySelector('.carnet-logo').textContent = `AGENTE [${agt}]`;
+  document.querySelector('.carnet-logo').textContent = `${emo} AGENTE [${agt}]`;
   
   const url = encodeURIComponent('institutolael.cl/los-olivos');
   const txt = encodeURIComponent(`🎮 ¡El Agente [${agt}] llegó a rango ${rank} con ${G.pts} pts en EL BÚNKER DE DATOS del Profe Diego! 👨‍🏫 ¿Puedes superarme? ${decodeURIComponent(url)}`);
@@ -1212,7 +1242,11 @@ const ZONE_NAMES_ALL = {...ZONE_NAMES, final:'Zona 07 — Prueba Final'};
 ═══════════════════════════════════════════ */
 function updateHUD(){
   document.getElementById('h-pts').textContent  = G.pts;
-  document.getElementById('h-lvl').textContent  = Math.floor(G.pts/200)+1;
+  const lvl = Math.floor(G.pts/400)+1;
+  const xpPct = ((G.pts%400)/400)*100;
+  document.getElementById('h-lvl').innerHTML = `Lvl ${lvl}
+<div style="width:100%;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:2px;overflow:hidden"><div style="width:${xpPct}%;height:100%;background:var(--c1);box-shadow:0 0 5px var(--c1);"></div></div>`;
+  document.getElementById('h-lvl').style.fontSize = '0.9rem';
   document.getElementById('h-str').textContent  = G.streak;
   const acc = G.total>0 ? Math.round(G.correct/G.total*100)+'%' : '—';
   document.getElementById('h-acc').textContent  = acc;
@@ -1314,7 +1348,7 @@ function renderQ(q){
         const ok=i===q.correct;
         b.classList.add(ok?'correct':'wrong');
         if(!ok) opts.querySelectorAll('.opt')[q.correct].classList.add('correct');
-        doScore(ok);
+        doScore(ok, isGold);
         if(ok) showDamage(arguments[0], '+'+((100+(G.streak>=3?20:0))*(G.hardcore?2:1))+' pts');
         else showDamage(arguments[0], 'Fallo', true);
         fb.style.display='block';
@@ -1341,7 +1375,7 @@ function renderQ(q){
       const ok=q.check(v);
       inp.disabled=true;chk.disabled=true;
       inp.classList.add(ok?'correct':'wrong');
-      doScore(ok);
+      doScore(ok, isGold);
       if(ok) showDamage(arguments[0], '+'+((100+(G.streak>=3?20:0))*(G.hardcore?2:1))+' pts');
       else showDamage(arguments[0], 'Fallo', true);
       fb.style.display='block';
@@ -1377,7 +1411,8 @@ function renderQ(q){
         clearInterval(hcTimerInt);
         document.getElementById('h-time').textContent = '☠️';
         if(navigator.vibrate) navigator.vibrate([50, 50, 100]);
-        G.streak=0; G.histTotal++; saveGame(); updateHUD();
+        G.streak=0; G.histTotal++;
+    if(isGold) { G.pts = Math.max(0, G.pts - 300); showToast('📉 PREGUNTA DE ORO FALLADA (-300 pts)'); } saveGame(); updateHUD();
         document.querySelector('.q-card').classList.add('shake');
         fb.style.display='block';
         fb.className='feedback wrong-fb';
@@ -1392,25 +1427,36 @@ function renderQ(q){
   }
 }
 
-function doScore(ok){
+function doScore(ok, isGold=false){
   G.total++;
   if(ok){
     G.correct++;G.streak++;G.histCorrect++;G.histTotal++;
     saveGame();
     const bonus=G.streak>=3?20:0;
-    const pts=(100+bonus)*(G.hardcore?2:1);
+    const pts=(100+bonus)*(G.hardcore?2:1)*(isGold?3:1);
     G.pts+=pts;G.zonePts+=pts;
     document.getElementById('gs-pts').textContent=G.zonePts;
     if(G.streak>=10 && !G.logros.intocable) { G.logros.intocable=true; showToast('🏆 MODO DIOS: ¡INTOCABLE! (+1000 pts)'); G.pts+=1000; saveGame(); updateHUD(); }
     if(G.streak>=3) showToast(`🔥 ¡Racha x${G.streak}! +${bonus} pts bonus`);
   } else { if(navigator.vibrate) navigator.vibrate([50, 50, 100]);
-    G.streak=0; G.histTotal++; document.querySelector('.q-card').classList.remove('shake'); void document.querySelector('.q-card').offsetWidth; document.querySelector('.q-card').classList.add('shake'); saveGame(); }
+    G.streak=0; G.histTotal++;
+    if(isGold) { G.pts = Math.max(0, G.pts - 300); showToast('📉 PREGUNTA DE ORO FALLADA (-300 pts)'); } document.querySelector('.q-card').classList.remove('shake'); void document.querySelector('.q-card').offsetWidth; document.querySelector('.q-card').classList.add('shake'); saveGame(); }
   updateHUD();
 }
 
 function showComplete(){
   document.getElementById('gs-prog').style.width='100%';
   const pct=Math.round(G.zonePts/(ZONE_LEN*100)*100);
+  
+  // BUGFIX: stop timer
+  const totalSeconds = typeof stopTimer === 'function' ? stopTimer() : 0;
+  let timeBonus = 0;
+  if(pct >= 80 && totalSeconds < 90) { 
+    timeBonus = 500; G.pts += timeBonus; G.zonePts += timeBonus; updateHUD();
+  }
+  if(pct>=80 && totalSeconds<=45 && !G.logros.relampago) { G.logros.relampago=true; showToast('⚡ LOGRO: ¡RELÁMPAGO!'); }
+  if(pct>=80 && G.hardcore && !G.logros.masoquista) { G.logros.masoquista=true; showToast('💀 LOGRO: ¡MASOQUISTA!'); }
+  
   updateStars(G.zone,pct);
   if(pct>=80) shootConfetti();
   /* update zone best */

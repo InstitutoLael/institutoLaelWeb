@@ -1718,7 +1718,7 @@ function exJob(){
 function exInvest(){
   const mA=rand(400,500), sdA=rand(30,50);
   const mB=mA+rand(10,40), sdB=rand(100,200);
-  const rawOpts = ['Que la enseñanza no le llega a todos por igual (mucha desigualdad)','Que son excelentes enseñando a todos','Que el promedio es artificial','No sirve de nada ese dato'];
+  const rawOpts = ['Que la enseñanza no le llega a todos por igual (mucha desigualdad)','Que el método pedagógico es excelente y beneficia a todo el alumnado','Que el promedio presentado es una métrica artificial y carente de validez','Que la desviación estándar es un dato irrelevante para este tipo de análisis'];
   const opts = shuffle(rawOpts);
   return{type:'mc',
     visual:`Preu A → Media ensayo: ${mA} | DE: ${sdA}<br>Preu B → Media ensayo: ${mB} | DE: ${sdB}`,
@@ -1730,7 +1730,7 @@ function exScores(){
   const B=[rand(20,40),rand(20,40),rand(80,100),rand(80,100),rand(40,55)];
   const mA=fmt(A.reduce((a,b)=>a+b,0)/A.length),mB=fmt(B.reduce((a,b)=>a+b,0)/B.length);
   const sdA=fmt(stdev(A)),sdB=fmt(stdev(B));
-  const rawOpts = ['El Liceo A (menor desviación estándar)','El Liceo B (porque hay gente con 100%)','Son idénticos en desempeño','La DE es inútil aquí'];
+  const rawOpts = ['El Liceo A (posee una dispersión menor y resultados más consistentes)','El Liceo B (presenta puntajes máximos de asistencia del 100% en la muestra)','Ambos establecimientos operan con idéntico nivel de desempeño académico','La desviación estándar es una medida inútil para determinar la equidad real'];
   const opts = shuffle(rawOpts);
   return{type:'mc',
     visual:`Liceo A: [ ${A.join('% , ')}% ] | DE ${sdA}<br>Liceo B: [ ${B.join('% , ')}% ] | DE ${sdB}`,

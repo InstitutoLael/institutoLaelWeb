@@ -594,16 +594,33 @@ body::after {
 #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
 
-/* ── CARNET MODAL & CONFETTI & SHAKE ── */
-.shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
-@keyframes shake {
-  10%, 90% { transform: translate3d(-1px, 0, 0); }
-  20%, 80% { transform: translate3d(2px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-  40%, 60% { transform: translate3d(4px, 0, 0); }
+/* CARNET MODAL */
+#carnet-modal {
+  display: none;
+  position: fixed; inset: 0; z-index: 2000;
+  background: rgba(8,11,20,0.98);
+  backdrop-filter: blur(20px);
+  justify-content: center; align-items: center;
+  padding: 1rem; animation: fadeIn .3s ease;
 }
-
-input { font-size: 16px !important; } /* Prevent iOS zoom */
+.carnet-card {
+  width: 100%; max-width: 440px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.1);
+  border-top: 2px solid rgba(126,232,250,0.4);
+  border-radius: var(--r-md);
+  padding: 2rem; position: relative;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.8);
+}
+.carnet-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem; }
+.carnet-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--text); letter-spacing: 1px; }
+.carnet-rank { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--c1); background: rgba(126,232,250,0.1); padding: 0.3rem 0.8rem; border-radius: 4px; border: 1px solid rgba(126,232,250,0.2); }
+.carnet-pts { font-family: 'Syne', sans-serif; font-size: 3.5rem; font-weight: 800; text-align: center; color: var(--c6); line-height: 1; margin: 1rem 0 0.2rem; filter: drop-shadow(0 0 15px rgba(251,191,36,0.2)); }
+.carnet-lbl { font-family: 'DM Mono', monospace; font-size: 0.7rem; text-align: center; color: var(--text3); letter-spacing: 2px; margin-bottom: 2rem; }
+.carnet-stats { display: flex; justify-content: space-around; text-align: center; margin-bottom: 2rem; }
+.carnet-stats-lbl { font-size: 0.6rem; color: var(--text3); letter-spacing: 1px; }
+.btn-close-carnet { width: 100%; background: none; border: 1px solid var(--border2); color: var(--text3); font-family: 'Figtree', sans-serif; font-weight: 600; padding: 0.75rem; border-radius: var(--r-sm); cursor: pointer; transition: all .2s; }
+.btn-close-carnet:hover { color: var(--text); border-color: var(--text2); }
 
 .hub-actions {
   display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;
@@ -1006,9 +1023,8 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
         <div class="logro ${G.logros.masoquista?'unlocked':''}" title="Dominar modo Contra el Reloj">💀 Masoquista</div>
       </div>
     </div>
-        <a id="wa-share" href="#" target="_blank" rel="noopener" style="display:block;width:calc(100% - 4rem);margin:0 auto 0.8rem;background:#25D366;color:#fff;border:none;padding:0.8rem;border-radius:var(--r-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:1px;text-align:center;text-decoration:none;">📲 Desafiar grupo (WA)</a>
-    <button onclick="showIG()" style="display:block;width:calc(100% - 4rem);margin:0 auto 1.5rem;background:linear-gradient(45deg,#f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);color:#fff;border:none;padding:0.8rem;border-radius:var(--r-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:1px;cursor:pointer;box-shadow:0 4px 15px rgba(220,39,67,0.4); border-bottom:3px solid #6d1020;">📸 Credencial IG (Descargar)</button>
-    <button class="btn-close-carnet" onclick="hideCarnet()">Cerrar</button>
+    <a id="wa-share" href="#" target="_blank" rel="noopener" style="display:block;width:calc(100% - 4rem);margin:0 auto 0.8rem;background:#25D366;color:#fff;border:none;padding:0.8rem;border-radius:var(--r-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:1px;text-align:center;text-decoration:none;">📲 Enviar reporte al Profe (WA)</a>
+    <button class="btn-close-carnet" onclick="hideCarnet()" style="margin-bottom:1.5rem;">Cerrar para Pantallazo</button>
   </div>
 </div>
 <div id="confetti-container" class="confetti"></div>
@@ -1170,34 +1186,11 @@ function showDamage(e, text, isBad=false) {
 }
 
 
-function showIG() {
-  document.getElementById('carnet-modal').style.display='none';
-  const overlay = document.getElementById('ig-overlay');
-  overlay.style.display = 'flex';
-  document.getElementById('ig-name').innerHTML = `AGENTE<br>${G.agente||'ANÓNIMO'}`;
-  document.getElementById('ig-pt').textContent = parseInt(G.pts).toLocaleString('en-US');
-  document.getElementById('ig-emo').textContent = G.emoji || '😎';
-  const rank = G.pts>=3000 ? 'MAESTRO DE DATOS' : G.pts>=2000 ? 'CIENTÍFICO' : G.pts>=1000 ? 'ANALISTA' : G.pts>=400 ? 'ESTUDIANTE' : 'NOVATO';
-  document.getElementById('ig-rk').textContent = rank;
-  showToast('Generando imagen, espera un par de segundos...');
-  const script = document.createElement('script');
-  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-  script.onload = () => {
-    html2canvas(overlay, {backgroundColor: '#05020d'}).then(canvas => {
-      const a = document.createElement('a');
-      a.href = canvas.toDataURL('image/jpeg', 0.9);
-      a.download = `Credencial_${G.agente||'Agente'}.jpg`;
-      a.click();
-      overlay.style.display = 'none';
-      showToast('¡Credencial descargada!');
-    });
-  };
-  document.head.appendChild(script);
-}
+
 
 function showCarnet() {
   document.getElementById('carnet-modal').style.display = 'flex';
-  const rank = G.pts>=3000 ? 'MAESTRO DE DATOS' : G.pts>=2000 ? 'CIENTÍFICO' : G.pts>=1000 ? 'ANALISTA' : G.pts>=400 ? 'ESTUDIANTE' : 'NOVATO';
+  const rank = G.pts>=6000 ? 'MAESTRO DE DATOS' : G.pts>=4000 ? 'CIENTÍFICO' : G.pts>=2000 ? 'ANALISTA' : G.pts>=800 ? 'ESTUDIANTE' : 'NOVATO';
   document.getElementById('c-rank').textContent = rank;
   document.getElementById('c-pts').textContent = G.pts;
   
@@ -1212,8 +1205,8 @@ function showCarnet() {
   document.querySelector('.carnet-logo').textContent = `${emo} AGENTE [${agt}]`;
   
   const url = encodeURIComponent('institutolael.cl/los-olivos');
-  const txt = encodeURIComponent(`🎮 ¡El Agente [${agt}] llegó a rango ${rank} con ${G.pts} pts en EL BÚNKER DE DATOS del Profe Diego! 👨‍🏫 ¿Puedes superarme? ${decodeURIComponent(url)}`);
-  document.getElementById('wa-share').href = `https://wa.me/?text=${txt}`;
+  const txt = encodeURIComponent(`*REPORTE BÚNKER LAEL* 👨‍🏫\n\nEl Agente ${emo} [${agt}] informa su progreso:\n📊 Puntos: ${G.pts}\n🏆 Rango: ${rank}\n⭐ Estrellas: ${countStars()}\n🎯 Precisión: ${acc}%\n\n¡Pantallazo adjunto! ${decodeURIComponent(url)}`);
+  document.getElementById('wa-share').href = `https://wa.me/56949481562?text=${txt}`;
 }
 
 function hideCarnet(e) {
@@ -1256,8 +1249,8 @@ const ZONE_NAMES_ALL = {...ZONE_NAMES, final:'Zona 07 — Prueba Final'};
 ═══════════════════════════════════════════ */
 function updateHUD(){
   document.getElementById('h-pts').textContent  = G.pts;
-  const lvl = Math.floor(G.pts/400)+1;
-  const xpPct = ((G.pts%400)/400)*100;
+  const lvl = Math.floor(G.pts/1000)+1;
+  const xpPct = ((G.pts%1000)/1000)*100;
   document.getElementById('h-lvl').innerHTML = `Lvl ${lvl}
 <div style="width:100%;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:2px;overflow:hidden"><div style="width:${xpPct}%;height:100%;background:var(--c1);box-shadow:0 0 5px var(--c1);"></div></div>`;
   document.getElementById('h-lvl').style.fontSize = '0.9rem';
@@ -1401,7 +1394,7 @@ function renderQ(q){
       inp.disabled=true;chk.disabled=true;
       inp.classList.add(ok?'correct':'wrong');
       doScore(ok, isGold);
-      if(ok) showDamage(arguments[0], '+'+((100+(G.streak>=3?20:0))*(G.hardcore?2:1))+' pts');
+      if(ok) showDamage(arguments[0], '+'+((100+(G.streak>=3?20:0))*(G.hardcore?2:1)*(isGold?2:1))+' pts');
       else showDamage(arguments[0], 'Fallo', true);
       fb.style.display='block';
       fb.className='feedback '+(ok?'correct-fb':'wrong-fb');
@@ -1458,7 +1451,7 @@ function doScore(ok, isGold=false){
     G.correct++;G.streak++;G.histCorrect++;G.histTotal++;
     saveGame();
     const bonus=G.streak>=3?20:0;
-    const pts=(100+bonus)*(G.hardcore?2:1)*(isGold?3:1);
+    const pts=(100+bonus)*(G.hardcore?2:1)*(isGold?2:1);
     G.pts+=pts;G.zonePts+=pts;
     document.getElementById('gs-pts').textContent=G.zonePts;
     if(G.streak>=10 && !G.logros.intocable) { G.logros.intocable=true; showToast('🏆 MODO DIOS: ¡INTOCABLE! (+1000 pts)'); G.pts+=1000; saveGame(); updateHUD(); }
@@ -1694,9 +1687,12 @@ function dispInput(){
   const mean=fmt(data.reduce((a,b)=>a+b,0)/data.length);
   return{type:'input',
     visual:`Tiempos esperando colectivos (min): [ ${data.join(' , ')} ]<br>Media = ${mean} min`,
-    text:'Calcula la <strong>desviación estándar</strong> exacta (usa 2 decimales y punto).',
-    placeholder:`Ej: ${sd}`,
-    check:val=>{const n=parseFloat(val);return !isNaN(n)&&Math.abs(n-sd)<0.6;},
+    text:'Calcula la <strong>desviación estándar</strong> exacta (usa 1 decimal y punto o coma).',
+    placeholder:`Ej: 1.5`,
+    check:val=>{
+      const n=parseFloat(val.trim().replace(',','.'));
+      return !isNaN(n) && Math.abs(n-sd) < 1.0;
+    },
     explanation:`Pasos: 1) Diferencias a la media al cuadrado. 2) Promédialos (Varianza). 3) Saca la Raíz (DE ≈ <strong>${sd}</strong>).`};
 }
 

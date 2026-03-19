@@ -579,6 +579,16 @@ body::after {
 .btn-zc.outline { background: none; border: 1.5px solid var(--border2); color: var(--text2); }
 .btn-zc.outline:hover { border-color: var(--c1); color: var(--c1); }
 
+/* CERTIFICATE */
+#cert-modal {
+  display: none;
+  position: fixed; inset: 0; z-index: 3000;
+  background: rgba(0,0,0,0.95);
+  backdrop-filter: blur(10px);
+  justify-content: center; align-items: flex-start;
+  padding: 2rem 1rem; overflow-y: auto;
+}
+
 /* ── STREAK TOAST ── */
 #toast {
   position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
@@ -600,8 +610,9 @@ body::after {
   position: fixed; inset: 0; z-index: 2000;
   background: rgba(8,11,20,0.98);
   backdrop-filter: blur(20px);
-  justify-content: center; align-items: center;
-  padding: 1rem; animation: fadeIn .3s ease;
+  justify-content: center; align-items: flex-start;
+  padding: 2rem 1rem; overflow-y: auto;
+  animation: fadeIn .3s ease;
 }
 .carnet-card {
   width: 100%; max-width: 440px;
@@ -627,7 +638,6 @@ body::after {
   0% { transform: scale(0.7) translateY(30px); opacity: 0; }
   100% { transform: scale(1) translateY(0); opacity: 1; }
 }
-#levelup-overlay { display: flex !important; }
 #levelup-overlay.hidden { display: none !important; }
 
 /* SHAKE */
@@ -1098,7 +1108,7 @@ input { font-size: 16px !important; }
 </div>
 
 <!-- CERTIFICATE MODAL -->
-<div id="cert-modal" style="display:none;position:fixed;inset:0;z-index:5000;background:rgba(8,11,20,0.97);backdrop-filter:blur(20px);align-items:center;justify-content:center;padding:1rem;">
+<div id="cert-modal" style="display:none;position:fixed;inset:0;z-index:5000;background:rgba(8,11,20,0.97);backdrop-filter:blur(20px);align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;">
   <div style="max-width:460px;width:100%;background:linear-gradient(135deg,rgba(251,191,36,0.12),rgba(126,232,250,0.06));border:2px solid rgba(251,191,36,0.4);border-radius:var(--r-lg);padding:2.5rem;text-align:center;position:relative;box-shadow:0 0 80px rgba(251,191,36,0.15);">
     <div style="font-size:3rem;margin-bottom:0.5rem">🎓</div>
     <div style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--c6);letter-spacing:4px;margin-bottom:0.5rem">CERTIFICADO DE GRADUACIÓN</div>
@@ -1121,7 +1131,7 @@ input { font-size: 16px !important; }
 </div>
 
 <!-- HALL OF FAME MODAL -->
-<div id="hof-modal" style="display:none;position:fixed;inset:0;z-index:5000;background:rgba(8,11,20,0.97);backdrop-filter:blur(20px);align-items:center;justify-content:center;padding:1rem;" onclick="if(event.target===this)this.style.display='none'">
+<div id="hof-modal" style="display:none;position:fixed;inset:0;z-index:5000;background:rgba(8,11,20,0.97);backdrop-filter:blur(20px);align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto;" onclick="if(event.target===this)this.style.display='none'">
   <div style="max-width:420px;width:100%;background:linear-gradient(180deg,rgba(251,191,36,0.1),rgba(255,255,255,0.02));border:1px solid rgba(251,191,36,0.3);border-top:2px solid rgba(251,191,36,0.6);border-radius:var(--r-lg);padding:2rem;box-shadow:0 40px 100px rgba(0,0,0,0.8);">
     <div style="text-align:center;margin-bottom:1.5rem;">
       <div style="font-size:2rem;margin-bottom:0.3rem">🏆</div>
@@ -1445,17 +1455,18 @@ function showLevelUp(lvl) {
   if(!ov) return;
   document.getElementById('levelup-num').textContent = `Subiste a Nivel ${lvl}`;
   ov.style.display = 'flex';
+  ov.style.opacity = '1';
   ov.classList.remove('hidden');
   shootConfetti();
   if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
   setTimeout(() => {
+    ov.style.transition = 'opacity 0.8s ease';
     ov.style.opacity = '0';
-    ov.style.transition = 'opacity 0.5s';
     setTimeout(() => {
       ov.style.display = 'none';
-      ov.style.opacity = '1';
-    }, 500);
-  }, 2000);
+      ov.classList.add('hidden');
+    }, 800);
+  }, 3000);
 }
 
 function showCertificate() {

@@ -622,6 +622,76 @@ body::after {
 .btn-close-carnet { width: 100%; background: none; border: 1px solid var(--border2); color: var(--text3); font-family: 'Figtree', sans-serif; font-weight: 600; padding: 0.75rem; border-radius: var(--r-sm); cursor: pointer; transition: all .2s; }
 .btn-close-carnet:hover { color: var(--text); border-color: var(--text2); }
 
+/* LEVEL UP */
+@keyframes levelUpPop {
+  0% { transform: scale(0.7) translateY(30px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+#levelup-overlay { display: flex !important; }
+#levelup-overlay.hidden { display: none !important; }
+
+/* SHAKE */
+.shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+  40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+input { font-size: 16px !important; }
+
+/* GLOSSARY TOOLTIP */
+.glos {
+  border-bottom: 1px dashed var(--c1);
+  color: var(--c1);
+  cursor: help;
+  position: relative;
+}
+.glos::after {
+  content: attr(data-def);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%; transform: translateX(-50%);
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  font-size: 0.72rem;
+  font-family: 'Figtree', sans-serif;
+  font-weight: 400;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  width: 200px;
+  text-align: center;
+  white-space: normal;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.glos:hover::after, .glos:focus::after, .glos.active::after { opacity: 1; }
+
+/* SPEED BADGE */
+@keyframes speedBadgePop {
+  0% { transform: scale(0) translateY(-10px); opacity: 0; }
+  60% { transform: scale(1.2) translateY(0); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.speed-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--c6), var(--c2));
+  color: #000;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  padding: 0.3rem 0.8rem;
+  border-radius: 99px;
+  margin-bottom: 0.5rem;
+  animation: speedBadgePop 0.4s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+
 .hub-actions {
   display: flex; gap: 1rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap;
 }
@@ -1017,6 +1087,57 @@ body::after {
   </div>
 </div>
 <div id="confetti-container" class="confetti"></div>
+
+<!-- LEVEL UP OVERLAY -->
+<div id="levelup-overlay" style="display:none;position:fixed;inset:0;z-index:9000;pointer-events:none;align-items:center;justify-content:center;">
+  <div id="levelup-card" style="background:linear-gradient(135deg,rgba(126,232,250,0.15),rgba(167,139,250,0.15));border:2px solid var(--c1);border-radius:var(--r-lg);padding:2.5rem 3rem;text-align:center;backdrop-filter:blur(20px);box-shadow:0 0 60px rgba(126,232,250,0.3);animation:levelUpPop 0.4s cubic-bezier(.4,0,.2,1);">
+    <div style="font-size:3.5rem;line-height:1;margin-bottom:0.5rem">⬆️</div>
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;color:var(--c1);letter-spacing:2px;text-shadow:0 0 20px var(--c1)">¡LEVEL UP!</div>
+    <div id="levelup-num" style="font-family:'DM Mono',monospace;font-size:1rem;color:var(--text2);margin-top:0.4rem"></div>
+  </div>
+</div>
+
+<!-- CERTIFICATE MODAL -->
+<div id="cert-modal" style="display:none;position:fixed;inset:0;z-index:5000;background:rgba(8,11,20,0.97);backdrop-filter:blur(20px);align-items:center;justify-content:center;padding:1rem;">
+  <div style="max-width:460px;width:100%;background:linear-gradient(135deg,rgba(251,191,36,0.12),rgba(126,232,250,0.06));border:2px solid rgba(251,191,36,0.4);border-radius:var(--r-lg);padding:2.5rem;text-align:center;position:relative;box-shadow:0 0 80px rgba(251,191,36,0.15);">
+    <div style="font-size:3rem;margin-bottom:0.5rem">🎓</div>
+    <div style="font-family:'DM Mono',monospace;font-size:0.6rem;color:var(--c6);letter-spacing:4px;margin-bottom:0.5rem">CERTIFICADO DE GRADUACIÓN</div>
+    <div style="font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--text);margin-bottom:0.5rem">El Búnker de Datos</div>
+    <div style="font-size:0.85rem;color:var(--text2);margin-bottom:1.5rem">Instituto Lael • Los Olivos HomeSchool</div>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r-sm);padding:1.2rem;margin-bottom:1.5rem;">
+      <div style="font-size:0.7rem;color:var(--text3);letter-spacing:2px;margin-bottom:0.3rem">CERTIFICA QUE EL AGENTE</div>
+      <div id="cert-name" style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--c6)"></div>
+      <div style="font-size:0.8rem;color:var(--text2);margin-top:0.3rem">ha completado las 7 zonas del Búnker con distinción máxima (21 ⭐)</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:1.5rem;padding:0 0.5rem;">
+      <div style="text-align:center;"><div style="font-size:0.6rem;color:var(--text3);letter-spacing:1px">FIRMA</div><div style="margin-top:0.5rem;font-family:'Syne',sans-serif;font-weight:800;color:var(--text2);font-size:0.85rem;border-top:1px solid var(--border2);padding-top:0.3rem">Profe Diego</div></div>
+      <div style="text-align:center;"><div style="font-size:0.6rem;color:var(--text3);letter-spacing:1px">FECHA</div><div id="cert-date" style="margin-top:0.5rem;font-family:'DM Mono',monospace;color:var(--text2);font-size:0.85rem;border-top:1px solid var(--border2);padding-top:0.3rem"></div></div>
+    </div>
+    <div style="display:flex;gap:0.8rem;flex-direction:column;">
+      <a id="cert-wa" href="#" target="_blank" style="display:block;background:#25D366;color:#fff;padding:0.8rem;border-radius:var(--r-sm);font-family:'Syne',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:1px;text-align:center;text-decoration:none;">📲 Enviar certificado al Profe</a>
+      <button onclick="document.getElementById('cert-modal').style.display='none'" style="background:none;border:1px solid var(--border2);color:var(--text3);padding:0.7rem;border-radius:var(--r-sm);font-family:'Figtree',sans-serif;font-weight:600;cursor:pointer;">Cerrar para Pantallazo 📸</button>
+    </div>
+  </div>
+</div>
+
+<!-- HALL OF FAME MODAL -->
+<div id="hof-modal" style="display:none;position:fixed;inset:0;z-index:5000;background:rgba(8,11,20,0.97);backdrop-filter:blur(20px);align-items:center;justify-content:center;padding:1rem;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="max-width:420px;width:100%;background:linear-gradient(180deg,rgba(251,191,36,0.1),rgba(255,255,255,0.02));border:1px solid rgba(251,191,36,0.3);border-top:2px solid rgba(251,191,36,0.6);border-radius:var(--r-lg);padding:2rem;box-shadow:0 40px 100px rgba(0,0,0,0.8);">
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <div style="font-size:2rem;margin-bottom:0.3rem">🏆</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.2rem;color:var(--c6);letter-spacing:2px">HALL OF FAME</div>
+      <div style="font-size:0.7rem;color:var(--text3);letter-spacing:1px">Top 5 Agentes Históricos</div>
+    </div>
+    <div id="hof-list" style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.5rem;"></div>
+    <button onclick="document.getElementById('hof-modal').style.display='none'" style="width:100%;background:none;border:1px solid var(--border2);color:var(--text3);padding:0.75rem;border-radius:var(--r-sm);font-family:'Figtree',sans-serif;font-weight:600;cursor:pointer;">Cerrar</button>
+  </div>
+</div>
+
+<!-- CHALLENGE BANNER -->
+<div id="challenge-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:8000;background:linear-gradient(90deg,rgba(167,139,250,0.9),rgba(126,232,250,0.9));backdrop-filter:blur(10px);padding:0.8rem 1.5rem;text-align:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.85rem;color:#fff;letter-spacing:1px;cursor:pointer;" onclick="this.style.display='none'">
+  ⚔️ ¡UN AGENTE TE DESAFÍA! Supera <span id="ch-score">0</span> pts — Toca para cerrar
+</div>
+
 <!-- ══════════════════════════════════════
      GAME SCREEN
 ══════════════════════════════════════ -->
@@ -1189,6 +1310,27 @@ function showCarnet() {
   document.getElementById('c-err').textContent = err + '%';
   document.getElementById('c-stars').textContent = countStars();
   
+  // Radar / Zone Chart
+  const chart = document.getElementById('carnet-chart') || document.createElement('div');
+  chart.id = 'carnet-chart';
+  chart.style.marginTop = '1rem';
+  chart.style.fontSize = '0.65rem';
+  chart.style.color = 'var(--text2)';
+  let chartHtml = '<div style="margin-bottom:0.5rem;font-weight:700;letter-spacing:1px;color:var(--text3)">ANÁLISIS POR ZONA:</div>';
+  Object.keys(ZONE_NAMES).forEach(z => {
+    const s = G.stars[z] || 0;
+    const pct = (s/3)*100;
+    chartHtml += `<div style="margin-bottom:0.4rem">
+      <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span>${ZONE_NAMES[z].split('—')[1]}</span><span>${s}/3 ⭐</span></div>
+      <div style="width:100%;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden">
+        <div style="width:${pct}%;height:100%;background:${ZONE_COLORS[z]};box-shadow:0 0 5px ${ZONE_COLORS[z]}"></div>
+      </div>
+    </div>`;
+  });
+  chart.innerHTML = chartHtml;
+  const statsDiv = document.querySelector('.carnet-stats');
+  if(statsDiv && !document.getElementById('carnet-chart')) statsDiv.after(chart);
+
   const agt = G.agente || 'ANÓNIMO';
   const emo = G.emoji || '😎';
   document.querySelector('.carnet-logo').textContent = `${emo} AGENTE [${agt}]`;
@@ -1196,6 +1338,38 @@ function showCarnet() {
   const url = encodeURIComponent('institutolael.cl/los-olivos');
   const txt = encodeURIComponent(`*REPORTE BÚNKER LAEL* 👨‍🏫\n\nEl Agente ${emo} [${agt}] informa su progreso:\n📊 Puntos: ${G.pts}\n🏆 Rango: ${rank}\n⭐ Estrellas: ${countStars()}\n🎯 Precisión: ${acc}%\n\n¡Pantallazo adjunto! ${decodeURIComponent(url)}`);
   document.getElementById('wa-share').href = `https://wa.me/56949481562?text=${txt}`;
+}
+
+function showHOF() {
+  const m = document.getElementById('hof-modal');
+  const list = document.getElementById('hof-list');
+  m.style.display = 'flex';
+  list.innerHTML = '';
+  if(!G.hof || G.hof.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:var(--text3);font-size:0.8rem;padding:1rem;">Aún no hay leyendas registradas...</div>';
+    return;
+  }
+  G.hof.forEach((h, i) => {
+    const row = document.createElement('div');
+    row.style = `display:flex;align-items:center;padding:0.8rem;background:rgba(255,255,255,${i===0?0.08:0.03});border-radius:12px;border:1px solid rgba(255,255,255,${i===0?0.1:0.05});`;
+    row.innerHTML = `
+      <div style="font-family:'DM Mono',monospace;font-size:1.2rem;font-weight:700;color:var(--c6);margin-right:1rem;width:20px">${i+1}</div>
+      <div style="font-size:1.5rem;margin-right:0.8rem">${h.emoji}</div>
+      <div style="flex:1">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:0.85rem;color:var(--text)">${h.agente}</div>
+        <div style="font-size:0.6rem;color:var(--text3)">${h.date}</div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-weight:700;color:var(--c1)">${h.pts} <span style="font-size:0.6rem">PTS</span></div>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function generateChallenge() {
+  const score = btoa(G.pts.toString());
+  const url = `https://institutolael.cl/los-olivos?challenge=${score}`;
+  const txt = encodeURIComponent(`⚔️ *DESAFÍO BÚNKER DE DATOS* ⚔️\n\nEl Agente ${G.emoji} [${G.agente}] ha sacado *${G.pts} puntos* y te desafía a superarlo.\n\n¿Tienes lo que se necesita? Juega aquí: ${url}`);
+  window.open(`https://wa.me/?text=${txt}`, '_blank');
 }
 
 function hideCarnet(e) {
@@ -1229,6 +1403,16 @@ function shootConfetti() {
   }
 }
 
+let bossHP = 100;
+function renderBossUI() {
+  const b = document.getElementById('boss-overlay');
+  if(!b) return;
+  b.style.display = G.zone === 'final' ? 'block' : 'none';
+  const bar = document.getElementById('boss-hp-fill');
+  if(bar) bar.style.width = bossHP + '%';
+  document.getElementById('boss-msg').textContent = bossHP <= 50 ? "¡ME ESTÁS GANANDO! 😱" : "¡EL BÚNKER ES MÍO! 😈";
+}
+
 let hcTimerInt;
 const ZONE_COLORS_ALL = {...ZONE_COLORS, final:'var(--c5)'};
 const ZONE_NAMES_ALL = {...ZONE_NAMES, final:'Zona 07 — Prueba Final'};
@@ -1239,6 +1423,9 @@ const ZONE_NAMES_ALL = {...ZONE_NAMES, final:'Zona 07 — Prueba Final'};
 function updateHUD(){
   document.getElementById('h-pts').textContent  = G.pts;
   const lvl = Math.floor(G.pts/1000)+1;
+  const oldLvl = parseInt(document.getElementById('h-lvl').textContent.replace('Lvl ','')) || 1;
+  if(lvl > oldLvl) showLevelUp(lvl);
+
   const xpPct = ((G.pts%1000)/1000)*100;
   document.getElementById('h-lvl').innerHTML = `Lvl ${lvl}
 <div style="width:100%;height:3px;background:rgba(255,255,255,0.1);border-radius:2px;margin-top:2px;overflow:hidden"><div style="width:${xpPct}%;height:100%;background:var(--c1);box-shadow:0 0 5px var(--c1);"></div></div>`;
@@ -1246,40 +1433,65 @@ function updateHUD(){
   document.getElementById('h-str').textContent  = G.streak;
   const acc = G.total>0 ? Math.round(G.correct/G.total*100)+'%' : '—';
   document.getElementById('h-acc').textContent  = acc;
+
+  if(countStars() >= 21) {
+    const cert = document.getElementById('cert-modal');
+    if(cert && cert.style.display !== 'flex' && !sessionStorage.getItem('certShown')) showCertificate();
+  }
 }
+
+function showLevelUp(lvl) {
+  const ov = document.getElementById('levelup-overlay');
+  if(!ov) return;
+  document.getElementById('levelup-num').textContent = `Subiste a Nivel ${lvl}`;
+  ov.style.display = 'flex';
+  ov.classList.remove('hidden');
+  shootConfetti();
+  if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
+  setTimeout(() => {
+    ov.style.opacity = '0';
+    ov.style.transition = 'opacity 0.5s';
+    setTimeout(() => {
+      ov.style.display = 'none';
+      ov.style.opacity = '1';
+    }, 500);
+  }, 2000);
+}
+
+function showCertificate() {
+  const m = document.getElementById('cert-modal');
+  if(!m) return;
+  m.style.display = 'flex';
+  document.getElementById('cert-name').textContent = G.agente || 'AGENTE';
+  document.getElementById('cert-date').textContent = new Date().toLocaleDateString();
+  const rank = G.pts>=6000 ? 'MAESTRO DE DATOS' : G.pts>=4000 ? 'CIENTÍFICO' : G.pts>=2000 ? 'ANALISTA' : G.pts>=800 ? 'ESTUDIANTE' : 'NOVATO';
+  const txt = encodeURIComponent(`*CERTIFICADO DE GRADUACIÓN* 🎓\n\nEl Agente ${G.emoji} [${G.agente}] se ha graduado del Búnker de Datos con honores.\n⭐ 21 Estrellas\n📊 Puntos: ${G.pts}\n🏆 Rango: ${rank}`);
+  document.getElementById('cert-wa').href = `https://wa.me/56949481562?text=${txt}`;
+  sessionStorage.setItem('certShown', 'true');
+}
+
 function updateStars(zone, pct){
   const s = pct>=80?3:pct>=50?2:1;
-  if(s>G.stars[zone]) { G.stars[zone] = G.stars[zone] || 0; G.stars[zone]=s; saveGame(); }
+  if(s>(G.stars[zone]||0)) { G.stars[zone]=s; saveGame(); }
   const icons=['○○○','★○○','★★○','★★★'];
   const el=document.getElementById('zs-'+zone);
-  if(el) el.textContent=icons[G.stars[zone]];
+  if(el) el.textContent=icons[G.stars[zone]||0];
 }
-
-/* ═══════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════ */
-let toastTimer;
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
-}
-
 /* ═══════════════════════════════════════════
    NAVIGATION
 ═══════════════════════════════════════════ */
 function enterZone(zone){
   G.zone=zone; G.zoneQ=0; G.zonePts=0; G.jokers=0;
+  if(zone==='final') bossHP = 100;
   document.getElementById('hub').style.display='none';
   const gs=document.getElementById('game-screen');
+  if(!gs) return;
   gs.style.display='block';
   gs.scrollTop=0;
   document.getElementById('gs-zname').textContent=ZONE_NAMES_ALL[zone];
   document.getElementById('gs-pts').textContent=0;
-  // set accent
-  document.getElementById('game-screen').style.setProperty('--accent',ZONE_COLORS_ALL[zone]);
+  gs.style.setProperty('--accent',ZONE_COLORS_ALL[zone]);
+  renderBossUI();
   startTimer();
   nextQuestion();
 }
@@ -1293,47 +1505,75 @@ function backToHub(){
 /* ═══════════════════════════════════════════
    QUESTION ENGINE
 ═══════════════════════════════════════════ */
+const GLOSSARY = {
+  'media aritmética': 'Es el promedio de toda la vida: sumas todo y divides por el total de datos.',
+  'promedio': 'Sumas todos los valores y divides por la cantidad de elementos.',
+  'mediana': 'Es el valor que está justo al medio cuando ordenas los datos de menor a mayor.',
+  'moda': 'Es el valor que más veces se repite en un conjunto de datos.',
+  'rango': 'Es la diferencia (resta) entre el valor más grande y el más chico.',
+  'desviación estándar': 'Mide qué tan desparramados están los datos respecto al promedio.',
+  'varianza': 'Es la desviación estándar al cuadrado. Mide la dispersión de los datos.',
+  'sesgo': 'Es una trampa o error que inclina los resultados hacia un lado injusto.',
+  'outlier': 'Es un valor "mentiroso" o extremo que se sale de la norma y altera el promedio.',
+  'frecuencia': 'Indica cuántas veces aparece un dato en la muestra.',
+  'probabilidad': 'Es la chance de que algo pase (Casos Favorables ÷ Casos Totales).',
+  'independencia': 'Significa que lo que pasó antes no afecta en nada a lo que pasará ahora.',
+  'condicional': 'Es la probabilidad de que pase algo SABIENDO que ya pasó otra cosa antes.'
+};
+
+function applyGlossary(text) {
+  if(!text) return '';
+  let html = text;
+  Object.keys(GLOSSARY).forEach(term => {
+    const reg = new RegExp(`\\b${term}\\b`, 'gi');
+    html = html.replace(reg, match => `<span class="glos" data-def="${GLOSSARY[term]}">${match}</span>`);
+  });
+  return html;
+}
+
 function nextQuestion(){
   const prog=(G.zoneQ/ZONE_LEN)*100;
   document.getElementById('gs-prog').style.width=prog+'%';
   if(G.zoneQ>=ZONE_LEN){showComplete();return;}
-  const gen={diagnosis:genDiag,lies:genLies,dispersion:genDisp,excel:genExcel,probability:genProb,montyhall:genMH,final:function(){return choose([genDiag,genLies,genDisp,genExcel,genProb,genMH])();}};
+  const gen={
+    diagnosis:genDiag,lies:genLies,dispersion:genDisp,excel:genExcel,
+    probability:genProb,montyhall:genMH,
+    final:function(){return choose([genDiag,genLies,genDisp,genExcel,genProb,genMH])();}
+  };
   renderQ(gen[G.zone]());
 }
 
 function renderQ(q){
   G.zoneQ++;
+  qStartTime = Date.now();
   const body=document.getElementById('gs-body');
+  if(!body) return;
   body.innerHTML='';
   const card=document.createElement('div');
   card.className='q-card';
   card.style.setProperty('--accent',ZONE_COLORS_ALL[G.zone]);
 
-  // meta
   const meta=document.createElement('div');meta.className='q-meta';
   meta.innerHTML=`<span class="q-num">Pregunta ${G.zoneQ} / ${ZONE_LEN}</span><div class="q-dot"></div><span class="q-zone-tag">${ZONE_NAMES_ALL[G.zone].split('—')[1].trim()}</span>`;
   card.appendChild(meta);
 
-  // GOLD QUESTION
   const isGold = Math.random() < 0.15 && G.pts >= 200 && G.zone !== 'montyhall' && q.type !== 'special';
   if(isGold) {
     card.style.boxShadow = '0 0 40px -5px rgba(251,191,36,0.6)';
     card.style.borderColor = '#fbbf24';
     const g=document.createElement('div');
-    g.innerHTML = '⭐ ¡PREGUNTA DE ORO! (x3 Puntos si aciertas, -300 si fallas)';
+    g.innerHTML = '⭐ ¡PREGUNTA DE ORO! (x2 Puntos si aciertas, -300 si fallas)';
     g.style.color='#fbbf24'; g.style.fontWeight='800'; g.style.textAlign='center'; g.style.marginBottom='1rem'; g.style.fontSize='0.85rem';
     card.appendChild(g);
   }
 
-  // visual
   if(q.visual){
     const vis=document.createElement('div');vis.className='q-visual';
-    vis.innerHTML=q.visual;card.appendChild(vis);
+    vis.innerHTML=applyGlossary(q.visual);card.appendChild(vis);
   }
 
-  // text
   const qt=document.createElement('div');qt.className='q-text';
-  qt.innerHTML=q.text;card.appendChild(qt);
+  qt.innerHTML=applyGlossary(q.text || '');card.appendChild(qt);
 
   const fb=document.createElement('div');fb.className='feedback';
   const btnNext=document.createElement('button');
@@ -1347,23 +1587,18 @@ function renderQ(q){
     q.options.forEach((opt,i)=>{
       const b=document.createElement('button');b.className='opt';
       b.innerHTML=`<span class="opt-letter">${letters[i]}</span>${opt}`;
-      b.onclick=function(){
+      b.onclick=function(ev){
         if(navigator.vibrate) navigator.vibrate(30);
         opts.querySelectorAll('.opt').forEach(x=>x.disabled=true);
-        
         clearInterval(hcTimerInt);
         const ok=i===q.correct;
         b.classList.add(ok?'correct':'wrong');
         if(!ok) opts.querySelectorAll('.opt')[q.correct].classList.add('correct');
-        doScore(ok, isGold);
-        if(ok) showDamage(arguments[0], '+'+((100+(G.streak>=3?20:0))*(G.hardcore?2:1))+' pts');
-        else showDamage(arguments[0], 'Fallo', true);
+        doScore(ok, isGold, q.type);
+        showDamage(ev, ok ? '+Pts' : 'Fallo', !ok);
         fb.style.display='block';
         fb.className='feedback '+(ok?'correct-fb':'wrong-fb');
-        const msgGood = "<strong>" + choose(msgsGood) + " </strong>";
-        const msgBad = "<strong>" + choose(msgsBad) + " </strong>";
-        fb.innerHTML=(ok?msgGood:msgBad)+q.explanation;
-
+        fb.innerHTML=`<strong>${choose(ok?msgsGood:msgsBad)}</strong> ${q.explanation}`;
         btnNext.style.display='block';
       };
       opts.appendChild(b);
@@ -1371,91 +1606,94 @@ function renderQ(q){
     card.appendChild(opts);
   } else if(q.type==='input'){
     const row=document.createElement('div');row.className='input-row';
-    const inp=document.createElement('input');
-    inp.className='ans-input';inp.placeholder=q.placeholder||'Tu respuesta...';inp.type='text';
+    const inp=document.createElement('input');inp.type='text';
+    inp.className='ans-input';inp.placeholder=q.placeholder||'Tu respuesta...';
     const chk=document.createElement('button');chk.className='btn-check';chk.textContent='✓ Verificar';
-    chk.onclick=function(){
+    chk.onclick=function(ev){
       if(navigator.vibrate) navigator.vibrate(30);
-      
       clearInterval(hcTimerInt);
-      const v=inp.value.trim().replace(',','.');
-      const ok=q.check(v);
-      inp.disabled=true;chk.disabled=true;
+      const ok=q.check(inp.value.trim().replace(',','.'));
+      inp.disabled=true; chk.disabled=true;
       inp.classList.add(ok?'correct':'wrong');
-      doScore(ok, isGold);
-      if(ok) showDamage(arguments[0], '+'+((100+(G.streak>=3?20:0))*(G.hardcore?2:1)*(isGold?2:1))+' pts');
-      else showDamage(arguments[0], 'Fallo', true);
+      doScore(ok, isGold, 'input');
+      showDamage(ev, ok ? '+Pts' : 'Fallo', !ok);
       fb.style.display='block';
       fb.className='feedback '+(ok?'correct-fb':'wrong-fb');
-      const msgGood = "<strong>" + choose(msgsGood) + " </strong>";
-      const msgBad = "<strong>" + choose(msgsBad) + " </strong>";
-      fb.innerHTML=(ok?msgGood:msgBad)+q.explanation;
-
+      fb.innerHTML=`<strong>${choose(ok?msgsGood:msgsBad)}</strong> ${q.explanation}`;
       btnNext.style.display='block';
     };
-    inp.addEventListener('keydown',e=>{if(e.key==='Enter')chk.click();});
-    row.appendChild(inp);row.appendChild(chk);
+    inp.onkeydown=e=>{if(e.key==='Enter')chk.click()};
+    row.appendChild(inp); row.appendChild(chk);
     card.appendChild(row);
   } else if(q.type==='special'){
-    const div=document.createElement('div');
-    div.innerHTML=q.html;
+    const div=document.createElement('div');div.innerHTML=q.html;
     card.appendChild(div);
   }
-
-  card.appendChild(fb);card.appendChild(btnNext);
+  card.appendChild(fb); card.appendChild(btnNext);
   body.appendChild(card);
   if(q.type==='special'&&q.setup) q.setup(card,fb,btnNext);
-  clearInterval(hcTimerInt);
+
   if(G.hardcore && G.zone !== 'montyhall' && q.type !== 'special') {
     let timeLeft = 15;
     document.getElementById('h-time').textContent = '00:'+timeLeft;
     document.getElementById('h-time').style.color = 'var(--c5)';
-    document.getElementById('timer-chip').style.display = 'block';
     hcTimerInt = setInterval(()=>{
       timeLeft--;
-      document.getElementById('h-time').textContent = '00:' + String(timeLeft).padStart(2,'0');
-      if(timeLeft <= 0) {
+      document.getElementById('h-time').textContent = '00:'+String(timeLeft).padStart(2,'0');
+      if(timeLeft<=0){
         clearInterval(hcTimerInt);
-        document.getElementById('h-time').textContent = '☠️';
-        if(navigator.vibrate) navigator.vibrate([50, 50, 100]);
-        G.streak=0; G.histTotal++;
-    if(isGold) { G.pts = Math.max(0, G.pts - 300); showToast('📉 PREGUNTA DE ORO FALLADA (-300 pts)'); } saveGame(); updateHUD();
-        document.querySelector('.q-card').classList.add('shake');
-        fb.style.display='block';
-        fb.className='feedback wrong-fb';
-        fb.innerHTML='<strong>¡TIEMPO AGOTADO! ☠️ </strong>' + q.explanation;
-        if(q.type==='mc') opts.querySelectorAll('.opt').forEach(x=>x.disabled=true);
-        if(q.type==='input') { document.querySelector('.ans-input').disabled=true; document.querySelector('.btn-check').disabled=true; }
+        doScore(false, isGold, 'time');
+        fb.style.display='block'; fb.className='feedback wrong-fb';
+        fb.innerHTML=`<strong>¡TIEMPO! ☠️</strong> ${q.explanation}`;
+        if(q.type==='mc') card.querySelectorAll('.opt').forEach(x=>x.disabled=true);
+        if(q.type==='input') { card.querySelector('.ans-input').disabled=true; card.querySelector('.btn-check').disabled=true; }
         btnNext.style.display='block';
       }
-    }, 1000);
-  } else if(!G.hardcore) {
-    if(document.getElementById('timer-chip').style.display === 'none') startTimer();
+    },1000);
   }
 }
 
-function doScore(ok, isGold=false){
+function doScore(ok, isGold=false, qType='gen'){
   G.total++;
+  const now = Date.now();
+  const timeTaken = now - qStartTime;
+  const isSpeedy = ok && timeTaken < 5000;
+
   if(ok){
     G.correct++;G.streak++;G.histCorrect++;G.histTotal++;
     saveGame();
+    if(G.zone === 'final') {
+      bossHP = Math.max(0, bossHP - 20);
+      renderBossUI();
+    }
     const bonus=G.streak>=3?20:0;
-    const pts=(100+bonus)*(G.hardcore?2:1)*(isGold?2:1);
+    const speedBonus = isSpeedy ? 50 : 0;
+    const pts=(100+bonus+speedBonus)*(G.hardcore?2:1)*(isGold?2:1);
     G.pts+=pts;G.zonePts+=pts;
     document.getElementById('gs-pts').textContent=G.zonePts;
     if(G.streak>=10 && !G.logros.intocable) { G.logros.intocable=true; showToast('🏆 MODO DIOS: ¡INTOCABLE! (+1000 pts)'); G.pts+=1000; saveGame(); updateHUD(); }
     if(G.streak>=3) showToast(`🔥 ¡Racha x${G.streak}! +${bonus} pts bonus`);
-  } else { if(navigator.vibrate) navigator.vibrate([50, 50, 100]);
+    if(isSpeedy) showToast('⚡ ¡ULTRA RÁPIDO! +50 pts bonus');
+  } else { 
+    if(navigator.vibrate) navigator.vibrate([50, 50, 100]);
     G.streak=0; G.histTotal++;
-    if(isGold) { G.pts = Math.max(0, G.pts - 300); showToast('📉 PREGUNTA DE ORO FALLADA (-300 pts)'); } document.querySelector('.q-card').classList.remove('shake'); void document.querySelector('.q-card').offsetWidth; document.querySelector('.q-card').classList.add('shake'); saveGame(); }
+    if(G.zone === 'final') {
+      bossHP = Math.min(100, bossHP + 10);
+      renderBossUI();
+    }
+    G.errors[qType] = (G.errors[qType] || 0) + 1;
+    if(isGold) { G.pts = Math.max(0, G.pts - 300); showToast('📉 PREGUNTA DE ORO FALLADA (-300 pts)'); } 
+    document.querySelector('.q-card')?.classList.remove('shake'); 
+    void document.querySelector('.q-card')?.offsetWidth; 
+    document.querySelector('.q-card')?.classList.add('shake'); 
+    saveGame(); 
+  }
   updateHUD();
 }
 
 function showComplete(){
   document.getElementById('gs-prog').style.width='100%';
   const pct=Math.round(G.zonePts/(ZONE_LEN*100)*100);
-  
-  // BUGFIX: stop timer
   const totalSeconds = typeof stopTimer === 'function' ? stopTimer() : 0;
   let timeBonus = 0;
   if(pct >= 80 && totalSeconds < 90) { 
@@ -1466,30 +1704,72 @@ function showComplete(){
   
   updateStars(G.zone,pct);
   if(pct>=80) shootConfetti();
-  /* update zone best */
   if(pct > (G.zoneBests[G.zone]||0)) { G.zoneBests[G.zone]=pct; saveGame(); }
   const best = G.zoneBests[G.zone]||pct;
-  const stars=['○○○','★○○','★★○','★★★'][G.stars[G.zone]];
+  const stars=['○○○','★○○','★★○','★★★'][G.stars[G.zone]||0];
   const icon=pct>=80?'🏆':pct>=50?'⚡':'🔄';
-  const title=pct>=80?'¡Zona dominada!':pct>=50?'¡Buen trabajo!':'Sigue intentando';
-  const histErrPct = G.histTotal>0 ? Math.round((1 - G.histCorrect/G.histTotal)*100) : 0;
+  
+  // Phrases & Tips
+  let phrase = "";
+  if(pct >= 80) phrase = choose(["¡Qué nivel, máquina!", "¡Eres un fenómeno de los datos!", "¡Puntaje nacional asegurado!", "¡Simplemente impecable!"]);
+  else if(pct >= 50) phrase = choose(["Buen intento, pero podemos pulirlo más.", "Vas por buen camino, maquinola.", "Casi perfecto, un par de ajustes y listo.", "Aprobado, pero el Búnker exige más."]);
+  else phrase = choose(["Hay que estudiar más, caballero.", "¿Dejaste el cerebro en el recreo?", "El Búnker no perdona errores básicos.", "A repasar la materia, ¡vamos!"]);
+
+  let errorTip = "";
+  const errorTypes = Object.entries(G.errors).sort((a,b)=>b[1]-a[1]);
+  if(errorTypes.length > 0 && pct < 100) {
+    const mainErr = errorTypes[0][0];
+    const tips = {
+      'mc': 'Ojo con las alternativas, lee bien los distractores largos.',
+      'input': 'Cuidado con la coma decimal y el redondeo.',
+      'time': '¡La presión del reloj te ganó! Respira hondo.',
+      'gen': 'Repasa los conceptos básicos de esta zona.'
+    };
+    errorTip = `<div style="margin-top:1rem;font-size:0.75rem;color:var(--text2);background:rgba(255,255,255,0.05);padding:0.6rem;border-radius:8px;border-left:3px solid var(--c5)">
+      🚩 <strong>Tip del Profe:</strong> ${tips[mainErr] || tips.gen}
+    </div>`;
+  }
+
   const body=document.getElementById('gs-body');
   body.innerHTML=`
     <div class="zone-complete">
       <div class="zc-icon">${icon}</div>
-      <div class="zc-title">${title}</div>
+      <div class="zc-title">${phrase}</div>
       <div class="zc-stars">${stars}</div>
       <div class="zc-sub">
         ⏱️ Tiempo: <strong style="color:var(--c4)">${Math.floor(totalSeconds/60)}m ${String(totalSeconds%60).padStart(2,'0')}s</strong> ${timeBonus>0 ? '<span style="color:var(--c6)">(+'+timeBonus+' pts Speedrun!)</span>' : ''}<br>
         Esta ronda: <strong style="color:var(--c6)">${G.zonePts} pts</strong> · ${pct}% correcto<br>
-        Tu mejor en esta zona: <strong style="color:var(--c1)">${best}%</strong><br>
-        <span style="color:var(--c5);font-size:0.8rem">% error histórico global: ${histErrPct}%</span>
+        Mejor histórico: <strong style="color:var(--c1)">${best}%</strong>
+        ${errorTip}
       </div>
       <div class="zc-btns">
         <button class="btn-zc primary" onclick="backToHub()">← Volver al Hub</button>
         <button class="btn-zc outline" onclick="enterZone('${G.zone}')">↺ Repetir zona</button>
       </div>
     </div>`;
+  
+  if(G.zone === 'final') {
+    document.getElementById('boss-overlay').style.display = 'none';
+    if(bossHP <= 0) {
+      body.innerHTML = `<div style="text-align:center;padding:2rem;">
+        <div style="font-size:4rem;">💀</div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:2rem;color:var(--c1);">¡JEFE DERROTADO!</h2>
+        <p style="color:var(--text2)">Has superado el desafío supremo del Profe Diego.</p>
+      </div>` + body.innerHTML;
+      shootConfetti();
+    }
+  }
+
+  updateHOF();
+}
+
+function updateHOF() {
+  const entry = { agente: G.agente, emoji: G.emoji, pts: G.pts, date: new Date().toLocaleDateString() };
+  if(!G.hof) G.hof = [];
+  G.hof.push(entry);
+  G.hof.sort((a,b) => b.pts - a.pts);
+  G.hof = G.hof.slice(0, 5);
+  saveGame();
 }
 
 /* ═══════════════════════════════════════════
@@ -1932,9 +2212,31 @@ function easterEgg(){
 const elChk = document.getElementById('chk-hardcore');
 if(elChk) elChk.checked = G.hardcore;
 
+// Daily Bonus
+const today = new Date().toDateString();
+if(G.lastLogin !== today) {
+  G.lastLogin = today;
+  G.pts += 100;
+  saveGame();
+  setTimeout(()=>showToast('🔔 ¡Bono de Lealtad! +100 XP por volver hoy'), 2000);
+}
+
+// Challenge Mode
+const urlParams = new URLSearchParams(window.location.search);
+const challengeScore = urlParams.get('challenge');
+if(challengeScore) {
+  try {
+    const s = parseInt(atob(challengeScore));
+    if(!isNaN(s)) {
+      document.getElementById('challenge-banner').style.display = 'block';
+      document.getElementById('ch-score').textContent = s;
+    }
+  } catch(e){}
+}
+
 if(!G.agente || !G.emoji) {
   setTimeout(()=>{
-    const p = prompt("ACCESO AL BÚNKER DE DATOS\\n\\nIngresa tu Nombre de Agente (Alias):", G.agente||"");
+    const p = prompt("ACCESO AL BÚNKER DE DATOS\n\nIngresa tu Nombre de Agente (Alias):", G.agente||"");
     const e = prompt("🎮 Elige UN emoji que te represente (Ej: 👾, 👻, 🤠):", G.emoji||"😎");
     G.agente = p ? p.toUpperCase().substring(0,12) : "NOVATO";
     G.emoji = e ? e.substring(0,2) : "😎";
@@ -1951,6 +2253,7 @@ if(countStars()>=6) {
   }
 }
 updateHUD();
+
 
 </script>
 </body>

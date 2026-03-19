@@ -655,6 +655,28 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
   100% { opacity: 0; transform: translateY(100vh) rotateZ(360deg); }
 }
 
+
+/* ── FIRE STREAK GLOW ── */
+.q-card.fire-streak {
+  animation: fire-glow 1s infinite alternate;
+}
+@keyframes fire-glow {
+  from { box-shadow: 0 0 10px rgba(251,191,36,0.3), inset 0 0 5px rgba(251,191,36,0.1); border-color: var(--c4); }
+  to { box-shadow: 0 0 30px rgba(249,115,22,0.7), inset 0 0 15px rgba(249,115,22,0.4); border-color: var(--c5); }
+}
+
+/* ── UI ANIMATIONS ── */
+.q-visual { animation: qslide .4s ease forwards; opacity:0; }
+.q-text { animation: qslide .5s ease forwards; opacity:0; }
+.options .opt { animation: qslide .3s ease forwards; opacity:0; }
+.options .opt:nth-child(1) { animation-delay: 0.1s; }
+.options .opt:nth-child(2) { animation-delay: 0.15s; }
+.options .opt:nth-child(3) { animation-delay: 0.2s; }
+.options .opt:nth-child(4) { animation-delay: 0.25s; }
+
+/* ── SPEEDRUN TIMER ── */
+.hud-chip.time .hv { color: var(--c4); text-shadow: 0 0 8px rgba(52,211,153,0.3); }
+
 /* SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg2); }
@@ -725,6 +747,12 @@ input { font-size: 16px !important; } /* Prevent iOS zoom */
       <div>
         <div class="hv" id="h-acc">—</div>
         <div class="hl">precisión</div>
+      </div>
+    </div>
+    <div class="hud-chip time" id="timer-chip" style="display:none">
+      <div>
+        <div class="hv" id="h-time" style="font-feature-settings: 'tnum';">00:00</div>
+        <div class="hl">tiempo</div>
       </div>
     </div>
   </div>
@@ -963,6 +991,28 @@ const fmt   = n     => Number(n.toFixed(2));
 const variance = d  => { const m=d.reduce((a,b)=>a+b,0)/d.length; return d.reduce((a,b)=>a+(b-m)**2,0)/d.length; };
 const stdev    = d  => Math.sqrt(variance(d));
 
+/* ── SPEEDRUN TIMER JS ── */
+let zoneStartTime = 0;
+let zoneTimerInt = null;
+function startTimer() {
+  document.getElementById('timer-chip').style.display = 'block';
+  document.getElementById('h-time').textContent = '00:00';
+  document.getElementById('h-time').style.color = 'var(--c4)';
+  zoneStartTime = Date.now();
+  clearInterval(zoneTimerInt);
+  zoneTimerInt = setInterval(() => {
+    const s = Math.floor((Date.now() - zoneStartTime)/1000);
+    const mm = String(Math.floor(s/60)).padStart(2,'0');
+    const ss = String(s%60).padStart(2,'0');
+    document.getElementById('h-time').textContent = mm+':'+ss;
+    if(s > 90) document.getElementById('h-time').style.color = 'var(--c5)'; // turn red if slow
+  }, 1000);
+}
+function stopTimer() {
+  clearInterval(zoneTimerInt);
+  return Math.floor((Date.now() - zoneStartTime)/1000);
+}
+
 /* ═══════════════════════════════════════════
    HUD
 ═══════════════════════════════════════════ */
@@ -1006,6 +1056,7 @@ function enterZone(zone){
   document.getElementById('gs-pts').textContent=0;
   // set accent
   document.getElementById('game-screen').style.setProperty('--accent',ZONE_COLORS[zone]);
+  startTimer();
   nextQuestion();
 }
 function backToHub(){
@@ -1138,6 +1189,7 @@ function showComplete(){
       <div class="zc-title">${title}</div>
       <div class="zc-stars">${stars}</div>
       <div class="zc-sub">
+        ⏱️ Tiempo: <strong style="color:var(--c4)">${Math.floor(totalSeconds/60)}m ${String(totalSeconds%60).padStart(2,'0')}s</strong> ${timeBonus>0 ? '<span style="color:var(--c6)">(+'+timeBonus+' pts Speedrun!)</span>' : ''}<br>
         Esta ronda: <strong style="color:var(--c6)">${G.zonePts} pts</strong> · ${pct}% correcto<br>
         Tu mejor en esta zona: <strong style="color:var(--c1)">${best}%</strong><br>
         <span style="color:var(--c5);font-size:0.8rem">% error histórico global: ${histErrPct}%</span>

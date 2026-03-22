@@ -14,17 +14,27 @@ export default {
         muted: "var(--text-secondary)",
         bd: "var(--border-color)",
         lael: {
-          blue: "#5850EC",
-          gold: "#FFCC33",
-          pink: "#EC4899", // Added pink
-          dark: "#0b1220",
-          soft: "#101a2f",
+          // ─ New 2026 brand palette ─
+          primary:  "#0D0D0D",
+          bg:       "#F8F5F0",
+          accent:   "#B85C38",
+          detail:   "#C4973E",
+          success:  "#5C6E4E",
+          // ─ Legacy (kept for /draft pages) ─
+          blue:     "#5850EC",
+          gold:     "#C4973E",
+          pink:     "#EC4899",
+          dark:     "#0D0D0D",
+          soft:     "#161412",
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'Arial', 'sans-serif'],
-        display: ['Space Grotesk', 'system-ui', 'Arial', 'sans-serif'],
-        accent: ['Outfit', 'system-ui', 'Arial', 'sans-serif'],
+        sans: ['DM Sans', 'system-ui', 'Arial', 'sans-serif'],
+        display: ['Playfair Display', 'Georgia', 'serif'],
+        accent: ['DM Sans', 'system-ui', 'Arial', 'sans-serif'],
+        // Legacy:
+        grotesk: ['Space Grotesk', 'system-ui', 'Arial', 'sans-serif'],
+        inter: ['Inter', 'system-ui', 'Arial', 'sans-serif'],
       },
       boxShadow: {
         lael: "0 8px 24px rgba(2,6,23,.25)",

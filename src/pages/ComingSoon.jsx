@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { createClient } from "@supabase/supabase-js";
 import logoBlanco from "../assets/img/Logos/lael-inst-blanco.png";
 
@@ -7,112 +7,11 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-// ─── Custom Cursor ────────────────────────────────────────────────────────────
-function CustomCursor() {
-  const dotRef = useRef(null);
-  const pos = useRef({ x: -100, y: -100 });
-  const target = useRef({ x: -100, y: -100 });
-  const rafRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMobile(window.matchMedia("(pointer: coarse)").matches);
-  }, []);
-
-  useEffect(() => {
-    if (isMobile) return;
-    const lerp = (a, b, t) => a + (b - a) * t;
-    const onMove = (e) => { target.current = { x: e.clientX, y: e.clientY }; };
-    const tick = () => {
-      pos.current.x = lerp(pos.current.x, target.current.x, 0.12);
-      pos.current.y = lerp(pos.current.y, target.current.y, 0.12);
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${pos.current.x - 3}px, ${pos.current.y - 3}px)`;
-      }
-      rafRef.current = requestAnimationFrame(tick);
-    };
-    window.addEventListener("mousemove", onMove);
-    document.body.style.cursor = "none";
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(rafRef.current);
-      document.body.style.cursor = "";
-    };
-  }, [isMobile]);
-
-  if (isMobile) return null;
-  return (
-    <div ref={dotRef} style={{
-      position: "fixed", top: 0, left: 0,
-      width: 6, height: 6, borderRadius: "50%",
-      background: "#C4973E", pointerEvents: "none",
-      zIndex: 9999, willChange: "transform",
-    }} />
-  );
-}
-
-// ─── Grain Canvas ─────────────────────────────────────────────────────────────
-function GrainCanvas() {
-  const ref = useRef(null);
-  const raf = useRef(null);
-
-  useEffect(() => {
-    const canvas = ref.current;
-    const ctx = canvas.getContext("2d");
-    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
-    resize();
-    window.addEventListener("resize", resize);
-
-    let f = 0;
-    const draw = () => {
-      f++;
-      const { width: W, height: H } = canvas;
-      const img = ctx.createImageData(W, H);
-      const d = img.data;
-      for (let i = 0; i < d.length; i += 4) {
-        const v = Math.floor(Math.random() * 22);
-        d[i] = v + 1; d[i+1] = v; d[i+2] = v - 1;
-        d[i+3] = f % 2 === 0 ? 16 : 12;
-      }
-      ctx.putImageData(img, 0, 0);
-      raf.current = requestAnimationFrame(draw);
-    };
-    draw();
-    return () => { cancelAnimationFrame(raf.current); window.removeEventListener("resize", resize); };
-  }, []);
-
-  return (
-    <canvas ref={ref} style={{
-      position: "fixed", inset: 0, width: "100vw", height: "100vh",
-      zIndex: 0, pointerEvents: "none",
-    }} />
-  );
-}
-
-// ─── Reveal Hook (Intersection Observer) ─────────────────────────────────────
-function useReveal(threshold = 0.1) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return [ref, visible];
-}
-
-// ─── Email Form ───────────────────────────────────────────────────────────────
-function EmailForm() {
+// Form Component (adapted for the technical notification box style)
+function NotificationForm() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
   const [msg, setMsg] = useState("");
-  const [focused, setFocused] = useState(false);
 
   const submit = async (e) => {
     e.preventDefault();
@@ -121,11 +20,12 @@ function EmailForm() {
     const { error } = await supabase
       .from("coming_soon_emails")
       .insert([{ email: email.trim().toLowerCase() }]);
+    
     if (error) {
       if (error.code === "23505") { setMsg("Ya estás en la lista."); setStatus("success"); }
-      else { setMsg("Algo salió mal. Intenta de nuevo."); setStatus("idle"); }
+      else { setMsg("Error de conexión."); setStatus("idle"); }
     } else {
-      setMsg("Perfecto. Serás el primero en saberlo.");
+      setMsg("Confirmado. Notificación programada.");
       setStatus("success");
     }
   };
@@ -133,44 +33,30 @@ function EmailForm() {
   const isSuccess = status === "success";
 
   return (
-    <div>
-      <form onSubmit={submit} style={{ display: "flex", alignItems: "flex-end", gap: 0 }}>
-        <div style={{ flex: 1, borderBottom: `1px solid ${focused ? "#B85C38" : "rgba(248,245,240,0.18)"}`, transition: "border-color 0.3s ease" }}>
-          <input
-            type="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            placeholder="Tu correo electrónico"
-            disabled={isSuccess}
-            style={{
-              width: "100%",
-              background: "transparent",
-              border: "none",
-              outline: "none",
-              padding: "12px 0",
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "1rem",
-              fontWeight: 300,
-              color: "#F8F5F0",
-              letterSpacing: "0.01em",
-            }}
-          />
-        </div>
-        <ArrowButton disabled={isSuccess || status === "loading"} type="submit" loading={status === "loading"} success={isSuccess} />
+    <div className="flex flex-col items-center w-full max-w-sm mt-8">
+      <form onSubmit={submit} className="w-full flex flex-col gap-4">
+        <input
+          type="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="INGRESE SU CORREO ELECTRÓNICO"
+          disabled={isSuccess}
+          className="w-full bg-transparent border border-[#0D0D0D]/20 text-[#0D0D0D] px-4 py-3 font-sans text-xs uppercase tracking-widest text-center focus:outline-none focus:border-[#B85C38] transition-colors placeholder:text-[#0D0D0D]/40"
+        />
+        <button
+          type="submit"
+          disabled={isSuccess || status === "loading"}
+          className={`w-full px-12 py-4 text-[11px] uppercase tracking-[0.3em] font-bold transition-all duration-500 hover:cursor-pointer
+            ${isSuccess 
+              ? "bg-[#5C6E4E] text-[#F8F5F0]" 
+              : "bg-[#0D0D0D] text-[#F8F5F0] border border-[#0D0D0D] hover:bg-[#B85C38] hover:border-[#B85C38]"}`}
+        >
+          {status === "loading" ? "PROCESANDO..." : isSuccess ? "SISTEMA ACTUALIZADO" : "NOTIFICARME AL REGRESO"}
+        </button>
       </form>
       {msg && (
-        <p style={{
-          marginTop: 14,
-          fontFamily: "'DM Sans', sans-serif",
-          fontSize: "0.78rem",
-          fontWeight: 300,
-          color: isSuccess ? "#C4973E" : "#B85C38",
-          opacity: 0.85,
-          letterSpacing: "0.03em",
-        }}>
+        <p className={`mt-4 font-sans text-[10px] font-bold uppercase tracking-widest ${isSuccess ? "text-[#5C6E4E]" : "text-[#B85C38]"}`}>
           {msg}
         </p>
       )}
@@ -178,348 +64,199 @@ function EmailForm() {
   );
 }
 
-// ─── Arrow Button ─────────────────────────────────────────────────────────────
-function ArrowButton({ disabled, type, loading, success }) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <button
-      type={type}
-      disabled={disabled}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        background: "none",
-        border: "none",
-        cursor: disabled ? "default" : "pointer",
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        paddingBottom: 12,
-        paddingLeft: 24,
-        fontFamily: "'DM Sans', sans-serif",
-        fontSize: "0.9rem",
-        fontWeight: 500,
-        letterSpacing: "0.03em",
-        color: success ? "#5C6E4E" : "#B85C38",
-        whiteSpace: "nowrap",
-        transition: "color 0.3s ease",
-      }}
-    >
-      <span>{loading ? "..." : success ? "Listo" : "Avisarme"}</span>
-      <span style={{
-        display: "inline-block",
-        transition: "transform 0.25s cubic-bezier(0.22, 1, 0.36, 1)",
-        transform: hovered && !disabled ? "translateX(4px)" : "translateX(0)",
-      }}>
-        {success ? "✓" : "→"}
-      </span>
-    </button>
-  );
-}
-
-// ─── Divider ──────────────────────────────────────────────────────────────────
-function Divider() {
-  return (
-    <div style={{
-      height: 1,
-      background: "linear-gradient(90deg, transparent 0%, #C4973E 40%, #B85C38 60%, transparent 100%)",
-      width: "100vw",
-      marginLeft: "calc(50% - 50vw)",
-      position: "relative",
-    }} />
-  );
-}
-
-// ─── MAIN ─────────────────────────────────────────────────────────────────────
 export default function ComingSoon() {
-  const [manifestoRef, manifestoVisible] = useReveal(0.1);
-  const [formRef, formVisible] = useReveal(0.1);
-
   return (
-    <>
+    <div className="bg-[#0D0D0D] text-[#F8F5F0] font-sans selection:bg-[#B85C38] selection:text-[#F8F5F0] min-h-screen">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500&display=swap');
-
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        /* ─── Clip-path reveal ─── */
-        @keyframes revealMask {
-          from { clip-path: inset(0 100% 0 0); opacity: 1; }
-          to   { clip-path: inset(0 0% 0 0);   opacity: 1; }
-        }
-        @keyframes fadeSlideUp {
-          from { opacity: 0; transform: translateY(24px); }
-          to   { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to   { opacity: 1; }
-        }
-
-        .reveal-mask {
-          clip-path: inset(0 100% 0 0);
-          animation: revealMask 1.2s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-        }
-
-        /* staggered wrappers */
-        .entry-0 { opacity: 0; animation: fadeSlideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards; }
-        .entry-1 { opacity: 0; animation: fadeSlideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.2s  forwards; }
-        .entry-2 { opacity: 0; animation: fadeSlideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s  forwards; }
-        .entry-3 { opacity: 0; animation: fadeSlideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.75s forwards; }
-        .entry-4 { opacity: 0; animation: fadeSlideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.0s  forwards; }
-        .entry-5 { opacity: 0; animation: fadeSlideUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.2s  forwards; }
-
-        /* manifesto reveal via IntersectionObserver */
-        .manifesto-line {
-          opacity: 0;
-          transform: translateY(14px);
-          transition: opacity 0.75s ease, transform 0.75s ease;
-        }
-        .manifesto-line.visible { opacity: 0.8; transform: translateY(0); }
-        .manifesto-line.visible:nth-child(2) { transition-delay: 0.22s; }
-        .manifesto-line.visible:nth-child(3) { transition-delay: 0.44s; }
-
-        /* form reveal */
-        .form-block {
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-        .form-block.visible { opacity: 1; transform: translateY(0); }
-
-        /* Placeholder */
-        input::placeholder { color: rgba(248,245,240,0.25); }
-
-        @media (max-width: 640px) {
-          .title-main { font-size: 2.8rem !important; }
-          .title-accent { font-size: 3.4rem !important; }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;700&display=swap');
+        
+        body { background-color: #0D0D0D; color: #F8F5F0; -webkit-font-smoothing: antialiased; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .font-sans, .font-body, .font-label { font-family: 'DM Sans', sans-serif; }
+        
+        .writing-vertical { writing-mode: vertical-rl; text-orientation: mixed; }
+        .ghost-border { border-color: rgba(186, 186, 176, 0.1); }
+        .gold-divider { border-color: rgba(196, 151, 62, 0.3); }
+        
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0D0D0D; }
+        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #B85C38; }
+        
+        /* Override Tailwind if class isn't fully compiled */
+        .tracking-widest { letter-spacing: 0.1em; }
       `}</style>
 
-      <GrainCanvas />
-      <CustomCursor />
-
-      {/* Page shell */}
-      <div style={{
-        position: "relative",
-        zIndex: 1,
-        minHeight: "100vh",
-        background: "#0D0D0D",
-        color: "#F8F5F0",
-        fontFamily: "'DM Sans', sans-serif",
-        overflowX: "hidden",
-      }}>
-
-        {/* ── Vignette glow (radial, top-left, very subtle) ── */}
-        <div style={{
-          position: "fixed",
-          top: "-200px",
-          left: "-100px",
-          width: 800,
-          height: 800,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(184,92,56,0.06) 0%, transparent 70%)",
-          pointerEvents: "none",
-          zIndex: 0,
-        }} />
-
-        {/* ── Content column ── */}
-        <div style={{
-          position: "relative",
-          zIndex: 1,
-          maxWidth: 720,
-          margin: "0 auto",
-          padding: "clamp(56px, 10vw, 100px) clamp(24px, 6vw, 0px)",
-          display: "flex",
-          flexDirection: "column",
-          gap: 0,
-        }}>
-
-          {/* LOGO */}
-          <div className="entry-0" style={{ marginBottom: "clamp(56px, 10vw, 96px)", display: "flex", justifyContent: "center" }}>
-            <img
-              src={logoBlanco}
-              alt="Instituto Lael"
-              style={{ height: 48, display: "block" }}
-            />
-          </div>
-
-          {/* HERO */}
-          <section className="entry-1" style={{ marginBottom: "clamp(56px, 9vw, 88px)" }}>
-
-            {/* Subtitle above */}
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "0.68rem",
-              fontWeight: 400,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "#F8F5F0",
-              opacity: 0.35,
-              marginBottom: "clamp(20px, 3.5vw, 28px)",
-            }}>
-              Instituto Lael · Relanzamiento 2026
-            </p>
-
-            {/* Title with clip-path reveal */}
-            <h1 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 400 }}>
-              <span
-                className="reveal-mask"
-                style={{
-                  display: "block",
-                  fontSize: "clamp(2.8rem, 4.5vw, 4.5rem)",
-                  lineHeight: 1.15,
-                  color: "#F8F5F0",
-                  letterSpacing: "-0.015em",
-                  animationDelay: "0.3s",
-                }}
-              >
-                La educación que merecías
-              </span>
-              <span
-                className="reveal-mask"
-                style={{
-                  display: "block",
-                  fontSize: "clamp(2.8rem, 4.5vw, 4.5rem)",
-                  lineHeight: 1.15,
-                  color: "#F8F5F0",
-                  letterSpacing: "-0.015em",
-                  animationDelay: "0.48s",
-                }}
-              >
-                siempre existió.
-              </span>
-              <span
-                className="reveal-mask"
-                style={{
-                  display: "block",
-                  fontSize: "clamp(2.8rem, 4.5vw, 4.5rem)",
-                  lineHeight: 1.15,
-                  color: "#F8F5F0",
-                  letterSpacing: "-0.015em",
-                  animationDelay: "0.62s",
-                }}
-              >
-                Solo estaba esperando
-              </span>
-              {/* Accent line — larger, italic, gold */}
-              <em
-                className="reveal-mask title-accent"
-                style={{
-                  display: "block",
-                  fontSize: "clamp(3.4rem, 5.5vw, 5.5rem)",
-                  lineHeight: 1.1,
-                  fontStyle: "italic",
-                  color: "#C4973E",
-                  letterSpacing: "-0.02em",
-                  animationDelay: "0.8s",
-                  marginTop: "0.1em",
-                }}
-              >
-                volver mejor.
-              </em>
-            </h1>
-          </section>
-
-          {/* DIVIDER 1 */}
-          <div className="entry-2" style={{ marginBottom: "clamp(48px, 8vw, 72px)" }}>
-            <Divider />
-          </div>
-
-          {/* MANIFIESTO */}
-          <section
-            ref={manifestoRef}
-            className="entry-3"
-            style={{ marginBottom: "clamp(56px, 9vw, 88px)" }}
-          >
-            <p style={{
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "0.65rem",
-              fontWeight: 400,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: "#B85C38",
-              opacity: 0.7,
-              marginBottom: "clamp(28px, 4vw, 36px)",
-            }}>
-              Manifiesto
-            </p>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "clamp(22px, 3.5vw, 30px)" }}>
-              {[
-                "No creemos en la educación que domestica. Creemos en la que despierta.",
-                "Luego paramos. Porque a veces parar es la decisión más honesta.",
-                "Hoy volvemos con más claridad, mejor estructura y una sola pregunta: ¿Qué tan lejos puedes llegar si alguien te da las herramientas correctas?"
-              ].map((line, i) => (
-                <p
-                  key={i}
-                  className={`manifesto-line${manifestoVisible ? " visible" : ""}`}
-                  style={{
-                    fontFamily: "'DM Sans', sans-serif",
-                    fontSize: "1.1rem",
-                    fontWeight: 300,
-                    lineHeight: 1.9,
-                    color: "#F8F5F0",
-                    transitionDelay: `${i * 0.22}s`,
-                  }}
-                >
-                  {line}
-                </p>
-              ))}
-            </div>
-          </section>
-
-          {/* DIVIDER 2 */}
-          <div className="entry-4" style={{ marginBottom: "clamp(48px, 8vw, 72px)" }}>
-            <Divider />
-          </div>
-
-          {/* FORMULARIO */}
-          <section
-            ref={formRef}
-            className={`entry-5 form-block${formVisible ? " visible" : ""}`}
-            style={{ marginBottom: "clamp(64px, 11vw, 104px)" }}
-          >
-            <h2 style={{
-              fontFamily: "'Playfair Display', serif",
-              fontSize: "clamp(1.6rem, 3vw, 2rem)",
-              fontWeight: 400,
-              fontStyle: "italic",
-              color: "#F8F5F0",
-              letterSpacing: "-0.01em",
-              marginBottom: "clamp(28px, 4vw, 40px)",
-              lineHeight: 1.25,
-            }}>
-              No te pierdas el regreso.
-            </h2>
-            <EmailForm />
-          </section>
-
-          {/* FOOTER */}
-          <footer style={{
-            borderTop: "1px solid rgba(248,245,240,0.07)",
-            paddingTop: 24,
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 12,
-          }}>
-            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem", fontWeight: 300, color: "#F8F5F0", opacity: 0.25, letterSpacing: "0.04em" }}>
-              @institutolael
-            </span>
-            <a
-              href="mailto:contacto@institutolael.cl"
-              style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "0.72rem", fontWeight: 300, color: "#F8F5F0", opacity: 0.25, letterSpacing: "0.02em", textDecoration: "none", transition: "opacity 0.3s" }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.6"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "0.25"}
-            >
-              contacto@institutolael.cl
-            </a>
-          </footer>
-
+      {/* Top AppBar */}
+      <header className="fixed top-0 z-50 flex justify-between items-center w-full px-6 md:px-12 h-20 bg-[#0D0D0D]/90 backdrop-blur-md border-b border-[#F8F5F0]/10">
+        <div className="flex items-center gap-4">
+          <img 
+            src={logoBlanco} 
+            alt="Instituto Lael" 
+            className="h-8 w-auto opacity-90"
+          />
+          <span className="font-serif text-xl md:text-2xl font-black text-[#F8F5F0] tracking-tighter">INSTITUTO</span>
         </div>
-      </div>
-    </>
+        <div className="hidden md:flex items-center gap-8">
+          <span className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-[#F8F5F0]/40">Status: Reestructuring_Phase_01</span>
+          <div className="h-4 w-[1px] bg-[#F8F5F0]/20"></div>
+          <span className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-[#F8F5F0]/40">Est. 2026</span>
+        </div>
+      </header>
+
+      <main className="pt-20">
+        
+        {/* HERO SECTION */}
+        <section className="min-h-[90vh] flex flex-col justify-center px-6 md:px-12 relative overflow-hidden">
+          <div className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none">
+            <span className="writing-vertical font-serif text-[120px] md:text-[180px] leading-none select-none">MMXXVI</span>
+          </div>
+          
+          <div className="max-w-7xl w-full mx-auto grid grid-cols-12 gap-8 items-end z-10">
+            <div className="col-span-12 lg:col-span-10">
+              <label className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.4em] text-[#B85C38] mb-6 md:mb-8 block">MANIFIESTO DE REESTRUCTURACIÓN</label>
+              <h1 className="font-serif text-[12vw] md:text-[8vw] leading-[0.9] font-black tracking-tighter mb-8 md:mb-12">
+                2026: El Silencio es <br />
+                <span className="italic text-[#C4973E] font-normal">Construcción.</span>
+              </h1>
+              <p className="font-sans text-base md:text-xl leading-relaxed text-[#F8F5F0]/70 max-w-2xl font-light">
+                Nos tomamos un tiempo para reestructurar nuestra infraestructura académica. No es una ausencia, es una redefinición. Estamos reescribiendo la forma en que aprendes para volver con tecnología de vanguardia y un propósito inquebrantable.
+              </p>
+            </div>
+          </div>
+          
+          <div className="max-w-7xl w-full mx-auto mt-16 md:mt-24 border-t ghost-border border-t-[rgba(186,186,176,0.1)] pt-8 md:pt-12 grid grid-cols-12 gap-8 z-10">
+            <div className="col-span-12 md:col-span-4">
+              <p className="font-sans text-[10px] font-bold uppercase tracking-[0.1em] text-[#F8F5F0]/40">Estado de Operación</p>
+              <p className="text-xs md:text-sm font-medium mt-2 tracking-wider">FASE DE REDEFINICIÓN TÉCNICA</p>
+            </div>
+            <div className="col-span-12 md:col-span-4">
+              <p className="font-sans text-[10px] font-bold uppercase tracking-[0.1em] text-[#F8F5F0]/40">Ubicación Múltiple</p>
+              <p className="text-xs md:text-sm font-medium mt-2 tracking-wider">SANTIAGO, CHILE / ECOSISTEMA DIGITAL</p>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 1: LA VISIÓN */}
+        <section className="py-24 md:py-48 px-6 md:px-12 bg-[#121212]">
+          <div className="max-w-4xl mx-auto">
+            <label className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.4em] text-[#C4973E] mb-12 md:mb-16 block text-center">I. LA VISIÓN</label>
+            <h2 className="font-serif text-4xl md:text-6xl text-center mb-16 md:mb-24 tracking-tight">Tecnología con Alma</h2>
+            
+            <div className="space-y-0">
+              <div className="py-8 md:py-12 border-t gold-divider group hover:bg-[#1A1A1A] transition-colors duration-500 box-border">
+                <div className="grid grid-cols-12 gap-4 md:gap-8 items-start md:items-center px-4">
+                  <span className="col-span-12 md:col-span-1 font-serif italic text-2xl text-[#F8F5F0] opacity-30">01</span>
+                  <h3 className="col-span-12 md:col-span-4 font-sans text-xs font-bold uppercase tracking-[0.1em] text-[#B85C38]">Propósito Técnico</h3>
+                  <p className="col-span-12 md:col-span-7 font-sans text-[#F8F5F0]/70 font-light leading-relaxed text-sm md:text-base">Desarrollamos herramientas que no solo procesan información, sino que elevan la capacidad crítica del estudiante chileno en la era de la IA.</p>
+                </div>
+              </div>
+              
+              <div className="py-8 md:py-12 border-t gold-divider group hover:bg-[#1A1A1A] transition-colors duration-500 box-border">
+                <div className="grid grid-cols-12 gap-4 md:gap-8 items-start md:items-center px-4">
+                  <span className="col-span-12 md:col-span-1 font-serif italic text-2xl text-[#F8F5F0] opacity-30">02</span>
+                  <h3 className="col-span-12 md:col-span-4 font-sans text-xs font-bold uppercase tracking-[0.1em] text-[#B85C38]">Arquitectura Humana</h3>
+                  <p className="col-span-12 md:col-span-7 font-sans text-[#F8F5F0]/70 font-light leading-relaxed text-sm md:text-base">El código es secundario al carácter. Diseñamos sistemas que priorizan la ética y la trascendencia metodológica sobre la métrica vacía.</p>
+                </div>
+              </div>
+              
+              <div className="py-8 md:py-12 border-t border-b gold-divider group hover:bg-[#1A1A1A] transition-colors duration-500 box-border">
+                <div className="grid grid-cols-12 gap-4 md:gap-8 items-start md:items-center px-4">
+                  <span className="col-span-12 md:col-span-1 font-serif italic text-2xl text-[#F8F5F0] opacity-30">03</span>
+                  <h3 className="col-span-12 md:col-span-4 font-sans text-xs font-bold uppercase tracking-[0.1em] text-[#B85C38]">Silencio Operativo</h3>
+                  <p className="col-span-12 md:col-span-7 font-sans text-[#F8F5F0]/70 font-light leading-relaxed text-sm md:text-base">Eliminamos el ruido publicitario para concentrarnos en la ingeniería pedagógica pura. La calidad de la enseñanza es nuestra única prioridad.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 2: THE MANIFESTO / LIGHT THEME BREAKOUT */}
+        <section className="py-24 md:py-48 px-6 md:px-12 bg-[#F8F5F0] text-[#0D0D0D]">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
+            
+            <div className="order-2 md:order-1 space-y-8 md:space-y-12">
+              <div className="space-y-6">
+                <h2 className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.4em] text-[#B85C38]">II. El Manifiesto</h2>
+                <p className="font-serif text-3xl md:text-5xl leading-tight tracking-tight text-[#0D0D0D]">
+                  Un año para redefinir la educación en Chile. <br/>
+                  <span className="italic text-[#C4973E]">No somos un folleto, somos un ecosistema.</span>
+                </p>
+              </div>
+              
+              <p className="font-sans text-sm md:text-base leading-relaxed text-[#0D0D0D]/80 max-w-md font-light">
+                El 2026 marca el fin de la educación como consumo masivo. Entramos en la era de la precisión académica, donde cada bit de información tiene un propósito ético. Abrazamos el silencio mediático para perfeccionar la arquitectura del aprendizaje y construir desde los cimientos.
+              </p>
+            </div>
+            
+            <div className="order-1 md:order-2 ghost-border border border-[#0D0D0D]/10 bg-[#FCF9F3] p-8 md:p-16 flex flex-col items-center text-center gap-8 shadow-xl">
+              <span className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.4em] text-[#0D0D0D]/60">Centro de Operaciones</span>
+              
+              <a className="group flex flex-col items-center gap-4 py-4" href="mailto:contacto@institutolael.cl">
+                <span className="font-serif text-2xl md:text-4xl text-[#0D0D0D] group-hover:text-[#B85C38] transition-colors duration-500">
+                  contacto@institutolael.cl
+                </span>
+                <div className="h-[1px] w-12 bg-[#0D0D0D]/20 group-hover:w-full group-hover:bg-[#B85C38] transition-all duration-700"></div>
+              </a>
+              
+              <NotificationForm />
+            </div>
+
+          </div>
+        </section>
+
+        {/* SECTION 3: THE COMMITMENT */}
+        <section className="py-32 md:py-56 px-6 md:px-12 bg-[#0D0D0D] flex items-center justify-center text-center relative overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none">
+            <span className="font-serif text-[40vw] font-black italic select-none">LAEL</span>
+          </div>
+          
+          <div className="max-w-4xl z-10 flex flex-col items-center">
+            <label className="font-sans text-[10px] md:text-[11px] font-bold uppercase tracking-[0.6em] text-[#C4973E] mb-12 block">III. EL COMPROMISO FUNDAMENTAL</label>
+            
+            <blockquote className="font-serif text-2xl md:text-4xl lg:text-5xl italic leading-tight text-[#F8F5F0] mb-16 opacity-90">
+              "El Espíritu del Señor está sobre mí, por cuanto me ha ungido para dar buenas nuevas; me ha enviado a sanar a los quebrantados de corazón; a pregonar libertad a los cautivos, y vista a los ciegos."
+            </blockquote>
+            
+            <div className="flex flex-col gap-3 items-center mt-8">
+              <span className="font-sans text-[9px] font-bold uppercase tracking-[0.5em] text-[#F8F5F0]/40">Foundation Principles</span>
+              <span className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-[#B85C38]">LUCAS 4:18 | JEREMÍAS 33:3</span>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="bg-[#0D0D0D] text-[#F8F5F0] border-t border-[#F8F5F0]/10 flex flex-col items-center gap-8 md:gap-12 w-full py-16 md:py-24 px-6 md:px-12">
+        <div className="flex items-center gap-4 opacity-50 mb-4">
+          <img 
+            src={logoBlanco} 
+            alt="Instituto Lael Icon" 
+            className="h-8 w-auto"
+          />
+          <span className="font-serif italic text-[#C4973E] text-xl">INSTITUTO</span>
+        </div>
+        
+        <div className="flex flex-wrap justify-center gap-6 md:gap-12">
+          <a href="#" className="font-sans text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 hover:opacity-100 hover:text-[#C4973E] transition-all">TÉRMINOS TÉCNICOS</a>
+          <a href="#" className="font-sans text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 hover:opacity-100 hover:text-[#C4973E] transition-all">PRIVACIDAD DE DATOS</a>
+          <a href="#" className="font-sans text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 hover:opacity-100 hover:text-[#C4973E] transition-all">ARCHIVO ACADÉMICO</a>
+        </div>
+        
+        <div className="h-[1px] w-12 bg-[#F8F5F0]/10"></div>
+        
+        <p className="font-sans text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] leading-loose text-center opacity-40">
+          © 2024-2026 INSTITUTO LAEL. SANTIAGO, CHILE. LUCAS 4:18.
+        </p>
+        
+        {/* Technical Marker */}
+        <div className="flex items-center gap-4 text-[#F8F5F0]/20 mt-4 md:mt-0">
+          <span className="font-sans text-[8px] md:text-[9px] tracking-widest font-bold uppercase">BUILD v.2026.0.1</span>
+          <div className="w-1 h-1 rounded-full bg-[#B85C38]/60"></div>
+          <span className="font-sans text-[8px] md:text-[9px] tracking-widest font-bold uppercase">SANTIAGO_CL</span>
+        </div>
+      </footer>
+    </div>
   );
 }

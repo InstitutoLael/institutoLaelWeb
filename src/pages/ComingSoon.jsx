@@ -94,9 +94,8 @@ export default function ComingSoon() {
           <img 
             src={logoBlanco} 
             alt="Instituto Lael" 
-            className="h-8 w-auto opacity-90"
+            className="h-10 md:h-12 w-auto opacity-100"
           />
-          <span className="font-serif text-xl md:text-2xl font-black text-[#F8F5F0] tracking-tighter">INSTITUTO</span>
         </div>
         <div className="hidden md:flex items-center gap-8">
           <span className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-[#F8F5F0]/40">Status: Reestructuring_Phase_01</span>
@@ -120,9 +119,14 @@ export default function ComingSoon() {
                 2026: El Silencio es <br />
                 <span className="italic text-[#C4973E] font-normal">Construcción.</span>
               </h1>
-              <p className="font-sans text-base md:text-xl leading-relaxed text-[#F8F5F0]/70 max-w-2xl font-light">
-                Nos tomamos un tiempo para reestructurar nuestra infraestructura académica. No es una ausencia, es una redefinición. Estamos reescribiendo la forma en que aprendes para volver con tecnología de vanguardia y un propósito inquebrantable.
-              </p>
+              <div className="space-y-6">
+                <span className="inline-block border border-[#C4973E] text-[#C4973E] px-3 py-1 font-sans text-[9px] font-bold uppercase tracking-widest">
+                  Comunicado Oficial
+                </span>
+                <p className="font-sans text-base md:text-lg leading-relaxed text-[#F8F5F0]/80 max-w-2xl font-light">
+                  Durante el año 2026, nuestros programas de formación online se encuentran en pausa en virtud de un proceso de reestructuración y actualización académica. Agradecemos la comprensión de quienes han sido parte de este proyecto. Seguiremos informando a través de nuestros canales.
+                </p>
+              </div>
             </div>
           </div>
           
@@ -148,24 +152,24 @@ export default function ComingSoon() {
               <div className="py-8 md:py-12 border-t gold-divider group hover:bg-[#1A1A1A] transition-colors duration-500 box-border">
                 <div className="grid grid-cols-12 gap-4 md:gap-8 items-start md:items-center px-4">
                   <span className="col-span-12 md:col-span-1 font-serif italic text-2xl text-[#F8F5F0] opacity-30">01</span>
-                  <h3 className="col-span-12 md:col-span-4 font-sans text-xs font-bold uppercase tracking-[0.1em] text-[#B85C38]">Propósito Técnico</h3>
-                  <p className="col-span-12 md:col-span-7 font-sans text-[#F8F5F0]/70 font-light leading-relaxed text-sm md:text-base">Desarrollamos herramientas que no solo procesan información, sino que elevan la capacidad crítica del estudiante chileno en la era de la IA.</p>
+                  <h3 className="col-span-12 md:col-span-4 font-sans text-xs font-bold uppercase tracking-[0.1em] text-[#B85C38]">El Ecosistema</h3>
+                  <p className="col-span-12 md:col-span-7 font-sans text-[#F8F5F0]/70 font-light leading-relaxed text-sm md:text-base">Lael nunca fue solo un preuniversitario. Somos el primer ecosistema educativo online de Chile diseñado para la generación que el sistema decidió ignorar.</p>
                 </div>
               </div>
               
               <div className="py-8 md:py-12 border-t gold-divider group hover:bg-[#1A1A1A] transition-colors duration-500 box-border">
                 <div className="grid grid-cols-12 gap-4 md:gap-8 items-start md:items-center px-4">
                   <span className="col-span-12 md:col-span-1 font-serif italic text-2xl text-[#F8F5F0] opacity-30">02</span>
-                  <h3 className="col-span-12 md:col-span-4 font-sans text-xs font-bold uppercase tracking-[0.1em] text-[#B85C38]">Arquitectura Humana</h3>
-                  <p className="col-span-12 md:col-span-7 font-sans text-[#F8F5F0]/70 font-light leading-relaxed text-sm md:text-base">El código es secundario al carácter. Diseñamos sistemas que priorizan la ética y la trascendencia metodológica sobre la métrica vacía.</p>
+                  <h3 className="col-span-12 md:col-span-4 font-sans text-xs font-bold uppercase tracking-[0.1em] text-[#B85C38]">Propósito Integral</h3>
+                  <p className="col-span-12 md:col-span-7 font-sans text-[#F8F5F0]/70 font-light leading-relaxed text-sm md:text-base">Nuestra base es clara: la PAES es la puerta de entrada gratuita, mientras que los idiomas, la IA, la inclusión y la comunidad son el motor que lo sostiene todo.</p>
                 </div>
               </div>
               
               <div className="py-8 md:py-12 border-t border-b gold-divider group hover:bg-[#1A1A1A] transition-colors duration-500 box-border">
                 <div className="grid grid-cols-12 gap-4 md:gap-8 items-start md:items-center px-4">
                   <span className="col-span-12 md:col-span-1 font-serif italic text-2xl text-[#F8F5F0] opacity-30">03</span>
-                  <h3 className="col-span-12 md:col-span-4 font-sans text-xs font-bold uppercase tracking-[0.1em] text-[#B85C38]">Silencio Operativo</h3>
-                  <p className="col-span-12 md:col-span-7 font-sans text-[#F8F5F0]/70 font-light leading-relaxed text-sm md:text-base">Eliminamos el ruido publicitario para concentrarnos en la ingeniería pedagógica pura. La calidad de la enseñanza es nuestra única prioridad.</p>
+                  <h3 className="col-span-12 md:col-span-4 font-sans text-xs font-bold uppercase tracking-[0.1em] text-[#B85C38]">Fe Activa</h3>
+                  <p className="col-span-12 md:col-span-7 font-sans text-[#F8F5F0]/70 font-light leading-relaxed text-sm md:text-base">La fe es nuestro fundamento, no nuestra etiqueta. Llegamos a todo Chile con calidad y calidez, construyendo trayectorias que cambian la forma de ver el mundo.</p>
                 </div>
               </div>
             </div>
@@ -229,13 +233,12 @@ export default function ComingSoon() {
 
       {/* FOOTER */}
       <footer className="bg-[#0D0D0D] text-[#F8F5F0] border-t border-[#F8F5F0]/10 flex flex-col items-center gap-8 md:gap-12 w-full py-16 md:py-24 px-6 md:px-12">
-        <div className="flex items-center gap-4 opacity-50 mb-4">
+        <div className="flex flex-col items-center gap-4 opacity-70 mb-4">
           <img 
             src={logoBlanco} 
             alt="Instituto Lael Icon" 
-            className="h-8 w-auto"
+            className="h-10 md:h-12 w-auto"
           />
-          <span className="font-serif italic text-[#C4973E] text-xl">INSTITUTO</span>
         </div>
         
         <div className="flex flex-wrap justify-center gap-6 md:gap-12">

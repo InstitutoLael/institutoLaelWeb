@@ -7,50 +7,7 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-// ─── Custom Cursor ────────────────────────────────────────────────────────────
-function CustomCursor() {
-  const dotRef = useRef(null);
-  const pos = useRef({ x: -100, y: -100 });
-  const target = useRef({ x: -100, y: -100 });
-  const rafRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMobile(window.matchMedia("(pointer: coarse)").matches);
-  }, []);
-
-  useEffect(() => {
-    if (isMobile) return;
-    const lerp = (a, b, t) => a + (b - a) * t;
-    const onMove = (e) => { target.current = { x: e.clientX, y: e.clientY }; };
-    const tick = () => {
-      pos.current.x = lerp(pos.current.x, target.current.x, 0.12);
-      pos.current.y = lerp(pos.current.y, target.current.y, 0.12);
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${pos.current.x - 3}px, ${pos.current.y - 3}px)`;
-      }
-      rafRef.current = requestAnimationFrame(tick);
-    };
-    window.addEventListener("mousemove", onMove);
-    document.body.style.cursor = "none";
-    rafRef.current = requestAnimationFrame(tick);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(rafRef.current);
-      document.body.style.cursor = "";
-    };
-  }, [isMobile]);
-
-  if (isMobile) return null;
-  return (
-    <div ref={dotRef} style={{
-      position: "fixed", top: 0, left: 0,
-      width: 6, height: 6, borderRadius: "50%",
-      background: "#C4973E", pointerEvents: "none",
-      zIndex: 9999, willChange: "transform",
-    }} />
-  );
-}
+// ─── Custom Cursor Removed by Request ──────────────────────────────────────────
 
 // ─── Grain Canvas ─────────────────────────────────────────────────────────────
 function GrainCanvas() {
@@ -297,7 +254,6 @@ export default function ComingSoon() {
       `}</style>
 
       <GrainCanvas />
-      <CustomCursor />
 
       {/* Page shell */}
       <div style={{
@@ -374,7 +330,7 @@ export default function ComingSoon() {
                   animationDelay: "0.3s",
                 }}
               >
-                La educación que merecías
+                Lael no es una empresa.
               </span>
               <span
                 className="reveal-mask"
@@ -387,7 +343,7 @@ export default function ComingSoon() {
                   animationDelay: "0.48s",
                 }}
               >
-                siempre existió.
+                Paró cuando fue necesario.
               </span>
               <span
                 className="reveal-mask"
@@ -400,7 +356,7 @@ export default function ComingSoon() {
                   animationDelay: "0.62s",
                 }}
               >
-                Solo estaba esperando
+                Y cuando vuelva,
               </span>
               {/* Accent line — larger, italic, gold */}
               <em
@@ -416,7 +372,7 @@ export default function ComingSoon() {
                   marginTop: "0.1em",
                 }}
               >
-                volver mejor.
+                volverá más fuerte.
               </em>
             </h1>
           </section>
@@ -447,9 +403,9 @@ export default function ComingSoon() {
 
             <div style={{ display: "flex", flexDirection: "column", gap: "clamp(22px, 3.5vw, 30px)" }}>
               {[
-                "No creemos en la educación que domestica. Creemos en la que despierta.",
-                "Luego paramos. Porque a veces parar es la decisión más honesta.",
-                "Hoy volvemos con más claridad, mejor estructura y una sola pregunta: ¿Qué tan lejos puedes llegar si alguien te da las herramientas correctas?"
+                "Lael no es solo un preuniversitario. Somos el primer ecosistema educativo de Chile diseñado para la generación que el sistema decidió ignorar.",
+                "Durante el año 2026, nuestros programas de formación online se encuentran en pausa en virtud de un proceso de reestructuración y actualización académica.",
+                "Agradecemos profundamente tu comprensión. El diseño y propósito de Lael no siguen las modas: las reescriben para volver más cálidos, serios e impactantes."
               ].map((line, i) => (
                 <p
                   key={i}

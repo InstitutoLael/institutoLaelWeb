@@ -1243,7 +1243,8 @@ const defaultG = {
   stars:{laplace:0,tree:0,table:0,rules:0,montyhall:0},
   /* historical accumulators — never reset on zone repeat */
   histCorrect:0, histTotal:0,
-  zoneBests:{laplace:0,tree:0,table:0,rules:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}, emoji:null, errors:{}, clase:null, hof:[], lastLogin:null
+  zoneBests:{laplace:0,tree:0,table:0,rules:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}, emoji:null, errors:{}, clase:null, hof:[], lastLogin:null,
+  zoneGrades:{laplace:[],tree:[],table:[],rules:[],montyhall:[],final:[]}
 };
 const savedG = localStorage.getItem('statArcadeSave');
 const G = savedG ? Object.assign({...defaultG}, JSON.parse(savedG)) : { ...defaultG };
@@ -1253,7 +1254,8 @@ function saveGame() {
     pts: G.pts, streak: G.streak, correct: G.correct, total: G.total,
     stars: G.stars, histCorrect: G.histCorrect, histTotal: G.histTotal,
     zoneBests: G.zoneBests, agente: G.agente, emoji: G.emoji, 
-    clase: G.clase, errors: G.errors, hof: G.hof, logros: G.logros, lastLogin: G.lastLogin
+    clase: G.clase, errors: G.errors, hof: G.hof, logros: G.logros, 
+    lastLogin: G.lastLogin, zoneGrades: G.zoneGrades
   };
   localStorage.setItem('statArcadeSave', JSON.stringify(payload));
 }
@@ -1268,6 +1270,25 @@ const shuffle = arr => { let a=[...arr]; for(let i=a.length-1;i>0;i--){let j=ran
 const fmt   = n     => Number(n.toFixed(2));
 const variance = d  => { const m=d.reduce((a,b)=>a+b,0)/d.length; return d.reduce((a,b)=>a+(b-m)**2,0)/d.length; };
 const stdev    = d  => Math.sqrt(variance(d));
+
+/* ── NOTA CALCULATOR (CHILE 60% SCALE) ── */
+function calcNota(pct) {
+  if(pct >= 60) return 4.0 + (pct - 60) / 40 * 3.0;
+  return 2.0 + (pct / 60) * 2.0; 
+}
+function getGlobalNota() {
+  let zoneAvgs = [];
+  Object.keys(G.zoneGrades).forEach(z => {
+    const list = G.zoneGrades[z];
+    if(list && list.length > 0) {
+      const avg = list.reduce((a,b)=>a+b,0) / list.length;
+      zoneAvgs.push(avg);
+    }
+  });
+  if(zoneAvgs.length === 0) return 2.0;
+  const total = zoneAvgs.reduce((a,b)=>a+b,0) / zoneAvgs.length;
+  return Math.max(2.0, Math.min(7.0, total));
+}
 
 /* ── SPEEDRUN TIMER JS ── */
 let zoneStartTime = 0;
@@ -1331,7 +1352,20 @@ function showCarnet() {
   const acc = G.histTotal>0 ? Math.round((G.histCorrect/G.histTotal)*100) : 0;
   document.getElementById('c-acc').textContent = acc + '%';
   document.getElementById('c-err').textContent = err + '%';
+  const globalNota = getGlobalNota();
   document.getElementById('c-stars').textContent = countStars();
+  
+  // Grade Display
+  const notaEl = document.getElementById('carnet-nota') || document.createElement('div');
+  notaEl.id = 'carnet-nota';
+  notaEl.style = 'margin-top:1.5rem; text-align:center; padding:1rem; background:rgba(255,255,255,0.03); border-radius:12px; border:1px solid var(--border2);';
+  const color = globalNota >= 4 ? 'var(--c1)' : 'var(--c5)';
+  notaEl.innerHTML = `<div style="font-size:0.6rem; color:var(--text3); letter-spacing:2px; margin-bottom:5px;">NOTA PROMEDIO ACUMULADA</div>
+                      <div style="font-size:2.5rem; font-weight:800; color:${color}; font-family:'Syne',sans-serif;">${globalNota.toFixed(1)}</div>
+                      <div style="font-size:0.6rem; color:var(--text2); opacity:0.6; margin-top:5px;">Escala 60% — Promedio de todas las Zonas e Intentos</div>`;
+  
+  const statsDiv = document.querySelector('.carnet-stats');
+  if(statsDiv && !document.getElementById('carnet-nota')) statsDiv.after(notaEl);
   
   // Radar / Zone Chart
   const chart = document.getElementById('carnet-chart') || document.createElement('div');
@@ -1763,6 +1797,11 @@ function showComplete(){
   
   updateStars(G.zone,pct);
   if(pct>=80) shootConfetti();
+  const attemptNota = calcNota(pct);
+  if(!G.zoneGrades[G.zone]) G.zoneGrades[G.zone] = [];
+  G.zoneGrades[G.zone].push(attemptNota);
+  saveGame();
+
   if(pct > (G.zoneBests[G.zone]||0)) { G.zoneBests[G.zone]=pct; saveGame(); }
   const best = G.zoneBests[G.zone]||pct;
   const stars=['○○○','★○○','★★○','★★★'][G.stars[G.zone]||0];
@@ -1798,6 +1837,7 @@ function showComplete(){
       <div class="zc-sub">
         ⏱️ Tiempo: <strong style="color:var(--c4)">${Math.floor(totalSeconds/60)}m ${String(totalSeconds%60).padStart(2,'0')}s</strong> ${timeBonus>0 ? '<span style="color:var(--c6)">(+'+timeBonus+' pts Speedrun!)</span>' : ''}<br>
         Esta ronda: <strong style="color:var(--c6)">${G.zonePts} pts</strong> · ${pct}% correcto<br>
+        Nota esta ronda: <strong style="color:var(--c1)">${attemptNota.toFixed(1)}</strong><br>
         Mejor histórico: <strong style="color:var(--c1)">${best}%</strong>
         ${errorTip}
       </div>
@@ -2202,8 +2242,7 @@ try {
 
 async function syncSupabaseScore() {
   if(!sb || !G.pts || G.pts < 100) return;
-  const notaEl = document.getElementById('carnet-nota');
-  const notaTxt = notaEl ? notaEl.innerText.replace('NOTA PAES (Escala 60%): ','').trim() : "2.0";
+  const notaTxt = getGlobalNota().toFixed(1);
   
   const leadData = {
     name: G.agente,

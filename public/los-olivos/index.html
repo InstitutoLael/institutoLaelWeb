@@ -1335,7 +1335,7 @@ function showCarnet() {
   document.querySelector('.carnet-logo').textContent = `${emo} AGENTE [${agt}]`;
   
   const url = encodeURIComponent('institutolael.cl/los-olivos');
-  const txt = encodeURIComponent(`*REPORTE BÚNKER LAEL* 👨‍🏫\n\nEl Agente ${emo} [${agt}] informa su progreso:\n📊 Puntos: ${G.pts}\n🏆 Rango: ${rank}\n⭐ Estrellas: ${countStars()}\n🎯 Precisión: ${acc}%\n\n¡Pantallazo adjunto! ${decodeURIComponent(url)}`);
+  const txt = encodeURIComponent(`*REPORTE BÚNKER PAES* 👨‍🏫\n\nEl Agente ${emo} [${agt}] informa su progreso:\n📊 Puntos: ${G.pts}\n🏆 Rango: ${rank}\n⭐ Estrellas: ${countStars()}\n🎯 Precisión: ${acc}%\n\n¡Pantallazo adjunto! ${decodeURIComponent(url)}`);
   document.getElementById('wa-share').href = `https://wa.me/56949481562?text=${txt}`;
 }
 
@@ -1466,7 +1466,7 @@ function showCertificate() {
   document.getElementById('cert-name').textContent = G.agente || 'AGENTE';
   document.getElementById('cert-date').textContent = new Date().toLocaleDateString();
   const rank = G.pts>=6000 ? 'MAESTRO DE DATOS' : G.pts>=4000 ? 'CIENTÍFICO' : G.pts>=2000 ? 'ANALISTA' : G.pts>=800 ? 'ESTUDIANTE' : 'NOVATO';
-  const txt = encodeURIComponent(`*CERTIFICADO DE GRADUACIÓN* 🎓\n\nEl Agente ${G.emoji} [${G.agente}] se ha graduado del Búnker de Datos con honores.\n⭐ 18 Estrellas\n📊 Puntos: ${G.pts}\n🏆 Rango: ${rank}`);
+  const txt = encodeURIComponent(`*CERTIFICADO DE GRADUACIÓN* 🎓\n\nEl Agente ${G.emoji} [${G.agente}] se ha graduado del Entrenamiento PAES con honores.\n⭐ 18 Estrellas\n📊 Puntos: ${G.pts}\n🏆 Rango: ${rank}`);
   document.getElementById('cert-wa').href = `https://wa.me/56949481562?text=${txt}`;
   sessionStorage.setItem('certShown', 'true');
 }
@@ -2261,35 +2261,40 @@ updateHUD();
 /* ── EASTER EGGS EXTRA ── */
 
 /* ── SONIDOS SFX (WEB AUDIO API) ── */
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let audioCtx = null;
 function playSound(type) {
-  if(audioCtx.state === 'suspended') audioCtx.resume();
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.connect(gain); gain.connect(audioCtx.destination);
-  const now = audioCtx.currentTime;
-  if(type === 'coin') {
-    osc.type = 'sine'; osc.frequency.setValueAtTime(987.77, now);
-    osc.frequency.setValueAtTime(1318.51, now + 0.1);
-    gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.2, now + 0.05);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-    osc.start(now); osc.stop(now + 0.3);
-  } else if(type === 'hurt') {
-    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now);
-    osc.frequency.exponentialRampToValueAtTime(50, now + 0.3);
-    gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-    osc.start(now); osc.stop(now + 0.3);
-  } else if(type === 'levelup') {
-    osc.type = 'square'; osc.frequency.setValueAtTime(440, now);
-    osc.frequency.setValueAtTime(554, now + 0.1); osc.frequency.setValueAtTime(659, now + 0.2);
-    osc.frequency.setValueAtTime(880, now + 0.3);
-    gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.6);
-    osc.start(now); osc.stop(now + 0.6);
-  } else if(type === 'boss_hurt') {
-    osc.type = 'triangle'; osc.frequency.setValueAtTime(100, now);
-    osc.frequency.exponentialRampToValueAtTime(20, now + 0.5);
-    gain.gain.setValueAtTime(0.5, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-    osc.start(now); osc.stop(now + 0.5);
+  try {
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    if(type === 'coin') {
+      osc.type = 'sine'; osc.frequency.setValueAtTime(987.77, now);
+      osc.frequency.setValueAtTime(1318.51, now + 0.1);
+      gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.2, now + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+      osc.start(now); osc.stop(now + 0.3);
+    } else if(type === 'hurt') {
+      osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now);
+      osc.frequency.exponentialRampToValueAtTime(50, now + 0.3);
+      gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+      osc.start(now); osc.stop(now + 0.3);
+    } else if(type === 'levelup') {
+      osc.type = 'square'; osc.frequency.setValueAtTime(440, now);
+      osc.frequency.setValueAtTime(554, now + 0.1); osc.frequency.setValueAtTime(659, now + 0.2);
+      osc.frequency.setValueAtTime(880, now + 0.3);
+      gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.6);
+      osc.start(now); osc.stop(now + 0.6);
+    } else if(type === 'boss_hurt') {
+      osc.type = 'triangle'; osc.frequency.setValueAtTime(100, now);
+      osc.frequency.exponentialRampToValueAtTime(20, now + 0.5);
+      gain.gain.setValueAtTime(0.5, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+      osc.start(now); osc.stop(now + 0.5);
+    }
+  } catch(e) {
+    console.warn("Audio disabled or error:", e);
   }
 }
 

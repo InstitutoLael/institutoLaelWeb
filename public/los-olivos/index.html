@@ -136,7 +136,7 @@ body::after {
 .hero-title .line2 {
   display: block;
   background: linear-gradient(90deg, var(--c1) 0%, var(--c3) 50%, var(--c2) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-size: 200%; animation: gradshift 5s ease infinite;
 }
 @keyframes gradshift { 0%,100%{background-position:0%} 50%{background-position:100%} }
@@ -514,7 +514,7 @@ body::after {
 .mh-door .door-num {
   font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1;
   background: linear-gradient(90deg, #a78bfa, #7ee8fa);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 .mh-door .door-knob {
   width: 8px; height: 8px; border-radius: 50%;
@@ -891,6 +891,7 @@ input { font-size: 16px !important; }
   .mh-door { width: 75px; height: 110px; }
 }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -904,7 +905,7 @@ input { font-size: 16px !important; }
   <header class="school-header">
     <div class="school-info">
       <span class="school-name">Los Olivos HomeSchool</span>
-      <span class="school-sub">Tercero Medio · Estadística &amp; Probabilidad</span>
+      <span class="school-sub">Taller Jueves · Hackeando la Probabilidad</span>
     </div>
     <div class="teacher-badge" id="teacher-badge" onclick="easterEgg()">
       <div class="teacher-avatar">DC</div>
@@ -917,11 +918,11 @@ input { font-size: 16px !important; }
       <span></span>laboratorio de datos interactivo
     </div>
     <h1 class="hero-title">
-      <span class="line1">STAT</span>
+      <span class="line1">PROB</span>
       <span class="line2">ARCADE</span>
     </h1>
     <p class="hero-desc">
-      6 zonas de desafíos. Datos siempre distintos. Entra a una zona, explora, compite contigo mismo. Pura matemática sin que parezca.
+      Entrenamiento puro camuflado de juego. Tablas PAES, Diagramas de Árbol, Monty Hall y trampas de lectura.
     </p>
   </div>
 
@@ -973,86 +974,74 @@ input { font-size: 16px !important; }
 
 
   <div class="zone-grid">
-    <div class="zone-card" data-c="1" onclick="enterZone('diagnosis')">
+    <div class="zone-card" data-c="1" onclick="enterZone('laplace')">
       <div class="zone-num">
         <span>Zona 01</span>
-        <span class="zone-stars-display" id="zs-diagnosis">○○○</span>
-      </div>
-      <div class="zone-icon-wrap">🔬</div>
-      <div class="zone-title">Diagnóstico</div>
-      <div class="zone-desc">Lee datos, calcula media, mediana, moda y rango. ¿El promedio siempre dice la verdad?</div>
-      <div class="zone-tag">estadística básica</div>
-      <div class="zone-arrow">↗</div>
-    </div>
-
-    <div class="zone-card" data-c="2" onclick="enterZone('lies')">
-      <div class="zone-num">
-        <span>Zona 02</span>
-        <span class="zone-stars-display" id="zs-lies">○○○</span>
-      </div>
-      <div class="zone-icon-wrap">🪤</div>
-      <div class="zone-title">Trampas</div>
-      <div class="zone-desc">Gráficos que mienten, promedios engañosos. Detecta la trampa antes de que te atrape.</div>
-      <div class="zone-tag">mentiras estadísticas</div>
-      <div class="zone-arrow">↗</div>
-    </div>
-
-    <div class="zone-card" data-c="3" onclick="enterZone('dispersion')">
-      <div class="zone-num">
-        <span>Zona 03</span>
-        <span class="zone-stars-display" id="zs-dispersion">○○○</span>
-      </div>
-      <div class="zone-icon-wrap">📡</div>
-      <div class="zone-title">Dispersión</div>
-      <div class="zone-desc">Calcula varianza y desviación estándar con datos aleatorios. ¿Qué tanto se alejan del promedio?</div>
-      <div class="zone-tag">varianza · DE</div>
-      <div class="zone-arrow">↗</div>
-    </div>
-
-    <div class="zone-card" data-c="4" onclick="enterZone('excel')">
-      <div class="zone-num">
-        <span>Zona 04</span>
-        <span class="zone-stars-display" id="zs-excel">○○○</span>
-      </div>
-      <div class="zone-icon-wrap">⚡</div>
-      <div class="zone-title">Decisiones</div>
-      <div class="zone-desc">Compara promedios Y dispersiones para tomar la mejor decisión. Situaciones de vida real.</div>
-      <div class="zone-tag">tomar decisiones</div>
-      <div class="zone-arrow">↗</div>
-    </div>
-
-    <div class="zone-card" data-c="5" onclick="enterZone('probability')">
-      <div class="zone-num">
-        <span>Zona 05</span>
-        <span class="zone-stars-display" id="zs-probability">○○○</span>
+        <span class="zone-stars-display" id="zs-laplace">○○○</span>
       </div>
       <div class="zone-icon-wrap">🎲</div>
-      <div class="zone-title">Probabilidad</div>
-      <div class="zone-desc">Eventos, condicionales, árboles. ¿Cuánto realmente controlas el azar?</div>
-      <div class="zone-tag">prob. condicional</div>
+      <div class="zone-title">Laplace & Trampas</div>
+      <div class="zone-desc">Casos favorables y totales. Cuidado con palabras como "al menos" o "como máximo".</div>
+      <div class="zone-tag">Laplace Clásico</div>
       <div class="zone-arrow">↗</div>
     </div>
 
-    <div class="zone-card" data-c="6" onclick="enterZone('montyhall')">
+    <div class="zone-card" data-c="2" onclick="enterZone('tree')">
       <div class="zone-num">
-        <span>Zona 06</span>
+        <span>Zona 02</span>
+        <span class="zone-stars-display" id="zs-tree">○○○</span>
+      </div>
+      <div class="zone-icon-wrap">🌿</div>
+      <div class="zone-title">Árboles</div>
+      <div class="zone-desc">Monedas, ropa, caminos. Multiplica ramas, suma resultados.</div>
+      <div class="zone-tag">Diagramas de Árbol</div>
+      <div class="zone-arrow">↗</div>
+    </div>
+
+    <div class="zone-card" data-c="3" onclick="enterZone('table')">
+      <div class="zone-num">
+        <span>Zona 03</span>
+        <span class="zone-stars-display" id="zs-table">○○○</span>
+      </div>
+      <div class="zone-icon-wrap">📊</div>
+      <div class="zone-title">Tablas de Contingencia</div>
+      <div class="zone-desc">Doble entrada. Hombres/Mujeres, Aprueba/Reprueba. Saca totales rápido.</div>
+      <div class="zone-tag">Doble Entrada</div>
+      <div class="zone-arrow">↗</div>
+    </div>
+
+    <div class="zone-card" data-c="4" onclick="enterZone('rules')">
+      <div class="zone-num">
+        <span>Zona 04</span>
+        <span class="zone-stars-display" id="zs-rules">○○○</span>
+      </div>
+      <div class="zone-icon-wrap">➕</div>
+      <div class="zone-title">Suma y Producto</div>
+      <div class="zone-desc">¿Es O (suma) o Y (multiplica)? Mutuamente excluyentes y reposición.</div>
+      <div class="zone-tag">Reglas Prob.</div>
+      <div class="zone-arrow">↗</div>
+    </div>
+
+    <div class="zone-card" data-c="5" onclick="enterZone('montyhall')">
+      <div class="zone-num">
+        <span>Zona 05</span>
         <span class="zone-stars-display" id="zs-montyhall">○○○</span>
       </div>
       <div class="zone-icon-wrap">🚪</div>
       <div class="zone-title">Monty Hall</div>
-      <div class="zone-desc">El juego de las puertas. Juega rondas reales, acumula datos. ¿Te convence la matemática?</div>
-      <div class="zone-tag">monty hall</div>
+      <div class="zone-desc">El juego de las 3 puertas. Simula, cambia y descubre por qué la intuición falla.</div>
+      <div class="zone-tag">Condicional / Sim</div>
       <div class="zone-arrow">↗</div>
     </div>
 
-    <div class="zone-card" id="z7-card" data-c="7" onclick="if(countStars()>=6) enterZone('final')">
+    <div class="zone-card" id="z6-card" data-c="6" onclick="if(countStars()>=5) enterZone('final')">
       <div class="zone-num">
-        <span>Zona 7</span>
+        <span>Zona 06</span>
         <span class="zone-stars-display" id="zs-final">🔒</span>
       </div>
-      <div class="zone-icon-wrap" id="z7-icon" style="filter:grayscale(1)">💀</div>
-      <div class="zone-title">Prueba Final</div>
-      <div class="zone-desc" id="z7-desc">Bloqueada. Consigue al menos 6 estrellas en total para desbloquear este Boss.</div>
+      <div class="zone-icon-wrap" id="z6-icon" style="filter:grayscale(1)">💀</div>
+      <div class="zone-title">Simulador PAES</div>
+      <div class="zone-desc" id="z6-desc">Bloqueada. Consigue al menos 5 estrellas en total para desbloquear este Boss.</div>
       <div class="zone-tag" style="background:var(--c5)">EXTREMO</div>
       <div class="zone-arrow">↗</div>
     </div>
@@ -1117,7 +1106,7 @@ input { font-size: 16px !important; }
     <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r-sm);padding:1.2rem;margin-bottom:1.5rem;">
       <div style="font-size:0.7rem;color:var(--text3);letter-spacing:2px;margin-bottom:0.3rem">CERTIFICA QUE EL AGENTE</div>
       <div id="cert-name" style="font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;color:var(--c6)"></div>
-      <div style="font-size:0.8rem;color:var(--text2);margin-top:0.3rem">ha completado las 7 zonas del Búnker con distinción máxima (21 ⭐)</div>
+      <div style="font-size:0.8rem;color:var(--text2);margin-top:0.3rem">ha completado las 6 zonas del Búnker con distinción máxima (18 ⭐)</div>
     </div>
     <div style="display:flex;justify-content:space-between;margin-bottom:1.5rem;padding:0 0.5rem;">
       <div style="text-align:center;"><div style="font-size:0.6rem;color:var(--text3);letter-spacing:1px">FIRMA</div><div style="margin-top:0.5rem;font-family:'Syne',sans-serif;font-weight:800;color:var(--text2);font-size:0.85rem;border-top:1px solid var(--border2);padding-top:0.3rem">Profe Diego</div></div>
@@ -1239,10 +1228,10 @@ input { font-size: 16px !important; }
 const defaultG = {
   pts:0, streak:0, correct:0, total:0,
   zoneQ:0, zonePts:0, zone:null,
-  stars:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0},
+  stars:{laplace:0,tree:0,table:0,rules:0,montyhall:0},
   /* historical accumulators — never reset on zone repeat */
   histCorrect:0, histTotal:0,
-  zoneBests:{diagnosis:0,lies:0,dispersion:0,excel:0,probability:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}, emoji:null
+  zoneBests:{laplace:0,tree:0,table:0,rules:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}, emoji:null
 };
 const savedG = localStorage.getItem('statArcadeSave');
 const G = savedG ? Object.assign({...defaultG}, JSON.parse(savedG)) : { ...defaultG };
@@ -1257,8 +1246,8 @@ function saveGame() {
 }
 
 const ZONE_LEN = 6;
-const ZONE_COLORS = {diagnosis:'var(--c1)',lies:'var(--c5)',dispersion:'var(--c6)',excel:'var(--c4)',probability:'var(--c3)',montyhall:'var(--c2)'};
-const ZONE_NAMES  = {diagnosis:'Zona 01 — Diagnóstico',lies:'Zona 02 — Trampas',dispersion:'Zona 03 — Dispersión',excel:'Zona 04 — Decisiones',probability:'Zona 05 — Probabilidad',montyhall:'Zona 06 — Monty Hall'};
+const ZONE_COLORS = {laplace:'var(--c1)',tree:'var(--c5)',table:'var(--c6)',rules:'var(--c4)',montyhall:'var(--c3)'};
+const ZONE_NAMES  = {laplace:'Zona 01 — Laplace & Trampas',tree:'Zona 02 — Árboles',table:'Zona 03 — Tablas (Contingencia)',rules:'Zona 04 — Reglas (Y/O)',montyhall:'Zona 05 — Monty Hall'};
 
 const rand  = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
 const choose = arr  => arr[Math.floor(Math.random()*arr.length)];
@@ -1425,7 +1414,7 @@ function renderBossUI() {
 
 let hcTimerInt;
 const ZONE_COLORS_ALL = {...ZONE_COLORS, final:'var(--c5)'};
-const ZONE_NAMES_ALL = {...ZONE_NAMES, final:'Zona 07 — Prueba Final'};
+const ZONE_NAMES_ALL = {...ZONE_NAMES, final:'Zona 06 — Simulador PAES'};
 
 /* ═══════════════════════════════════════════
    HUD
@@ -1444,7 +1433,7 @@ function updateHUD(){
   const acc = G.total>0 ? Math.round(G.correct/G.total*100)+'%' : '—';
   document.getElementById('h-acc').textContent  = acc;
 
-  if(countStars() >= 21) {
+  if(countStars() >= 18) {
     const cert = document.getElementById('cert-modal');
     if(cert && cert.style.display !== 'flex' && !sessionStorage.getItem('certShown')) showCertificate();
   }
@@ -1457,6 +1446,7 @@ function showLevelUp(lvl) {
   ov.style.display = 'flex';
   ov.style.opacity = '1';
   ov.classList.remove('hidden');
+  if(typeof playSound==='function') playSound('levelup');
   shootConfetti();
   if(navigator.vibrate) navigator.vibrate([100, 50, 100]);
   setTimeout(() => {
@@ -1476,7 +1466,7 @@ function showCertificate() {
   document.getElementById('cert-name').textContent = G.agente || 'AGENTE';
   document.getElementById('cert-date').textContent = new Date().toLocaleDateString();
   const rank = G.pts>=6000 ? 'MAESTRO DE DATOS' : G.pts>=4000 ? 'CIENTÍFICO' : G.pts>=2000 ? 'ANALISTA' : G.pts>=800 ? 'ESTUDIANTE' : 'NOVATO';
-  const txt = encodeURIComponent(`*CERTIFICADO DE GRADUACIÓN* 🎓\n\nEl Agente ${G.emoji} [${G.agente}] se ha graduado del Búnker de Datos con honores.\n⭐ 21 Estrellas\n📊 Puntos: ${G.pts}\n🏆 Rango: ${rank}`);
+  const txt = encodeURIComponent(`*CERTIFICADO DE GRADUACIÓN* 🎓\n\nEl Agente ${G.emoji} [${G.agente}] se ha graduado del Búnker de Datos con honores.\n⭐ 18 Estrellas\n📊 Puntos: ${G.pts}\n🏆 Rango: ${rank}`);
   document.getElementById('cert-wa').href = `https://wa.me/56949481562?text=${txt}`;
   sessionStorage.setItem('certShown', 'true');
 }
@@ -1493,7 +1483,16 @@ function updateStars(zone, pct){
 ═══════════════════════════════════════════ */
 function enterZone(zone){
   G.zone=zone; G.zoneQ=0; G.zonePts=0; G.jokers=0;
-  if(zone==='final') bossHP = 100;
+  if(zone==='final') {
+    bossHP = 100;
+    G.hardcore = true; 
+    document.body.style.boxShadow = 'inset 0 0 50px rgba(239, 68, 68, 0.8)';
+    showToast('⚠️ MODO MUERTE SÚBITA ACTIVADO ⚠️');
+  } else {
+    document.body.style.boxShadow = 'none';
+    const elChk = document.getElementById('chk-hardcore');
+    if(elChk) G.hardcore = elChk.checked;
+  }
   document.getElementById('hub').style.display='none';
   const gs=document.getElementById('game-screen');
   if(!gs) return;
@@ -1510,6 +1509,8 @@ function backToHub(){
   document.getElementById('game-screen').style.display='none';
   document.getElementById('hub').style.display='flex';
   updateHUD();
+  syncSupabaseScore();
+  setTimeout(loadLeaderboard, 1000);
   window.scrollTo(0,0);
 }
 
@@ -1517,19 +1518,15 @@ function backToHub(){
    QUESTION ENGINE
 ═══════════════════════════════════════════ */
 const GLOSSARY = {
-  'media aritmética': 'Es el promedio de toda la vida: sumas todo y divides por el total de datos.',
-  'promedio': 'Sumas todos los valores y divides por la cantidad de elementos.',
-  'mediana': 'Es el valor que está justo al medio cuando ordenas los datos de menor a mayor.',
-  'moda': 'Es el valor que más veces se repite en un conjunto de datos.',
-  'rango': 'Es la diferencia (resta) entre el valor más grande y el más chico.',
-  'desviación estándar': 'Mide qué tan desparramados están los datos respecto al promedio.',
-  'varianza': 'Es la desviación estándar al cuadrado. Mide la dispersión de los datos.',
-  'sesgo': 'Es una trampa o error que inclina los resultados hacia un lado injusto.',
-  'outlier': 'Es un valor "mentiroso" o extremo que se sale de la norma y altera el promedio.',
-  'frecuencia': 'Indica cuántas veces aparece un dato en la muestra.',
-  'probabilidad': 'Es la chance de que algo pase (Casos Favorables ÷ Casos Totales).',
-  'independencia': 'Significa que lo que pasó antes no afecta en nada a lo que pasará ahora.',
-  'condicional': 'Es la probabilidad de que pase algo SABIENDO que ya pasó otra cosa antes.'
+  'Laplace': 'Probabilidad Clásica = Casos Favorables ÷ Casos Totales.',
+  'mutuamente excluyentes': 'Eventos que no pueden pasar al mismo tiempo. (Tirar un dado y que salga 2 y 3).',
+  'independientes': 'Que pase uno NO afecta al otro. (Tirar un dado y lanzar una moneda).',
+  'con o sin reposición': 'Si sacas algo y no lo devuelves, el total cambia (afectando la Prob. Condicionada).',
+  'contingencia': 'Tabla de doble entrada que curza dos variables (ej: género y nota).',
+  'diagrama de árbol': 'Ramificaciones para ver todos los caminos y calcular multiplicando probabilidades.',
+  'al menos': 'Incluye ese número y todos los de arriba. Ej: "al menos 2" es 2, 3, 4, 5...',
+  'como máximo': 'Incluye ese número y todos los de abajo. Ej: "como máximo 2" es 0, 1, o 2.',
+  'probabilidad': 'Es la chance de que algo pase (Casos Favorables ÷ Casos Totales).'
 };
 
 function applyGlossary(text) {
@@ -1547,9 +1544,8 @@ function nextQuestion(){
   document.getElementById('gs-prog').style.width=prog+'%';
   if(G.zoneQ>=ZONE_LEN){showComplete();return;}
   const gen={
-    diagnosis:genDiag,lies:genLies,dispersion:genDisp,excel:genExcel,
-    probability:genProb,montyhall:genMH,
-    final:function(){return choose([genDiag,genLies,genDisp,genExcel,genProb,genMH])();}
+    laplace:genLaplace,tree:genTree,table:genTable,rules:genRules,montyhall:genMH,
+    final:function(){return choose([genLaplace,genTree,genTable,genRules,genMH])();}
   };
   renderQ(gen[G.zone]());
 }
@@ -1671,6 +1667,7 @@ function doScore(ok, isGold=false, qType='gen'){
   const isSpeedy = ok && timeTaken < 5000;
 
   if(ok){
+    if(typeof playSound==='function') playSound('coin');
     G.correct++;G.streak++;G.histCorrect++;G.histTotal++;
     saveGame();
     if(G.zone === 'final') {
@@ -1686,11 +1683,15 @@ function doScore(ok, isGold=false, qType='gen'){
     if(G.streak>=3) showToast(`🔥 ¡Racha x${G.streak}! +${bonus} pts bonus`);
     if(isSpeedy) showToast('⚡ ¡ULTRA RÁPIDO! +50 pts bonus');
   } else { 
+    if(typeof playSound==='function') playSound(G.zone==='final'?'boss_hurt':'hurt');
     if(navigator.vibrate) navigator.vibrate([50, 50, 100]);
     G.streak=0; G.histTotal++;
     if(G.zone === 'final') {
-      bossHP = Math.min(100, bossHP + 10);
+      bossHP = 100;
       renderBossUI();
+      showToast('💀 INSTA-KILL. ¡LA PAES NO PERDONA!');
+      setTimeout(backToHub, 2000);
+      return;
     }
     G.errors[qType] = (G.errors[qType] || 0) + 1;
     if(isGold) { G.pts = Math.max(0, G.pts - 300); showToast('📉 PREGUNTA DE ORO FALLADA (-300 pts)'); } 
@@ -1783,314 +1784,236 @@ function updateHOF() {
   saveGame();
 }
 
+
+
 /* ═══════════════════════════════════════════
-   ZONA 1 — DIAGNÓSTICO (CHILENIZADA)
+   ZONA 1 — LAPLACE & TRAMPAS
 ═══════════════════════════════════════════ */
-function genDiag(){
-  return choose([dMean,dMedian,dMode,dRange,dOutlier,dWhich])();
+function genLaplace(){
+  return choose([lapUrna, lapDados, lapTrampaAlMenos, lapTrampaComoMaximo])();
 }
-function dMean(){
-  const n=rand(4,6), data=Array.from({length:n},()=>rand(40,70)/10);
-  const mean=fmt(data.reduce((a,b)=>a+b,0)/n);
-  const wrong=[fmt(mean+rand(5,15)/10), fmt(mean-rand(4,10)/10), fmt(mean*1.1)];
-  const opts=shuffle([mean,...wrong.slice(0,3)]);
-  return{type:'mc',visual:'Notas: [ '+data.map(n=>n.toFixed(1)).join(' , ')+' ]',
-    text:'Calcula el <strong>promedio (media aritmética)</strong> de estas notas del semestre.',
-    options:opts.map(n=>Number(n).toFixed(1)),correct:opts.indexOf(mean),
-    explanation:`Suma = ${fmt(data.reduce((a,b)=>a+b,0))} ÷ ${n} notas = <strong>${mean.toFixed(1)}</strong>`};
+function lapUrna(){
+  const rojas = rand(3, 7);
+  const azules = rand(2, 6);
+  const verdes = rand(1, 4);
+  const total = rojas + azules + verdes;
+  const color = choose([{n:'rojas', c:rojas}, {n:'azules', c:azules}, {n:'verdes', c:verdes}]);
+  
+  const prob = fmt(color.c / total);
+  const bad1 = fmt((total - color.c)/total); 
+  const bad2 = fmt(color.c/(total-1)); 
+  const bad3 = fmt(1/color.c); 
+  let opts = shuffle([prob, bad1, bad2, bad3]);
+  
+  return {
+    type:'mc',
+    visual:`¡Atentos maquinolas! Urna con: ${rojas} rojas, ${azules} azules, ${verdes} verdes.`,
+    text:`Sacan una bolita con los ojos cerrados. ¿Cuál es la probabilidad de que justo salga ${color.n}?`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`La clásica Regla de Laplace, cabros: Casos Favorables (${color.c}) ÷ Casos Totales (${total}) = <strong>${prob}</strong>. ¡No caigan en meter mal los dedos a la calculadora!`
+  };
 }
-function dMedian(){
-  const n=rand(3,4)*2-1;
-  const data=Array.from({length:n},()=>rand(400,950));
-  const sorted=[...data].sort((a,b)=>a-b);
-  const med=sorted[Math.floor(n/2)];
-  const wrong=[sorted[0],sorted[n-1],fmt((sorted[0]+sorted[n-1])/2)];
-  const opts=shuffle([med,...wrong.slice(0,3)]);
-  return{type:'mc',visual:'Puntajes PAES: [ '+sorted.join(' , ')+' ]',
-    text:'¿Cuál es la <strong>mediana</strong> de estos puntajes PAES?',
-    options:opts.map(String),correct:opts.indexOf(med),
-    explanation:`Con ${n} puntajes ordenados, el central es el de la posición ${Math.floor(n/2)+1}: <strong>${med}</strong>`};
+function lapDados(){
+  const prob = fmt(3/36); 
+  let opts = shuffle([prob, fmt(4/36), fmt(2/36), fmt(10/36)]);
+  return {
+    type:'mc',
+    visual:`Tiramos DOS dados normales a la vez. Casos totales = 36.`,
+    text:`Pregunta típica PAES: ¿Cuál es la probabilidad de que la suma de los dos dados sea EXACTAMENTE 10?`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`Anoten los pares que suman 10: (4,6), (5,5) y (6,4). Son 3 miseros casos de 36. 3/36 ≈ <strong>${prob}</strong>. (Ojo que el 5,5 se cuenta una sola vez, trampa mortal).`
+  };
 }
-function dMode(){
-  const base=Array.from({length:4},()=>rand(1,6)*100);
-  const rep=choose(base);
-  const data=shuffle([...base,rep,rand(7,9)*100]);
-  const wrong=[base.find(x=>x!==rep)||rand(1,6)*100,rand(3,8)*100,'No hay moda'];
-  const opts=shuffle([rep,...wrong.slice(0,3)]);
-  return{type:'mc',visual:'Precios de Sopaipillas ($): [ '+data.join(' , ')+' ]',
-    text:'Afuera del metro venden sopaipillas. ¿Cuál es la <strong>moda</strong> de estos precios?',
-    options:opts.map(String),correct:opts.indexOf(rep),
-    explanation:`<strong>$${rep}</strong> es el precio que más se repite.`};
+function lapTrampaAlMenos(){
+  const prob = fmt(4/6); 
+  let opts = shuffle([prob, fmt(3/6), fmt(2/6), fmt(1/6)]);
+  return {
+    type:'mc',
+    visual:`Tiras un dado común y corriente (6 caras).`,
+    text:`¡Cuidado con la trampa de lectura! ¿Probabilidad de sacar <strong>AL MENOS un 3</strong>?`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`"Al menos 3" significa "del 3 pa' arriba", o sea: {3, 4, 5, 6}. Eso nos da 4 casos favorables. 4/6 ≈ <strong>${prob}</strong>. ¡Lean bien los enunciados!`
+  };
 }
-function dRange(){
-  const data=Array.from({length:6},()=>rand(15,90));
-  const range=Math.max(...data)-Math.min(...data);
-  const opts=shuffle([range,range+rand(5,15),range-rand(2,8),Math.max(...data)]);
-  return{type:'mc',visual:'Tiempos esperando la micro (min): [ '+data.join(' , ')+' ]',
-    text:'¿Cuál es el <strong>rango</strong> de tiempo que esperaste la micro en la semana?',
-    options:opts.map(String),correct:opts.indexOf(range),
-    explanation:`Rango = ${Math.max(...data)} (máx) − ${Math.min(...data)} (mín) = <strong>${range} min</strong>`};
-}
-function dOutlier(){
-  const data=Array.from({length:4},()=>rand(45,55)/10);
-  const out=2.0;
-  const sd=[...data,out];const sdata=shuffle(sd);
-  const mw=fmt(sdata.reduce((a,b)=>a+b,0)/sdata.length);
-  const mwo=fmt(data.reduce((a,b)=>a+b,0)/data.length);
-  const opts=shuffle(['El dato extremo arrastra la media aritmética hacia abajo de forma significativa','La media se mantiene estable ya que es una medida de tendencia central robusta','El outlier solo genera una distorsión visual en el rango pero no afecta al promedio','La presencia de una nota baja mejora la representatividad de la muestra']);
-  return{type:'mc',visual:'Tus notas: [ '+sdata.map(n=>n.toFixed(1)).join(' , ')+' ]',
-    text:`Ese <strong style="color:var(--c5)">${out.toFixed(1)}</strong> de la prueba sorpresa... ¿Qué le hace a tu promedio matemático?`,
-    options:opts,correct:opts.indexOf('El dato extremo arrastra la media aritmética hacia abajo de forma significativa'),
-    explanation:`Sin ese rojo tu promedio sería ~${mwo.toFixed(1)}. Con él bajaste a ~${mw.toFixed(1)}. ¡Los valores extremos (outliers) tiran el promedio lejos!`};
-}
-function dWhich(){
-  const casos=[
-    {text:'Llegaste a un preu nuevo y quieres saber cómo le va a "la persona del medio", ignorando al mateo nacional y al que sacó 150 puntos.',c:1,e:'La <strong>mediana</strong> ignora los puntajes extremos.'},
-    {text:'El colegio quiere postular al SNED (excelencia académica) calculando la nota de TODOS sumada y dividida.',c:0,e:'La <strong>media aritmética</strong> es el promedio clásico de notas.'},
-    {text:'La tía del kiosko quiere saber qué sabor de bebida encargar más para los recreos.',c:2,e:'La <strong>moda</strong> manda en ventas: es lo que más se repite o prefiere la mayoría.'},
-    {text:'Quieres saber la diferencia en lucas entre el arriendo más caro y más barato en Santiago Centro.',c:3,e:'El <strong>rango</strong> mide exactamente la amplitud entre el máximo y mínimo.'},
-  ];
-  const s=choose(casos);
-  const rawOpts = ['La media (Promedio)','La mediana','La moda','El rango'];
-  const opts = shuffle(rawOpts);
-  return{type:'mc',text:s.text,
-    options:opts,correct:opts.indexOf(rawOpts[s.c]),explanation:s.e};
+function lapTrampaComoMaximo(){
+  const total = 10;
+  const num = rand(3, 5);
+  const prob = fmt(num / total);
+  let opts = shuffle([prob, fmt((num - 1)/total), fmt((num + 1)/total), fmt(1/total)]);
+  return {
+    type:'mc',
+    visual:`Tómbola de kermesse con bolitas del 1 al 10.`,
+    text:`¿Probabilidad de sacar una bolita que sea <strong>COMO MÁXIMO ${num}</strong>? Ojo piojo con el texto.`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`"Como máximo ${num}" significa "hasta el ${num} inclusive". O sea, desde el 1 hasta el ${num}. Son ${num} casos de ${total}. <strong>${num}/${total} = ${prob}</strong>.`
+  };
 }
 
 /* ═══════════════════════════════════════════
-   ZONA 2 — TRAMPAS (CHILENIZADA)
+   ZONA 2 — ÁRBOLES Y CAMINOS
 ═══════════════════════════════════════════ */
-function genLies(){return choose([lEje,lMuestra,lPromedio,lPorcentaje,lCausalidad])();}
-function lEje(){
-  const casos=[
-    {vis:'📊 Matinal de la TV: "¡La delincuencia se disparó en las comunas!"<br>⚠ Eje Y va de 980 a 1000. Hubo 980 casos en enero y 1000 en febrero.',
-    q:'¿Qué trampa visual hicieron en el matinal para asustarte?',
-    opts:['Se truncó el eje vertical para que una variación porcentual mínima parezca un cambio drástico','Los datos presentados carecen de una fuente oficial verificable para el espectador','El uso de simbología de alerta influye en la percepción del error estadístico','La omisión de la frecuencia relativa impide calcular el impacto real de la noticia'],
-    c:0,e:'Eje Y truncado: visualmente la barra de 1000 se ve gigantesca al lado de la de 980, pero el salto real apenas es del 2%.'},
-    {vis:'📊 Titular Político: "Desempleo cae a cifras nunca vistas"<br>⚠ Eje Y empieza en 6.0%. El desempleo pasó de 6.3% a 6.1%.',
-    q:'¿Cómo manipula este gráfico tu percepción?',
-    opts:['El eje empieza muy alto, haciendo que el 0.2% de caída parezca un precipicio','La metodología de recolección de datos presenta un margen de error desconocido','Se invirtió la escala de tiempo para favorecer la interpretación de la tendencia','La muestra seleccionada no es representativa de la población activa nacional'],
-    c:0,e:'Una caída de 0.2% es ínfima y muchas veces margen de error. Al cortar el eje, engañan al ojo humano.'},
-  ];
-  const s=choose(casos);
-  const opts = shuffle(s.opts);
-  return{type:'mc',visual:s.vis.replace(/\n/g,'<br>'),text:s.q,options:opts,correct:opts.indexOf(s.opts[s.c]),explanation:s.e};
+function genTree(){
+  return choose([treeMonedas, treeRopa, treeCaminos])();
 }
-function lMuestra(){
-  const casos=[
-    {text:'"El 95% de los chilenos ama el reggaetón." — (Encuesta hecha a las 3 AM afuera de una disco en Bellavista).',
-    c:0,e:'El lugar y la hora sesgan completamente la muestra (Sesgo de selección). No representa a "los chilenos".'},
-    {text:'"Los alumnos de tercero medio no están ni ahí con estudiar." — (Conclusión sacada entrevistando a los 5 que se saltaron la clase en la plaza).',
-    c:0,e:'Entrevistaste justo a los que se saltaron la clase. Es una muestra hiper reducida y sesgada.'},
-  ];
-  const s=choose(casos);
-  const rawOpts = ['La muestra presenta un sesgo de selección crítico y no tiene validez para generalizar al total','Existe un error de cálculo masivo en el intervalo de confianza de la proporción presentada','La metodología de recolección de datos en espacios públicos invalida el resultado final','El tamaño de la muestra es insuficiente para determinar una tendencia cultural real'];
-  const opts = shuffle(rawOpts);
-  return{type:'mc',text:'Detecta el truco estadístico: <em>'+s.text+'</em>',
+function treeMonedas(){
+  const prob = fmt(1/8);
+  let opts = shuffle([prob, fmt(3/8), fmt(1/3), fmt(1/6)]);
+  return {
+    type:'mc',
+    visual:`Lanzas una misma moneda al aire 3 veces seguidas.`,
+    text:`Hagan el árbol mental: ¿Probabilidad de que te salgan <strong>3 CARAS seguidas</strong>?`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`Multiplicamos el caminito descendente del árbol: (1/2) * (1/2) * (1/2) = 1/8. Hay sola una rama (C-C-C) entre las 8 posibles. ≈ <strong>${prob}</strong>.`
+  };
+}
+function treeRopa(){
+  const poleras = rand(3, 5);
+  const pantalones = rand(2, 4);
+  const zapatillas = rand(2, 3);
+  const total = poleras * pantalones * zapatillas;
+  const bad1 = poleras + pantalones + zapatillas;
+  const bad2 = total - zapatillas;
+  let opts = shuffle([String(total), String(bad1), String(bad2), String(total-1)]);
+  return {
+    type:'mc',
+    visual:`Abres el clóset: hay ${poleras} poleras, ${pantalones} pantalones y ${zapatillas} pares de zapatillas (todo distinto).`,
+    text:`Principio multiplicativo salvaje. ¿De cuántas pintas (formas) te puedes vestir hoy?`,
     options:opts,
-    correct:opts.indexOf(rawOpts[s.c]),explanation:s.e};
+    correct:opts.indexOf(String(total)),
+    explanation:`¡No me sumen las prendas por favor! Se multiplican las opciones del árbol: ${poleras} × ${pantalones} × ${zapatillas} = <strong>${total}</strong> tenidas diferentes.`
+  };
 }
-function lPromedio(){
-  const salaries=Array.from({length:5},()=>rand(400,600)*1000);
-  const boss=rand(10,20)*1000000; // gerente general chupasangre
-  const all=[...salaries,boss];
-  const mean=fmt(all.reduce((a,b)=>a+b,0)/all.length);
-  const med=[...salaries].sort((a,b)=>a-b)[2];
-  const fm=n=>'$'+n.toLocaleString('es-CL');
-  const opts=shuffle([`El promedio (${fm(mean)}) es un espejismo por las lucas del dueño`,`La mediana (${fm(med)}) es un dato erróneo`,`Todos ganan súper bien`,`A los trabajadores les subieron el sueldo`]);
-  return{type:'mc',
-    visual:`Sueldos de una PYME: ${salaries.map(fm).join(' — ')} — ${fm(boss)} (Dueño)<br>Promedio: ${fm(mean)} | Mediana: ${fm(med)}`,
-    text:`El dueño sale en la revista diciendo: <em>"En mi PYME el sueldo promedio es brutal: ${fm(mean)}."</em> ¿Cual es la trampa?`,
-    options:opts,correct:opts.indexOf(`El promedio (${fm(mean)}) es un espejismo por las lucas del dueño`),
-    explanation:`El mega-sueldo del dueño infla el promedio. La <strong>mediana</strong> (${fm(med)}) es la pura y dura realidad salarial del negocio.`};
-}
-function lPorcentaje(){
-  const casos=[
-    {vis:`📰 "Los atropellos de scooters eléctricos en Providencia aumentaron un 100% este mes"`,q:'Luego lees la letra chica: "El mes pasado hubo 1, y este mes 2".',
-    opts:['Un incremento porcentual masivo suele esconder una frecuencia absoluta inicial demasiado pequeña','Se aplicó una fórmula de interés compuesto errónea para determinar la tasa de crecimiento','La ausencia de un grupo de control impide validar el aumento de la siniestralidad','Las variables cualitativas no permiten obtener conclusiones sobre el impacto real del mes'],
-    c:0,e:'1 accidente extra significa un aumento del 100%. Genera pánico artificial, pero en casos reales siguen siendo poquísimos.'},
-  ];
-  const s=choose(casos);
-  const opts = shuffle(s.opts);
-  return{type:'mc',visual:s.vis,text:s.q,options:opts,correct:opts.indexOf(s.opts[s.c]),explanation:s.e};
-}
-function lCausalidad(){
-  const pares=[
-    {a:'Venta de helados Bórex',b:'asaltos en la playa',causa:'el verano y la cantidad de gente',text:'En enero suben las ventas de helados en Viña, y suben los asaltos. ¿Vender helados genera delincuencia?'},
-    {a:'Zapatillas más caras',b:'llegar temprano',causa:'el nivel socioeconómico/movilización',text:'Alumnos con zapatillas de 100 lucas llegan más temprano que los que usan de 20 lucas. ¿La zapatilla te hace caminar más rápido?'},
-  ];
-  const p=choose(pares);
-  const rawOpts = [`Existe una correlación estadística fuerte, pero el factor causal real es externo: ${p.causa}`,'Se confirma la causalidad directa ya que el aumento de uno precede al otro en el tiempo','La precisión del calzado influye directamente en la eficiencia biomecánica del estudiante','Los datos son inconsistentes debido a una falla en la recolección de la variable dependiente'];
-  const opts = shuffle(rawOpts);
-  return{type:'mc',
-    visual:`📈 Falsa Correlación: ${p.a} causan ${p.b}`,
-    text:p.text,
-    options:opts,
-    correct:opts.indexOf(rawOpts[0]),
-    explanation:`Es el clásico error de <strong>Correlación ≠ Causalidad</strong>. Siempre pregúntate si hay una tercera variable mágica escondida.`};
+function treeCaminos(){
+  const pA = fmt(rand(3,6)/10);
+  const pB = fmt(rand(6,9)/10);
+  const ans = fmt(pA * pB);
+  let opts = shuffle([ans, fmt(pA * (1-pB)), fmt(pA + pB), fmt(pB)]);
+  return {
+    type:'mc',
+    visual:`Probabilidad de que llueva: ${pA}<br>Probabilidad de que haya taco SI es que llueve: ${pB}`,
+    text:`Construyan la rama: ¿Cuál es la probabilidad de salir tempranito, que te <strong>LLUEVA y además HAYA TACO</strong>?`,
+    options:opts.map(String),
+    correct:opts.indexOf(ans),
+    explanation:`Regla del "Y" (vas avanzando por las ramas): se multiplican las probabilidades. ${pA} × ${pB} ≈ <strong>${ans}</strong>.`
+  };
 }
 
 /* ═══════════════════════════════════════════
-   ZONA 3 — DISPERSIÓN (CHILENIZADA)
+   ZONA 3 — TABLAS DE CONTINGENCIA
 ═══════════════════════════════════════════ */
-function genDisp(){return choose([dispCalc,dispCompare,dispConcept,dispInput])();}
-function dispCalc(){
-  const data=Array.from({length:5},()=>rand(40,65)/10);
-  const v=fmt(variance(data)),sd=fmt(stdev(data));
-  const mean=fmt(data.reduce((a,b)=>a+b,0)/data.length);
-  const askSD=rand(0,1)===0;
-  const ans=askSD?sd:v;
-  const opts=shuffle([ans,fmt(ans+0.5),fmt(Math.abs(ans-0.3)),fmt(ans*1.5)]);
-  return{type:'mc',
-    visual:'Tus notas: [ '+data.map(n=>n.toFixed(1)).join(' , ')+' ]<br>Promedio = '+mean.toFixed(1),
-    text:askSD?'Tu profesor te pide calcular la <strong>Desviación Estándar</strong> aproximada de tus notas.':'Calcula la <strong>Varianza</strong> aproximada de tu rendimiento.',
-    options:opts.map(String),correct:opts.indexOf(ans),
-    explanation:askSD?`Varianza = ${v} → DE = √${v} ≈ <strong>${sd}</strong>`:
-      `Varianza = promedio de (Nota − Promedio)² ≈ <strong>${v}</strong>`};
+function genTable(){
+  return choose([tableTotal, tableCondition, tableRowCol])();
 }
-function dispCompare(){
-  const A=Array.from({length:5},()=>rand(55,60)/10);
-  const B=[rand(20,35)/10, rand(35,50)/10, rand(60,70)/10, rand(65,70)/10, rand(20,40)/10];
-  const sdA=fmt(stdev(A)),sdB=fmt(stdev(B));
-  const mA=fmt(A.reduce((a,b)=>a+b,0)/A.length),mB=fmt(B.reduce((a,b)=>a+b,0)/B.length);
-  const betterA=sdA<sdB;
-  return{type:'mc',
-    visual:`Alumno A: [ ${A.join(', ')} ] → prox. ${mA}<br>Alumno B: [ ${B.join(', ')} ] → prox. ${mB}`,
-    text:'¿Qué alumno es más "parejito" (más consistente / menos disperso)?',
-    options:['Alumno A (sus notas casi no se alejan de su promedio)','Alumno B (se saca rojos y sietes extremos)','Ambos son igual de consistentes','No hay cómo saberlo'],
-    correct:betterA?0:1,
-    explanation:`La DE del Alumno A es  ${sdA} vs la de B que es gigantesca (${sdB}). Menor DE = más consistencia histórica.`};
+function tableTotal(){
+  const hA = rand(10, 20); const hR = rand(5, 10);
+  const mA = rand(15, 25); const mR = rand(2, 8);
+  const total = hA + hR + mA + mR;
+  const totA = hA + mA;
+  const prob = fmt(totA / total);
+  let opts = shuffle([prob, fmt(mA / total), fmt(hA / total), fmt((hR+mR)/total)]);
+  return {
+    type:'mc',
+    visual:`Tabla de Doble Entrada:<br>
+    Hombres: ${hA} Aprueban, ${hR} Reprueban.<br>
+    Mujeres: ${mA} Aprueban, ${mR} Reprueban.`,
+    text:`Si el profe saca a un alumno al azar de TODA la sala, ¿Probabilidad de elegir a alguien que <strong>APRUEBE</strong>?`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`Suma TODO el curso: ${total} alumnos. Suma a todos los genios que Aprueban (Hombres+Mujeres): ${totA}. Laplace al instante: <strong>${totA}/${total} ≈ ${prob}</strong>.`
+  };
 }
-function dispConcept(){
-  const qs=[
-    {text:'A simple vista, ¿qué nos dice la maldita <strong>desviación estándar</strong>?',opts:['Indica, en promedio, el nivel de dispersión o distancia de los datos con respecto a la media','Representa el límite superior estadístico para el cálculo de probabilidades PAES','Determina la frecuencia absoluta de casos que se encuentran bajo el umbral de aprobación','Mide la amplitud térmica de la muestra considerando exclusivamente los valores extremos'],c:0,e:'Es tal cual: nos chismosea si los datos están agrupados protegiendo el promedio, o si andan todos desparramados.'},
-    {text:'Si las estaturas de un curso de educación física tienen Varianza = 0, ¿qué significa?',opts:['Literally todos miden exactamente lo mismo (cero dispersión en la muestra)','Se aplicó una técnica de clonación que igualó las medidas de tendencia central','El promedio de estatura es nulo y la muestra no posee validez estadística real','El instrumento de medición presentó un error de calibración sistémico e irreversible'],c:0,e:'Varianza 0 implica cero dispersión. Aunque suene falso, significaría que hasta el último milímetro todos empatan.'},
-  ];
-  const s=choose(qs);
-  return{type:'mc',text:s.text,options:s.opts,correct:s.c,explanation:s.e};
+function tableCondition(){
+  const hA = rand(10, 20); const hR = rand(5, 15);
+  const mA = rand(15, 25); const mR = rand(2, 10);
+  const totM = mA + mR;
+  const prob = fmt(mA / totM);
+  let opts = shuffle([prob, fmt(mA / (hA+hR+mA+mR)), fmt(mA / (hA+mA)), fmt(mR / totM)]);
+  return {
+    type:'mc',
+    visual:`Tabla de Contingencia:<br>
+    Hombres: ${hA} Apr, ${hR} Rep.<br>
+    Mujeres: ${mA} Apr, ${mR} Rep.`,
+    text:`¡OJO a la Condición! Te dicen: "<strong>SABIENDO que es MUJER</strong>, ¿probabilidad de que apruebe?"`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`La frase "Sabiendo que" te ACHICA el Universo. Tu nuevo total son SOLO las Mujeres (${totM}). De ellas, ${mA} aprueban: <strong>${mA}/${totM} ≈ ${prob}</strong>.`
+  };
 }
-function dispInput(){
-  const data=[rand(5,8), rand(5,8), rand(15,20), rand(15,20)];
-  const sd=fmt(stdev(data));
-  const mean=fmt(data.reduce((a,b)=>a+b,0)/data.length);
-  return{type:'input',
-    visual:`Tiempos esperando colectivos (min): [ ${data.join(' , ')} ]<br>Media = ${mean} min`,
-    text:'Calcula la <strong>desviación estándar</strong> exacta (usa 1 decimal y punto o coma).',
-    placeholder:`Ej: 1.5`,
-    check:val=>{
-      const n=parseFloat(val.trim().replace(',','.'));
-      return !isNaN(n) && Math.abs(n-sd) < 1.0;
-    },
-    explanation:`Pasos: 1) Diferencias a la media al cuadrado. 2) Promédialos (Varianza). 3) Saca la Raíz (DE ≈ <strong>${sd}</strong>).`};
+function tableRowCol(){
+  const hA = rand(10, 20); const hR = rand(10, 15);
+  const mA = rand(15, 25); const mR = rand(5, 10);
+  const totA = hA + mA;
+  const prob = fmt(hA / totA);
+  let opts = shuffle([prob, fmt(hA / (hA+hR)), fmt(hA / (hA+hR+mA+mR)), fmt(mA / totA)]);
+  return {
+    type:'mc',
+    visual:`Hombres: ${hA} Apr, ${hR} Rep.<br>Mujeres: ${mA} Apr, ${mR} Rep.`,
+    text:`Encuentras un papel en el suelo de la sala y dice <strong>Aprobado</strong>. ¿Probabilidad de que el dueño sea Hombre?`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`Tu universo ahora son SOLO los Aprobados totales (${totA}). ¿Cuántos de esos son hombres? ${hA}. O sea: <strong>${hA}/${totA} ≈ ${prob}</strong>.`
+  };
 }
 
 /* ═══════════════════════════════════════════
-   ZONA 4 — DECISIONES (CHILENIZADA)
+   ZONA 4 — REGLAS (O/Y)
 ═══════════════════════════════════════════ */
-function genExcel(){return choose([exJob,exInvest,exScores])();}
-function exJob(){
-  const mA=rand(550,600)*1000,sdA=rand(10,20)*1000;
-  const mB=mA+rand(50,150)*1000,sdB=rand(150,250)*1000;
-  const fm=n=>'$'+(n/1000).toFixed(0)+'k';
-  const stable=sdA<sdB?'El Trabajo A':'El Trabajo B';
-  const high=mA>mB?'El Trabajo A':'El Trabajo B';
-  const casos=[
-    {q:'Estudias de noche y necesitas pagar arriendo sí o sí. No puedes arriesgar tu sueldo. ¿Cuál tomas?',c:sdA<sdB?0:1,e:`<strong>${stable}</strong> tiene menor DE (${fm(Math.min(sdA,sdB))}): pagan siempre casi lo mismo. Sin sustos a fin de mes.`},
-    {q:'Vives con tus papás (0 gastos fijos) y quieres hacer plata rápida como comisionista experto.',c:mA>mB?0:1,e:`<strong>${high}</strong> tiene mayor promedio (${fm(Math.max(mA,mB))}). Mucho riesgo (DE alta), pero potencial de ganar jugoso.`},
-  ];
-  const s=choose(casos);
-  const rawOpts = ['Trabajo A','Trabajo B','Tiro una moneda','Cualquiera sirve'];
-  const opts = shuffle(rawOpts);
-  return{type:'mc',
-    visual:`Trabajo A (Fijo) → Media: ${fm(mA)} | DE: ${fm(sdA)}<br>Trabajo B (Comisiones) → Media: ${fm(mB)} | DE: ${fm(sdB)}`,
-    text:s.q,options:opts,
-    correct:opts.indexOf(rawOpts[s.c]),explanation:s.e};
+function genRules(){
+  return choose([ruleO, ruleY, ruleReposicion, ruleSinReposicion])();
 }
-function exInvest(){
-  const mA=rand(400,500), sdA=rand(30,50);
-  const mB=mA+rand(10,40), sdB=rand(100,200);
-  const rawOpts = ['Que la enseñanza no le llega a todos por igual (mucha desigualdad)','Que el método pedagógico es excelente y beneficia a todo el alumnado','Que el promedio presentado es una métrica artificial y carente de validez','Que la desviación estándar es un dato irrelevante para este tipo de análisis'];
-  const opts = shuffle(rawOpts);
-  return{type:'mc',
-    visual:`Preu A → Media ensayo: ${mA} | DE: ${sdA}<br>Preu B → Media ensayo: ${mB} | DE: ${sdB}`,
-    text:`Ambos preuniversitarios tienen promedios SIMILARES. Pero en el Preu B hay gente con ${mB+200} y gente con ${Math.max(100,mB-300)} pts. ¿Qué te dice la Desviación Estándar alta del B?`,
-    options:opts,correct:opts.indexOf(rawOpts[0]),explanation:`Altísima DE en el Preu B significa resultados brutales en los extremos. A unos les va excelente y otros reprueban duro. El Preu A es más parejo pedagógicamente.`};
+function ruleO(){
+  const prob = fmt(4/52 + 13/52 - 1/52); // As o Corazón
+  let opts = shuffle([prob, fmt(4/52 + 13/52), fmt((4*13)/52), fmt(17/52)]);
+  return {
+    type:'mc',
+    visual:`Mazo inglés: 52 cartas. (4 pintas, 13 cartas por pinta).`,
+    text:`Regla de la Suma (O). Al sacar una carta, ¿probabilidad de que sea un <strong>As O un Corazón</strong>?`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`P(As) = 4/52. P(Corazón) = 13/52. ¡Cuidado! Hay un AS de Corazón que tú, pajarito de dios, sumaste dos veces. Hay que restarlo: 4/52 + 13/52 - 1/52 = 16/52 ≈ <strong>${prob}</strong>.`
+  };
 }
-function exScores(){
-  const A=Array.from({length:5},()=>rand(55,65));
-  const B=[rand(20,40),rand(20,40),rand(80,100),rand(80,100),rand(40,55)];
-  const mA=fmt(A.reduce((a,b)=>a+b,0)/A.length),mB=fmt(B.reduce((a,b)=>a+b,0)/B.length);
-  const sdA=fmt(stdev(A)),sdB=fmt(stdev(B));
-  const rawOpts = ['El Liceo A (posee una dispersión menor y resultados más consistentes)','El Liceo B (presenta puntajes máximos de asistencia del 100% en la muestra)','Ambos establecimientos operan con idéntico nivel de desempeño académico','La desviación estándar es una medida inútil para determinar la equidad real'];
-  const opts = shuffle(rawOpts);
-  return{type:'mc',
-    visual:`Liceo A: [ ${A.join('% , ')}% ] | DE ${sdA}<br>Liceo B: [ ${B.join('% , ')}% ] | DE ${sdB}`,
-    text:'Porcentajes de asistencia en marzo. ¿Qué liceo tuvo una asistencia más equitativa y controlada?',
-    options:opts,
-    correct:opts.indexOf(rawOpts[0]),
-    explanation:`El Liceo B tiene una crisis en algunos cursos (gente con 20%). El Liceo A logró sostener la barra pareja para todos (DE=${sdA}).`};
+function ruleY(){
+  const prob = fmt((4/52) * (4/52));
+  let opts = shuffle([prob, fmt((4/52) + (4/52)), fmt((4/52)*(3/51)), fmt((4/52)*(3/52))]);
+  return {
+    type:'mc',
+    visual:`Mazo de 52 cartas. Sacas 2 cartas seguidas <strong>CON REPOSICIÓN</strong> (la devuelves).`,
+    text:`Regla del producto (Y). ¿Probabilidad de que la 1ra sea As <strong>Y</strong> la 2da también sea As?`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`Al devolverla, nada cambia. Son eventos independientes. Multiplicamos las ramas: (4/52) × (4/52) ≈ <strong>${prob}</strong>.`
+  };
 }
-
-/* ═══════════════════════════════════════════
-   ZONA 5 — PROBABILIDAD (CHILENIZADA)
-═══════════════════════════════════════════ */
-function genProb(){return choose([pBasic,pConditional,pTree,pComplement,pConcept])();}
-function pBasic(){
-  const total=rand(10,20)*2,fav=rand(2,total-2);
-  const prob=fmt(fav/total);
-  const opts=shuffle([prob,fmt((fav+1)/total),fmt(Math.abs(fav-1)/(total)),fmt((total-fav)/total)]);
-  const scenarios=[
-    `Estás en el metro y pasan ${total} trenes en una hora: ${fav} van vacíos y el resto repletos hasta la puerta. ¿Probabilidad de que el primero venga vacío?`,
-    `Tu playlist de Spotify tiene ${total} canciones perreo. De esas, ${fav} son de Bad Bunny. Aprietas "Shuffle". ¿Prob. de que suene el conejo?`,
-    `De ${total} sopaipillas en el carrito, ${fav} están pasadas y te quemas. Sacas una al azar. ¿Probabilidad de quemarte?`,
-  ];
-  return{type:'mc',text:choose(scenarios),options:opts.map(String),correct:opts.indexOf(prob),
-    explanation:`Casos favorables / Totales = ${fav} / ${total} = <strong>${prob}</strong>`};
+function ruleReposicion(){
+  const prob = fmt((13/52) * (13/52));
+  let opts = shuffle([prob, fmt((13/52)*(12/51)), fmt((13/52)+(13/52)), fmt((13/52)*(13/51))]);
+  return {
+    type:'mc',
+    visual:`Mazo de 52 cartas.`,
+    text:`Sacas una carta, ves que es Trébol, y <strong>la tiras de vuelta al mazo (CON reposición)</strong>. ¿Probabilidad de volver a sacar Trébol en la 2da?`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`El mazo se "resetea" porque la devolviste intacta. Tienes 52 cartas y 13 tréboles de nuevo. La prob total: (13/52) × (13/52) ≈ <strong>${prob}</strong>.`
+  };
 }
-function pConditional(){
-  const total=100;
-  const con=rand(30,50),sin=total-con;
-  const posC=Math.round(con*(rand(85,95)/100)); // Estudiaron y pasaron
-  const posS=Math.round(sin*(rand(5,15)/100)); // No estudiaron, chamullaron y pasaron
-  const totalPos=posC+posS;
-  const ans=fmt(posC/totalPos);
-  const opts=shuffle([ans,fmt(posC/total),fmt(con/total),fmt(totalPos/total)]);
-  return{type:'mc',
-    visual:`De 100 estudiantes:<br>— ${con} estudiaron de verdad → ${posC} aprobaron el examen.<br>— ${sin} no estudiaron nada → ${posS} le achuntaron (chamullo) y aprobaron.<br>Total aprobados: ${totalPos}`,
-    text:'Entrevistas a <strong>un estudiante X que acaba de avisar que Aprobó.</strong> ¿Probabilidad de que sí haya estudiado?',
-    options:opts.map(String),correct:opts.indexOf(ans),
-    explanation:`Regla del sabio (Prob. Condicionada): P(Estudió | Aprobó) = ${posC} / ${totalPos} aprobados totales = <strong>${ans}</strong>.`};
+function ruleSinReposicion(){
+  const prob = fmt((13/52) * (12/51));
+  let opts = shuffle([prob, fmt((13/52)*(13/52)), fmt((13/52)+(12/51)), fmt((13/52)*(13/51))]);
+  return {
+    type:'mc',
+    visual:`Mazo de 52 cartas.`,
+    text:`¡El clásico caza bobos! Sacas una carta, es Pica. <strong>SIN devolverla (SIN reposición)</strong>, sacas otra. ¿Probabilidad de sacar ambas Picas seguidas?`,
+    options:opts.map(String),
+    correct:opts.indexOf(prob),
+    explanation:`¡Sin reposición el universo entero cambia! P(1ra Pica) = 13/52. Pero para la 2da tirada, te quedan solo 12 picas y el mazo bajó a 51. Multiplicas: 13/52 × 12/51 ≈ <strong>${prob}</strong>.`
+  };
 }
-function pTree(){
-  const pA=rand(3,6)/10,pBgivenA=rand(6,9)/10,pBgivenNA=rand(1,3)/10;
-  const ans=fmt(pA*pBgivenA);
-  const opts=shuffle([ans,fmt(pA*pBgivenNA),fmt((1-pA)*pBgivenA),fmt(pBgivenA)]);
-  return{type:'mc',
-    visual:`P(Profe envíe tarea sorpresa) = ${pA}<br>P(Tú te mueras de sueño | hay tarea) = ${pBgivenA}<br>P(Tú te mueras de sueño | NO hay tarea) = ${pBgivenNA}`,
-    text:'¿Probabilidad exacta de que el Profe DEJE tarea y tú a las 2AM ESTÉS muerto de sueño?',
-    options:opts.map(String),correct:opts.indexOf(ans),
-    explanation:`Árbol de probabilidad: Vas por la rama "Hay Tarea" (${pA}) y luego rama "Muerto de Sueño" (${pBgivenA}). Multiplicas: <strong>${ans}</strong>.`};
-}
-function pComplement(){
-  const p=rand(2,8)/10;const comp=fmt(1-p);
-  const qs=[
-    {text:`Juegas un Loto. P(ganar al menos $1000) = ${p}. ¿Cuál es P(no ganar NADA)?`,ans:comp,e:`Si es el complemento: 1 − ${p} = <strong>${comp}</strong> (Puta mala cuea).`},
-    {text:`Tienes una Probabilidad de ${p} (un ${p*100}%) de quedarte dormido mañana. ¿Probabilidad de despertar bien?`,ans:comp,e:`Prob(Despertar) = 1 − Prob(Quedarse dormido). 1 − ${p} = <strong>${comp}</strong>.`},
-  ];
-  const s=choose(qs);
-  const opts=shuffle([s.ans,fmt(s.ans+0.05),fmt(p),fmt(Math.abs(s.ans-0.1))]);
-  return{type:'mc',text:s.text,options:opts.map(String),correct:opts.indexOf(s.ans),explanation:s.e};
-}
-function pConcept(){
-  const qs=[
-    {text:'En estadistica de 3ro Medio, ¿qué es P(A|B)? (Ej: P(aprobar | me mate estudiando))',opts:['Determina la probabilidad de un evento A sabiendo que ya ha ocurrido un evento condicionante B','Calcula la intersección de dos conjuntos disjuntos dentro del espacio muestral total','Indica que la ocurrencia de un evento es independiente de cualquier condición previa','Representa la adición de probabilidades para eventos que no son mutuamente excluyentes'],c:0,e:'P(A|B) es la bendita <strong>probabilidad condicional</strong>. La información que adquieres en "B" cambia totalmente tus chances del futuro "A".'},
-    {text:'Lanzas una moneda "honesta" (50% sello, 50% cara) y sacas 3 caras seguidas. A la cuarta tienes la guata apretada de que esta vez FIJO sale sello. ¿Qué dice el Profe Chaparro de eso?',opts:['Los eventos son independientes y el azar no tiene memoria: la probabilidad sigue siendo un 50%','Se aplica la Ley de los Grandes Números que asegura una compensación inmediata del azar','La inercia probabilística garantiza que la tendencia ganadora se mantendrá constante','Existe un desgaste físico en el material que sesga el resultado hacia el lado opuesto'],c:0,e:'<strong>Eventos independientes.</strong> Llorarle a la "Ley de los Promedios" a corto plazo es la Falacia del Jugador. Siempre será 50%.'},
-  ];
-  const s=choose(qs);
-  const opts = shuffle(s.opts);
-  return{type:'mc',text:s.text,options:opts,correct:opts.indexOf(s.opts[s.c]),explanation:s.e};
-}
-
 
 /* ═══════════════════════════════════════════
    ZONA 6 — MONTY HALL (RESTORED)
@@ -2219,6 +2142,75 @@ function easterEgg(){
 }
 
 
+
+/* ── LEADERBOARD SUPABASE (HACK "SIN MOVER UN DEDO") ── */
+const supabaseUrl = 'https://oefelsnvxzlupztoxuii.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9lZmVsc252eHpsdXB6dG94dWlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkxMDI5MDQsImV4cCI6MjA4NDY3ODkwNH0.NEBmwovZkq_dbwH-Yw5BH8pFVDS2YbgALIMPYituXWM';
+const sb = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+async function syncSupabaseScore() {
+  if(!G.pts || G.pts < 100) return;
+  const notaEl = document.getElementById('carnet-nota');
+  const notaTxt = notaEl ? notaEl.innerText.replace('NOTA PAES (Escala 60%): ','').trim() : "2.0";
+  
+  const leadData = {
+    name: G.agente,
+    phone: G.emoji, // emoji -> phone
+    rut: String(G.pts), // pts -> rut
+    plan_name: notaTxt, // nota -> plan_name
+    type: 'bunker_score',
+    email: `bunker_${Math.random().toString(36).substring(2,10)}@bunker.com`,
+    interest_pay: false,
+    created_at: new Date().toISOString()
+  };
+  try {
+    await sb.from('leads').insert([leadData]);
+  } catch(e) { console.error('SB Sync', e); }
+}
+
+async function loadLeaderboard() {
+  const lblist = document.getElementById('lb-list');
+  if(!lblist) return;
+  try {
+    const { data, error } = await sb.from('leads')
+      .select('name, phone, rut, plan_name, created_at')
+      .eq('type', 'bunker_score')
+      .order('created_at', { ascending: false })
+      .limit(1000);
+      
+    if(error) throw error;
+    
+    // Deduplicate by name, keeping highest score
+    const tops = {};
+    data.forEach(r => {
+      const p = parseInt(r.rut) || 0;
+      if(!tops[r.name] || p > tops[r.name].p) {
+        tops[r.name] = { p, e: r.phone||'🤓', n: r.plan_name||'2.0' };
+      }
+    });
+    
+    const sorted = Object.entries(tops).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.p - a.p).slice(0,10);
+    
+    if(sorted.length === 0) {
+      lblist.innerHTML = '<div style="text-align:center; color:var(--text3);">Sé el primero en entrar a la historia.</div>';
+      return;
+    }
+    
+    lblist.innerHTML = sorted.map((u, i) => `
+      <div style="display:flex; justify-content:space-between; background:rgba(255,255,255,0.02); padding:0.5rem 1rem; border-radius:4px; border-left:3px solid ${i===0?'#fbbf24':i===1?'#94a3b8':i===2?'#b45309':'var(--c1)'};">
+        <span style="color:var(--text);">${i+1}. ${u.e} ${u.name.substring(0,12)}</span>
+        <span style="color:var(--c4);">${u.p} pts <span style="font-size:0.75rem;color:var(--text3);margin-left:8px">Nota ${u.n}</span></span>
+      </div>
+    `).join('');
+    
+  } catch(e) {
+    lblist.innerHTML = '<div style="text-align:center; color:var(--c5);">Error conectando al satélite Supabase.</div>';
+  }
+}
+
+// Load on init
+setTimeout(loadLeaderboard, 1500);
+
 /* INIT */
 const elChk = document.getElementById('chk-hardcore');
 if(elChk) elChk.checked = G.hardcore;
@@ -2255,16 +2247,73 @@ if(!G.agente || !G.emoji) {
     updateHUD();
   }, 500);
 }
-if(countStars()>=6) {
-  const z7 = document.getElementById('z7-card');
-  if(z7) {
-    z7.querySelector('.zone-icon-wrap').style.filter = 'drop-shadow(0 0 10px var(--c5))';
-    z7.querySelector('.zone-desc').innerHTML = "¡DESBLOQUEADO! Examen final randomizado. Supera El Búnker para graduarte.";
-    z7.querySelector('#zs-final').textContent = ['○○○','★○○','★★○','★★★'][G.stars.final||0];
+if(countStars()>=5) {
+  const z6 = document.getElementById('z6-card');
+  if(z6) {
+    z6.querySelector('.zone-icon-wrap').style.filter = 'drop-shadow(0 0 10px var(--c5))';
+    z6.querySelector('.zone-desc').innerHTML = "¡DESBLOQUEADO! Examen final randomizado. Supera El Búnker para graduarte.";
+    z6.querySelector('#zs-final').textContent = ['○○○','★○○','★★○','★★★'][G.stars.final||0];
   }
 }
 updateHUD();
 
+
+/* ── EASTER EGGS EXTRA ── */
+
+/* ── SONIDOS SFX (WEB AUDIO API) ── */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playSound(type) {
+  if(audioCtx.state === 'suspended') audioCtx.resume();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  const now = audioCtx.currentTime;
+  if(type === 'coin') {
+    osc.type = 'sine'; osc.frequency.setValueAtTime(987.77, now);
+    osc.frequency.setValueAtTime(1318.51, now + 0.1);
+    gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.2, now + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+    osc.start(now); osc.stop(now + 0.3);
+  } else if(type === 'hurt') {
+    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now);
+    osc.frequency.exponentialRampToValueAtTime(50, now + 0.3);
+    gain.gain.setValueAtTime(0.2, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+    osc.start(now); osc.stop(now + 0.3);
+  } else if(type === 'levelup') {
+    osc.type = 'square'; osc.frequency.setValueAtTime(440, now);
+    osc.frequency.setValueAtTime(554, now + 0.1); osc.frequency.setValueAtTime(659, now + 0.2);
+    osc.frequency.setValueAtTime(880, now + 0.3);
+    gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.6);
+    osc.start(now); osc.stop(now + 0.6);
+  } else if(type === 'boss_hurt') {
+    osc.type = 'triangle'; osc.frequency.setValueAtTime(100, now);
+    osc.frequency.exponentialRampToValueAtTime(20, now + 0.5);
+    gain.gain.setValueAtTime(0.5, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+    osc.start(now); osc.stop(now + 0.5);
+  }
+}
+
+let kkeys = '';
+window.addEventListener('keydown', e => {
+  kkeys += e.key.toLowerCase();
+  if(kkeys.length > 20) kkeys = kkeys.slice(-20);
+  if(kkeys.includes('profe')) {
+    kkeys = '';
+    if(!G.logros.profeEgg) {
+      G.pts += 1000; saveGame(); updateHUD();
+      showToast('🤫 CÓDIGO SECRETO: ¡PROFEEEE! +1000 pts 💯');
+      G.logros.profeEgg = true;
+    }
+  }
+  if(kkeys.includes('paes')) {
+    kkeys = '';
+    if(!G.logros.paesEgg) {
+      G.pts += 850; saveGame(); updateHUD();
+      showToast('📝 ¡PUNTAJE NACIONAL PAES! +850 pts 🚀');
+      G.logros.paesEgg = true;
+    }
+  }
+});
 
 </script>
 </body>

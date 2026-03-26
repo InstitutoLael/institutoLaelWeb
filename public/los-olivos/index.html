@@ -2247,7 +2247,10 @@ async function loadLeaderboard() {
       }
     });
     
-    const sorted = Object.entries(tops).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.p - a.p).slice(0,10);
+    const sorted = Object.entries(tops).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.p - a.p).slice(0,9);
+    
+    // Inyectar al Profe Diego Inmortal
+    sorted.unshift({ name: "PROFE DIEGO", p: 99999, e: "🔥", n: "7.0 (MAX)", isBoss: true });
     
     if(sorted.length === 0) {
       lblist.innerHTML = '<div style="text-align:center; color:var(--text3); padding:1.5rem;">📱 Sé el primer Agente en sincronizar su puntaje hoy.</div>';
@@ -2255,12 +2258,12 @@ async function loadLeaderboard() {
     }
     
     lblist.innerHTML = sorted.map((u, i) => `
-      <div style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.02); padding:0.6rem 1rem; border-radius:8px; border-left:4px solid ${i===0?'#fbbf24':i===1?'#94a3b8':i===2?'#b45309':'var(--border2)'}; transition:0.3s; margin-bottom:2px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; background:${u.isBoss ? 'rgba(251,191,36,0.1)' : 'rgba(255,255,255,0.02)'}; padding:0.6rem 1rem; border-radius:8px; border-left:4px solid ${u.isBoss ? '#fbbf24' : i===1?'#94a3b8':i===2?'#b45309':'var(--border2)'}; transition:0.3s; margin-bottom:2px; ${u.isBoss ? 'box-shadow:0 0 15px rgba(251,191,36,0.2); border:1px solid rgba(251,191,36,0.3);' : ''}">
         <span style="color:var(--text); font-weight:500;">
-          <span style="color:var(--text3); margin-right:8px; font-size:0.7rem;">#${i+1}</span>
+          <span style="color:${u.isBoss ? 'var(--c6)' : 'var(--text3)'}; margin-right:8px; font-size:0.75rem;">${u.isBoss ? '👑' : '#'+(i+1)}</span>
           ${u.e} ${u.name.substring(0,12)}
         </span>
-        <span style="color:var(--c1); font-weight:800;">
+        <span style="color:${u.isBoss ? 'var(--c6)' : 'var(--c1)'}; font-weight:800;">
           ${u.p} pts 
           <span style="font-size:0.65rem; color:var(--text2); margin-left:10px; opacity:0.7;">Nota ${u.n}</span>
         </span>

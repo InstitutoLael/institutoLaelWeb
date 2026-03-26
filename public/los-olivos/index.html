@@ -1296,6 +1296,17 @@ function stopTimer() {
 const msgsGood = ["¡Eres máquina mastodonte!", "¡Ese es mi alumno!", "Tráiganle la NASA a este", "¡Maquinola!", "Puntaje Nacional a la vista", "¡Seco!"];
 const msgsBad = ["Fue pura suerte al revés...", "¿Dejaste el cerebro en la casa?", "A leer de nuevo el enunciado...", "Me va a dar un infarto", "¿En serio?", "Por favor concéntrate..."];
 
+function showToast(text) {
+  const t = document.getElementById('toast');
+  if(!t) return;
+  t.textContent = text;
+  t.classList.remove('show');
+  void t.offsetWidth; // trigger reflow
+  t.classList.add('show');
+  if(t.timer) clearTimeout(t.timer);
+  t.timer = setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
 function showDamage(e, text, isBad=false) {
   if(!e || !e.clientX) return;
   const d = document.createElement('div');

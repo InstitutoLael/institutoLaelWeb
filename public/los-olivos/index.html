@@ -1231,7 +1231,7 @@ const defaultG = {
   stars:{laplace:0,tree:0,table:0,rules:0,montyhall:0},
   /* historical accumulators — never reset on zone repeat */
   histCorrect:0, histTotal:0,
-  zoneBests:{laplace:0,tree:0,table:0,rules:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}, emoji:null
+  zoneBests:{laplace:0,tree:0,table:0,rules:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}, emoji:null, errors:{}
 };
 const savedG = localStorage.getItem('statArcadeSave');
 const G = savedG ? Object.assign({...defaultG}, JSON.parse(savedG)) : { ...defaultG };
@@ -1445,6 +1445,8 @@ function showLevelUp(lvl) {
   document.getElementById('levelup-num').textContent = `Subiste a Nivel ${lvl}`;
   ov.style.display = 'flex';
   ov.style.opacity = '1';
+  ov.style.pointerEvents = 'none';
+  ov.style.zIndex = '9999';
   ov.classList.remove('hidden');
   if(typeof playSound==='function') playSound('levelup');
   shootConfetti();
@@ -1693,7 +1695,7 @@ function doScore(ok, isGold=false, qType='gen'){
       setTimeout(backToHub, 2000);
       return;
     }
-    G.errors[qType] = (G.errors[qType] || 0) + 1;
+    if(!G.errors) G.errors = {}; G.errors[qType] = (G.errors[qType] || 0) + 1;
     if(isGold) { G.pts = Math.max(0, G.pts - 300); showToast('📉 PREGUNTA DE ORO FALLADA (-300 pts)'); } 
     document.querySelector('.q-card')?.classList.remove('shake'); 
     void document.querySelector('.q-card')?.offsetWidth; 

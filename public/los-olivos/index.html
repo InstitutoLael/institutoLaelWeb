@@ -1385,7 +1385,6 @@ function showCarnet() {
     </div>`;
   });
   chart.innerHTML = chartHtml;
-  const statsDiv = document.querySelector('.carnet-stats');
   if(statsDiv && !document.getElementById('carnet-chart')) statsDiv.after(chart);
 
   const agt = G.agente || 'ANÓNIMO';

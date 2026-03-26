@@ -1231,7 +1231,7 @@ const defaultG = {
   stars:{laplace:0,tree:0,table:0,rules:0,montyhall:0},
   /* historical accumulators — never reset on zone repeat */
   histCorrect:0, histTotal:0,
-  zoneBests:{laplace:0,tree:0,table:0,rules:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}, emoji:null, errors:{}
+  zoneBests:{laplace:0,tree:0,table:0,rules:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}, emoji:null, errors:{}, clase:null, hof:[]
 };
 const savedG = localStorage.getItem('statArcadeSave');
 const G = savedG ? Object.assign({...defaultG}, JSON.parse(savedG)) : { ...defaultG };
@@ -1240,7 +1240,8 @@ function saveGame() {
   const payload = {
     pts: G.pts, streak: G.streak, correct: G.correct, total: G.total,
     stars: G.stars, histCorrect: G.histCorrect, histTotal: G.histTotal,
-    zoneBests: G.zoneBests
+    zoneBests: G.zoneBests, agente: G.agente, emoji: G.emoji, 
+    clase: G.clase, errors: G.errors, hof: G.hof, logros: G.logros
   };
   localStorage.setItem('statArcadeSave', JSON.stringify(payload));
 }
@@ -1461,6 +1462,17 @@ function showLevelUp(lvl) {
   }, 3000);
 }
 
+window.onload=function(){
+  createStars();
+  if(!G.agente) {
+    document.getElementById('hub').style.display='none';
+    document.getElementById('agent-modal').style.display='flex';
+  } else {
+    document.getElementById('hub').style.display='flex';
+    updateHUD();
+  }
+}
+
 function showCertificate() {
   const m = document.getElementById('cert-modal');
   if(!m) return;
@@ -1643,7 +1655,7 @@ function renderQ(q){
   if(q.type==='special'&&q.setup) q.setup(card,fb,btnNext);
 
   if(G.hardcore && G.zone !== 'montyhall' && q.type !== 'special') {
-    let timeLeft = 15;
+    let timeLeft = G.clase === 'nerd' ? 10 : 15;
     document.getElementById('h-time').textContent = '00:'+timeLeft;
     document.getElementById('h-time').style.color = 'var(--c5)';
     hcTimerInt = setInterval(()=>{
@@ -1677,16 +1689,24 @@ function doScore(ok, isGold=false, qType='gen'){
       renderBossUI();
     }
     const bonus=G.streak>=3?20:0;
-    const speedBonus = isSpeedy ? 50 : 0;
-    const pts=(100+bonus+speedBonus)*(G.hardcore?2:1)*(isGold?2:1);
+    const speedBonus = isSpeedy ? (G.clase==='speedy'?150:50) : 0;
+    let base = 100+bonus+speedBonus;
+    if(G.clase==='nerd') base = Math.floor(base * 1.2);
+    const pts=base*(G.hardcore?2:1)*(isGold?2:1);
     G.pts+=pts;G.zonePts+=pts;
     document.getElementById('gs-pts').textContent=G.zonePts;
     if(G.streak>=10 && !G.logros.intocable) { G.logros.intocable=true; showToast('🏆 MODO DIOS: ¡INTOCABLE! (+1000 pts)'); G.pts+=1000; saveGame(); updateHUD(); }
     if(G.streak>=3) showToast(`🔥 ¡Racha x${G.streak}! +${bonus} pts bonus`);
     if(isSpeedy) showToast('⚡ ¡ULTRA RÁPIDO! +50 pts bonus');
   } else { 
+    if(G.clase==='lucky' && Math.random() < 0.15) {
+      if(typeof playSound==='function') playSound('coin');
+      showToast('🍀 SUERTE DIVINA: ¡Puntaje y racha salvada!');
+      return;
+    }
     if(typeof playSound==='function') playSound(G.zone==='final'?'boss_hurt':'hurt');
     if(navigator.vibrate) navigator.vibrate([50, 50, 100]);
+    if(G.clase==='speedy') { G.pts = Math.max(0, G.pts - 500); showToast('⚠️ VELOCISTA: Caída crítica (-500 pts)'); }
     G.streak=0; G.histTotal++;
     if(G.zone === 'final') {
       bossHP = 100;
@@ -1730,7 +1750,7 @@ function showComplete(){
   else phrase = choose(["Hay que estudiar más, caballero.", "¿Dejaste el cerebro en el recreo?", "El Búnker no perdona errores básicos.", "A repasar la materia, ¡vamos!"]);
 
   let errorTip = "";
-  const errorTypes = Object.entries(G.errors).sort((a,b)=>b[1]-a[1]);
+  const errorTypes = Object.entries(G.errors || {}).sort((a,b)=>b[1]-a[1]);
   if(errorTypes.length > 0 && pct < 100) {
     const mainErr = errorTypes[0][0];
     const tips = {
@@ -2322,6 +2342,61 @@ window.addEventListener('keydown', e => {
   }
 });
 
+</script>
+<div id="agent-modal" style="position:fixed;inset:0;background:rgba(10,10,20,0.98);z-index:99999;display:none;align-items:center;justify-content:center;flex-direction:column;padding:2rem;font-family:'Syne',sans-serif;backdrop-filter:blur(15px);overflow-y:auto;">
+  <h2 style="color:white;font-size:2.2rem;text-transform:uppercase;margin-bottom:0.5rem;text-align:center;text-shadow:0 0 20px var(--c1);letter-spacing:2px;">SELECCIONA TU AGENTE</h2>
+  <div style="font-family:'DM Mono',monospace;color:var(--text3);font-size:0.8rem;margin-bottom:2rem;text-align:center;max-width:600px;">Elige una Especialidad Táctica. Esta decisión alterará las reglas de tu Búnker.</div>
+  
+  <div style="display:flex;gap:1rem;margin-bottom:2rem;flex-wrap:wrap;justify-content:center;width:100%;">
+    <!-- Nerd -->
+    <div class="class-card" onclick="selectClass('nerd')" id="cc-nerd" style="width:200px;background:rgba(255,255,255,0.03);border:2px solid rgba(255,255,255,0.1);border-radius:16px;padding:1.2rem;cursor:pointer;text-align:center;transition:0.3s;">
+      <div style="font-size:3.5rem;margin-bottom:0.5rem">🤓</div>
+      <div style="color:var(--c1);font-weight:800;margin-bottom:0.5rem;font-size:0.9rem;">EL MATEMÁTICO</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text3);line-height:1.4;">Bono: <span style="color:var(--c1)">+20% Puntos</span>.<br><span style="color:var(--c5)">Penalidad: Reloj -5s.</span></div>
+    </div>
+    <!-- Lucky -->
+    <div class="class-card" onclick="selectClass('lucky')" id="cc-lucky" style="width:200px;background:rgba(255,255,255,0.03);border:2px solid rgba(255,255,255,0.1);border-radius:16px;padding:1.2rem;cursor:pointer;text-align:center;transition:0.3s;">
+      <div style="font-size:3.5rem;margin-bottom:0.5rem">🍀</div>
+      <div style="color:var(--c3);font-weight:800;margin-bottom:0.5rem;font-size:0.9rem;">EL SUERTUDO</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text3);line-height:1.4;">Bono: <span style="color:var(--c3)">15% prob. de ignorar error</span> (salva racha e insta-kill).</div>
+    </div>
+    <!-- Speedy -->
+    <div class="class-card" onclick="selectClass('speedy')" id="cc-speedy" style="width:200px;background:rgba(255,255,255,0.03);border:2px solid rgba(255,255,255,0.1);border-radius:16px;padding:1.2rem;cursor:pointer;text-align:center;transition:0.3s;">
+      <div style="font-size:3.5rem;margin-bottom:0.5rem">⚡</div>
+      <div style="color:var(--c4);font-weight:800;margin-bottom:0.5rem;font-size:0.9rem;">EL ACELERADO</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text3);line-height:1.4;">Bono: Velocidad <span style="color:var(--c4)">+150 pts</span>.<br><span style="color:var(--c5)">Fallo: -500 pts directos.</span></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:0.8rem;margin-bottom:2rem;width:100%;max-width:360px;">
+    <input id="in-agente" type="text" placeholder="TU ALIAS" maxlength="15" style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;padding:1rem;border-radius:12px;font-family:'DM Mono',monospace;outline:none;text-transform:uppercase;">
+    <input id="in-emoji" type="text" placeholder="👾" maxlength="2" style="width:70px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:white;padding:1rem;border-radius:12px;text-align:center;font-size:1.2rem;outline:none;">
+  </div>
+  
+  <button onclick="confirmAgent()" style="padding:1rem 3rem;background:var(--c1);color:var(--bg);font-weight:800;font-size:1.1rem;letter-spacing:1px;border:none;border-radius:30px;cursor:pointer;font-family:'Syne',sans-serif;box-shadow:0 0 20px rgba(126,232,250,0.4);">INGRESAR AL BÚNKER</button>
+</div>
+<script>
+let selectedClass = null;
+function selectClass(c) {
+  selectedClass = c;
+  ['nerd','lucky','speedy'].forEach(id => {
+    const el = document.getElementById('cc-'+id);
+    if(el) {
+        el.style.borderColor = c===id ? (c==='nerd'?'var(--c1)':c==='lucky'?'var(--c3)':'var(--c4)') : 'rgba(255,255,255,0.1)';
+        el.style.background = c===id ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.03)';
+    }
+  });
+}
+function confirmAgent() {
+  const nom = document.getElementById('in-agente').value.trim().toUpperCase() || 'ANÓNIMO';
+  const emo = document.getElementById('in-emoji').value.trim() || '😎';
+  if(!selectedClass) { alert("¡Debes elegir una Especialidad!"); return; }
+  G.agente = nom; G.emoji = emo; G.clase = selectedClass; G.errors = {};
+  saveGame();
+  document.getElementById('agent-modal').style.display = 'none';
+  document.getElementById('hub').style.display='flex';
+  updateHUD();
+}
 </script>
 </body>
 </html>

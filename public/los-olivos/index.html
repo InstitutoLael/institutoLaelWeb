@@ -1349,7 +1349,7 @@ function initCourse(c) {
     ZONE_COLORS_ALL[z.id] = z.color;
     ZONE_NAMES_ALL[z.id] = `Zona 0${idx+1} — ${z.title}`;
     const avg = getZoneAverage(z.id);
-    const notaDisp = avg ? `<span style="margin-left:8px; font-weight:700; color:${avg>=4?'var(--c1)':'#f87171'}">N: ${avg.toFixed(1)}</span>` : '';
+    const notaDisp = avg ? `<span id="zn-${z.id}" style="margin-left:8px; font-weight:700; color:${avg>=4?'var(--c1)':'#f87171'}">N: ${avg.toFixed(1)}</span>` : `<span id="zn-${z.id}"></span>`;
     if (!G.stars[z.id]) G.stars[z.id] = 0;
     
     const isBoss = idx === 5;
@@ -1373,7 +1373,11 @@ function initCourse(c) {
   });
   document.getElementById('lobby').style.display = 'none';
   if(!G.agente) document.getElementById('agent-modal').style.display='flex';
-  else { document.getElementById('hub').style.display='flex'; updateHUD(); }
+  else { 
+    document.getElementById('hub').style.display='flex'; 
+    updateHUD(); 
+    startLBAutoRefresh();
+  }
   setTimeout(loadLeaderboard, 100);
 }
 
@@ -1389,7 +1393,12 @@ function selectCourse(c) {
   };
   
   if (raw) Object.assign(G, def, JSON.parse(raw));
-  else Object.assign(G, def);
+  else {
+    // Si no hay partida guardada de este curso, intentar heredar perfil global
+    const globalProf = localStorage.getItem('statBunkerProfile');
+    if(globalProf) Object.assign(G, def, JSON.parse(globalProf));
+    else Object.assign(G, def);
+  }
   
   initCourse(c);
 }
@@ -1405,6 +1414,24 @@ function saveGame() {
   if(!currentCourse) return;
   const payload = { ...G };
   localStorage.setItem('statBunkerSave_' + currentCourse, JSON.stringify(payload));
+  localStorage.setItem('statBunkerLastCourse', currentCourse);
+  
+  // Guardar perfil globalmente para evitar re-ingreso
+  const profile = { agente: G.agente, emoji: G.emoji, clase: G.clase };
+  localStorage.setItem('statBunkerProfile', JSON.stringify(profile));
+}
+
+let lbInterval = null;
+function startLBAutoRefresh() {
+  stopLBAutoRefresh();
+  lbInterval = setInterval(() => {
+    if(document.getElementById('hub').style.display !== 'none') {
+      loadLeaderboard();
+    }
+  }, 60000); // 60s
+}
+function stopLBAutoRefresh() {
+  if(lbInterval) clearInterval(lbInterval);
 }
 
 const ZONE_LEN = 6;
@@ -1715,9 +1742,19 @@ function showCertificate() {
 function updateStars(zone, pct){
   const s = pct>=80?3:pct>=50?2:1;
   if(s>(G.stars[zone]||0)) { G.stars[zone]=s; saveGame(); }
-  const icons=['○○○','★○○','★★○','★★★'];
+  const icons=['○○○','★○○','★★○','★★★'][G.stars[zone]||0];
   const el=document.getElementById('zs-'+zone);
   if(el) el.textContent=icons[G.stars[zone]||0];
+  
+  // Actualizar también la Nota en el Hub en tiempo real
+  const avg = getZoneAverage(zone);
+  const nEl = document.getElementById('zn-'+zone);
+  if(nEl && avg) {
+    nEl.style.marginLeft = '8px';
+    nEl.style.fontWeight = '700';
+    nEl.style.color = avg>=4 ? 'var(--c1)' : '#f87171';
+    nEl.textContent = `N: ${avg.toFixed(1)}`;
+  }
 }
 /* ═══════════════════════════════════════════
    NAVIGATION
@@ -1749,6 +1786,7 @@ function enterZone(zone){
 function backToHub(){
   document.getElementById('game-screen').style.display='none';
   document.getElementById('hub').style.display='flex';
+  startLBAutoRefresh();
   updateHUD();
   syncSupabaseScore();
   setTimeout(loadLeaderboard, 1000);
@@ -1973,6 +2011,7 @@ function showComplete(){
   if(!G.zoneGrades[G.zone]) G.zoneGrades[G.zone] = [];
   G.zoneGrades[G.zone].push(attemptNota);
   saveGame();
+  updateHUD();
 
   if(pct > (G.zoneBests[G.zone]||0)) { G.zoneBests[G.zone]=pct; saveGame(); }
   const best = G.zoneBests[G.zone]||pct;
@@ -2032,6 +2071,7 @@ function showComplete(){
   }
 
   updateHOF();
+  syncSupabaseScore();
 }
 
 function updateHOF() {
@@ -2561,6 +2601,19 @@ function confirmAgent() {
     updateHUD();
   }
 }
+
+// AUTO-RESTAURAR SESIÓN AL CARGAR
+window.addEventListener('load', () => {
+    const last = localStorage.getItem('statBunkerLastCourse');
+    const prof = localStorage.getItem('statBunkerProfile');
+    if(prof) {
+        const p = JSON.parse(prof);
+        G.agente = p.agente; G.emoji = p.emoji; G.clase = p.clase;
+    }
+    if(last && last !== 'null') {
+        selectCourse(last);
+    }
+});
 </script>
 </body>
 </html>

@@ -64,6 +64,19 @@ body::after {
   background-size: 200px;
 }
 
+/* ── LOBBY ── */
+#lobby { position:relative; z-index:5; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; }
+.lobby-title { font-family:'Syne',sans-serif; font-size:clamp(2.5rem,6vw,4rem); font-weight:800; color:var(--text); margin-bottom:2.5rem; text-align:center; letter-spacing:-1px; line-height:1.1; }
+.lobby-title span { display:block; background:linear-gradient(90deg,var(--c1),var(--c3)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-size:0.6em; margin-top:10px; }
+.lobby-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1.5rem; max-width:800px; width:100%; }
+@media(max-width:600px) { .lobby-grid { grid-template-columns:1fr; } }
+.course-card { background:rgba(16,21,38,0.6); backdrop-filter:blur(16px); border:1px solid var(--border); border-bottom:4px solid var(--border); border-radius:var(--r-md); padding:2.5rem 1.5rem; cursor:pointer; text-align:center; transition:all .2s; }
+.course-card:hover:not(.locked) { transform:translateY(-5px); border-color:var(--c1); border-bottom-color:var(--c1); box-shadow:0 10px 30px rgba(126,232,250,0.15); }
+.course-card:active:not(.locked) { transform:translateY(0); border-bottom-width:1px; margin-top:3px; }
+.course-card.locked { opacity:0.5; cursor:not-allowed; filter:grayscale(1); border-bottom-width:1px; }
+.course-h { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; color:var(--text); margin-bottom:0.5rem; }
+.course-p { font-size:1rem; color:var(--text2); }
+
 /* ═══════════════════════════════════════════════
    HUB SCREEN
 ═══════════════════════════════════════════════ */
@@ -901,14 +914,30 @@ input { font-size: 16px !important; }
 <!-- ══════════════════════════════════════
      HUB
 ══════════════════════════════════════ -->
-<div id="hub">
+<!-- LOBBY -->
+<div id="lobby">
+  <div class="lobby-title">BÚNKER DE DATOS<span>SELECCIONA TU NIVEL</span></div>
+  <div class="lobby-grid">
+    <div class="course-card" onclick="selectCourse('1M')">
+      <div class="course-h">1° MEDIO</div>
+      <div class="course-p">Mundo de Potencias<br><span style="color:var(--c4);font-size:0.8em;font-weight:bold;margin-top:10px;display:block">▶ ENTRAR AL LABORATORIO</span></div>
+    </div>
+    <div class="course-card locked"><div class="course-h">2° MEDIO</div><div class="course-p">Próximamente</div></div>
+    <div class="course-card" onclick="selectCourse('3M')">
+      <div class="course-h">3° MEDIO</div>
+      <div class="course-p">Probabilidades y Estadística<br><span style="color:var(--c1);font-size:0.8em;font-weight:bold;margin-top:10px;display:block">▶ ENTRAR AL ARCADE</span></div>
+    </div>
+    <div class="course-card locked"><div class="course-h">4° MEDIO</div><div class="course-p">Próximamente</div></div>
+  </div>
+</div>
+<div id="hub" style="display:none;">
 
   <header class="school-header">
     <div class="school-info">
       <span class="school-name">Los Olivos HomeSchool</span>
       <span class="school-sub">Taller Jueves · Hackeando la Probabilidad</span>
     </div>
-    <div class="teacher-badge" id="teacher-badge" onclick="easterEgg()">
+    <div class="teacher-badge" id="teacher-badge">
       <div class="teacher-avatar">DC</div>
       <div class="teacher-name">Profe <strong>Diego Chaparro</strong></div>
     </div>
@@ -1238,35 +1267,131 @@ input { font-size: 16px !important; }
 ═══════════════════════════════════════════ */
 
 const defaultG = {
-  pts:0, streak:0, correct:0, total:0,
-  zoneQ:0, zonePts:0, zone:null,
-  stars:{laplace:0,tree:0,table:0,rules:0,montyhall:0},
-  /* historical accumulators — never reset on zone repeat */
-  histCorrect:0, histTotal:0,
-  zoneBests:{laplace:0,tree:0,table:0,rules:0,montyhall:0,final:0}, agente:null, hardcore:false, logros:{intocable:false,relampago:false,elegido:false,masoquista:false}, emoji:null, errors:{}, clase:null, hof:[], lastLogin:null,
-  zoneGrades:{laplace:[],tree:[],table:[],rules:[],montyhall:[],final:[]}
+  pts:0, streak:0, correct:0, total:0, zoneQ:0, zonePts:0, zone:null, stars:{}, histCorrect:0, histTotal:0, zoneBests:{}, agente:null, hardcore:false, logros:{}, emoji:null, errors:{}, clase:null, hof:[], lastLogin:null, zoneGrades:{}
 };
-const savedG = localStorage.getItem('statArcadeSave');
-const G = savedG ? Object.assign({...defaultG}, JSON.parse(savedG)) : { ...defaultG };
+// Delay initialization
+const G = { ...defaultG };
+
+/* COURSE LOGIC */
+let currentCourse = null;
+const courseConfig = {
+  '1M': {
+    title: 'Potencias y Exponentes',
+    zones: [
+      { id:'c1z1', icon:'1️⃣', title:'Concepto Base', desc:'Comprender las potencias y exponente entero.', tag:'Base e Índice', color:'var(--c1)' },
+      { id:'c1z2', icon:'✖️', title:'Multiplicación', desc:'Multiplicar potencias igual base.', tag:'Propiedades', color:'var(--c5)' },
+      { id:'c1z3', icon:'➗', title:'División', desc:'Dividir potencias igual base.', tag:'Propiedades', color:'var(--c6)' },
+      { id:'c1z4', icon:'➖', title:'Exponente Negativo', desc:'Resolver exponentes negativos.', tag:'Inversos', color:'var(--c4)' },
+      { id:'c1z5', icon:'🦠', title:'Simulador', desc:'Simulador decaimiento y crecimiento', tag:'Aplicación', color:'var(--c3)' },
+      { id:'c1z6', icon:'💀', title:'Boss Examen', desc:'Demuestra lo que sabes en un PAES.', tag:'EXTREMO', color:'var(--c2)' }
+    ]
+  },
+  '3M': {
+    title: 'Hackeando la Probabilidad',
+    zones: [
+      { id:'laplace', icon:'🎲', title:'Laplace & Trampas', desc:'Casos favorables/totales.', tag:'Laplace', color:'var(--c1)' },
+      { id:'tree', icon:'🌿', title:'Árboles', desc:'Multiplicar ramas.', tag:'Diagramas', color:'var(--c5)' },
+      { id:'table', icon:'📊', title:'Contingencia', desc:'Doble entrada.', tag:'Doble Entrada', color:'var(--c6)' },
+      { id:'rules', icon:'➕', title:'Suma y Producto', desc:'¿O (suma) o Y (multiplica)?', tag:'Reglas Prob.', color:'var(--c4)' },
+      { id:'montyhall', icon:'🚪', title:'Monty Hall', desc:'Juego 3 puertas.', tag:'Condicional', color:'var(--c3)' },
+      { id:'final', icon:'💀', title:'Simulador PAES', desc:'Jefe Final', tag:'EXTREMO', color:'var(--c2)' }
+    ]
+  }
+};
+
+let ZONE_COLORS_ALL = {};
+let ZONE_NAMES_ALL = {};
+
+function initCourse(c) {
+  currentCourse = c;
+  const cfg = courseConfig[c];
+  document.getElementById('hub-course-title').textContent = cfg.title;
+  
+  const grid = document.querySelector('.zone-grid');
+  grid.innerHTML = '';
+  
+  cfg.zones.forEach((z, idx) => {
+    ZONE_COLORS_ALL[z.id] = z.color;
+    ZONE_NAMES_ALL[z.id] = `Zona 0${idx+1} — ${z.title}`;
+    if (!G.stars[z.id]) G.stars[z.id] = 0;
+    
+    const isBoss = idx === 5;
+    const lockedBtn = isBoss ? `if(countStars()>=5) enterZone('${z.id}')` : `enterZone('${z.id}')`;
+    const starsDisp = isBoss && countStars()<5 ? '🔒' : ['○○○','★○○','★★○','★★★'][G.stars[z.id]||0];
+    const desc = isBoss && countStars()<5 ? 'Consigue al menos 5 estrellas en total.' : z.desc;
+    
+    grid.innerHTML += `
+      <div class="zone-card" style="--accent:${z.color}" onclick="${lockedBtn}">
+        <div class="zone-num">
+          <span>Zona 0${idx+1}</span>
+          <span class="zone-stars-display" id="zs-${z.id}">${starsDisp}</span>
+        </div>
+        <div class="zone-icon-wrap" ${isBoss && countStars()<5 ? 'style="filter:grayscale(1)"' : ''}>${z.icon}</div>
+        <div class="zone-title">${z.title}</div>
+        <div class="zone-desc" id="desc-${z.id}">${desc}</div>
+        <div class="zone-tag" style="${isBoss?'background:var(--c5)':''}">${z.tag}</div>
+        <div class="zone-arrow">↗</div>
+      </div>
+    `;
+  });
+  document.getElementById('lobby').style.display = 'none';
+  if(!G.agente) document.getElementById('agent-modal').style.display='flex';
+  else { document.getElementById('hub').style.display='flex'; updateHUD(); }
+  setTimeout(loadLeaderboard, 100);
+}
+
+function selectCourse(c) {
+  if(currentCourse) saveGame();
+  const saveKey = 'statBunkerSave_' + c; 
+  const raw = localStorage.getItem(saveKey);
+  const def = {
+    pts:0, streak:0, correct:0, total:0, zoneQ:0, zonePts:0, zone:null,
+    stars:{}, histCorrect:0, histTotal:0, zoneBests:{}, 
+    agente: G.agente, emoji: G.emoji, clase: G.clase,
+    hardcore:false, logros:{}, errors:{}, hof:[], lastLogin:null, zoneGrades:{}
+  };
+  
+  if (raw) Object.assign(G, def, JSON.parse(raw));
+  else Object.assign(G, def);
+  
+  initCourse(c);
+}
+
+function quitarCurso() {
+  saveGame();
+  currentCourse = null;
+  document.getElementById('hub').style.display = 'none';
+  document.getElementById('lobby').style.display = 'flex';
+}
 
 function saveGame() {
-  const payload = {
-    pts: G.pts, streak: G.streak, correct: G.correct, total: G.total,
-    stars: G.stars, histCorrect: G.histCorrect, histTotal: G.histTotal,
-    zoneBests: G.zoneBests, agente: G.agente, emoji: G.emoji, 
-    clase: G.clase, errors: G.errors, hof: G.hof, logros: G.logros, 
-    lastLogin: G.lastLogin, zoneGrades: G.zoneGrades
-  };
-  localStorage.setItem('statArcadeSave', JSON.stringify(payload));
+  if(!currentCourse) return;
+  const payload = { ...G };
+  localStorage.setItem('statBunkerSave_' + currentCourse, JSON.stringify(payload));
 }
 
 const ZONE_LEN = 6;
-const ZONE_COLORS = {laplace:'var(--c1)',tree:'var(--c5)',table:'var(--c6)',rules:'var(--c4)',montyhall:'var(--c3)'};
-const ZONE_NAMES  = {laplace:'Zona 01 — Laplace & Trampas',tree:'Zona 02 — Árboles',table:'Zona 03 — Tablas (Contingencia)',rules:'Zona 04 — Reglas (Y/O)',montyhall:'Zona 05 — Monty Hall'};
+const ZONE_COLORS = ZONE_COLORS_ALL;
+const ZONE_NAMES = ZONE_NAMES_ALL;
 
 const rand  = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
 const choose = arr  => arr[Math.floor(Math.random()*arr.length)];
 const shuffle = arr => { let a=[...arr]; for(let i=a.length-1;i>0;i--){let j=rand(0,i);[a[i],a[j]]=[a[j],a[i]]} return a; };
+const uniqueShuffle = (ans, bads) => { 
+  let u = Array.from(new Set(bads.filter(x => String(x) !== String(ans)))); 
+  while(u.length > 3) u.pop(); 
+  while(u.length < 3) u.push(String(rand(-50,50)) + (Math.random() > 0.5 ? '/'+rand(2,10) : ''));
+  let finalOpts = shuffle([String(ans), ...u.map(String)]); 
+  return { options: finalOpts, correct: finalOpts.indexOf(String(ans)) };
+};
+
+const Q_QUEUE = {};
+function pullQuestion(zone, generators) {
+  if (!Q_QUEUE[zone] || Q_QUEUE[zone].length === 0) {
+    Q_QUEUE[zone] = shuffle(generators);
+  }
+  return Q_QUEUE[zone].pop()();
+}
 const fmt   = n     => Number(n.toFixed(2));
 const variance = d  => { const m=d.reduce((a,b)=>a+b,0)/d.length; return d.reduce((a,b)=>a+(b-m)**2,0)/d.length; };
 const stdev    = d  => Math.sqrt(variance(d));
@@ -1314,8 +1439,8 @@ function stopTimer() {
 
 
 /* ── EL PAQUETE DEFINITIVO JS ── */
-const msgsGood = ["¡Eres máquina mastodonte!", "¡Ese es mi alumno!", "Tráiganle la NASA a este", "¡Maquinola!", "Puntaje Nacional a la vista", "¡Seco!"];
-const msgsBad = ["Fue pura suerte al revés...", "¿Dejaste el cerebro en la casa?", "A leer de nuevo el enunciado...", "Me va a dar un infarto", "¿En serio?", "Por favor concéntrate..."];
+const msgsGood = ["¡Buena maquinola!", "¡Ese es mi alumno estrella!", "Tráiganle la NASA a este cabro/a", "¡Tremendo, puntaje nacional a la vista!", "¡Esa es la actitud, espectacular!", "¡Seco! Ni yo lo hubiese hecho tan rápido."];
+const msgsBad = ["Ya po, no me decepciones...", "A ver, a leer de nuevo con calma.", "Se nos fue la inspiración, ¡concéntrate!", "Estás puro adivinando oye...", "¿Seguro revisaste bien? Ojo con la trampa.", "Ayayai, casi me da un infarto."];
 
 function showToast(text) {
   const t = document.getElementById('toast');
@@ -1378,7 +1503,7 @@ function showCarnet() {
     const s = G.stars[z] || 0;
     const pct = (s/3)*100;
     chartHtml += `<div style="margin-bottom:0.4rem">
-      <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span>${ZONE_NAMES[z].split('—')[1]}</span><span>${s}/3 ⭐</span></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span>${(ZONE_NAMES[z]||"Zona X").split('—')[1]||"Zona"}</span><span>${s}/3 ⭐</span></div>
       <div style="width:100%;height:4px;background:rgba(255,255,255,0.05);border-radius:2px;overflow:hidden">
         <div style="width:${pct}%;height:100%;background:${ZONE_COLORS[z]};box-shadow:0 0 5px ${ZONE_COLORS[z]}"></div>
       </div>
@@ -1614,8 +1739,9 @@ function nextQuestion(){
   document.getElementById('gs-prog').style.width=prog+'%';
   if(G.zoneQ>=ZONE_LEN){showComplete();return;}
   const gen={
+    c1z1:genC1Z1, c1z2:genC1Z2, c1z3:genC1Z3, c1z4:genC1Z4, c1z5:genC1Z5, c1z6:genC1Z6,
     laplace:genLaplace,tree:genTree,table:genTable,rules:genRules,montyhall:genMH,
-    final:function(){return choose([genLaplace,genTree,genTable,genRules,genMH])();}
+    final:function(){return pullQuestion('final', [genLaplace,genTree,genTable,genRules,genMH]);}
   };
   renderQ(gen[G.zone]());
 }
@@ -1631,7 +1757,7 @@ function renderQ(q){
   card.style.setProperty('--accent',ZONE_COLORS_ALL[G.zone]);
 
   const meta=document.createElement('div');meta.className='q-meta';
-  meta.innerHTML=`<span class="q-num">Pregunta ${G.zoneQ} / ${ZONE_LEN}</span><div class="q-dot"></div><span class="q-zone-tag">${ZONE_NAMES_ALL[G.zone].split('—')[1].trim()}</span>`;
+  meta.innerHTML=`<span class="q-num">Pregunta ${G.zoneQ} / ${ZONE_LEN}</span><div class="q-dot"></div><span class="q-zone-tag">${(ZONE_NAMES_ALL[G.zone]||"Zona X").split('—')[1]?.trim()||"Zona"}</span>`;
   card.appendChild(meta);
 
   const isGold = Math.random() < 0.15 && G.pts >= 200 && G.zone !== 'montyhall' && q.type !== 'special';
@@ -1875,232 +2001,61 @@ function updateHOF() {
 /* ═══════════════════════════════════════════
    ZONA 1 — LAPLACE & TRAMPAS
 ═══════════════════════════════════════════ */
-function genLaplace(){
-  return choose([lapUrna, lapDados, lapTrampaAlMenos, lapTrampaComoMaximo])();
-}
-function lapUrna(){
-  const rojas = rand(3, 7);
-  const azules = rand(2, 6);
-  const verdes = rand(1, 4);
-  const total = rojas + azules + verdes;
-  const color = choose([{n:'rojas', c:rojas}, {n:'azules', c:azules}, {n:'verdes', c:verdes}]);
-  
-  const prob = fmt(color.c / total);
-  const bad1 = fmt((total - color.c)/total); 
-  const bad2 = fmt(color.c/(total-1)); 
-  const bad3 = fmt(1/color.c); 
-  let opts = shuffle([prob, bad1, bad2, bad3]);
-  
-  return {
-    type:'mc',
-    visual:`¡Atentos maquinolas! Urna con: ${rojas} rojas, ${azules} azules, ${verdes} verdes.`,
-    text:`Sacan una bolita con los ojos cerrados. ¿Cuál es la probabilidad de que justo salga ${color.n}?`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`La clásica Regla de Laplace, cabros: Casos Favorables (${color.c}) ÷ Casos Totales (${total}) = <strong>${prob}</strong>. ¡No caigan en meter mal los dedos a la calculadora!`
-  };
-}
-function lapDados(){
-  const prob = fmt(3/36); 
-  let opts = shuffle([prob, fmt(4/36), fmt(2/36), fmt(10/36)]);
-  return {
-    type:'mc',
-    visual:`Tiramos DOS dados normales a la vez. Casos totales = 36.`,
-    text:`Pregunta típica PAES: ¿Cuál es la probabilidad de que la suma de los dos dados sea EXACTAMENTE 10?`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`Anoten los pares que suman 10: (4,6), (5,5) y (6,4). Son 3 miseros casos de 36. 3/36 ≈ <strong>${prob}</strong>. (Ojo que el 5,5 se cuenta una sola vez, trampa mortal).`
-  };
-}
-function lapTrampaAlMenos(){
-  const prob = fmt(4/6); 
-  let opts = shuffle([prob, fmt(3/6), fmt(2/6), fmt(1/6)]);
-  return {
-    type:'mc',
-    visual:`Tiras un dado común y corriente (6 caras).`,
-    text:`¡Cuidado con la trampa de lectura! ¿Probabilidad de sacar <strong>AL MENOS un 3</strong>?`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`"Al menos 3" significa "del 3 pa' arriba", o sea: {3, 4, 5, 6}. Eso nos da 4 casos favorables. 4/6 ≈ <strong>${prob}</strong>. ¡Lean bien los enunciados!`
-  };
-}
-function lapTrampaComoMaximo(){
-  const total = 10;
-  const num = rand(3, 5);
-  const prob = fmt(num / total);
-  let opts = shuffle([prob, fmt((num - 1)/total), fmt((num + 1)/total), fmt(1/total)]);
-  return {
-    type:'mc',
-    visual:`Tómbola de kermesse con bolitas del 1 al 10.`,
-    text:`¿Probabilidad de sacar una bolita que sea <strong>COMO MÁXIMO ${num}</strong>? Ojo piojo con el texto.`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`"Como máximo ${num}" significa "hasta el ${num} inclusive". O sea, desde el 1 hasta el ${num}. Son ${num} casos de ${total}. <strong>${num}/${total} = ${prob}</strong>.`
-  };
+/* 1M GEN */
+function genC1Z1(){return pullQuestion('c1z1',[pConcepto,pBaseNegativa,pCero,pBasePositiva]);}
+function genC1Z2(){return pullQuestion('c1z2',[pMultIgualBase,pMultMix,pMultGeo,pMultIgualBaseExtra]);}
+function genC1Z3(){return pullQuestion('c1z3',[pDivIgualBase,pDivFrac,pDivIgualBaseExtra]);}
+function genC1Z4(){return pullQuestion('c1z4',[pExpNegativo,pExpNegFrac,pExpNegCombo]);}
+function genC1Z5(){return pSimulador();}
+function genC1Z6(){return pullQuestion('c1z6',[pConcepto,pBaseNegativa,pMultMix,pDivFrac,pExpNegCombo]);}
+
+function pConcepto() { const b=rand(2,5),e=rand(2,4),a=Math.pow(b,e); const o=uniqueShuffle(a,[b*e,Math.pow(b,e+1),b+e]); return {type:'mc',visual:`Básico: <strong>${b}<sup>${e}</sup></strong>`,text:`Valor real?`,options:o.options,correct:o.correct,explanation:`${b} se multiplica a sí misma ${e} veces = <strong>${a}</strong>.`}; }
+function pBasePositiva() { const b=rand(3,6),a=Math.pow(b,3); const o=uniqueShuffle(a,[b*3,-Math.pow(b,3),b+3]); return {type:'mc',visual:`Cubo: <strong>${b}<sup>3</sup></strong>`,text:`Cálculo`,options:o.options,correct:o.correct,explanation:`${b}x${b}x${b}= <strong>${a}</strong>.`}; }
+function pBaseNegativa() { const b=rand(-5,-2),isEven=rand(0,1)===0,e=isEven?2:3,a=Math.pow(b,e); const o=uniqueShuffle(a,[-Math.pow(b,e),b*e,-b*e]); return {type:'mc',visual:`Cuidado: <strong>(${b})<sup>${e}</sup></strong>`,text:`Paréntesis.`,options:o.options,correct:o.correct,explanation:`Exponente ${isEven?'PAR':'IMPAR'} da resultado ${isEven?'POSITIVO':'NEGATIVO'}. Da <strong>${a}</strong>.`}; }
+function pCero() { const r=rand(100,999),o=uniqueShuffle('1',['0',String(r),'Indef']); return {type:'mc',visual:`Trampa: <strong>${r}<sup>0</sup></strong>`,text:`Equivale a?`,options:o.options,correct:o.correct,explanation:`Salvo cero, todo elevado a 0 es <strong>1</strong>.`}; }
+function pMultIgualBase() { const b=rand(2,7),e1=rand(3,7),e2=rand(2,5),a=`${b}<sup>${e1+e2}</sup>`; const o=uniqueShuffle(a,[`${b}<sup>${e1*e2}</sup>`,`${b+b}<sup>${e1+e2}</sup>`,`${b}<sup>${e1-e2}</sup>`]); return {type:'mc',visual:`Multi: <strong>${b}<sup>${e1}</sup> × ${b}<sup>${e2}</sup></strong>`,text:`Propiedad.`,options:o.options,correct:o.correct,explanation:`Mantiene base, suma exponentes.`}; }
+function pMultIgualBaseExtra(){ const b=rand(3,9),e1=rand(2,4),e2=rand(4,8),a=`${b}<sup>${e1+e2}</sup>`; const o=uniqueShuffle(a,[`${b}<sup>${e1*e2}</sup>`,`${b+b}<sup>${e1+e2}</sup>`,`${b}<sup>${e2-e1}</sup>`]); return {type:'mc',visual:`Multi 2: <strong>${b}<sup>${e1}</sup> × ${b}<sup>${e2}</sup></strong>`,text:`Reduce`,options:o.options,correct:o.correct,explanation:`Igual base, se suma.`}; }
+function pMultMix() { const b=rand(2,4),e1=rand(1,4),e2=rand(1,3),v=Math.pow(b,e1+e2); const o=uniqueShuffle(v,[Math.pow(b,e1)*e2,b*(e1+e2),v+b]); return {type:'mc',visual:`Calcula: <strong>${b}<sup>${e1}</sup> × ${b}<sup>${e2}</sup></strong>`,text:`Valor numérico final`,options:o.options,correct:o.correct,explanation:`${b}^${e1+e2} = <strong>${v}</strong>.`}; }
+function pMultGeo() { const b=3,e1=rand(2,5),a=`3<sup>${e1*2}</sup>`; const o=uniqueShuffle(a,[`3<sup>${e1}</sup>`,`6<sup>${e1*2}</sup>`,`9<sup>${e1*2}</sup>`]); return {type:'mc',visual:`Cuadrado de lado <strong>${b}<sup>${e1}</sup></strong>`,text:`Área?`,options:o.options,correct:o.correct,explanation:`3^${e1} * 3^${e1} = 3^${e1*2}.`}; }
+function pDivIgualBase() { const b=rand(3,8),e1=rand(6,10),e2=rand(2,5),a=`${b}<sup>${e1-e2}</sup>`; const o=uniqueShuffle(a,[`${b}<sup>${e1/e2}</sup>`,`1<sup>${e1-e2}</sup>`,`${b}<sup>${e1+e2}</sup>`]); return {type:'mc',visual:`División: <strong>${b}<sup>${e1}</sup> ÷ ${b}<sup>${e2}</sup></strong>`,text:`Propiedad`,options:o.options,correct:o.correct,explanation:`Mantiene base, RESTA exponentes.`}; }
+function pDivIgualBaseExtra() { const b=rand(5,12),e1=rand(7,12),e2=rand(3,6),a=`${b}<sup>${e1-e2}</sup>`; const o=uniqueShuffle(a,[`${b}<sup>${e1/e2}</sup>`,`1<sup>${e1-e2}</sup>`,`${b}<sup>${e1*e2}</sup>`]); return {type:'mc',visual:`División 2: <strong>${b}<sup>${e1}</sup> ÷ ${b}<sup>${e2}</sup></strong>`,text:``,options:o.options,correct:o.correct,explanation:`Directo: restan los exponentes.`}; }
+function pDivFrac() { const b=rand(2,4),e1=rand(4,7),e2=rand(1,3),a=Math.pow(b,e1-e2); const o=uniqueShuffle(a,[Math.pow(b,e1)/e2,b*(e1-e2),a*b]); return {type:'mc',visual:`Fracción gigante: <strong>(${b}<sup>${e1}</sup>) / (${b}<sup>${e2}</sup>)</strong>`,text:`Valor final`,options:o.options,correct:o.correct,explanation:`${b}^${e1-e2} = <strong>${a}</strong>.`}; }
+function pExpNegativo() { const b=rand(2,5),en=rand(1,3),a="1/"+Math.pow(b,en); const o=uniqueShuffle(a,[-Math.pow(b,en),"-1/"+Math.pow(b,en),Math.pow(b,en)]); return {type:'mc',visual:`Negativo: <strong>${b}<sup>-${en}</sup></strong>`,text:`Equivale a?`,options:o.options,correct:o.correct,explanation:`INVIERTE base. 1/(${b}^${en}) = <strong>${a}</strong>.`}; }
+function pExpNegFrac() { const n=rand(2,4),d=rand(5,7),e=rand(2,3),a=`${Math.pow(d,e)}/${Math.pow(n,e)}`; const o=uniqueShuffle(a,[`-${Math.pow(n,e)}/${Math.pow(d,e)}`,`${Math.pow(n,e)}/${Math.pow(d,e)}`,`-${Math.pow(d,e)}/${Math.pow(n,e)}`]); return {type:'mc',visual:`Fracción a la menos algo: <strong>(${n}/${d})<sup>-${e}</sup></strong>`,text:`Inviértela`,options:o.options,correct:o.correct,explanation:`INVIERTE la fracción y aplica exponente: <strong>${a}</strong>.`}; }
+function pExpNegCombo() { const b=2,e1=rand(2,4),e2=rand(3,5),v=e1-e2,a="1/"+Math.pow(b,-v); const o=uniqueShuffle(a,[-Math.pow(b,-v),"1/"+Math.pow(b,v*2),Math.pow(b,v)]); return {type:'mc',visual:`Combo: <strong>${b}<sup>${e1}</sup> × ${b}<sup>-${e2}</sup></strong>`,text:`Calcula`,options:o.options,correct:o.correct,explanation:`${e1}+(-${e2})=${v}. Negativo se invierte: <strong>${a}</strong>.`}; }
+function pSimulador() {
+  const i=rand(5,20),fa=rand(2,3),h=rand(4,6),a=i*Math.pow(fa,h);
+  return {type:'input',placeholder:'Nº Bacterias...',
+    visual:`Aplicación real: Crecimiento Poblacional`,text:`Fórmula (Población = Inicial × Tasa<sup>tiempo</sup>). Calcula exacto con pob inicial ${i}, tasa ${fa}x por hora, y pasadas <strong>${h} hrs</strong>.`,
+    check:v=>Number(v)===a,explanation:`${i} × ${fa}^${h} = <strong>${a}</strong>`};
 }
 
-/* ═══════════════════════════════════════════
-   ZONA 2 — ÁRBOLES Y CAMINOS
-═══════════════════════════════════════════ */
-function genTree(){
-  return choose([treeMonedas, treeRopa, treeCaminos])();
-}
-function treeMonedas(){
-  const prob = fmt(1/8);
-  let opts = shuffle([prob, fmt(3/8), fmt(1/3), fmt(1/6)]);
-  return {
-    type:'mc',
-    visual:`Lanzas una misma moneda al aire 3 veces seguidas.`,
-    text:`Hagan el árbol mental: ¿Probabilidad de que te salgan <strong>3 CARAS seguidas</strong>?`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`Multiplicamos el caminito descendente del árbol: (1/2) * (1/2) * (1/2) = 1/8. Hay sola una rama (C-C-C) entre las 8 posibles. ≈ <strong>${prob}</strong>.`
-  };
-}
-function treeRopa(){
-  const poleras = rand(3, 5);
-  const pantalones = rand(2, 4);
-  const zapatillas = rand(2, 3);
-  const total = poleras * pantalones * zapatillas;
-  const bad1 = poleras + pantalones + zapatillas;
-  const bad2 = total - zapatillas;
-  let opts = shuffle([String(total), String(bad1), String(bad2), String(total-1)]);
-  return {
-    type:'mc',
-    visual:`Abres el clóset: hay ${poleras} poleras, ${pantalones} pantalones y ${zapatillas} pares de zapatillas (todo distinto).`,
-    text:`Principio multiplicativo salvaje. ¿De cuántas pintas (formas) te puedes vestir hoy?`,
-    options:opts,
-    correct:opts.indexOf(String(total)),
-    explanation:`¡No me sumen las prendas por favor! Se multiplican las opciones del árbol: ${poleras} × ${pantalones} × ${zapatillas} = <strong>${total}</strong> tenidas diferentes.`
-  };
-}
-function treeCaminos(){
-  const pA = fmt(rand(3,6)/10);
-  const pB = fmt(rand(6,9)/10);
-  const ans = fmt(pA * pB);
-  let opts = shuffle([ans, fmt(pA * (1-pB)), fmt(pA + pB), fmt(pB)]);
-  return {
-    type:'mc',
-    visual:`Probabilidad de que llueva: ${pA}<br>Probabilidad de que haya taco SI es que llueve: ${pB}`,
-    text:`Construyan la rama: ¿Cuál es la probabilidad de salir tempranito, que te <strong>LLUEVA y además HAYA TACO</strong>?`,
-    options:opts.map(String),
-    correct:opts.indexOf(ans),
-    explanation:`Regla del "Y" (vas avanzando por las ramas): se multiplican las probabilidades. ${pA} × ${pB} ≈ <strong>${ans}</strong>.`
-  };
-}
+// 3 MEDIUM REWRITES WITH QUEUE
+function lapUrna(){ const r=rand(3,7),az=rand(2,6),v=rand(1,4),t=r+az+v,c=choose([{n:'rojas',v:r},{n:'azules',v:az},{n:'verdes',v:v}]); const p=fmt(c.v/t); const o=uniqueShuffle(p,[fmt((t-c.v)/t),fmt(c.v/(t-1)),fmt(1/c.v)]); return {type:'mc',visual:`Urna: ${r} rojas, ${az} azul, ${v} verde.`,text:`P(${c.n})?`,options:o.options,correct:o.correct,explanation:`Fav/Tot = ${c.v}/${t} = <strong>${p}</strong>.`};}
+function lapUrna2(){ const b=rand(4,8),n=rand(3,5),t=b+n,p=fmt(b/t); const o=uniqueShuffle(p,[fmt(n/t),fmt(b/(t-1)),'0.5']); return {type:'mc',visual:`Caja: ${b} blancas, ${n} negras.`,text:`P(BLANCA)?`,options:o.options,correct:o.correct,explanation:`Blancas/Tot = ${b}/${t} = <strong>${p}</strong>.`};}
+function lapDados(){ const p=fmt(3/36); const o=uniqueShuffle(p,[fmt(4/36),fmt(2/36),fmt(10/36)]); return {type:'mc',visual:`Lanzar DOS dados. Casos = 36.`,text:`Probabilidad suma = EXACTAMENTE 10?`,options:o.options,correct:o.correct,explanation:`(4,6), (5,5), (6,4). 3/36 = <strong>${p}</strong>.`};}
+function lapDados2(){ const p=fmt(6/36); const o=uniqueShuffle(p,[fmt(5/36),fmt(4/36),fmt(12/36)]); return {type:'mc',visual:`Lanzar DOS dados. Casos = 36.`,text:`Probabilidad suma = EXACTAMENTE 7?`,options:o.options,correct:o.correct,explanation:`(1,6), (2,5), (3,4), (4,3), (5,2), (6,1). 6/36 = <strong>${p}</strong>.`};}
+function lapTrampaAlMenos(){ const p=fmt(4/6),o=uniqueShuffle(p,[fmt(3/6),fmt(2/6),fmt(1/6)]); return {type:'mc',visual:`Lanzas un dado normal (6 caras).`,text:`P(AL MENOS un 3)?`,options:o.options,correct:o.correct,explanation:`{3,4,5,6} = 4 casos. 4/6 = <strong>${p}</strong>.`};}
+function lapTrampaComoMaximo(){ const t=10,n=rand(3,5),p=fmt(n/t),o=uniqueShuffle(p,[fmt((n-1)/t),fmt((n+1)/t),fmt(1/t)]); return {type:'mc',visual:`Tómbola bolas 1 al 10.`,text:`P(COMO MÁXIMO ${n})?`,options:o.options,correct:o.correct,explanation:`Del 1 al ${n}. <strong>${p}</strong>.`};}
+function lapMonedas(){ const o=uniqueShuffle('3/8',['1/8','1/4','7/8']); return {type:'mc',visual:`Lanzas 3 monedas...`,text:`P(exacto 2 CARAS)?`,options:o.options,correct:o.correct,explanation:`Casos (C,C,S), (C,S,C), (S,C,C). => <strong>3/8</strong>.`};}
 
-/* ═══════════════════════════════════════════
-   ZONA 3 — TABLAS DE CONTINGENCIA
-═══════════════════════════════════════════ */
-function genTable(){
-  return choose([tableTotal, tableCondition, tableRowCol])();
-}
-function tableTotal(){
-  const hA = rand(10, 20); const hR = rand(5, 10);
-  const mA = rand(15, 25); const mR = rand(2, 8);
-  const total = hA + hR + mA + mR;
-  const totA = hA + mA;
-  const prob = fmt(totA / total);
-  let opts = shuffle([prob, fmt(mA / total), fmt(hA / total), fmt((hR+mR)/total)]);
-  return {
-    type:'mc',
-    visual:`Tabla de Doble Entrada:<br>
-    Hombres: ${hA} Aprueban, ${hR} Reprueban.<br>
-    Mujeres: ${mA} Aprueban, ${mR} Reprueban.`,
-    text:`Si el profe saca a un alumno al azar de TODA la sala, ¿Probabilidad de elegir a alguien que <strong>APRUEBE</strong>?`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`Suma TODO el curso: ${total} alumnos. Suma a todos los genios que Aprueban (Hombres+Mujeres): ${totA}. Laplace al instante: <strong>${totA}/${total} ≈ ${prob}</strong>.`
-  };
-}
-function tableCondition(){
-  const hA = rand(10, 20); const hR = rand(5, 15);
-  const mA = rand(15, 25); const mR = rand(2, 10);
-  const totM = mA + mR;
-  const prob = fmt(mA / totM);
-  let opts = shuffle([prob, fmt(mA / (hA+hR+mA+mR)), fmt(mA / (hA+mA)), fmt(mR / totM)]);
-  return {
-    type:'mc',
-    visual:`Tabla de Contingencia:<br>
-    Hombres: ${hA} Apr, ${hR} Rep.<br>
-    Mujeres: ${mA} Apr, ${mR} Rep.`,
-    text:`¡OJO a la Condición! Te dicen: "<strong>SABIENDO que es MUJER</strong>, ¿probabilidad de que apruebe?"`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`La frase "Sabiendo que" te ACHICA el Universo. Tu nuevo total son SOLO las Mujeres (${totM}). De ellas, ${mA} aprueban: <strong>${mA}/${totM} ≈ ${prob}</strong>.`
-  };
-}
-function tableRowCol(){
-  const hA = rand(10, 20); const hR = rand(10, 15);
-  const mA = rand(15, 25); const mR = rand(5, 10);
-  const totA = hA + mA;
-  const prob = fmt(hA / totA);
-  let opts = shuffle([prob, fmt(hA / (hA+hR)), fmt(hA / (hA+hR+mA+mR)), fmt(mA / totA)]);
-  return {
-    type:'mc',
-    visual:`Hombres: ${hA} Apr, ${hR} Rep.<br>Mujeres: ${mA} Apr, ${mR} Rep.`,
-    text:`Encuentras un papel en el suelo de la sala y dice <strong>Aprobado</strong>. ¿Probabilidad de que el dueño sea Hombre?`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`Tu universo ahora son SOLO los Aprobados totales (${totA}). ¿Cuántos de esos son hombres? ${hA}. O sea: <strong>${hA}/${totA} ≈ ${prob}</strong>.`
-  };
-}
+function treeMonedas(){ const p=fmt(1/8),o=uniqueShuffle(p,[fmt(3/8),fmt(1/3),fmt(1/6)]); return {type:'mc',visual:`Lanzas 3 monedas.`,text:`P(3 CARAS seguidas)?`,options:o.options,correct:o.correct,explanation:`(1/2)*(1/2)*(1/2) = 1/8 = <strong>${p}</strong>.`};}
+function treeMonedas2(){ const p=fmt(1/16),o=uniqueShuffle(p,[fmt(4/16),fmt(1/4),fmt(1/8)]); return {type:'mc',visual:`Lanzas 4 monedas.`,text:`P(4 SELLOS seguidos)?`,options:o.options,correct:o.correct,explanation:`(1/2)^4 = 1/16 = <strong>${p}</strong>.`};}
+function treeRopa(){ const p=rand(3,5),pa=rand(2,4),z=rand(2,3),t=p*pa*z,o=uniqueShuffle(t,[p+pa+z,t-z,t-1]); return {type:'mc',visual:`Clóset: ${p} poleras, ${pa} pantalones, ${z} zapatillas.`,text:`¿De cuántas pintas te vistes hoy?`,options:o.options,correct:o.correct,explanation:`$${p} \\times ${pa} \\times ${z} = ${t}$.`};}
+function treeCaminos(){ const pA=fmt(rand(3,6)/10),pB=fmt(rand(6,9)/10),ans=fmt(pA*pB),o=uniqueShuffle(ans,[fmt(pA*(1-pB)),fmt(pA+pB),fmt(pB)]); return {type:'mc',visual:`P(Llueva) = ${pA}<br>P(Taco SI llueve) = ${pB}`,text:`P(Lluvia Y Taco)?`,options:o.options,correct:o.correct,explanation:`Multiplicando: ${pA} × ${pB} = <strong>${ans}</strong>.`};}
 
-/* ═══════════════════════════════════════════
-   ZONA 4 — REGLAS (O/Y)
-═══════════════════════════════════════════ */
-function genRules(){
-  return choose([ruleO, ruleY, ruleReposicion, ruleSinReposicion])();
-}
-function ruleO(){
-  const prob = fmt(4/52 + 13/52 - 1/52); // As o Corazón
-  let opts = shuffle([prob, fmt(4/52 + 13/52), fmt((4*13)/52), fmt(17/52)]);
-  return {
-    type:'mc',
-    visual:`Mazo inglés: 52 cartas. (4 pintas, 13 cartas por pinta).`,
-    text:`Regla de la Suma (O). Al sacar una carta, ¿probabilidad de que sea un <strong>As O un Corazón</strong>?`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`P(As) = 4/52. P(Corazón) = 13/52. ¡Cuidado! Hay un AS de Corazón que tú, pajarito de dios, sumaste dos veces. Hay que restarlo: 4/52 + 13/52 - 1/52 = 16/52 ≈ <strong>${prob}</strong>.`
-  };
-}
-function ruleY(){
-  const prob = fmt((4/52) * (4/52));
-  let opts = shuffle([prob, fmt((4/52) + (4/52)), fmt((4/52)*(3/51)), fmt((4/52)*(3/52))]);
-  return {
-    type:'mc',
-    visual:`Mazo de 52 cartas. Sacas 2 cartas seguidas <strong>CON REPOSICIÓN</strong> (la devuelves).`,
-    text:`Regla del producto (Y). ¿Probabilidad de que la 1ra sea As <strong>Y</strong> la 2da también sea As?`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`Al devolverla, nada cambia. Son eventos independientes. Multiplicamos las ramas: (4/52) × (4/52) ≈ <strong>${prob}</strong>.`
-  };
-}
-function ruleReposicion(){
-  const prob = fmt((13/52) * (13/52));
-  let opts = shuffle([prob, fmt((13/52)*(12/51)), fmt((13/52)+(13/52)), fmt((13/52)*(13/51))]);
-  return {
-    type:'mc',
-    visual:`Mazo de 52 cartas.`,
-    text:`Sacas una carta, ves que es Trébol, y <strong>la tiras de vuelta al mazo (CON reposición)</strong>. ¿Probabilidad de volver a sacar Trébol en la 2da?`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`El mazo se "resetea" porque la devolviste intacta. Tienes 52 cartas y 13 tréboles de nuevo. La prob total: (13/52) × (13/52) ≈ <strong>${prob}</strong>.`
-  };
-}
-function ruleSinReposicion(){
-  const prob = fmt((13/52) * (12/51));
-  let opts = shuffle([prob, fmt((13/52)*(13/52)), fmt((13/52)+(12/51)), fmt((13/52)*(13/51))]);
-  return {
-    type:'mc',
-    visual:`Mazo de 52 cartas.`,
-    text:`¡El clásico caza bobos! Sacas una carta, es Pica. <strong>SIN devolverla (SIN reposición)</strong>, sacas otra. ¿Probabilidad de sacar ambas Picas seguidas?`,
-    options:opts.map(String),
-    correct:opts.indexOf(prob),
-    explanation:`¡Sin reposición el universo entero cambia! P(1ra Pica) = 13/52. Pero para la 2da tirada, te quedan solo 12 picas y el mazo bajó a 51. Multiplicas: 13/52 × 12/51 ≈ <strong>${prob}</strong>.`
-  };
-}
+function tableTotal(){ const ha=rand(10,20),hr=rand(5,10),ma=rand(15,25),mr=rand(2,8),t=ha+hr+ma+mr,ta=ha+ma,p=fmt(ta/t),o=uniqueShuffle(p,[fmt(ma/t),fmt(ha/t),fmt((hr+mr)/t)]); return {type:'mc',visual:`Hombres: ${ha} Ap / ${hr} Rep<br>Mujeres: ${ma} Ap / ${mr} Rep`,text:`Sacar cualquiera, P(APRUEBE)?`,options:o.options,correct:o.correct,explanation:`Total aprob = ${ta}. Total alum = ${t}. => <strong>${p}</strong>.`};}
+function tableCondition(){ const ha=15,hr=5,ma=20,mr=10,t=ma+mr,p=fmt(ma/t),o=uniqueShuffle(p,[fmt(ma/(ha+hr+ma+mr)),fmt(ma/(ha+ma)),fmt(mr/t)]); return {type:'mc',visual:`H: ${ha} Ap / ${hr} Rep<br>M: ${ma} Ap / ${mr} Rep`,text:`SABIENDO es MUJER. P(Apruebe)?`,options:o.options,correct:o.correct,explanation:`Mujeres=30. Aprobadas=20. => ${p}.`};}
+function tableRowCol(){ const ha=12,hr=12,ma=16,mr=8,ta=ha+ma,p=fmt(ha/ta),o=uniqueShuffle(p,[fmt(ha/(ha+hr)),fmt(ha/(ha+hr+ma+mr)),fmt(ma/ta)]); return {type:'mc',visual:`H: ${ha} Ap / ${hr} Rep<br>M: ${ma} Ap / ${mr} Rep`,text:`SABIENDO está APROBADO. P(Hombre)?`,options:o.options,correct:o.correct,explanation:`Total aprobados = ${ta}. Hombres = ${ha}. => ${p}.`};}
 
+function ruleO(){ const ans=fmt(4/52+13/52-1/52),o=uniqueShuffle(ans,[fmt(4/52+13/52),fmt((4*13)/52),fmt(17/52)]); return {type:'mc',visual:`Mazo inglés: 52 cartas.`,text:`Sacas 1, P(As O Corazón)?`,options:o.options,correct:o.correct,explanation:`P(As) + P(Corz) - P(As de Corz) = 16/52 = <strong>${ans}</strong>.`};}
+function ruleY(){ const p=fmt((4/52)*(4/52)),o=uniqueShuffle(p,[fmt(4/52+4/52),fmt((4/52)*(3/51)),fmt((4/52)*(3/52))]); return {type:'mc',visual:`Sacas 2 cartas CON REPOSICIÓN.`,text:`P(As Y As)?`,options:o.options,correct:o.correct,explanation:`(4/52) × (4/52) = <strong>${p}</strong>.`};}
+function ruleSinReposicion(){ const p=fmt((13/52)*(12/51)),o=uniqueShuffle(p,[fmt((13/52)*(13/52)),fmt((13/52)+(12/51)),fmt((13/52)*(13/51))]); return {type:'mc',visual:`SIN REPOSICIÓN.`,text:`P(Sacar 2 picas seguidas)?`,options:o.options,correct:o.correct,explanation:`13/52 × 12/51 = <strong>${p}</strong>.`};}
+
+function genLaplace() { return pullQuestion('laplace', [lapUrna, lapUrna2, lapDados, lapDados2, lapTrampaAlMenos, lapTrampaComoMaximo, lapMonedas]); }
+function genTree()    { return pullQuestion('tree', [treeMonedas, treeMonedas2, treeRopa, treeCaminos]); }
+function genTable()   { return pullQuestion('table', [tableTotal, tableCondition, tableRowCol]); }
+function genRules()   { return pullQuestion('rules', [ruleO, ruleY, ruleSinReposicion]); }
 /* ═══════════════════════════════════════════
    ZONA 6 — MONTY HALL (RESTORED)
 ═══════════════════════════════════════════ */
@@ -2248,7 +2203,7 @@ async function syncSupabaseScore() {
     phone: G.emoji, // emoji -> phone
     rut: String(G.pts), // pts -> rut
     plan_name: notaTxt, // nota -> plan_name
-    type: 'bunker_score',
+    type: 'bunker_score_' + currentCourse,
     email: `bunker_${Math.random().toString(36).substring(2,10)}@bunker.com`,
     interest_pay: false,
     created_at: new Date().toISOString()
@@ -2269,7 +2224,7 @@ async function loadLeaderboard() {
   try {
     const { data, error } = await sb.from('leads')
       .select('name, phone, rut, plan_name, created_at')
-      .eq('type', 'bunker_score')
+      .like('type', 'bunker_score_%')
       .order('created_at', { ascending: false })
       .limit(2000);
       
@@ -2280,15 +2235,16 @@ async function loadLeaderboard() {
     data.forEach(r => {
       if(!r.name) return;
       const p = parseInt(r.rut) || 0;
+      let cursoTag = r.type === 'bunker_score_1M' ? '<span style="color:var(--text3);font-size:0.6rem">[1ºM]</span> ' : '<span style="color:var(--text3);font-size:0.6rem">[3ºM]</span> ';
       if(!tops[r.name] || p > tops[r.name].p) {
-        tops[r.name] = { p, e: r.phone||'🤓', n: r.plan_name||'2.0' };
+        tops[r.name] = { p, e: r.phone||'🤓', n: r.plan_name||'2.0', tag: cursoTag };
       }
     });
     
     const sorted = Object.entries(tops).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.p - a.p).slice(0,9);
     
     // Inyectar al Profe Diego Inmortal
-    sorted.unshift({ name: "PROFE DIEGO", p: 99999, e: "🔥", n: "7.0 (MAX)", isBoss: true });
+    sorted.unshift({ name: "PROFE DIEGO", p: 1000000, e: "👨🏻‍🏫", n: "7.0 (MAX)", isBoss: true, tag: '<span style="color:var(--c6);font-size:0.6rem">[PRO]</span> ' });
     
     if(sorted.length === 0) {
       lblist.innerHTML = '<div style="text-align:center; color:var(--text3); padding:1.5rem;">📱 Sé el primer Agente en sincronizar su puntaje hoy.</div>';
@@ -2299,7 +2255,7 @@ async function loadLeaderboard() {
       <div style="display:flex; justify-content:space-between; align-items:center; background:${u.isBoss ? 'rgba(251,191,36,0.1)' : 'rgba(255,255,255,0.02)'}; padding:0.6rem 1rem; border-radius:8px; border-left:4px solid ${u.isBoss ? '#fbbf24' : i===1?'#94a3b8':i===2?'#b45309':'var(--border2)'}; transition:0.3s; margin-bottom:2px; ${u.isBoss ? 'box-shadow:0 0 15px rgba(251,191,36,0.2); border:1px solid rgba(251,191,36,0.3);' : ''}">
         <span style="color:var(--text); font-weight:500;">
           <span style="color:${u.isBoss ? 'var(--c6)' : 'var(--text3)'}; margin-right:8px; font-size:0.75rem;">${u.isBoss ? '👑' : '#'+(i+1)}</span>
-          ${u.e} ${u.name.substring(0,12)}
+          ${u.tag||''} ${u.e} ${u.name.substring(0,12)}
         </span>
         <span style="color:${u.isBoss ? 'var(--c6)' : 'var(--c1)'}; font-weight:800;">
           ${u.p} pts 

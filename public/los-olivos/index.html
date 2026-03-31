@@ -1753,6 +1753,7 @@ function nextQuestion(){
   if(G.zoneQ>=ZONE_LEN){showComplete();return;}
   const gen={
     c1z1:genC1Z1, c1z2:genC1Z2, c1z3:genC1Z3, c1z4:genC1Z4, c1z5:genC1Z5, c1z6:genC1Z6,
+    c2z1:genC2Z1, c2z2:genC2Z2, c2z3:genC2Z3, c2z4:genC2Z4, c2z5:genC2Z5, c2z6:genC2Z6,
     laplace:genLaplace,tree:genTree,table:genTable,rules:genRules,montyhall:genMH,
     final:function(){return pullQuestion('final', [genLaplace,genTree,genTable,genRules,genMH]);}
   };

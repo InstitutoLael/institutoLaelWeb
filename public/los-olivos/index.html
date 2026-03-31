@@ -1643,13 +1643,6 @@ function showLevelUp(lvl) {
 
 window.onload=function(){
   createStars();
-  if(!G.agente) {
-    document.getElementById('hub').style.display='none';
-    document.getElementById('agent-modal').style.display='flex';
-  } else {
-    document.getElementById('hub').style.display='flex';
-    updateHUD();
-  }
 }
 
 function showCertificate() {
@@ -2436,8 +2429,10 @@ function confirmAgent() {
   G.agente = nom; G.emoji = emo; G.clase = selectedClass; G.errors = {};
   saveGame();
   document.getElementById('agent-modal').style.display = 'none';
-  document.getElementById('hub').style.display='flex';
-  updateHUD();
+  if (currentCourse) {
+    document.getElementById('hub').style.display='flex';
+    updateHUD();
+  }
 }
 </script>
 </body>

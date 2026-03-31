@@ -1190,6 +1190,19 @@ input { font-size: 16px !important; }
     <div class="gs-zone-name" id="gs-zname">Zona</div>
     <div class="gs-pts-badge">+<span id="gs-pts">0</span> pts</div>
   </div>
+  
+  <!-- BOSS OVERLAY (HP BAR) -->
+  <div id="boss-overlay" style="display:none;padding:1rem;background:rgba(0,0,0,0.4);border-bottom:1px solid rgba(255,255,255,0.1);flex-direction:column;gap:0.5rem;">
+    <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:1px;">
+      <span style="color:var(--c2)">PROFE DIEGO (BOSS)</span>
+      <span id="boss-hp-text" style="color:var(--c2)">100% HP</span>
+    </div>
+    <div style="height:6px;background:rgba(255,255,255,0.1);border-radius:10px;overflow:hidden;">
+      <div id="boss-hp-fill" style="width:100%;height:100%;background:linear-gradient(90deg,var(--c2),#f87171);transition:width 0.3s ease;"></div>
+    </div>
+    <div id="boss-msg" style="font-size:0.65rem;color:var(--text2);text-align:center;font-style:italic;"></div>
+  </div>
+
   <div class="gs-progress">
     <div class="gs-progress-fill" id="gs-prog" style="width:0%"></div>
   </div>
@@ -1608,12 +1621,20 @@ function shootConfetti() {
 
 let bossHP = 100;
 function renderBossUI() {
-  const b = document.getElementById('boss-overlay');
-  if(!b) return;
-  b.style.display = G.zone === 'final' ? 'block' : 'none';
+  const overlay = document.getElementById('boss-overlay');
+  if(!overlay) return;
+  
+  // Mostrar si es zona final de cualquier curso (c1z6, c2z6, final, etc)
+  const isBossZone = G.zone === 'final' || G.zone === 'c1z6' || G.zone === 'c2z6' || (G.zone && G.zone.endsWith('z6'));
+  overlay.style.display = isBossZone ? 'flex' : 'none';
+  
   const bar = document.getElementById('boss-hp-fill');
+  const txt = document.getElementById('boss-hp-text');
+  const msg = document.getElementById('boss-msg');
+
   if(bar) bar.style.width = bossHP + '%';
-  document.getElementById('boss-msg').textContent = bossHP <= 50 ? "¡ME ESTÁS GANANDO! 😱" : "¡EL BÚNKER ES MÍO! 😈";
+  if(txt) txt.textContent = bossHP + '% HP';
+  if(msg) msg.textContent = bossHP <= 50 ? "¡ME ESTÁS GANANDO! 😱" : "¡EL BÚNKER ES MÍO! 😈";
 }
 
 let hcTimerInt;

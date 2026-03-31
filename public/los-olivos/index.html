@@ -1083,8 +1083,15 @@ input { font-size: 16px !important; }
   <!-- TOP 10 NACIONAL -->
   <div id="lb-panel" style="margin-top:3rem; width:100%; max-width:900px; padding:2rem; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:var(--r-md); backdrop-filter:blur(10px); color:white;">
     <h3 style="font-family:'Syne',sans-serif; text-transform:uppercase; letter-spacing:2px; color:var(--c1); margin-bottom:1.5rem; display:flex; align-items:center; gap:10px;">
-      🏆 TOP 10 NACIONAL <span style="font-size:0.7rem; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:10px; color:var(--text3)">EN VIVO</span>
-      <button onclick="loadLeaderboard()" style="margin-left:auto; background:none; border:none; color:var(--c1); cursor:pointer; font-size:1.2rem; outline:none;" title="Refrescar">↻</button>
+      🏆 TOP 10 <span id="lb-scope-title">NACIONAL</span> <span style="font-size:0.7rem; background:rgba(255,255,255,0.05); padding:2px 8px; border-radius:10px; color:var(--text3)">EN VIVO</span>
+      <div style="display:flex; align-items:center; gap:10px; margin-left:auto;">
+        <div class="lb-switch" onclick="toggleLB()" style="display:flex; background:rgba(0,0,0,0.3); padding:4px; border-radius:30px; cursor:pointer; border:1px solid var(--border2); position:relative; width:140px; height:32px;">
+          <div id="lb-indicator" style="position:absolute; left:4px; top:4px; bottom:4px; width:64px; background:var(--c1); border-radius:20px; transition:0.3s ease;"></div>
+          <span style="flex:1; text-align:center; z-index:1; font-size:0.65rem; font-weight:800; line-height:24px;">CURSO</span>
+          <span style="flex:1; text-align:center; z-index:1; font-size:0.65rem; font-weight:800; line-height:24px;">GLOBAL</span>
+        </div>
+        <button onclick="loadLeaderboard()" style="background:none; border:none; color:var(--c1); cursor:pointer; font-size:1.2rem; outline:none;" title="Refrescar">↻</button>
+      </div>
     </h3>
     <div id="lb-list" style="display:flex; flex-direction:column; gap:0.8rem; font-family:'DM Mono',monospace; font-size:0.85rem;">
       <div style="text-align:center; color:var(--text3); padding:1rem;">Cargando transmisiones del satélite...</div>
@@ -1290,6 +1297,7 @@ const G = { ...defaultG };
 
 /* COURSE LOGIC */
 let currentCourse = null;
+let lbIsGlobal = false;
 const courseConfig = {
   '1M': {
     title: 'Potencias y Exponentes',
@@ -1340,6 +1348,8 @@ function initCourse(c) {
   cfg.zones.forEach((z, idx) => {
     ZONE_COLORS_ALL[z.id] = z.color;
     ZONE_NAMES_ALL[z.id] = `Zona 0${idx+1} — ${z.title}`;
+    const avg = getZoneAverage(z.id);
+    const notaDisp = avg ? `<span style="margin-left:8px; font-weight:700; color:${avg>=4?'var(--c1)':'#f87171'}">N: ${avg.toFixed(1)}</span>` : '';
     if (!G.stars[z.id]) G.stars[z.id] = 0;
     
     const isBoss = idx === 5;
@@ -1350,7 +1360,7 @@ function initCourse(c) {
     grid.innerHTML += `
       <div class="zone-card" style="--accent:${z.color}" onclick="${lockedBtn}">
         <div class="zone-num">
-          <span>Zona 0${idx+1}</span>
+          <span>Zona 0${idx+1} ${notaDisp}</span>
           <span class="zone-stars-display" id="zs-${z.id}">${starsDisp}</span>
         </div>
         <div class="zone-icon-wrap" ${isBoss && countStars()<5 ? 'style="filter:grayscale(1)"' : ''}>${z.icon}</div>
@@ -1436,14 +1446,16 @@ function calcNota(pct) {
   if(pct >= 60) return 4.0 + (pct - 60) / 40 * 3.0;
   return 2.0 + (pct / 60) * 2.0; 
 }
+function getZoneAverage(z) {
+  const list = G.zoneGrades[z];
+  if(!list || list.length === 0) return null;
+  return list.reduce((a,b)=>a+b,0) / list.length;
+}
 function getGlobalNota() {
   let zoneAvgs = [];
   Object.keys(G.zoneGrades).forEach(z => {
-    const list = G.zoneGrades[z];
-    if(list && list.length > 0) {
-      const avg = list.reduce((a,b)=>a+b,0) / list.length;
-      zoneAvgs.push(avg);
-    }
+    const avg = getZoneAverage(z);
+    if(avg !== null) zoneAvgs.push(avg);
   });
   if(zoneAvgs.length === 0) return 2.0;
   const total = zoneAvgs.reduce((a,b)=>a+b,0) / zoneAvgs.length;
@@ -2304,6 +2316,15 @@ async function syncSupabaseScore() {
   } catch(e) { console.error('SB Sync', e); }
 }
 
+function toggleLB() {
+  lbIsGlobal = !lbIsGlobal;
+  const ind = document.getElementById('lb-indicator');
+  const tit = document.getElementById('lb-scope-title');
+  if(ind) ind.style.left = lbIsGlobal ? '72px' : '4px';
+  if(tit) tit.textContent = lbIsGlobal ? 'GLOBAL' : 'NACIONAL';
+  loadLeaderboard();
+}
+
 async function loadLeaderboard() {
   const lblist = document.getElementById('lb-list');
   if(!lblist) return;
@@ -2314,7 +2335,7 @@ async function loadLeaderboard() {
   }
   try {
     const { data, error } = await sb.from('leads')
-      .select('name, phone, rut, plan_name, created_at')
+      .select('name, phone, rut, plan_name, type, created_at')
       .like('type', 'bunker_score_%')
       .order('created_at', { ascending: false })
       .limit(2000);
@@ -2325,8 +2346,14 @@ async function loadLeaderboard() {
     const tops = {};
     data.forEach(r => {
       if(!r.name) return;
+      
+      // If NOT global, only show current course
+      if(!lbIsGlobal && r.type !== 'bunker_score_' + currentCourse) return;
+      
       const p = parseInt(r.rut) || 0;
-      let cursoTag = r.type === 'bunker_score_1M' ? '<span style="color:var(--text3);font-size:0.6rem">[1ºM]</span> ' : '<span style="color:var(--text3);font-size:0.6rem">[3ºM]</span> ';
+      let courseCode = r.type.replace('bunker_score_', '');
+      let cursoTag = `<span style="color:var(--text3);font-size:0.6rem">[${courseCode}]</span> `;
+      
       if(!tops[r.name] || p > tops[r.name].p) {
         tops[r.name] = { p, e: r.phone||'🤓', n: r.plan_name||'2.0', tag: cursoTag };
       }
@@ -2334,11 +2361,11 @@ async function loadLeaderboard() {
     
     const sorted = Object.entries(tops).map(([k,v])=>({name:k,...v})).sort((a,b)=>b.p - a.p).slice(0,9);
     
-    // Inyectar al Profe Diego Inmortal
+    // Inyectar al Profe Diego Inmortal (Boss)
     sorted.unshift({ name: "PROFE DIEGO", p: 1000000, e: "👨🏻‍🏫", n: "7.0 (MAX)", isBoss: true, tag: '<span style="color:var(--c6);font-size:0.6rem">[PRO]</span> ' });
     
     if(sorted.length === 0) {
-      lblist.innerHTML = '<div style="text-align:center; color:var(--text3); padding:1.5rem;">📱 Sé el primer Agente en sincronizar su puntaje hoy.</div>';
+      lblist.innerHTML = `<div style="text-align:center; color:var(--text3); padding:1.5rem;">📱 No hay registros en el Top ${lbIsGlobal?'Global':'del Curso'} aún.</div>`;
       return;
     }
     

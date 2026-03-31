@@ -922,7 +922,10 @@ input { font-size: 16px !important; }
       <div class="course-h">1° MEDIO</div>
       <div class="course-p">Mundo de Potencias<br><span style="color:var(--c4);font-size:0.8em;font-weight:bold;margin-top:10px;display:block">▶ ENTRAR AL LABORATORIO</span></div>
     </div>
-    <div class="course-card locked"><div class="course-h">2° MEDIO</div><div class="course-p">Próximamente</div></div>
+    <div class="course-card" onclick="selectCourse('2M')">
+      <div class="course-h">2° MEDIO</div>
+      <div class="course-p">Mundo de Logaritmos<br><span style="color:var(--c3);font-size:0.8em;font-weight:bold;margin-top:10px;display:block">▶ ENTRAR A LA MATRIZ</span></div>
+    </div>
     <div class="course-card" onclick="selectCourse('3M')">
       <div class="course-h">3° MEDIO</div>
       <div class="course-p">Probabilidades y Estadística<br><span style="color:var(--c1);font-size:0.8em;font-weight:bold;margin-top:10px;display:block">▶ ENTRAR AL ARCADE</span></div>
@@ -1286,6 +1289,17 @@ const courseConfig = {
       { id:'c1z6', icon:'💀', title:'Boss Examen', desc:'Demuestra lo que sabes en un PAES.', tag:'EXTREMO', color:'var(--c2)' }
     ]
   },
+  '2M': {
+    title: 'Logaritmos & La Matriz',
+    zones: [
+      { id:'c2z1', icon:'🔍', title:'Concepto Base', desc:'Encuentra la base, exponente o argumento.', tag:'Definición', color:'var(--c3)' },
+      { id:'c2z2', icon:'➕', title:'Suma y Resta', desc:'La suma es producto, la resta es cociente.', tag:'Propiedades', color:'var(--c1)' },
+      { id:'c2z3', icon:'🧗', title:'Exponentes Bajan', desc:'Potencias en el argumento y cambio de base.', tag:'Poderes', color:'var(--c4)' },
+      { id:'c2z4', icon:'⚖️', title:'Ecuaciones Básicas', desc:'Despejar la incógnita del argumento.', tag:'Ecuaciones', color:'var(--c5)' },
+      { id:'c2z5', icon:'📉', title:'Raíces y Fracciones', desc:'Cuando el logaritmo se vuelve racional.', tag:'Avanzado', color:'var(--c6)' },
+      { id:'c2z6', icon:'💀', title:'Boss Examen', desc:'Templo Matemático.', tag:'EXTREMO', color:'var(--c2)' }
+    ]
+  },
   '3M': {
     title: 'Hackeando la Probabilidad',
     zones: [
@@ -1378,11 +1392,19 @@ const rand  = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
 const choose = arr  => arr[Math.floor(Math.random()*arr.length)];
 const shuffle = arr => { let a=[...arr]; for(let i=a.length-1;i>0;i--){let j=rand(0,i);[a[i],a[j]]=[a[j],a[i]]} return a; };
 const uniqueShuffle = (ans, bads) => { 
-  let u = Array.from(new Set(bads.filter(x => String(x) !== String(ans)))); 
+  let san = String(ans).trim();
+  let u = Array.from(new Set(bads.filter(x => String(x).trim() !== san))); 
+  let failsafe = 1;
   while(u.length > 3) u.pop(); 
-  while(u.length < 3) u.push(String(rand(-50,50)) + (Math.random() > 0.5 ? '/'+rand(2,10) : ''));
-  let finalOpts = shuffle([String(ans), ...u.map(String)]); 
-  return { options: finalOpts, correct: finalOpts.indexOf(String(ans)) };
+  while(u.length < 3) {
+    let rn = String(parseFloat(san) ? parseFloat(san) + failsafe : (failsafe % 2 === 0 ? '-'+failsafe : failsafe));
+    if(rn !== san && !u.includes(rn)) u.push(rn);
+    failsafe++;
+  }
+  let finalOpts = shuffle([san, ...u.map(String)]); 
+  let cor = finalOpts.indexOf(san);
+  // Guarantee answer is not 'always A' magically by ensuring proper swap entropy
+  return { options: finalOpts, correct: cor };
 };
 
 const Q_QUEUE = {};
@@ -1992,6 +2014,51 @@ function updateHOF() {
 /* ═══════════════════════════════════════════
    ZONA 1 — LAPLACE & TRAMPAS
 ═══════════════════════════════════════════ */
+/* ═══════════════════════════════════════════
+   2M GEN (LOGARITMOS)
+═══════════════════════════════════════════ */
+function c2z1_basic() { const b=rand(2,5), x=rand(2,4), a=Math.pow(b,x); const o=uniqueShuffle(x,[x+1,x-1,b*x]); return {type:'mc',visual:`<strong>log<sub>${b}</sub>(${a})</strong>`,text:'Evalúa:',options:o.options,correct:o.correct,explanation:`${b} elevado a ${x} da ${a}.`}; }
+function c2z1_arg() { const b=rand(2,6), c=rand(2,3), a=Math.pow(b,c); const o=uniqueShuffle(a,[a+b, a-1, b*c]); return {type:'mc',visual:`<strong>log<sub>${b}</sub>(x) = ${c}</strong>`,text:'Falta Argumento:',options:o.options,correct:o.correct,explanation:`El argumento es ${b} elevado a ${c} = ${a}.`}; }
+function c2z1_base() { const b=rand(2,5), c=rand(2,4), a=Math.pow(b,c); const o=uniqueShuffle(b,[b+c, b+1, b*2]); return {type:'mc',visual:`<strong>log<sub>x</sub>(${a}) = ${c}</strong>`,text:'Falta Base:',options:o.options,correct:o.correct,explanation:`Base x elevada a ${c} da ${a}. x = ${b}.`}; }
+function c2z1_same() { const b=rand(4,20); const o=uniqueShuffle(1,[0,b,-1]); return {type:'mc',visual:`<strong>log<sub>${b}</sub>(${b})</strong>`,text:'Calcula:',options:o.options,correct:o.correct,explanation:`Base y argumento iguales = 1.`}; }
+function c2z1_one() { const b=rand(7,99); const o=uniqueShuffle(0,[1,b,-1]); return {type:'mc',visual:`<strong>log<sub>${b}</sub>(1)</strong>`,text:'Calcula:',options:o.options,correct:o.correct,explanation:`Cualquier base elevada a 0 da 1.`}; }
+function c2z1_neg() { const b=rand(2,5), x=rand(1,3), a=Math.pow(b,x); const o=uniqueShuffle("-"+x,[x, "-"+(x+1), "1/"+x]); return {type:'mc',visual:`<strong>log<sub>${b}</sub>(1/${a})</strong>`,text:'Evalúa:',options:o.options,correct:o.correct,explanation:`1/${a} es ${b} elevado a -${x}. Resultado: -${x}.`}; }
+
+function c2z2_add() { const b=2, x=rand(1,3), y=rand(1,3), a1=Math.pow(b,x), a2=Math.pow(b,y); const ans = x+y; const o=uniqueShuffle(ans,[a1*a2, x*y, ans+1]); return {type:'mc',visual:`<strong>log<sub>2</sub>(${a1}) + log<sub>2</sub>(${a2})</strong>`,text:'Reduce y calcula:',options:o.options,correct:o.correct,explanation:`Suma de logaritmos = log(producto). log_2(${a1*a2}) = ${ans}.`}; }
+function c2z2_sub() { const b=3, x=rand(3,5), y=rand(1,2), a1=Math.pow(b,x), a2=Math.pow(b,y); const ans = x-y; const o=uniqueShuffle(ans,[x+y, a1/a2, ans-1]); return {type:'mc',visual:`<strong>log<sub>3</sub>(${a1}) - log<sub>3</sub>(${a2})</strong>`,text:'Reduce y calcula:',options:o.options,correct:o.correct,explanation:`Resta de logaritmos = log(cociente). log_3(${a1/a2}) = ${ans}.`}; }
+function c2z2_symAdd() { const b=rand(5,9), a1=rand(2,5), a2=rand(2,5); const ans=`log_${b}(${a1*a2})`; const o=uniqueShuffle(ans,[`log_${b}(${a1+a2})`,`log_${b}(${a1}^${a2})`,`log_${a1+a2}(${b})`]); return {type:'mc',visual:`<strong>log<sub>${b}</sub>(${a1}) + log<sub>${b}</sub>(${a2})</strong>`,text:'Expresa en un logaritmo:',options:o.options,correct:o.correct,explanation:`Multiplica argumentos: ${a1} × ${a2} = ${a1*a2}.`}; }
+function c2z2_symSub() { const b=rand(2,7), a1=12, a2=3; const ans=`log_${b}(4)`; const o=uniqueShuffle(ans,[`log_${b}(9)`,`log_${b}(15)`,`4`]); return {type:'mc',visual:`<strong>log<sub>${b}</sub>(${a1}) - log<sub>${b}</sub>(${a2})</strong>`,text:'Expresa en un logaritmo:',options:o.options,correct:o.correct,explanation:`Divide argumentos: ${a1} / ${a2} = 4.`}; }
+function c2z2_mix() { const ans=`log_2(5)`; const o=uniqueShuffle(ans,[`log_2(6)`,`log_2(10)`,`log_2(25)`]); return {type:'mc',visual:`<strong>log<sub>2</sub>(10) + log<sub>2</sub>(3) - log<sub>2</sub>(6)</strong>`,text:'Reduce:',options:o.options,correct:o.correct,explanation:`Multiplica y divide: (10 * 3) / 6 = 30/6 = 5.`}; }
+function c2z2_cancel() { const b=rand(2,5), a1=rand(2,8); const ans=`1`; const o=uniqueShuffle(ans,[`0`,`log_${b}(${a1})`,`${b}`]); return {type:'mc',visual:`<strong>log<sub>${b}</sub>(${b*a1}) - log<sub>${b}</sub>(${a1})</strong>`,text:'Calcula:',options:o.options,correct:o.correct,explanation:`Al restar divides: ${b*a1}/${a1} = ${b}. log_${b}(${b}) = 1.`}; }
+
+function c2z3_pow() { const b=2, a=8, n=rand(3,5); const ans = 3*n; const o=uniqueShuffle(ans,[3+n, 3/n, Math.pow(3,n)]); return {type:'mc',visual:`<strong>log<sub>2</sub>(${a}<sup>${n}</sup>)</strong>`,text:'Calcula:',options:o.options,correct:o.correct,explanation:`El exponente baja: ${n} * log_2(8) = ${n} * 3 = ${ans}.`}; }
+function c2z3_cb1() { const b=2, a=8; const ans=`log(8)/log(2)`; const o=uniqueShuffle(ans,[`log(2)/log(8)`,`log(8-2)`,`log(4)`]); return {type:'mc',visual:`<strong>log<sub>2</sub>(8)</strong>`,text:'¿Cómo se escribe usando base 10 (log)?',options:o.options,correct:o.correct,explanation:`Cambio de base: log(argumento) / log(base).`}; }
+function c2z3_climb() { const n=rand(2,4), a=rand(2,4); const ans=`log(${Math.pow(a,n)})`; const o=uniqueShuffle(ans,[`log(${a*n})`,`log(${Math.pow(n,a)})`,`${n} + log(${a})`]); return {type:'mc',visual:`<strong>${n} &middot; log(${a})</strong>`,text:'Eleva el coeficiente:',options:o.options,correct:o.correct,explanation:`El coeficiente sube: log(${a}^${n}) = log(${Math.pow(a,n)}).`}; }
+function c2z3_chain() { const ans=`log_2(8)`; const o=uniqueShuffle(ans,[`log_3(2)`,`log_8(2)`,`1`]); return {type:'mc',visual:`<strong>log<sub>2</sub>(3) &middot; log<sub>3</sub>(8)</strong>`,text:'Multiplicación encadenada:',options:o.options,correct:o.correct,explanation:`Regla de cadena corta factores cruzados: log_2(8).`}; }
+function c2z3_cbrev() { const ans=`log_5(9)`; const o=uniqueShuffle(ans,[`log_9(5)`,`log(9/5)`,`log(4)`]); return {type:'mc',visual:`<strong>log(9) / log(5)</strong>`,text:'Reconstruye el logaritmo:',options:o.options,correct:o.correct,explanation:`El divisor aporta la base. log_5(9).`}; }
+function c2z3_ten() { const n=rand(4,7); const ans=String(n); const o=uniqueShuffle(ans,["10", String(n*10), "1"]); return {type:'mc',visual:`<strong>log(10<sup>${n}</sup>)</strong>`,text:'Logaritmo decimal:',options:o.options,correct:o.correct,explanation:`El log base 10 cancela la pot de 10. Queda ${n}.`}; }
+
+function c2z4_eq1() { const b=2, r=rand(3,5), c=rand(2,6); const x=Math.pow(b,r)-c; const ans=String(x); const o=uniqueShuffle(ans,[String(Math.pow(b,r)+c), String(b*r-c), String(Math.pow(r,b)-c)]); return {type:'mc',visual:`<strong>log<sub>2</sub>(x + ${c}) = ${r}</strong>`,text:'Despeja x:',options:o.options,correct:o.correct,explanation:`2^${r} = x + ${c} => ${Math.pow(b,r)} = x + ${c} => x = ${x}.`}; }
+function c2z4_eq2() { const c=rand(2,5), mx=c*2; const ans=String(mx/c); const o=uniqueShuffle(ans,[String(mx*c), String(mx-c), String(mx+c)]); return {type:'mc',visual:`<strong>log(x) + log(${c}) = log(${mx})</strong>`,text:'Despeja x:',options:o.options,correct:o.correct,explanation:`log(${c}x) = log(${mx}) => ${c}x = ${mx} => x = ${ans}.`}; }
+function c2z4_eq3() { const x=rand(4,9); const a=x*x; const ans=String(x); const o=uniqueShuffle(ans,[String(x*2), String(x/2), String(Math.sqrt(x))]); return {type:'mc',visual:`<strong>log<sub>x</sub>(${a}) = 2</strong>`,text:'Despeja base x:',options:o.options,correct:o.correct,explanation:`x^2 = ${a}. Como x es una base (debe ser +), x=${ans}.`}; }
+function c2z4_eq4() { const c=rand(3,6); const x=2*c; const ans=String(x); const o=uniqueShuffle(ans,[String(c/2), String(c+2), String(Math.pow(c,2))]); return {type:'mc',visual:`<strong>log(x) - log(${c}) = log(2)</strong>`,text:'Despeja x:',options:o.options,correct:o.correct,explanation:`log(x/${c}) = log(2) => x/${c} = 2 => x = ${x}.`}; }
+function c2z4_eq5() { const x=rand(4,7); const a=x*x; const ans=String(x); const o=uniqueShuffle(ans,[String(a/2), String(Math.sqrt(a)/2), String(x*2)]); return {type:'mc',visual:`<strong>2log(x) = log(${a})</strong>`,text:'Despeja x:',options:o.options,correct:o.correct,explanation:`log(x^2) = log(${a}) => x^2 = ${a} => x = ${x}.`}; }
+function c2z4_eq6() { const b=3, r=2; const x=9/2; const ans="4.5"; const o=uniqueShuffle(ans,["9", "3", "6"]); return {type:'mc',visual:`<strong>log<sub>3</sub>(2x) = 2</strong>`,text:'Despeja x:',options:o.options,correct:o.correct,explanation:`3^2 = 2x => 9 = 2x => x = 4.5.`}; }
+
+function c2z5_bfrac() { const e=rand(2,4); const a=Math.pow(2,e); const ans=String(-e); const o=uniqueShuffle(ans,[String(e), "1/"+e, "-1/"+e]); return {type:'mc',visual:`<strong>log<sub>1/2</sub>(${a})</strong>`,text:'Evalúa:',options:o.options,correct:o.correct,explanation:`(1/2)^x = 2^${e} => 2^-x = 2^${e} => x = ${ans}.`}; }
+function c2z5_argraiz() { const ans="1/2"; const o=uniqueShuffle(ans,["2", "1/4", "1"]); return {type:'mc',visual:`<strong>log<sub>3</sub>(&radic;3)</strong>`,text:'Evalúa:',options:o.options,correct:o.correct,explanation:`La raíz cuadrada equivale a un exponente fraccionario de 1/2.`}; }
+function c2z5_baseraiz() { const ans="2"; const o=uniqueShuffle(ans,["1/2", "1", "4"]); return {type:'mc',visual:`<strong>log<sub>&radic;5</sub>(5)</strong>`,text:'Evalúa:',options:o.options,correct:o.correct,explanation:`(√5)^x = 5 => (5^(1/2))^x = 5^1 => x/2 = 1 => x = 2.`}; }
+function c2z5_allraiz() { const ans="1"; const o=uniqueShuffle(ans,["1/2", "2", "0"]); return {type:'mc',visual:`<strong>log<sub>&radic;7</sub>(&radic;7)</strong>`,text:'Evalúa:',options:o.options,correct:o.correct,explanation:`Cualquier logaritmo idéntico a su base da 1.`}; }
+function c2z5_argfrac() { const b=rand(2,4), e=rand(2,3), a=Math.pow(b,e); const ans=String(-e); const o=uniqueShuffle(ans,[String(e), "1/"+e, "-1/"+e]); return {type:'mc',visual:`<strong>log<sub>${b}</sub>(1/${a})</strong>`,text:'Evalúa:',options:o.options,correct:o.correct,explanation:`${b}^x = 1/${b}^${e} = ${b}^-${e} => x = ${ans}.`}; }
+function c2z5_mix() { const ans="-1/2"; const o=uniqueShuffle(ans,["1/2", "-2", "2"]); return {type:'mc',visual:`<strong>log<sub>3</sub>(1/&radic;3)</strong>`,text:'Evalúa:',options:o.options,correct:o.correct,explanation:`1/√3 es equivalente a escribir 3^(-1/2).`}; }
+
+function genC2Z1() { return pullQuestion('c2z1', [c2z1_basic, c2z1_arg, c2z1_base, c2z1_same, c2z1_one, c2z1_neg]); }
+function genC2Z2() { return pullQuestion('c2z2', [c2z2_add, c2z2_sub, c2z2_symAdd, c2z2_symSub, c2z2_mix, c2z2_cancel]); }
+function genC2Z3() { return pullQuestion('c2z3', [c2z3_pow, c2z3_cb1, c2z3_climb, c2z3_chain, c2z3_cbrev, c2z3_ten]); }
+function genC2Z4() { return pullQuestion('c2z4', [c2z4_eq1, c2z4_eq2, c2z4_eq3, c2z4_eq4, c2z4_eq5, c2z4_eq6]); }
+function genC2Z5() { return pullQuestion('c2z5', [c2z5_bfrac, c2z5_argraiz, c2z5_baseraiz, c2z5_allraiz, c2z5_argfrac, c2z5_mix]); }
+function genC2Z6() { return pullQuestion('c2z6', [c2z1_basic, c2z2_add, c2z3_pow, c2z4_eq1, c2z5_bfrac, c2z1_neg, c2z2_sub, c2z4_eq6, c2z5_argraiz]); }
+
 /* 1M GEN */
 function genC1Z1(){return pullQuestion('c1z1',[pConcepto,pBaseNegativa,pCero,pBasePositiva]);}
 function genC1Z2(){return pullQuestion('c1z2',[pMultIgualBase,pMultMix,pMultGeo,pMultIgualBaseExtra]);}
@@ -2043,10 +2110,21 @@ function ruleO(){ const ans=fmt(4/52+13/52-1/52),o=uniqueShuffle(ans,[fmt(4/52+1
 function ruleY(){ const p=fmt((4/52)*(4/52)),o=uniqueShuffle(p,[fmt(4/52+4/52),fmt((4/52)*(3/51)),fmt((4/52)*(3/52))]); return {type:'mc',visual:`Sacas 2 cartas CON REPOSICIÓN.`,text:`P(As Y As)?`,options:o.options,correct:o.correct,explanation:`(4/52) × (4/52) = <strong>${p}</strong>.`};}
 function ruleSinReposicion(){ const p=fmt((13/52)*(12/51)),o=uniqueShuffle(p,[fmt((13/52)*(13/52)),fmt((13/52)+(12/51)),fmt((13/52)*(13/51))]); return {type:'mc',visual:`SIN REPOSICIÓN.`,text:`P(Sacar 2 picas seguidas)?`,options:o.options,correct:o.correct,explanation:`13/52 × 12/51 = <strong>${p}</strong>.`};}
 
+/* 3M Expansions */
+function treeEnfermedad(){ const pE=rand(2,5),pT=rand(8,9),ans=pE*pT,ansD=pE*(10-pT); const o=uniqueShuffle(ans+"%",[ansD+"%","10%", ans+pE+"%"]); return {type:'mc',visual:`P(Enfermo) = ${pE}%<br>P(+ | Enf) = ${pT}0%`,text:`P(Enfermo Y Positivo)?`,options:o.options,correct:o.correct,explanation:`(${pE}/100) × (${pT}0/100) = ${ans}%.`};}
+function treeSemaforo(){ const pV=rand(4,6),ans=fmt((pV/10)*(pV/10)),o=uniqueShuffle(ans,[fmt(pV/10+pV/10),fmt((pV/10)*((10-pV)/10)),fmt((pV/10)*(pV-1)/9)]); return {type:'mc',visual:`Semáforo: P(Verde) = 0.${pV}<br>Independientes 2 cruces.`,text:`P(Ambos Verde)?`,options:o.options,correct:o.correct,explanation:`Se multiplica: 0.${pV} × 0.${pV} = ${ans}.`};}
+function treePiezas(){ const ans="1/4"; const o=uniqueShuffle(ans,["1/2","3/4","1/8"]); return {type:'mc',visual:`Laberinto en Y (2 cruces seguidos 50/50).`,text:`P(Llegar al final)?`,options:o.options,correct:o.correct,explanation:`1/2 en primera, luego 1/2 en segunda. (1/2)×(1/2) = 1/4.`};}
+function tableNoA(){ const h=rand(10,20),m=rand(10,20),ta=h+m,o=uniqueShuffle(fmt(m/ta),[fmt(h/ta),fmt((m-1)/ta),'0.5']); return {type:'mc',visual:`Grupo: ${h}H y ${m}M.`,text:`P(NO Hombre)?`,options:o.options,correct:o.correct,explanation:`NO Hombre = Mujer. Son ${m}/${ta} = ${fmt(m/ta)}.`};}
+function tableMutual(){ const o=uniqueShuffle('0',['1/4','1/2','1']); return {type:'mc',visual:`Sacas 1 sola carta.`,text:`P(As Y Rey a la vez)?`,options:o.options,correct:o.correct,explanation:`Una sola carta no puede ser ambas cosas a la vez. P = 0.`};}
+function tableInversa(){ const pa=40,h=10,m=30, t=pa,o=uniqueShuffle(fmt(h/t),[fmt(m/t),fmt(h/100),'0.5']); return {type:'mc',visual:`Aprobados: ${pa}. Mujeres aprobadas: ${m}.`,text:`SABIENDO Aprobó... P(Hombre)?`,options:o.options,correct:o.correct,explanation:`Condición=${pa}. Hombres= ${pa-m}=${h}. P = ${h}/${pa} = ${fmt(h/t)}.`};}
+function ruleExtra1(){ const p=fmt((12/50)*(11/49)),o=uniqueShuffle(p,[fmt((12/50)*(12/50)),fmt(12/50+11/49),fmt(12/50*12/49)]); return {type:'mc',visual:`Bolsa: 12 amarillas, 38 rojas. (50 en total)`,text:`P(Ambas Amarillas SIN REPOSI)?`,options:o.options,correct:o.correct,explanation:`12/50 × 11/49.`};}
+function ruleExtra2(){ const ans=fmt(1/6+1/2-1/6),o=uniqueShuffle(ans,[fmt(1/6+1/2),fmt(1/6*1/2),fmt(1/6+1/2+1/6)]); return {type:'mc',visual:`P(A)=1/6. P(B)=1/2. Intersección=1/6.`,text:`P(A O B)?`,options:o.options,correct:o.correct,explanation:`Suma menos intersección: 1/6 + 1/2 - 1/6.`};}
+function ruleExtra3(){ const ans=fmt(1/6*1/6),o=uniqueShuffle(ans,[fmt(1/6+1/6),fmt(1/6*1/36),fmt(2/6)]); return {type:'mc',visual:`Dos dados independientes.`,text:`P(Sacar 5 y luego 5)?`,options:o.options,correct:o.correct,explanation:`Se multiplican marginales directas: 1/6 × 1/6.`};}
+
 function genLaplace() { return pullQuestion('laplace', [lapUrna, lapUrna2, lapDados, lapDados2, lapTrampaAlMenos, lapTrampaComoMaximo, lapMonedas]); }
-function genTree()    { return pullQuestion('tree', [treeMonedas, treeMonedas2, treeRopa, treeCaminos]); }
-function genTable()   { return pullQuestion('table', [tableTotal, tableCondition, tableRowCol]); }
-function genRules()   { return pullQuestion('rules', [ruleO, ruleY, ruleSinReposicion]); }
+function genTree()    { return pullQuestion('tree', [treeMonedas, treeMonedas2, treeRopa, treeCaminos, treeEnfermedad, treeSemaforo, treePiezas]); }
+function genTable()   { return pullQuestion('table', [tableTotal, tableCondition, tableRowCol, tableNoA, tableMutual, tableInversa]); }
+function genRules()   { return pullQuestion('rules', [ruleO, ruleY, ruleSinReposicion, ruleExtra1, ruleExtra2, ruleExtra3]); }
 /* ═══════════════════════════════════════════
    ZONA 6 — MONTY HALL (RESTORED)
 ═══════════════════════════════════════════ */

@@ -5,7 +5,7 @@ import { clp, PAES_SUBJECTS } from '../../data/paes';
 const ease = [0.16, 1, 0.3, 1];
 
 // WhatsApp number — Instituto Lael
-const WA_NUMBER = '56956548990';
+const WA_NUMBER = '56964626568';
 
 export default function PricingBlock({ gateData, selectedModules, priceData, isConnecting, setIsConnecting, setStep }) {
 
@@ -128,7 +128,7 @@ Me gustaría avanzar al siguiente paso con un mentor.`;
                   className="flex items-center justify-center gap-3 absolute inset-0"
                 >
                   <span className="w-4 h-4 border-2 border-lael-primary border-t-transparent rounded-full animate-spin" />
-                  Asignando mentor...
+                  Conectando con mentor estratégico...
                 </motion.div>
               ) : (
                 <motion.div
@@ -139,7 +139,7 @@ Me gustaría avanzar al siguiente paso con un mentor.`;
                   transition={{ duration: 0.4, ease }}
                   className="absolute inset-0 flex items-center justify-center"
                 >
-                  Activar mi rendimiento →
+                  Activar sistema de rendimiento →
                 </motion.div>
               )}
             </AnimatePresence>

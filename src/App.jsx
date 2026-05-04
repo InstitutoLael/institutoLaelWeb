@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import PAES from "./pages/PAES";
 import MetodoLael from "./pages/MetodoLael";
 import Idiomas from "./pages/Idiomas";
+import LSCh from "./pages/LSCh";
 import Contacto from "./pages/Contacto";
 import ComingSoon from "./pages/ComingSoon";
 
@@ -25,7 +26,7 @@ export default function App() {
         }
       }} />
       <Navbar />
-      
+
       <main className="flex-grow pt-20">
         <PageTransition>
           <Routes>
@@ -34,8 +35,9 @@ export default function App() {
             <Route path="/paes" element={<PAES />} />
             <Route path="/metodo" element={<MetodoLael />} />
             <Route path="/idiomas" element={<Idiomas />} />
+            <Route path="/lsch" element={<LSCh />} />
             <Route path="/contacto" element={<Contacto />} />
-            {/* Fallback para las que aún no hacemos */}
+            {/* Fallback */}
             <Route path="*" element={<ComingSoon />} />
           </Routes>
         </PageTransition>

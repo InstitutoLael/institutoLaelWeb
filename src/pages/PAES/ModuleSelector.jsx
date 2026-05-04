@@ -6,11 +6,10 @@ const ICON_MAP = {
   len: PenTool,
   m1: Calculator,
   m2: Target,
-  sci: Atom,
+  his: Database,
   bio: Activity,
-  chi: Database,
   fis: Globe,
-  qui: Beaker
+  qui: Beaker,
 };
 
 export default function ModuleSelector({ selectedModules, setSelectedModules }) {

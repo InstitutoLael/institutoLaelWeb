@@ -73,65 +73,65 @@ export const priceForCount = (count) => computePaesPrice(Array(count).fill(0)).t
 export const PAES_SUBJECTS = [
   {
     id: "m1",
-    name: "Dominio Estratégico Matemática M1",
-    category: "Pilar Fundamental",
+    name: "Matemática M1",
+    category: "Prueba Obligatoria",
     icon: "📐",
     color: "#C6A66B",
-    desc: "Desarrollo de razonamiento lógico y tácticas para maximizar puntaje en el menor tiempo posible.",
+    desc: "Resolución de problemas, razonamiento lógico y tácticas de puntaje máximo.",
     hoursPerWeek: 3
   },
   {
     id: "len",
-    name: "Análisis Crítico y Comprensión Lectora",
-    category: "Pilar Fundamental",
+    name: "Competencia Lectora",
+    category: "Prueba Obligatoria",
     icon: "📚",
     color: "#C6A66B",
-    desc: "Sistemas de decodificación rápida de textos y extracción de inferencias precisas.",
+    desc: "Comprensión, análisis e interpretación de textos bajo presión de tiempo.",
     hoursPerWeek: 3
   },
   {
     id: "m2",
-    name: "Matemática Avanzada M2",
-    category: "Especialización Científica",
+    name: "Matemática M2",
+    category: "Prueba Electiva",
     icon: "🚀",
     color: "#C6A66B",
-    desc: "Ingeniería inversa de problemas complejos para carreras STEM de alta exigencia.",
+    desc: "Profundización matemática para carreras STEM de alta selectividad.",
     hoursPerWeek: 2
   },
   {
     id: "his",
-    name: "Perspectiva Histórica y Social",
-    category: "Módulo Estratégico",
+    name: "Historia y Ciencias Sociales",
+    category: "Prueba Electiva",
     icon: "🏛️",
     color: "#C6A66B",
-    desc: "Estructuración temporal y análisis de procesos para dominar la evaluación humanista.",
+    desc: "Análisis histórico, procesos sociales y dominio de la prueba humanista.",
     hoursPerWeek: 2
   },
   {
     id: "bio",
-    name: "Ciencias Biológicas",
-    category: "Módulo Científico",
+    name: "Ciencias — Biología",
+    category: "Prueba Electiva",
     icon: "🧬",
     color: "#C6A66B",
-    desc: "Comprensión sistémica del mundo natural enfocado en el modelo PAES.",
+    desc: "Comprensión sistémica del mundo natural enfocada en el modelo PAES.",
     hoursPerWeek: 2
   },
   {
     id: "fis",
-    name: "Física Estructural",
-    category: "Módulo Científico",
+    name: "Ciencias — Física",
+    category: "Prueba Electiva",
     icon: "⚡",
     color: "#C6A66B",
-    desc: "Mecánica y energía aplicada a la resolución de problemas lógicos.",
+    desc: "Mecánica y energía aplicada a la resolución de problemas bajo presión.",
     hoursPerWeek: 2
   },
   {
     id: "qui",
-    name: "Química Fundamental",
-    category: "Módulo Científico",
+    name: "Ciencias — Química",
+    category: "Prueba Electiva",
     icon: "🧪",
     color: "#C6A66B",
-    desc: "Dominio de la materia y sus interacciones bajo presión de tiempo.",
+    desc: "Dominio de la materia y sus interacciones para maximizar tu puntaje.",
     hoursPerWeek: 2
   },
 ];

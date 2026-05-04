@@ -1,18 +1,59 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { clp } from '../../data/paes';
+import { clp, PAES_SUBJECTS } from '../../data/paes';
 
 const ease = [0.16, 1, 0.3, 1];
 
-// PricingBlock is the "consequence" — it arrives last, with most weight
-// Delay is handled here, outside SystemReveal, so it truly comes after modules
+// WhatsApp number — Instituto Lael
+const WA_NUMBER = '56956548990';
+
 export default function PricingBlock({ gateData, selectedModules, priceData, isConnecting, setIsConnecting, setStep }) {
+
   const handleActivateSystem = () => {
     setIsConnecting(true);
+
+    // Resolve human-readable module names from IDs
+    const moduleNames = selectedModules
+      .map(id => {
+        const mod = PAES_SUBJECTS.find(s => s.id === id);
+        return mod?.name ?? id;
+      })
+      .join(', ');
+
+    // Premium conversion message
+    const message =
+`Hola, soy ${gateData.name}.
+
+Acabo de completar mi diagnóstico en Instituto Lael y quiero activar mi sistema de preparación PAES.
+
+🎯 Objetivo: ${gateData.score || 'A definir'}
+🧠 Pruebas seleccionadas: ${moduleNames}
+💸 Inversión mensual: ${clp(priceData?.totalMonthly ?? 0)}
+
+Me gustaría avanzar al siguiente paso con un mentor.`;
+
+    const encodedMessage = encodeURIComponent(message);
+
+    // Persist lead locally (conversion tracking)
+    try {
+      localStorage.setItem(
+        `lael_lead_${Date.now()}`,
+        JSON.stringify({
+          name: gateData.name,
+          phone: gateData.phone,
+          score: gateData.score,
+          modules: moduleNames,
+          total: priceData?.totalMonthly ?? 0,
+          ts: new Date().toISOString(),
+        })
+      );
+    } catch (_) {}
+
     setTimeout(() => {
-      setStep(3);
       setIsConnecting(false);
-    }, 1800);
+      setStep(3);
+      window.open(`https://wa.me/${WA_NUMBER}?text=${encodedMessage}`, '_blank');
+    }, 900);
   };
 
   return (
@@ -25,39 +66,56 @@ export default function PricingBlock({ gateData, selectedModules, priceData, isC
     >
       <div className="w-full max-w-3xl bg-[#0B0B0B] border border-lael-accent/20 rounded-3xl p-12 lg:p-16 text-center relative overflow-hidden shadow-[0_0_80px_rgba(198,166,107,0.05)]">
 
-        {/* Radial glow behind pricing */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(ellipse_at_center,_rgba(198,166,107,0.08)_0%,_transparent_70%)] pointer-events-none" />
+        {/* Radial glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(ellipse_at_center,_rgba(198,166,107,0.07)_0%,_transparent_70%)] pointer-events-none" />
 
         <div className="relative z-10">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10">Tu sistema confirmado</p>
 
-          {/* Module list */}
+          {/* Selected module pills */}
           <div className="flex flex-wrap gap-2 justify-center mb-10">
-            {selectedModules.map(m => (
-              <span key={m} className="text-[10px] tracking-[0.15em] text-lael-muted/70 border border-white/10 px-3 py-1 rounded-full uppercase">
-                {m}
-              </span>
-            ))}
+            {selectedModules.map(id => {
+              const mod = PAES_SUBJECTS.find(s => s.id === id);
+              return (
+                <span key={id} className="text-[10px] tracking-[0.12em] text-lael-muted/60 border border-white/10 px-3 py-1 rounded-full uppercase">
+                  {mod?.name ?? id}
+                </span>
+              );
+            })}
           </div>
 
+          {/* Package label */}
+          {priceData?.label && (
+            <p className="text-lael-muted/40 text-[11px] tracking-[0.15em] uppercase mb-4">
+              {priceData.label}
+            </p>
+          )}
+
           {/* Price — dominant */}
-          <div className="mb-12">
+          <div className="mb-4">
             <p className="text-lael-muted/40 text-[10px] tracking-[0.2em] uppercase mb-3">Inversión mensual</p>
             <p className="font-display text-6xl lg:text-8xl text-lael-light tracking-[-0.03em] font-bold">
-              {clp(priceData?.monthly ?? 0)}
+              {clp(priceData?.totalMonthly ?? 0)}
             </p>
-            {priceData?.hasDiscount && (
-              <p className="text-lael-accent text-[11px] tracking-[0.1em] mt-3">
-                {priceData.discountLabel}
-              </p>
-            )}
           </div>
+
+          {/* Savings badge */}
+          {priceData?.saving > 0 && (
+            <p className="text-lael-accent text-[11px] tracking-[0.1em] mb-12">
+              Ahorras {clp(priceData.saving)} respecto a contratar módulos individuales
+            </p>
+          )}
+
+          {/* First month breakdown */}
+          <p className="text-lael-muted/30 text-[10px] tracking-[0.1em] uppercase mb-12">
+            Primer mes: {clp(priceData?.totalFirstMonth ?? 0)} (incluye matrícula)
+          </p>
 
           {/* CTA */}
           <button
             onClick={handleActivateSystem}
             disabled={isConnecting}
-            className="w-full bg-lael-accent text-lael-primary py-6 rounded-xl text-xs tracking-[0.2em] uppercase font-bold transition-all duration-700 hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(198,166,107,0.2)] hover:shadow-[0_0_60px_rgba(198,166,107,0.5)] flex items-center justify-center relative overflow-hidden h-16"
+            className="w-full bg-lael-accent text-lael-primary py-6 rounded-xl text-xs tracking-[0.2em] uppercase font-bold transition-all duration-700 hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(198,166,107,0.2)] hover:shadow-[0_0_60px_rgba(198,166,107,0.5)] relative overflow-hidden h-16"
           >
             <AnimatePresence mode="wait">
               {isConnecting ? (
@@ -67,10 +125,10 @@ export default function PricingBlock({ gateData, selectedModules, priceData, isC
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4, ease }}
-                  className="flex items-center justify-center gap-3 absolute"
+                  className="flex items-center justify-center gap-3 absolute inset-0"
                 >
                   <span className="w-4 h-4 border-2 border-lael-primary border-t-transparent rounded-full animate-spin" />
-                  Conectando con un mentor...
+                  Asignando mentor...
                 </motion.div>
               ) : (
                 <motion.div
@@ -79,16 +137,16 @@ export default function PricingBlock({ gateData, selectedModules, priceData, isC
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4, ease }}
-                  className="absolute"
+                  className="absolute inset-0 flex items-center justify-center"
                 >
-                  Activar mi rendimiento
+                  Activar mi rendimiento →
                 </motion.div>
               )}
             </AnimatePresence>
           </button>
 
-          <p className="mt-8 text-[10px] text-lael-muted/40 tracking-[0.1em] uppercase">
-            Sin compromiso de permanencia · Cancela cuando quieras
+          <p className="mt-8 text-[10px] text-lael-muted/30 tracking-[0.1em] uppercase">
+            Sin permanencia mínima · Cancela cuando quieras
           </p>
         </div>
       </div>

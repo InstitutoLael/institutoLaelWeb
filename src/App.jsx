@@ -8,7 +8,7 @@ import FloatingWhatsApp from "./components/FloatingWhatsApp";
 
 // Pages
 import Home from "./pages/Home";
-import Preuniversitario from "./pages/Preuniversitario";
+import PAES from "./pages/PAES";
 import MetodoLael from "./pages/MetodoLael";
 import Idiomas from "./pages/Idiomas";
 import Contacto from "./pages/Contacto";
@@ -30,8 +30,8 @@ export default function App() {
         <PageTransition>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/preuniversitario" element={<Preuniversitario />} />
-            <Route path="/paes" element={<Preuniversitario />} />
+            <Route path="/preuniversitario" element={<PAES />} />
+            <Route path="/paes" element={<PAES />} />
             <Route path="/metodo" element={<MetodoLael />} />
             <Route path="/idiomas" element={<Idiomas />} />
             <Route path="/contacto" element={<Contacto />} />

@@ -5,6 +5,17 @@ import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import { Target, Compass, Users, LineChart, GraduationCap, Globe, HandHeart, Building } from 'lucide-react';
 
+import demre from '../assets/img/Partners/DEMRE.png';
+import google from '../assets/img/Partners/GoogleWorkspace.png';
+import ino from '../assets/img/Partners/INO.png';
+import losOlivos from '../assets/img/Partners/LosOlivos.png';
+import mercadoPago from '../assets/img/Partners/MercadoPago.png';
+import naama from '../assets/img/Partners/naama-studio.png';
+import onepay from '../assets/img/Partners/onepay.png';
+import transbank from '../assets/img/Partners/Transbank.png';
+
+const partners = [demre, google, ino, losOlivos, mercadoPago, naama, onepay, transbank];
+
 // Premium easing
 const ease = [0.16, 1, 0.3, 1];
 
@@ -96,13 +107,16 @@ export default function Home() {
         <div className="absolute left-0 top-0 bottom-0 w-48 bg-gradient-to-r from-lael-primary to-transparent z-10" />
         <div className="absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-lael-primary to-transparent z-10" />
         
-        <div className="flex w-max animate-marquee opacity-20 blur-[0.5px]">
+        <div className="flex w-max animate-marquee opacity-30">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex gap-24 px-12 items-center justify-center">
-              {['Universidad de Chile', 'Pontificia Universidad Católica', 'Corporate Partners', 'Exalumnos Destacados', 'Colegios de Excelencia'].map((partner, idx) => (
-                <div key={idx} className="text-lael-light font-display font-bold text-2xl tracking-widest whitespace-nowrap">
-                  {partner}
-                </div>
+              {partners.map((partnerImg, idx) => (
+                <img 
+                  key={idx} 
+                  src={partnerImg} 
+                  alt="Partner" 
+                  className="h-8 md:h-10 w-auto object-contain opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700" 
+                />
               ))}
             </div>
           ))}

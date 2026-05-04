@@ -72,8 +72,8 @@ export default function Home() {
   return (
     <div className="bg-[#0B0B0B] text-lael-light overflow-hidden">
       <Helmet>
-        <title>Instituto Lael | Sistema de Rendimiento Académico</title>
-        <meta name="description" content="No entrenamos para pruebas. Formamos sistemas de rendimiento. PAES, Idiomas y Lengua de Señas Chilena." />
+        <title>Instituto Lael | Educación Online en Chile — PAES, Idiomas, LSCh</title>
+        <meta name="description" content="No entrenamos para pruebas. Formamos sistemas de rendimiento. PAES, Idiomas (Inglés, Coreano) y Lengua de Señas Chilena. Santiago, Chile." />
       </Helmet>
 
       {/* Grain texture */}

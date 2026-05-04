@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import LandingLSCh from './LandingLSCh';
 import ModuleProgression from './ModuleProgression';
 import PlanSelector from './PlanSelector';
@@ -23,6 +24,10 @@ export default function LSCh() {
 
   return (
     <main className="bg-[#0B0B0B] min-h-screen">
+      <Helmet>
+        <title>Lengua de Señas Chilena Online | Instituto Lael — Inclusión Real</title>
+        <meta name="description" content="Aprende LSCh con una instructora Sorda nativa. Cultura Sorda, metodología real y certificación por competencias. Cumple la Ley 21.015. Instituto Lael." />
+      </Helmet>
       {/* ── CAPA 1: LANDING ── */}
       <LandingLSCh onChoosePlan={scrollToSystem} />
 

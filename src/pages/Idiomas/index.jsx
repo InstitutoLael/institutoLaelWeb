@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import LandingIdiomas from './LandingIdiomas';
 import LanguageSelector from './LanguageSelector';
 import IdiomaPricing from './IdiomaPricing';
@@ -21,6 +22,10 @@ export default function Idiomas() {
 
   return (
     <main className="bg-[#0B0B0B] min-h-screen">
+      <Helmet>
+        <title>Clases de Inglés, Coreano y Español Online | Instituto Lael</title>
+        <meta name="description" content="Programas de idiomas estratégicos. Inglés, Coreano e Inmersión en Español para Expats. Simulación real, no clases pasivas. Instituto Lael, Chile." />
+      </Helmet>
       {/* ── CAPA 1: LANDING ── */}
       <LandingIdiomas onConfigure={scrollToSelector} />
 

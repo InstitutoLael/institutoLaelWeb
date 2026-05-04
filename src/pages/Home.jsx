@@ -6,7 +6,7 @@ import Button from '../components/ui/Button';
 import { Target, Compass, Users, LineChart, GraduationCap, Globe, HandHeart, Building } from 'lucide-react';
 
 // Premium easing
-const easing = [0.16, 1, 0.3, 1];
+const ease = [0.16, 1, 0.3, 1];
 
 // Signature Visual Element (Lael Identity)
 const SignatureRing = ({ className }) => (

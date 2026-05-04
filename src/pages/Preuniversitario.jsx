@@ -7,7 +7,7 @@ import { Target, Shield, Compass, ChevronRight, Zap, Check } from 'lucide-react'
 import { PAES_SUBJECTS, computePaesPrice, clp } from '../data/paes';
 
 // Premium easing
-const easing = [0.16, 1, 0.3, 1];
+const ease = [0.16, 1, 0.3, 1];
 
 export default function Preuniversitario() {
   const [step, setStep] = useState(1);

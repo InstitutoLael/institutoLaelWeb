@@ -1,6 +1,24 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Variants for the gate container (access layer)
+const gateVariants = {
+  visible: {
+    opacity: 1,
+    scale: 1,
+    filter: 'blur(0px)',
+    transition: { duration: 0.8, ease },
+  },
+  locked: {
+    opacity: 0.2,
+    scale: 0.98,
+    filter: 'blur(2px)',
+    transition: { duration: 0.8, ease },
+  },
+};
+
+const ease = [0.16, 1, 0.3, 1];
+
 export default function AccessGate({ step, gateData, setGateData, setStep }) {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -8,14 +26,20 @@ export default function AccessGate({ step, gateData, setGateData, setStep }) {
       setStep(2);
       setTimeout(() => {
         document.getElementById('estrategia-layer')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
+      }, 400);
     }
   };
 
   const isLocked = step > 1;
 
   return (
-    <section className={`w-full px-6 pb-32 lg:pb-48 flex justify-center transition-all duration-1000 ${isLocked ? 'opacity-30 pointer-events-none scale-95' : 'opacity-100 scale-100'}`}>
+    <motion.section
+      className={`w-full px-6 pb-32 lg:pb-48 flex justify-center`}
+      variants={gateVariants}
+      initial="visible"
+      animate={isLocked ? "locked" : "visible"}
+      transition={{ duration: 0.8, ease }}
+    >
       <div className="w-full max-w-xl bg-[#050505]/60 backdrop-blur-2xl rounded-2xl p-8 lg:p-16 border border-white/[0.01] shadow-[0_0_80px_rgba(0,0,0,0.6)]">
         
         <div className="text-center mb-12">
@@ -87,6 +111,6 @@ export default function AccessGate({ step, gateData, setGateData, setStep }) {
         </form>
 
       </div>
-    </section>
+    </motion.section>
   );
 }

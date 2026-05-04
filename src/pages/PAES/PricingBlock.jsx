@@ -21,7 +21,7 @@ export default function PricingBlock({ gateData, selectedModules, priceData, isC
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.8, ease }}
+      transition={{ duration: 1.0, ease }}
       className="w-full mt-24 flex justify-center pb-32 lg:pb-48"
     >
       <div className="w-full max-w-3xl bg-[#0B0B0B] border border-lael-accent/20 rounded-3xl p-12 lg:p-16 text-center relative overflow-hidden shadow-[0_0_80px_rgba(198,166,107,0.05)]">

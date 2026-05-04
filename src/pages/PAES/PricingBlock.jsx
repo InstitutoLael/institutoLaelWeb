@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clp, PAES_SUBJECTS } from '../../data/paes';
+import { track } from '../../utils/analytics';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -9,8 +10,12 @@ const WA_NUMBER = '56964626568';
 
 export default function PricingBlock({ gateData, selectedModules, priceData, isConnecting, setIsConnecting, setStep }) {
 
+  // Track pricing view (high-intent signal)
+  useEffect(() => { track.pricingView('paes'); }, []);
+
   const handleActivateSystem = () => {
     setIsConnecting(true);
+    track.whatsappClick('paes');
 
     // Resolve human-readable module names from IDs
     const moduleNames = selectedModules

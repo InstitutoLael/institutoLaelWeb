@@ -58,7 +58,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
     <>
       <Helmet>
         <title>Contacto | Instituto Lael SpA — Santiago, Chile</title>
-        <meta name="description" content="Contáctanos para PAES, Idiomas, LSCh o convenios corporativos. Respuesta en menos de 24 horas. contacto@institutolael.cl" />
+        <meta name="description" content="Contacto | Instituto Lael SpA — Santiago, Chile" />
       </Helmet>
 
       <main className="bg-[#0B0B0B] min-h-screen">
@@ -67,9 +67,9 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
         <section className="relative w-full pt-32 pb-20 flex flex-col items-center text-center px-6 overflow-hidden">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-lael-accent/[0.03] rounded-full blur-[100px] pointer-events-none" />
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">Instituto Lael · Contacto</motion.p>
-          <motion.h1 {...fadeUp(0.15)} className="font-display text-5xl lg:text-6xl text-lael-light font-bold leading-tight max-w-2xl">
-            Hablemos.
-          </motion.h1>
+          <h1 className="font-display text-5xl lg:text-6xl text-lael-light font-bold leading-tight max-w-2xl clip-reveal">
+            Hablemos <span className="accent-italic">ahora.</span>
+          </h1>
           <motion.p {...fadeUp(0.3)} className="mt-8 text-lael-muted text-base max-w-md mx-auto leading-relaxed">
             Un mentor estratégico revisará tu mensaje y te responderá en menos de 24 horas hábiles.
           </motion.p>

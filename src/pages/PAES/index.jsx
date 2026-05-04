@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { trackEvent } from '../../utils/analytics';
 import { AnimatePresence } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import ProgressBar from './ProgressBar';
@@ -25,10 +26,14 @@ export default function PAES() {
     }, 100);
   };
 
+  useEffect(() => {
+    trackEvent('page_view_paes');
+  }, []);
+
   return (
     <main className="bg-[#0B0B0B] min-h-screen">
       <Helmet>
-        <title>Preuniversitario PAES Online | Instituto Lael — Santiago</title>
+        <title>Preuniversitario PAES Gratuito Online | Instituto Lael Santiago</title>
         <meta name="description" content="Sistema de preparación PAES de alto rendimiento. Diágnostico táctico, módulos personalizados y mentores estratégicos. No es un preuniversitario, es un sistema." />
       </Helmet>
       <ProgressBar step={step} />

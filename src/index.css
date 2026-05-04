@@ -13,8 +13,9 @@
     --text-primary:  #F5F5F5;
     --text-secondary:#A0A0A0;
     --text-muted:    #7A7A7A;
-    --accent-gold:   #C6A66B;
+    --accent-gold:   #C4973E;
     --accent-gold-soft: #E0C48F;
+    --accent-rust:   #B85C38;
     --border-color:  rgba(255, 255, 255, 0.05);
 
     /* ─── TYPOGRAPHY SYSTEM ─── */
@@ -70,5 +71,50 @@
   
   .cinematic-shadow {
     box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(198, 166, 107, 0.05);
+  }
+
+  /* ─── NEW GLOBAL UTILITIES ─── */
+  .clip-reveal {
+    animation: clipReveal 1.2s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+    clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+  }
+
+  @keyframes clipReveal {
+    from {
+      clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
+    }
+    to {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+  }
+
+  .separator-gradient {
+    width: 100vw;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold), var(--accent-rust), transparent);
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+  }
+
+  .hover-card {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+  }
+  
+  .hover-card:hover {
+    border-color: var(--accent-rust);
+    transform: translateY(-4px);
+  }
+  
+  /* Global typography overrides for H1 */
+  h1 {
+    font-family: var(--font-title);
+    color: #F8F5F0;
+  }
+
+  h1 .accent-italic {
+    font-style: italic;
+    color: var(--accent-gold);
   }
 }

@@ -31,15 +31,15 @@ export default function LandingPAES({ onStartDiagnosis }) {
           Instituto Lael · Sistema de Rendimiento PAES
         </motion.p>
 
-        <motion.h1
-          {...fadeUp(0.15)}
-          className="font-display text-5xl lg:text-7xl xl:text-8xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl"
+        <h1
+          className="font-display text-5xl lg:text-7xl xl:text-8xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal"
+          style={{ opacity: 0, animationDelay: '0.15s' }}
         >
           No es un preuniversitario.<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-lael-light via-lael-accent to-lael-light/50">
+          <span className="accent-italic">
             Es un sistema de rendimiento.
           </span>
-        </motion.h1>
+        </h1>
 
         <motion.p {...fadeUp(0.35)} className="mt-10 text-lael-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
           Aquí no estudias más. Entrenas mejor. Cada sesión tiene un objetivo táctico, medible y con feedback inmediato.
@@ -64,7 +64,8 @@ export default function LandingPAES({ onStartDiagnosis }) {
       </section>
 
       {/* ── PROBLEMA ──────────────────────────────────────────────────── */}
-      <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
         <div className="w-full max-w-4xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">
             El problema real
@@ -79,7 +80,7 @@ export default function LandingPAES({ onStartDiagnosis }) {
               { label: 'Clases masivas', desc: 'Un profesor para 30 alumnos no puede adaptar el ritmo a tu punto de partida ni a tu carrera objetivo.' },
               { label: 'Sin feedback real', desc: 'Estudiar sin corrección es practicar errores. El error sin diagnóstico se convierte en hábito.' },
             ].map((item, i) => (
-              <motion.div key={item.label} {...fadeUp(i * 0.1)} className="p-8 border border-white/5 rounded-2xl bg-[#080808]">
+              <motion.div key={item.label} {...fadeUp(i * 0.1)} className="p-8 rounded-2xl bg-[#080808] hover-card">
                 <p className="text-lael-accent text-[10px] tracking-[0.2em] uppercase mb-4">{item.label}</p>
                 <p className="text-lael-muted/70 text-sm leading-relaxed">{item.desc}</p>
               </motion.div>
@@ -89,7 +90,8 @@ export default function LandingPAES({ onStartDiagnosis }) {
       </section>
 
       {/* ── DIFERENCIA: SISTEMA VS CLASES ──────────────────────────────── */}
-      <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
         <div className="w-full max-w-4xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">
             La diferencia
@@ -116,7 +118,8 @@ export default function LandingPAES({ onStartDiagnosis }) {
       </section>
 
       {/* ── VALOR INCLUIDO ─────────────────────────────────────────────── */}
-      <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">
             Tu sistema incluye
@@ -127,7 +130,7 @@ export default function LandingPAES({ onStartDiagnosis }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {PAES_FEATURES.map((f, i) => (
-              <motion.div key={f.title} {...fadeUp(i * 0.08)} className="flex gap-6 p-8 border border-white/5 rounded-2xl bg-[#080808]">
+              <motion.div key={f.title} {...fadeUp(i * 0.08)} className="flex gap-6 p-8 rounded-2xl bg-[#080808] hover-card">
                 <span className="text-3xl flex-shrink-0">{f.icon}</span>
                 <div>
                   <h3 className="text-lael-light font-semibold mb-2">{f.title}</h3>
@@ -140,7 +143,8 @@ export default function LandingPAES({ onStartDiagnosis }) {
       </section>
 
       {/* ── TRANSICIÓN AL SISTEMA ──────────────────────────────────────── */}
-      <section className="w-full px-6 py-32 flex flex-col items-center border-t border-white/[0.03]">
+      <section className="relative w-full px-6 py-32 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Siguiente paso</p>
           <h2 className="font-display text-4xl lg:text-5xl text-lael-light font-bold mb-8">

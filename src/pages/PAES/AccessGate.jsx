@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { track } from '../../utils/analytics';
 
 const ease = [0.16, 1, 0.3, 1];
 const WA_NUMBER = '56964626568';
@@ -22,6 +23,9 @@ const ease2 = [0.16, 1, 0.3, 1];
 export default function AccessGate({ step, gateData, setGateData, setStep }) {
   const [isPending, setIsPending] = useState(false);
   const [phoneError, setPhoneError] = useState('');
+
+  // Track funnel entry
+  useEffect(() => { track.accessGateView(); }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

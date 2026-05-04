@@ -72,7 +72,7 @@ export default function Home() {
   return (
     <div className="bg-[#0B0B0B] text-lael-light overflow-hidden">
       <Helmet>
-        <title>Instituto Lael | Educación Online en Chile — PAES, Idiomas, LSCh</title>
+        <title>Instituto Lael | Educación Online en Chile — PAES Gratis, Idiomas, IA</title>
         <meta name="description" content="No entrenamos para pruebas. Formamos sistemas de rendimiento. PAES, Idiomas (Inglés, Coreano) y Lengua de Señas Chilena. Santiago, Chile." />
       </Helmet>
 
@@ -91,14 +91,16 @@ export default function Home() {
           Instituto Lael · Chile
         </motion.p>
 
-        <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.3, delay: 0.15, ease }}
-          className="font-display text-5xl lg:text-7xl xl:text-8xl tracking-[-0.02em] font-bold leading-tight max-w-5xl">
+        <h1
+          className="font-display text-5xl lg:text-7xl xl:text-8xl tracking-[-0.02em] font-bold leading-tight max-w-5xl clip-reveal"
+          style={{ opacity: 0, animationDelay: '0.15s' }}
+        >
           No entrenamos para pruebas.
           <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-lael-light via-lael-accent to-lael-light/40">
+          <span className="accent-italic">
             Formamos sistemas de rendimiento.
           </span>
-        </motion.h1>
+        </h1>
 
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 0.45, ease }}
           className="mt-10 text-lael-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
@@ -119,7 +121,8 @@ export default function Home() {
       </section>
 
       {/* ── 2. SISTEMAS ──────────────────────────────────────────────── */}
-      <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
         <div className="w-full max-w-6xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Nuestros sistemas</motion.p>
           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-20 leading-tight">
@@ -129,7 +132,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {SYSTEMS.map((sys, i) => (
               <motion.div key={sys.id} {...fadeUp(i * 0.12)}
-                className="group p-10 lg:p-12 border border-white/[0.06] rounded-2xl bg-[#080808] hover:bg-[#0D0D0D] hover:border-lael-accent/20 transition-all duration-700 flex flex-col relative overflow-hidden">
+                className="group p-10 lg:p-12 bg-[#080808] hover:bg-[#0D0D0D] flex flex-col relative overflow-hidden hover-card rounded-2xl">
                 <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-lael-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <p className="text-lael-accent text-[10px] tracking-[0.2em] uppercase mb-6">{sys.label}</p>
                 <h3 className="font-display text-2xl lg:text-3xl text-lael-light font-bold leading-tight mb-2">{sys.headline}</h3>
@@ -149,7 +152,8 @@ export default function Home() {
       </section>
 
       {/* ── 3. MANIFIESTO ────────────────────────────────────────────── */}
-      <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
         <div className="w-full max-w-3xl text-center">
           <motion.p {...fadeUp(0)} className="font-display text-3xl lg:text-5xl text-lael-muted/30 leading-tight mb-4">
             La mayoría memoriza.
@@ -165,7 +169,8 @@ export default function Home() {
       </section>
 
       {/* ── 4. MÉTODO ────────────────────────────────────────────────── */}
-      <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Cómo funciona</motion.p>
           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-5xl text-lael-light font-bold text-center mb-20">
@@ -173,7 +178,7 @@ export default function Home() {
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {METHOD.map((m, i) => (
-              <motion.div key={m.step} {...fadeUp(i * 0.1)} className="p-8 border border-white/5 rounded-2xl bg-[#080808]">
+              <motion.div key={m.step} {...fadeUp(i * 0.1)} className="p-8 rounded-2xl bg-[#080808] hover-card">
                 <p className="font-display text-5xl text-lael-accent/20 font-bold mb-4">{m.step}</p>
                 <h3 className="text-lael-light font-semibold mb-3 tracking-wide">{m.label}</h3>
                 <p className="text-lael-muted/50 text-sm leading-relaxed">{m.desc}</p>
@@ -184,7 +189,8 @@ export default function Home() {
       </section>
 
       {/* ── 5. PARTNERS ──────────────────────────────────────────────── */}
-      <section className="w-full py-20 border-t border-white/[0.03] overflow-hidden">
+      <section className="relative w-full py-20 overflow-hidden">
+        <div className="separator-gradient top-0" />
         <motion.p {...fadeUp(0)} className="text-lael-muted/30 text-[9px] tracking-[0.3em] uppercase text-center mb-12">
           Aliados y partners
         </motion.p>
@@ -196,7 +202,8 @@ export default function Home() {
       </section>
 
       {/* ── 6. CTA FINAL ─────────────────────────────────────────────── */}
-      <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8">Comenzar ahora</p>
           <h2 className="font-display text-4xl lg:text-6xl text-lael-light font-bold leading-tight mb-10">

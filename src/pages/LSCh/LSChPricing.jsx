@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clp, calculateLschPrice, LSCH_GROUP_PLANS, LSCH_ONE2ONE_PLANS } from '../../data/lsch';
+import { track } from '../../utils/analytics';
 
 const ease = [0.16, 1, 0.3, 1];
 const WA_NUMBER = '56964626568';
@@ -15,8 +16,11 @@ export default function LSChPricing({ gateData, selectedPlan, isChurch, isConnec
   const priceData = calculateLschPrice(isChurch ? 'church' : selectedPlan, isChurch);
   const planLabel = getPlanLabel(isChurch ? 'church' : selectedPlan, isChurch);
 
+  useEffect(() => { track.pricingView('lsch'); }, []);
+
   const handleActivate = () => {
     setIsConnecting(true);
+    track.whatsappClick('lsch');
 
     const message =
 `Hola, soy ${gateData?.name || '—'}.

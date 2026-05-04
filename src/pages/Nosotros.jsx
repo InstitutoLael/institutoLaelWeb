@@ -31,19 +31,18 @@ export default function Nosotros() {
         <section className="relative w-full min-h-[70vh] flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">Instituto Lael · Chile · 2021</motion.p>
-          <motion.h1
-            {...fadeUp(0.15)}
-            className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-3xl"
+          <h1
+            className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-3xl clip-reveal"
           >
-            Nuestra Historia
-          </motion.h1>
+            Nuestra <span className="accent-italic">Historia</span>
+          </h1>
           <motion.p {...fadeUp(0.35)} className="mt-10 text-lael-muted text-base lg:text-lg max-w-lg mx-auto leading-relaxed">
             Fe Activa · Accesibilidad Radical · Excelencia sin Excusa
           </motion.p>
         </section>
 
-        {/* ── ORIGEN ────────────────────────────────────────────────── */}
-        <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+        <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+          <div className="separator-gradient top-0" />
           <div className="w-full max-w-3xl">
             <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8">El origen</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-5xl text-lael-light font-bold leading-tight mb-12">
@@ -63,8 +62,8 @@ export default function Nosotros() {
           </div>
         </section>
 
-        {/* ── MISIÓN ────────────────────────────────────────────────── */}
-        <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+        <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+          <div className="separator-gradient top-0" />
           <div className="w-full max-w-3xl text-center">
             <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8">Misión</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold leading-tight">
@@ -73,8 +72,8 @@ export default function Nosotros() {
           </div>
         </section>
 
-        {/* ── VALORES ───────────────────────────────────────────────── */}
-        <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+        <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+          <div className="separator-gradient top-0" />
           <div className="w-full max-w-5xl">
             <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Valores</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-16">
@@ -82,7 +81,7 @@ export default function Nosotros() {
             </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {VALUES.map((v, i) => (
-                <motion.div key={v.title} {...fadeUp(i * 0.1)} className="p-8 lg:p-10 border border-white/5 rounded-2xl bg-[#080808]">
+                <motion.div key={v.title} {...fadeUp(i * 0.1)} className="p-8 lg:p-10 rounded-2xl bg-[#080808] hover-card">
                   <h3 className="font-display text-xl text-lael-accent font-bold mb-4">{v.title}</h3>
                   <p className="text-lael-muted/70 text-sm leading-relaxed">{v.desc}</p>
                 </motion.div>
@@ -91,8 +90,8 @@ export default function Nosotros() {
           </div>
         </section>
 
-        {/* ── FUNDADOR ──────────────────────────────────────────────── */}
-        <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+        <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+          <div className="separator-gradient top-0" />
           <div className="w-full max-w-3xl">
             <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8">Fundador</motion.p>
             <motion.div {...fadeUp(0.1)} className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
@@ -111,7 +110,7 @@ export default function Nosotros() {
               </div>
               <div className="flex flex-col gap-4">
                 {['2021 — Fundación', '600+ Estudiantes simultáneos', 'PAES · Idiomas · LSCh', 'Santiago, Chile'].map(item => (
-                  <div key={item} className="p-4 border border-white/5 rounded-xl bg-[#080808]">
+                  <div key={item} className="p-4 rounded-xl bg-[#080808] hover-card">
                     <p className="text-[11px] tracking-[0.1em] text-lael-muted/60">{item}</p>
                   </div>
                 ))}
@@ -120,8 +119,8 @@ export default function Nosotros() {
           </div>
         </section>
 
-        {/* ── VERSÍCULO ─────────────────────────────────────────────── */}
-        <section className="w-full px-6 py-24 flex flex-col items-center border-t border-white/[0.03]">
+        <section className="relative w-full px-6 py-24 flex flex-col items-center">
+          <div className="separator-gradient top-0" />
           <motion.div {...fadeUp(0)} className="text-center max-w-xl">
             <p className="font-display text-xl text-lael-muted/40 italic leading-relaxed">
               "El Espíritu del Señor está sobre mí, por cuanto me ha ungido para dar buenas nuevas a los pobres."

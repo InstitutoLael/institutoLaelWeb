@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clp, LANGUAGES } from '../../data/idiomas';
+import { track } from '../../utils/analytics';
 
 const ease = [0.16, 1, 0.3, 1];
 const WA_NUMBER = '56964626568';
 
 export default function IdiomaPricing({ gateData, selectedLanguages, priceData, isConnecting, setIsConnecting }) {
+
+  useEffect(() => { track.pricingView('idiomas'); }, []);
+
   const handleActivate = () => {
     setIsConnecting(true);
+    track.whatsappClick('idiomas');
 
     const langNames = selectedLanguages
       .map(id => LANGUAGES.find(l => l.id === id)?.name ?? id)

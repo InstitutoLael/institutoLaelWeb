@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import ProgressBar from './ProgressBar';
 import HeroPAES from './HeroPAES';
 import AccessGate from './AccessGate';
@@ -37,16 +38,18 @@ export default function PAES() {
             setSelectedModules={setSelectedModules}
           />
           
-          {selectedModules.length > 0 && (
-            <PricingBlock 
-              gateData={gateData}
-              selectedModules={selectedModules}
-              priceData={priceData}
-              isConnecting={isConnecting}
-              setIsConnecting={setIsConnecting}
-              setStep={setStep}
-            />
-          )}
+          <AnimatePresence mode="wait">
+            {selectedModules.length > 0 && (
+              <PricingBlock 
+                gateData={gateData}
+                selectedModules={selectedModules}
+                priceData={priceData}
+                isConnecting={isConnecting}
+                setIsConnecting={setIsConnecting}
+                setStep={setStep}
+              />
+            )}
+          </AnimatePresence>
         </SystemReveal>
       )}
 

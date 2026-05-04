@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AccessGate({ step, gateData, setGateData, setStep }) {
   const handleSubmit = (e) => {
@@ -65,9 +66,19 @@ export default function AccessGate({ step, gateData, setGateData, setStep }) {
             <button 
               type="submit" 
               disabled={isLocked}
-              className="w-full bg-lael-accent/10 border border-lael-accent/30 text-lael-accent py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-lael-primary hover:shadow-[0_0_30px_rgba(198,166,107,0.3)] transition-all duration-500"
+              className="w-full bg-lael-accent/10 border border-lael-accent/30 text-lael-accent py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-lael-primary hover:shadow-[0_0_30px_rgba(198,166,107,0.3)] transition-all duration-500 relative overflow-hidden h-[54px]"
             >
-              {isLocked ? 'Sistema Desbloqueado' : 'Ver mi estrategia'}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isLocked ? 'locked' : 'unlocked'}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  {isLocked ? 'Sistema Desbloqueado' : 'Ver mi estrategia'}
+                </motion.div>
+              </AnimatePresence>
             </button>
             <p className="mt-6 text-center text-[10px] text-lael-muted/40 tracking-wider">
               No es inscripción. Es el inicio de tu diagnóstico estratégico.

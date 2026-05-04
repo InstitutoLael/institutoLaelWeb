@@ -1,4 +1,7 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+
+const ease = [0.16, 1, 0.3, 1];
 
 export default function ProgressBar({ step }) {
   const steps = [
@@ -14,9 +17,11 @@ export default function ProgressBar({ step }) {
         <div className="absolute left-6 right-6 lg:left-12 lg:right-12 top-1/2 -translate-y-1/2 h-[0.5px] bg-white/[0.03] -z-10" />
         
         {/* Progress Line */}
-        <div 
-          className="absolute left-6 lg:left-12 top-1/2 -translate-y-1/2 h-[0.5px] bg-lael-accent transition-all duration-1000 -z-10"
-          style={{ width: step === 1 ? '0%' : step === 2 ? '50%' : '100%' }}
+        <motion.div 
+          className="absolute left-6 lg:left-12 top-1/2 -translate-y-1/2 h-[0.5px] bg-lael-accent -z-10 origin-left"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: step === 1 ? 0 : step === 2 ? 0.5 : 1 }}
+          transition={{ duration: 1.2, ease }}
         />
 
         {steps.map((s) => {

@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { LANGUAGES, LANG_FEATURES } from '../../data/idiomas';
+import { useNavigate } from 'react-router-dom';
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
@@ -11,19 +12,25 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 1.1, delay, ease },
 });
 
-export default function LandingIdiomas({ onConfigure }) {
+export default function LandingIdiomas() {
+  const navigate = useNavigate();
+
+  const startDiagnostic = () => {
+    navigate('/diagnostico');
+  };
+
   return (
     <div className="w-full bg-lael-primary">
       {/* HERO */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
-        <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">Instituto Lael · Programas de Idiomas</motion.p>
+        <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8 font-bold">Ingeniería del Lenguaje</motion.p>
         <h1 className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal" style={{ animationDelay: '0.15s' }}>
           No aprendes idiomas.<br />
           <span className="accent-italic">Ejecutas sistemas de comunicación.</span>
         </h1>
-        <motion.p {...fadeUp(0.35)} className="mt-10 text-lael-muted text-base max-w-xl mx-auto leading-relaxed">Sin repetición mecánica. Solo simulaciones reales que te preparan para comunicarte en cualquier entorno.</motion.p>
-        <motion.button {...fadeUp(0.55)} onClick={onConfigure} className="mt-14 bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]">Configurar mi programa</motion.button>
+        <motion.p {...fadeUp(0.35)} className="mt-10 text-lael-muted text-base max-w-xl mx-auto leading-relaxed">Sin repetición mecánica. Solo simulaciones reales que te preparan para comunicarte en cualquier entorno profesional.</motion.p>
+        <motion.button {...fadeUp(0.55)} onClick={startDiagnostic} className="mt-14 bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]">Iniciar diagnóstico táctico</motion.button>
         <motion.div 
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
           className="absolute bottom-10 animate-bounce text-lael-accent"
@@ -149,8 +156,8 @@ export default function LandingIdiomas({ onConfigure }) {
       <section className="relative w-full px-6 py-20 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
-          <h2 className="font-display text-4xl text-lael-light font-bold mb-8">Configura tu programa ahora.</h2>
-          <button onClick={onConfigure} className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-white transition-all duration-500">Configurar programa →</button>
+          <h2 className="font-display text-4xl text-lael-light font-bold mb-8">Configura tu sistema ahora.</h2>
+          <button onClick={startDiagnostic} className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-white transition-all duration-500">Iniciar diagnóstico táctico →</button>
         </motion.div>
         <div className="w-px h-32 bg-gradient-to-b from-lael-accent/30 to-transparent mt-24" />
       </section>

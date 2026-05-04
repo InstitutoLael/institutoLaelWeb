@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { PAES_FEATURES } from '../../data/paes';
+import { useNavigate } from 'react-router-dom';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -16,11 +17,17 @@ const fadeUp = (delay = 0) => ({
 const COMPARE = [
   { feature: 'Enfoque', lael: 'Estrategia de rendimiento', other: 'Memorización temática' },
   { feature: 'Metodología', lael: 'Diagnóstico + Plan táctico', other: 'Clases masivas genéricas' },
-  { feature: 'Seguimiento', lael: 'Mentor 1:1 en tiempo real', other: 'Respuestas lentas o nulas' },
-  { feature: 'Simulacros', lael: 'Semanal bajo presión real', other: 'Esporádicos o sin feedback' },
+  { feature: 'Seguimiento', lael: 'Estratega asignado 1:1', other: 'Respuestas lentas o nulas' },
+  { feature: 'Simulaciones', lael: 'Sesión semanal de presión', other: 'Esporádicos o sin feedback' },
 ];
 
-export default function LandingPAES({ onStartDiagnosis }) {
+export default function LandingPAES() {
+  const navigate = useNavigate();
+
+  const startDiagnostic = () => {
+    navigate('/diagnostico');
+  };
+
   return (
     <div className="w-full bg-lael-primary">
 
@@ -28,30 +35,30 @@ export default function LandingPAES({ onStartDiagnosis }) {
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] max-w-[600px] max-h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
-        <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">
-          Instituto Lael · Sistema de Rendimiento PAES
+        <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8 font-bold">
+          Arquitectura de Puntaje PAES
         </motion.p>
 
         <h1
           className="font-display text-5xl lg:text-7xl xl:text-8xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal"
           style={{ animationDelay: '0.15s' }}
         >
-          No es un preuniversitario.<br />
+          No estudias más.<br />
           <span className="accent-italic">
-            Es un sistema de rendimiento.
+            Entrenas mejor.
           </span>
         </h1>
 
         <motion.p {...fadeUp(0.35)} className="mt-10 text-lael-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
-          Aquí no estudias más. Entrenas mejor. Cada sesión tiene un objetivo táctico, medible y con feedback inmediato.
+          Si crees que la solución es más materia, este sistema no es para ti. Aquí hackeamos tu rendimiento mediante diagnóstico y sesiones tácticas.
         </motion.p>
 
         <motion.button
           {...fadeUp(0.55)}
-          onClick={onStartDiagnosis}
+          onClick={startDiagnostic}
           className="mt-14 bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-[0_4px_20px_rgba(196,151,62,0.3)] hover:-translate-y-1"
         >
-          Iniciar diagnóstico
+          Iniciar diagnóstico táctico
         </motion.button>
 
         <motion.div {...fadeUp(0.7)} className="flex gap-4 md:gap-8 mt-12 justify-center">
@@ -249,10 +256,10 @@ export default function LandingPAES({ onStartDiagnosis }) {
             Ingresa tus datos, selecciona tus pruebas y recibe tu propuesta de inversión en menos de 2 minutos.
           </p>
           <button
-            onClick={onStartDiagnosis}
+            onClick={startDiagnostic}
             className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-white transition-all duration-500"
           >
-            Iniciar diagnóstico →
+            Iniciar diagnóstico táctico →
           </button>
         </motion.div>
 

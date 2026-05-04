@@ -9,7 +9,8 @@ export const NAVIGATION = {
     main: [
         { name: "PAES", path: "/paes" },
         { name: "Idiomas", path: "/idiomas" },
-        { name: "LSCh", path: "/lsch" },
+        { name: "Diagnóstico", path: "/diagnostico" },
+        { name: "El Sistema", path: "/sistema" },
         { name: "Adultos", path: "/adultos" },
     ],
     
@@ -65,8 +66,8 @@ export const NAVIGATION = {
     action: {
         aula: { name: "Aula Virtual", path: "/aula" },
         whatsapp: {
-            url: "https://wa.me/56964626568?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20los%20programas%20de%20Instituto%20Lael.",
-            label: "Evaluaci\u00f3n Estrat\u00e9gica"
+            url: "https://wa.me/56964626568?text=Hola%2C%20quiero%20realizar%20mi%20diagn%C3%B3stico%20inicial%20Lael.",
+            label: "Diagnóstico Táctico"
         }
     }
 };

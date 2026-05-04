@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { LSCH_WHY_US, TEACHER_PROFILE, COMPARISON_DATA } from '../../data/lsch';
+import { useNavigate } from 'react-router-dom';
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
@@ -11,24 +12,29 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 1.1, delay, ease },
 });
 
-export default function LandingLSCh({ onChoosePlan }) {
+export default function LandingLSCh() {
+  const navigate = useNavigate();
+
+  const startDiagnostic = () => {
+    navigate('/diagnostico');
+  };
+
   return (
     <div className="w-full bg-lael-primary">
-
       {/* HERO */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
-        <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">Instituto Lael · Lengua de Señas Chilena</motion.p>
+        <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8 font-bold">Inclusión Estratégica</motion.p>
         <h1 className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal" style={{ animationDelay: '0.15s' }}>
           El idioma que<br />
           <span className="accent-italic">elimina barreras.</span>
         </h1>
         <motion.p {...fadeUp(0.35)} className="mt-10 text-lael-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
-          No es aprender señas. Es aprender a comunicarte con quienes el mundo ignora.
+          No es solo aprender señas. Es aprender a comunicarte en entornos reales con quienes el sistema ignoró.
         </motion.p>
-        <motion.button {...fadeUp(0.55)} onClick={onChoosePlan}
+        <motion.button {...fadeUp(0.55)} onClick={startDiagnostic}
           className="mt-14 bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]">
-          Elegir mi plan
+          Iniciar diagnóstico táctico
         </motion.button>
         <motion.div {...fadeUp(0.7)} className="flex gap-8 mt-12 justify-center">
           {['Ley 21.015', 'Cultura Sorda', 'Instructora Nativa'].map((item, i) => (
@@ -167,8 +173,8 @@ export default function LandingLSCh({ onChoosePlan }) {
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
           <h2 className="font-display text-4xl text-lael-light font-bold mb-8">Elige tu plan y comienza hoy.</h2>
-          <button onClick={onChoosePlan} className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-white transition-all duration-500">
-            Elegir plan →
+          <button onClick={startDiagnostic} className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-white transition-all duration-500">
+            Iniciar diagnóstico táctico →
           </button>
         </motion.div>
         <div className="w-px h-32 bg-gradient-to-b from-lael-accent/30 to-transparent mt-24" />

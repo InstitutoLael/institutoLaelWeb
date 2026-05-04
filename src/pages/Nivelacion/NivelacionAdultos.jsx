@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { ADULT_CONTENT } from '../../data/nivelacion';
 import { CheckCircle2, Target, BookOpen, Clock, Users, ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -14,10 +15,16 @@ const fadeUp = (delay = 0) => ({
 });
 
 export default function NivelacionAdultos() {
+  const navigate = useNavigate();
+
+  const startDiagnostic = () => {
+    navigate('/diagnostico');
+  };
+
   return (
     <div className="bg-lael-primary min-h-screen pt-20">
       <Helmet>
-        <title>Adultos | Instituto Lael — Termina tu Enseñanza Media</title>
+        <title>Nivelación Adultos | Instituto Lael — Ingeniería del Rendimiento</title>
         <meta name="description" content="Nunca fue tarde. Termina tu educación con estrategia y flexibilidad. Sistema diseñado para adultos que buscan una segunda oportunidad real." />
       </Helmet>
 
@@ -29,19 +36,19 @@ export default function NivelacionAdultos() {
         </div>
 
         <motion.div {...fadeUp()} className="text-center max-w-4xl relative z-10">
-          <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-8 font-bold">Mundo Adultos</p>
+          <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-8 font-bold">Arquitectura Educativa</p>
           <h1 className="font-display text-5xl lg:text-7xl text-lael-light mb-8 leading-tight">
             {ADULT_CONTENT.hero.title} <br/>
             <span className="text-lael-accent italic italic-playfair">{ADULT_CONTENT.hero.subtitle}</span>
           </h1>
           <p className="text-lael-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
-            {ADULT_CONTENT.hero.description}
+            No es solo terminar el colegio. Es activar tu capacidad de rendimiento para lo que viene después.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-lael-accent text-white px-10 py-5 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-xl">
-              Iniciar Diagnóstico Gratuito
+            <button onClick={startDiagnostic} className="bg-lael-accent text-white px-10 py-5 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-xl">
+              Iniciar Diagnóstico Táctico
             </button>
-            <button className="bg-transparent border border-lael-bd text-lael-light px-10 py-5 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-secondary transition-all duration-500">
+            <button onClick={() => navigate('/sistema')} className="bg-transparent border border-lael-bd text-lael-light px-10 py-5 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-secondary transition-all duration-500">
               Ver el Sistema
             </button>
           </div>
@@ -142,8 +149,8 @@ export default function NivelacionAdultos() {
          <motion.p {...fadeUp()} className="font-display text-3xl lg:text-5xl text-lael-light text-center px-6">
             {ADULT_CONTENT.message}
          </motion.p>
-         <motion.button {...fadeUp(0.2)} className="mt-12 bg-lael-accent text-white px-12 py-6 rounded-xl text-xs tracking-[0.2em] uppercase font-bold hover:scale-105 transition-all duration-500">
-            Consultar disponibilidad de cupos →
+         <motion.button onClick={startDiagnostic} {...fadeUp(0.2)} className="mt-12 bg-lael-accent text-white px-12 py-6 rounded-xl text-xs tracking-[0.2em] uppercase font-bold hover:scale-105 transition-all duration-500">
+            Iniciar diagnóstico gratuito →
          </motion.button>
       </section>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 import demre from '../assets/img/Partners/DEMRE.png';
@@ -14,6 +14,8 @@ import transbank from '../assets/img/Partners/Transbank.png';
 
 import SignificadoLael from '../components/SignificadoLael';
 import CharlaGratuita from '../components/CharlaGratuita';
+import InsideLael from '../components/InsideLael';
+import ObjectionsFAQ from '../components/ObjectionsFAQ';
 
 const partners = [demre, google, ino, losOlivos, mercadoPago, naama, onepay, transbank];
 const ease = [0.16, 1, 0.3, 1];
@@ -67,9 +69,11 @@ const METHOD = [
 ];
 
 export default function Home() {
+  const navigate = useNavigate();
+
   const handleEvaluation = () => {
-    const msg = encodeURIComponent('Hola, quiero solicitar una evaluación inicial en Instituto Lael. ¿Por dónde comienzo?');
-    window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
+    trackEvent('hero_diagnostic_click');
+    navigate('/diagnostico');
   };
 
   return (
@@ -83,6 +87,17 @@ export default function Home() {
       <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.05] mix-blend-multiply"
         style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")' }} />
 
+      {/* ── URGENCY BANNER ───────────────────────────────────────────── */}
+      <div className="bg-lael-accent py-3 px-6 text-center overflow-hidden">
+        <motion.p 
+          animate={{ x: [0, -20, 0] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          className="text-white text-[10px] tracking-[0.3em] uppercase font-bold"
+        >
+          🔥 Próximo ciclo de activación inicia en 10 días · Cupos limitados por estratega
+        </motion.p>
+      </div>
+
       {/* ── 1. HERO ───────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border-[0.5px] border-lael-accent/[0.06] rounded-full pointer-events-none" />
@@ -91,34 +106,34 @@ export default function Home() {
 
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, ease }}
           className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10">
-          Instituto Lael · Chile
+          Ingeniería del Rendimiento Académico
         </motion.p>
 
         <h1
           className="font-display text-5xl lg:text-7xl xl:text-8xl tracking-[-0.02em] font-bold leading-tight max-w-5xl clip-reveal"
           style={{ opacity: 0, animationDelay: '0.15s' }}
         >
-          No entrenamos para pruebas.
+          No es un preuniversitario.
           <br />
           <span className="accent-italic">
-            Formamos sistemas de rendimiento.
+            Es la evolución del entrenamiento.
           </span>
         </h1>
 
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 0.45, ease }}
-          className="mt-10 text-lael-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
-          PAES · Idiomas · Lengua de Señas Chilena
+          className="mt-10 text-lael-muted text-base lg:text-lg max-w-2xl mx-auto leading-relaxed">
+          Descubre por qué no estás mejorando. Activa tu arquitectura de puntaje hoy.
         </motion.p>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.0, delay: 0.7, ease }}
           className="flex flex-col sm:flex-row gap-4 mt-14">
           <button onClick={handleEvaluation}
             className="bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-[0_4px_20px_rgba(196,151,62,0.3)] hover:shadow-[0_4px_30px_rgba(184,92,56,0.4)] hover:-translate-y-1">
-            Solicitar evaluación
+            Iniciar diagnóstico táctico
           </button>
-          <Link to="/paes"
+          <Link to="/sistema"
             className="bg-lael-secondary border border-lael-bd text-lael-light px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:border-lael-accent transition-all duration-500 text-center hover:shadow-[0_4px_20px_rgba(13,13,13,0.05)] hover:-translate-y-1">
-            Explorar sistemas
+            Ver el sistema
           </Link>
         </motion.div>
       </section>
@@ -265,6 +280,49 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── ANTES / DESPUÉS ─────────────────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
+        <div className="w-full max-w-5xl">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <motion.div {...fadeUp()} className="p-10 rounded-3xl bg-lael-secondary border border-lael-bd">
+                 <h4 className="text-lael-muted text-[10px] tracking-[0.3em] uppercase mb-8 font-bold">Antes de Lael</h4>
+                 <ul className="space-y-6">
+                    <li className="flex gap-4 text-lael-muted/50 text-sm">
+                       <X size={18} className="flex-shrink-0" /> Estudio desordenado y sin métricas.
+                    </li>
+                    <li className="flex gap-4 text-lael-muted/50 text-sm">
+                       <X size={18} className="flex-shrink-0" /> Sin claridad de por qué fallas.
+                    </li>
+                    <li className="flex gap-4 text-lael-muted/50 text-sm">
+                       <X size={18} className="flex-shrink-0" /> Mucho tiempo invertido, poco avance real.
+                    </li>
+                 </ul>
+              </motion.div>
+              <motion.div {...fadeUp(0.2)} className="p-10 rounded-3xl bg-lael-accent/5 border border-lael-accent/20">
+                 <h4 className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-8 font-bold">Después de Lael</h4>
+                 <ul className="space-y-6">
+                    <li className="flex gap-4 text-lael-light text-sm font-bold">
+                       <ChevronRight size={18} className="text-lael-accent flex-shrink-0" /> Estrategia táctica personalizada.
+                    </li>
+                    <li className="flex gap-4 text-lael-light text-sm font-bold">
+                       <ChevronRight size={18} className="text-lael-accent flex-shrink-0" /> Errores identificados y corregidos.
+                    </li>
+                    <li className="flex gap-4 text-lael-light text-sm font-bold">
+                       <ChevronRight size={18} className="text-lael-accent flex-shrink-0" /> Progreso medible cada semana.
+                    </li>
+                 </ul>
+              </motion.div>
+           </div>
+        </div>
+      </section>
+
+      {/* ── INSIDE LAEL ─────────────────────────────────────────────── */}
+      <InsideLael />
+
+      {/* ── OBJECCIONES FAQ ──────────────────────────────────────────── */}
+      <ObjectionsFAQ />
+
       {/* ── 7. PARTNERS ──────────────────────────────────────────────── */}
       <section className="relative w-full py-20 overflow-hidden">
         <div className="separator-gradient top-0" />
@@ -284,17 +342,17 @@ export default function Home() {
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8">Comenzar ahora</p>
           <h2 className="font-display text-4xl lg:text-6xl text-lael-light font-bold leading-tight mb-10">
-            Tu sistema de rendimiento comienza con una evaluación.
+            Tu arquitectura de puntaje comienza con un diagnóstico.
           </h2>
           <p className="text-lael-muted text-base mb-14 leading-relaxed">
-            Sin compromiso. Sin formularios eternos. En 15 minutos sabemos qué sistema necesitas y cómo activarlo.
+            Si crees que estudiar más horas es la solución, este sistema no es para ti. Pero si buscas eficiencia, este es el lugar.
           </p>
           <button onClick={handleEvaluation}
             className="bg-lael-accent text-white px-14 py-6 rounded-xl text-xs tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)] hover:shadow-[0_4px_30px_rgba(184,92,56,0.4)]">
-            Solicitar evaluación gratuita →
+            Iniciar diagnóstico táctico →
           </button>
-          <p className="mt-8 text-[10px] text-lael-muted tracking-[0.1em] uppercase">
-            Respuesta en menos de 24 horas
+          <p className="mt-8 text-[10px] text-lael-muted tracking-[0.1em] uppercase italic">
+            "No estás estancado por falta de esfuerzo. Estás estancado porque no sabes qué corregir."
           </p>
         </motion.div>
       </section>

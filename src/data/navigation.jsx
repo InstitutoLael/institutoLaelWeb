@@ -7,13 +7,10 @@ import {
 
 export const NAVIGATION = {
     main: [
-        { name: "Inicio", path: "/" },
         { name: "PAES", path: "/paes" },
         { name: "Idiomas", path: "/idiomas" },
-        { name: "Inclusión", path: "/lsch" },
-        { name: "Nivelación", path: "/nivelacion" },
+        { name: "LSCh", path: "/lsch" },
         { name: "Empresas", path: "/empresas" },
-        { name: "Blog", path: "/blog" },
     ],
     
     // Categorized for Mobile Menu or MegaMenu
@@ -71,6 +68,9 @@ export const NAVIGATION = {
 
     action: {
         aula: { name: "Aula Virtual", path: "/aula" },
-        whatsapp: { url: "https://wa.me/56964626568", label: "WhatsApp Directo" }
+        whatsapp: {
+            url: "https://wa.me/56964626568?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20los%20programas%20de%20Instituto%20Lael.",
+            label: "Evaluaci\u00f3n Estrat\u00e9gica"
+        }
     }
 };

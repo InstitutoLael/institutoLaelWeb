@@ -31,6 +31,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/preuniversitario" element={<Preuniversitario />} />
+            <Route path="/paes" element={<Preuniversitario />} />
             <Route path="/metodo" element={<MetodoLael />} />
             <Route path="/idiomas" element={<Idiomas />} />
             <Route path="/contacto" element={<Contacto />} />

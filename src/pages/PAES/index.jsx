@@ -31,7 +31,7 @@ export default function PAES() {
   }, []);
 
   return (
-    <main className="bg-[#0B0B0B] min-h-screen">
+    <main className="bg-lael-primary min-h-screen">
       <Helmet>
         <title>Preuniversitario PAES Gratuito Online | Instituto Lael Santiago</title>
         <meta name="description" content="Sistema de preparación PAES de alto rendimiento. Diágnostico táctico, módulos personalizados y mentores estratégicos. No es un preuniversitario, es un sistema." />

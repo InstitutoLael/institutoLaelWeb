@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import logo from '../assets/img/Logos/lael-inst-blanco.png';
+import logo from '../assets/img/Logos/lael-inst-negro.png';
 import { NAVIGATION } from '../data/navigation';
 
 const ease = [0.16, 1, 0.3, 1];
@@ -41,7 +41,7 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-[#0B0B0B]/70 backdrop-blur-3xl border-b border-white/[0.04] py-2 shadow-[0_4px_40px_rgba(0,0,0,0.4)]'
+          ? 'bg-[#F8F5F0]/80 backdrop-blur-3xl border-b border-[#0D0D0D]/[0.04] py-2 shadow-[0_4px_40px_rgba(0,0,0,0.05)]'
           : 'bg-transparent border-b border-transparent py-5'
       }`}
     >
@@ -56,7 +56,7 @@ export default function Navbar() {
             loading="eager"
             width="140"
             height="40"
-            className="h-7 lg:h-8 w-auto object-contain transition-all duration-500 group-hover:drop-shadow-[0_0_12px_rgba(198,166,107,0.5)]"
+            className="h-7 lg:h-8 w-auto object-contain transition-all duration-500 group-hover:drop-shadow-[0_0_12px_rgba(184,92,56,0.3)]"
           />
         </Link>
 
@@ -101,7 +101,7 @@ export default function Navbar() {
           <button
             onClick={() => setMobileOpen(v => !v)}
             aria-label="Toggle menu"
-            className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg bg-white/[0.04] border border-white/[0.08] text-lael-muted hover:text-lael-light transition-all active:scale-95"
+            className="lg:hidden w-10 h-10 flex items-center justify-center rounded-lg bg-black/[0.03] border border-black/[0.05] text-lael-muted hover:text-lael-light transition-all active:scale-95"
           >
             <AnimatePresence mode="wait" initial={false}>
               {mobileOpen ? (
@@ -126,7 +126,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.45, ease }}
-            className="fixed inset-0 bg-[#080808] z-[49] flex flex-col items-center justify-center"
+            className="fixed inset-0 bg-[#F8F5F0] z-[49] flex flex-col items-center justify-center"
           >
             {/* Subtle glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-lael-accent/[0.03] rounded-full blur-[100px] pointer-events-none" />

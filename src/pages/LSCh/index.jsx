@@ -23,7 +23,7 @@ export default function LSCh() {
   };
 
   return (
-    <main className="bg-[#0B0B0B] min-h-screen">
+    <main className="bg-lael-primary min-h-screen">
       <Helmet>
         <title>Lengua de Señas Chilena Online | Instituto Lael — Inclusión Real</title>
         <meta name="description" content="Aprende LSCh con una instructora Sorda nativa. Cultura Sorda, metodología real y certificación por competencias. Cumple la Ley 21.015. Instituto Lael." />

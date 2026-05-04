@@ -14,13 +14,15 @@ export default {
         muted: "var(--text-secondary)",
         bd: "var(--border-color)",
         lael: {
-          // ─ Cinematic 2026 brand palette ─
-          primary:  "#0B0B0B",
-          secondary: "#1A1A1A",
-          light: "#F5F5F5",
-          accent:   "#C6A66B",
-          muted: "#A0A0A0",
-          "accent-glow": "rgba(198,166,107,0.15)",
+          // ─ Earthy 2026 brand palette ─
+          primary:  "#F8F5F0",
+          secondary: "#FFFFFF",
+          light: "#0D0D0D", // Reversing light to be dark text for readability
+          accent:   "#C4973E",
+          muted: "#8A8A8A",
+          rust: "#B85C38",
+          olive: "#5C6E4E",
+          "accent-glow": "rgba(196,151,62,0.15)",
         },
       },
       fontFamily: {

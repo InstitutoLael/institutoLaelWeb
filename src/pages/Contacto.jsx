@@ -61,7 +61,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
         <meta name="description" content="Contacto | Instituto Lael SpA — Santiago, Chile" />
       </Helmet>
 
-      <main className="bg-[#0B0B0B] min-h-screen">
+      <main className="bg-lael-primary min-h-screen">
 
         {/* HERO */}
         <section className="relative w-full pt-32 pb-20 flex flex-col items-center text-center px-6 overflow-hidden">
@@ -99,9 +99,9 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
                 </div>
               ))}
 
-              <div className="pt-6 border-t border-white/5">
-                <p className="text-[10px] tracking-[0.15em] text-lael-muted/30 uppercase mb-2">Horario de atención</p>
-                <p className="text-lael-muted/50 text-sm">Lunes a Viernes · 09:00 – 19:00 hrs</p>
+              <div className="pt-6 border-t border-lael-bd">
+                <p className="text-[10px] tracking-[0.15em] text-lael-muted uppercase mb-2">Horario de atención</p>
+                <p className="text-lael-muted text-sm">Lunes a Viernes · 09:00 – 19:00 hrs</p>
               </div>
             </div>
 
@@ -110,7 +110,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.0, delay: 0.2, ease }}
-              className="lg:col-span-3 bg-[#080808] border border-white/5 rounded-2xl p-8 lg:p-12"
+              className="lg:col-span-3 bg-lael-secondary border border-lael-bd rounded-2xl p-8 lg:p-12 cinematic-shadow"
             >
               <AnimatePresence mode="wait">
                 {sent ? (
@@ -141,7 +141,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
                       <input
                         type="text" name="nombre" required value={form.nombre} onChange={handleChange}
                         placeholder="Ej. María González"
-                        className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-white/15 text-sm"
+                        className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/50 text-sm"
                       />
                     </div>
 
@@ -151,7 +151,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
                       <input
                         type="email" name="email" required value={form.email} onChange={handleChange}
                         placeholder="tu@email.com"
-                        className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-white/15 text-sm"
+                        className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/50 text-sm"
                       />
                     </div>
 
@@ -161,7 +161,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
                       <input
                         type="tel" name="telefono" value={form.telefono} onChange={handleChange}
                         placeholder="+56 9..."
-                        className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-white/15 text-sm"
+                        className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/50 text-sm"
                       />
                     </div>
 
@@ -170,7 +170,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
                       <label className="text-[10px] tracking-[0.2em] text-lael-muted/50 uppercase mb-2 block">Programa de interés *</label>
                       <select
                         name="programa" required value={form.programa} onChange={handleChange}
-                        className="w-full bg-[#080808] border-b border-white/10 px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 text-sm appearance-none cursor-pointer"
+                        className="w-full bg-lael-secondary border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 text-sm appearance-none cursor-pointer"
                       >
                         <option value="" disabled>Selecciona un programa...</option>
                         {PROGRAMS.map(p => <option key={p} value={p}>{p}</option>)}
@@ -183,7 +183,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
                       <textarea
                         name="mensaje" rows={3} value={form.mensaje} onChange={handleChange}
                         placeholder="Cuéntanos tu situación o consulta..."
-                        className="w-full bg-transparent border-b border-white/10 px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-white/15 text-sm resize-none"
+                        className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/50 text-sm resize-none"
                       />
                     </div>
 
@@ -198,7 +198,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
 
                     <button
                       type="submit"
-                      className="w-full bg-lael-accent text-lael-primary py-5 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:scale-[1.01] active:scale-95 transition-all duration-500 shadow-[0_0_30px_rgba(198,166,107,0.2)] hover:shadow-[0_0_50px_rgba(198,166,107,0.4)] mt-4"
+                      className="w-full bg-lael-accent text-white py-5 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)] hover:shadow-[0_4px_30px_rgba(184,92,56,0.4)] mt-4"
                     >
                       Enviar solicitud →
                     </button>

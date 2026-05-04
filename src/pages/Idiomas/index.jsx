@@ -21,7 +21,7 @@ export default function Idiomas() {
   };
 
   return (
-    <main className="bg-[#0B0B0B] min-h-screen">
+    <main className="bg-lael-primary min-h-screen">
       <Helmet>
         <title>Clases de Inglés, Coreano y LSCh Online | Instituto Lael</title>
         <meta name="description" content="Programas de idiomas estratégicos. Inglés, Coreano e Inmersión en Español para Expats. Simulación real, no clases pasivas. Instituto Lael, Chile." />

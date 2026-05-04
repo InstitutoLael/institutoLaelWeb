@@ -12,7 +12,7 @@ const fadeUp = (delay = 0) => ({
 
 export default function LandingLSCh({ onChoosePlan }) {
   return (
-    <div className="w-full bg-[#0B0B0B]">
+    <div className="w-full bg-lael-primary">
 
       {/* HERO */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden">
@@ -26,7 +26,7 @@ export default function LandingLSCh({ onChoosePlan }) {
           No es aprender señas. Es aprender a comunicarte con quienes el mundo ignora.
         </motion.p>
         <motion.button {...fadeUp(0.55)} onClick={onChoosePlan}
-          className="mt-14 bg-lael-accent text-lael-primary px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:scale-[1.02] transition-all duration-500 shadow-[0_0_30px_rgba(198,166,107,0.25)]">
+          className="mt-14 bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]">
           Elegir mi plan
         </motion.button>
         <motion.div {...fadeUp(0.7)} className="flex gap-8 mt-12 justify-center">
@@ -61,9 +61,9 @@ export default function LandingLSCh({ onChoosePlan }) {
           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-16">Cultura Sorda + metodología real.</motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {LSCH_WHY_US.map((item, i) => (
-              <motion.div key={item.title} {...fadeUp(i * 0.1)} className="p-8 rounded-2xl bg-[#080808] hover-card">
-                <p className="text-lael-accent text-[10px] tracking-[0.2em] uppercase mb-4">{item.title}</p>
-                <p className="text-lael-muted/70 text-sm leading-relaxed">{item.desc}</p>
+              <motion.div key={item.title} {...fadeUp(i * 0.1)} className="p-8 rounded-2xl bg-lael-secondary hover-card border border-lael-bd cinematic-shadow">
+                <p className="text-lael-rust text-[10px] tracking-[0.2em] uppercase mb-4 font-bold">{item.title}</p>
+                <p className="text-lael-muted text-sm leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -85,19 +85,19 @@ export default function LandingLSCh({ onChoosePlan }) {
               ))}
             </div>
           </motion.div>
-          <motion.div {...fadeUp(0.15)} className="bg-[#080808] border border-white/5 rounded-2xl p-8">
-            <p className="text-[10px] tracking-[0.2em] uppercase text-lael-muted/40 mb-6">Esto no es un curso. Es acceso cultural real.</p>
+          <motion.div {...fadeUp(0.15)} className="bg-lael-secondary border border-lael-bd rounded-2xl p-8 cinematic-shadow">
+            <p className="text-[10px] tracking-[0.2em] uppercase text-lael-muted mb-6 font-bold">Esto no es un curso. Es acceso cultural real.</p>
             <div className="space-y-0">
               <div className="grid grid-cols-3 pb-4 mb-2">
-                <p className="text-[9px] tracking-[0.15em] text-lael-muted/30 uppercase">Aspecto</p>
-                <p className="text-[9px] tracking-[0.15em] text-lael-accent uppercase">Lael</p>
-                <p className="text-[9px] tracking-[0.15em] text-lael-muted/30 uppercase">Otros</p>
+                <p className="text-[9px] tracking-[0.15em] text-lael-muted uppercase font-bold">Aspecto</p>
+                <p className="text-[9px] tracking-[0.15em] text-lael-accent uppercase font-bold">Lael</p>
+                <p className="text-[9px] tracking-[0.15em] text-lael-muted uppercase font-bold">Otros</p>
               </div>
               {COMPARISON_DATA.map((row, i) => (
-                <div key={row.feature} className={`grid grid-cols-3 py-4 border-t border-white/[0.04] ${i === COMPARISON_DATA.length - 1 ? '' : ''}`}>
-                  <p className="text-[11px] text-lael-muted/50">{row.feature}</p>
+                <div key={row.feature} className={`grid grid-cols-3 py-4 border-t border-lael-bd ${i === COMPARISON_DATA.length - 1 ? '' : ''}`}>
+                  <p className="text-[11px] text-lael-muted font-bold">{row.feature}</p>
                   <p className="text-[11px] text-lael-accent font-medium">{row.us}</p>
-                  <p className="text-[11px] text-lael-muted/30">{row.others}</p>
+                  <p className="text-[11px] text-lael-muted">{row.others}</p>
                 </div>
               ))}
             </div>
@@ -110,7 +110,7 @@ export default function LandingLSCh({ onChoosePlan }) {
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
           <h2 className="font-display text-4xl text-lael-light font-bold mb-8">Elige tu plan y comienza hoy.</h2>
-          <button onClick={onChoosePlan} className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-lael-primary transition-all duration-500">
+          <button onClick={onChoosePlan} className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-white transition-all duration-500">
             Elegir plan →
           </button>
         </motion.div>

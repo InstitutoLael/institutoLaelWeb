@@ -15,7 +15,6 @@ import LSCh from "./pages/LSCh";
 import Empresas from "./pages/Empresas";
 import Nosotros from "./pages/Nosotros";
 import Contacto from "./pages/Contacto";
-import ComingSoon from "./pages/ComingSoon";
 
 import ScrollToTop from "./components/ScrollToTop";
 import GrainCanvas from "./components/ui/GrainCanvas";
@@ -42,7 +41,7 @@ export default function App() {
             <Route path="/empresas" element={<Empresas />} />
             <Route path="/nosotros" element={<Nosotros />} />
             <Route path="/contacto" element={<Contacto />} />
-            <Route path="*" element={<ComingSoon />} />
+            <Route path="*" element={<Home />} />
           </Routes>
         </PageTransition>
       </main>

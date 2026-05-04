@@ -2,6 +2,9 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 
+import SignificadoLael from '../components/SignificadoLael';
+import CharlaGratuita from '../components/CharlaGratuita';
+
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 40 },
@@ -25,7 +28,7 @@ export default function Nosotros() {
         <meta name="description" content="Nacimos en 2021 como preuniversitario gratuito. Llegamos a 600 estudiantes simultáneos. Conoce la historia y misión de Instituto Lael." />
       </Helmet>
 
-      <main className="bg-[#0B0B0B] min-h-screen">
+      <main className="bg-lael-primary min-h-screen">
 
         {/* ── HERO ──────────────────────────────────────────────────── */}
         <section className="relative w-full min-h-[70vh] flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden">
@@ -61,7 +64,7 @@ export default function Nosotros() {
             </motion.div>
           </div>
         </section>
-
+        <SignificadoLael />
         <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
           <div className="separator-gradient top-0" />
           <div className="w-full max-w-3xl text-center">
@@ -81,9 +84,9 @@ export default function Nosotros() {
             </motion.h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {VALUES.map((v, i) => (
-                <motion.div key={v.title} {...fadeUp(i * 0.1)} className="p-8 lg:p-10 rounded-2xl bg-[#080808] hover-card">
+                <motion.div key={v.title} {...fadeUp(i * 0.1)} className="p-8 lg:p-10 rounded-2xl bg-lael-secondary hover-card border border-lael-bd cinematic-shadow">
                   <h3 className="font-display text-xl text-lael-accent font-bold mb-4">{v.title}</h3>
-                  <p className="text-lael-muted/70 text-sm leading-relaxed">{v.desc}</p>
+                  <p className="text-lael-muted text-sm leading-relaxed">{v.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -110,8 +113,8 @@ export default function Nosotros() {
               </div>
               <div className="flex flex-col gap-4">
                 {['2021 — Fundación', '600+ Estudiantes simultáneos', 'PAES · Idiomas · LSCh', 'Santiago, Chile'].map(item => (
-                  <div key={item} className="p-4 rounded-xl bg-[#080808] hover-card">
-                    <p className="text-[11px] tracking-[0.1em] text-lael-muted/60">{item}</p>
+                  <div key={item} className="p-4 rounded-xl bg-lael-secondary hover-card border border-lael-bd cinematic-shadow">
+                    <p className="text-[11px] tracking-[0.1em] text-lael-muted">{item}</p>
                   </div>
                 ))}
               </div>
@@ -128,6 +131,8 @@ export default function Nosotros() {
             <p className="mt-4 text-[10px] tracking-[0.2em] text-lael-muted/30 uppercase">Lucas 4:18</p>
           </motion.div>
         </section>
+        
+        <CharlaGratuita />
       </main>
     </>
   );

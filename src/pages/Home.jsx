@@ -12,6 +12,9 @@ import naama from '../assets/img/Partners/naama-studio.png';
 import onepay from '../assets/img/Partners/onepay.png';
 import transbank from '../assets/img/Partners/Transbank.png';
 
+import SignificadoLael from '../components/SignificadoLael';
+import CharlaGratuita from '../components/CharlaGratuita';
+
 const partners = [demre, google, ino, losOlivos, mercadoPago, naama, onepay, transbank];
 const ease = [0.16, 1, 0.3, 1];
 const WA_NUMBER = '56964626568';
@@ -70,14 +73,14 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-[#0B0B0B] text-lael-light overflow-hidden">
+    <div className="bg-lael-primary text-lael-light overflow-hidden">
       <Helmet>
         <title>Instituto Lael | Educación Online en Chile — PAES Gratis, Idiomas, IA</title>
         <meta name="description" content="No entrenamos para pruebas. Formamos sistemas de rendimiento. PAES, Idiomas (Inglés, Coreano) y Lengua de Señas Chilena. Santiago, Chile." />
       </Helmet>
 
       {/* Grain texture */}
-      <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.025] mix-blend-overlay"
+      <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.05] mix-blend-multiply"
         style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")' }} />
 
       {/* ── 1. HERO ───────────────────────────────────────────────────── */}
@@ -110,11 +113,11 @@ export default function Home() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.0, delay: 0.7, ease }}
           className="flex flex-col sm:flex-row gap-4 mt-14">
           <button onClick={handleEvaluation}
-            className="bg-lael-accent text-lael-primary px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:scale-[1.02] transition-all duration-500 shadow-[0_0_30px_rgba(198,166,107,0.25)]">
+            className="bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-[0_4px_20px_rgba(196,151,62,0.3)] hover:shadow-[0_4px_30px_rgba(184,92,56,0.4)] hover:-translate-y-1">
             Solicitar evaluación
           </button>
           <Link to="/paes"
-            className="bg-white/[0.03] border border-white/10 text-lael-light px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-white/[0.06] transition-all duration-500 text-center">
+            className="bg-lael-secondary border border-lael-bd text-lael-light px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:border-lael-accent transition-all duration-500 text-center hover:shadow-[0_4px_20px_rgba(13,13,13,0.05)] hover:-translate-y-1">
             Explorar sistemas
           </Link>
         </motion.div>
@@ -132,17 +135,16 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {SYSTEMS.map((sys, i) => (
               <motion.div key={sys.id} {...fadeUp(i * 0.12)}
-                className="group p-10 lg:p-12 bg-[#080808] hover:bg-[#0D0D0D] flex flex-col relative overflow-hidden hover-card rounded-2xl">
-                <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-lael-accent/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                <p className="text-lael-accent text-[10px] tracking-[0.2em] uppercase mb-6">{sys.label}</p>
+                className="group p-10 lg:p-12 bg-lael-secondary flex flex-col relative overflow-hidden hover-card rounded-2xl">
+                <p className="text-lael-rust text-[10px] tracking-[0.2em] uppercase mb-6 font-bold">{sys.label}</p>
                 <h3 className="font-display text-2xl lg:text-3xl text-lael-light font-bold leading-tight mb-2">{sys.headline}</h3>
                 <h3 className="font-display text-2xl lg:text-3xl text-lael-accent font-bold leading-tight mb-6">{sys.sub}</h3>
-                <p className="text-lael-muted/60 text-sm leading-relaxed mb-8 flex-1">{sys.desc}</p>
+                <p className="text-lael-muted text-sm leading-relaxed mb-8 flex-1">{sys.desc}</p>
                 <div className="space-y-2 mb-10">
-                  {sys.tags.map(t => <p key={t} className="text-[10px] tracking-[0.12em] text-lael-muted/40 uppercase">· {t}</p>)}
+                  {sys.tags.map(t => <p key={t} className="text-[10px] tracking-[0.12em] text-lael-muted/80 uppercase">· {t}</p>)}
                 </div>
                 <Link to={sys.route}
-                  className="text-[11px] tracking-[0.2em] uppercase text-lael-accent border border-lael-accent/30 px-6 py-3 rounded-lg text-center hover:bg-lael-accent hover:text-lael-primary transition-all duration-500 font-bold">
+                  className="text-[11px] tracking-[0.2em] uppercase text-lael-accent border border-lael-accent/30 px-6 py-3 rounded-lg text-center hover:bg-lael-accent hover:text-white transition-all duration-500 font-bold">
                   {sys.cta} →
                 </Link>
               </motion.div>
@@ -155,18 +157,24 @@ export default function Home() {
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-3xl text-center">
-          <motion.p {...fadeUp(0)} className="font-display text-3xl lg:text-5xl text-lael-muted/30 leading-tight mb-4">
+          <motion.p {...fadeUp(0)} className="font-display text-3xl lg:text-5xl text-lael-muted leading-tight mb-4">
             La mayoría memoriza.
           </motion.p>
           <motion.p {...fadeUp(0.2)} className="font-display text-3xl lg:text-5xl text-lael-light leading-tight mb-4">
             Nosotros entrenamos criterio.
           </motion.p>
-          <motion.div {...fadeUp(0.4)} className="w-16 h-[1px] bg-lael-accent/40 mx-auto mt-10 mb-10" />
-          <motion.p {...fadeUp(0.5)} className="text-lael-muted/50 text-sm leading-relaxed max-w-lg mx-auto">
+          <motion.div {...fadeUp(0.4)} className="w-16 h-[1px] bg-lael-rust/40 mx-auto mt-10 mb-10" />
+          <motion.p {...fadeUp(0.5)} className="text-lael-muted text-sm leading-relaxed max-w-lg mx-auto">
             El sistema educativo premia la repetición. Nosotros premiamos la comprensión estratégica. La diferencia no es cuánto estudias. Es cómo entrenas.
           </motion.p>
         </div>
       </section>
+
+      {/* ── NEW: SIGNIFICADO LAEL ────────────────────────────────────── */}
+      <SignificadoLael />
+
+      {/* ── NEW: CHARLA GRATUITA ─────────────────────────────────────── */}
+      <CharlaGratuita />
 
       {/* ── 4. MÉTODO ────────────────────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
@@ -178,10 +186,10 @@ export default function Home() {
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {METHOD.map((m, i) => (
-              <motion.div key={m.step} {...fadeUp(i * 0.1)} className="p-8 rounded-2xl bg-[#080808] hover-card">
-                <p className="font-display text-5xl text-lael-accent/20 font-bold mb-4">{m.step}</p>
+              <motion.div key={m.step} {...fadeUp(i * 0.1)} className="p-8 rounded-2xl bg-lael-secondary hover-card border border-lael-bd cinematic-shadow">
+                <p className="font-display text-5xl text-lael-accent/40 font-bold mb-4">{m.step}</p>
                 <h3 className="text-lael-light font-semibold mb-3 tracking-wide">{m.label}</h3>
-                <p className="text-lael-muted/50 text-sm leading-relaxed">{m.desc}</p>
+                <p className="text-lael-muted text-sm leading-relaxed">{m.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -191,12 +199,12 @@ export default function Home() {
       {/* ── 5. PARTNERS ──────────────────────────────────────────────── */}
       <section className="relative w-full py-20 overflow-hidden">
         <div className="separator-gradient top-0" />
-        <motion.p {...fadeUp(0)} className="text-lael-muted/30 text-[9px] tracking-[0.3em] uppercase text-center mb-12">
+        <motion.p {...fadeUp(0)} className="text-lael-muted text-[9px] tracking-[0.3em] uppercase text-center mb-12">
           Aliados y partners
         </motion.p>
         <div className="flex gap-16 animate-marquee whitespace-nowrap items-center">
           {[...partners, ...partners].map((src, i) => (
-            <img key={i} src={src} alt="partner" className="h-7 lg:h-8 object-contain opacity-25 hover:opacity-60 transition-opacity duration-500 grayscale flex-shrink-0" />
+            <img key={i} src={src} alt="partner" className="h-10 lg:h-12 object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 flex-shrink-0 mix-blend-multiply grayscale hover:grayscale-0" />
           ))}
         </div>
       </section>
@@ -209,14 +217,14 @@ export default function Home() {
           <h2 className="font-display text-4xl lg:text-6xl text-lael-light font-bold leading-tight mb-10">
             Tu sistema de rendimiento comienza con una evaluación.
           </h2>
-          <p className="text-lael-muted/50 text-base mb-14 leading-relaxed">
+          <p className="text-lael-muted text-base mb-14 leading-relaxed">
             Sin compromiso. Sin formularios eternos. En 15 minutos sabemos qué sistema necesitas y cómo activarlo.
           </p>
           <button onClick={handleEvaluation}
-            className="bg-lael-accent text-lael-primary px-14 py-6 rounded-xl text-xs tracking-[0.2em] uppercase font-bold hover:scale-[1.02] active:scale-95 transition-all duration-500 shadow-[0_0_40px_rgba(198,166,107,0.3)] hover:shadow-[0_0_80px_rgba(198,166,107,0.5)]">
+            className="bg-lael-accent text-white px-14 py-6 rounded-xl text-xs tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)] hover:shadow-[0_4px_30px_rgba(184,92,56,0.4)]">
             Solicitar evaluación gratuita →
           </button>
-          <p className="mt-8 text-[10px] text-lael-muted/30 tracking-[0.1em] uppercase">
+          <p className="mt-8 text-[10px] text-lael-muted tracking-[0.1em] uppercase">
             Respuesta en menos de 24 horas
           </p>
         </motion.div>

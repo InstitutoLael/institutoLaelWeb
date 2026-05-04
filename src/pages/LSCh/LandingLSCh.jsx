@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 import { LSCH_WHY_US, TEACHER_PROFILE, COMPARISON_DATA } from '../../data/lsch';
 
 const ease = [0.16, 1, 0.3, 1];
@@ -15,10 +16,10 @@ export default function LandingLSCh({ onChoosePlan }) {
     <div className="w-full bg-lael-primary">
 
       {/* HERO */}
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden">
+      <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
         <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">Instituto Lael · Lengua de Señas Chilena</motion.p>
-        <h1 className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal" style={{ opacity: 0, animationDelay: '0.15s' }}>
+        <h1 className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal" style={{ animationDelay: '0.15s' }}>
           El idioma que<br />
           <span className="accent-italic">elimina barreras.</span>
         </h1>
@@ -37,10 +38,16 @@ export default function LandingLSCh({ onChoosePlan }) {
             </React.Fragment>
           ))}
         </motion.div>
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-10 animate-bounce text-lael-accent"
+        >
+          <ChevronDown size={24} />
+        </motion.div>
       </section>
 
       {/* IMPACTO EMOCIONAL */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-3xl text-center">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Por qué importa</motion.p>
@@ -54,7 +61,7 @@ export default function LandingLSCh({ onChoosePlan }) {
       </section>
 
       {/* DIFERENCIA */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-4xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Por qué Lael</motion.p>
@@ -70,8 +77,26 @@ export default function LandingLSCh({ onChoosePlan }) {
         </div>
       </section>
 
+      {/* VISIÓN */}
+      <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center bg-lael-secondary border-y border-lael-bd cinematic-shadow">
+        <div className="w-full max-w-4xl text-center">
+          <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Inclusión Real</p>
+          <h2 className="font-display text-4xl lg:text-5xl text-lael-light font-bold mb-10">
+            Más que señas. Cultura y conexión.
+          </h2>
+          <div className="text-lael-muted text-sm leading-relaxed max-w-2xl mx-auto space-y-6">
+            <p>
+              La inclusión no es saber el abecedario. Es entender cómo una persona Sorda percibe el mundo, cómo estructura el espacio a su alrededor y cómo se expresa emocionalmente.
+            </p>
+            <p>
+              Nuestro programa está diseñado bajo los parámetros de la Cultura Sorda. Aprenderás a "hablar" con tu cuerpo, tus expresiones faciales y a usar el espacio tridimensional para comunicarte de forma nativa.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* FERNANDA */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div {...fadeUp(0)}>
@@ -106,7 +131,7 @@ export default function LandingLSCh({ onChoosePlan }) {
       </section>
 
       {/* TRANSICIÓN */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
           <h2 className="font-display text-4xl text-lael-light font-bold mb-8">Elige tu plan y comienza hoy.</h2>

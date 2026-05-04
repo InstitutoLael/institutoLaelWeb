@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 import { PAES_FEATURES } from '../../data/paes';
 
 const ease = [0.16, 1, 0.3, 1];
@@ -24,7 +25,7 @@ export default function LandingPAES({ onStartDiagnosis }) {
     <div className="w-full bg-lael-primary">
 
       {/* ── HERO NARRATIVO ────────────────────────────────────────────── */}
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden">
+      <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] max-w-[600px] max-h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
         <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">
@@ -33,7 +34,7 @@ export default function LandingPAES({ onStartDiagnosis }) {
 
         <h1
           className="font-display text-5xl lg:text-7xl xl:text-8xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal"
-          style={{ opacity: 0, animationDelay: '0.15s' }}
+          style={{ animationDelay: '0.15s' }}
         >
           No es un preuniversitario.<br />
           <span className="accent-italic">
@@ -61,10 +62,17 @@ export default function LandingPAES({ onStartDiagnosis }) {
             </React.Fragment>
           ))}
         </motion.div>
+
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-10 animate-bounce text-lael-accent"
+        >
+          <ChevronDown size={24} />
+        </motion.div>
       </section>
 
       {/* ── PROBLEMA ──────────────────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-4xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">
@@ -90,7 +98,7 @@ export default function LandingPAES({ onStartDiagnosis }) {
       </section>
 
       {/* ── DIFERENCIA: SISTEMA VS CLASES ──────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-4xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">
@@ -118,7 +126,7 @@ export default function LandingPAES({ onStartDiagnosis }) {
       </section>
 
       {/* ── VALOR INCLUIDO ─────────────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">
@@ -143,7 +151,7 @@ export default function LandingPAES({ onStartDiagnosis }) {
       </section>
 
       {/* ── TRANSICIÓN AL SISTEMA ──────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Siguiente paso</p>

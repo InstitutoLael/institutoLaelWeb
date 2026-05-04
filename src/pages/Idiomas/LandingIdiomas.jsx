@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 import { LANGUAGES, LANG_FEATURES } from '../../data/idiomas';
 
 const ease = [0.16, 1, 0.3, 1];
@@ -14,19 +15,25 @@ export default function LandingIdiomas({ onConfigure }) {
   return (
     <div className="w-full bg-lael-primary">
       {/* HERO */}
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden">
+      <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
         <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">Instituto Lael · Programas de Idiomas</motion.p>
-        <h1 className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal" style={{ opacity: 0, animationDelay: '0.15s' }}>
+        <h1 className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal" style={{ animationDelay: '0.15s' }}>
           No aprendes idiomas.<br />
           <span className="accent-italic">Ejecutas sistemas de comunicación.</span>
         </h1>
         <motion.p {...fadeUp(0.35)} className="mt-10 text-lael-muted text-base max-w-xl mx-auto leading-relaxed">Sin repetición mecánica. Solo simulaciones reales que te preparan para comunicarte en cualquier entorno.</motion.p>
         <motion.button {...fadeUp(0.55)} onClick={onConfigure} className="mt-14 bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]">Configurar mi programa</motion.button>
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
+          className="absolute bottom-10 animate-bounce text-lael-accent"
+        >
+          <ChevronDown size={24} />
+        </motion.div>
       </section>
 
       {/* DIFERENCIA */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-4xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Por qué es diferente</motion.p>
@@ -42,8 +49,39 @@ export default function LandingIdiomas({ onConfigure }) {
         </div>
       </section>
 
+      {/* METODOLOGÍA */}
+      <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center bg-lael-secondary border-y border-lael-bd cinematic-shadow">
+        <div className="w-full max-w-4xl text-center">
+          <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">El Método</p>
+          <h2 className="font-display text-4xl lg:text-5xl text-lael-light font-bold mb-10">
+            Hackeando el proceso de aprendizaje.
+          </h2>
+          <div className="text-lael-muted text-sm leading-relaxed max-w-2xl mx-auto space-y-6">
+            <p>
+              Estudiar gramática en una pizarra durante años y no poder pedir un café es el estándar de la educación tradicional. En Lael, vemos los idiomas como <strong>códigos de software</strong>.
+            </p>
+            <p>
+              Primero instalamos la estructura básica (el algoritmo). Luego, saturamos tus sentidos con simulaciones reales (los datos). El resultado: tu cerebro decodifica el idioma automáticamente, sin necesidad de traducir palabra por palabra.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 text-center">
+            {[
+              { num: '01', title: 'Inmersión' },
+              { num: '02', title: 'Estructura' },
+              { num: '03', title: 'Simulación' },
+              { num: '04', title: 'Fluidez' }
+            ].map(step => (
+              <div key={step.num}>
+                <p className="font-display text-4xl text-lael-accent/40 font-bold mb-2">{step.num}</p>
+                <p className="text-[11px] tracking-wider text-lael-light uppercase font-bold">{step.title}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* PROGRAMAS PREVIEW */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Programas disponibles</motion.p>
@@ -62,7 +100,7 @@ export default function LandingIdiomas({ onConfigure }) {
       </section>
 
       {/* TRANSICIÓN */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center">
+      <section className="relative w-full px-6 py-20 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
           <h2 className="font-display text-4xl text-lael-light font-bold mb-8">Configura tu programa ahora.</h2>

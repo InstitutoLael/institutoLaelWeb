@@ -15,7 +15,7 @@ export const ABOUT_DATA = {
         title: "¿Por qué LAEL?",
         term: "Lael (לָאֵל)",
         definition: "Perteneciente a Dios",
-        description: "Elegimos este nombre (Números 3:24) como declaración de propiedad: esta institución, talentos y alumnos tienen un propósito divino.",
+        description: "Elegimos este nombre (Jeremías 33:3, Lucas 4:18) como declaración de propiedad: esta institución, talentos y alumnos tienen un propósito divino.",
         cards: [
             { icon: "FaChalkboardTeacher", title: "Pedagogía", desc: "Explicamos fácil lo difícil" },
             { icon: "FaLightbulb", title: "Mente", desc: "Pensamiento Crítico" },
@@ -25,9 +25,9 @@ export const ABOUT_DATA = {
     founder: {
         name: "Diego Chaparro",
         role: "Fundador & Director",
-        bio: "Comenzó enseñando matemáticas con una pizarra en una habitación y hoy potencia la visión educativa de toda la comunidad. Cree firmemente que los números no son difíciles, solo están mal explicados.",
+        bio: "Comenzó enseñando matemáticas con una pizarra en una habitación y hoy potencia la visión educativa de toda la comunidad. Aunque estoy solo en la ejecución hoy, el diseño y la visión vienen directamente de Dios. Los números no son difíciles, solo están mal explicados.",
         quote: "Aquí nadie es un número, todos tienen un propósito.",
-        tags: ["Educación", "Matemáticas", "Visión 2026"]
+        tags: ["Santiago, Chile", "Matemáticas", "Fundador"]
     },
     values: [
         {

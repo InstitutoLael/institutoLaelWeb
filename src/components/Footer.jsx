@@ -2,17 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Linkedin, Youtube } from 'lucide-react';
 import logo from '../assets/img/Logos/lael-inst-negro.png';
-
-const LINKS_PROGRAMAS = [
-  { name: 'PAES', path: '/paes' },
-  { name: 'Idiomas', path: '/idiomas' },
-  { name: 'LSCh — Señas', path: '/lsch' },
-];
-
-const LINKS_INSTITUTO = [
-  { name: 'Quiénes Somos', path: '/nosotros' },
-  { name: 'Contacto', path: '/contacto' },
-];
+import { NAVIGATION } from '../data/navigation';
 
 const SOCIAL = [
   { name: 'Instagram', href: 'https://instagram.com/institutolael', Icon: Instagram },
@@ -36,7 +26,7 @@ export default function Footer() {
               <img src={logo} alt="Instituto Lael" loading="lazy" className="h-7 w-auto opacity-90 hover:opacity-100 transition-opacity" />
             </Link>
             <p className="text-lael-muted text-sm leading-relaxed max-w-xs">
-              Sistema de rendimiento académico. PAES, Idiomas y Lengua de Señas Chilena.
+              Sistema de rendimiento académico. PAES, Idiomas, LSCh y Nivelación para Adultos.
             </p>
             {/* Social */}
             <div className="flex gap-3">
@@ -53,7 +43,7 @@ export default function Footer() {
           <div>
             <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6">Programas</h4>
             <nav className="flex flex-col gap-4">
-              {LINKS_PROGRAMAS.map(l => (
+              {NAVIGATION.footer.programs.map(l => (
                 <Link key={l.path} to={l.path} className="text-sm text-lael-muted hover:text-lael-accent transition-colors duration-300">
                   {l.name}
                 </Link>
@@ -65,7 +55,7 @@ export default function Footer() {
           <div>
             <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6">Instituto</h4>
             <nav className="flex flex-col gap-4 mb-8">
-              {LINKS_INSTITUTO.map(l => (
+              {NAVIGATION.footer.company.map(l => (
                 <Link key={l.path} to={l.path} className="text-sm text-lael-muted hover:text-lael-accent transition-colors duration-300">
                   {l.name}
                 </Link>

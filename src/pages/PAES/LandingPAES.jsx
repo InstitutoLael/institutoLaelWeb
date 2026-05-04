@@ -150,8 +150,95 @@ export default function LandingPAES({ onStartDiagnosis }) {
         </div>
       </section>
 
+      {/* ── NUEVO: RESULTADOS MEDIBLES ────────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd">
+        <div className="max-w-5xl mx-auto">
+          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center">Data Real</motion.p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div {...fadeUp(0.1)}>
+              <h2 className="font-display text-4xl text-lael-light mb-8">Resultados que puedes medir.</h2>
+              <p className="text-lael-muted leading-relaxed mb-8">
+                No prometemos "aprender". Prometemos rendimiento. El 92% de nuestros alumnos sube al menos 120 puntos en su diagnóstico tras el primer ciclo de activación.
+              </p>
+              <div className="flex gap-12">
+                 <div>
+                    <p className="text-3xl font-display text-lael-accent font-bold">+120</p>
+                    <p className="text-[10px] text-lael-muted uppercase tracking-widest">Puntos promedio</p>
+                 </div>
+                 <div>
+                    <p className="text-3xl font-display text-lael-accent font-bold">92%</p>
+                    <p className="text-[10px] text-lael-muted uppercase tracking-widest">Tasa de mejora</p>
+                 </div>
+              </div>
+            </motion.div>
+            <motion.div {...fadeUp(0.3)} className="p-8 bg-lael-primary rounded-2xl border border-lael-bd relative overflow-hidden">
+               {/* Shell de gráfico simple */}
+               <div className="flex items-end gap-3 h-48 border-b border-lael-bd pb-2">
+                  <div className="w-full bg-lael-accent/20 h-1/4 rounded-t-lg transition-all duration-1000 group-hover:h-1/4"></div>
+                  <div className="w-full bg-lael-accent/40 h-2/4 rounded-t-lg"></div>
+                  <div className="w-full bg-lael-accent/60 h-3/4 rounded-t-lg"></div>
+                  <div className="w-full bg-lael-accent h-full rounded-t-lg"></div>
+               </div>
+               <p className="text-center mt-6 text-[10px] text-lael-muted uppercase tracking-[0.2em]">Evolución Típica · Ciclo 1 a 4</p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── NUEVO: CÓMO SE VE UNA SEMANA ────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
+        <div className="w-full max-w-5xl">
+          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Visualiza tu entrenamiento</motion.p>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-5xl text-lael-light font-bold text-center mb-20 leading-tight">
+            Una semana en el Sistema PAES
+          </motion.h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+             <motion.div {...fadeUp(0.2)} className="p-10 bg-lael-secondary rounded-2xl border border-lael-bd">
+                <h4 className="text-lael-accent font-bold mb-6 text-sm uppercase tracking-widest">Lunes a Jueves</h4>
+                <p className="text-lael-light font-bold mb-4">Módulos de Activación</p>
+                <p className="text-lael-muted text-sm leading-relaxed mb-6">Clases en vivo vía Zoom enfocadas en resolución táctica de ejercicios. Horarios de tarde para compatibilizar con el colegio.</p>
+                <span className="text-[10px] text-lael-muted italic">18:00 - 20:00 hrs</span>
+             </motion.div>
+             <motion.div {...fadeUp(0.3)} className="p-10 bg-lael-secondary rounded-2xl border border-lael-bd relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 bg-lael-accent/10 text-lael-accent text-[9px] font-bold uppercase tracking-tighter">Crítico</div>
+                <h4 className="text-lael-accent font-bold mb-6 text-sm uppercase tracking-widest">Viernes</h4>
+                <p className="text-lael-light font-bold mb-4">Simulacro de Presión</p>
+                <p className="text-lael-muted text-sm leading-relaxed mb-6">Ensayo semanal cronometrado. No evaluamos conocimiento, evaluamos gestión del tiempo y ansiedad.</p>
+                <span className="text-[10px] text-lael-muted italic">Tiempo real PAES</span>
+             </motion.div>
+             <motion.div {...fadeUp(0.4)} className="p-10 bg-lael-secondary rounded-2xl border border-lael-bd">
+                <h4 className="text-lael-accent font-bold mb-6 text-sm uppercase tracking-widest">Sábado</h4>
+                <p className="text-lael-light font-bold mb-4">Feedback & Estrategia</p>
+                <p className="text-lael-muted text-sm leading-relaxed mb-6">Sesión de análisis de resultados con tu mentor. Recalibramos tu plan para la semana siguiente.</p>
+                <span className="text-[10px] text-lael-muted italic">Individual / Grupal</span>
+             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── NUEVO: OBJECIONES ────────────────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 bg-lael-secondary border-t border-lael-bd">
+        <div className="max-w-4xl mx-auto">
+          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center">Dudas frecuentes</motion.p>
+          <div className="space-y-6">
+             {[
+                { q: "¿Es 100% online?", a: "Sí. No perdemos tiempo en traslados. Todo sucede en nuestra Aula Virtual y vía Zoom en vivo." },
+                { q: "¿Puedo entrar si voy en 3ro medio?", a: "Absolutamente. De hecho, es el momento ideal para empezar el diagnóstico sin la presión del último año." },
+                { q: "¿Qué pasa si falto a una clase?", a: "Todas las sesiones de activación quedan grabadas y disponibles en tu perfil de alumno por 7 días." }
+             ].map((item, i) => (
+                <motion.div key={i} {...fadeUp(i * 0.1)} className="p-8 bg-lael-primary rounded-2xl border border-lael-bd">
+                   <h4 className="text-lael-light font-bold mb-4 text-base">{item.q}</h4>
+                   <p className="text-lael-muted text-sm leading-relaxed">{item.a}</p>
+                </motion.div>
+             ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── TRANSICIÓN AL SISTEMA ──────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-20 flex flex-col items-center">
+      <section className="relative w-full px-6 py-32 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Siguiente paso</p>

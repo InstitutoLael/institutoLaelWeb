@@ -15,6 +15,8 @@ import LSCh from "./pages/LSCh";
 import Empresas from "./pages/Empresas";
 import Nosotros from "./pages/Nosotros";
 import Contacto from "./pages/Contacto";
+import NivelacionAdultos from "./pages/Nivelacion/NivelacionAdultos";
+import SistemaLael from "./pages/SistemaLael";
 import NotFound from "./pages/NotFound";
 
 import ScrollToTop from "./components/ScrollToTop";
@@ -39,6 +41,8 @@ export default function App() {
             <Route path="/metodo" element={<MetodoLael />} />
             <Route path="/idiomas" element={<Idiomas />} />
             <Route path="/lsch" element={<LSCh />} />
+            <Route path="/adultos" element={<NivelacionAdultos />} />
+            <Route path="/sistema" element={<SistemaLael />} />
             <Route path="/empresas" element={<Empresas />} />
             <Route path="/nosotros" element={<Nosotros />} />
             <Route path="/contacto" element={<Contacto />} />

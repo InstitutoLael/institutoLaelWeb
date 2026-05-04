@@ -123,60 +123,129 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* ── 2. SISTEMAS ──────────────────────────────────────────────── */}
+      {/* ── 2. ELIGE TU MUNDO ────────────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-6xl">
-          <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Nuestros sistemas</motion.p>
+          <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Explora tu sistema</motion.p>
           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-20 leading-tight">
-            Tres sistemas.<br />Un solo objetivo: tu resultado.
+            No vendemos programas.<br />Vendemos universos de rendimiento.
           </motion.h2>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {SYSTEMS.map((sys, i) => (
-              <motion.div key={sys.id} {...fadeUp(i * 0.12)}
-                className="group p-10 lg:p-12 bg-lael-secondary flex flex-col relative overflow-hidden hover-card rounded-2xl">
-                <p className="text-lael-rust text-[10px] tracking-[0.2em] uppercase mb-6 font-bold">{sys.label}</p>
-                <h3 className="font-display text-2xl lg:text-3xl text-lael-light font-bold leading-tight mb-2">{sys.headline}</h3>
-                <h3 className="font-display text-2xl lg:text-3xl text-lael-accent font-bold leading-tight mb-6">{sys.sub}</h3>
-                <p className="text-lael-muted text-sm leading-relaxed mb-8 flex-1">{sys.desc}</p>
-                <div className="space-y-2 mb-10">
-                  {sys.tags.map(t => <p key={t} className="text-[10px] tracking-[0.12em] text-lael-muted/80 uppercase">· {t}</p>)}
-                </div>
-                <Link to={sys.route}
-                  className="text-[11px] tracking-[0.2em] uppercase text-lael-accent border border-lael-accent/30 px-6 py-3 rounded-lg text-center hover:bg-lael-accent hover:text-white transition-all duration-500 font-bold">
-                  {sys.cta} →
-                </Link>
-              </motion.div>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* PAES */}
+            <motion.div {...fadeUp(0.1)} className="group p-10 bg-lael-secondary hover-card rounded-2xl border border-lael-bd">
+              <p className="text-lael-accent text-[9px] tracking-[0.2em] uppercase mb-6 font-bold">[ PAES ]</p>
+              <h3 className="font-display text-2xl text-lael-light font-bold mb-4">Subir puntaje</h3>
+              <p className="text-lael-muted text-sm leading-relaxed mb-10">Optimización de rendimiento académico para maximizar tu ingreso a la universidad.</p>
+              <Link to="/paes" className="text-[10px] tracking-[0.2em] uppercase text-lael-accent font-bold group-hover:translate-x-2 transition-transform inline-block">Entrar al mundo →</Link>
+            </motion.div>
+
+            {/* IDIOMAS */}
+            <motion.div {...fadeUp(0.2)} className="group p-10 bg-lael-secondary hover-card rounded-2xl border border-lael-bd">
+              <p className="text-lael-accent text-[9px] tracking-[0.2em] uppercase mb-6 font-bold">[ IDIOMAS ]</p>
+              <h3 className="font-display text-2xl text-lael-light font-bold mb-4">Comunicarte globalmente</h3>
+              <p className="text-lael-muted text-sm leading-relaxed mb-10">Inglés, Coreano y Español. No es gramática, es ejecución en escenarios reales.</p>
+              <Link to="/idiomas" className="text-[10px] tracking-[0.2em] uppercase text-lael-accent font-bold group-hover:translate-x-2 transition-transform inline-block">Entrar al mundo →</Link>
+            </motion.div>
+
+            {/* LSCh */}
+            <motion.div {...fadeUp(0.3)} className="group p-10 bg-lael-secondary hover-card rounded-2xl border border-lael-bd">
+              <p className="text-lael-accent text-[9px] tracking-[0.2em] uppercase mb-6 font-bold">[ LSCh ]</p>
+              <h3 className="font-display text-2xl text-lael-light font-bold mb-4">Inclusión real</h3>
+              <p className="text-lael-muted text-sm leading-relaxed mb-10">Lengua de Señas Chilena con instructores sordos nativos. Rompe la barrera.</p>
+              <Link to="/lsch" className="text-[10px] tracking-[0.2em] uppercase text-lael-accent font-bold group-hover:translate-x-2 transition-transform inline-block">Entrar al mundo →</Link>
+            </motion.div>
+
+            {/* ADULTOS */}
+            <motion.div {...fadeUp(0.4)} className="group p-10 bg-lael-secondary hover-card rounded-2xl border border-lael-bd">
+              <p className="text-lael-accent text-[9px] tracking-[0.2em] uppercase mb-6 font-bold">[ ADULTOS ]</p>
+              <h3 className="font-display text-2xl text-lael-light font-bold mb-4">Terminar lo que empezaste</h3>
+              <p className="text-lael-muted text-sm leading-relaxed mb-10">Nivelación de estudios flexible para quienes el sistema tradicional ignoró.</p>
+              <Link to="/adultos" className="text-[10px] tracking-[0.2em] uppercase text-lael-accent font-bold group-hover:translate-x-2 transition-transform inline-block">Entrar al mundo →</Link>
+            </motion.div>
+
+            {/* EMPRESAS */}
+            <motion.div {...fadeUp(0.5)} className="group p-10 bg-lael-secondary hover-card rounded-2xl border border-lael-bd">
+              <p className="text-lael-accent text-[9px] tracking-[0.2em] uppercase mb-6 font-bold">[ EMPRESAS ]</p>
+              <h3 className="font-display text-2xl text-lael-light font-bold mb-4">Rendimiento organizacional</h3>
+              <p className="text-lael-muted text-sm leading-relaxed mb-10">Capacitación estratégica y cumplimiento legal con enfoque en resultados.</p>
+              <Link to="/empresas" className="text-[10px] tracking-[0.2em] uppercase text-lael-accent font-bold group-hover:translate-x-2 transition-transform inline-block">Entrar al mundo →</Link>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ── 3. MANIFIESTO ────────────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
-        <div className="separator-gradient top-0" />
-        <div className="w-full max-w-3xl text-center">
-          <motion.p {...fadeUp(0)} className="font-display text-3xl lg:text-5xl text-lael-muted leading-tight mb-4">
-            La mayoría memoriza.
-          </motion.p>
-          <motion.p {...fadeUp(0.2)} className="font-display text-3xl lg:text-5xl text-lael-light leading-tight mb-4">
-            Nosotros entrenamos criterio.
-          </motion.p>
-          <motion.div {...fadeUp(0.4)} className="w-16 h-[1px] bg-lael-rust/40 mx-auto mt-10 mb-10" />
-          <motion.p {...fadeUp(0.5)} className="text-lael-muted text-sm leading-relaxed max-w-lg mx-auto">
-            El sistema educativo premia la repetición. Nosotros premiamos la comprensión estratégica. La diferencia no es cuánto estudias. Es cómo entrenas.
-          </motion.p>
+      {/* ── 3. RESULTADOS REALES ────────────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd flex flex-col items-center">
+        <div className="max-w-4xl text-center">
+          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10">Resultados Reales</motion.p>
+          <motion.div {...fadeUp(0.2)} className="relative px-12 py-20 bg-lael-primary rounded-[40px] border border-lael-bd">
+             <span className="absolute top-10 left-10 text-8xl font-display text-lael-accent/10">"</span>
+             <h3 className="font-display text-3xl lg:text-4xl text-lael-light mb-8 italic">
+                Subí de 580 a 710 en 4 meses.
+             </h3>
+             <p className="text-lael-muted tracking-[0.1em] uppercase text-xs">— Estudiante Lael</p>
+          </motion.div>
         </div>
       </section>
 
-      {/* ── NEW: SIGNIFICADO LAEL ────────────────────────────────────── */}
-      <SignificadoLael />
+      {/* ── 4. PARA QUIÉN ES LAEL ────────────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
+        <div className="w-full max-w-5xl">
+           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8 text-center">Filtro de Compromiso</motion.p>
+           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-24">¿Es esto para ti?</motion.h2>
+           
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <motion.div {...fadeUp(0.2)} className="p-10 rounded-3xl border border-emerald-500/10 bg-emerald-500/[0.02]">
+                 <h4 className="text-emerald-400 font-bold mb-8 flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-emerald-400/10 flex items-center justify-center text-xs">✔</span>
+                    Esto es para ti si:
+                 </h4>
+                 <ul className="space-y-6">
+                    <li className="text-lael-muted text-sm flex gap-3"><span className="text-emerald-400">·</span> Quieres resultados medibles</li>
+                    <li className="text-lael-muted text-sm flex gap-3"><span className="text-emerald-400">·</span> Estás dispuesto a entrenar</li>
+                    <li className="text-lael-muted text-sm flex gap-3"><span className="text-emerald-400">·</span> No buscas clases tradicionales</li>
+                 </ul>
+              </motion.div>
 
-      {/* ── NEW: CHARLA GRATUITA ─────────────────────────────────────── */}
-      <CharlaGratuita />
+              <motion.div {...fadeUp(0.3)} className="p-10 rounded-3xl border border-lael-rust/10 bg-lael-rust/[0.02]">
+                 <h4 className="text-lael-rust font-bold mb-8 flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-lael-rust/10 flex items-center justify-center text-xs">✘</span>
+                    Esto NO es para ti si:
+                 </h4>
+                 <ul className="space-y-6">
+                    <li className="text-lael-muted text-sm flex gap-3"><span className="text-lael-rust">·</span> Solo quieres "probar"</li>
+                    <li className="text-lael-muted text-sm flex gap-3"><span className="text-lael-rust">·</span> No toleras presión</li>
+                    <li className="text-lael-muted text-sm flex gap-3"><span className="text-lael-rust">·</span> Buscas clases pasivas</li>
+                 </ul>
+              </motion.div>
+           </div>
+        </div>
+      </section>
 
-      {/* ── 4. MÉTODO ────────────────────────────────────────────────── */}
+      {/* ── 5. INVERSIÓN ─────────────────────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 bg-lael-secondary border-t border-lael-bd flex flex-col items-center">
+        <div className="max-w-2xl text-center">
+           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10">Transparencia</motion.p>
+           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold mb-8">Inversión</motion.h2>
+           <motion.p {...fadeUp(0.2)} className="text-lael-muted mb-12">
+              No vendemos cursos genéricos. Ofrecemos sistemas personalizados según tu punto de partida.
+           </motion.p>
+           <motion.div {...fadeUp(0.3)} className="inline-block p-1 bg-lael-primary rounded-2xl border border-lael-bd">
+              <div className="px-10 py-6">
+                 <p className="text-lael-accent text-[10px] tracking-[0.2em] uppercase mb-2">Programas desde</p>
+                 <p className="font-display text-4xl text-lael-light">$24.990 <span className="text-lg text-lael-muted">/ mensual</span></p>
+              </div>
+           </motion.div>
+           <motion.p {...fadeUp(0.4)} className="mt-8 text-[10px] text-lael-muted uppercase tracking-widest italic">
+              Adaptado a tu diagnóstico inicial
+           </motion.p>
+        </div>
+      </section>
+
+      {/* ── 6. MÉTODO ────────────────────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
@@ -196,7 +265,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 5. PARTNERS ──────────────────────────────────────────────── */}
+      {/* ── 7. PARTNERS ──────────────────────────────────────────────── */}
       <section className="relative w-full py-20 overflow-hidden">
         <div className="separator-gradient top-0" />
         <motion.p {...fadeUp(0)} className="text-lael-muted text-[9px] tracking-[0.3em] uppercase text-center mb-12">
@@ -209,7 +278,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 6. CTA FINAL ─────────────────────────────────────────────── */}
+      {/* ── 8. CTA FINAL ─────────────────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">

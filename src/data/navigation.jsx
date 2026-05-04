@@ -10,7 +10,7 @@ export const NAVIGATION = {
         { name: "PAES", path: "/paes" },
         { name: "Idiomas", path: "/idiomas" },
         { name: "LSCh", path: "/lsch" },
-        // { name: "Empresas", path: "/empresas" },
+        { name: "Adultos", path: "/adultos" },
     ],
     
     // Categorized for Mobile Menu or MegaMenu
@@ -19,16 +19,14 @@ export const NAVIGATION = {
             { name: "Preu PAES", path: "/paes", icon: <GraduationCap size={20} /> },
             { name: "Idiomas", path: "/idiomas", icon: <Globe size={20} /> },
             { name: "Signos (LSCh)", path: "/lsch", icon: <HandHeart size={20} /> },
-            // { name: "Nivelación Adultos", path: "/nivelacion", icon: <BookOpen size={20} /> },
+            { name: "Nivelación Adultos", path: "/adultos", icon: <Users size={20} /> },
             // { name: "Homeschool", path: "/homeschool", icon: <Rocket size={20} /> },
-            // { name: "Catálogo", path: "/programas", icon: <BookOpen size={20} /> },
         ],
         institutional: [
+            { name: "El Sistema Lael", path: "/sistema", icon: <Rocket size={20} /> },
             { name: "Sobre Nosotros", path: "/nosotros", icon: <Info size={20} /> },
-            { name: "Convenios", path: "/convenios", icon: <Shield size={20} /> },
-            { name: "Trabaja con Nosotros", path: "/trabaja", icon: <Briefcase size={20} /> },
             { name: "Cuerpo Docente", path: "/docentes", icon: <Users size={20} /> },
-            // { name: "Blog / Recursos", path: "/blog", icon: <BookOpen size={20} /> },
+            { name: "Empresas", path: "/empresas", icon: <Briefcase size={20} /> },
         ],
         support: [
             { name: "Contacto", path: "/contacto", icon: <MessageCircle size={20} /> },
@@ -43,15 +41,13 @@ export const NAVIGATION = {
             { name: "Preu PAES", path: "/paes" },
             { name: "Idiomas", path: "/idiomas" },
             { name: "LSCh Inclusión", path: "/lsch" },
-            // { name: "Nivelación Estudios", path: "/nivelacion" },
-            // { name: "Project Homeschool", path: "/homeschool" },
+            { name: "Nivelación Adultos", path: "/adultos" },
         ],
         company: [
+            { name: "El Sistema Lael", path: "/sistema" },
             { name: "Nosotros", path: "/nosotros" },
-            // { name: "Empresas", path: "/empresas" },
-            { name: "Convenios", path: "/convenios" },
+            { name: "Empresas", path: "/empresas" },
             { name: "Docentes", path: "/docentes" },
-            { name: "Trabaja con nosotros", path: "/trabaja" },
         ],
         legal: [
             { name: "Términos y Condiciones", path: "/terminos" },

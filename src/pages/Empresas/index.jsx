@@ -101,6 +101,75 @@ export default function Empresas() {
         </div>
       </section>
 
+      {/* ROI & ENFOQUE ESTRATÉGICO */}
+      <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd flex flex-col items-center overflow-hidden">
+         <div className="absolute top-0 right-0 w-96 h-96 bg-lael-accent/5 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
+         <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <motion.div {...fadeUp()}>
+               <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8">Enfoque en ROI</p>
+               <h2 className="font-display text-4xl text-lael-light mb-8">Capacitación que impacta en el balance.</h2>
+               <p className="text-lael-muted leading-relaxed mb-8">
+                  No medimos el éxito por la cantidad de horas dictadas, sino por la mejora en el rendimiento de tu equipo. Menos fricción en la comunicación, mejor clima laboral y cumplimiento estricto de normativas vigentes.
+               </p>
+               <ul className="space-y-4">
+                  <li className="flex items-center gap-3 text-lael-light text-sm font-medium">
+                     <span className="w-1.5 h-1.5 rounded-full bg-lael-accent"></span>
+                     Reducción de brechas comunicacionales.
+                  </li>
+                  <li className="flex items-center gap-3 text-lael-light text-sm font-medium">
+                     <span className="w-1.5 h-1.5 rounded-full bg-lael-accent"></span>
+                     Cumplimiento de Ley 21.015 (Inclusión).
+                  </li>
+                  <li className="flex items-center gap-3 text-lael-light text-sm font-medium">
+                     <span className="w-1.5 h-1.5 rounded-full bg-lael-accent"></span>
+                     Métricas de progreso por departamento.
+                  </li>
+               </ul>
+            </motion.div>
+            <motion.div {...fadeUp(0.2)} className="grid grid-cols-2 gap-4">
+               <div className="p-8 bg-lael-primary rounded-2xl border border-lael-bd text-center">
+                  <p className="text-3xl font-display text-lael-accent font-bold mb-2">+30%</p>
+                  <p className="text-[9px] text-lael-muted uppercase tracking-widest">Efectividad en equipos</p>
+               </div>
+               <div className="p-8 bg-lael-primary rounded-2xl border border-lael-bd text-center">
+                  <p className="text-3xl font-display text-lael-accent font-bold mb-2">100%</p>
+                  <p className="text-[9px] text-lael-muted uppercase tracking-widest">Apego normativo</p>
+               </div>
+               <div className="p-8 bg-lael-primary rounded-2xl border border-lael-bd text-center col-span-2">
+                  <p className="text-lael-light font-bold mb-2 italic">"Sistemas, no talleres"</p>
+                  <p className="text-[9px] text-lael-muted uppercase tracking-widest">Filosofía Corporativa Lael</p>
+               </div>
+            </motion.div>
+         </div>
+      </section>
+
+      {/* CASOS DE ÉXITO / PARTNERS */}
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
+        <div className="w-full max-w-5xl">
+          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center">Trayectoria</motion.p>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-20 leading-tight">Empresas que confían en nuestro sistema.</motion.h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+             <motion.div {...fadeUp(0.2)} className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd">
+                <h4 className="text-lael-accent font-bold mb-6 text-sm uppercase tracking-widest">Naama Studio</h4>
+                <p className="text-lael-muted text-sm leading-relaxed italic mb-8">
+                   "El sistema de idiomas de Lael permitió que nuestro equipo creativo se comunicara con fluidez con clientes en el extranjero, eliminando la barrera del idioma en solo meses."
+                </p>
+                <div className="w-12 h-px bg-lael-bd"></div>
+             </motion.div>
+
+             <motion.div {...fadeUp(0.3)} className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd">
+                <h4 className="text-lael-accent font-bold mb-6 text-sm uppercase tracking-widest">Siloé D&V Construcciones</h4>
+                <p className="text-lael-muted text-sm leading-relaxed italic mb-8">
+                   "Implementar el programa de LSCh no solo nos permitió cumplir con la ley, sino que transformó la cultura de inclusión en nuestra oficina técnica."
+                </p>
+                <div className="w-12 h-px bg-lael-bd"></div>
+             </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA FORMULARIO FINAL */}
       <section className="w-full px-6 py-20 lg:py-28 flex flex-col items-center border-t border-lael-bd">
         <EmpresasForm />

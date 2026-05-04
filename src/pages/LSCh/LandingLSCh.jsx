@@ -130,6 +130,38 @@ export default function LandingLSCh({ onChoosePlan }) {
         </div>
       </section>
 
+      {/* ── NUEVO: OUTPUT PROFESIONAL ────────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
+        <div className="w-full max-w-5xl">
+          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center">Inclusión en Acción</motion.p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+             <motion.div {...fadeUp(0.1)} className="p-12 bg-emerald-500/5 rounded-[40px] border border-emerald-500/10">
+                <p className="text-emerald-400 text-[10px] tracking-[0.2em] uppercase mb-6 font-bold">Caso Real</p>
+                <h3 className="font-display text-3xl text-lael-light mb-8 italic">
+                   "Ahora puedo atender a clientes Sordos en mi local sin intermediarios. La conexión humana es inmediata."
+                </h3>
+                <p className="text-lael-muted text-xs uppercase tracking-widest">— Alumna Nivel A1</p>
+             </motion.div>
+             <motion.div {...fadeUp(0.3)}>
+                <h2 className="font-display text-4xl text-lael-light mb-8">Certificación por Competencias.</h2>
+                <p className="text-lael-muted leading-relaxed mb-10">
+                   Al finalizar cada nivel, recibes un <strong>Diploma de Participación y Competencia</strong> emitido por Instituto Lael, avalando tus horas de inmersión y habilidades prácticas en LSCh.
+                </p>
+                <div className="flex items-center gap-6 p-6 bg-lael-secondary rounded-2xl border border-lael-bd shadow-xl">
+                   <div className="w-16 h-16 bg-lael-accent/20 rounded-full flex items-center justify-center text-lael-accent">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15l-2 5l2 2l2 -2l-2 -5z"/><circle cx="12" cy="7" r="4"/><path d="M10 11a8.1 8.1 0 0 0 -5 3v2h5m4 -2v-2a8.1 8.1 0 0 1 5 -3"/></svg>
+                   </div>
+                   <div>
+                      <p className="text-lael-light font-bold text-sm">Diploma Oficial Lael</p>
+                      <p className="text-lael-muted text-xs">Válido para CV y cumplimiento Ley 21.015</p>
+                   </div>
+                </div>
+             </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* TRANSICIÓN */}
       <section className="relative w-full px-6 py-20 flex flex-col items-center">
         <div className="separator-gradient top-0" />

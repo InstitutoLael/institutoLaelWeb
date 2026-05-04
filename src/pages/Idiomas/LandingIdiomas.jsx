@@ -99,6 +99,52 @@ export default function LandingIdiomas({ onConfigure }) {
         </div>
       </section>
 
+      {/* ── NUEVO: RESULTADOS Y ESCENARIOS ────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="separator-gradient top-0" />
+        <div className="w-full max-w-5xl">
+          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center">Output Real</motion.p>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-20">¿Qué serás capaz de hacer?</motion.h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+             <motion.div {...fadeUp(0.2)} className="space-y-8">
+                <h3 className="font-display text-2xl text-lael-light italic">Escenarios de Simulación</h3>
+                <div className="space-y-4">
+                   {[
+                      { icon: "💼", title: "Entrevistas Laborales", desc: "Simulamos procesos de selección reales en el idioma objetivo." },
+                      { icon: "✈️", title: "Inmersión en Viajes", desc: "Desde pedir ayuda médica hasta negociar en un mercado local." },
+                      { icon: "🤝", title: "Networking Profesional", desc: "Cómo presentar tu proyecto y cerrar acuerdos estratégicos." }
+                   ].map(s => (
+                      <div key={s.title} className="flex gap-4 p-6 bg-lael-secondary rounded-xl border border-lael-bd">
+                         <span className="text-2xl">{s.icon}</span>
+                         <div>
+                            <p className="text-lael-light font-bold text-sm mb-1">{s.title}</p>
+                            <p className="text-lael-muted text-xs leading-relaxed">{s.desc}</p>
+                         </div>
+                      </div>
+                   ))}
+                </div>
+             </motion.div>
+
+             <motion.div {...fadeUp(0.4)} className="p-10 bg-lael-accent rounded-3xl text-white flex flex-col justify-center">
+                <h3 className="font-display text-3xl mb-8">Tiempo Estimado de Ejecución</h3>
+                <div className="space-y-6">
+                   <div>
+                      <p className="text-white/60 text-[10px] uppercase tracking-widest mb-1">Conversación Básica</p>
+                      <p className="text-2xl font-bold italic">3 a 6 meses</p>
+                   </div>
+                   <div className="w-full h-px bg-white/20"></div>
+                   <div>
+                      <p className="text-white/60 text-[10px] uppercase tracking-widest mb-1">Fluidez Profesional</p>
+                      <p className="text-2xl font-bold italic">12 a 18 meses</p>
+                   </div>
+                </div>
+                <p className="mt-10 text-[10px] text-white/50 italic">* Basado en un entrenamiento de 4 horas semanales + inmersión pasiva.</p>
+             </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* TRANSICIÓN */}
       <section className="relative w-full px-6 py-20 flex flex-col items-center">
         <div className="separator-gradient top-0" />

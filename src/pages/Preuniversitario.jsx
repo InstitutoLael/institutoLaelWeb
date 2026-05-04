@@ -15,6 +15,7 @@ export default function Preuniversitario() {
   
   // Gate Form State
   const [gateData, setGateData] = useState({ name: '', phone: '', score: '' });
+  const [isConnecting, setIsConnecting] = useState(false);
 
   const toggleSubject = (id) => {
     if (selectedSubjects.includes(id)) {
@@ -36,11 +37,30 @@ export default function Preuniversitario() {
   };
 
   const handleActivateSystem = () => {
-    setStep(3);
-    // Smooth scroll down to Elite layer or final confirmation (or redirect)
+    const leadData = {
+      name: gateData.name,
+      whatsapp: gateData.phone,
+      goal: gateData.score,
+      modules: selectedSubjects,
+      monthlyPrice: priceData.totalMonthly,
+      timestamp: new Date().toISOString()
+    };
+    localStorage.setItem(`lael_lead_${Date.now()}`, JSON.stringify(leadData));
+
+    const selectedNames = PAES_SUBJECTS.filter(s => selectedSubjects.includes(s.id)).map(s => s.name).join(', ');
+    const msg = `Hola, soy ${gateData.name}.\nQuiero activar mi sistema en Lael.\n\nObjetivo: ${gateData.score || 'No definido'}\nMódulos: ${selectedNames}\nInversión: ${clp(priceData.totalMonthly)} mensual\n\n¿Siguiente paso?`;
+    const waUrl = `https://wa.me/56964626568?text=${encodeURIComponent(msg)}`;
+
+    setIsConnecting(true);
+
     setTimeout(() => {
-      document.getElementById('activacion-layer')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 100);
+      setIsConnecting(false);
+      window.open(waUrl, '_blank');
+      setStep(3);
+      setTimeout(() => {
+        document.getElementById('activacion-layer')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }, 800);
   };
 
   const priceData = computePaesPrice(selectedSubjects);
@@ -256,9 +276,17 @@ export default function Preuniversitario() {
 
                         <button 
                           onClick={handleActivateSystem}
-                          className="w-full bg-lael-accent text-lael-primary py-6 text-xs tracking-[0.2em] uppercase font-bold rounded-xl transition-all duration-700 hover:scale-[1.03] active:scale-95 shadow-[0_0_30px_rgba(198,166,107,0.2)] hover:shadow-[0_0_60px_rgba(198,166,107,0.5)]"
+                          disabled={isConnecting}
+                          className="w-full bg-lael-accent text-lael-primary py-6 text-xs tracking-[0.2em] uppercase font-bold rounded-xl transition-all duration-700 hover:scale-[1.03] active:scale-95 shadow-[0_0_30px_rgba(198,166,107,0.2)] hover:shadow-[0_0_60px_rgba(198,166,107,0.5)] flex items-center justify-center gap-2"
                         >
-                          Activar mi rendimiento
+                          {isConnecting ? (
+                            <>
+                              <span className="w-3 h-3 border-2 border-lael-primary border-t-transparent rounded-full animate-spin"></span>
+                              Conectando con un mentor...
+                            </>
+                          ) : (
+                            'Activar mi rendimiento'
+                          )}
                         </button>
                         
                         <p className="mt-6 text-[11px] text-lael-muted/50 tracking-wider">

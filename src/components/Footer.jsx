@@ -39,7 +39,7 @@ export default function Footer() {
                 <div className="flex flex-col gap-6">
                     <h4 className="text-lael-light text-sm font-semibold uppercase tracking-widest">Institución</h4>
                     <nav className="flex flex-col gap-4 text-sm">
-                        {NAVIGATION.footer.institution.map((link, i) => (
+                        {NAVIGATION.footer.company.map((link, i) => (
                             <FooterLink key={i} to={link.path}>{link.name}</FooterLink>
                         ))}
                     </nav>

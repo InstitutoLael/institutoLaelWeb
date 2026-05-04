@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PageTransition from "./components/PageTransition";
+import FloatingWhatsApp from "./components/FloatingWhatsApp";
 
 // Pages
 import Home from "./pages/Home";
@@ -39,6 +40,7 @@ export default function App() {
         </PageTransition>
       </main>
 
+      <FloatingWhatsApp />
       <Footer />
     </div>
   );

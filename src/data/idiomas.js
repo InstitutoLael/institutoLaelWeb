@@ -1,16 +1,12 @@
 // src/data/idiomas.js
 
 /* ──────────────────────────────────────────────────────────────────────────
-   1. CONFIGURACIÓN DE NEGOCIO (PRECIOS)
+   1. CONFIGURACIÓN DE INVERSIÓN
    ────────────────────────────────────────────────────────────────────────── */
 
-export const ENROLLMENT_FEE = 10990; // Matrícula única
-export const ACADEMIC_MONTHS = 9;    // Marzo a Diciembre
+export const ENROLLMENT_FEE = 10990; 
+export const ACADEMIC_MONTHS = 9;
 
-/**
- * 🔢 Formateador de CLP
- * Uso: clp(17990) -> "$17.990"
- */
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
     style: "currency",
@@ -18,11 +14,6 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-/**
- * 🧠 MOTOR DE BUNDLES (DESCUENTOS POR CANTIDAD)
- * Lógica: 
- * 1 Idioma: $17.990 | 2 Idiomas: $32.990 | 3+ Idiomas: $45.990
- */
 export function computeLangBundle(countSelected) {
   const count = Math.max(0, Number(countSelected || 0));
 
@@ -38,17 +29,17 @@ export function computeLangBundle(countSelected) {
 
   if (count === 0) {
     totalMonthly = 0;
-    label = "Selecciona tus idiomas";
+    label = "Configura tu Programa";
   } else if (count === 1) {
     totalMonthly = PRICES.SINGLE;
-    label = "Plan Mensual (1 Idioma)";
+    label = "Inmersión Singular";
   } else if (count === 2) {
     totalMonthly = PRICES.DUO;
-    label = "Plan Dúo (Ahorro)";
+    label = "Inmersión Dual Estratégica";
     saving = (PRICES.SINGLE * 2) - PRICES.DUO;
   } else {
     totalMonthly = PRICES.POLYGLOT;
-    label = "Plan Políglota (Tarifa Plana)";
+    label = "Sistema Políglota Integral";
     saving = (PRICES.SINGLE * count) - PRICES.POLYGLOT;
   }
 
@@ -64,113 +55,112 @@ export function computeLangBundle(countSelected) {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. CATÁLOGO DE IDIOMAS (DATA)
+   2. PROGRAMAS DE INMERSIÓN
    ────────────────────────────────────────────────────────────────────────── */
 export const LANGUAGES = [
   {
     id: "plan-ingles",
-    name: "English Booster",
+    name: "Dominio Estratégico Inglés",
     emoji: "🇺🇸",
-    color: "#3b82f6", // Blue
-    badge: "Más Vendido",
-    summary: "Entrenamiento dinámico para el mundo real. Olvida la gramática aburrida y empieza a hablar desde el primer día.",
+    color: "#C6A66B",
+    badge: "Alto Impacto",
+    summary: "Ingeniería inversa del idioma. Estructuras de alto rendimiento para negocios, tecnología y certificación internacional.",
     features: [
-      "Preparación certificaciones (IELTS/TOEFL)",
-      "Enfoque en Business English & Tech",
-      "Club de conversación semanal incluido"
+      "Preparación táctica para IELTS/TOEFL",
+      "Estructuras comunicativas corporativas",
+      "Simulacros de speaking de alta presión"
     ],
-    levels: ["A1 (Básico)", "A2", "B1", "B2 (Avanzado)"],
+    levels: ["A1 (Fundamentos)", "A2", "B1", "B2 (Dominio)"],
     comingSoon: false,
-    paymentUrl: "" // Pegar link aquí
+    paymentUrl: ""
   },
   {
     id: "plan-coreano",
-    name: "Coreano + Cultura",
+    name: "Inmersión Estructural Coreana",
     emoji: "🇰🇷",
-    color: "#ec4899", // Pink
-    badge: "Tendencia K-Pop",
-    summary: "Aprende Hangul y gramática coreana mientras analizas tus K-Dramas y canciones favoritas.",
+    color: "#C6A66B",
+    badge: "Alta Demanda",
+    summary: "Decodificación precisa del sistema Hangul y gramática coreana avanzada, conectada con su ecosistema cultural.",
     features: [
-      "Lectura y escritura Hangul en 4 sesiones",
-      "Protocolo y etiqueta coreana",
-      "Preparación examen oficial TOPIK"
+      "Lectura y escritura acelerada (Hangul)",
+      "Sistema de honoríficos y jerarquía",
+      "Preparación estratégica TOPIK"
     ],
-    levels: ["Nivel 1 (Inicial)", "Nivel 2", "Nivel 3"],
+    levels: ["Nivel 1 (Fundamentos)", "Nivel 2", "Nivel 3"],
     comingSoon: false,
-    paymentUrl: "" // Pegar link aquí
+    paymentUrl: ""
   },
   {
     id: "plan-espanol",
-    name: "Spanish for Expats",
+    name: "Integración Lingüística para Expats",
     emoji: "🇨🇱",
-    color: "#f59e0b", // Amber
-    badge: "Inserción Local",
-    summary: "Practical Spanish for everyday life in Chile. Focused on work, residency paperwork, and local culture.",
+    color: "#C6A66B",
+    badge: "Inserción Estratégica",
+    summary: "Sistemas prácticos para dominar el español en el entorno chileno. Foco corporativo y de inmersión social profunda.",
     features: [
-      "Survival Chilean slang & idioms",
-      "Job interview preparation",
-      "Administrative support (Migración)"
+      "Desmitificación de la dialectología local",
+      "Estructuras para entrevistas de alto nivel",
+      "Negociación y persuasión en español"
     ],
-    levels: ["A1 (Survival)", "A2", "B1 (Fluent)"],
+    levels: ["A1 (Fundamentos)", "A2", "B1 (Dominio)"],
     comingSoon: false,
-    paymentUrl: "" // Pegar link aquí
+    paymentUrl: ""
   }
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   3. INFO EXTRA PARA LA UI (FAQ/VENTAJAS)
+   3. VALOR AGREGADO
    ────────────────────────────────────────────────────────────────────────── */
 export const LANG_FEATURES = [
-  { title: "Clases en Vivo", desc: "Nada de videos grabados. Interactúa con tu profesor en tiempo real.", icon: "🎥" },
-  { title: "Grupos Reducidos", desc: "Máximo 10-12 alumnos por sección para asegurar tu aprendizaje.", icon: "👥" },
-  { title: "Certificado Lael", desc: "Obtén un certificado que avale tus horas de estudio al finalizar el nivel.", icon: "📜" }
+  { title: "Sistemas Dinámicos", desc: "No hay clases pasivas. Interacción constante y simulación de entornos reales.", icon: "🎥" },
+  { title: "Entornos Exclusivos", desc: "Secciones de alta concentración para asegurar tu tiempo de participación.", icon: "👥" },
+  { title: "Certificación Estratégica", desc: "Acreditación de dominio orientada a demostrar tu capacidad en el mercado.", icon: "📜" }
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   4. SYLLABUS PREVIEW (Lo que aprenderás)
+   4. SYLLABUS PREVIEW
    ────────────────────────────────────────────────────────────────────────── */
 export const SYLLABUS_PREVIEW = {
   ingles: [
-    { level: "A1-A2", topics: ["Presentaciones y 'Small Talk'", "Survival English para Viajes", "Pronunciación: TH, R, V vs B"] },
-    { level: "B1-B2", topics: ["Inglés para Negocios (Emails/Meetings)", "Debate y Argumentación", "Phrasal Verbs esenciales"] }
+    { level: "Fundamentos", topics: ["Estructuras base de persuasión", "Tácticas de negociación elemental", "Alineación fonética"] },
+    { level: "Dominio", topics: ["Comunicación corporativa asertiva", "Defensa de argumentos complejos", "Optimización gramatical"] }
   ],
   coreano: [
-    { level: "Nivel 1", topics: ["Hangul: Lectura y Escritura", "Saludos y Etiqueta Coreana", "Estructura de Oración SOV"] },
-    { level: "Nivel 2", topics: ["Partículas Complejas", "Vocabulario de K-Dramas", "Números Sino-Coreanos vs Nativos"] }
+    { level: "Nivel 1", topics: ["Decodificación del sistema Hangul", "Arquitectura de la oración (SOV)", "Protocolo base"] },
+    { level: "Nivel 2", topics: ["Dominio de partículas complejas", "Análisis de estructuras idiomáticas", "Sistemas numéricos duales"] }
   ],
   espanol: [
-    { level: "Survival", topics: ["RUT & Visas: Vocabulary", "Chilean Slang (Weón, Cachái)", "Navigating Santiago Metro"] },
-    { level: "Business", topics: ["Formal vs Informal Register", "Job Interviews in Chile", "Writing Reports"] }
+    { level: "Fundamentos", topics: ["Navegación del sistema burocrático", "Comprensión del registro informal", "Adaptación fonética"] },
+    { level: "Dominio", topics: ["Dominio del registro formal e informal", "Resolución de conflictos laborales", "Redacción estratégica"] }
   ]
 };
 
 /* ──────────────────────────────────────────────────────────────────────────
-   5. COMPARATIVE CHART
+   5. ESTRATEGIA COMPARATIVA
    ────────────────────────────────────────────────────────────────────────── */
 export const COMPARISON_DATA = [
-  { feature: "Clases en Vivo", lael: true, app: false, institute: true },
-  { feature: "Corrección de Pronunciación", lael: "En tiempo real", app: "IA Básica", institute: "Grupal" },
-  { feature: "Enfoque Cultural", lael: true, app: false, institute: "A veces" },
-  { feature: "Comunidad/Club", lael: "Incluido", app: "No", institute: "Pago extra" },
-  { feature: "Precio Mensual", lael: "$17.990", app: "$9.000", institute: "$95.000+" }
+  { feature: "Enfoque del Programa", lael: "Resultados y Dominio", app: "Repetición Mecánica", institute: "Gramática Teórica" },
+  { feature: "Metodología", lael: "Sistemas Estructurales", app: "Algoritmos", institute: "Libros Genéricos" },
+  { feature: "Interacción", lael: "Simulacros Reales", app: "Nula", institute: "Pasiva" },
+  { feature: "Entorno Visual", lael: "Premium", app: "Básico", institute: "Convencional" },
+  { feature: "Inversión Mensual", lael: "Alta Eficiencia", app: "Baja Eficiencia", institute: "Sobrevalorada" }
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   6. TEACHERS (Expertos)
+   6. EXPERTOS (Mentores Estratégicos)
    ────────────────────────────────────────────────────────────────────────── */
 export const TEACHERS_LIST = [
-  { name: "Javiera", origin: "🇺🇸", role: "Head of English", bio: "Especialista en reducción de acento.", img: "👩🏼‍🏫" },
-  { name: "Fernanda", origin: "🇰🇷", role: "Lead Korean Tutor", bio: "Enseña con K-Pop y situaciones de la vida real.", img: "👩🏻‍🏫" },
-  { name: "Diego", origin: "🇨🇱", role: "Spanish Coach", bio: "Lingüista experto en dialectología chilena.", img: "👨🏻‍🏫" }
+  { name: "Equipo Estratégico Inglés", origin: "🇺🇸", role: "Mentores de Alto Impacto", bio: "Especialistas en fonética y comunicación corporativa.", img: "💼" },
+  { name: "Equipo Estructural Coreano", origin: "🇰🇷", role: "Especialistas en Inmersión", bio: "Dominio técnico del idioma y su psicología cultural.", img: "⛩️" },
+  { name: "Equipo Inserción Español", origin: "🇨🇱", role: "Lingüistas Tácticos", bio: "Expertos en dialectología y adaptación social rápida.", img: "🏢" }
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   7. FAQS (PREGUNTAS FRECUENTES)
+   7. FAQS TÁCTICAS
    ────────────────────────────────────────────────────────────────────────── */
 export const IDIOMAS_FAQS = [
-  { q: "¿En cuánto tiempo podré hablar fluido?", a: "Depende de tu dedicación, pero nuestro método está diseñado para que tengas tus primeras conversaciones básicas desde el primer mes. Un nivel completo (ej. A1) toma aprox. 4 a 5 meses." },
-  { q: "¿Las clases quedan grabadas?", a: "¡Sí! Todas las sesiones en vivo se graban y suben a tu aula virtual para que repases cuando quieras." },
-  { q: "¿Entregan algún certificado?", a: "Al finalizar y aprobar cada nivel, recibes un Certificado Digital de Instituto Lael verificable por código QR." },
-  { q: "¿Qué pasa si falto a una clase?", a: "No te preocupes. Puedes ver la grabación y contactar a tu tutor por WhatsApp para resolver dudas puntuales." },
-  { q: "¿Sirve para niños?", a: "Nuestros programas están enfocados en Jóvenes y Adultos (14+ años). Para niños menores recomendamos clases particulares, consúltanos." }
+  { q: "¿Cuál es el tiempo estimado de dominio?", a: "Nuestro sistema prioriza la fluidez funcional rápida. Podrás ejecutar interacciones estratégicas en el primer nivel (3-4 meses), y alcanzar dominio conversacional profundo en ciclos posteriores." },
+  { q: "¿Existe un registro de mi progreso?", a: "Absolutamente. Toda sesión estratégica queda respaldada en nuestra plataforma cinemática para tu revisión y optimización de fallos." },
+  { q: "¿La certificación es válida?", a: "Emitimos una Certificación Institucional verificable que acredita tu dominio de la estructura, perfecta para respaldar competencias laborales." },
+  { q: "¿Cómo es el seguimiento?", a: "No te dejamos a tu suerte. Tienes contacto directo con el equipo de mentores para corregir tu trayectoria fuera de los simulacros en vivo." }
 ];

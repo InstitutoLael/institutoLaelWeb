@@ -1,4 +1,3 @@
-
 import React, { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -16,26 +15,23 @@ const Button = forwardRef(({
 }, ref) => {
   
   // Base styles
-  const baseStyles = "inline-flex items-center justify-center font-black uppercase tracking-widest transition-all rounded-2xl active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed";
+  const baseStyles = "inline-flex items-center justify-center font-medium transition-all duration-300 rounded-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed";
   
   // Variants
   const variants = {
-    primary: "bg-indigo-600 text-white hover:bg-indigo-500 shadow-xl shadow-indigo-600/20",
-    secondary: "bg-white text-slate-950 hover:bg-slate-100 shadow-xl shadow-white/10",
-    outline: "bg-transparent border border-white/10 text-slate-300 hover:bg-white/5 hover:text-white",
-    ghost: "bg-transparent text-slate-400 hover:text-white hover:bg-white/5",
-    danger: "bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white border border-red-500/20",
-    amber: "bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-xl shadow-amber-500/20"
+    primary: "bg-lael-accent text-lael-primary hover:bg-lael-accent/90 hover:shadow-[0_0_20px_rgba(198,166,107,0.3)]",
+    secondary: "bg-transparent border border-white/10 text-lael-light hover:bg-white/5 hover:border-lael-accent/30 hover:text-lael-accent",
+    ghost: "bg-transparent text-lael-muted hover:text-lael-accent relative after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 after:bg-lael-accent hover:after:w-full after:transition-all after:duration-300"
   };
 
   // Sizes
   const sizes = {
-    sm: "text-[10px] py-3 px-5",
-    md: "text-xs py-4 px-8",
-    lg: "text-sm py-5 px-10"
+    sm: "text-sm py-2 px-4",
+    md: "text-base py-3 px-6",
+    lg: "text-lg py-4 px-8"
   };
 
-  const combinedClasses = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
+  const combinedClasses = `${baseStyles} ${variants[variant] || variants.primary} ${sizes[size] || sizes.md} ${className}`;
 
   // Content with optional icon
   const content = (

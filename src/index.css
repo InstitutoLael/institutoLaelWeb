@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -6,51 +6,29 @@
 
 @layer base {
   :root {
-    /* ─── COLOR PALETTE (LAEL RELAUNCH 2026) ─── */
-    --lael-primary:  #0D0D0D;
-    --lael-bg:       #F8F5F0;
-    --lael-accent:   #B85C38;
-    --lael-detail:   #C4973E;
-    --lael-success:  #5C6E4E;
-
-    /* Legacy aliases — kept for compatibility with /draft pages */
-    --lael-blue-deep:  #050505;
-    --lael-blue-indigo:#1e1b4b;
-    --lael-gold:       #C4973E;
-    --lael-gold-alt:   #B85C38;
-    --lael-slate:      #94a3b8;
-    --lael-white:      #F8F5F0;
-
-    /* Semantic Variables (Light Mode Default) */
-    --bg-primary:    #F8F5F0;
-    --bg-secondary:  #f0ece6;
-    --text-primary:  #0D0D0D;
-    --text-secondary:#4a4440;
-    --border-color:  #ddd8d2;
+    /* ─── COLOR PALETTE (CINEMATIC LAEL 2026) ─── */
+    --bg-primary:    #0B0B0B;
+    --bg-secondary:  #121212;
+    --bg-elevated:   #1A1A1A;
+    --text-primary:  #F5F5F5;
+    --text-secondary:#A0A0A0;
+    --text-muted:    #7A7A7A;
+    --accent-gold:   #C6A66B;
+    --accent-gold-soft: #E0C48F;
+    --border-color:  rgba(255, 255, 255, 0.05);
 
     /* ─── TYPOGRAPHY SYSTEM ─── */
     --font-title: "Playfair Display", serif;
-    --font-body:  "DM Sans", sans-serif;
-    --font-accent:"DM Sans", sans-serif;
+    --font-body:  "Inter", sans-serif;
   }
 
-  .dark {
-    /* Coming Soon mode is always dark */
-    --bg-primary:    #0D0D0D;
-    --bg-secondary:  #161412;
-    --text-primary:  #F8F5F0;
-    --text-secondary:#a09890;
-    --border-color:  #2a2520;
-  }
-
+  /* Force dark mode by default everywhere */
   html {
     scroll-behavior: smooth;
     font-family: var(--font-body);
-    background-color: #0D0D0D;
+    background-color: var(--bg-primary);
     color: var(--text-primary);
-    transition:
-      background-color 0.3s ease,
-      color 0.3s ease;
+    color-scheme: dark;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -59,29 +37,38 @@
 
   body {
     font-family: var(--font-body);
-    background-color: #0D0D0D;
-    color: #F8F5F0;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     margin: 0;
     -webkit-tap-highlight-color: transparent;
   }
 
   button:active, a:active {
-    transform: scale(0.97);
-    transition: transform 0.1s ease;
+    transform: scale(0.98);
+    transition: transform 0.1s ease-out;
   }
 
   ::selection {
-    background: rgba(196, 151, 62, 0.3);
-    color: #F8F5F0;
+    background: rgba(198, 166, 107, 0.3); /* Gold glow selection */
+    color: #F5F5F5;
   }
 }
 
 @layer utilities {
   .glass {
     @apply backdrop-blur-xl;
-    background: rgba(248, 245, 240, 0.04);
-    border: 1px solid rgba(248, 245, 240, 0.08);
+    background: rgba(11, 11, 11, 0.4);
+    border: 1px solid var(--border-color);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
+  }
+  
+  .glow-border {
+    border: 1px solid rgba(198, 166, 107, 0.15);
+    box-shadow: inset 0 0 20px rgba(198, 166, 107, 0.05);
+  }
+  
+  .cinematic-shadow {
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(198, 166, 107, 0.05);
   }
 }

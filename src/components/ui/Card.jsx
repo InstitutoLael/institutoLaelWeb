@@ -1,10 +1,13 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 
 export default function Card({ children, className = '', hoverEffect = false, ...props }) {
-  const baseStyles = "bg-white/[0.02] border border-white/5 rounded-[2rem] backdrop-blur-xl relative overflow-hidden";
-  const hoverStyles = hoverEffect ? "hover:bg-white/[0.04] hover:border-white/10 hover:-translate-y-1 transition-all duration-300" : "";
+  const baseStyles = "bg-lael-secondary rounded-2xl relative overflow-hidden transition-all duration-500 border border-transparent";
+  
+  // Cinematic Hover: Glow suave, elevación, borde iluminado
+  const hoverStyles = hoverEffect 
+    ? "hover:bg-lael-elevated hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5),0_0_20px_rgba(198,166,107,0.05)] hover:border-lael-accent/20" 
+    : "";
 
   return (
     <motion.div 
@@ -12,10 +15,9 @@ export default function Card({ children, className = '', hoverEffect = false, ..
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
       {...props}
     >
-      {/* Subtle Noise/Gradient can go here if needed in future */}
       {children}
     </motion.div>
   );

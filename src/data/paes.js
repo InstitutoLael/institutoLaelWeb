@@ -1,12 +1,12 @@
 // src/data/paes.js
-// === Preuniversitario Lael 2026: Estrategia de Volumen y Resultados ===
+// === Sistema de Alto Rendimiento PAES Lael ===
 
 /* ──────────────────────────────────────────────────────────────────────────
    1. CONFIGURACIÓN FINANCIERA Y BASE
    ────────────────────────────────────────────────────────────────────────── */
 
 export const ENROLLMENT_FEE = 10990;
-export const ACADEMIC_MONTHS = 8; // Abril a Noviembre (Intensivo)
+export const ACADEMIC_MONTHS = 8;
 
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
@@ -16,13 +16,9 @@ export const clp = (n) =>
   });
 
 /* ──────────────────────────────────────────────────────────────────────────
-   2. EL CEREBRO: CALCULADORA DE PRECIOS
+   2. EL CEREBRO: CALCULADORA DE INVERSIÓN
    ────────────────────────────────────────────────────────────────────────── */
 
-/**
- * Calcula el total mensual basado en la cantidad de ramos.
- * M1 y Lenguaje son los pilares, los demás son complementos estratégicos.
- */
 export function computePaesPrice(selectedIds = []) {
   const count = selectedIds.length;
 
@@ -30,7 +26,7 @@ export function computePaesPrice(selectedIds = []) {
     1: 14990,
     2: 24990,
     3: 34990,
-    FULL: 44990 // 4 o más ramos
+    FULL: 44990
   };
 
   let totalMonthly = 0;
@@ -39,21 +35,21 @@ export function computePaesPrice(selectedIds = []) {
 
   if (count === 0) {
     totalMonthly = 0;
-    label = "Selecciona tus ramos";
+    label = "Configura tu Sistema";
   } else if (count === 1) {
     totalMonthly = TIER_PRICES[1];
-    label = "Plan Monoramo";
+    label = "Módulo de Especialización";
   } else if (count === 2) {
     totalMonthly = TIER_PRICES[2];
-    label = "Plan Dúo Dinámico";
+    label = "Estrategia Dual";
     saving = (TIER_PRICES[1] * 2) - TIER_PRICES[2];
   } else if (count === 3) {
     totalMonthly = TIER_PRICES[3];
-    label = "Plan Trío Fundamental";
+    label = "Estrategia de Alto Impacto";
     saving = (TIER_PRICES[1] * 3) - TIER_PRICES[3];
   } else {
     totalMonthly = TIER_PRICES.FULL;
-    label = "🏆 Plan Full Intensivo (Tarifa Plana)";
+    label = "🏆 Sistema Integral de Rendimiento";
     saving = (TIER_PRICES[1] * count) - TIER_PRICES.FULL;
   }
 
@@ -68,114 +64,113 @@ export function computePaesPrice(selectedIds = []) {
   };
 }
 
-// Adaptadores para la UI
 export const priceForSubjects = (ids) => computePaesPrice(ids).totalMonthly;
 export const priceForCount = (count) => computePaesPrice(Array(count).fill(0)).totalMonthly;
 
 /* ──────────────────────────────────────────────────────────────────────────
-   3. CATÁLOGO DE ASIGNATURAS (DATA DETALLADA)
+   3. MÓDULOS DE ENTRENAMIENTO (DATA DETALLADA)
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_SUBJECTS = [
   {
     id: "m1",
-    name: "Matemática M1",
-    category: "Obligatorio",
+    name: "Dominio Estratégico Matemática M1",
+    category: "Pilar Fundamental",
     icon: "📐",
-    color: "#3b82f6",
-    desc: "Base fundamental para todas las carreras. Números, Álgebra, Geometría y Datos.",
+    color: "#C6A66B",
+    desc: "Desarrollo de razonamiento lógico y tácticas para maximizar puntaje en el menor tiempo posible.",
     hoursPerWeek: 3
   },
   {
     id: "len",
-    name: "Comprensión Lectora",
-    category: "Obligatorio",
+    name: "Análisis Crítico y Comprensión Lectora",
+    category: "Pilar Fundamental",
     icon: "📚",
-    color: "#f97316",
-    desc: "Estrategias críticas para textos literarios y no literarios. Vocabulario en contexto.",
+    color: "#C6A66B",
+    desc: "Sistemas de decodificación rápida de textos y extracción de inferencias precisas.",
     hoursPerWeek: 3
   },
   {
     id: "m2",
-    name: "Matemática M2",
-    category: "Electivo Especializado",
+    name: "Matemática Avanzada M2",
+    category: "Especialización Científica",
     icon: "🚀",
-    color: "#8b5cf6",
-    desc: "Contenido avanzado para carreras STEM (Ingenierías, Ciencias, salud técnica).",
+    color: "#C6A66B",
+    desc: "Ingeniería inversa de problemas complejos para carreras STEM de alta exigencia.",
     hoursPerWeek: 2
   },
   {
     id: "his",
-    name: "Historia y Cs. Sociales",
-    category: "Electivo",
+    name: "Perspectiva Histórica y Social",
+    category: "Módulo Estratégico",
     icon: "🏛️",
-    color: "#a855f7",
-    desc: "Historia de Chile y el Mundo, Formación Ciudadana y Economía.",
+    color: "#C6A66B",
+    desc: "Estructuración temporal y análisis de procesos para dominar la evaluación humanista.",
     hoursPerWeek: 2
   },
   {
     id: "bio",
-    name: "Ciencias - Biología",
-    category: "Ciencias",
+    name: "Ciencias Biológicas",
+    category: "Módulo Científico",
     icon: "🧬",
-    color: "#10b981",
-    desc: "Célula, Herencia, Ecosistemas y Procesos Biológicos Humanos.",
+    color: "#C6A66B",
+    desc: "Comprensión sistémica del mundo natural enfocado en el modelo PAES.",
     hoursPerWeek: 2
   },
   {
     id: "fis",
-    name: "Ciencias - Física",
-    category: "Ciencias",
+    name: "Física Estructural",
+    category: "Módulo Científico",
     icon: "⚡",
-    color: "#ef4444",
-    desc: "Mecánica, Energía, Ondas, Electricidad y Magnetismo.",
+    color: "#C6A66B",
+    desc: "Mecánica y energía aplicada a la resolución de problemas lógicos.",
     hoursPerWeek: 2
   },
   {
     id: "qui",
-    name: "Ciencias - Química",
-    category: "Ciencias",
+    name: "Química Fundamental",
+    category: "Módulo Científico",
     icon: "🧪",
-    color: "#06b6d4",
-    desc: "Estructura Atómica, Química Orgánica y Estequiometría.",
+    color: "#C6A66B",
+    desc: "Dominio de la materia y sus interacciones bajo presión de tiempo.",
     hoursPerWeek: 2
   },
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   4. COMBOS PRE-ARMADOS (VENTA RÁPIDA)
+   4. ESTRATEGIAS DE RENDIMIENTO
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_COMBOS = [
   {
     id: "combo-humanista",
-    title: "Pack Humanista",
-    subtitle: "Lenguaje + Historia + Filosofía",
+    title: "Estrategia Humanista Premium",
+    subtitle: "Comprensión Lectora + Perspectiva Histórica + M1",
     subjects: ["len", "his", "m1"], 
     price: 34990,
     color: "amber",
-    tag: "Oferta Lanzamiento",
-    features: ["Lenguaje + Historia", "Módulo Filosofía Incan", "Ensayo Semanal", "Clases en Vivo"],
-    paymentUrl: "" // Pegar link de Mercado Pago aquí
+    tag: "Alto Rendimiento",
+    features: ["Acompañamiento Táctico", "Módulo de Filosofía Incan", "Simulacros de Presión", "Feedback en Tiempo Real"],
+    paymentUrl: "" 
   },
   {
     id: "combo-cientifico",
-    title: "Pack Científico",
-    subtitle: "Matemáticas + Ciencias + Biología/Física",
+    title: "Estrategia STEM Avanzada",
+    subtitle: "M1 + M2 + Ciencias Específicas",
     subjects: ["m1", "m2", "bio", "fis"], 
     price: 34990,
     color: "teal",
-    tag: "Más Popular",
-    features: ["M1 + M2 (Matemáticas)", "Elige Biología o Física", "Ciencias Común", "Ensayo Semanal"],
-    paymentUrl: "" // Pegar link de Mercado Pago aquí
+    tag: "Selectivo",
+    features: ["Enfoque 100% Lógico", "Resolución de Alta Complejidad", "Preparación M2 Intensiva", "Simulacros de Presión"],
+    paymentUrl: "" 
   },
   {
     id: "combo-full",
-    title: "Pack 4 Medios (Full)",
-    subtitle: "Todas las asignaturas para asegurar",
+    title: "Sistema Integral Lael",
+    subtitle: "Dominio absoluto para asegurar tu objetivo",
     subjects: ["len", "m1", "m2", "his", "bio"],
     price: 44990,
     color: "indigo",
-    features: ["Acceso a TODO", "Orientación Vocacional", "Taller Manejo Ansiedad", "Garantía de Puntaje"],
-    paymentUrl: "" // Pegar link de Mercado Pago aquí
+    features: ["Acceso a Todo el Sistema", "Orientación Estratégica Vocacional", "Manejo Táctico de Ansiedad", "Seguimiento Diario"],
+    paymentUrl: "" 
   }
 ];
 
@@ -183,48 +178,45 @@ export const PAES_COMBOS = [
    5. VALOR AGREGADO (LO QUE INCLUYE SIEMPRE)
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_FEATURES = [
-  { title: "Plataforma 24/7", desc: "Clases grabadas y guías descargables en cualquier momento.", icon: "💻" },
-  { title: "Ensayos Ilimitados", desc: "Simulacros con tiempo real y corrección automática.", icon: "📝" },
-  { title: "Tutorías Personalizadas", desc: "Resolución de dudas vía WhatsApp con profesores reales.", icon: "📱" },
-  { title: "Orientación Vocacional", desc: "Charlas sobre becas, gratuidad y postulación universitaria.", icon: "🎯" }
+  { title: "Entorno de Alto Rendimiento", desc: "Infraestructura digital premium y contenido cinemático disponible 24/7.", icon: "💻" },
+  { title: "Simulacros de Presión", desc: "Entrenamientos bajo condiciones reales para destruir la ansiedad en la prueba.", icon: "📝" },
+  { title: "Mentores Tácticos", desc: "No son profesores, son expertos en estrategia que corrigen tu trayectoria en tiempo real.", icon: "📱" },
+  { title: "Estrategia de Ingreso", desc: "Análisis de ponderaciones y rutas tácticas para asegurar tu carrera objetivo.", icon: "🎯" }
 ];
 
 export const PAES_FAQS = [
   {
-    q: "¿Cuándo comienzan las clases?",
-    a: "Nuestro ciclo principal inicia la primera semana de Abril, pero tienes acceso a material nivelatorio apenas te inscribes.",
+    q: "¿Cuándo inicia el entrenamiento?",
+    a: "El sistema inicia la primera semana de Abril, pero tu diagnóstico de precisión y nivelación comienzan en el momento en que postulas.",
   },
   {
-    q: "¿Las clases son en vivo?",
-    a: "Sí, todas las clases son vía Zoom en vivo para que preguntes lo que quieras. Si no puedes asistir, quedan grabadas.",
-  },
-  {
+    q: "¿Las sesiones son grabadas?",
+    a: "Las sesiones son dinámicas y en vivo, enfocadas en la resolución de problemas. Toda sesión estratégica queda respaldada en el sistema.",
   }
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
-   6. DATOS DE CONTENIDO (SYLLABUS & COMPARATIVA)
+   6. DATOS DE CONTENIDO
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_SYLLABUS = {
   m1: [
-    "Números: Racionales, Potencias y Raíces.",
-    "Álgebra: Ecuaciones, Inecuaciones y Sistemas.",
-    "Geometría: Figuras 2D, 3D y Vectores.",
-    "Datos y Azar: Probabilidades y Estadística Descriptiva."
+    "Patrones Numéricos y Operatoria Estratégica.",
+    "Modelamiento Algebraico de Problemas Complejos.",
+    "Visualización Espacial y Geometría.",
+    "Análisis de Datos y Toma de Decisiones."
   ],
   len: [
-    "Textos Literarios: Narrativa y Dramática.",
-    "Textos No Literarios: Medios Masivos y Argumentación.",
-    "Vocabulario Contextual y Plan de Redacción.",
-    "Lectura Crítica e Inferencial."
+    "Decodificación de Textos Literarios.",
+    "Análisis Argumentativo y Medios Masivos.",
+    "Inferencia Avanzada y Contexto.",
+    "Estrategias de Descarte Rápido."
   ]
 };
 
 export const PAES_COMPARISON = [
-  { feature: "Clases en Vivo", lael: true, other: true, tutor: true },
-  { feature: "Grabaciones 4K", lael: true, other: false, tutor: false },
-  { feature: "Ensayo Semanal", lael: true, other: "Mensual", tutor: "No incluído" },
-  { feature: "Corrección con IA", lael: true, other: false, tutor: false },
-  { feature: "Orientación Vocacional", lael: true, other: false, tutor: false },
-  { feature: "Precio Mensual Promedio", lael: "$27.990", other: "$85.000", tutor: "$160.000" },
+  { feature: "Enfoque Principal", lael: "Sistema Estratégico de Rendimiento", other: "Clases Tradicionales", tutor: "Resolución de Dudas" },
+  { feature: "Ambiente Visual", lael: "Premium & Cinemático", other: "Escolar / Básico", tutor: "N/A" },
+  { feature: "Simulacros de Presión", lael: "Semanal", other: "Mensual", tutor: "No incluído" },
+  { feature: "Mentores Tácticos", lael: "Feedback Inmediato", other: "Respuestas lentas", tutor: "Depende de la tarifa" },
+  { feature: "Orientación Vocacional", lael: "Estrategia de Ponderación", other: "Charlas Genéricas", tutor: "No incluído" },
 ];

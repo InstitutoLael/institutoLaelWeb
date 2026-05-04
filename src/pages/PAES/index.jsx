@@ -19,43 +19,48 @@ export default function PAES() {
 
   return (
     <main>
-      {/* SKELETON RENDER */}
+      {/* Step indicator — sticky 0.5px precision bar */}
       <ProgressBar step={step} />
-      
+
+      {/* ── Step 1 ── Cinematic hero */}
       <HeroPAES />
-      
-      <AccessGate 
+
+      {/* ── Step 1 ── Access gate — closes/fades when step > 1 */}
+      <AccessGate
         step={step}
         gateData={gateData}
         setGateData={setGateData}
         setStep={setStep}
       />
-      
+
+      {/* ── Step 2 ── System reveal — header + module selector
+           Enters as a unit (blur → clear, y → 0) then staggered children */}
       {step >= 2 && (
         <SystemReveal>
-          <ModuleSelector 
+          <ModuleSelector
             selectedModules={selectedModules}
             setSelectedModules={setSelectedModules}
           />
-          
-          <AnimatePresence mode="wait">
-            {selectedModules.length > 0 && (
-              <PricingBlock 
-                gateData={gateData}
-                selectedModules={selectedModules}
-                priceData={priceData}
-                isConnecting={isConnecting}
-                setIsConnecting={setIsConnecting}
-                setStep={setStep}
-              />
-            )}
-          </AnimatePresence>
         </SystemReveal>
       )}
 
-      {step >= 3 && (
-        <EliteLayer />
-      )}
+      {/* ── Step 2 ── Pricing block — rendered as SIBLING, not child of SystemReveal
+           This guarantees it appears AFTER modules with deliberate weight */}
+      <AnimatePresence mode="wait">
+        {step >= 2 && selectedModules.length > 0 && (
+          <PricingBlock
+            gateData={gateData}
+            selectedModules={selectedModules}
+            priceData={priceData}
+            isConnecting={isConnecting}
+            setIsConnecting={setIsConnecting}
+            setStep={setStep}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* ── Step 3 ── Elite layer */}
+      {step >= 3 && <EliteLayer />}
     </main>
   );
 }

@@ -68,7 +68,7 @@ export default function AccessGate({ step, gateData, setGateData, setStep }) {
       transition={{ duration: 1.1, ease: ease2 }}
       style={{ pointerEvents: isLocked ? 'none' : 'auto' }}
     >
-      <div className="w-full max-w-xl bg-[#050505]/60 backdrop-blur-2xl rounded-2xl p-8 lg:p-16 border border-white/[0.01] shadow-[0_0_80px_rgba(0,0,0,0.6)]">
+      <div className="w-full max-w-xl bg-lael-secondary border border-lael-bd rounded-2xl p-8 lg:p-16 cinematic-shadow">
 
         <div className="text-center mb-12">
           <h2 className="font-display text-2xl lg:text-3xl text-lael-light mb-2">Fase de Ingreso</h2>
@@ -77,27 +77,27 @@ export default function AccessGate({ step, gateData, setGateData, setStep }) {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-[10px] text-lael-muted/50 tracking-[0.2em] uppercase ml-4">Nombre Completo</label>
+            <label className="text-[10px] text-lael-muted/60 tracking-[0.2em] uppercase ml-4">Nombre Completo</label>
             <input
               type="text"
               required
               value={gateData.name}
               onChange={e => setGateData({ ...gateData, name: e.target.value })}
               disabled={isLocked}
-              className="w-full bg-transparent border-b border-white/10 px-4 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-all duration-500 placeholder:text-white/10"
+              className="w-full bg-transparent border-b border-lael-bd px-4 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-all duration-500 placeholder:text-lael-muted/30"
               placeholder="Ingresa tu nombre..."
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] text-lael-muted/50 tracking-[0.2em] uppercase ml-4">WhatsApp</label>
+            <label className="text-[10px] text-lael-muted/60 tracking-[0.2em] uppercase ml-4">WhatsApp</label>
             <input
               type="tel"
               required
               value={gateData.phone}
               onChange={e => { setGateData({ ...gateData, phone: e.target.value }); setPhoneError(''); }}
               disabled={isLocked}
-              className={`w-full bg-transparent border-b px-4 py-3 text-lael-light focus:outline-none transition-all duration-500 placeholder:text-white/10 ${phoneError ? 'border-red-500/60 focus:border-red-500' : 'border-white/10 focus:border-lael-accent'}`}
+              className={`w-full bg-transparent border-b px-4 py-3 text-lael-light focus:outline-none transition-all duration-500 placeholder:text-lael-muted/30 ${phoneError ? 'border-red-500/60 focus:border-red-500' : 'border-lael-bd focus:border-lael-accent'}`}
               placeholder="+56 9..."
             />
             <AnimatePresence>
@@ -115,13 +115,13 @@ export default function AccessGate({ step, gateData, setGateData, setStep }) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-[10px] text-lael-muted/50 tracking-[0.2em] uppercase ml-4">Puntaje Objetivo</label>
+            <label className="text-[10px] text-lael-muted/60 tracking-[0.2em] uppercase ml-4">Puntaje Objetivo</label>
             <input
               type="text"
               value={gateData.score}
               onChange={e => setGateData({ ...gateData, score: e.target.value })}
               disabled={isLocked}
-              className="w-full bg-transparent border-b border-white/10 px-4 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-all duration-500 placeholder:text-white/10"
+              className="w-full bg-transparent border-b border-lael-bd px-4 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-all duration-500 placeholder:text-lael-muted/30"
               placeholder="Ej: 850 (Opcional)"
             />
           </div>
@@ -130,7 +130,7 @@ export default function AccessGate({ step, gateData, setGateData, setStep }) {
             <button
               type="submit"
               disabled={isLocked || isPending}
-              className="w-full bg-lael-accent/10 border border-lael-accent/30 text-lael-accent py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-lael-primary hover:shadow-[0_0_30px_rgba(198,166,107,0.3)] transition-all duration-500 relative overflow-hidden h-[54px]"
+              className="w-full bg-lael-accent text-white py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust hover:shadow-[0_4px_20px_rgba(196,151,62,0.3)] transition-all duration-500 relative overflow-hidden h-[54px]"
             >
               <AnimatePresence mode="wait">
                 {isLocked ? (
@@ -139,7 +139,7 @@ export default function AccessGate({ step, gateData, setGateData, setStep }) {
                   </motion.div>
                 ) : isPending ? (
                   <motion.div key="pending" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.4, ease: ease2 }} className="absolute inset-0 flex items-center justify-center gap-3">
-                    <span className="w-3 h-3 border border-lael-accent border-t-transparent rounded-full animate-spin" />
+                    <span className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin" />
                     Validando sistema...
                   </motion.div>
                 ) : (

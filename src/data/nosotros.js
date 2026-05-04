@@ -1,8 +1,8 @@
 export const MANIFESTO = {
-    tagline: "Más que un instituto.",
-    title: "Educación sin barreras para un mundo conectado.",
-    description: "Nacimos con una convicción: la calidad educativa no puede ser un privilegio. Combinamos tecnología de punta con calidez humana para cerrar las brechas que separan a las personas de sus sueños.",
-    videoUrl: null // Por ahora sin video, usaremos gradientes
+    tagline: "Lael no es una empresa.",
+    title: "Paró cuando fue necesario. Y cuando vuelva, volverá más fuerte.",
+    description: "Lael no es solo un preuniversitario. Somos el primer ecosistema educativo de Chile diseñado para la generación que el sistema decidió ignorar. Durante el año 2026, estamos en un proceso de reestructuración para volver con una propuesta académica sin precedentes.",
+    videoUrl: null 
 };
 
 export const THE_NAME = {
@@ -13,10 +13,10 @@ export const THE_NAME = {
 };
 
 export const STATS = [
-    { id: 1, value: "+8", label: "Años de Experiencia" },
-    { id: 2, value: "+2.500", label: "Alumnos Egresados" },
-    { id: 3, value: "100%", label: "Online y en Vivo" },
-    { id: 4, value: "+15k", label: "Horas de Clases" },
+    { id: 1, value: '+600', label: 'Alumnos en el Peak' },
+    { id: 2, value: '100%', label: 'Online y en Vivo' },
+    { id: 3, value: '$0', label: 'La PAES siempre gratis' },
+    { id: 4, value: '3', label: 'Idiomas Disponibles' },
 ];
 
 export const VALUES = [
@@ -29,7 +29,7 @@ export const VALUES = [
     { 
         id: "inclusion",
         title: "Inclusión Radical", 
-        desc: "Desde LSCh hasta la Nivelación de Estudios. Aquí celebramos la diversidad en cada aula.",
+        desc: "Desde LSCh hasta la preparación PAES gratuita. Aquí celebramos la diversidad y el propósito de cada estudiante.",
         icon: "🤝"
     },
     { 

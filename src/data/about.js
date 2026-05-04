@@ -7,9 +7,9 @@ import { BsStars } from "react-icons/bs";
 
 export const ABOUT_DATA = {
     hero: {
-        title: "Educar es Trascender",
-        subtitle: "Nacimos en 2020 con un propósito claro: desafiar el estándar educativo uniendo excelencia académica y principios eternos.",
-        badge: "Since 2020"
+        title: "Nacimos para los que el sistema ignoró",
+        subtitle: "En 2021 comenzamos con un computador y convicción. Hoy somos el ecosistema educativo online que Chile necesitaba.",
+        badge: "Since 2021"
     },
     origin: {
         title: "¿Por qué LAEL?",
@@ -50,9 +50,9 @@ export const ABOUT_DATA = {
         }
     ],
     timeline: [
-        { year: "2020", title: "El Inicio", desc: "Clases particulares en una habitación pequeña." },
-        { year: "2022", title: "Expansión", desc: "Nace la plataforma online y primeros cursos grupales." },
-        { year: "2024", title: "Consolidación", desc: "+500 alumnos y apertura de Escuela de Idiomas." },
-        { year: "2026", title: "Futuro", desc: "Nueva sede digital y alianzas internacionales." }
+        { year: "2021", title: "El Inicio", desc: "Nace como preuniversitario PAES 100% gratuito. Diego lo construye desde cero." },
+        { year: "2022", title: "Peak", desc: "600 alumnos simultáneos. Expansión a idiomas: LSCh, Inglés, Coreano." },
+        { year: "2023-25", title: "Inclusión", desc: "Fernanda Gaete se suma como profesora de LSCh y cultura sorda." },
+        { year: "2026", title: "Relanzamiento", desc: "Estructura más sólida y enfoque en resultados estratégicos." }
     ]
 };

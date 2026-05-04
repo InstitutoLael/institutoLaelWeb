@@ -32,12 +32,12 @@ export const SEO = {
 
 export const CONTACT = {
   address: {
-    street: "Manutara 3424",
-    locality: "San Joaquín",
-    region: "Región Metropolitana",
+    street: "Santiago",
+    locality: "Chile",
+    region: "Metropolitana",
     country: "Chile",
-    postalCode: "8900000",
-    mapLink: "https://maps.app.goo.gl/tudireccion...", // Opcional: Link a Google Maps
+    postalCode: "8000000",
+    mapLink: null,
   },
   whatsapp: {
     display: "+56 9 6462 6568",

@@ -18,8 +18,8 @@ export const CONTACT_INFO = {
         note: "Domingos y Festivos: Cerrado"
     },
     location: {
-        title: "Sede Administrativa",
-        address: "San Joaquín, Región Metropolitana",
+        title: "Ubicación",
+        address: "Santiago, Chile",
         note: "Atención 100% Online • Sin atención de público presencial" // IMPORTANTE destacar esto
     }
 };

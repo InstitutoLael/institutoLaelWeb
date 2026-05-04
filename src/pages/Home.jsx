@@ -204,7 +204,7 @@ export default function Home() {
         </motion.p>
         <div className="flex gap-16 animate-marquee whitespace-nowrap items-center">
           {[...partners, ...partners].map((src, i) => (
-            <img key={i} src={src} alt="partner" className="h-10 lg:h-12 object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 flex-shrink-0 mix-blend-multiply grayscale hover:grayscale-0" />
+            <img key={i} src={src} alt="partner" loading="lazy" className="h-10 lg:h-12 object-contain opacity-60 hover:opacity-100 transition-opacity duration-500 flex-shrink-0 mix-blend-multiply grayscale hover:grayscale-0" />
           ))}
         </div>
       </section>

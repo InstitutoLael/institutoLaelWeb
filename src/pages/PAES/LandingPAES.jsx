@@ -54,11 +54,11 @@ export default function LandingPAES({ onStartDiagnosis }) {
           Iniciar diagnóstico
         </motion.button>
 
-        <motion.div {...fadeUp(0.7)} className="flex gap-8 mt-12 justify-center">
+        <motion.div {...fadeUp(0.7)} className="flex gap-4 md:gap-8 mt-12 justify-center">
           {['Diagnóstico', 'Estrategia', 'Activación'].map((item, i) => (
             <React.Fragment key={item}>
-              <span className="text-[10px] tracking-[0.2em] text-lael-muted/50 uppercase">{item}</span>
-              {i < 2 && <span className="text-lael-muted/20">·</span>}
+              <span className="text-[11px] md:text-sm tracking-[0.2em] text-lael-accent font-bold uppercase">{item}</span>
+              {i < 2 && <span className="text-lael-accent/40">·</span>}
             </React.Fragment>
           ))}
         </motion.div>

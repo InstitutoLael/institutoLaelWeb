@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import EmpresasForm from './EmpresasForm';
@@ -43,7 +44,12 @@ export default function Empresas() {
   };
 
   return (
-    <main className="bg-lael-primary min-h-screen">
+    <>
+      <Helmet>
+        <title>Capacitación para Empresas | Instituto Lael Corporativo</title>
+        <meta name="description" content="Sistemas de rendimiento adaptados a tu organización. PAES Institucional, Idiomas Corporativos y LSCh para cumplimiento de la Ley 21.015." />
+      </Helmet>
+      <main className="bg-lael-primary min-h-screen">
 
       {/* HERO */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
@@ -100,5 +106,6 @@ export default function Empresas() {
         <EmpresasForm />
       </section>
     </main>
+    </>
   );
 }

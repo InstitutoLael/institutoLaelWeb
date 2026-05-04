@@ -61,21 +61,21 @@ Quiero recibir orientación para comenzar.`;
       transition={{ duration: 1.1, ease, delay: 0.3 }}
       className="w-full flex justify-center px-6 mt-24 pb-32 lg:pb-48"
     >
-      <div className="w-full max-w-3xl bg-[#0B0B0B] border border-lael-accent/20 rounded-3xl p-12 lg:p-16 text-center relative overflow-hidden shadow-[0_0_80px_rgba(198,166,107,0.05)]">
+      <div className="w-full max-w-3xl bg-lael-secondary border border-lael-bd rounded-3xl p-12 lg:p-16 text-center relative overflow-hidden cinematic-shadow">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(ellipse_at_center,_rgba(198,166,107,0.07)_0%,_transparent_70%)] pointer-events-none" />
 
         <div className="relative z-10">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8">Plan seleccionado</p>
 
-          <p className="text-lael-muted/40 text-[11px] tracking-[0.15em] uppercase mb-4">{planLabel}</p>
+          <p className="text-lael-muted text-[11px] tracking-[0.15em] uppercase mb-4">{planLabel}</p>
 
-          <p className="text-lael-muted/40 text-[10px] tracking-[0.2em] uppercase mb-3">Inversión mensual</p>
+          <p className="text-lael-muted/60 text-[10px] tracking-[0.2em] uppercase mb-3">Inversión mensual</p>
           <p className="font-display text-6xl lg:text-8xl text-lael-light tracking-[-0.03em] font-bold mb-6">
             {clp(priceData.price)}
           </p>
 
           {priceData.enrollment > 0 ? (
-            <p className="text-lael-muted/30 text-[10px] tracking-[0.1em] uppercase mb-10">
+            <p className="text-lael-muted/60 text-[10px] tracking-[0.1em] uppercase mb-10">
               + {clp(priceData.enrollment)} matrícula anual · Primer mes {clp(priceData.price + priceData.enrollment)}
             </p>
           ) : (
@@ -103,7 +103,7 @@ Quiero recibir orientación para comenzar.`;
             </AnimatePresence>
           </button>
 
-          <p className="mt-8 text-[10px] text-lael-muted/30 tracking-[0.1em] uppercase">
+          <p className="mt-8 text-[10px] text-lael-muted/60 tracking-[0.1em] uppercase">
             Sin permanencia mínima · Cancela cuando quieras
           </p>
         </div>

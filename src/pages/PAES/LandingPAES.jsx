@@ -1,0 +1,165 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { PAES_FEATURES } from '../../data/paes';
+
+const ease = [0.16, 1, 0.3, 1];
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 40 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-80px' },
+  transition: { duration: 1.1, delay, ease },
+});
+
+// Comparison row data
+const COMPARE = [
+  { feature: 'Enfoque', lael: 'Estrategia de rendimiento', other: 'Memorización temática' },
+  { feature: 'Metodología', lael: 'Diagnóstico + Plan táctico', other: 'Clases masivas genéricas' },
+  { feature: 'Seguimiento', lael: 'Mentor 1:1 en tiempo real', other: 'Respuestas lentas o nulas' },
+  { feature: 'Simulacros', lael: 'Semanal bajo presión real', other: 'Esporádicos o sin feedback' },
+];
+
+export default function LandingPAES({ onStartDiagnosis }) {
+  return (
+    <div className="w-full bg-[#0B0B0B]">
+
+      {/* ── HERO NARRATIVO ────────────────────────────────────────────── */}
+      <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] max-w-[600px] max-h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
+
+        <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">
+          Instituto Lael · Sistema de Rendimiento PAES
+        </motion.p>
+
+        <motion.h1
+          {...fadeUp(0.15)}
+          className="font-display text-5xl lg:text-7xl xl:text-8xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl"
+        >
+          No es un preuniversitario.<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-lael-light via-lael-accent to-lael-light/50">
+            Es un sistema de rendimiento.
+          </span>
+        </motion.h1>
+
+        <motion.p {...fadeUp(0.35)} className="mt-10 text-lael-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed">
+          Aquí no estudias más. Entrenas mejor. Cada sesión tiene un objetivo táctico, medible y con feedback inmediato.
+        </motion.p>
+
+        <motion.button
+          {...fadeUp(0.55)}
+          onClick={onStartDiagnosis}
+          className="mt-14 bg-lael-accent text-lael-primary px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:scale-[1.02] active:scale-95 transition-all duration-500 shadow-[0_0_30px_rgba(198,166,107,0.25)] hover:shadow-[0_0_60px_rgba(198,166,107,0.4)]"
+        >
+          Iniciar diagnóstico
+        </motion.button>
+
+        <motion.div {...fadeUp(0.7)} className="flex gap-8 mt-12 justify-center">
+          {['Diagnóstico', 'Estrategia', 'Activación'].map((item, i) => (
+            <React.Fragment key={item}>
+              <span className="text-[10px] tracking-[0.2em] text-lael-muted/50 uppercase">{item}</span>
+              {i < 2 && <span className="text-lael-muted/20">·</span>}
+            </React.Fragment>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* ── PROBLEMA ──────────────────────────────────────────────────── */}
+      <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center">
+        <div className="w-full max-w-4xl">
+          <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">
+            El problema real
+          </motion.p>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-16 leading-tight">
+            Estudiar más<br />no significa mejorar.
+          </motion.h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { label: 'Horas sin estrategia', desc: 'Los estudiantes promedio dedican cientos de horas sin saber qué está fallando ni cómo corregirlo.' },
+              { label: 'Clases masivas', desc: 'Un profesor para 30 alumnos no puede adaptar el ritmo a tu punto de partida ni a tu carrera objetivo.' },
+              { label: 'Sin feedback real', desc: 'Estudiar sin corrección es practicar errores. El error sin diagnóstico se convierte en hábito.' },
+            ].map((item, i) => (
+              <motion.div key={item.label} {...fadeUp(i * 0.1)} className="p-8 border border-white/5 rounded-2xl bg-[#080808]">
+                <p className="text-lael-accent text-[10px] tracking-[0.2em] uppercase mb-4">{item.label}</p>
+                <p className="text-lael-muted/70 text-sm leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── DIFERENCIA: SISTEMA VS CLASES ──────────────────────────────── */}
+      <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+        <div className="w-full max-w-4xl">
+          <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">
+            La diferencia
+          </motion.p>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-5xl text-lael-light font-bold text-center mb-16">
+            Sistema de rendimiento vs clases tradicionales
+          </motion.h2>
+
+          <motion.div {...fadeUp(0.2)} className="rounded-2xl border border-white/5 overflow-hidden">
+            <div className="grid grid-cols-3 bg-[#080808] px-8 py-4 border-b border-white/5">
+              <p className="text-[10px] tracking-[0.2em] text-lael-muted/40 uppercase">Aspecto</p>
+              <p className="text-[10px] tracking-[0.2em] text-lael-accent uppercase">Lael</p>
+              <p className="text-[10px] tracking-[0.2em] text-lael-muted/40 uppercase">Otros</p>
+            </div>
+            {COMPARE.map((row, i) => (
+              <div key={row.feature} className={`grid grid-cols-3 px-8 py-5 ${i % 2 === 0 ? 'bg-[#060606]' : 'bg-[#080808]'} border-b border-white/[0.03] last:border-0`}>
+                <p className="text-[11px] text-lael-muted/50 tracking-wider">{row.feature}</p>
+                <p className="text-[11px] text-lael-light font-medium tracking-wide">{row.lael}</p>
+                <p className="text-[11px] text-lael-muted/30 tracking-wide">{row.other}</p>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── VALOR INCLUIDO ─────────────────────────────────────────────── */}
+      <section className="w-full px-6 py-32 lg:py-48 flex flex-col items-center border-t border-white/[0.03]">
+        <div className="w-full max-w-5xl">
+          <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">
+            Tu sistema incluye
+          </motion.p>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-5xl text-lael-light font-bold text-center mb-16">
+            Todo lo que necesitas para rendir mejor.
+          </motion.h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {PAES_FEATURES.map((f, i) => (
+              <motion.div key={f.title} {...fadeUp(i * 0.08)} className="flex gap-6 p-8 border border-white/5 rounded-2xl bg-[#080808]">
+                <span className="text-3xl flex-shrink-0">{f.icon}</span>
+                <div>
+                  <h3 className="text-lael-light font-semibold mb-2">{f.title}</h3>
+                  <p className="text-lael-muted/60 text-sm leading-relaxed">{f.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── TRANSICIÓN AL SISTEMA ──────────────────────────────────────── */}
+      <section className="w-full px-6 py-32 flex flex-col items-center border-t border-white/[0.03]">
+        <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
+          <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Siguiente paso</p>
+          <h2 className="font-display text-4xl lg:text-5xl text-lael-light font-bold mb-8">
+            Configura tu sistema ahora.
+          </h2>
+          <p className="text-lael-muted/60 text-base mb-12 leading-relaxed">
+            Ingresa tus datos, selecciona tus pruebas y recibe tu propuesta de inversión en menos de 2 minutos.
+          </p>
+          <button
+            onClick={onStartDiagnosis}
+            className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-lael-primary transition-all duration-500"
+          >
+            Iniciar diagnóstico →
+          </button>
+        </motion.div>
+
+        {/* Visual divider */}
+        <div className="w-px h-32 bg-gradient-to-b from-lael-accent/30 to-transparent mt-24" />
+      </section>
+    </div>
+  );
+}

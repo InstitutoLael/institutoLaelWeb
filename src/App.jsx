@@ -12,6 +12,7 @@ import PAES from "./pages/PAES";
 import MetodoLael from "./pages/MetodoLael";
 import Idiomas from "./pages/Idiomas";
 import LSCh from "./pages/LSCh";
+import Empresas from "./pages/Empresas";
 import Contacto from "./pages/Contacto";
 import ComingSoon from "./pages/ComingSoon";
 
@@ -19,11 +20,7 @@ export default function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <Toaster position="top-right" reverseOrder={false} toastOptions={{
-        style: {
-          background: '#1A1A1A',
-          color: '#F5F5F5',
-          border: '1px solid rgba(255,255,255,0.05)'
-        }
+        style: { background: '#1A1A1A', color: '#F5F5F5', border: '1px solid rgba(255,255,255,0.05)' }
       }} />
       <Navbar />
 
@@ -36,8 +33,8 @@ export default function App() {
             <Route path="/metodo" element={<MetodoLael />} />
             <Route path="/idiomas" element={<Idiomas />} />
             <Route path="/lsch" element={<LSCh />} />
+            <Route path="/empresas" element={<Empresas />} />
             <Route path="/contacto" element={<Contacto />} />
-            {/* Fallback */}
             <Route path="*" element={<ComingSoon />} />
           </Routes>
         </PageTransition>

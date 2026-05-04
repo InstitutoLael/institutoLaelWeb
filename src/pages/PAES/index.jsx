@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import ProgressBar from './ProgressBar';
-import HeroPAES from './HeroPAES';
+import LandingPAES from './LandingPAES';
 import AccessGate from './AccessGate';
 import SystemReveal from './SystemReveal';
 import ModuleSelector from './ModuleSelector';
@@ -15,26 +15,32 @@ export default function PAES() {
   const [selectedModules, setSelectedModules] = useState([]);
   const [isConnecting, setIsConnecting] = useState(false);
 
+  const gateRef = useRef(null);
   const priceData = computePaesPrice(selectedModules);
 
+  const scrollToGate = () => {
+    setTimeout(() => {
+      gateRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  };
+
   return (
-    <main>
-      {/* Step indicator — sticky 0.5px precision bar */}
+    <main className="bg-[#0B0B0B] min-h-screen">
       <ProgressBar step={step} />
 
-      {/* ── Step 1 ── Cinematic hero */}
-      <HeroPAES />
+      {/* ── CAPA 1: LANDING ── */}
+      <LandingPAES onStartDiagnosis={scrollToGate} />
 
-      {/* ── Step 1 ── Access gate — closes/fades when step > 1 */}
-      <AccessGate
-        step={step}
-        gateData={gateData}
-        setGateData={setGateData}
-        setStep={setStep}
-      />
+      {/* ── CAPA 2: SISTEMA ── */}
+      <div ref={gateRef} id="diagnostico">
+        <AccessGate
+          step={step}
+          gateData={gateData}
+          setGateData={setGateData}
+          setStep={setStep}
+        />
+      </div>
 
-      {/* ── Step 2 ── System reveal — header + module selector
-           Enters as a unit (blur → clear, y → 0) then staggered children */}
       {step >= 2 && (
         <SystemReveal>
           <ModuleSelector
@@ -44,8 +50,6 @@ export default function PAES() {
         </SystemReveal>
       )}
 
-      {/* ── Step 2 ── Pricing block — rendered as SIBLING, not child of SystemReveal
-           This guarantees it appears AFTER modules with deliberate weight */}
       <AnimatePresence mode="wait">
         {step >= 2 && selectedModules.length > 0 && (
           <PricingBlock
@@ -59,7 +63,6 @@ export default function PAES() {
         )}
       </AnimatePresence>
 
-      {/* ── Step 3 ── Elite layer */}
       {step >= 3 && <EliteLayer />}
     </main>
   );

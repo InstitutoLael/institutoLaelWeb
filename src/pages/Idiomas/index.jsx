@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import HeroIdiomas from './HeroIdiomas';
+import LandingIdiomas from './LandingIdiomas';
 import LanguageSelector from './LanguageSelector';
 import IdiomaPricing from './IdiomaPricing';
 import { computeLangBundle } from '../../data/idiomas';
@@ -11,7 +11,6 @@ export default function Idiomas() {
   const [isConnecting, setIsConnecting] = useState(false);
 
   const selectorRef = useRef(null);
-
   const priceData = computeLangBundle(selectedLanguages.length);
 
   const scrollToSelector = () => {
@@ -22,9 +21,10 @@ export default function Idiomas() {
 
   return (
     <main className="bg-[#0B0B0B] min-h-screen">
-      <HeroIdiomas onConfigure={scrollToSelector} />
+      {/* ── CAPA 1: LANDING ── */}
+      <LandingIdiomas onConfigure={scrollToSelector} />
 
-      {/* Language selector */}
+      {/* ── CAPA 2: SISTEMA ── */}
       <section ref={selectorRef} className="w-full px-6 py-32 lg:py-48 flex flex-col items-center">
         <LanguageSelector
           selectedLanguages={selectedLanguages}
@@ -32,7 +32,6 @@ export default function Idiomas() {
         />
       </section>
 
-      {/* Pricing — appears when languages are selected */}
       <AnimatePresence mode="wait">
         {selectedLanguages.length > 0 && (
           <IdiomaPricing

@@ -15,7 +15,7 @@ export default function AccessGate({ step, gateData, setGateData, setStep }) {
 
   return (
     <section className={`w-full px-6 pb-32 lg:pb-48 flex justify-center transition-all duration-1000 ${isLocked ? 'opacity-30 pointer-events-none scale-95' : 'opacity-100 scale-100'}`}>
-      <div className="w-full max-w-xl bg-[#050505]/80 backdrop-blur-xl rounded-2xl p-8 lg:p-16 border border-white/[0.02] shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+      <div className="w-full max-w-xl bg-[#050505]/60 backdrop-blur-2xl rounded-2xl p-8 lg:p-16 border border-white/[0.01] shadow-[0_0_80px_rgba(0,0,0,0.6)]">
         
         <div className="text-center mb-12">
           <h2 className="font-display text-2xl lg:text-3xl text-lael-light mb-2">Fase de Ingreso</h2>

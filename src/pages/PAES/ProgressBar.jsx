@@ -11,11 +11,11 @@ export default function ProgressBar({ step }) {
     <div className="sticky top-20 z-40 w-full bg-[#0B0B0B]/80 backdrop-blur-2xl border-b border-white/[0.02] py-6">
       <div className="max-w-3xl mx-auto px-6 lg:px-12 relative flex items-center justify-between">
         {/* Background Line */}
-        <div className="absolute left-6 right-6 lg:left-12 lg:right-12 top-1/2 -translate-y-1/2 h-[1px] bg-white/[0.03] -z-10" />
+        <div className="absolute left-6 right-6 lg:left-12 lg:right-12 top-1/2 -translate-y-1/2 h-[0.5px] bg-white/[0.03] -z-10" />
         
         {/* Progress Line */}
         <div 
-          className="absolute left-6 lg:left-12 top-1/2 -translate-y-1/2 h-[1px] bg-lael-accent transition-all duration-1000 -z-10"
+          className="absolute left-6 lg:left-12 top-1/2 -translate-y-1/2 h-[0.5px] bg-lael-accent transition-all duration-1000 -z-10"
           style={{ width: step === 1 ? '0%' : step === 2 ? '50%' : '100%' }}
         />
 

@@ -15,7 +15,7 @@ export default function PricingBlock({ gateData, selectedModules, priceData, isC
 
   return (
     <div className="w-full mt-24 flex justify-center pb-32 lg:pb-48">
-      <div className="w-full max-w-2xl bg-[#0B0B0B] border border-lael-accent/20 rounded-3xl p-12 lg:p-16 text-center relative overflow-hidden shadow-[0_0_80px_rgba(198,166,107,0.05)]">
+      <div className="w-full max-w-3xl bg-[#0B0B0B] border border-lael-accent/20 rounded-3xl p-12 lg:p-16 text-center relative overflow-hidden shadow-[0_0_80px_rgba(198,166,107,0.05)]">
         {/* Glow behind */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[150%] bg-[radial-gradient(ellipse_at_center,_rgba(198,166,107,0.08)_0%,_transparent_70%)] pointer-events-none" />
 
@@ -25,7 +25,7 @@ export default function PricingBlock({ gateData, selectedModules, priceData, isC
           </p>
           
           <div className="flex flex-col items-center justify-center mb-10">
-            <span className="text-5xl lg:text-7xl font-display font-bold text-lael-light tracking-tighter">
+            <span className="text-6xl lg:text-8xl tracking-[-0.03em] font-display font-bold text-lael-light">
               {clp(priceData.totalMonthly)}
             </span>
             <span className="text-lael-muted/50 text-[11px] tracking-[0.2em] uppercase mt-4">Inversión mensual</span>

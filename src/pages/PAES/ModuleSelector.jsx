@@ -32,7 +32,7 @@ export default function ModuleSelector({ selectedModules, setSelectedModules }) 
           <div 
             key={subject.id} 
             onClick={() => toggleSubject(subject.id)}
-            className={`group cursor-pointer p-8 lg:p-10 rounded-2xl border transition-all duration-700 relative overflow-hidden ${isSelected ? 'bg-[#111111] border-lael-accent/40 shadow-[0_0_40px_rgba(198,166,107,0.15)]' : 'bg-[#0B0B0B] border-white/5 hover:bg-[#0F0F0F] hover:border-white/10'}`}
+            className={`group cursor-pointer p-8 lg:p-10 rounded-2xl border transition-all duration-700 relative overflow-hidden ${isSelected ? 'bg-[#111111] border-lael-accent/40 shadow-[0_0_40px_rgba(198,166,107,0.15)]' : 'bg-[#080808] border-white/5 hover:bg-[#0D0D0D] hover:border-white/10'}`}
           >
             {/* Active Glow Indicator */}
             <div className={`absolute top-0 left-0 w-1 h-full transition-all duration-700 ${isSelected ? 'bg-lael-accent shadow-[0_0_20px_rgba(198,166,107,1)]' : 'bg-transparent'}`} />

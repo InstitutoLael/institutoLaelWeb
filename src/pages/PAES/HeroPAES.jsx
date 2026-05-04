@@ -6,7 +6,7 @@ export default function HeroPAES() {
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] max-w-[600px] max-h-[600px] bg-lael-accent/[0.03] rounded-full blur-[100px] pointer-events-none" />
 
-      <h1 className="font-display text-4xl lg:text-7xl text-lael-light font-bold leading-tight tracking-tight max-w-4xl relative z-10">
+      <h1 className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl relative z-10">
         No es un preuniversitario.<br />
         <span className="text-transparent bg-clip-text bg-gradient-to-r from-lael-light via-lael-accent to-lael-light/50">Es un sistema de rendimiento.</span>
       </h1>

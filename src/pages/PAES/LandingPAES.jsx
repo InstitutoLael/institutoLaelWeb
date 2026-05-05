@@ -4,6 +4,7 @@ import { ChevronDown } from 'lucide-react';
 import { PAES_FEATURES } from '../../data/paes';
 import { useNavigate } from 'react-router-dom';
 import paesMentor from '../../assets/img/Home/paes_mentor_strategy_1777948898105.png';
+import paesBg from '../../assets/img/Home/mundo_paes_bg_1777943419260.png';
 
 const ease = [0.16, 1, 0.3, 1];
 

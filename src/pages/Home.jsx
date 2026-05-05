@@ -12,6 +12,11 @@ import mercadoPago from '../assets/img/Partners/MercadoPago.png';
 import naama from '../assets/img/Partners/naama-studio.png';
 import onepay from '../assets/img/Partners/onepay.png';
 import transbank from '../assets/img/Partners/Transbank.png';
+import paesBg from '../assets/img/Home/mundo_paes_bg_1777943419260.png';
+import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.png';
+import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.png';
+import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.png';
+import empresasBg from '../assets/img/Home/mundo_empresas_bg_1777944168670.png';
 
 import SignificadoLael from '../components/SignificadoLael';
 import CharlaGratuita from '../components/CharlaGratuita';
@@ -28,12 +33,6 @@ const fadeUp = (delay = 0) => ({
   viewport: { once: true, margin: '-80px' },
   transition: { duration: 1.1, delay, ease },
 });
-
-import paesBg from '../assets/img/Home/mundo_paes_bg_1777943419260.png';
-import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.png';
-import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.png';
-import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.png';
-import empresasBg from '../assets/img/Home/mundo_empresas_bg_1777944168670.png';
 
 const SYSTEMS = [
   {

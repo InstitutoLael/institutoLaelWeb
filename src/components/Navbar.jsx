@@ -58,7 +58,6 @@ export default function Navbar() {
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
   const isFocusPage = location.pathname === '/diagnostico' || location.pathname === '/resultado-diagnostico';
-  const logoToShow = (scrolled || mobileOpen) ? logoNegro : (isFocusPage ? logoNegro : logoBlanco);
 
   if (isFocusPage) {
     return (
@@ -84,20 +83,24 @@ export default function Navbar() {
     <header
       className={`fixed left-0 w-full z-50 transition-all duration-700 ${
         scrolled
-          ? 'bg-white/80 backdrop-blur-2xl border-b border-black/[0.03] py-3 shadow-[0_4px_30px_rgba(0,0,0,0.03)]'
-          : 'bg-transparent py-6'
+          ? 'bg-white/80 backdrop-blur-2xl border-b border-black/[0.03] py-3 shadow-[0_10px_30px_rgba(0,0,0,0.04)]'
+          : 'bg-[#F8F5F0]/40 backdrop-blur-md py-6'
       }`}
       style={{ top: bannerHeight }}
     >
-      <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-8 lg:px-12 flex items-center justify-between">
         
         {/* ── LOGO ───────────────────────────────────────────────────── */}
-        <Link to="/" className="z-[60] relative group">
+        <Link to="/" className="z-[60] relative group flex items-center gap-3">
           <img
-            src={logoToShow}
+            src={logoNegro}
             alt="Instituto Lael"
-            className="h-7 lg:h-9 w-auto object-contain transition-all duration-700 group-hover:scale-105"
+            className="h-8 lg:h-10 w-auto object-contain transition-all duration-700 group-hover:scale-105"
           />
+          <div className="h-6 w-px bg-lael-bd mx-2 hidden lg:block" />
+          <span className="hidden lg:block text-[10px] tracking-[0.4em] uppercase font-bold text-lael-muted opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            Pertenencia
+          </span>
         </Link>
 
         {/* ── DESKTOP NAV ────────────────────────────────────────────── */}
@@ -110,7 +113,7 @@ export default function Navbar() {
                 `relative text-[11px] tracking-[0.15em] uppercase font-bold transition-all duration-300 group ${
                   isActive 
                     ? 'text-lael-accent' 
-                    : (scrolled ? 'text-lael-muted hover:text-lael-accent' : 'text-white/70 hover:text-white')
+                    : (scrolled ? 'text-lael-muted hover:text-lael-accent' : 'text-lael-muted/70 hover:text-lael-light')
                 }`
               }
             >
@@ -137,7 +140,7 @@ export default function Navbar() {
             className={`hidden lg:inline-flex items-center px-6 py-3 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold transition-all duration-500 shadow-sm ${
               scrolled 
                 ? 'bg-lael-accent text-white hover:bg-lael-rust' 
-                : 'bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-lael-accent'
+                : 'bg-lael-accent/10 border border-lael-accent/20 text-lael-accent hover:bg-lael-accent hover:text-white'
             }`}
           >
             {NAVIGATION.action.whatsapp.label}
@@ -195,7 +198,7 @@ export default function Navbar() {
                     to={link.path}
                     className={({ isActive }) =>
                       `font-display text-4xl lg:text-5xl font-bold transition-all duration-300 ${
-                        isActive ? 'text-lael-accent' : 'text-lael-muted/50 hover:text-lael-light'
+                        isActive ? 'text-lael-accent' : 'text-[#0D0D0D]/70 hover:text-lael-light'
                       }`
                     }
                   >

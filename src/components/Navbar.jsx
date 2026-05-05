@@ -39,20 +39,20 @@ export default function Navbar() {
     };
   }, []);
 
-  // Body scroll lock (robust fixed approach)
+  // Body scroll lock (Better stability)
   useEffect(() => {
+    const html = document.documentElement;
     if (mobileOpen) {
-      const scrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.width = '100%';
+      html.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
     } else {
-      const scrollY = document.body.style.top;
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.width = '';
-      if (scrollY) window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      html.style.overflow = '';
+      document.body.style.overflow = '';
     }
+    return () => {
+      html.style.overflow = '';
+      document.body.style.overflow = '';
+    };
   }, [mobileOpen]);
 
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
@@ -62,7 +62,7 @@ export default function Navbar() {
   if (isFocusPage) {
     return (
       <header 
-        className="fixed left-0 w-full z-50 py-8 px-8 flex justify-between items-center transition-all duration-500"
+        className="fixed left-0 w-full z-[100] py-8 px-8 flex justify-between items-center transition-all duration-500"
         style={{ top: bannerHeight }}
       >
         <Link to="/" className="pointer-events-auto group">
@@ -81,17 +81,17 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed left-0 w-full z-50 transition-all duration-700 ${
-        scrolled
+      className={`fixed left-0 w-full z-[100] transition-all duration-700 ${
+        scrolled || mobileOpen
           ? 'bg-white/80 backdrop-blur-2xl border-b border-black/[0.03] py-3 shadow-[0_10px_30px_rgba(0,0,0,0.04)]'
           : 'bg-[#F8F5F0]/40 backdrop-blur-md py-6'
       }`}
       style={{ top: bannerHeight }}
     >
-      <div className="max-w-7xl mx-auto px-8 lg:px-12 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-8 lg:px-12 flex items-center justify-between relative z-10">
         
         {/* ── LOGO ───────────────────────────────────────────────────── */}
-        <Link to="/" className="z-[60] relative group flex items-center gap-3">
+        <Link to="/" className="z-[110] relative group flex items-center gap-3">
           <img
             src={logoNegro}
             alt="Instituto Lael"
@@ -132,7 +132,7 @@ export default function Navbar() {
         </nav>
 
         {/* ── RIGHT: CTA + BURGER ────────────────────────────────────── */}
-        <div className="flex items-center gap-6 z-[60]">
+        <div className="flex items-center gap-6 z-[110]">
           <a
             href={NAVIGATION.action.whatsapp.url}
             target="_blank"
@@ -177,53 +177,74 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.45, ease }}
-            className="fixed inset-0 bg-[#F8F5F0] z-[49] flex flex-col items-center justify-center"
+            initial={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
+            animate={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}
+            exit={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
+            transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 bg-[#F8F5F0] z-[90] flex flex-col pt-32 pb-12 px-10 overflow-hidden"
           >
-            {/* Subtle glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-lael-accent/[0.03] rounded-full blur-[100px] pointer-events-none" />
+            {/* Background Texture & Watermark */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none select-none">
+               <img src={logoNegro} alt="" className="w-[80vw] h-auto grayscale" />
+            </div>
 
-            <nav className="flex flex-col items-center gap-10 relative z-10">
+            {/* Menu Links */}
+            <nav className="flex flex-col gap-8 relative z-10">
               {NAVIGATION.main.map((link, i) => (
                 <motion.div
                   key={link.path}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: i * 0.07, ease }}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 + (i * 0.08), ease: [0.16, 1, 0.3, 1] }}
+                  className="group"
                 >
                   <NavLink
                     to={link.path}
                     className={({ isActive }) =>
-                      `font-display text-4xl lg:text-5xl font-bold transition-all duration-300 ${
-                        isActive ? 'text-lael-accent' : 'text-[#0D0D0D]/70 hover:text-lael-light'
+                      `flex items-baseline gap-6 font-display text-5xl font-bold transition-all duration-500 ${
+                        isActive ? 'text-lael-accent' : 'text-[#0D0D0D]/80 hover:text-lael-accent'
                       }`
                     }
                   >
-                    {link.name}
+                    <span className="text-[10px] font-sans tracking-[0.3em] text-lael-rust/40 font-bold">0{i+1}</span>
+                    <span className="relative">
+                      {link.name}
+                      <motion.span 
+                        className="absolute -bottom-1 left-0 h-[3px] bg-lael-accent"
+                        initial={{ width: 0 }}
+                        whileInView={{ width: '100%' }}
+                        transition={{ duration: 0.5, delay: 0.5 + (i * 0.1) }}
+                      />
+                    </span>
                   </NavLink>
                 </motion.div>
               ))}
             </nav>
 
-            {/* CTA at bottom */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.4, ease }}
-              className="absolute bottom-12 left-0 right-0 flex justify-center px-6"
-            >
-              <a
-                href={NAVIGATION.action.whatsapp.url}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full max-w-sm bg-lael-accent text-lael-primary py-4 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold text-center hover:scale-[1.02] transition-all duration-500 shadow-[0_0_30px_rgba(198,166,107,0.25)]"
-              >
-                {NAVIGATION.action.whatsapp.label}
-              </a>
-            </motion.div>
+            {/* Footer Section in Menu */}
+            <div className="mt-auto relative z-10 border-t border-black/5 pt-12">
+               <motion.div 
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 transition={{ delay: 0.8 }}
+                 className="flex flex-col gap-8"
+               >
+                  <p className="text-[10px] tracking-[0.4em] uppercase text-lael-muted font-bold">Nuestro Propósito</p>
+                  <p className="font-display text-xl text-lael-light leading-relaxed italic italic-playfair max-w-xs">
+                    "Lael es el nuevo comienzo tras la tormenta. Una guía real en tu proceso."
+                  </p>
+                  
+                  <a
+                    href={NAVIGATION.action.whatsapp.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full bg-lael-accent text-white py-5 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold text-center shadow-lg active:scale-95 transition-all"
+                  >
+                    {NAVIGATION.action.whatsapp.label}
+                  </a>
+               </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

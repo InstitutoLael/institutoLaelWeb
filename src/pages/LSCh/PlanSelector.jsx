@@ -71,18 +71,18 @@ export default function PlanSelector({ selectedPlan, setSelectedPlan, isChurch, 
                     </span>
                   )}
 
-                  <h3 className={`font-display text-lg mb-2 transition-colors duration-500 ${isSelected ? 'text-lael-light font-bold' : 'text-lael-light'}`}>
+                  <h3 className={`font-display text-lg mb-2 transition-colors duration-500 ${isSelected ? 'text-lael-rust font-bold' : 'text-[#0D0D0D]'}`}>
                     {plan.title}
                   </h3>
-                  <p className={`font-display text-3xl font-bold mb-3 transition-colors duration-500 ${isSelected ? 'text-lael-accent' : 'text-lael-light'}`}>
+                  <p className={`font-display text-3xl font-bold mb-3 transition-colors duration-500 ${isSelected ? 'text-lael-accent' : 'text-[#0D0D0D]'}`}>
                     ${plan.price?.toLocaleString('es-CL')}
-                    <span className="text-sm font-normal text-lael-muted/60"> /mes</span>
+                    <span className="text-sm font-normal text-[#8A8A8A]"> /mes</span>
                   </p>
-                  <p className="text-sm text-lael-light/80 mb-4">{plan.desc}</p>
+                  <p className="text-sm text-[#3A3A3A] mb-4">{plan.desc}</p>
 
                   <div className="space-y-2">
                     {plan.features?.map(f => (
-                      <p key={f} className={`text-[11px] tracking-wider transition-colors duration-500 ${isSelected ? 'text-lael-light/80' : 'text-lael-muted'}`}>
+                      <p key={f} className={`text-[11px] tracking-wider transition-colors duration-500 ${isSelected ? 'text-[#3A3A3A]' : 'text-[#8A8A8A]'}`}>
                         · {f}
                       </p>
                     ))}

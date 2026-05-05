@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { LANGUAGES, LANG_FEATURES } from '../../data/idiomas';
 import { useNavigate } from 'react-router-dom';
+import idiomasExecution from '../../assets/img/Home/idiomas_execution_bg_1777948997295.png';
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
@@ -116,6 +117,31 @@ export default function LandingIdiomas() {
                 <p className="text-[11px] tracking-[0.2em] text-lael-light uppercase font-bold">{step.title}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3.5 REALIDAD GLOBAL (VISUAL) ─────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 flex flex-col items-center overflow-hidden">
+        <div className="w-full max-w-7xl">
+          <div className="relative aspect-[21/9] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow">
+             <img 
+               src={idiomasExecution} 
+               alt="Ejecución de Idiomas Lael" 
+               className="w-full h-full object-cover"
+             />
+             <div className="absolute inset-0 bg-gradient-to-l from-black/80 via-black/20 to-transparent" />
+             <div className="absolute inset-y-0 right-0 flex items-center px-12 lg:px-20 max-w-2xl text-right">
+                <motion.div {...fadeUp()}>
+                   <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Sin Traductores</p>
+                   <h3 className="font-display text-4xl lg:text-6xl text-white font-bold leading-tight mb-8">
+                     Tu pasaporte es <br /> tu capacidad.
+                   </h3>
+                   <p className="text-white/70 text-lg leading-relaxed">
+                     Preparamos tu mente para responder sin vacilar. No traduces, simplemente hablas. Porque en el mundo real, no hay tiempo para diccionarios.
+                   </p>
+                </motion.div>
+             </div>
           </div>
         </div>
       </section>

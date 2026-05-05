@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { ADULT_CONTENT } from '../../data/nivelacion';
 import { CheckCircle2, Target, BookOpen, Clock, Users, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import adultosRealidad from '../../assets/img/Home/mundo_adultos_bg_1777944001677.png';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -86,6 +87,31 @@ export default function NivelacionAdultos() {
                 <p className="text-lael-muted text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3.5 REALIDAD DE LOGRO (VISUAL) ───────────────────────────── */}
+      <section className="relative w-full px-6 py-32 flex flex-col items-center overflow-hidden">
+        <div className="w-full max-w-7xl">
+          <div className="relative aspect-[21/9] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow">
+             <img 
+               src={adultosRealidad} 
+               alt="Logro Adultos Lael" 
+               className="w-full h-full object-cover"
+             />
+             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent" />
+             <div className="absolute inset-y-0 left-0 flex items-center px-12 lg:px-20 max-w-2xl">
+                <motion.div {...fadeUp()}>
+                   <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Un Nuevo Comienzo</p>
+                   <h3 className="font-display text-4xl lg:text-6xl text-white font-bold leading-tight mb-8">
+                     Nunca es tarde <br /> para ser quien eres.
+                   </h3>
+                   <p className="text-white/70 text-lg leading-relaxed">
+                     Terminar tu educación no es solo obtener un papel. Es demostrarte a ti mismo que puedes conquistar lo que el tiempo dejó pendiente. En Lael, te acompañamos hasta la meta.
+                   </p>
+                </motion.div>
+             </div>
           </div>
         </div>
       </section>

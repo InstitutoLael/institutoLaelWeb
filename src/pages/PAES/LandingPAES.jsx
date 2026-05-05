@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { PAES_FEATURES } from '../../data/paes';
 import { useNavigate } from 'react-router-dom';
+import paesMentor from '../../assets/img/Home/paes_mentor_strategy_1777948898105.png';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -178,6 +179,7 @@ export default function LandingPAES() {
 
       {/* ── 5. DATA REAL (SUBIDA) ────────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd">
+        {/* ... (keep data content) ... */}
         <div className="max-w-5xl mx-auto">
           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-12 text-center font-bold">Evidencia, no promesas</motion.p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
@@ -206,6 +208,31 @@ export default function LandingPAES() {
                </div>
                <p className="text-center mt-8 text-[11px] text-lael-muted uppercase tracking-[0.3em] font-bold">Evolución del Puntaje PAES</p>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5.5 REALIDAD ESTRATÉGICA (VISUAL) ────────────────────────── */}
+      <section className="relative w-full px-6 py-32 flex flex-col items-center overflow-hidden">
+        <div className="w-full max-w-7xl">
+          <div className="relative aspect-[21/9] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow">
+             <img 
+               src={paesMentor} 
+               alt="Mentoría Estratégica Lael" 
+               className="w-full h-full object-cover"
+             />
+             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent" />
+             <div className="absolute inset-y-0 left-0 flex items-center px-12 lg:px-20 max-w-2xl">
+                <motion.div {...fadeUp()}>
+                   <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Mentores, no Profesores</p>
+                   <h3 className="font-display text-4xl lg:text-6xl text-white font-bold leading-tight mb-8">
+                     Análisis Quirúrgico <br /> de tu Rendimiento.
+                   </h3>
+                   <p className="text-white/70 text-lg leading-relaxed">
+                     En Lael no te damos una clase magistral. Te sentamos con un estratega para desglosar cada segundo de tu ejecución. Aquí es donde los puntos se ganan de verdad.
+                   </p>
+                </motion.div>
+             </div>
           </div>
         </div>
       </section>

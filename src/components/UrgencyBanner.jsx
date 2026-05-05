@@ -25,7 +25,7 @@ export default function UrgencyBanner() {
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          className="bg-lael-rust text-white overflow-hidden relative z-[70]"
+          className="bg-lael-rust text-white overflow-hidden relative z-[70] lael-urgency-banner"
         >
           <div className="py-2 px-6 flex items-center justify-center gap-4 text-center relative pr-12">
             <AlertCircle size={14} className="hidden sm:block flex-shrink-0" />

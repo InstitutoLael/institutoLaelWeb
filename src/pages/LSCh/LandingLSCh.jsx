@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { LSCH_WHY_US, TEACHER_PROFILE, COMPARISON_DATA } from '../../data/lsch';
 import { useNavigate } from 'react-router-dom';
+import lschRealidad from '../../assets/img/Home/mundo_lsch_bg_1777943626827.png';
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
@@ -97,6 +98,31 @@ export default function LandingLSCh() {
             <p>
               Nuestro programa está diseñado bajo los parámetros de la Cultura Sorda. Aprenderás a "hablar" con tu cuerpo, tus expresiones faciales y a usar el espacio tridimensional para comunicarte de forma nativa.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3.5 REALIDAD INCLUSIVA (VISUAL) ─────────────────────────── */}
+      <section className="relative w-full px-6 py-32 flex flex-col items-center overflow-hidden">
+        <div className="w-full max-w-7xl">
+          <div className="relative aspect-[21/9] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow">
+             <img 
+               src={lschRealidad} 
+               alt="Comunidad LSCh Lael" 
+               className="w-full h-full object-cover"
+             />
+             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+             <div className="absolute inset-x-0 bottom-0 flex flex-col items-center p-12 lg:p-20 text-center">
+                <motion.div {...fadeUp()}>
+                   <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Comunidad Activa</p>
+                   <h3 className="font-display text-4xl lg:text-6xl text-white font-bold leading-tight mb-8">
+                     Rompe el Silencio <br /> con el Alma.
+                   </h3>
+                   <p className="text-white/70 text-lg leading-relaxed max-w-3xl">
+                     Nuestras sesiones no son solo teoría. Son encuentros donde la comunidad Sorda y oyente se une para derribar las paredes de la incomunicación. Aquí aprendes el lenguaje del corazón.
+                   </p>
+                </motion.div>
+             </div>
           </div>
         </div>
       </section>

@@ -111,9 +111,7 @@ export default function Navbar() {
               to={link.path}
               className={({ isActive }) =>
                 `relative text-[11px] tracking-[0.15em] uppercase font-bold transition-all duration-300 group ${
-                  isActive 
-                    ? 'text-lael-accent' 
-                    : (scrolled ? 'text-lael-muted hover:text-lael-accent' : 'text-lael-muted/70 hover:text-lael-light')
+                  isActive ? 'text-lael-accent' : 'text-lael-muted/70 hover:text-lael-light'
                 }`
               }
             >
@@ -150,15 +148,17 @@ export default function Navbar() {
             onClick={() => setMobileOpen(v => !v)}
             aria-label="Toggle menu"
             className={`lg:hidden w-11 h-11 flex items-center justify-center rounded-xl transition-all active:scale-95 border ${
-              (scrolled || mobileOpen)
-                ? 'bg-black/[0.02] border-black/5 text-lael-muted' 
-                : 'bg-white/10 border-white/10 text-white'
+              mobileOpen
+                ? 'bg-lael-accent text-white border-lael-accent'
+                : (scrolled 
+                    ? 'bg-lael-accent/10 border-lael-accent/20 text-lael-accent' 
+                    : 'bg-lael-accent text-white border-lael-accent shadow-lg shadow-lael-accent/20')
             }`}
           >
             <AnimatePresence mode="wait" initial={false}>
               {mobileOpen ? (
                 <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 45, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.3 }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="12" y1="4" x2="12" y2="20" />
                     <line x1="7" y1="9" x2="17" y2="9" />
                   </svg>
@@ -173,79 +173,94 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* ── MOBILE MENU — FULLSCREEN ────────────────────────────────── */}
+      {/* ── MOBILE DRAWER — APP-STYLE OVERLAY ────────────────────────── */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
-            animate={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' }}
-            exit={{ clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }}
-            transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 bg-[#F8F5F0] z-[90] flex flex-col pt-32 pb-12 px-10 overflow-hidden"
-          >
-            {/* Background Texture & Watermark */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.02] pointer-events-none select-none">
-               <img src={logoNegro} alt="" className="w-[80vw] h-auto grayscale" />
-            </div>
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMobileOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[150]"
+            />
 
-            {/* Menu Links */}
-            <nav className="flex flex-col gap-8 relative z-10">
-              {NAVIGATION.main.map((link, i) => (
-                <motion.div
-                  key={link.path}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 + (i * 0.08), ease: [0.16, 1, 0.3, 1] }}
-                  className="group"
+            {/* Drawer */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed left-0 top-0 bottom-0 w-[85%] max-w-sm bg-[#F8F5F0] z-[160] rounded-r-[40px] shadow-2xl flex flex-col p-10 overflow-hidden"
+            >
+              {/* Background Grain */}
+              <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+              
+              {/* Header inside Drawer */}
+              <div className="flex items-center justify-between mb-16 relative z-10">
+                <img src={logoNegro} alt="Lael" className="h-8 w-auto" />
+                <button 
+                  onClick={() => setMobileOpen(false)}
+                  className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-lael-muted"
                 >
-                  <NavLink
-                    to={link.path}
-                    className={({ isActive }) =>
-                      `flex items-baseline gap-6 font-display text-5xl font-bold transition-all duration-500 ${
-                        isActive ? 'text-lael-accent' : 'text-[#0D0D0D]/80 hover:text-lael-accent'
-                      }`
-                    }
-                  >
-                    <span className="text-[10px] font-sans tracking-[0.3em] text-lael-rust/40 font-bold">0{i+1}</span>
-                    <span className="relative">
-                      {link.name}
-                      <motion.span 
-                        className="absolute -bottom-1 left-0 h-[3px] bg-lael-accent"
-                        initial={{ width: 0 }}
-                        whileInView={{ width: '100%' }}
-                        transition={{ duration: 0.5, delay: 0.5 + (i * 0.1) }}
-                      />
-                    </span>
-                  </NavLink>
-                </motion.div>
-              ))}
-            </nav>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="rotate-45">
+                    <line x1="12" y1="4" x2="12" y2="20" />
+                    <line x1="7" y1="9" x2="17" y2="9" />
+                  </svg>
+                </button>
+              </div>
 
-            {/* Footer Section in Menu */}
-            <div className="mt-auto relative z-10 border-t border-black/5 pt-12">
-               <motion.div 
-                 initial={{ opacity: 0 }}
-                 animate={{ opacity: 1 }}
-                 transition={{ delay: 0.8 }}
-                 className="flex flex-col gap-8"
-               >
-                  <p className="text-[10px] tracking-[0.4em] uppercase text-lael-muted font-bold">Nuestro Propósito</p>
-                  <p className="font-display text-xl text-lael-light leading-relaxed italic italic-playfair max-w-xs">
-                    "Lael es el nuevo comienzo tras la tormenta. Una guía real en tu proceso."
-                  </p>
-                  
-                  <a
+              {/* Links with Icons */}
+              <nav className="flex flex-col gap-4 relative z-10">
+                {NAVIGATION.main.map((link, i) => (
+                  <motion.div
+                    key={link.path}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 + (i * 0.08) }}
+                  >
+                    <NavLink
+                      to={link.path}
+                      className={({ isActive }) =>
+                        `flex items-center gap-5 p-4 rounded-2xl transition-all duration-300 ${
+                          isActive 
+                            ? 'bg-lael-accent text-white shadow-lg shadow-lael-accent/20' 
+                            : 'text-[#0D0D0D]/70 hover:bg-black/5'
+                        }`
+                      }
+                    >
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                        location.pathname === link.path ? 'bg-white/20' : 'bg-lael-accent/10 text-lael-accent'
+                      }`}>
+                         <span className="text-[10px] font-bold">{i+1}</span>
+                      </div>
+                      <span className="font-display text-2xl font-bold">{link.name}</span>
+                    </NavLink>
+                  </motion.div>
+                ))}
+              </nav>
+
+              {/* Footer Section */}
+              <div className="mt-auto relative z-10 pt-10 border-t border-black/5">
+                 <div className="bg-lael-accent/5 p-6 rounded-[30px] border border-lael-accent/10 mb-8">
+                    <p className="text-[9px] tracking-[0.3em] uppercase text-lael-muted font-bold mb-4">Misión Lael</p>
+                    <p className="text-sm text-lael-light leading-relaxed italic italic-playfair">
+                      "No es solo aprender, es pertenecer a un sistema de alto rendimiento espiritual y académico."
+                    </p>
+                 </div>
+                 <a
                     href={NAVIGATION.action.whatsapp.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full bg-lael-accent text-white py-5 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold text-center shadow-lg active:scale-95 transition-all"
+                    className="flex items-center justify-center gap-3 w-full bg-lael-accent text-white py-5 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold shadow-xl active:scale-95 transition-all"
                   >
-                    {NAVIGATION.action.whatsapp.label}
+                    <span>Contactar ahora</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
                   </a>
-               </motion.div>
-            </div>
-          </motion.div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </header>

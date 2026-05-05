@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import logo from '../assets/img/Logos/lael-inst-negro.png';
+import logo from '../assets/img/Logos/lael-inst-blanco.png';
 import { NAVIGATION } from '../data/navigation';
 
 const ease = [0.16, 1, 0.3, 1];

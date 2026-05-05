@@ -47,25 +47,26 @@ export default function InsideLael() {
           {FEATURES.map((f, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.15 }}
+              transition={{ delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="group relative"
             >
-              <div className="aspect-[4/5] bg-lael-primary rounded-[32px] border border-lael-bd overflow-hidden cinematic-shadow mb-8 relative">
+              <div className="aspect-[4/5] bg-lael-primary rounded-[48px] border border-lael-bd overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.3)] mb-8 relative">
                 <img 
                   src={f.img} 
                   alt={f.title}
-                  className="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-105 group-hover:opacity-60 transition-all duration-700"
+                  className="w-full h-full object-cover opacity-30 grayscale group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-50 transition-all duration-1000"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-lael-primary via-transparent to-transparent"></div>
-                <div className="absolute bottom-8 left-8 right-8">
-                   <div className="w-12 h-12 bg-lael-accent text-white rounded-2xl flex items-center justify-center mb-4 shadow-xl">
+                <div className="absolute inset-0 bg-gradient-to-t from-lael-primary via-lael-primary/40 to-transparent"></div>
+                
+                <div className="absolute bottom-10 left-10 right-10">
+                   <div className="w-14 h-14 bg-lael-accent text-white rounded-2xl flex items-center justify-center mb-6 shadow-[0_10px_30px_rgba(196,151,62,0.3)] group-hover:scale-110 transition-transform duration-500">
                       {f.icon}
                    </div>
-                   <h3 className="text-lael-light font-display text-2xl font-bold mb-2">{f.title}</h3>
-                   <p className="text-lael-muted text-sm leading-relaxed">{f.desc}</p>
+                   <h3 className="text-lael-light font-display text-3xl font-bold mb-4 tracking-tight">{f.title}</h3>
+                   <p className="text-lael-muted/90 text-sm leading-relaxed font-medium">{f.desc}</p>
                 </div>
               </div>
             </motion.div>

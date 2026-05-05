@@ -29,36 +29,62 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 1.1, delay, ease },
 });
 
+import paesBg from '../assets/img/Home/mundo_paes_bg_1777943419260.png';
+import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.png';
+import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.png';
+import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.png';
+import empresasBg from '../assets/img/Home/mundo_empresas_bg_1777944168670.png';
+
 const SYSTEMS = [
   {
     id: 'paes',
     route: '/paes',
-    label: 'Sistema PAES',
-    headline: 'No es un preuniversitario.',
-    sub: 'Es un sistema de rendimiento.',
-    desc: 'Diagnóstico táctico, módulos personalizados y mentores estratégicos para maximizar tu puntaje PAES.',
-    tags: ['Diagnóstico de precisión', 'Módulos personalizados', 'Simulacros semanales'],
-    cta: 'Iniciar diagnóstico',
+    label: 'MUNDO PAES',
+    title: 'Subir puntaje',
+    accent: 'de verdad.',
+    desc: 'Optimización de rendimiento académico para maximizar tu ingreso a la universidad.',
+    bg: paesBg,
+    cta: 'Ver mi arquitectura',
   },
   {
     id: 'idiomas',
     route: '/idiomas',
-    label: 'Programas de Idiomas',
-    headline: 'No aprendes idiomas.',
-    sub: 'Ejecutas sistemas de comunicación.',
-    desc: 'Inglés, Coreano y Español para Expats. Simulación real, no clases pasivas.',
-    tags: ['Inglés · Coreano · Español', 'Preparación IELTS / TOPIK', 'Certificación estratégica'],
-    cta: 'Configurar programa',
+    label: 'MUNDO IDIOMAS',
+    title: 'Comunicarte',
+    accent: 'sin miedo.',
+    desc: 'Inglés, Coreano y Español. No es gramática, es ejecución en escenarios reales.',
+    bg: idiomasBg,
+    cta: 'Configurar sistema',
   },
   {
     id: 'lsch',
     route: '/lsch',
-    label: 'Lengua de Señas',
-    headline: 'El idioma que',
-    sub: 'elimina barreras.',
-    desc: 'Aprende LSCh con una instructora Sorda nativa. Cultura, metodología y certificación real.',
-    tags: ['Instructora Sorda nativa', 'Ley 21.015', 'Cultura Sorda'],
-    cta: 'Elegir plan',
+    label: 'MUNDO LSCH',
+    title: 'Inclusión',
+    accent: 'real.',
+    desc: 'Lengua de Señas Chilena con instructores sordos nativos. Rompe la barrera.',
+    bg: lschBg,
+    cta: 'Entrar al mundo',
+  },
+  {
+    id: 'adultos',
+    route: '/adultos',
+    label: 'MUNDO ADULTOS',
+    title: 'Terminar lo',
+    accent: 'que empezaste.',
+    desc: 'Nivelación de estudios flexible para quienes el sistema tradicional ignoró.',
+    bg: adultosBg,
+    cta: 'Ver mi plan de sueños',
+  },
+  {
+    id: 'empresas',
+    route: '/empresas',
+    label: 'MUNDO EMPRESAS',
+    title: 'Rendimiento',
+    accent: 'organizacional.',
+    desc: 'Capacitación estratégica y cumplimiento legal con enfoque en resultados.',
+    bg: empresasBg,
+    cta: 'Entrar al mundo',
   },
 ];
 
@@ -134,61 +160,68 @@ export default function Home() {
         </motion.p>
       </section>
 
+      {/* ── 1.5 MANIFIESTO IDENTIDAD ────────────────────────────────── */}
+      <section className="relative w-full py-32 flex flex-col items-center text-center px-6 overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[150px] pointer-events-none" />
+        <motion.div {...fadeUp()} className="max-w-4xl relative z-10">
+           <h2 className="text-lael-accent text-[10px] tracking-[0.5em] uppercase mb-12 font-bold">Nuestra Esencia</h2>
+           <h3 className="font-display text-4xl lg:text-7xl text-lael-light font-bold leading-tight mb-10 tracking-tighter">
+             No somos una empresa. <br />
+             <span className="accent-italic text-lael-accent">Somos un propósito.</span>
+           </h3>
+           <p className="text-lael-muted text-lg lg:text-2xl leading-relaxed italic italic-playfair max-w-2xl mx-auto">
+             "Lael" significa pertenencia. Nuestra paloma no es solo un logo; es la promesa de un nuevo comienzo tras la tormenta.
+           </p>
+        </motion.div>
+      </section>
+
+      {/* ── 1.6 SIGNIFICADO LAEL (IDENTIDAD) ─────────────────────────── */}
+      <SignificadoLael />
+
       {/* ── 2. MUNDOS (VISUAL & PROTAGONISTA) ────────────────────────── */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center">
+      <section className="relative w-full px-6 py-32 flex flex-col items-center overflow-hidden">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* PAES */}
-            <motion.div {...fadeUp(0.1)} className="group relative aspect-[4/5] rounded-[40px] overflow-hidden border border-lael-bd cinematic-shadow">
-               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
-               <div className="absolute bottom-12 left-10 right-10 z-20">
-                  <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-4 font-bold">Mundo PAES</p>
-                  <h3 className="font-display text-4xl text-white font-bold mb-6">Subir puntaje <br/> <span className="text-lael-accent italic italic-playfair font-normal">de verdad.</span></h3>
-                  <div className="space-y-3">
-                    <Link to="/paes" className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 hover:bg-lael-accent transition-all">
-                       Ver mi arquitectura
-                    </Link>
-                    <button onClick={() => navigate('/diagnostico')} className="w-full text-[9px] uppercase tracking-widest text-lael-accent/70 font-bold hover:text-lael-accent transition-colors">
-                       ¿Esto es para mí? →
-                    </button>
-                  </div>
-               </div>
-            </motion.div>
+          <div className="text-center mb-20">
+             <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">Explora tu sistema</motion.p>
+             <h2 className="font-display text-4xl lg:text-6xl text-lael-light font-bold">Elige tu mundo.</h2>
+          </div>
 
-            {/* IDIOMAS */}
-            <motion.div {...fadeUp(0.2)} className="group relative aspect-[4/5] rounded-[40px] overflow-hidden border border-lael-bd cinematic-shadow">
-               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
-               <div className="absolute bottom-12 left-10 right-10 z-20">
-                  <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-4 font-bold">Mundo Idiomas</p>
-                  <h3 className="font-display text-4xl text-white font-bold mb-6">Comunicarte <br/> <span className="text-lael-accent italic italic-playfair font-normal">sin miedo.</span></h3>
-                  <div className="space-y-3">
-                    <Link to="/idiomas" className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 hover:bg-lael-accent transition-all">
-                       Configurar sistema
-                    </Link>
-                    <button onClick={() => navigate('/diagnostico')} className="w-full text-[9px] uppercase tracking-widest text-lael-accent/70 font-bold hover:text-lael-accent transition-colors">
-                       ¿Funciona para mi nivel? →
-                    </button>
-                  </div>
-               </div>
-            </motion.div>
-
-            {/* ADULTOS */}
-            <motion.div {...fadeUp(0.3)} className="group relative aspect-[4/5] rounded-[40px] overflow-hidden border border-lael-bd cinematic-shadow">
-               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
-               <div className="absolute bottom-12 left-10 right-10 z-20">
-                  <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-4 font-bold">Mundo Adultos</p>
-                  <h3 className="font-display text-4xl text-white font-bold mb-6">Terminar lo <br/> <span className="text-lael-accent italic italic-playfair font-normal">que empezaste.</span></h3>
-                  <div className="space-y-3">
-                    <Link to="/adultos" className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 hover:bg-lael-accent transition-all">
-                       Ver mi plan de sueños
-                    </Link>
-                    <button onClick={() => navigate('/diagnostico')} className="w-full text-[9px] uppercase tracking-widest text-lael-accent/70 font-bold hover:text-lael-accent transition-colors">
-                       ¿Por dónde empiezo? →
-                    </button>
-                  </div>
-               </div>
-            </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {SYSTEMS.map((system, i) => (
+              <motion.div 
+                key={system.id} 
+                {...fadeUp(i * 0.1)} 
+                className="group relative aspect-[4/5] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow hover:scale-[1.02] transition-all duration-700"
+              >
+                 {/* Background Image */}
+                 <img 
+                   src={system.bg} 
+                   alt={system.label} 
+                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                 />
+                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
+                 
+                 <div className="absolute bottom-12 left-10 right-10 z-20">
+                    <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">{system.label}</p>
+                    <h3 className="font-display text-4xl text-white font-bold leading-tight mb-4">
+                      {system.title} <br/> 
+                      <span className="text-lael-accent italic italic-playfair font-normal">{system.accent}</span>
+                    </h3>
+                    <p className="text-lael-muted/90 text-sm leading-relaxed mb-8 max-w-[300px]">
+                      {system.desc}
+                    </p>
+                    <div className="space-y-3">
+                      <Link to={system.route} className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 hover:bg-lael-accent transition-all duration-500">
+                         {system.cta}
+                      </Link>
+                      <button onClick={() => navigate('/diagnostico')} className="w-full text-[9px] uppercase tracking-widest text-lael-accent/70 font-bold hover:text-lael-accent transition-colors">
+                         ¿Esto es para mí? →
+                      </button>
+                    </div>
+                 </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

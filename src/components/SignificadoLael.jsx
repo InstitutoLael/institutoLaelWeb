@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import laelLogo from '../assets/img/Logos/lael-inst-negro.png';
+import laelLogo from '../assets/img/Logos/lael-inst-blanco.png';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },

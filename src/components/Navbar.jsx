@@ -80,126 +80,130 @@ export default function Navbar() {
   }
 
   return (
-    <header
-      className={`fixed left-0 w-full z-[100] transition-all duration-700 ${
-        scrolled || mobileOpen
-          ? 'bg-white/80 backdrop-blur-2xl border-b border-black/[0.03] py-3 shadow-[0_10px_30px_rgba(0,0,0,0.04)]'
-          : 'bg-[#F8F5F0]/40 backdrop-blur-md py-6'
-      }`}
-      style={{ top: bannerHeight }}
-    >
-      <div className="max-w-7xl mx-auto px-8 lg:px-12 flex items-center justify-between relative z-10">
-        
-        {/* ── LOGO ───────────────────────────────────────────────────── */}
-        <Link to="/" className="z-[110] relative group flex items-center gap-3">
-          <img
-            src={logoNegro}
-            alt="Instituto Lael"
-            className="h-8 lg:h-10 w-auto object-contain transition-all duration-700 group-hover:scale-105"
-          />
-          <div className="h-6 w-px bg-lael-bd mx-2 hidden lg:block" />
-          <span className="hidden lg:block text-[10px] tracking-[0.4em] uppercase font-bold text-lael-muted opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-            Pertenencia
-          </span>
-        </Link>
+    <>
+      <header
+        className={`fixed left-0 w-full z-[100] transition-all duration-700 ${
+          scrolled || mobileOpen
+            ? 'bg-white/80 backdrop-blur-2xl border-b border-black/[0.03] py-3 shadow-[0_10px_30px_rgba(0,0,0,0.04)]'
+            : 'bg-[#F8F5F0]/40 backdrop-blur-md py-6'
+        }`}
+        style={{ top: bannerHeight }}
+      >
+        <div className="max-w-7xl mx-auto px-8 lg:px-12 flex items-center justify-between relative z-10">
+          
+          {/* ── LOGO ───────────────────────────────────────────────────── */}
+          <Link to="/" className="z-[110] relative group flex items-center gap-3">
+            <img
+              src={logoNegro}
+              alt="Instituto Lael"
+              className="h-8 lg:h-10 w-auto object-contain transition-all duration-700 group-hover:scale-105"
+            />
+            <div className="h-6 w-px bg-lael-bd mx-2 hidden lg:block" />
+            <span className="hidden lg:block text-[10px] tracking-[0.4em] uppercase font-bold text-lael-muted opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+              Pertenencia
+            </span>
+          </Link>
 
-        {/* ── DESKTOP NAV ────────────────────────────────────────────── */}
-        <nav className="hidden lg:flex items-center gap-12">
-          {NAVIGATION.main.map((link) => (
-            <NavLink
-              key={link.path}
-              to={link.path}
-              className={({ isActive }) =>
-                `relative text-[11px] tracking-[0.15em] uppercase font-bold transition-all duration-300 group ${
-                  isActive ? 'text-lael-accent' : 'text-lael-muted/70 hover:text-lael-light'
-                }`
-              }
+          {/* ── DESKTOP NAV ────────────────────────────────────────────── */}
+          <nav className="hidden lg:flex items-center gap-12">
+            {NAVIGATION.main.map((link) => (
+              <NavLink
+                key={link.path}
+                to={link.path}
+                className={({ isActive }) =>
+                  `relative text-[11px] tracking-[0.15em] uppercase font-bold transition-all duration-300 group ${
+                    isActive ? 'text-lael-accent' : 'text-lael-muted/70 hover:text-lael-light'
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {link.name}
+                    <span
+                      className={`absolute -bottom-1.5 left-0 h-[2px] bg-lael-accent transition-all duration-500 ${
+                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                      }`}
+                    />
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* ── RIGHT: CTA + BURGER ────────────────────────────────────── */}
+          <div className="flex items-center gap-6 z-[110]">
+            <a
+              href={NAVIGATION.action.whatsapp.url}
+              target="_blank"
+              rel="noreferrer"
+              className={`hidden lg:inline-flex items-center px-6 py-3 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold transition-all duration-500 shadow-sm ${
+                scrolled 
+                  ? 'bg-lael-accent text-white hover:bg-lael-rust' 
+                  : 'bg-lael-accent/10 border border-lael-accent/20 text-lael-accent hover:bg-lael-accent hover:text-white'
+              }`}
             >
-              {({ isActive }) => (
-                <>
-                  {link.name}
-                  <span
-                    className={`absolute -bottom-1.5 left-0 h-[2px] bg-lael-accent transition-all duration-500 ${
-                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                    }`}
-                  />
-                </>
-              )}
-            </NavLink>
-          ))}
-        </nav>
+              {NAVIGATION.action.whatsapp.label}
+            </a>
 
-        {/* ── RIGHT: CTA + BURGER ────────────────────────────────────── */}
-        <div className="flex items-center gap-6 z-[110]">
-          <a
-            href={NAVIGATION.action.whatsapp.url}
-            target="_blank"
-            rel="noreferrer"
-            className={`hidden lg:inline-flex items-center px-6 py-3 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold transition-all duration-500 shadow-sm ${
-              scrolled 
-                ? 'bg-lael-accent text-white hover:bg-lael-rust' 
-                : 'bg-lael-accent/10 border border-lael-accent/20 text-lael-accent hover:bg-lael-accent hover:text-white'
-            }`}
-          >
-            {NAVIGATION.action.whatsapp.label}
-          </a>
-
-          <button
-            onClick={() => setMobileOpen(v => !v)}
-            aria-label="Toggle menu"
-            className={`lg:hidden w-11 h-11 flex items-center justify-center rounded-xl transition-all active:scale-95 border ${
-              mobileOpen
-                ? 'bg-lael-accent text-white border-lael-accent'
-                : (scrolled 
-                    ? 'bg-lael-accent/10 border-lael-accent/20 text-lael-accent' 
-                    : 'bg-lael-accent text-white border-lael-accent shadow-lg shadow-lael-accent/20')
-            }`}
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              {mobileOpen ? (
-                <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 45, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.3 }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="12" y1="4" x2="12" y2="20" />
-                    <line x1="7" y1="9" x2="17" y2="9" />
-                  </svg>
-                </motion.div>
-              ) : (
-                <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.3 }}>
-                  <Menu size={20} />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </button>
+            <button
+              onClick={() => setMobileOpen(v => !v)}
+              aria-label="Toggle menu"
+              className={`lg:hidden w-11 h-11 flex items-center justify-center rounded-xl transition-all active:scale-95 border ${
+                mobileOpen
+                  ? 'bg-lael-accent text-white border-lael-accent'
+                  : (scrolled 
+                      ? 'bg-lael-accent/10 border-lael-accent/20 text-lael-accent' 
+                      : 'bg-lael-accent text-white border-lael-accent shadow-lg shadow-lael-accent/20')
+              }`}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {mobileOpen ? (
+                  <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 45, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.3 }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="12" y1="4" x2="12" y2="20" />
+                      <line x1="7" y1="9" x2="17" y2="9" />
+                    </svg>
+                  </motion.div>
+                ) : (
+                  <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.3 }}>
+                    <Menu size={20} />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </button>
+          </div>
         </div>
-      </div>
+      </header>
 
       {/* ── MOBILE DRAWER — APP-STYLE OVERLAY ────────────────────────── */}
       <AnimatePresence>
         {mobileOpen && (
-          <>
+          <div className="fixed inset-0 z-[200]">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[150]"
+              className="absolute inset-0 bg-black/60 backdrop-blur-md"
             />
 
-            {/* Drawer */}
+            {/* Drawer Content */}
             <motion.div
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed left-0 top-0 bottom-0 w-[85%] max-w-sm bg-[#F8F5F0] z-[160] rounded-r-[40px] shadow-2xl flex flex-col p-10 overflow-hidden"
+              className="absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-[#F8F5F0] rounded-r-[40px] shadow-2xl flex flex-col p-10 overflow-y-auto"
             >
               {/* Background Grain */}
               <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
               
               {/* Header inside Drawer */}
               <div className="flex items-center justify-between mb-16 relative z-10">
-                <img src={logoNegro} alt="Lael" className="h-8 w-auto" />
+                <Link to="/" onClick={() => setMobileOpen(false)}>
+                  <img src={logoNegro} alt="Lael" className="h-8 w-auto" />
+                </Link>
                 <button 
                   onClick={() => setMobileOpen(false)}
                   className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-lael-muted"
@@ -222,16 +226,17 @@ export default function Navbar() {
                   >
                     <NavLink
                       to={link.path}
+                      onClick={() => setMobileOpen(false)}
                       className={({ isActive }) =>
                         `flex items-center gap-5 p-4 rounded-2xl transition-all duration-300 ${
                           isActive 
                             ? 'bg-lael-accent text-white shadow-lg shadow-lael-accent/20' 
-                            : 'text-[#0D0D0D]/70 hover:bg-black/5'
+                            : 'text-[#0D0D0D]/80 hover:bg-black/5'
                         }`
                       }
                     >
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                        location.pathname === link.path ? 'bg-white/20' : 'bg-lael-accent/10 text-lael-accent'
+                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                        location.pathname === link.path ? 'bg-white/20 text-white' : 'bg-lael-accent/10 text-lael-accent'
                       }`}>
                          <span className="text-[10px] font-bold">{i+1}</span>
                       </div>
@@ -260,9 +265,9 @@ export default function Navbar() {
                   </a>
               </div>
             </motion.div>
-          </>
+          </div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

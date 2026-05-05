@@ -68,7 +68,7 @@ Quiero que me orienten para comenzar.`;
             {selectedLanguages.map(id => {
               const lang = LANGUAGES.find(l => l.id === id);
               return (
-                <span key={id} className="text-[10px] tracking-[0.12em] text-lael-muted/80 border border-lael-bd px-3 py-1 rounded-full uppercase bg-lael-primary">
+                <span key={id} className="text-[10px] tracking-[0.12em] text-lael-accent border border-lael-accent/30 px-3 py-1 rounded-full uppercase bg-lael-accent/5 font-bold">
                   {lang?.name ?? id}
                 </span>
               );

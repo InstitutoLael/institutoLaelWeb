@@ -24,85 +24,65 @@ export default function NivelacionAdultos() {
   return (
     <div className="bg-lael-primary min-h-screen pt-20">
       <Helmet>
-        <title>Nivelación Adultos | Instituto Lael — Ingeniería del Rendimiento</title>
-        <meta name="description" content="Nunca fue tarde. Termina tu educación con estrategia y flexibilidad. Sistema diseñado para adultos que buscan una segunda oportunidad real." />
+        <title>Escuela de Sueños | Instituto Lael — Nivelación Adultos</title>
+        <meta name="description" content="No es solo el colegio. Es tu nueva vida. Escuela de Sueños de Instituto Lael. Nivelación de estudios para adultos con un sistema que sí funciona." />
       </Helmet>
 
-      {/* Hero Section */}
-      <section className="relative px-6 py-24 lg:py-32 flex flex-col items-center overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-full pointer-events-none opacity-20">
-            <div className="absolute top-20 left-10 w-64 h-64 bg-lael-accent/20 blur-[120px] rounded-full" />
-            <div className="absolute bottom-10 right-10 w-96 h-96 bg-lael-rust/10 blur-[150px] rounded-full" />
-        </div>
+      {/* ── 1. HERO EMOCIONAL ─────────────────────────────────────────── */}
+      <section className="relative px-6 py-24 lg:py-48 flex flex-col items-center overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
-        <motion.div {...fadeUp()} className="text-center max-w-4xl relative z-10">
-          <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-8 font-bold">Arquitectura Educativa</p>
-          <h1 className="font-display text-5xl lg:text-7xl text-lael-light mb-8 leading-tight">
+        <motion.div {...fadeUp()} className="text-center max-w-5xl relative z-10">
+          <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 font-bold">Escuela de Sueños</p>
+          <h1 className="font-display text-5xl lg:text-8xl text-lael-light mb-12 leading-[0.9] tracking-tighter">
             {ADULT_CONTENT.hero.title} <br/>
-            <span className="text-lael-accent italic italic-playfair">{ADULT_CONTENT.hero.subtitle}</span>
+            <span className="accent-italic">{ADULT_CONTENT.hero.subtitle}</span>
           </h1>
-          <p className="text-lael-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-12">
-            No es solo terminar el colegio. Es activar tu capacidad de rendimiento para lo que viene después.
+          <p className="text-lael-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-16 italic italic-playfair">
+            {ADULT_CONTENT.hero.description}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button onClick={startDiagnostic} className="bg-lael-accent text-white px-10 py-5 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-xl">
-              Iniciar Diagnóstico Táctico
-            </button>
-            <button onClick={() => navigate('/sistema')} className="bg-transparent border border-lael-bd text-lael-light px-10 py-5 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-secondary transition-all duration-500">
-              Ver el Sistema
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <button onClick={startDiagnostic} className="bg-lael-accent text-white px-12 py-6 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-[0_10px_40px_rgba(196,151,62,0.2)]">
+              ¿Hablamos de tu meta? →
             </button>
           </div>
         </motion.div>
       </section>
 
-      {/* Problem Section */}
-      <section className="px-6 py-24 bg-lael-secondary border-y border-lael-bd">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <motion.div {...fadeUp()}>
-              <h2 className="font-display text-3xl lg:text-4xl text-lael-light mb-6">
-                {ADULT_CONTENT.problem.title}
-              </h2>
-              <p className="text-lael-muted text-base lg:text-lg leading-relaxed mb-8">
-                {ADULT_CONTENT.problem.description}
-              </p>
-              <div className="p-6 bg-lael-primary/50 border border-lael-accent/20 rounded-2xl italic text-lael-accent">
-                "{ADULT_CONTENT.problem.solution}"
-              </div>
-            </motion.div>
-            <motion.div {...fadeUp(0.2)} className="grid grid-cols-1 gap-6">
-               <div className="p-8 bg-lael-primary rounded-2xl border border-lael-bd cinematic-shadow">
-                  <Users className="text-lael-accent mb-4" size={32} />
-                  <h3 className="text-lael-light font-bold mb-2">Contexto Real</h3>
-                  <p className="text-lael-muted text-sm">Entendemos que tienes trabajo, familia y responsabilidades. El sistema se dobla, no tú.</p>
-               </div>
-               <div className="p-8 bg-lael-primary rounded-2xl border border-lael-bd cinematic-shadow">
-                  <Target className="text-lael-accent mb-4" size={32} />
-                  <h3 className="text-lael-light font-bold mb-2">Estrategia Táctica</h3>
-                  <p className="text-lael-muted text-sm">No te llenamos de contenido irrelevante. Vamos a lo que te preguntan en el examen.</p>
-               </div>
-            </motion.div>
-          </div>
+      {/* ── 2. MOMENTO DE VERDAD ───────────────────────────────────────── */}
+      <section className="px-6 py-32 bg-lael-secondary border-y border-lael-bd">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div {...fadeUp()}>
+            <h2 className="font-display text-4xl lg:text-5xl text-lael-light mb-10 uppercase tracking-widest">
+              {ADULT_CONTENT.problem.title}
+            </h2>
+            <p className="text-lael-muted text-lg lg:text-xl leading-relaxed mb-12">
+              {ADULT_CONTENT.problem.description}
+            </p>
+            <div className="inline-block p-10 bg-lael-primary rounded-[40px] border border-lael-accent/20 italic italic-playfair text-lael-accent text-xl">
+              "{ADULT_CONTENT.problem.solution}"
+            </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="px-6 py-24 lg:py-32">
+      {/* ── 3. EL SISTEMA (CAMINOS) ────────────────────────────────────── */}
+      <section className="px-6 py-32 lg:py-48">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-20">
-             <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-4">El Sistema Caminos</p>
-             <h2 className="font-display text-4xl text-lael-light">Propuesta Completa</h2>
+          <div className="text-center mb-24">
+             <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Tu Arquitectura de Éxito</p>
+             <h2 className="font-display text-5xl text-lael-light uppercase tracking-tighter">Cómo lo logramos.</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {ADULT_CONTENT.system.features.map((f, i) => (
-              <motion.div key={f.id} {...fadeUp(i * 0.1)} className="p-8 bg-lael-secondary rounded-2xl border border-lael-bd hover:border-lael-accent/50 transition-all duration-500">
-                <div className="w-12 h-12 bg-lael-accent/10 rounded-xl flex items-center justify-center text-lael-accent mb-6">
-                  {i === 0 && <Clock size={24}/>}
-                  {i === 1 && <BookOpen size={24}/>}
-                  {i === 2 && <Users size={24}/>}
-                  {i === 3 && <Target size={24}/>}
+              <motion.div key={f.id} {...fadeUp(i * 0.1)} className="p-10 bg-lael-secondary rounded-[40px] border border-lael-bd hover:border-lael-accent/30 transition-all duration-500 cinematic-shadow group">
+                <div className="w-16 h-16 bg-lael-accent/10 rounded-2xl flex items-center justify-center text-lael-accent mb-10 group-hover:scale-110 transition-transform">
+                  {i === 0 && <Clock size={28}/>}
+                  {i === 1 && <BookOpen size={28}/>}
+                  {i === 2 && <Users size={28}/>}
+                  {i === 3 && <Target size={28}/>}
                 </div>
-                <h3 className="text-lael-light font-bold mb-3 tracking-wide">{f.title}</h3>
+                <h3 className="text-lael-light font-bold mb-4 tracking-tight text-xl uppercase">{f.title}</h3>
                 <p className="text-lael-muted text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
@@ -110,32 +90,32 @@ export default function NivelacionAdultos() {
         </div>
       </section>
 
-      {/* Target & Outcomes */}
-      <section className="px-6 py-24 bg-lael-secondary border-t border-lael-bd">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-          <motion.div {...fadeUp()} className="space-y-8">
-            <h3 className="font-display text-2xl text-lael-light flex items-center gap-3">
-              <CheckCircle2 className="text-lael-accent" />
-              Esto es para ti si:
+      {/* ── 4. PARA QUIÉN ES ─────────────────────────────────────────── */}
+      <section className="px-6 py-32 bg-lael-secondary border-t border-lael-bd">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-20">
+          <motion.div {...fadeUp()} className="space-y-10">
+            <h3 className="font-display text-3xl text-lael-light flex items-center gap-4 uppercase tracking-widest">
+              <CheckCircle2 className="text-lael-accent" size={32} />
+              Esto es para ti:
             </h3>
-            <ul className="space-y-4">
+            <ul className="space-y-6">
               {ADULT_CONTENT.target.forYou.map((item, i) => (
-                <li key={i} className="flex items-start gap-4 text-lael-muted text-sm leading-relaxed">
-                  <div className="w-1.5 h-1.5 rounded-full bg-lael-accent mt-1.5 flex-shrink-0" />
+                <li key={i} className="flex items-start gap-5 text-lael-muted text-base leading-relaxed">
+                  <div className="w-2 h-2 rounded-full bg-lael-accent mt-2 flex-shrink-0" />
                   {item}
                 </li>
               ))}
             </ul>
           </motion.div>
-          <motion.div {...fadeUp(0.2)} className="space-y-8">
-            <h3 className="font-display text-2xl text-lael-light flex items-center gap-3">
-              <ArrowRight className="text-lael-accent" />
-              Resultados Esperados:
+          <motion.div {...fadeUp(0.2)} className="space-y-10">
+            <h3 className="font-display text-3xl text-lael-light flex items-center gap-4 uppercase tracking-widest">
+              <ArrowRight className="text-lael-accent" size={32} />
+              Tu nueva realidad:
             </h3>
-            <ul className="space-y-4">
+            <ul className="space-y-6">
               {ADULT_CONTENT.target.outcome.map((item, i) => (
-                <li key={i} className="flex items-start gap-4 text-lael-muted text-sm leading-relaxed">
-                  <div className="w-1.5 h-1.5 rounded-full bg-lael-rust mt-1.5 flex-shrink-0" />
+                <li key={i} className="flex items-start gap-5 text-lael-muted text-base leading-relaxed">
+                  <div className="w-2 h-2 rounded-full bg-lael-rust mt-2 flex-shrink-0" />
                   {item}
                 </li>
               ))}
@@ -144,13 +124,14 @@ export default function NivelacionAdultos() {
         </div>
       </section>
 
-      {/* Message Footer */}
-      <section className="py-32 flex flex-col items-center">
-         <motion.p {...fadeUp()} className="font-display text-3xl lg:text-5xl text-lael-light text-center px-6">
+      {/* ── 5. CTA FINAL ─────────────────────────────────────────────── */}
+      <section className="py-48 flex flex-col items-center bg-lael-primary relative">
+         <div className="separator-gradient top-0" />
+         <motion.p {...fadeUp()} className="font-display text-4xl lg:text-6xl text-lael-light text-center px-6 max-w-4xl leading-tight mb-16 italic italic-playfair">
             {ADULT_CONTENT.message}
          </motion.p>
-         <motion.button onClick={startDiagnostic} {...fadeUp(0.2)} className="mt-12 bg-lael-accent text-white px-12 py-6 rounded-xl text-xs tracking-[0.2em] uppercase font-bold hover:scale-105 transition-all duration-500">
-            Iniciar diagnóstico gratuito →
+         <motion.button onClick={startDiagnostic} {...fadeUp(0.2)} className="bg-lael-accent text-white px-16 py-7 rounded-2xl text-xs tracking-[0.3em] uppercase font-bold hover:-translate-y-2 transition-all duration-500 shadow-[0_20px_50px_rgba(196,151,62,0.25)]">
+            Iniciar mi transformación →
          </motion.button>
       </section>
     </div>

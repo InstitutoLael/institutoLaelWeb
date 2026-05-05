@@ -1,43 +1,43 @@
 // src/data/nivelacion.js
-// === Mundo Adultos: Finalización Educativa con Estrategia ===
+// === Mundo Adultos: Escuela de Sueños ===
 
 export const ADULT_CONTENT = {
   hero: {
-    title: "Nunca fue tarde.",
-    subtitle: "Solo no era el sistema correcto.",
-    description: "Termina tu educación con estrategia, no frustración. Un sistema flexible diseñado para quienes el sistema tradicional ignoró."
+    title: "El colegio no es la meta.",
+    subtitle: "Es el inicio de tu nueva vida.",
+    description: "No estamos aquí solo para que saques un cartón. Estamos aquí para que recuperes el tiempo y desbloquees el futuro que dejaste en pausa. Escuela de Sueños."
   },
   problem: {
-    title: "El problema no eres tú.",
-    description: "Dejar el colegio no fue falta de capacidad. Fue falta de sistema. Trabajo, familia, contexto... El sistema tradicional no estaba hecho para ti.",
-    solution: "Lael Adultos es un sistema flexible de finalización educativa que se adapta a tu vida real."
+    title: "Tu sueño no tiene fecha de vencimiento.",
+    description: "Si dejaste de estudiar, no fue por falta de ganas. Fue porque la vida se puso en medio. Trabajo, familia, miedos... El sistema tradicional te falló a ti, no tú al sistema.",
+    solution: "Lael Adultos es el puente diseñado para que tu pasado no limite tu futuro."
   },
   system: {
-    title: "Propuesta Completa",
+    title: "Tu Arquitectura de Éxito",
     features: [
-      { id: 1, title: "Ritmo Adaptado", desc: "Clases grabadas y en vivo que respetan tus tiempos." },
-      { id: 2, title: "Contenidos Esenciales", desc: "No más relleno. Enfocados en lo que realmente necesitas saber." },
-      { id: 3, title: "Acompañamiento Real", desc: "Mentores que entienden tu contexto de adulto." },
-      { id: 4, title: "Preparación Exámenes Libres", desc: "Te preparamos para que valides tus estudios ante el Mineduc." }
+      { id: 1, title: "Respeto a tu Tiempo", desc: "Sabemos que eres adulto. El sistema se adapta a tu trabajo y familia, no al revés." },
+      { id: 2, title: "Foco en el Futuro", desc: "No te enseñamos cosas que no usarás. Te damos las herramientas para tu próximo paso." },
+      { id: 3, title: "Mentores de Vida", desc: "No son solo profesores. Son guías que han estado donde tú estás hoy." },
+      { id: 4, title: "Validación Real", desc: "Te acompañamos hasta que tengas tu licencia en la mano y la confianza en el cielo." }
     ]
   },
   process: [
-    { step: "01", label: "Diagnóstico académico real", desc: "Entendemos qué base traes y qué te falta." },
-    { step: "02", label: "Plan personalizado", desc: "Diseñamos tu ruta de estudio según tu meta." },
-    { step: "03", label: "Clases tácticas", desc: "Contenido directo al grano, sin rodeos." },
-    { step: "04", label: "Simulación de examen", desc: "Llegas al examen oficial con la seguridad de haberlo hecho antes." }
+    { step: "01", label: "Diagnóstico de Sueños", desc: "¿Qué quieres lograr realmente? La licencia es solo el inicio." },
+    { step: "02", label: "Mapa Estratégico", desc: "Trazamos la ruta más corta y segura hacia tu meta." },
+    { step: "03", label: "Entrenamiento Activo", desc: "Clases que no aburren. Contenido que sirve para la vida real." },
+    { step: "04", label: "Cumplimiento de Meta", desc: "Exámenes validados y el inicio de tu nueva etapa profesional." }
   ],
   target: {
     forYou: [
-      "Adultos que no terminaron enseñanza media",
-      "Personas que quieren mejorar oportunidades laborales",
-      "Personas que quieren retomar estudios superiores"
+      "Si sientes que el tren ya pasó (Spoiler: No ha pasado)",
+      "Si quieres demostrarte a ti mismo que sí puedes",
+      "Si necesitas la licencia para ese ascenso o nueva carrera"
     ],
     outcome: [
-      "Licencia de enseñanza media (vía exámenes oficiales)",
-      "Base académica real para el mundo de hoy",
-      "Opción de continuar estudios en Lael PAES o Idiomas"
+      "Licencia de Enseñanza Media legal y reconocida",
+      "Reactivación de tu confianza intelectual",
+      "Acceso directo a becas y educación superior"
     ]
   },
-  message: "🔥 Segunda oportunidad con sistema"
+  message: "“Nunca es tarde para ser lo que podrías haber sido.”"
 };

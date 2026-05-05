@@ -9,9 +9,9 @@ export const NAVIGATION = {
     main: [
         { name: "PAES", path: "/paes" },
         { name: "Idiomas", path: "/idiomas" },
-        { name: "Diagnóstico", path: "/diagnostico" },
-        { name: "El Sistema", path: "/sistema" },
+        { name: "LSCh (Señas)", path: "/lsch" },
         { name: "Adultos", path: "/adultos" },
+        { name: "El Sistema", path: "/sistema" },
     ],
     
     // Categorized for Mobile Menu or MegaMenu

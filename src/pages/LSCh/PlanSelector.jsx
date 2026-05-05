@@ -66,23 +66,23 @@ export default function PlanSelector({ selectedPlan, setSelectedPlan, isChurch, 
                   <div className={`absolute top-0 left-0 w-1 h-full transition-all duration-700 ${isSelected ? 'bg-lael-accent' : 'bg-transparent'}`} />
 
                   {plan.highlight && (
-                    <span className="text-[9px] tracking-[0.2em] uppercase text-lael-accent border border-lael-accent/30 px-2 py-1 rounded-full mb-4 inline-block">
+                    <span className="text-[10px] tracking-[0.12em] text-lael-accent border border-lael-accent/30 px-3 py-1 rounded-full uppercase bg-lael-accent/5 font-bold mb-4 inline-block">
                       {plan.badge}
                     </span>
                   )}
 
-                  <h3 className={`font-display text-lg mb-2 transition-colors duration-500 ${isSelected ? 'text-lael-light font-bold' : 'text-lael-muted'}`}>
+                  <h3 className={`font-display text-lg mb-2 transition-colors duration-500 ${isSelected ? 'text-lael-light font-bold' : 'text-lael-light'}`}>
                     {plan.title}
                   </h3>
                   <p className={`font-display text-3xl font-bold mb-3 transition-colors duration-500 ${isSelected ? 'text-lael-accent' : 'text-lael-light'}`}>
                     ${plan.price?.toLocaleString('es-CL')}
                     <span className="text-sm font-normal text-lael-muted/60"> /mes</span>
                   </p>
-                  <p className="text-sm text-lael-muted/80 mb-4">{plan.desc}</p>
+                  <p className="text-sm text-lael-light/80 mb-4">{plan.desc}</p>
 
                   <div className="space-y-2">
                     {plan.features?.map(f => (
-                      <p key={f} className={`text-[11px] tracking-wider transition-colors duration-500 ${isSelected ? 'text-lael-muted' : 'text-lael-muted/60'}`}>
+                      <p key={f} className={`text-[11px] tracking-wider transition-colors duration-500 ${isSelected ? 'text-lael-light/80' : 'text-lael-muted'}`}>
                         · {f}
                       </p>
                     ))}

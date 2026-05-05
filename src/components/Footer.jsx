@@ -73,13 +73,18 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-lael-bd pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[11px] text-lael-muted/80 tracking-wider">
-            © {year} Instituto Lael SpA · Santiago, Chile
+        <div className="border-t border-lael-bd pt-12 flex flex-col items-center gap-8 text-center">
+          <p className="text-lael-muted text-sm italic max-w-2xl leading-relaxed">
+             “Nacimos en medio de una crisis, con clases gratis en Zoom para quienes no podían pagar un preu. Hoy somos tecnología, pero el espíritu es el mismo: que nadie se quede atrás.”
           </p>
-          <p className="text-[11px] text-lael-muted/60 italic tracking-wider">
-            "El Espíritu del Señor está sobre mí..." — Lucas 4:18
-          </p>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-[11px] text-lael-muted/60 italic tracking-[0.2em] uppercase font-bold">
+              Jeremías 33:3 · Lucas 4:18
+            </p>
+            <p className="text-[10px] text-lael-muted/40 tracking-widest">
+              © {year} Instituto Lael SpA · Santiago, Chile
+            </p>
+          </div>
         </div>
       </div>
     </footer>

@@ -135,18 +135,62 @@ export const getDiagnosticResult = (answers) => {
   }
 
 
-  // Fallback for other categories (Adultos/Idiomas)
+
+  if (category === 'adultos') {
+    return {
+      title: "El Arquitecto de su Propio Destino",
+      subtitle: "Detectamos que tu problema no fue la capacidad, sino el contexto.",
+      description: "Dejar los estudios no fue un fracaso, fue una pausa obligatoria por la vida. Hoy, tu madurez es tu mayor activo. No necesitas un colegio, necesitas un sistema que respete tu tiempo y potencie tu experiencia real.",
+      tone: "empathetic",
+      wa_msg: "Hola, me salió 'El Arquitecto de su Propio Destino'. Quiero terminar mi enseñanza media con la Escuela de Sueños Lael.",
+      cta: "Iniciar mi Plan de Sueños",
+      entry_product: "Sesión de Nivelación Inicial (Gratis)",
+      attributes: [
+        { label: "Madurez Operativa", value: "Máxima", score: 90 },
+        { label: "Foco en Metas", value: "Alto", score: 80 },
+        { label: "Disponibilidad Horaria", value: "Flexible", score: 100 }
+      ],
+      stats: [
+        { label: "Potencial Laboral", value: "+45%" },
+        { label: "Tiempo Meta", value: "6-8 meses" },
+        { label: "Factibilidad", value: "99%" }
+      ]
+    };
+  }
+
+  if (category === 'idiomas') {
+    return {
+      title: "El Comunicador Global Estratégico",
+      subtitle: "Buscas fluidez, no teoría gramatical.",
+      description: "Tu cerebro ya domina un código (español). Ahora necesita instalar los drivers de un nuevo sistema de comunicación. No te enseñaremos a conjugar verbos en una pizarra, te entrenaremos para que cierres negocios y navegues el mundo sin fricción.",
+      tone: "direct",
+      wa_msg: "Hola, mi resultado fue 'Comunicador Global'. Busco fluidez real para mi carrera profesional.",
+      cta: "Configurar mi Programa",
+      entry_product: "Diagnóstico de Nivel Comunicativo",
+      attributes: [
+        { label: "Lógica de Estructura", value: "Profesional", score: 75 },
+        { label: "Miedo al Error", value: "A trabajar", score: 40 },
+        { label: "Potencial de Fluidez", value: "Alto", score: 85 }
+      ],
+      stats: [
+        { label: "Crecimiento Laboral", value: "3x" },
+        { label: "Enfoque", value: "Simulación" }
+      ]
+    };
+  }
+
+  // Fallback for other categories (Empresas)
   return {
-    title: "Estratega en Formación",
-    subtitle: "Analizando tu arquitectura de rendimiento...",
-    description: "Detectamos que buscas un cambio estructural. No estás aquí por un curso, estás aquí por un resultado. El sistema Lael se adaptará a tu disponibilidad horaria y meta específica.",
-    tone: "empathetic",
-    wa_msg: "Hola, completé el diagnóstico. Quiero saber cómo el sistema Lael se adapta a mis metas personales.",
-    cta: "Solicitar Sesión de Onboarding",
-    entry_product: "Sesión Táctica de 15 min",
+    title: "Socio de Rendimiento Organizacional",
+    subtitle: "Analizando la arquitectura de tu equipo...",
+    description: "Las empresas no necesitan cursos, necesitan resultados medibles. El sistema Lael para empresas optimiza el rendimiento humano a través de datos y acompañamiento táctico.",
+    tone: "professional",
+    wa_msg: "Hola, busco una solución corporativa basada en el sistema de rendimiento Lael.",
+    cta: "Solicitar Propuesta Técnica",
+    entry_product: "Auditoría de Capacitación",
     stats: [
-      { label: "Viabilidad", value: "Alta" },
-      { label: "Enfoque", value: category.toUpperCase() }
+      { label: "ROI Estimado", value: "High" },
+      { label: "Personalización", value: "100%" }
     ]
   };
 };

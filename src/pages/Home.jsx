@@ -114,73 +114,101 @@ export default function Home() {
       <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.05] mix-blend-multiply"
         style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")' }} />
 
-      {/* ── 1. HERO (CONEXIÓN EMOCIONAL) ────────────────────────────────── */}
+      {/* ── 1. HERO (CINEMÁTICO & EMOCIONAL) ─────────────────────────── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] border-[0.5px] border-lael-accent/[0.06] rounded-full pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lael-accent/[0.025] rounded-full blur-[100px] pointer-events-none" />
+        {/* Background Cinematic Image (Placeholder for night student study) */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-lael-primary/40 via-lael-primary/60 to-lael-primary z-10" />
+          <div className="absolute inset-0 bg-lael-primary/20 backdrop-blur-[2px] z-0" />
+          {/* Note: When generated, hero_home_emotional will go here */}
+          <div className="w-full h-full bg-cover bg-center opacity-30 mix-blend-luminosity" 
+            style={{ backgroundImage: `url(${paesBg})` }} /> 
+        </div>
 
-        <motion.div {...fadeUp()} className="mb-10">
-           <h2 className="text-lael-accent font-display text-2xl lg:text-3xl italic italic-playfair font-normal">
-              Si sientes que estudias y no mejoras, <br className="hidden md:block" /> no eres el problema.
-           </h2>
-        </motion.div>
+        <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center">
+          <motion.div {...fadeUp()} className="mb-10">
+             <h2 className="text-lael-accent font-display text-2xl lg:text-3xl italic italic-playfair font-normal">
+                Si sientes que estudias y no mejoras, <br className="hidden md:block" /> no eres el problema.
+             </h2>
+          </motion.div>
 
-        <h1
-          className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] font-bold leading-[0.9] max-w-6xl clip-reveal"
-          style={{ opacity: 0, animationDelay: '0.15s' }}
-        >
-          Te enseñamos a <br/>
-          <span className="accent-italic">subir tu puntaje.</span>
-        </h1>
+          <h1 className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] font-bold leading-[0.9] max-w-6xl clip-reveal mb-12">
+            Te enseñamos a <br/>
+            <span className="accent-italic">subir tu puntaje.</span>
+          </h1>
 
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 0.45, ease }}
-          className="mt-12 text-lael-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed">
-          Corregimos lo que estás haciendo mal, no solo te damos más materia. <br className="hidden md:block" /> ¿Por dónde quieres empezar?
-        </motion.p>
+          <motion.p {...fadeUp(0.3)} className="text-lael-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-14">
+            Corregimos lo que estás haciendo mal, no solo te damos más materia. <br className="hidden md:block" /> ¿Por dónde quieres empezar?
+          </motion.p>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.0, delay: 0.7, ease }}
-          className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 mt-14">
-          <button onClick={() => navigate('/diagnostico', { state: { path: 'stagnation' } })}
-            className="bg-lael-accent text-white px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all shadow-xl">
-            Estoy estancado
-          </button>
-          <button onClick={() => navigate('/diagnostico', { state: { path: 'target' } })}
-            className="bg-lael-secondary border border-lael-bd text-lael-light px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
-            Quiero mejorar mi puntaje
-          </button>
-          <button onClick={() => navigate('/diagnostico', { state: { path: 'lost' } })}
-            className="bg-transparent border border-lael-accent/30 text-lael-accent px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
-            No sé por dónde empezar
-          </button>
-        </motion.div>
-        
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
-          className="mt-8 text-[10px] uppercase tracking-[0.3em] text-lael-rust font-bold">
-          ⚠ Si no activas hoy, pierdes 1 semana completa de avance estratégico.
-        </motion.p>
+          <motion.div {...fadeUp(0.6)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
+            <button onClick={() => navigate('/diagnostico', { state: { path: 'stagnation' } })}
+              className="bg-lael-accent text-white px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all shadow-xl">
+              Estoy estancado
+            </button>
+            <button onClick={() => navigate('/diagnostico', { state: { path: 'target' } })}
+              className="bg-lael-secondary border border-lael-bd text-lael-light px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
+              Quiero mejorar mi puntaje
+            </button>
+            <button onClick={() => navigate('/diagnostico', { state: { path: 'lost' } })}
+              className="bg-transparent border border-lael-accent/30 text-lael-accent px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
+              No sé por dónde empezar
+            </button>
+          </motion.div>
+          
+          <motion.p {...fadeUp(0.9)} className="mt-8 text-[10px] uppercase tracking-[0.3em] text-lael-rust font-bold">
+            ⚠ Si no activas hoy, pierdes 1 semana completa de avance estratégico.
+          </motion.p>
+        </div>
       </section>
 
-      {/* ── 1.5 MANIFIESTO IDENTIDAD ────────────────────────────────── */}
-      <section className="relative w-full py-32 flex flex-col items-center text-center px-6 overflow-hidden">
+      {/* ── 2. DOLOR DIRECTO (EL QUIEBRE) ─────────────────────────────── */}
+      <section className="relative w-full py-32 bg-lael-primary flex flex-col items-center px-6 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[150px] pointer-events-none" />
-        <motion.div {...fadeUp()} className="max-w-4xl relative z-10">
-           <h2 className="text-lael-accent text-[10px] tracking-[0.5em] uppercase mb-12 font-bold">Nuestra Esencia</h2>
-           <h3 className="font-display text-4xl lg:text-7xl text-lael-light font-bold leading-tight mb-10 tracking-tighter">
-             No somos una empresa. <br />
-             <span className="accent-italic text-lael-accent">Somos un propósito.</span>
-           </h3>
-           <p className="text-lael-muted text-lg lg:text-2xl leading-relaxed italic italic-playfair max-w-2xl mx-auto">
-             "Lael" significa pertenencia. Nuestra paloma no es solo un logo; es la promesa de un nuevo comienzo tras la tormenta.
-           </p>
-        </motion.div>
+        <div className="max-w-4xl w-full relative z-10 text-center lg:text-left">
+           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.5em] uppercase mb-12 font-bold text-center lg:text-left">La Realidad</motion.p>
+           
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div>
+                <h3 className="font-display text-4xl lg:text-6xl text-lael-light font-bold leading-tight mb-8">
+                  El sistema <br />
+                  <span className="accent-italic text-lael-accent">te está fallando.</span>
+                </h3>
+                <div className="space-y-6 text-lael-muted text-lg">
+                  <p>Estudias 8 horas al día. Repites guías. Ves videos. Y el puntaje sigue igual.</p>
+                  <p className="font-bold text-lael-light">No es tu capacidad. Es tu arquitectura de rendimiento.</p>
+                </div>
+
+                {/* HUMAN VOICE COUNTERWEIGHT */}
+                <div className="mt-12 p-8 border border-white/5 bg-white/[0.02] rounded-3xl">
+                  <p className="text-lael-muted text-sm leading-relaxed">
+                    <span className="text-lael-accent font-bold">Siendo honestos…</span> la mayoría de los alumnos que llegan a Lael ya lo han intentado antes. Llegan cansados, frustrados y con la idea de que "no les da la cabeza". 
+                    <br/><br/>
+                    No llegas acá porque te falta capacidad. Llegas porque nadie te enseñó cómo mejorar bajo presión.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-8">
+                <div className="p-8 bg-lael-accent/5 border-l-2 border-lael-accent rounded-r-2xl">
+                  <p className="text-lael-light font-medium italic italic-playfair">"Lo intenté en preuniversitarios masivos y era solo un número más. En Lael encontraron exactamente por qué me bloqueaba."</p>
+                  <p className="mt-4 text-[10px] uppercase tracking-widest text-lael-muted font-bold">— Constanza, Puntaje Nacional Matemáticas</p>
+                </div>
+              </div>
+           </div>
+        </div>
       </section>
 
-      {/* ── 1.6 SIGNIFICADO LAEL (IDENTIDAD) ─────────────────────────── */}
-      <SignificadoLael />
+      {/* ── 3. CTA INTERMEDIO (LAEL CHOICE) ───────────────────────────── */}
+      <section className="py-20 flex justify-center border-y border-white/[0.03]">
+          <button onClick={() => navigate('/diagnostico')}
+            className="group flex items-center gap-4 text-lael-accent text-xs tracking-[0.4em] uppercase font-bold hover:gap-8 transition-all">
+            Identificar mis fallos ahora <ChevronRight size={16} />
+          </button>
+      </section>
 
-      {/* ── 2. MUNDOS (VISUAL & PROTAGONISTA) ────────────────────────── */}
+      {/* ── 4. MUNDOS (LAEL SYSTEMS) ──────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 flex flex-col items-center overflow-hidden">
-        <div className="separator-gradient top-0" />
         <div className="w-full max-w-7xl">
           <div className="text-center mb-20">
              <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">Explora tu sistema</motion.p>
@@ -194,7 +222,6 @@ export default function Home() {
                 {...fadeUp(i * 0.1)} 
                 className="group relative aspect-[4/5] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow hover:scale-[1.02] transition-all duration-700"
               >
-                 {/* Background Image */}
                  <img 
                    src={system.bg} 
                    alt={system.label} 
@@ -215,9 +242,6 @@ export default function Home() {
                       <Link to={system.route} className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 hover:bg-lael-accent transition-all duration-500">
                          {system.cta}
                       </Link>
-                      <button onClick={() => navigate('/diagnostico')} className="w-full text-[9px] uppercase tracking-widest text-lael-accent/70 font-bold hover:text-lael-accent transition-colors">
-                         ¿Esto es para mí? →
-                      </button>
                     </div>
                  </div>
               </motion.div>
@@ -226,10 +250,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 3. CÓMO FUNCIONA (EL PROCESO) ───────────────────────────── */}
+      {/* ── 5. PROCESO (ARQUITECTURA) ─────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd flex flex-col items-center">
         <div className="max-w-5xl w-full">
-           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 text-center">El Proceso</motion.p>
+           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-16 text-center">Nuestra Arquitectura</motion.p>
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
               {METHOD.map((item, i) => (
                 <motion.div key={i} {...fadeUp(i * 0.1)} className="text-center lg:text-left space-y-6">
@@ -242,136 +266,45 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 4. HISTORIA FILTRADA (CONEXIÓN HUMANA) ────────────────────── */}
-      <section className="py-24 px-6 text-center">
-         <motion.div {...fadeUp()} className="max-w-3xl mx-auto">
-            <p className="text-lael-muted text-lg italic leading-relaxed">
-               “Partimos con clases gratis en pandemia. No porque fuera negocio... sino porque era necesario. 
-               Hoy somos un sistema tecnológico, pero seguimos teniendo el mismo objetivo: <span className="text-lael-accent font-bold">que nadie se quede atrás por falta de método.</span>”
-            </p>
-         </motion.div>
-      </section>
-
-      {/* ── 5. FILTRO DE COMPROMISO ─────────────────────────────────── */}
+      {/* ── 6. RESULTADOS (DATA REAL) ─────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 flex flex-col items-center">
-        <div className="separator-gradient top-0" />
-        <div className="w-full max-w-5xl">
-           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-24 uppercase tracking-widest">¿Es esto para ti?</motion.h2>
-           
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <motion.div {...fadeUp(0.2)} className="p-12 rounded-[40px] border border-emerald-500/10 bg-emerald-500/[0.02]">
-                 <h4 className="text-emerald-400 font-bold mb-8 text-xs uppercase tracking-widest flex items-center gap-3">
-                    ✔ Esto es para ti si:
-                 </h4>
-                 <ul className="space-y-6">
-                    <li className="text-lael-muted text-sm flex gap-3">Buscas resultados, no solo asistir a clase.</li>
-                    <li className="text-lael-muted text-sm flex gap-3">Estás dispuesto a que te mostremos tus fallos.</li>
-                    <li className="text-lael-muted text-sm flex gap-3">Sabes que estudiar más no es la solución.</li>
-                 </ul>
-              </motion.div>
-
-              <motion.div {...fadeUp(0.3)} className="p-12 rounded-[40px] border border-lael-rust/10 bg-lael-rust/[0.02]">
-                 <h4 className="text-lael-rust font-bold mb-8 text-xs uppercase tracking-widest flex items-center gap-3">
-                    ✘ Esto NO es para ti si:
-                 </h4>
-                 <ul className="space-y-6">
-                    <li className="text-lael-muted text-sm flex gap-3">Buscas una receta mágica sin esfuerzo.</li>
-                    <li className="text-lael-muted text-sm flex gap-3">Prefieres ser un número más en un preu masivo.</li>
-                    <li className="text-lael-muted text-sm flex gap-3">No tienes compromiso real con tu futuro.</li>
-                 </ul>
-              </motion.div>
-           </div>
-        </div>
-      </section>
-
-      {/* ── 6. RESULTADOS REALES (CON DATA) ─────────────────────────── */}
-      <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd flex flex-col items-center">
         <div className="max-w-6xl w-full">
-           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-16 text-center">Resultados de nuestro sistema</motion.p>
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="p-10 bg-lael-primary rounded-3xl border border-lael-bd text-center">
+           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-16 text-center">Resultados Comprobados</motion.p>
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+              <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
                  <p className="text-emerald-400 text-5xl font-display font-bold mb-2">+140 pts</p>
-                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Mejora promedio en 12 semanas</p>
+                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Mejora promedio</p>
               </div>
-              <div className="p-10 bg-lael-primary rounded-3xl border border-lael-bd text-center">
+              <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
                  <p className="text-emerald-400 text-5xl font-display font-bold mb-2">98.2%</p>
                  <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Precisión de diagnóstico</p>
               </div>
-              <div className="p-10 bg-lael-primary rounded-3xl border border-lael-bd text-center">
+              <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
                  <p className="text-emerald-400 text-5xl font-display font-bold mb-2">4/5</p>
-                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Alumnos entran a su primera opción</p>
+                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Entran a su 1era opción</p>
               </div>
            </div>
-           <motion.div {...fadeUp(0.4)} className="mt-16 text-center p-10 bg-lael-accent/5 rounded-[40px] border border-lael-accent/10">
-              <h3 className="font-display text-2xl lg:text-3xl text-lael-light italic italic-playfair">"Pasé de 580 a 710 puntos. El sistema me enseñó a no tenerle miedo al tiempo."</h3>
-              <p className="mt-6 text-lael-muted text-xs uppercase tracking-widest font-bold">— Diego, Medicina UC</p>
-           </motion.div>
+           
+           <InsideLael />
         </div>
       </section>
 
-      {/* ── 7. ANTES VS DESPUÉS (LENGUAJE REAL) ─────────────────────── */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center">
-        <div className="separator-gradient top-0" />
-        <div className="w-full max-w-5xl">
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <motion.div {...fadeUp()} className="p-12 bg-lael-secondary rounded-[40px] border border-lael-bd">
-                 <h4 className="text-lael-muted text-[10px] tracking-[0.3em] uppercase mb-10 font-bold">Sin el Sistema Lael</h4>
-                 <ul className="space-y-8">
-                    <li className="flex gap-4 text-lael-muted/50 text-sm italic">"Estudio harto pero en los ensayos saco lo mismo."</li>
-                    <li className="flex gap-4 text-lael-muted/50 text-sm italic">"No entiendo por qué me equivoco en estas preguntas."</li>
-                    <li className="flex gap-4 text-lael-muted/50 text-sm italic">"El tiempo me come y entro en pánico."</li>
-                 </ul>
-              </motion.div>
-              <motion.div {...fadeUp(0.2)} className="p-12 bg-lael-accent/5 rounded-[40px] border border-lael-accent/20">
-                 <h4 className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-10 font-bold">Con tu Arquitectura Lael</h4>
-                 <ul className="space-y-8">
-                    <li className="flex gap-4 text-lael-light text-sm font-bold">Entiendes exactamente en qué fallas y por qué.</li>
-                    <li className="flex gap-4 text-lael-light text-sm font-bold">Tienes un estratega que te guía paso a paso.</li>
-                    <li className="flex gap-4 text-lael-light text-sm font-bold">El día de la prueba es el más fácil de tu semana.</li>
-                 </ul>
-              </motion.div>
-           </div>
-        </div>
-      </section>
-
-      {/* ── 8. INVERSIÓN (DESPUÉS DE CONVENCER) ──────────────────────── */}
-      <section className="relative w-full px-6 py-32 bg-lael-secondary border-t border-lael-bd flex flex-col items-center">
-        <div className="max-w-2xl text-center">
-           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold mb-8 uppercase tracking-widest">Inversión Táctica</motion.h2>
-           <motion.p {...fadeUp(0.2)} className="text-lael-muted mb-12">
-              ¿Trabajas? ¿Tienes poco tiempo? Perfecto. El sistema se arma contigo, no al revés.
-           </motion.p>
-           <motion.div {...fadeUp(0.3)} className="inline-block p-1 bg-lael-primary rounded-3xl border border-lael-bd">
-              <div className="px-12 py-8 text-center">
-                 <p className="text-lael-accent text-[10px] tracking-[0.2em] uppercase mb-2 font-bold">Planes desde</p>
-                 <p className="font-display text-5xl text-lael-light font-bold">$24.990 <span className="text-lg text-lael-muted font-normal">/ mes</span></p>
-              </div>
-           </motion.div>
-        </div>
-      </section>
-
-      {/* ── 9. INSIDE LAEL (VISUALIZACIÓN) ─────────────────────────── */}
-      <InsideLael />
-
-      {/* ── 10. FAQ DIVIDIDO ───────────────────────────────────────── */}
-      <ObjectionsFAQ />
-
-      {/* ── 11. CTA FINAL (NATURAL) ─────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center bg-lael-primary">
-        <div className="separator-gradient top-0" />
+      {/* ── 7. CIERRE (CTA FINAL & FAQ) ───────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center bg-lael-secondary border-t border-lael-bd">
         <motion.div {...fadeUp(0)} className="text-center max-w-3xl">
-          <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 font-bold">El Momento es Ahora</p>
+          <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 font-bold">No es para todos. Es para ti.</p>
           <h2 className="font-display text-5xl lg:text-7xl text-lael-light font-bold leading-[1] mb-12 uppercase tracking-tight">
-            ¿Quieres saber <br/> qué está fallando?
+            ¿Empezamos <br/> tu activación?
           </h2>
-          <p className="text-lael-muted text-lg mb-14 leading-relaxed italic italic-playfair">
-            Si llegaste hasta acá, ya sabes que estudiar más no es la solución. <br className="hidden md:block" /> Ahora necesitas saber qué corregir.
-          </p>
           <button onClick={handleEvaluation}
-            className="bg-lael-accent text-white px-16 py-7 rounded-2xl text-xs tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-500 shadow-[0_10px_40px_rgba(196,151,62,0.2)] hover:shadow-[0_10px_50px_rgba(184,92,56,0.3)]">
+            className="bg-lael-accent text-white px-16 py-7 rounded-2xl text-xs tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-500 shadow-[0_10px_40px_rgba(196,151,62,0.2)]">
             Iniciar diagnóstico táctico →
           </button>
         </motion.div>
+
+        <div className="w-full max-w-5xl mt-32">
+           <ObjectionsFAQ />
+        </div>
       </section>
 
     </div>

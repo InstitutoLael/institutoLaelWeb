@@ -49,9 +49,14 @@ export default function SignificadoLael() {
             </motion.div>
 
             <motion.div variants={fadeUp} className="mt-10 p-6 bg-lael-accent/5 border-l-2 border-lael-accent rounded-r-xl">
-              <p className="text-lael-light font-medium italic text-sm">
+              <p className="text-lael-light font-medium italic text-sm mb-4">
                 "Nuestro logo nos recuerda que todo lo que hacemos tiene un propósito mayor: llevar luz, esperanza y educación a quienes lo necesitan, bajo la cobertura y dirección de Dios."
               </p>
+              <div className="pt-4 border-t border-lael-accent/10">
+                <p className="text-lael-muted text-[11px] uppercase tracking-widest font-bold">
+                  Esto no partió como un sistema. <span className="text-lael-accent">Partió como una ayuda.</span>
+                </p>
+              </div>
             </motion.div>
           </div>
         </motion.div>

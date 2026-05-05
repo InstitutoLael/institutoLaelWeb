@@ -22,23 +22,33 @@ export default function LandingIdiomas() {
 
   return (
     <div className="w-full bg-lael-primary">
-      {/* HERO */}
+      {/* HERO (CINEMÁTICO) */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
-        <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8 font-bold">Ingeniería del Lenguaje</motion.p>
-        <h1 className="font-display text-5xl lg:text-8xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl clip-reveal" style={{ animationDelay: '0.15s' }}>
-          No aprendes idiomas.<br />
-          <span className="accent-italic">Ejecutas sistemas de comunicación.</span>
-        </h1>
-        <motion.p {...fadeUp(0.35)} className="mt-12 text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed italic italic-playfair">
-          Sin repetición mecánica. Solo simulaciones reales que te preparan para comunicarte en cualquier entorno profesional.
-        </motion.p>
-        <motion.button {...fadeUp(0.55)} onClick={startDiagnostic} className="mt-14 bg-lael-accent text-white px-12 py-6 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_30px_rgba(196,151,62,0.3)]">
-          Iniciar diagnóstico táctico →
-        </motion.button>
+        {/* Cinematic Background Layer */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-lael-primary/40 via-lael-primary/70 to-lael-primary z-10" />
+          {/* Note: hero_idiomas_interaction will be placed here when available */}
+          <div className="w-full h-full bg-cover bg-center opacity-40 mix-blend-luminosity grayscale group-hover:grayscale-0 transition-all duration-1000" 
+            style={{ backgroundImage: `url(${idiomasExecution})` }} /> 
+        </div>
+
+        <div className="relative z-20 max-w-7xl mx-auto flex flex-col items-center">
+          <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8 font-bold">Ingeniería del Lenguaje</motion.p>
+          <h1 className="font-display text-5xl lg:text-8xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl clip-reveal mb-12">
+            No aprendes idiomas.<br />
+            <span className="accent-italic">Ejecutas sistemas de comunicación.</span>
+          </h1>
+          <motion.p {...fadeUp(0.35)} className="text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed italic italic-playfair mb-14">
+            Sin repetición mecánica. Solo simulaciones reales que te preparan para comunicarte en cualquier entorno profesional.
+          </motion.p>
+          <motion.button {...fadeUp(0.55)} onClick={startDiagnostic} className="bg-lael-accent text-white px-12 py-6 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_30px_rgba(196,151,62,0.3)]">
+            Iniciar diagnóstico táctico →
+          </motion.button>
+        </div>
+
         <motion.div 
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10 animate-bounce text-lael-accent"
+          className="absolute bottom-10 animate-bounce text-lael-accent z-20"
         >
           <ChevronDown size={24} />
         </motion.div>

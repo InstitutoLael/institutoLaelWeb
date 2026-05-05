@@ -4,22 +4,22 @@ import { Monitor, FileText, MessageSquare, PlayCircle } from 'lucide-react';
 
 const FEATURES = [
   {
-    title: "Aula Virtual 2.0",
-    desc: "Tu dashboard de rendimiento. Módulos, simulacros y progreso en tiempo real.",
+    title: "Realidad Virtual 2.0",
+    desc: "Tu dashboard de rendimiento. No es una plataforma, es el mapa exacto de tus fallos y avances en tiempo real.",
     icon: <Monitor size={24} />,
-    img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800"
+    img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800" // Close-up focus on screen glow
   },
   {
-    title: "Material Táctico",
-    desc: "PDFs diseñados para la ejecución rápida, no para el relleno académico.",
+    title: "Material de Quiebre",
+    desc: "Guías diseñadas para la ejecución bajo presión, donde cada error se convierte en una instrucción táctica.",
     icon: <FileText size={24} />,
-    img: "https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?auto=format&fit=crop&q=80&w=800"
+    img: "https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?auto=format&fit=crop&q=80&w=800" // Messy notes with corrections
   },
   {
-    title: "Feedback Directo",
-    desc: "Correcciones estratégicas sobre tus errores específicos en cada simulación.",
+    title: "Feedback Humano",
+    desc: "Mentores reales que analizan tu proceso, no solo tu resultado. Correcciones que te cambian la mentalidad.",
     icon: <MessageSquare size={24} />,
-    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800"
+    img: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800" // Focused interaction online
   }
 ];
 

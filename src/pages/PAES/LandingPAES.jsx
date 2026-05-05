@@ -32,51 +32,55 @@ export default function LandingPAES() {
   return (
     <div className="w-full bg-lael-primary">
 
-      {/* ── 1. HERO NARRATIVO ────────────────────────────────────────────── */}
+      {/* ── 1. HERO NARRATIVO (CINEMÁTICO) ─────────────────────────────── */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] max-w-[600px] max-h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
+        {/* Cinematic Background Layer */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-lael-primary/40 via-lael-primary/70 to-lael-primary z-10" />
+          {/* Note: hero_paes_mentor will be placed here when available */}
+          <div className="w-full h-full bg-cover bg-center opacity-40 mix-blend-luminosity grayscale group-hover:grayscale-0 transition-all duration-1000" 
+            style={{ backgroundImage: `url(${paesBg})` }} /> 
+        </div>
 
-        <motion.div {...fadeUp()} className="mb-10">
-           <h2 className="text-lael-accent font-display text-2xl lg:text-3xl italic italic-playfair font-normal">
-              ¿Estudias harto pero tu puntaje no sube?
-           </h2>
-        </motion.div>
+        <div className="relative z-20 max-w-7xl mx-auto flex flex-col items-center">
+          <motion.div {...fadeUp()} className="mb-10">
+             <h2 className="text-lael-accent font-display text-2xl lg:text-3xl italic italic-playfair font-normal">
+                ¿Estudias harto pero tu puntaje no sube?
+             </h2>
+          </motion.div>
 
-        <h1
-          className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl clip-reveal"
-          style={{ animationDelay: '0.15s' }}
-        >
-          Te enseñamos a <br />
-          <span className="accent-italic">hackear la PAES.</span>
-        </h1>
+          <h1 className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl clip-reveal mb-12">
+            Te enseñamos a <br />
+            <span className="accent-italic">hackear la PAES.</span>
+          </h1>
 
-        <motion.p {...fadeUp(0.35)} className="mt-12 text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed">
-           No es materia, es estrategia. Corregimos lo que estás haciendo mal el día de la prueba. <br className="hidden md:block" /> ¿Cuál es tu situación hoy?
-        </motion.p>
+          <motion.p {...fadeUp(0.35)} className="mt-12 text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed mb-14">
+             No es materia, es estrategia. Corregimos lo que estás haciendo mal el día de la prueba. <br className="hidden md:block" /> ¿Cuál es tu situación hoy?
+          </motion.p>
 
-        <motion.div {...fadeUp(0.55)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 mt-14">
-          <button onClick={() => navigate('/diagnostico', { state: { path: 'stagnation' } })}
-            className="bg-lael-accent text-white px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all shadow-xl">
-            Estoy estancado
-          </button>
-          <button onClick={() => navigate('/diagnostico', { state: { path: 'target' } })}
-            className="bg-lael-secondary border border-lael-bd text-lael-light px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
-            Voy por carrera de élite
-          </button>
-          <button onClick={() => navigate('/diagnostico', { state: { path: 'lost' } })}
-            className="bg-transparent border border-lael-accent/30 text-lael-accent px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
-            No sé por dónde empezar
-          </button>
-        </motion.div>
+          <motion.div {...fadeUp(0.55)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
+            <button onClick={() => navigate('/diagnostico', { state: { path: 'stagnation' } })}
+              className="bg-lael-accent text-white px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all shadow-xl">
+              Estoy estancado
+            </button>
+            <button onClick={() => navigate('/diagnostico', { state: { path: 'target' } })}
+              className="bg-lael-secondary border border-lael-bd text-lael-light px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
+              Voy por carrera de élite
+            </button>
+            <button onClick={() => navigate('/diagnostico', { state: { path: 'lost' } })}
+              className="bg-transparent border border-lael-accent/30 text-lael-accent px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
+              No sé por dónde empezar
+            </button>
+          </motion.div>
 
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
-          className="mt-8 text-[10px] uppercase tracking-[0.3em] text-lael-rust font-bold">
-          ⚠ Si no entras hoy, pierdes 1 semana completa de activación estratégica.
-        </motion.p>
+          <motion.p {...fadeUp(0.8)} className="mt-12 text-[10px] uppercase tracking-[0.3em] text-lael-rust font-bold">
+            ⚠ Si no entras hoy, pierdes 1 semana completa de activación estratégica.
+          </motion.p>
+        </div>
 
         <motion.div 
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10 animate-bounce text-lael-accent"
+          className="absolute bottom-10 animate-bounce text-lael-accent z-20"
         >
           <ChevronDown size={24} />
         </motion.div>

@@ -29,11 +29,17 @@ export default function NivelacionAdultos() {
         <meta name="description" content="No es solo el colegio. Es tu nueva vida. Escuela de Sueños de Instituto Lael. Nivelación de estudios para adultos con un sistema que sí funciona." />
       </Helmet>
 
-      {/* ── 1. HERO EMOCIONAL ─────────────────────────────────────────── */}
-      <section className="relative px-6 py-24 lg:py-48 flex flex-col items-center overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
+      {/* ── 1. HERO EMOCIONAL (CINEMÁTICO) ─────────────────────────────── */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-24 overflow-hidden">
+        {/* Cinematic Background Layer */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-lael-primary/40 via-lael-primary/70 to-lael-primary z-10" />
+          {/* Note: hero_adultos_studying will be placed here when available */}
+          <div className="w-full h-full bg-cover bg-center opacity-40 mix-blend-luminosity grayscale group-hover:grayscale-0 transition-all duration-1000" 
+            style={{ backgroundImage: `url(${adultosRealidad})` }} /> 
+        </div>
 
-        <motion.div {...fadeUp()} className="text-center max-w-5xl relative z-10">
+        <motion.div {...fadeUp()} className="text-center max-w-5xl relative z-20 flex flex-col items-center">
           <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 font-bold">Escuela de Sueños</p>
           <h1 className="font-display text-5xl lg:text-8xl text-lael-light mb-12 leading-[0.9] tracking-tighter">
             {ADULT_CONTENT.hero.title} <br/>

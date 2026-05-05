@@ -37,6 +37,19 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
 
+  const isFocusPage = location.pathname === '/diagnostico' || location.pathname === '/resultado-diagnostico';
+
+  if (isFocusPage) {
+    return (
+      <header className="fixed top-0 left-0 w-full z-50 py-6 px-6 flex justify-between items-center pointer-events-none">
+        <Link to="/" className="pointer-events-auto opacity-50 hover:opacity-100 transition-opacity">
+           <img src={logo} alt="Instituto Lael" className="h-6 w-auto" />
+        </Link>
+        <Link to="/" className="pointer-events-auto text-[10px] uppercase tracking-[0.3em] text-lael-muted font-bold hover:text-lael-accent transition-colors">Salir del modo foco ✕</Link>
+      </header>
+    );
+  }
+
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${

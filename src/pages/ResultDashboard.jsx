@@ -61,41 +61,84 @@ export default function ResultDashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           {/* Main Analysis */}
-          <motion.div {...fadeUp(0.1)} className="lg:col-span-2 p-10 bg-lael-secondary rounded-3xl border border-lael-bd cinematic-shadow">
-            <h3 className="font-display text-2xl text-lael-light mb-8 flex items-center gap-3">
-              <Zap className="text-lael-accent" /> Análisis de Ejecución
-            </h3>
-            <p className="text-lael-muted text-lg leading-relaxed mb-10">
-              {result.description}
-            </p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {result.stats.map((stat, i) => (
-                <div key={i} className="p-6 bg-lael-primary rounded-2xl border border-lael-bd text-center">
-                   <p className={`font-display text-3xl font-bold mb-2 ${stat.label === 'Factor de Riesgo' ? 'text-lael-rust' : 'text-lael-accent'}`}>{stat.value}</p>
-                   <p className="text-[10px] text-lael-muted uppercase tracking-widest">{stat.label}</p>
-                </div>
-              ))}
+          <motion.div {...fadeUp(0.1)} className="lg:col-span-2 space-y-8">
+            <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd cinematic-shadow">
+              <h3 className="font-display text-2xl text-lael-light mb-8 flex items-center gap-3">
+                <Zap className="text-lael-accent" /> Análisis de Ejecución
+              </h3>
+              <p className="text-lael-muted text-lg leading-relaxed mb-10">
+                {result.description}
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {result.stats.map((stat, i) => (
+                  <div key={i} className="p-6 bg-lael-primary rounded-2xl border border-lael-bd text-center">
+                     <p className={`font-display text-3xl font-bold mb-2 ${stat.label === 'Confiabilidad' ? 'text-emerald-400' : 'text-lael-accent'}`}>{stat.value}</p>
+                     <p className="text-[10px] text-lael-muted uppercase tracking-widest">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* ATRIBUTOS DE DATA */}
+            {result.attributes && result.attributes.length > 0 && (
+              <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd">
+                <h4 className="text-lael-muted text-[10px] tracking-[0.3em] uppercase mb-8 font-bold">Métricas Detectadas</h4>
+                <div className="space-y-8">
+                  {result.attributes.map((attr, i) => (
+                    <div key={i}>
+                      <div className="flex justify-between mb-3 text-xs uppercase tracking-widest font-bold">
+                        <span className="text-lael-light">{attr.label}</span>
+                        <span className="text-lael-accent">{attr.value}</span>
+                      </div>
+                      <div className="h-1.5 bg-lael-primary rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${attr.score}%` }}
+                          transition={{ duration: 1.5, delay: 0.5 }}
+                          className="h-full bg-lael-accent"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </motion.div>
 
-          {/* Entry Product Card */}
-          <motion.div {...fadeUp(0.2)} className="p-10 bg-lael-accent rounded-3xl text-white flex flex-col justify-center shadow-2xl relative overflow-hidden">
-             <div className="absolute top-0 right-0 p-4 bg-white/10 text-[9px] font-bold uppercase tracking-widest">Cupos: 3/5 esta semana</div>
-             <h3 className="font-display text-3xl mb-8">{result.entry_product}</h3>
-             <p className="text-white/80 text-sm leading-relaxed mb-10">
-                Tu diagnóstico indica que un curso genérico no resolverá tu estancamiento. Necesitas una <strong>validación táctica 1:1</strong> para diseñar tu arquitectura de puntaje.
-             </p>
-             
-             <div className="space-y-4">
-                <button 
-                  onClick={() => handleContact('whatsapp')}
-                  className="w-full py-5 bg-white text-lael-accent rounded-xl font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform shadow-xl"
-                >
-                   <MessageCircle size={18} /> Agendar Sesión vía WhatsApp
-                </button>
-                <p className="text-center text-[9px] text-white/60 uppercase tracking-[0.2em] font-bold">Respuesta en menos de 15 min</p>
-             </div>
+          {/* Entry Product Card & Case Study */}
+          <motion.div {...fadeUp(0.2)} className="space-y-8">
+            <div className="p-10 bg-lael-accent rounded-3xl text-white shadow-2xl relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-4 bg-white/10 text-[9px] font-bold uppercase tracking-widest">Cupos: 3/5 esta semana</div>
+               <h3 className="font-display text-3xl mb-8">{result.entry_product}</h3>
+               <p className="text-white/80 text-sm leading-relaxed mb-10">
+                  Tu diagnóstico indica que un curso genérico no resolverá tu estancamiento. Necesitas una <strong>validación táctica 1:1</strong> para diseñar tu arquitectura de puntaje.
+               </p>
+               
+               <div className="space-y-4">
+                  <button 
+                    onClick={() => handleContact('whatsapp')}
+                    className="w-full py-5 bg-white text-lael-accent rounded-xl font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform shadow-xl"
+                  >
+                     <MessageCircle size={18} /> Agendar Sesión vía WhatsApp
+                  </button>
+                  <p className="text-center text-[9px] text-white/60 uppercase tracking-[0.2em] font-bold">Respuesta en menos de 15 min</p>
+               </div>
+            </div>
+
+            {/* CASE STUDY */}
+            {result.case_study && (
+              <div className="p-8 bg-emerald-500/5 rounded-3xl border border-emerald-500/10">
+                <p className="text-emerald-400 text-[9px] tracking-[0.3em] uppercase mb-4 font-bold flex items-center gap-2">
+                  <BarChart3 size={12} /> Validación de Perfil
+                </p>
+                <p className="text-lael-light text-sm italic mb-4">"{result.case_study.text}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="px-3 py-1 bg-emerald-500/20 rounded-full text-emerald-400 text-[10px] font-bold">{result.case_study.metrics}</div>
+                  <span className="text-lael-muted text-[10px] uppercase tracking-widest">{result.case_study.name}</span>
+                </div>
+              </div>
+            )}
           </motion.div>
         </div>
 

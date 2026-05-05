@@ -20,6 +20,9 @@ import SistemaLael from "./pages/SistemaLael";
 import DiagnosticPage from "./pages/DiagnosticPage";
 import ResultDashboard from "./pages/ResultDashboard";
 import FunnelDashboard from "./pages/Admin/FunnelDashboard";
+import Tecnologia from "./pages/Tecnologia";
+import Preguntas from "./pages/Preguntas";
+import Transparencia from "./pages/Transparencia";
 import NotFound from "./pages/NotFound";
 
 import ScrollToTop from "./components/ScrollToTop";
@@ -46,6 +49,9 @@ export default function App() {
             <Route path="/lsch" element={<LSCh />} />
             <Route path="/adultos" element={<NivelacionAdultos />} />
             <Route path="/sistema" element={<SistemaLael />} />
+            <Route path="/tecnologia" element={<Tecnologia />} />
+            <Route path="/preguntas" element={<Preguntas />} />
+            <Route path="/transparencia" element={<Transparencia />} />
             <Route path="/diagnostico" element={<DiagnosticPage />} />
             <Route path="/resultado-diagnostico" element={<ResultDashboard />} />
             <Route path="/admin/funnel" element={<FunnelDashboard />} />

@@ -18,7 +18,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Top grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
 
           {/* Marca */}
           <div className="flex flex-col gap-6 lg:col-span-2">
@@ -26,13 +26,13 @@ export default function Footer() {
               <img src={logo} alt="Instituto Lael" loading="lazy" className="h-7 w-auto opacity-90 hover:opacity-100 transition-opacity" />
             </Link>
             <p className="text-lael-muted text-sm leading-relaxed max-w-xs">
-              Sistema de rendimiento académico. PAES, Idiomas, LSCh y Nivelación para Adultos.
+              Ingeniería del rendimiento académico. No vendemos cursos, diseñamos el éxito de nuestros alumnos a través de datos y estrategia.
             </p>
             {/* Social */}
             <div className="flex gap-3">
               {SOCIAL.map(({ name, href, Icon }) => (
                 <a key={name} href={href} target="_blank" rel="noreferrer" aria-label={name}
-                  className="w-9 h-9 flex items-center justify-center rounded-lg bg-black/[0.03] border border-black/[0.06] text-lael-muted hover:text-lael-accent hover:border-lael-accent/30 transition-all duration-300">
+                  className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 border border-lael-bd text-lael-muted hover:text-lael-accent hover:border-lael-accent/30 transition-all duration-300">
                   <Icon size={16} />
                 </a>
               ))}
@@ -41,35 +41,34 @@ export default function Footer() {
 
           {/* Programas */}
           <div>
-            <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6">Programas</h4>
+            <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6 font-bold">Mundos</h4>
             <nav className="flex flex-col gap-4">
-              {NAVIGATION.footer.programs.map(l => (
-                <Link key={l.path} to={l.path} className="text-sm text-lael-muted hover:text-lael-accent transition-colors duration-300">
-                  {l.name}
-                </Link>
-              ))}
+              <Link to="/paes" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">PAES</Link>
+              <Link to="/idiomas" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Idiomas</Link>
+              <Link to="/lsch" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Inclusión LSCh</Link>
+              <Link to="/adultos" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Adultos</Link>
+            </nav>
+          </div>
+
+          {/* El Sistema */}
+          <div>
+            <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6 font-bold">El Sistema</h4>
+            <nav className="flex flex-col gap-4">
+              <Link to="/metodo" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">El Método</Link>
+              <Link to="/tecnologia" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Tecnología</Link>
+              <Link to="/transparencia" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Transparencia</Link>
+              <Link to="/preguntas" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">FAQ Avanzado</Link>
             </nav>
           </div>
 
           {/* Instituto */}
           <div>
-            <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6">Instituto</h4>
+            <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6 font-bold">Instituto</h4>
             <nav className="flex flex-col gap-4 mb-8">
-              {NAVIGATION.footer.company.map(l => (
-                <Link key={l.path} to={l.path} className="text-sm text-lael-muted hover:text-lael-accent transition-colors duration-300">
-                  {l.name}
-                </Link>
-              ))}
+              <Link to="/nosotros" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Sobre Nosotros</Link>
+              <Link to="/contacto" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Contacto</Link>
+              <Link to="/diagnostico" className="text-sm text-lael-accent font-bold hover:underline transition-colors">Iniciar Diagnóstico</Link>
             </nav>
-            <div className="flex flex-col gap-2">
-              <a href="mailto:contacto@institutolael.cl" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">
-                contacto@institutolael.cl
-              </a>
-              <a href="https://instagram.com/institutolael" target="_blank" rel="noreferrer" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">
-                @institutolael
-              </a>
-              <p className="text-sm text-lael-muted">Santiago, Chile</p>
-            </div>
           </div>
         </div>
 

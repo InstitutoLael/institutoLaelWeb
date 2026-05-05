@@ -27,6 +27,7 @@ export const track = {
   leadGenerated: (type, profile) => trackEvent('lead_generated', { type, profile }),
   
   // Specific Interactions
+  accessGateView: () => trackEvent('access_gate_view'),
   pricingView: (program) => trackEvent('pricing_view', { program }),
   whatsappClick: (intent) => trackEvent('whatsapp_click', { intent }),
   ctaScroll: (section) => trackEvent('cta_scroll_view', { section }),

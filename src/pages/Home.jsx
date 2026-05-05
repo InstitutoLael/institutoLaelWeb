@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { X, ChevronRight } from 'lucide-react';
 
 import demre from '../assets/img/Partners/DEMRE.png';
 import google from '../assets/img/Partners/GoogleWorkspace.png';

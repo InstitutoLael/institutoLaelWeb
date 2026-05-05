@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DIAGNOSTIC_QUESTIONS } from '../../data/diagnostic';
 import { useNavigate } from 'react-router-dom';
 import { ChevronRight, ArrowLeft } from 'lucide-react';
+import { trackFunnelEvent } from '../../utils/funnel';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -10,6 +11,10 @@ export default function DiagnosticFlow() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+    trackFunnelEvent('start');
+  }, []);
 
   const filteredQuestions = DIAGNOSTIC_QUESTIONS.filter(q => {
     if (!q.dependsOn) return true;
@@ -19,6 +24,12 @@ export default function DiagnosticFlow() {
 
   const question = filteredQuestions[currentStep];
 
+  useEffect(() => {
+    if (question) {
+      trackFunnelEvent('step_view', question.id);
+    }
+  }, [currentStep, question]);
+
   const handleSelect = (value) => {
     const newAnswers = { ...answers, [question.id]: value };
     setAnswers(newAnswers);
@@ -27,6 +38,7 @@ export default function DiagnosticFlow() {
       setCurrentStep(currentStep + 1);
     } else {
       // Finalize
+      trackFunnelEvent('complete');
       navigate('/resultado-diagnostico', { state: { answers: newAnswers } });
     }
   };

@@ -5,6 +5,7 @@ import { getDiagnosticResult } from '../data/diagnostic';
 import { Helmet } from 'react-helmet-async';
 import { BarChart3, Target, Zap, MessageCircle, Mail, Calendar } from 'lucide-react';
 import { trackEvent } from '../utils/analytics';
+import { trackFunnelEvent } from '../utils/funnel';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -34,10 +35,10 @@ export default function ResultDashboard() {
   const handleContact = (type) => {
     trackEvent('contact_click', { type, profile: result.title });
     if (type === 'whatsapp') {
-      const msg = encodeURIComponent(`Hola, acabo de completar mi diagnóstico Lael. Mi perfil es: ${result.title}. Quiero activar mi ruta.`);
+      trackFunnelEvent('whatsapp');
+      const msg = encodeURIComponent(result.wa_msg || `Hola, acabo de completar mi diagnóstico Lael. Mi perfil es: ${result.title}. Quiero activar mi ruta.`);
       window.open(`https://wa.me/56964626568?text=${msg}`, '_blank');
     }
-    // Add other redirections as needed
   };
 
   return (
@@ -51,7 +52,7 @@ export default function ResultDashboard() {
           <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">Diagnóstico Finalizado</p>
           <h1 className="font-display text-4xl lg:text-6xl text-lael-light mb-6">
             Perfil Detectado: <br/>
-            <span className="text-lael-accent italic italic-playfair">{result.title}</span>
+            <span className={`text-lael-accent italic italic-playfair ${result.tone === 'hard' ? 'text-lael-rust' : ''}`}>{result.title}</span>
           </h1>
           <p className="text-lael-muted text-lg max-w-2xl mx-auto">
             {result.subtitle}
@@ -59,10 +60,10 @@ export default function ResultDashboard() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-          {/* Main Plan */}
+          {/* Main Analysis */}
           <motion.div {...fadeUp(0.1)} className="lg:col-span-2 p-10 bg-lael-secondary rounded-3xl border border-lael-bd cinematic-shadow">
             <h3 className="font-display text-2xl text-lael-light mb-8 flex items-center gap-3">
-              <Zap className="text-lael-accent" /> Plan Recomendado
+              <Zap className="text-lael-accent" /> Análisis de Ejecución
             </h3>
             <p className="text-lael-muted text-lg leading-relaxed mb-10">
               {result.description}
@@ -71,18 +72,19 @@ export default function ResultDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {result.stats.map((stat, i) => (
                 <div key={i} className="p-6 bg-lael-primary rounded-2xl border border-lael-bd text-center">
-                  <p className="text-lael-accent font-display text-3xl font-bold mb-2">{stat.value}</p>
-                  <p className="text-[10px] text-lael-muted uppercase tracking-widest">{stat.label}</p>
+                   <p className={`font-display text-3xl font-bold mb-2 ${stat.label === 'Factor de Riesgo' ? 'text-lael-rust' : 'text-lael-accent'}`}>{stat.value}</p>
+                   <p className="text-[10px] text-lael-muted uppercase tracking-widest">{stat.label}</p>
                 </div>
               ))}
             </div>
           </motion.div>
 
-          {/* Action Card */}
-          <motion.div {...fadeUp(0.2)} className="p-10 bg-lael-accent rounded-3xl text-white flex flex-col justify-center shadow-2xl">
-             <h3 className="font-display text-3xl mb-8">Activa tu Sistema hoy.</h3>
+          {/* Entry Product Card */}
+          <motion.div {...fadeUp(0.2)} className="p-10 bg-lael-accent rounded-3xl text-white flex flex-col justify-center shadow-2xl relative overflow-hidden">
+             <div className="absolute top-0 right-0 p-4 bg-white/10 text-[9px] font-bold uppercase tracking-widest">Cupos: 3/5 esta semana</div>
+             <h3 className="font-display text-3xl mb-8">{result.entry_product}</h3>
              <p className="text-white/80 text-sm leading-relaxed mb-10">
-                Tu diagnóstico está listo. El siguiente paso es una breve validación con un estratega para asegurar tu cupo en el próximo ciclo.
+                Tu diagnóstico indica que un curso genérico no resolverá tu estancamiento. Necesitas una <strong>validación táctica 1:1</strong> para diseñar tu arquitectura de puntaje.
              </p>
              
              <div className="space-y-4">
@@ -90,13 +92,9 @@ export default function ResultDashboard() {
                   onClick={() => handleContact('whatsapp')}
                   className="w-full py-5 bg-white text-lael-accent rounded-xl font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform shadow-xl"
                 >
-                   <MessageCircle size={18} /> WhatsApp (Prioridad)
+                   <MessageCircle size={18} /> Agendar Sesión vía WhatsApp
                 </button>
-                <button 
-                  className="w-full py-5 bg-white/10 border border-white/20 text-white rounded-xl font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 hover:bg-white/20 transition-colors"
-                >
-                   <Calendar size={18} /> Agendar Llamada
-                </button>
+                <p className="text-center text-[9px] text-white/60 uppercase tracking-[0.2em] font-bold">Respuesta en menos de 15 min</p>
              </div>
           </motion.div>
         </div>

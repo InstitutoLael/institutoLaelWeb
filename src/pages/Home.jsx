@@ -197,10 +197,7 @@ export default function Home() {
       <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd flex flex-col items-center">
         <div className="max-w-5xl w-full">
            <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 text-center">El Proceso</motion.p>
-           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-              {[
-                { t: "Diagnóstico", d: "Encontramos el fallo táctico que hoy te tiene estancado.", icon: "01" },
-                { t: "Estrategia", d: "No estudias más. Estudias lo que tu diagnóstico detectó.", icon: "02" },
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
               {METHOD.map((item, i) => (
                 <motion.div key={i} {...fadeUp(i * 0.1)} className="text-center lg:text-left space-y-6">
                    <div className="font-display text-7xl text-lael-accent/10 font-bold">{item.step}</div>

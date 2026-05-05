@@ -83,7 +83,7 @@ export default function FunnelDashboard() {
                {/* Complete to WA */}
                <div>
                   <div className="flex justify-between mb-4 text-xs uppercase tracking-widest font-bold">
-                    <span className="text-lael-muted">Conversión a WhatsApp (Dashboard -> Lead)</span>
+                    <span className="text-lael-muted">Conversión a WhatsApp (Dashboard → Lead)</span>
                     <span className="text-lael-accent">{conversionRate}%</span>
                   </div>
                   <div className="h-4 bg-lael-primary rounded-full overflow-hidden border border-lael-bd">

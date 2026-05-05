@@ -66,7 +66,10 @@ const METHOD = [
   { step: '01', label: 'Diagnóstico', desc: 'Identificamos tu punto de partida real, no el que crees.' },
   { step: '02', label: 'Estrategia', desc: 'Diseñamos un plan táctico basado en tu objetivo y tiempo disponible.' },
   { step: '03', label: 'Acompañamiento', desc: 'Mentores activos que corrigen tu trayectoria en tiempo real.' },
-  { step: '04', label: 'Evaluación', desc: 'Simulacros bajo presión real para que el día de la export default function Home() {
+  { step: '04', label: 'Evaluación', desc: 'Simulacros bajo presión real para que el día de la prueba no sea una sorpresa.' }
+];
+
+export default function Home() {
   const navigate = useNavigate();
 
   const handleEvaluation = () => {
@@ -198,12 +201,11 @@ const METHOD = [
               {[
                 { t: "Diagnóstico", d: "Encontramos el fallo táctico que hoy te tiene estancado.", icon: "01" },
                 { t: "Estrategia", d: "No estudias más. Estudias lo que tu diagnóstico detectó.", icon: "02" },
-                { t: "Activación", d: "Entrenas bajo presión real con feedback inmediato.", icon: "03" }
-              ].map((item, i) => (
+              {METHOD.map((item, i) => (
                 <motion.div key={i} {...fadeUp(i * 0.1)} className="text-center lg:text-left space-y-6">
-                   <div className="font-display text-7xl text-lael-accent/10 font-bold">{item.icon}</div>
-                   <h4 className="text-lael-light text-2xl font-bold uppercase tracking-widest">{item.t}</h4>
-                   <p className="text-lael-muted leading-relaxed">{item.d}</p>
+                   <div className="font-display text-7xl text-lael-accent/10 font-bold">{item.step}</div>
+                   <h4 className="text-lael-light text-2xl font-bold uppercase tracking-widest">{item.label}</h4>
+                   <p className="text-lael-muted leading-relaxed">{item.desc}</p>
                 </motion.div>
               ))}
            </div>

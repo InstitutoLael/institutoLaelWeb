@@ -100,22 +100,35 @@ const METHOD = [
           className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] font-bold leading-[0.9] max-w-6xl clip-reveal"
           style={{ opacity: 0, animationDelay: '0.15s' }}
         >
-          Ingeniería del <br/>
-          <span className="accent-italic">Rendimiento.</span>
+          Te enseñamos a <br/>
+          <span className="accent-italic">subir tu puntaje.</span>
         </h1>
 
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.2, delay: 0.45, ease }}
           className="mt-12 text-lael-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed">
-          No es un preu. Es lo que nos habría gustado tener <br className="hidden md:block" /> cuando estábamos en tu lugar.
+          Corregimos lo que estás haciendo mal, no solo te damos más materia. <br className="hidden md:block" /> ¿Por dónde quieres empezar?
         </motion.p>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.0, delay: 0.7, ease }}
-          className="flex flex-col sm:flex-row gap-6 mt-14">
-          <button onClick={handleEvaluation}
-            className="bg-lael-accent text-white px-12 py-6 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-[0_4px_30px_rgba(196,151,62,0.25)] hover:shadow-[0_4px_40px_rgba(184,92,56,0.35)] hover:-translate-y-1">
-            ¿Quieres saber qué está fallando? →
+          className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 mt-14">
+          <button onClick={() => navigate('/diagnostico', { state: { path: 'stagnation' } })}
+            className="bg-lael-accent text-white px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all shadow-xl">
+            Estoy estancado
+          </button>
+          <button onClick={() => navigate('/diagnostico', { state: { path: 'target' } })}
+            className="bg-lael-secondary border border-lael-bd text-lael-light px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
+            Quiero mejorar mi puntaje
+          </button>
+          <button onClick={() => navigate('/diagnostico', { state: { path: 'lost' } })}
+            className="bg-transparent border border-lael-accent/30 text-lael-accent px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
+            No sé por dónde empezar
           </button>
         </motion.div>
+        
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
+          className="mt-8 text-[10px] uppercase tracking-[0.3em] text-lael-rust font-bold">
+          ⚠ Si no activas hoy, pierdes 1 semana completa de avance estratégico.
+        </motion.p>
       </section>
 
       {/* ── 2. MUNDOS (VISUAL & PROTAGONISTA) ────────────────────────── */}
@@ -126,13 +139,17 @@ const METHOD = [
             {/* PAES */}
             <motion.div {...fadeUp(0.1)} className="group relative aspect-[4/5] rounded-[40px] overflow-hidden border border-lael-bd cinematic-shadow">
                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
-               <div className="absolute inset-0 bg-lael-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-5" />
                <div className="absolute bottom-12 left-10 right-10 z-20">
                   <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-4 font-bold">Mundo PAES</p>
                   <h3 className="font-display text-4xl text-white font-bold mb-6">Subir puntaje <br/> <span className="text-lael-accent italic italic-playfair font-normal">de verdad.</span></h3>
-                  <Link to="/paes" className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 group-hover:bg-lael-accent transition-all">
-                     Entrar al mundo
-                  </Link>
+                  <div className="space-y-3">
+                    <Link to="/paes" className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 hover:bg-lael-accent transition-all">
+                       Ver mi arquitectura
+                    </Link>
+                    <button onClick={() => navigate('/diagnostico')} className="w-full text-[9px] uppercase tracking-widest text-lael-accent/70 font-bold hover:text-lael-accent transition-colors">
+                       ¿Esto es para mí? →
+                    </button>
+                  </div>
                </div>
             </motion.div>
 
@@ -142,9 +159,14 @@ const METHOD = [
                <div className="absolute bottom-12 left-10 right-10 z-20">
                   <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-4 font-bold">Mundo Idiomas</p>
                   <h3 className="font-display text-4xl text-white font-bold mb-6">Comunicarte <br/> <span className="text-lael-accent italic italic-playfair font-normal">sin miedo.</span></h3>
-                  <Link to="/idiomas" className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 group-hover:bg-lael-accent transition-all">
-                     Entrar al mundo
-                  </Link>
+                  <div className="space-y-3">
+                    <Link to="/idiomas" className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 hover:bg-lael-accent transition-all">
+                       Configurar sistema
+                    </Link>
+                    <button onClick={() => navigate('/diagnostico')} className="w-full text-[9px] uppercase tracking-widest text-lael-accent/70 font-bold hover:text-lael-accent transition-colors">
+                       ¿Funciona para mi nivel? →
+                    </button>
+                  </div>
                </div>
             </motion.div>
 
@@ -154,9 +176,14 @@ const METHOD = [
                <div className="absolute bottom-12 left-10 right-10 z-20">
                   <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-4 font-bold">Mundo Adultos</p>
                   <h3 className="font-display text-4xl text-white font-bold mb-6">Terminar lo <br/> <span className="text-lael-accent italic italic-playfair font-normal">que empezaste.</span></h3>
-                  <Link to="/adultos" className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 group-hover:bg-lael-accent transition-all">
-                     Entrar al mundo
-                  </Link>
+                  <div className="space-y-3">
+                    <Link to="/adultos" className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 hover:bg-lael-accent transition-all">
+                       Ver mi plan de sueños
+                    </Link>
+                    <button onClick={() => navigate('/diagnostico')} className="w-full text-[9px] uppercase tracking-widest text-lael-accent/70 font-bold hover:text-lael-accent transition-colors">
+                       ¿Por dónde empiezo? →
+                    </button>
+                  </div>
                </div>
             </motion.div>
           </div>

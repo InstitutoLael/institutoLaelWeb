@@ -37,7 +37,7 @@ export default function LandingPAES() {
 
         <motion.div {...fadeUp()} className="mb-10">
            <h2 className="text-lael-accent font-display text-2xl lg:text-3xl italic italic-playfair font-normal">
-              Si sientes que estudias y no mejoras, <br className="hidden md:block" /> no eres el problema.
+              ¿Estudias harto pero tu puntaje no sube?
            </h2>
         </motion.div>
 
@@ -45,23 +45,33 @@ export default function LandingPAES() {
           className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl clip-reveal"
           style={{ animationDelay: '0.15s' }}
         >
-          No es un preu.<br />
-          <span className="accent-italic">
-            Es entrenamiento.
-          </span>
+          Te enseñamos a <br />
+          <span className="accent-italic">hackear la PAES.</span>
         </h1>
 
         <motion.p {...fadeUp(0.35)} className="mt-12 text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed">
-           Te mostramos exactamente qué estás haciendo mal... <br className="hidden md:block" /> y cómo corregirlo.
+           No es materia, es estrategia. Corregimos lo que estás haciendo mal el día de la prueba. <br className="hidden md:block" /> ¿Cuál es tu situación hoy?
         </motion.p>
 
-        <motion.button
-          {...fadeUp(0.55)}
-          onClick={startDiagnostic}
-          className="mt-14 bg-lael-accent text-white px-12 py-6 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-[0_10px_40px_rgba(196,151,62,0.2)] hover:-translate-y-1"
-        >
-          ¿Quieres saber qué está fallando? →
-        </motion.button>
+        <motion.div {...fadeUp(0.55)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-4 mt-14">
+          <button onClick={() => navigate('/diagnostico', { state: { path: 'stagnation' } })}
+            className="bg-lael-accent text-white px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all shadow-xl">
+            Estoy estancado
+          </button>
+          <button onClick={() => navigate('/diagnostico', { state: { path: 'target' } })}
+            className="bg-lael-secondary border border-lael-bd text-lael-light px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
+            Voy por carrera de élite
+          </button>
+          <button onClick={() => navigate('/diagnostico', { state: { path: 'lost' } })}
+            className="bg-transparent border border-lael-accent/30 text-lael-accent px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
+            No sé por dónde empezar
+          </button>
+        </motion.div>
+
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
+          className="mt-8 text-[10px] uppercase tracking-[0.3em] text-lael-rust font-bold">
+          ⚠ Si no entras hoy, pierdes 1 semana completa de activación estratégica.
+        </motion.p>
 
         <motion.div 
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
@@ -85,17 +95,26 @@ export default function LandingPAES() {
               { label: 'El Ruido del Preu', desc: 'Estar en una sala con 40 personas escuchando a alguien hablar no es aprender. Es solo ver a otro trabajar.' },
               { label: 'Entrenar Errores', desc: 'Sin un diagnóstico diario, solo estás repitiendo tus fallos una y otra vez. Estudiar sin corregir es hábito, no progreso.' },
             ].map((item, i) => (
-              <motion.div key={item.label} {...fadeUp(i * 0.1)} className="p-10 rounded-3xl bg-lael-secondary border border-lael-bd cinematic-shadow">
+              <motion.div key={item.label} {...fadeUp(i * 0.1)} className="p-10 rounded-3xl bg-lael-secondary border border-lael-bd cinematic-shadow group">
                 <p className="text-lael-rust text-[10px] tracking-[0.2em] uppercase mb-6 font-bold">{item.label}</p>
-                <p className="text-lael-muted text-sm leading-relaxed">{item.desc}</p>
+                <p className="text-lael-muted text-sm leading-relaxed mb-6">{item.desc}</p>
+                <button onClick={() => navigate('/diagnostico')} className="text-[9px] uppercase tracking-widest text-lael-accent font-bold hover:underline">
+                   Esto me está pasando →
+                </button>
               </motion.div>
             ))}
           </div>
 
-          <motion.div {...fadeUp(0.4)} className="mt-20 text-center">
-             <p className="text-lael-muted text-lg italic italic-playfair">
-                “Siendo honestos… la mayoría de los alumnos que llegan a Lael ya lo han intentado antes en preuniversitarios masivos.”
-             </p>
+          <motion.div {...fadeUp(0.4)} className="mt-24 p-10 bg-lael-accent/5 rounded-[40px] border border-lael-accent/10 flex flex-col lg:flex-row items-center gap-10">
+             <div className="flex-1">
+                <h3 className="font-display text-2xl text-lael-light italic mb-4">"Aquí el alumno se equivocó en esto..."</h3>
+                <p className="text-lael-muted text-sm leading-relaxed">
+                   Mostramos la imperfección. En Lael, las correcciones no son notas, son instrucciones de vuelo para tu próximo ensayo.
+                </p>
+             </div>
+             <div className="flex-shrink-0">
+                <button onClick={() => navigate('/casos-reales')} className="px-8 py-4 bg-lael-accent text-white rounded-xl text-[10px] uppercase font-bold tracking-widest">Ver ejemplos reales</button>
+             </div>
           </motion.div>
         </div>
       </section>

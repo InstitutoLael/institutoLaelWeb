@@ -23,14 +23,17 @@ import FunnelDashboard from "./pages/Admin/FunnelDashboard";
 import Tecnologia from "./pages/Tecnologia";
 import Preguntas from "./pages/Preguntas";
 import Transparencia from "./pages/Transparencia";
+import CasosReales from "./pages/CasosReales";
 import NotFound from "./pages/NotFound";
 
 import ScrollToTop from "./components/ScrollToTop";
 import GrainCanvas from "./components/ui/GrainCanvas";
+import UrgencyBanner from "./components/UrgencyBanner";
 
 export default function App() {
   return (
     <div className="flex flex-col min-h-screen relative z-10">
+      <UrgencyBanner />
       <ScrollToTop />
       <GrainCanvas opacity={0.12} />
       <Toaster position="top-right" reverseOrder={false} toastOptions={{
@@ -52,6 +55,7 @@ export default function App() {
             <Route path="/tecnologia" element={<Tecnologia />} />
             <Route path="/preguntas" element={<Preguntas />} />
             <Route path="/transparencia" element={<Transparencia />} />
+            <Route path="/casos-reales" element={<CasosReales />} />
             <Route path="/diagnostico" element={<DiagnosticPage />} />
             <Route path="/resultado-diagnostico" element={<ResultDashboard />} />
             <Route path="/admin/funnel" element={<FunnelDashboard />} />

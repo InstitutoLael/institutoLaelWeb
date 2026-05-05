@@ -74,7 +74,7 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil: Memorístico Saturado. Resultado: +130 puntos en 10 semanas tras activar el sistema de flujo.",
         metrics: "+130 pts"
       };
-      profile.wa_msg = "Hola, completé el diagnóstico y salió 'Memorístico Saturado'. Me hizo mucho sentido lo de la saturación de datos. ¿Cómo podemos empezar?";
+      profile.wa_msg = "Hola, hice el diagnóstico y me salió 'Memorístico Saturado'. Me hizo mucho sentido lo de la saturación de datos, siento que estudio harto pero no sé aplicarlo. ¿Cómo podemos empezar?";
     } 
     else if (paes_pain === 'strategy' && (discipline === 'low' || discipline === 'mid')) {
       profile.title = "El Ansioso Bajo Presión";
@@ -90,7 +90,7 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil: Ansioso Bajo Presión. Resultado: Pasó de 620 a 745 puntos al dominar la gestión del reloj.",
         metrics: "+125 pts"
       };
-      profile.wa_msg = "Hola, me salió 'Ansioso Bajo Presión'. Es justo lo que me pasa en los ensayos, me bloqueo con el tiempo. ¿Me ayudan?";
+      profile.wa_msg = "Hola, me salió 'Ansioso Bajo Presión'. Es justo lo que me pasa en los ensayos, me bloqueo con el tiempo y siento que sé la materia pero no me alcanza el reloj. ¿Me ayudan?";
     }
     else if (paes_pain === 'strategy' && discipline === 'high') {
       profile.title = "El Estratégicamente Perdido";
@@ -106,7 +106,7 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil: Estratégicamente Perdido. Resultado: 960 puntos en Matemáticas tras redirigir su esfuerzo.",
         metrics: "960 pts"
       };
-      profile.wa_msg = "Hola, mi resultado fue 'Estratégicamente Perdido'. Tengo las ganas y el tiempo, pero necesito la arquitectura que mencionan.";
+      profile.wa_msg = "Hola, mi resultado fue 'Estratégicamente Perdido'. Tengo las ganas y el tiempo, pero siento que estoy trabajando duro sin ver resultados reales. Necesito esa arquitectura que mencionan.";
     }
     else {
       profile.title = "El Inconsistente Crónico";
@@ -122,7 +122,7 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil: Inconsistente Crónico. Resultado: Estabilizó su puntaje sobre los 800 pts en 2 meses.",
         metrics: "800+ pts"
       };
-      profile.wa_msg = "Hola, me salió 'Inconsistente Crónico'. Siento que hago muchos ensayos pero siempre saco lo mismo. Ayuda.";
+      profile.wa_msg = "Hola, hice el diagnóstico y me salió 'Inconsistente Crónico'. Me hizo mucho sentido lo de repetir errores sin darme cuenta, siento que hago muchos ensayos pero siempre saco lo mismo. Ayuda.";
     }
 
     profile.stats = [

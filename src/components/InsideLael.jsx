@@ -90,6 +90,49 @@ export default function InsideLael() {
               </div>
            </div>
         </div>
+
+        {/* ── HUMAN IMPERFECTION (REAL MOMENTS) ────────────────────────── */}
+        <div className="mt-24 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+            className="p-10 bg-lael-primary rounded-[40px] border border-lael-bd relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+              <MessageSquare size={120} />
+            </div>
+            <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-8 font-bold">Corrección Real</p>
+            <div className="p-8 bg-lael-secondary rounded-3xl border border-lael-bd mb-8 relative z-10">
+              <p className="text-lael-muted text-sm italic leading-relaxed">
+                "Aquí el alumno se equivocó en esto: no falló por no saber la materia, falló por no leer la restricción del enunciado. Es un error táctico de lectura bajo presión."
+              </p>
+            </div>
+            <p className="text-lael-light text-sm font-bold leading-relaxed relative z-10">
+              No ocultamos los errores. Los usamos como materia prima para el éxito.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
+            className="p-10 bg-lael-primary rounded-[40px] border border-lael-bd relative overflow-hidden group"
+          >
+            <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
+              <Monitor size={120} />
+            </div>
+            <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase mb-8 font-bold">Momento de Quiebre</p>
+            <div className="space-y-4 relative z-10">
+              <div className="flex gap-3 justify-end">
+                <div className="p-5 bg-lael-accent text-white rounded-3xl rounded-tr-none text-xs font-medium shadow-xl max-w-[80%]">
+                  Profe, por fin bajé de los 2 minutos por pregunta en Geometría. ¡El truco de la variable me salvó!
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <div className="p-5 bg-lael-secondary border border-lael-bd text-lael-light rounded-3xl rounded-tl-none text-xs font-medium max-w-[80%]">
+                  ¡Eso es! Ahora ese tiempo lo usamos para las preguntas de alta dificultad. Vamos por ese 800+.
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );

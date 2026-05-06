@@ -18,7 +18,6 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 1.1, delay, ease },
 });
 
-const ease = [0.16, 1, 0.3, 1];
 
 export default function LandingPAES() {
   const navigate = useNavigate();

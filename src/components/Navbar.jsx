@@ -94,7 +94,7 @@ export default function Navbar() {
           {/* ── LOGO ───────────────────────────────────────────────────── */}
           <Link to="/" className="z-[110] relative group flex items-center gap-3">
             <img
-              src={logoNegro}
+              src={scrolled || mobileOpen ? logoNegro : logoBlanco}
               alt="Instituto Lael"
               className="h-8 lg:h-10 w-auto object-contain transition-all duration-700 group-hover:scale-105"
             />
@@ -112,7 +112,9 @@ export default function Navbar() {
                 to={link.path}
                 className={({ isActive }) =>
                   `relative text-[11px] tracking-[0.15em] uppercase font-bold transition-all duration-300 group ${
-                    isActive ? 'text-lael-accent' : 'text-lael-muted/70 hover:text-lael-light'
+                    isActive 
+                      ? 'text-lael-accent' 
+                      : (scrolled || mobileOpen ? 'text-black/70 hover:text-black' : 'text-white/70 hover:text-white')
                   }`
                 }
               >
@@ -151,21 +153,16 @@ export default function Navbar() {
               className={`lg:hidden w-11 h-11 flex items-center justify-center rounded-xl transition-all active:scale-95 border ${
                 mobileOpen
                   ? 'bg-lael-accent text-white border-lael-accent'
-                  : (scrolled 
-                      ? 'bg-lael-accent/10 border-lael-accent/20 text-lael-accent' 
-                      : 'bg-lael-accent text-white border-lael-accent shadow-lg shadow-lael-accent/20')
+                  : 'bg-[#0D0D0D] text-white border-black shadow-xl'
               }`}
             >
               <AnimatePresence mode="wait" initial={false}>
                 {mobileOpen ? (
-                  <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 45, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.3 }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="12" y1="4" x2="12" y2="20" />
-                      <line x1="7" y1="9" x2="17" y2="9" />
-                    </svg>
+                  <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                    <X size={20} />
                   </motion.div>
                 ) : (
-                  <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.3 }}>
+                  <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
                     <Menu size={20} />
                   </motion.div>
                 )}
@@ -185,7 +182,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
+              className="absolute inset-0 bg-black/80 backdrop-blur-lg"
             />
 
             {/* Drawer Content */}
@@ -193,12 +190,9 @@ export default function Navbar() {
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-[#F8F5F0] rounded-r-[40px] shadow-2xl flex flex-col p-10 overflow-y-auto"
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-white rounded-r-[40px] shadow-2xl flex flex-col p-10 overflow-y-auto"
             >
-              {/* Background Grain */}
-              <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-              
               {/* Header inside Drawer */}
               <div className="flex items-center justify-between mb-16 relative z-10">
                 <Link to="/" onClick={() => setMobileOpen(false)}>
@@ -206,12 +200,9 @@ export default function Navbar() {
                 </Link>
                 <button 
                   onClick={() => setMobileOpen(false)}
-                  className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-lael-muted"
+                  className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-lael-muted hover:bg-black/10"
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="rotate-45">
-                    <line x1="12" y1="4" x2="12" y2="20" />
-                    <line x1="7" y1="9" x2="17" y2="9" />
-                  </svg>
+                  <X size={20} />
                 </button>
               </div>
 

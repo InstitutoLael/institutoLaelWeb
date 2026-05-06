@@ -12,7 +12,7 @@ import mercadoPago from '../assets/img/Partners/MercadoPago.png';
 import naama from '../assets/img/Partners/naama-studio.png';
 import onepay from '../assets/img/Partners/onepay.png';
 import transbank from '../assets/img/Partners/Transbank.png';
-import paesBg from '../assets/img/Home/mundo_paes_bg_1777943419260.png';
+import paesBg from '../assets/img/Home/hero_paes_cinematic_human_1778110563659.png';
 import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.png';
 import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.png';
 import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.png';
@@ -51,7 +51,7 @@ const SYSTEMS = [
     label: 'MUNDO IDIOMAS',
     title: 'Habla con',
     accent: 'seguridad.',
-    desc: 'Inglés, Coreano y Español. Pierde el miedo a hablar con simulaciones reales.',
+    desc: 'Inglés real. Clases en vivo por Google Meet. Sin apps, sin atajos, directo a la fluidez.',
     bg: idiomasBg,
     cta: 'Ver idiomas',
   },
@@ -61,7 +61,7 @@ const SYSTEMS = [
     label: 'MUNDO LSCH',
     title: 'Inclusión',
     accent: 'para todos.',
-    desc: 'Lengua de Señas Chilena con instructores nativos. Rompe la barrera.',
+    desc: 'Lengua de Señas Chilena con instructores nativos. Rompe la barrera de comunicación hoy.',
     bg: lschBg,
     cta: 'Aprender LSCh',
   },
@@ -71,7 +71,7 @@ const SYSTEMS = [
     label: 'MUNDO ADULTOS',
     title: 'Termina tus',
     accent: 'estudios.',
-    desc: 'Nivelación de estudios flexible para quienes necesitan una segunda oportunidad.',
+    desc: 'Tu segunda oportunidad es hoy. Nivelación flexible que se adapta a tu ritmo de vida.',
     bg: adultosBg,
     cta: 'Comenzar hoy',
   },
@@ -81,17 +81,17 @@ const SYSTEMS = [
     label: 'MUNDO EMPRESAS',
     title: 'Capacita a',
     accent: 'tu equipo.',
-    desc: 'Talleres estratégicos y cumplimiento de ley con enfoque en resultados reales.',
+    desc: 'Resultados reales para tu empresa. Talleres estratégicos y cumplimiento de normativa.',
     bg: empresasBg,
     cta: 'Cotizar servicio',
   },
 ];
 
 const METHOD = [
-  { step: '01', label: 'Diagnóstico', desc: 'Identificamos tu punto de partida real, no el que crees.' },
-  { step: '02', label: 'Estrategia', desc: 'Diseñamos un plan táctico basado en tu objetivo y tiempo disponible.' },
-  { step: '03', label: 'Acompañamiento', desc: 'Mentores activos que corrigen tu trayectoria en tiempo real.' },
-  { step: '04', label: 'Evaluación', desc: 'Simulacros bajo presión real para que el día de la prueba no sea una sorpresa.' }
+  { step: '01', label: 'Diagnóstico', desc: 'Detectamos dónde estás realmente y por qué no has subido tu puntaje.' },
+  { step: '02', label: 'Estrategia', desc: 'Armamos un plan que se adapta a tu meta y al tiempo que tienes hoy.' },
+  { step: '03', label: 'Profesores', desc: 'Profesores reales que te conocen por tu nombre y te ayudan en vivo.' },
+  { step: '04', label: 'Ensayos', desc: 'Entrenamos con ensayos iguales a la prueba real para que vayas tranquilo.' }
 ];
 
 export default function Home() {

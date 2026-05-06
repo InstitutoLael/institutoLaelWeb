@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MessageCircle, X, ChevronRight, Zap, Target, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { trackEvent } from '../utils/analytics';
+import { trackFunnelEvent } from '../utils/funnel';
 
 const OPTIONS = [
   { 
@@ -34,6 +35,7 @@ export default function FloatingWhatsApp() {
 
   const handleOption = (option) => {
     trackEvent('whatsapp_option_click', { option: option.id });
+    trackFunnelEvent('whatsapp');
     const url = `https://wa.me/56964626568?text=${encodeURIComponent(option.msg)}`;
     window.open(url, '_blank');
     setIsOpen(false);

@@ -56,7 +56,10 @@ export const getDiagnosticResult = (answers) => {
       entry_product: "Sesión de Diagnóstico Profundo (Gratuita)",
       stats: [],
       attributes: [], // Data metrics for the profile
-      case_study: null //    // LOGIC FOR SURGICAL PROFILES
+      case_study: null
+    };
+
+    // LOGIC FOR SURGICAL PROFILES
     if (paes_pain === 'content') {
       profile.title = "El Alumno 'Materia-Dependiente'";
       profile.subtitle = "Sientes que necesitas saberlo todo antes de empezar, y eso te está frenando.";

@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react';
 import { PAES_FEATURES, PAES_CONFIG, PAES_FAQS } from '../../data/paes';
 import { useNavigate } from 'react-router-dom';
 import paesMentor from '../../assets/img/Home/paes_mentor_strategy_1777948898105.png';
-import paesBg from '../../assets/img/Home/mundo_paes_bg_1777943419260.png';
+import paesBg from '../../assets/img/Home/hero_paes_cinematic_human_1778110563659.png';
 import ScrollProgress from '../../components/ui/ScrollProgress';
 import { Helmet } from 'react-helmet-async';
 import { Target, Zap, Clock, Users, BookOpen } from 'lucide-react';

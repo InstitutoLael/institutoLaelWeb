@@ -5,19 +5,19 @@ import { Plus, Minus } from 'lucide-react';
 const FAQS = [
   {
     q: "¿Y si no tengo plata?",
-    a: "Entendemos que la educación es una inversión. Por eso creamos el Plan Mensual Flexible: sin contratos de permanencia eterna. Si el sistema no te da valor el primer mes, puedes pausar sin explicaciones. Pero recuerda: el costo de no mejorar tu puntaje o no aprender el idioma suele ser mucho más alto a largo plazo."
+    a: "No importa. El entrenamiento PAES en Lael es 100% gratuito. Nuestra misión es que el dinero no sea el motivo por el que no entras a la carrera que quieres. Para los otros mundos (Idiomas o LSCh), tenemos opciones flexibles, pero PAES es costo $0 para siempre."
   },
   {
     q: "¿Y si no tengo tiempo?",
-    a: "Nadie tiene tiempo, el tiempo se gestiona. El sistema Lael está diseñado para sesiones tácticas de alto impacto. No te pedimos 5 horas al día, te pedimos 60-90 minutos de ejecución concentrada. Si puedes scrollear en redes sociales, tienes tiempo para entrenar tu rendimiento."
+    a: "Nadie tiene tiempo, el tiempo se hace. Nuestras clases son intensas y al grano. No te pedimos 5 horas al día, te pedimos un par de horas de esfuerzo real. Si tienes tiempo para ver reels, tienes tiempo para asegurar tu futuro."
   },
   {
-    q: "¿Y si ya fallé antes en otros preus o cursos?",
-    a: "La mayoría falla porque intenta resolver problemas nuevos con métodos viejos (memorización). Si fallaste antes, probablemente no fue tu culpa, fue del sistema genérico. Aquí diagnosticamos por qué fallaste y atacamos esa brecha específica. No repetimos la materia, recalibramos tu ejecución."
+    q: "¿Y si ya fallé antes?",
+    a: "Mejor. Significa que ya sabes lo que no funciona. La mayoría falla porque intenta memorizar en vez de entrenar. Aquí no repetimos materia, detectamos por qué te equivocas y corregimos el error antes de la prueba real."
   },
   {
-    q: "¿Qué pasa si no me resulta?",
-    a: "Lo que no se mide, no mejora. Si sigues el plan, haces las simulaciones de presión y asistes a las sesiones de feedback, es estadísticamente improbable que no veas avances. El sistema Lael es ingeniería educativa, no una promesa vacía."
+    q: "¿De verdad me va a resultar?",
+    a: "Si vienes a las clases, haces los ensayos y sigues el plan, es casi imposible que no mejores. Esto no es magia, es entrenamiento guiado por profes que saben exactamente lo que la prueba pide."
   }
 ];
 

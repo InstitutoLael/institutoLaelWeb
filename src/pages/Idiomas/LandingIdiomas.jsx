@@ -5,6 +5,8 @@ import { LANGUAGES, LANG_FEATURES } from '../../data/idiomas';
 import { useNavigate } from 'react-router-dom';
 import idiomasExecution from '../../assets/img/Home/idiomas_execution_bg_1777948997295.png';
 
+import ScrollProgress from '../../components/ui/ScrollProgress';
+
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 40 },
@@ -22,6 +24,7 @@ export default function LandingIdiomas() {
 
   return (
     <div className="w-full bg-lael-primary">
+      <ScrollProgress />
       {/* HERO (CINEMÁTICO) */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
         {/* Cinematic Background Layer */}
@@ -33,16 +36,16 @@ export default function LandingIdiomas() {
         </div>
 
         <div className="relative z-20 max-w-7xl mx-auto flex flex-col items-center">
-          <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8 font-bold">Ingeniería del Lenguaje</motion.p>
+          <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8 font-bold">Idiomas Reales</motion.p>
           <h1 className="font-display text-5xl lg:text-8xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl clip-reveal mb-12">
-            No aprendes idiomas.<br />
-            <span className="accent-italic">Ejecutas sistemas de comunicación.</span>
+            No estudias un idioma.<br />
+            <span className="accent-italic">Lo hablas desde el primer día.</span>
           </h1>
           <motion.p {...fadeUp(0.35)} className="text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed italic italic-playfair mb-14">
-            Sin repetición mecánica. Solo simulaciones reales que te preparan para comunicarte en cualquier entorno profesional.
+            Sin apps de repetición. Solo clases en vivo y simulaciones reales que te preparan para la vida profesional.
           </motion.p>
           <motion.button {...fadeUp(0.55)} onClick={startDiagnostic} className="bg-lael-accent text-white px-12 py-6 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_30px_rgba(196,151,62,0.3)]">
-            Iniciar diagnóstico táctico →
+            Quiero hablar con fluidez →
           </motion.button>
         </div>
 

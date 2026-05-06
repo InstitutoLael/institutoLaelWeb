@@ -38,52 +38,52 @@ const SYSTEMS = [
   {
     id: 'paes',
     route: '/paes',
-    label: 'MUNDO PAES',
-    title: 'Subir puntaje',
-    accent: 'de verdad.',
-    desc: 'Optimización de rendimiento académico para maximizar tu ingreso a la universidad.',
+    label: 'PREPARACIÓN PAES',
+    title: 'Prepárate con',
+    accent: 'expertos, gratis.',
+    desc: 'Clases en vivo y simulacros sin costo. Calidad de élite accesible para todos.',
     bg: paesBg,
-    cta: 'Ver mi arquitectura',
+    cta: 'Inscribirme $0',
   },
   {
     id: 'idiomas',
     route: '/idiomas',
     label: 'MUNDO IDIOMAS',
-    title: 'Comunicarte',
-    accent: 'sin miedo.',
-    desc: 'Inglés, Coreano y Español. No es gramática, es ejecución en escenarios reales.',
+    title: 'Habla con',
+    accent: 'seguridad.',
+    desc: 'Inglés, Coreano y Español. Pierde el miedo a hablar con simulaciones reales.',
     bg: idiomasBg,
-    cta: 'Configurar sistema',
+    cta: 'Ver idiomas',
   },
   {
     id: 'lsch',
     route: '/lsch',
     label: 'MUNDO LSCH',
     title: 'Inclusión',
-    accent: 'real.',
-    desc: 'Lengua de Señas Chilena con instructores sordos nativos. Rompe la barrera.',
+    accent: 'para todos.',
+    desc: 'Lengua de Señas Chilena con instructores nativos. Rompe la barrera.',
     bg: lschBg,
-    cta: 'Entrar al mundo',
+    cta: 'Aprender LSCh',
   },
   {
     id: 'adultos',
     route: '/adultos',
     label: 'MUNDO ADULTOS',
-    title: 'Terminar lo',
-    accent: 'que empezaste.',
-    desc: 'Nivelación de estudios flexible para quienes el sistema tradicional ignoró.',
+    title: 'Termina tus',
+    accent: 'estudios.',
+    desc: 'Nivelación de estudios flexible para quienes necesitan una segunda oportunidad.',
     bg: adultosBg,
-    cta: 'Ver mi plan de sueños',
+    cta: 'Comenzar hoy',
   },
   {
     id: 'empresas',
     route: '/empresas',
     label: 'MUNDO EMPRESAS',
-    title: 'Rendimiento',
-    accent: 'organizacional.',
-    desc: 'Capacitación estratégica y cumplimiento legal con enfoque en resultados.',
+    title: 'Capacita a',
+    accent: 'tu equipo.',
+    desc: 'Talleres estratégicos y cumplimiento de ley con enfoque en resultados reales.',
     bg: empresasBg,
-    cta: 'Entrar al mundo',
+    cta: 'Cotizar servicio',
   },
 ];
 
@@ -127,36 +127,34 @@ export default function Home() {
         <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center">
           <motion.div {...fadeUp()} className="mb-10">
              <h2 className="text-lael-accent font-display text-2xl lg:text-3xl italic italic-playfair font-normal">
-                Si sientes que estudias y no mejoras, <br className="hidden md:block" /> no eres el problema.
+                Preparación PAES de alto rendimiento, <br className="hidden md:block" />
+                <span className="text-lael-rust not-italic font-sans text-sm tracking-[0.3em] uppercase font-bold">Ahora 100% gratuita.</span>
              </h2>
           </motion.div>
 
           <h1 className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] font-bold leading-[0.9] max-w-6xl clip-reveal mb-12">
-            Te enseñamos a <br/>
-            <span className="accent-italic">subir tu puntaje.</span>
+            Tu futuro no <br/>
+            <span className="accent-italic">tiene precio.</span>
           </h1>
 
           <motion.p {...fadeUp(0.3)} className="text-lael-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-14">
-            Corregimos lo que estás haciendo mal, no solo te damos más materia. <br className="hidden md:block" /> ¿Por dónde quieres empezar?
+            Clases en vivo con profesores reales, simulacros y comunidad. <br className="hidden md:block" /> 
+            Sin costos ocultos. Sin barreras. Solo tu esfuerzo y nuestra guía.
           </motion.p>
 
-          <motion.div {...fadeUp(0.6)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
-            <button onClick={() => navigate('/diagnostico', { state: { path: 'stagnation' } })}
-              className="bg-lael-accent text-white px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all shadow-xl">
-              Estoy estancado
+          <motion.div {...fadeUp(0.6)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-6">
+            <button onClick={() => navigate('/diagnostico')}
+              className="bg-lael-accent text-white px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-2 transition-all shadow-2xl shadow-lael-accent/20">
+              Inscribirme Gratis
             </button>
-            <button onClick={() => navigate('/diagnostico', { state: { path: 'target' } })}
-              className="bg-lael-secondary border border-lael-bd text-lael-light px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
-              Quiero mejorar mi puntaje
-            </button>
-            <button onClick={() => navigate('/diagnostico', { state: { path: 'lost' } })}
-              className="bg-transparent border border-lael-accent/30 text-lael-accent px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
-              No sé por dónde empezar
+            <button onClick={() => navigate('/paes')}
+              className="bg-lael-secondary border border-lael-bd text-lael-light px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-2 transition-all">
+              Ver cómo funciona
             </button>
           </motion.div>
           
-          <motion.p {...fadeUp(0.9)} className="mt-8 text-[10px] uppercase tracking-[0.3em] text-lael-rust font-bold">
-            ⚠ Si no activas hoy, pierdes 1 semana completa de avance estratégico.
+          <motion.p {...fadeUp(0.9)} className="mt-12 text-[10px] uppercase tracking-[0.3em] text-lael-muted font-bold opacity-60">
+            En vivo por Google Meet • Material incluido • $0 costo mensual
           </motion.p>
         </div>
       </section>
@@ -169,21 +167,21 @@ export default function Home() {
            
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <h3 className="font-display text-4xl lg:text-6xl text-lael-light font-bold leading-tight mb-8">
-                  El sistema <br />
-                  <span className="accent-italic text-lael-accent">te está fallando.</span>
+                 <h3 className="font-display text-4xl lg:text-6xl text-lael-light font-bold leading-tight mb-8">
+                  A veces, estudiar más <br />
+                  <span className="accent-italic text-lael-accent">no es la solución.</span>
                 </h3>
                 <div className="space-y-6 text-lael-muted text-lg">
-                  <p>Estudias 8 horas al día. Repites guías. Ves videos. Y el puntaje sigue igual.</p>
-                  <p className="font-bold text-lael-light">No es tu capacidad. Es tu arquitectura de rendimiento.</p>
+                  <p>Pasas horas frente a los libros. Repites ejercicios. Te esfuerzas. Pero el puntaje parece estar bloqueado.</p>
+                  <p className="font-bold text-lael-light">No es tu falta de capacidad. Es que nadie te ha enseñado a entrenar de verdad.</p>
                 </div>
 
                 {/* HUMAN VOICE COUNTERWEIGHT */}
                 <div className="mt-12 p-8 border border-white/5 bg-white/[0.02] rounded-3xl">
                   <p className="text-lael-muted text-sm leading-relaxed">
-                    <span className="text-lael-accent font-bold">Siendo honestos…</span> la mayoría de los alumnos que llegan a Lael ya lo han intentado antes. Llegan cansados, frustrados y con la idea de que "no les da la cabeza". 
+                    <span className="text-lael-accent font-bold">Entendemos tu frustración.</span> La mayoría de nuestros alumnos llegan sintiéndose agotados y con la idea de que "no les da la cabeza". 
                     <br/><br/>
-                    No llegas acá porque te falta capacidad. Llegas porque nadie te enseñó cómo mejorar bajo presión.
+                    En Lael, rompemos esa barrera. Te acompañamos paso a paso, en vivo, para que recuperes la confianza y logres el puntaje que mereces.
                   </p>
                 </div>
               </div>
@@ -218,8 +216,10 @@ export default function Home() {
             {SYSTEMS.map((system, i) => (
               <motion.div 
                 key={system.id} 
-                {...fadeUp(i * 0.1)} 
-                className="group relative aspect-[4/5] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow hover:scale-[1.02] transition-all duration-700"
+                {...fadeUp(i * 0.1)}
+                whileHover={{ y: -8, borderColor: '#C4973E' }}
+                transition={{ duration: 0.3 }}
+                className="group relative aspect-[4/5] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow transition-all duration-500"
               >
                  <img 
                    src={system.bg} 
@@ -238,7 +238,7 @@ export default function Home() {
                       {system.desc}
                     </p>
                     <div className="space-y-3">
-                      <Link to={system.route} className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 hover:bg-lael-accent transition-all duration-500">
+                      <Link to={system.route} className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 group-hover:bg-lael-rust transition-all duration-500">
                          {system.cta}
                       </Link>
                     </div>
@@ -268,19 +268,23 @@ export default function Home() {
       {/* ── 6. RESULTADOS (DATA REAL) ─────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 flex flex-col items-center">
         <div className="max-w-6xl w-full">
-           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-16 text-center">Resultados Comprobados</motion.p>
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-16 text-center font-bold">Datos Reales</motion.p>
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
-                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">+140 pts</p>
-                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Mejora promedio</p>
+                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">+600</p>
+                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Alumnos activos</p>
               </div>
               <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
-                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">98.2%</p>
-                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Precisión de diagnóstico</p>
+                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">$0</p>
+                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Costo PAES</p>
               </div>
               <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
-                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">4/5</p>
-                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Entran a su 1era opción</p>
+                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">3</p>
+                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Idiomas</p>
+              </div>
+              <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
+                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">100%</p>
+                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Online</p>
               </div>
            </div>
            

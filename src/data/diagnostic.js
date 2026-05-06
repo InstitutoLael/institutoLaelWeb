@@ -56,85 +56,84 @@ export const getDiagnosticResult = (answers) => {
       entry_product: "Sesión de Diagnóstico Profundo (Gratuita)",
       stats: [],
       attributes: [], // Data metrics for the profile
-      case_study: null // Linked success story
-    };
-
-    // LOGIC FOR SURGICAL PROFILES
+      case_study: null //    // LOGIC FOR SURGICAL PROFILES
     if (paes_pain === 'content') {
-      profile.title = "El Memorístico Saturado";
-      profile.subtitle = "Detectamos un patrón de retención pasiva (presente en el 72% de los alumnos que evaluamos).";
-      profile.description = "Tu problema no es la falta de estudio, es el método de almacenamiento. Estás intentando memorizar la PAES como si fuera una prueba de colegio. No estás fallando por falta de esfuerzo, estás fallando porque tu cerebro está saturado de datos pero vacío de ejecución táctica.";
+      profile.title = "El Alumno 'Materia-Dependiente'";
+      profile.subtitle = "Sientes que necesitas saberlo todo antes de empezar, y eso te está frenando.";
+      profile.description = "Tu problema no es la falta de estudio, es que estás tratando la PAES como una prueba de memoria. Te falta técnica para aplicar lo que sabes bajo presión. En nuestras clases gratuitas en vivo, te enseñamos a pensar como el examen, no solo a memorizarlo.";
       profile.attributes = [
-        { label: "Retención Teórica", value: "Alta", score: 85 },
-        { label: "Ejecución Táctica", value: "Baja", score: 20 },
-        { label: "Eficiencia de Tiempo", value: "Crítica", score: 15 }
+        { label: "Base Teórica", value: "Sólida", score: 80 },
+        { label: "Técnica de Descarte", value: "Baja", score: 20 },
+        { label: "Confianza al Responder", value: "Baja", score: 15 }
       ];
       profile.case_study = {
         name: "Caso Javiera",
-        text: "Mismo perfil: Memorístico Saturado. Resultado: +130 puntos en 10 semanas tras activar el sistema de flujo.",
+        text: "Mismo perfil. Logró +130 puntos al dejar de memorizar y empezar a entrenar estrategia con nosotros.",
         metrics: "+130 pts"
       };
-      profile.wa_msg = "Hola, hice el diagnóstico y me salió 'Memorístico Saturado'. Me hizo mucho sentido lo de la saturación de datos, siento que estudio harto pero no sé aplicarlo. ¿Cómo podemos empezar?";
+      profile.wa_msg = "Hola, me salió el perfil 'Alumno Materia-Dependiente'. Quiero unirme a las clases gratis y aprender a aplicar lo que sé.";
+      profile.entry_product = "Acceso a Clases PAES Gratuitas";
     } 
     else if (paes_pain === 'strategy' && (discipline === 'low' || discipline === 'mid')) {
-      profile.title = "El Ansioso Bajo Presión";
-      profile.subtitle = "Un patrón reactivo detectado en el 84% de los perfiles con alta capacidad teórica.";
-      profile.description = "Sabes más de lo que tus puntajes dicen. El problema no es el conocimiento, es que no tienes un sistema de gestión de ansiedad táctica. Cada minuto que pasa en el ensayo es una distracción más que drena tu rendimiento real.";
+      profile.title = "El Bloqueo por Presión";
+      profile.subtitle = "Sabes la materia, pero los nervios y el reloj te juegan en contra.";
+      profile.description = "No te falta inteligencia, te falta un sistema para dominar la ansiedad. Cada minuto que pasa en el ensayo es una distracción que drena tu rendimiento. Te vamos a entrenar en vivo para que el tiempo sea tu aliado, no tu enemigo.";
       profile.attributes = [
-        { label: "Gestión de Estrés", value: "Crítica", score: 10 },
-        { label: "Análisis de Variable", value: "Media", score: 50 },
-        { label: "Velocidad de Respuesta", value: "Inconsistente", score: 30 }
+        { label: "Manejo de Estrés", value: "Crítico", score: 10 },
+        { label: "Velocidad de Respuesta", value: "Media", score: 45 },
+        { label: "Lógica de Examen", value: "Media", score: 50 }
       ];
       profile.case_study = {
         name: "Caso Matías",
-        text: "Mismo perfil: Ansioso Bajo Presión. Resultado: Pasó de 620 a 745 puntos al dominar la gestión del reloj.",
+        text: "Mismo perfil. Pasó de 620 a 745 puntos al aprender a dominar el reloj en nuestras sesiones en vivo.",
         metrics: "+125 pts"
       };
-      profile.wa_msg = "Hola, me salió 'Ansioso Bajo Presión'. Es justo lo que me pasa en los ensayos, me bloqueo con el tiempo y siento que sé la materia pero no me alcanza el reloj. ¿Me ayudan?";
+      profile.wa_msg = "Hola, mi perfil es 'Bloqueo por Presión'. Me pasa mucho que me pongo nervioso con el tiempo, quiero entrar a las clases gratis.";
+      profile.entry_product = "Acceso a Clases PAES Gratuitas";
     }
     else if (paes_pain === 'strategy' && discipline === 'high') {
-      profile.title = "El Estratégicamente Perdido";
-      profile.subtitle = "Un perfil de alta disciplina (visto en el 65% de los alumnos que vienen de otros preuniversitarios).";
-      profile.description = "Eres una máquina de estudiar, pero sin arquitectura. Estás dedicando el mismo tiempo a lo que ya sabes que a tus brechas reales. Estás trabajando duro, no trabajando inteligente. Tu disciplina es tu mayor activo, pero hoy está mal dirigida.";
+      profile.title = "El Esfuerzo sin Brújula";
+      profile.subtitle = "Eres disciplinado, pero estás dedicando tiempo a cosas que no suben tu puntaje.";
+      profile.description = "Eres una máquina de estudiar, pero te falta foco. Estás trabajando duro, pero no de forma inteligente. Necesitas identificar tus brechas reales para que tu esfuerzo rinda frutos. Te daremos el mapa táctico que necesitas sin cobrarte un peso.";
       profile.attributes = [
-        { label: "Disciplina Operativa", value: "Máxima", score: 95 },
-        { label: "Foco en Brechas", value: "Nulo", score: 5 },
-        { label: "Retorno de Esfuerzo", value: "Bajo", score: 40 }
+        { label: "Disciplina de Estudio", value: "Excelente", score: 95 },
+        { label: "Foco Estratégico", value: "Bajo", score: 10 },
+        { label: "Retorno de Esfuerzo", value: "Bajo", score: 30 }
       ];
       profile.case_study = {
         name: "Caso Sofía",
-        text: "Mismo perfil: Estratégicamente Perdido. Resultado: 960 puntos en Matemáticas tras redirigir su esfuerzo.",
+        text: "Mismo perfil. Logró 960 puntos en Matemáticas tras redirigir su disciplina hacia sus puntos débiles.",
         metrics: "960 pts"
       };
-      profile.wa_msg = "Hola, mi resultado fue 'Estratégicamente Perdido'. Tengo las ganas y el tiempo, pero siento que estoy trabajando duro sin ver resultados reales. Necesito esa arquitectura que mencionan.";
+      profile.wa_msg = "Hola, mi resultado fue 'Esfuerzo sin Brújula'. Tengo las ganas pero necesito el mapa para no perder tiempo. ¡Me inscribo gratis!";
+      profile.entry_product = "Acceso a Clases PAES Gratuitas";
     }
     else {
-      profile.title = "El Inconsistente Crónico";
-      profile.subtitle = "Patrón de práctica circular detectado en el 78% de los alumnos sin feedback externo.";
-      profile.description = "Haces ensayos por cumplir, pero no revisas el porqué de tus fallos. Estás practicando equivocarte. No es falta de capacidad, es falta de un sistema de retroalimentación táctica que te obligue a cerrar tus brechas reales.";
+      profile.title = "La Práctica sin Dirección";
+      profile.subtitle = "Haces ensayos por cumplir, pero cometes siempre los mismos errores.";
+      profile.description = "Estás practicando equivocarte. Sin un sistema de feedback real, solo estás repitiendo fallos. En nuestras sesiones en vivo, detectamos por qué te equivocas y lo corregimos en el momento. Es gratis, solo necesitas disposición.";
       profile.attributes = [
-        { label: "Hábito de Feedback", value: "Ausente", score: 0 },
-        { label: "Consistencia de Puntaje", value: "Errática", score: 25 },
-        { label: "Identificación de Error", value: "Baja", score: 15 }
+        { label: "Hábito de Feedback", value: "Ausente", score: 5 },
+        { label: "Consistencia de Puntaje", value: "Baja", score: 20 },
+        { label: "Detección de Error", value: "Crítica", score: 10 }
       ];
       profile.case_study = {
         name: "Caso Diego",
-        text: "Mismo perfil: Inconsistente Crónico. Resultado: Estabilizó su puntaje sobre los 800 pts en 2 meses.",
+        text: "Mismo perfil. Estabilizó su puntaje sobre los 800 pts en solo 2 meses de entrenamiento guiado.",
         metrics: "800+ pts"
       };
-      profile.wa_msg = "Hola, hice el diagnóstico y me salió 'Inconsistente Crónico'. Me hizo mucho sentido lo de repetir errores sin darme cuenta, siento que hago muchos ensayos pero siempre saco lo mismo. Ayuda.";
+      profile.wa_msg = "Hola, me salió 'Práctica sin Dirección'. Me inscribo a las clases gratis para dejar de repetir los mismos errores.";
+      profile.entry_product = "Acceso a Clases PAES Gratuitas";
     }
 
     profile.stats = [
-      { label: "Potencial", value: paes_target === 'elite' ? '940+' : '820+' },
-      { label: "Urgencia", value: "Alta" },
-      { label: "Confiabilidad", value: "98.2%" }
+      { label: "Potencial Real", value: paes_target === 'elite' ? '940+' : '820+' },
+      { label: "Estado de Urgencia", value: "Activo" },
+      { label: "Costo Mensual", value: "$0" }
     ];
 
     return profile;
   }
-
-
 
   if (category === 'adultos') {
     return {

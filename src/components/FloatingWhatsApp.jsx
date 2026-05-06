@@ -5,22 +5,22 @@ import { trackEvent } from '../utils/analytics';
 
 const OPTIONS = [
   { 
-    id: 'diagnostico', 
-    label: 'Quiero un diagnóstico', 
+    id: 'paes_gratis', 
+    label: 'Quiero PAES Gratis', 
     icon: <Target size={18} />, 
-    msg: 'Hola, quiero realizar mi diagnóstico inicial para el sistema Lael.' 
+    msg: 'Hola, quiero unirme a las clases gratuitas de PAES en vivo por Google Meet.' 
   },
   { 
     id: 'mejorar', 
-    label: 'Quiero mejorar mi puntaje', 
+    label: 'Tengo dudas sobre idiomas', 
     icon: <Zap size={18} />, 
-    msg: 'Hola, estoy estancado con mi puntaje y quiero saber cómo el sistema Lael puede ayudarme.' 
+    msg: 'Hola, me interesa saber más sobre el programa de Idiomas y cómo funcionan las simulaciones reales.' 
   },
   { 
     id: 'ayuda', 
     label: 'No sé qué elegir', 
     icon: <HelpCircle size={18} />, 
-    msg: 'Hola, estoy viendo la web y no sé qué programa se adapta mejor a mi caso. ¿Me ayudan?' 
+    msg: 'Hola, estoy viendo la web y no sé por dónde empezar. ¿Me pueden orientar?' 
   }
 ];
 
@@ -74,6 +74,15 @@ export default function FloatingWhatsApp() {
 
       <motion.button
         onClick={handleOpen}
+        animate={!isOpen ? { 
+          scale: [1, 1.08, 1],
+        } : {}}
+        transition={!isOpen ? {
+          duration: 0.6,
+          repeat: Infinity,
+          repeatDelay: 4,
+          ease: "easeInOut"
+        } : {}}
         className={`w-16 h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ${
           isOpen ? 'bg-lael-primary text-lael-light rotate-90' : 'bg-[#25D366] text-white'
         }`}

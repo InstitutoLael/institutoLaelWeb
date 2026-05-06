@@ -22,11 +22,12 @@ export const clp = (n) =>
 export function computePaesPrice(selectedIds = []) {
   const count = selectedIds.length;
 
+  // El modelo ahora es 100% gratuito
   const TIER_PRICES = {
-    1: 14990,
-    2: 24990,
-    3: 34990,
-    FULL: 44990
+    1: 0,
+    2: 0,
+    3: 0,
+    FULL: 0
   };
 
   let totalMonthly = 0;
@@ -35,32 +36,21 @@ export function computePaesPrice(selectedIds = []) {
 
   if (count === 0) {
     totalMonthly = 0;
-    label = "Configura tu Sistema";
-  } else if (count === 1) {
-    totalMonthly = TIER_PRICES[1];
-    label = "Módulo de Especialización";
-  } else if (count === 2) {
-    totalMonthly = TIER_PRICES[2];
-    label = "Estrategia Dual";
-    saving = (TIER_PRICES[1] * 2) - TIER_PRICES[2];
-  } else if (count === 3) {
-    totalMonthly = TIER_PRICES[3];
-    label = "Estrategia de Alto Impacto";
-    saving = (TIER_PRICES[1] * 3) - TIER_PRICES[3];
+    label = "Inicia tu preparación";
   } else {
-    totalMonthly = TIER_PRICES.FULL;
-    label = "🏆 Sistema Integral de Rendimiento";
-    saving = (TIER_PRICES[1] * count) - TIER_PRICES.FULL;
+    totalMonthly = 0;
+    label = "Sistema de Alto Rendimiento — Gratis";
+    saving = 0;
   }
 
   return {
     count,
     label,
-    totalMonthly,
-    saving,
-    enrollment: ENROLLMENT_FEE,
-    totalFirstMonth: totalMonthly + ENROLLMENT_FEE,
-    pricePerSubject: count > 0 ? Math.round(totalMonthly / count) : 0
+    totalMonthly: 0,
+    saving: 0,
+    enrollment: 0, // Matrícula $0
+    totalFirstMonth: 0,
+    pricePerSubject: 0
   };
 }
 
@@ -142,24 +132,24 @@ export const PAES_SUBJECTS = [
 export const PAES_COMBOS = [
   {
     id: "combo-humanista",
-    title: "Estrategia Humanista Premium",
+    title: "Estrategia Humanista",
     subtitle: "Comprensión Lectora + Perspectiva Histórica + M1",
     subjects: ["len", "his", "m1"], 
-    price: 34990,
+    price: 0,
     color: "amber",
-    tag: "Alto Rendimiento",
-    features: ["Acompañamiento Táctico", "Módulo de Filosofía Incan", "Simulacros de Presión", "Feedback en Tiempo Real"],
+    tag: "100% Gratuito",
+    features: ["Clases en vivo por Google Meet", "Simulacros de Presión", "Material de Quiebre", "Comunidad de Apoyo"],
     paymentUrl: "" 
   },
   {
     id: "combo-cientifico",
-    title: "Estrategia STEM Avanzada",
+    title: "Estrategia STEM",
     subtitle: "M1 + M2 + Ciencias Específicas",
     subjects: ["m1", "m2", "bio", "fis"], 
-    price: 34990,
+    price: 0,
     color: "teal",
-    tag: "Selectivo",
-    features: ["Enfoque 100% Lógico", "Resolución de Alta Complejidad", "Preparación M2 Intensiva", "Simulacros de Presión"],
+    tag: "100% Gratuito",
+    features: ["Enfoque 100% Lógico", "Preparación M2 Intensiva", "Clases en vivo", "Simulacros Semanales"],
     paymentUrl: "" 
   },
   {
@@ -167,9 +157,9 @@ export const PAES_COMBOS = [
     title: "Sistema Integral Lael",
     subtitle: "Dominio absoluto para asegurar tu objetivo",
     subjects: ["len", "m1", "m2", "his", "bio"],
-    price: 44990,
+    price: 0,
     color: "indigo",
-    features: ["Acceso a Todo el Sistema", "Orientación Estratégica Vocacional", "Manejo Táctico de Ansiedad", "Seguimiento Diario"],
+    features: ["Acceso a Todo el Sistema", "Orientación Vocacional", "Clases en vivo", "Soporte de Comunidad"],
     paymentUrl: "" 
   }
 ];
@@ -177,21 +167,35 @@ export const PAES_COMBOS = [
 /* ──────────────────────────────────────────────────────────────────────────
    5. VALOR AGREGADO (LO QUE INCLUYE SIEMPRE)
    ────────────────────────────────────────────────────────────────────────── */
+export const PAES_CONFIG = {
+  AVAILABLE_SPOTS: 12,
+  START_DATE: "Junio 2026",
+  FREE_BADGE: "100% GRATIS"
+};
+
 export const PAES_FEATURES = [
-  { title: "Entorno de Alto Rendimiento", desc: "Infraestructura digital premium y contenido cinemático disponible 24/7.", icon: "💻" },
-  { title: "Simulacros de Presión", desc: "Entrenamientos bajo condiciones reales para destruir la ansiedad en la prueba.", icon: "📝" },
-  { title: "Mentores Tácticos", desc: "No son profesores, son expertos en estrategia que corrigen tu trayectoria en tiempo real.", icon: "📱" },
-  { title: "Estrategia de Ingreso", desc: "Análisis de ponderaciones y rutas tácticas para asegurar tu carrera objetivo.", icon: "🎯" }
+  { title: "Comunidad de Apoyo", desc: "No estás solo. Profesores y alumnos te acompañan en cada paso del proceso.", icon: "🤝" },
+  { title: "Ensayos Semanales", desc: "Entrenamientos para que llegues tranquilo y seguro el día de la PAES.", icon: "📝" },
+  { title: "Profesores Reales", desc: "Profes que saben tu nombre, te responden dudas y se preocupan por tu puntaje.", icon: "👨‍🏫" },
+  { title: "Clases Grabadas", desc: "Si no pudiste conectarte a la clase en vivo, queda guardada para que la veas después.", icon: "🎥" }
 ];
 
 export const PAES_FAQS = [
-  {
-    q: "¿Cuándo inicia el entrenamiento?",
-    a: "El sistema inicia la primera semana de Abril, pero tu diagnóstico de precisión y nivelación comienzan en el momento en que postulas.",
+  { 
+    q: "¿De verdad es gratis? ¿Hay trampa?", 
+    a: "Sí, es gratis. La PAES en Lael nunca ha tenido costo y nunca lo tendrá. Nuestra misión es que el dinero no sea una barrera para tu futuro." 
   },
-  {
-    q: "¿Las sesiones son grabadas?",
-    a: "Las sesiones son dinámicas y en vivo, enfocadas en la resolución de problemas. Toda sesión estratégica queda respaldada en el sistema.",
+  { 
+    q: "¿Cómo son las clases?", 
+    a: "Son 100% en vivo por Google Meet. Con fecha y hora fija, donde puedes interactuar con el profesor y resolver tus dudas en el momento." 
+  },
+  { 
+    q: "¿Qué pasa si me pierdo una clase?", 
+    a: "No te preocupes. Todas las clases quedan grabadas en tu panel de alumno para que las veas cuando quieras." 
+  },
+  { 
+    q: "¿Cuántas horas de clases hay a la semana?", 
+    a: "Depende de las materias. En promedio son 2 a 3 horas por asignatura a la semana, enfocadas totalmente en lo que realmente entra en la prueba." 
   }
 ];
 

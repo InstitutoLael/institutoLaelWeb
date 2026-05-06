@@ -1,10 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { PAES_FEATURES } from '../../data/paes';
+import { PAES_FEATURES, PAES_CONFIG, PAES_FAQS } from '../../data/paes';
 import { useNavigate } from 'react-router-dom';
 import paesMentor from '../../assets/img/Home/paes_mentor_strategy_1777948898105.png';
 import paesBg from '../../assets/img/Home/mundo_paes_bg_1777943419260.png';
+import ScrollProgress from '../../components/ui/ScrollProgress';
+import { Helmet } from 'react-helmet-async';
+import { Target, Zap, Clock, Users, BookOpen } from 'lucide-react';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -15,13 +18,7 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 1.1, delay, ease },
 });
 
-// Comparison row data
-const COMPARE = [
-  { feature: 'Enfoque', lael: 'Estrategia de rendimiento', other: 'Memorización temática' },
-  { feature: 'Metodología', lael: 'Diagnóstico + Plan táctico', other: 'Clases masivas genéricas' },
-  { feature: 'Seguimiento', lael: 'Estratega asignado 1:1', other: 'Respuestas lentas o nulas' },
-  { feature: 'Simulaciones', lael: 'Sesión semanal de presión', other: 'Esporádicos o sin feedback' },
-];
+const ease = [0.16, 1, 0.3, 1];
 
 export default function LandingPAES() {
   const navigate = useNavigate();
@@ -32,6 +29,11 @@ export default function LandingPAES() {
 
   return (
     <div className="w-full bg-lael-primary">
+      <ScrollProgress />
+      <Helmet>
+        <title>PAES de Alto Rendimiento | 100% Gratuito | Instituto Lael</title>
+        <meta name="description" content="Entrena con los mejores para la PAES. Clases en vivo, materiales y diagnóstico profundo. Completamente gratis." />
+      </Helmet>
 
       {/* ── 1. HERO NARRATIVO (CINEMÁTICO) ─────────────────────────────── */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
@@ -46,36 +48,38 @@ export default function LandingPAES() {
         <div className="relative z-20 max-w-7xl mx-auto flex flex-col items-center">
           <motion.div {...fadeUp()} className="mb-10">
              <h2 className="text-lael-accent font-display text-2xl lg:text-3xl italic italic-playfair font-normal">
-                ¿Estudias harto pero tu puntaje no sube?
+                Clases en vivo por Google Meet. <br className="hidden md:block" />
+                <span className="text-lael-rust not-italic font-sans text-sm tracking-[0.3em] uppercase font-bold">{PAES_CONFIG.FREE_BADGE} • Inicio {PAES_CONFIG.START_DATE}</span>
              </h2>
           </motion.div>
 
           <h1 className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl clip-reveal mb-12">
-            Te enseñamos a <br />
-            <span className="accent-italic">hackear la PAES.</span>
+            La mejor versión <br />
+            <span className="accent-italic">de tu puntaje.</span>
           </h1>
 
           <motion.p {...fadeUp(0.35)} className="mt-12 text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed mb-14">
-             No es materia, es estrategia. Corregimos lo que estás haciendo mal el día de la prueba. <br className="hidden md:block" /> ¿Cuál es tu situación hoy?
+             No es un video grabado. Son profesores reales enseñándote a resolver la prueba en tiempo real. <br className="hidden md:block" /> ¿Listo para empezar tu entrenamiento?
           </motion.p>
 
-          <motion.div {...fadeUp(0.55)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-4">
-            <button onClick={() => navigate('/diagnostico', { state: { path: 'stagnation' } })}
-              className="bg-lael-accent text-white px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all shadow-xl">
-              Estoy estancado
-            </button>
-            <button onClick={() => navigate('/diagnostico', { state: { path: 'target' } })}
-              className="bg-lael-secondary border border-lael-bd text-lael-light px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
-              Voy por carrera de élite
-            </button>
-            <button onClick={() => navigate('/diagnostico', { state: { path: 'lost' } })}
-              className="bg-transparent border border-lael-accent/30 text-lael-accent px-8 py-5 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all">
-              No sé por dónde empezar
+          <motion.div {...fadeUp(0.55)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-6">
+            <div className="flex flex-col items-center gap-4">
+              <button onClick={() => navigate('/diagnostico')}
+                className="bg-lael-accent text-white px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-2 transition-all shadow-2xl shadow-lael-accent/20">
+                Inscribirme Gratis $0
+              </button>
+              <p className="text-lael-rust text-[11px] font-bold tracking-widest animate-pulse">
+                Solo quedan {PAES_CONFIG.AVAILABLE_SPOTS} cupos para {PAES_CONFIG.START_DATE}
+              </p>
+            </div>
+            <button onClick={() => document.getElementById('metodologia').scrollIntoView({ behavior: 'smooth' })}
+              className="bg-lael-secondary border border-lael-bd text-lael-light px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-2 transition-all h-fit">
+              Ver metodología
             </button>
           </motion.div>
 
-          <motion.p {...fadeUp(0.8)} className="mt-12 text-[10px] uppercase tracking-[0.3em] text-lael-rust font-bold">
-            ⚠ Si no entras hoy, pierdes 1 semana completa de activación estratégica.
+          <motion.p {...fadeUp(0.8)} className="mt-12 text-[10px] uppercase tracking-[0.3em] text-lael-muted font-bold opacity-60">
+             Acceso inmediato • Comunidad en vivo • Material incluido
           </motion.p>
         </div>
 
@@ -138,7 +142,12 @@ export default function LandingPAES() {
               <p className="text-[10px] tracking-[0.2em] text-lael-accent uppercase font-bold">Lael</p>
               <p className="text-[10px] tracking-[0.2em] text-lael-muted uppercase font-bold">Preus Tradicionales</p>
             </div>
-            {COMPARE.map((row, i) => (
+            {[
+              { feature: 'Costo Mensual', lael: '$0 (Completamente Gratis)', other: '$80.000 - $150.000' },
+              { feature: 'Metodología', lael: 'Clases en vivo 100% interactivas', other: 'Clases masivas o grabadas' },
+              { feature: 'Profesores', lael: 'Equipo real por Google Meet', other: 'Profesores distantes' },
+              { feature: 'Comunidad', lael: 'Apoyo constante y real', other: 'Un alumno más en la lista' },
+            ].map((row, i) => (
               <div key={row.feature} className={`grid grid-cols-3 px-10 py-8 ${i % 2 === 0 ? 'bg-lael-primary' : 'bg-lael-secondary/50'} border-b border-lael-bd last:border-0`}>
                 <p className="text-xs text-lael-muted tracking-wider font-bold uppercase">{row.feature}</p>
                 <p className="text-sm text-lael-light font-bold tracking-wide">{row.lael}</p>
@@ -150,7 +159,7 @@ export default function LandingPAES() {
       </section>
 
       {/* ── 4. UNA SEMANA EN EL SISTEMA (SUBIDA) ─────────────────────── */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center">
+      <section id="metodologia" className="relative w-full px-6 py-32 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 text-center font-bold">Visualiza tu entrenamiento</motion.p>
@@ -247,7 +256,7 @@ export default function LandingPAES() {
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-5xl text-lael-light font-bold text-center mb-24 uppercase tracking-widest">
-            Tu Arquitectura Táctica.
+            Tu Equipo de Entrenamiento.
           </motion.h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -269,11 +278,7 @@ export default function LandingPAES() {
         <div className="max-w-4xl mx-auto">
           <motion.h2 {...fadeUp()} className="font-display text-4xl text-lael-light font-bold text-center mb-16 uppercase tracking-widest">Hablemos claro.</motion.h2>
           <div className="space-y-6">
-             {[
-                { q: "¿Es 100% online?", a: "Sí. No perdemos tiempo en traslados. Lael sucede donde tú estés, pero con el rigor de una sala de entrenamiento real." },
-                { q: "¿Y si ya fallé antes?", a: "Perfecto. Significa que ya probaste lo que no funciona. Nosotros te mostramos por qué fallaste y cómo hackear ese resultado." },
-                { q: "¿Cuánto tiempo necesito?", a: "¿Trabajas? ¿Tienes poco tiempo? El sistema se arma contigo. Optimizamos cada minuto para que el estudio sea quirúrgico." }
-             ].map((item, i) => (
+             {PAES_FAQS.map((item, i) => (
                 <motion.div key={i} {...fadeUp(i * 0.1)} className="p-10 bg-lael-primary rounded-[40px] border border-lael-bd cinematic-shadow">
                    <h4 className="text-lael-light font-bold mb-6 text-lg tracking-tight uppercase">{item.q}</h4>
                    <p className="text-lael-muted text-sm leading-relaxed">{item.a}</p>
@@ -288,17 +293,22 @@ export default function LandingPAES() {
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
           <h2 className="font-display text-5xl lg:text-7xl text-lael-light font-bold leading-none mb-12 uppercase tracking-tighter">
-             ¿Listo para saber <br/> <span className="text-lael-accent">la verdad?</span>
+             ¿Empezamos tu <br/> <span className="text-lael-accent">entrenamiento?</span>
           </h2>
           <p className="text-lael-muted text-lg mb-16 leading-relaxed italic italic-playfair">
              No llegas acá porque te falta capacidad. <br className="hidden md:block" /> Llegas porque nadie te enseñó cómo mejorar.
           </p>
-          <button
-            onClick={startDiagnostic}
-            className="bg-lael-accent text-white px-16 py-7 rounded-2xl text-[11px] tracking-[0.3em] uppercase font-bold hover:-translate-y-2 transition-all duration-500 shadow-[0_20px_50px_rgba(196,151,62,0.25)]"
-          >
-            Iniciar diagnóstico táctico →
-          </button>
+          <div className="flex flex-col items-center gap-6">
+            <button
+              onClick={startDiagnostic}
+              className="bg-lael-accent text-white px-16 py-7 rounded-2xl text-[11px] tracking-[0.3em] uppercase font-bold hover:-translate-y-2 transition-all duration-500 shadow-[0_20px_50px_rgba(196,151,62,0.25)]"
+            >
+              Quiero mi diagnóstico gratis →
+            </button>
+            <p className="text-lael-muted text-[10px] uppercase tracking-[0.3em] font-bold opacity-60">
+              Inicio {PAES_CONFIG.START_DATE} • {PAES_CONFIG.FREE_BADGE}
+            </p>
+          </div>
         </motion.div>
 
         {/* Visual divider */}

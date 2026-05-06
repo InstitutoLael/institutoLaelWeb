@@ -112,7 +112,7 @@ export default function ResultDashboard() {
                <div className="absolute top-0 right-0 p-4 bg-white/10 text-[9px] font-bold uppercase tracking-widest">Cupos: 3/5 esta semana</div>
                <h3 className="font-display text-3xl mb-8">{result.entry_product}</h3>
                <p className="text-white/80 text-sm leading-relaxed mb-10">
-                  Tu diagnóstico indica que un curso genérico no resolverá tu estancamiento. Necesitas una <strong>validación táctica 1:1</strong> para diseñar tu arquitectura de puntaje.
+                  Tu diagnóstico indica que tienes el potencial, pero te falta la guía correcta. Únete a nuestro equipo y accede a la **mejor preparación PAES de Chile** sin pagar ni un peso.
                </p>
                
                <div className="space-y-4">
@@ -120,9 +120,9 @@ export default function ResultDashboard() {
                     onClick={() => handleContact('whatsapp')}
                     className="w-full py-5 bg-white text-lael-accent rounded-xl font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-3 hover:scale-[1.02] transition-transform shadow-xl"
                   >
-                     <MessageCircle size={18} /> Agendar Sesión vía WhatsApp
+                     <MessageCircle size={18} /> Inscribirme Gratis vía WhatsApp
                   </button>
-                  <p className="text-center text-[9px] text-white/60 uppercase tracking-[0.2em] font-bold">Respuesta en menos de 15 min</p>
+                  <p className="text-center text-[9px] text-white/60 uppercase tracking-[0.2em] font-bold">Un estratega te guiará para activar tu cuenta hoy mismo</p>
                </div>
             </div>
 

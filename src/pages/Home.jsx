@@ -206,7 +206,7 @@ export default function Home() {
                   </div>
                   <span className="bg-lael-accent text-white text-[9px] font-bold px-3 py-1.5 rounded-full tracking-widest uppercase shadow-lg shadow-lael-accent/20">GRATIS</span>
                </div>
-               <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">Prepararme PAES</h3>
+               <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">Preparar mi PAES</h3>
                <p className="text-sm text-lael-muted mb-6">Clases en vivo sin costo mensual.</p>
                <span className="text-lael-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all">Inscribirme <ChevronRight size={14}/></span>
             </motion.div>
@@ -405,7 +405,7 @@ export default function Home() {
                  <div className="p-12 bg-white rounded-[50px] border border-lael-bd cinematic-shadow group-hover:border-lael-accent transition-all duration-500 text-center">
                     <p className="text-lael-accent text-7xl font-display font-bold mb-4">$0</p>
                     <div className="h-[2px] w-12 bg-lael-accent/20 mx-auto mb-4"></div>
-                    <p className="text-lael-primary text-[11px] uppercase tracking-[0.25em] font-bold">Costo PAES</p>
+                    <p className="text-lael-primary text-[11px] uppercase tracking-[0.25em] font-bold">Inversión PAES</p>
                  </div>
               </div>
 

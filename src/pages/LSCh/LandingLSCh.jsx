@@ -49,7 +49,7 @@ export default function LandingLSCh() {
             className="font-display text-5xl lg:text-7xl xl:text-8xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl mb-10 relative"
           >
             <span className="absolute inset-0 blur-[100px] bg-lael-accent/20 -z-10 rounded-full"></span>
-            El idioma que<br />
+            La lengua que<br />
             <span className="accent-italic relative z-10">elimina barreras.</span>
           </motion.h1>
           <motion.p {...fadeUp(0.35)} className="text-lael-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed mb-12">

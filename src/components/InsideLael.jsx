@@ -30,7 +30,7 @@ export default function InsideLael() {
         <div className="flex flex-col lg:flex-row gap-16 items-center mb-24">
           <div className="flex-1">
             <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">Inmersión</p>
-            <h2 className="font-display text-4xl lg:text-6xl text-lael-light font-bold mb-8">Dentro de Lael.</h2>
+            <h2 className="font-display text-4xl lg:text-6xl text-lael-primary font-bold mb-8">Dentro de Lael.</h2>
             <p className="text-lael-muted text-lg leading-relaxed max-w-xl">
               Somos 100% online, pero nuestra presencia es constante. Mira cómo se entrena el rendimiento académico desde cualquier lugar de Chile.
             </p>
@@ -127,7 +127,7 @@ export default function InsideLael() {
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="p-5 bg-lael-secondary border border-lael-bd text-lael-light rounded-3xl rounded-tl-none text-xs font-medium max-w-[80%]">
+                <div className="p-5 bg-lael-secondary border border-lael-bd text-lael-primary rounded-3xl rounded-tl-none text-xs font-medium max-w-[80%]">
                   ¡Eso es! Ahora ese tiempo lo usamos para las preguntas de alta dificultad. Vamos por ese 800+.
                 </div>
               </div>

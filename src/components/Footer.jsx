@@ -14,7 +14,7 @@ const SOCIAL = [
 export default function Footer() {
   const year = new Date().getFullYear();
   const location = useLocation();
-  const isLightPage = ['/', '/nosotros', '/contacto', '/transparencia', '/preguntas', '/diagnostico'].includes(location.pathname);
+  const isLightPage = ['/nosotros', '/contacto', '/transparencia', '/preguntas', '/diagnostico'].includes(location.pathname);
 
   return (
     <footer className="bg-lael-primary border-t border-lael-bd pt-20 pb-10">
@@ -29,7 +29,7 @@ export default function Footer() {
               <img src={logoBlanco} alt="Instituto Lael" loading="lazy" className="h-7 w-auto opacity-90 hover:opacity-100 transition-opacity" />
             </Link>
             <p className="text-lael-muted text-sm leading-relaxed max-w-xs">
-              Ingeniería del rendimiento académico. No vendemos cursos, diseñamos el éxito de nuestros alumnos a través de datos y estrategia.
+              No vendemos cursos. Activamos propósitos a través de ingeniería de rendimiento académico y estrategia táctica de alto nivel.
             </p>
             {/* Social */}
             <div className="flex gap-3">

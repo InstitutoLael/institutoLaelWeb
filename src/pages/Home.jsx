@@ -102,6 +102,8 @@ const SYSTEMS = [
   },
 ];
 
+const isLightPage = ['nosotros', 'contacto', 'transparencia', 'preguntas', 'diagnostico'].includes(location.pathname);
+
 const METHOD = [
   { step: '01', label: 'Diagnóstico', desc: 'Detectamos dónde estás realmente y por qué no has subido tu puntaje.' },
   { step: '02', label: 'Estrategia', desc: 'Armamos un plan que se adapta a tu meta y al tiempo que tienes hoy.' },
@@ -151,10 +153,13 @@ export default function Home() {
             initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
             animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-primary font-bold leading-[0.9] max-w-6xl mb-12"
+            className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-6xl mb-12 relative"
           >
             Tu futuro no <br/>
-            <span className="accent-italic">tiene precio.</span>
+            <span className="relative inline-block">
+               <span className="absolute inset-0 blur-3xl bg-lael-accent/20 -z-10 rounded-full animate-pulse"></span>
+               <span className="accent-italic relative z-10">tiene precio.</span>
+            </span>
           </motion.h1>
 
           <motion.p {...fadeUp(0.3)} className="text-lael-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-14">
@@ -194,40 +199,40 @@ export default function Home() {
             <h2 className="text-3xl font-display font-bold">¿Qué necesitas hoy?</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/paes')} className="p-8 rounded-3xl bg-lael-secondary/50 border border-lael-bd cursor-pointer group hover:border-[#5C6E4E]/50 transition-all">
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/paes')} className="p-8 rounded-3xl bg-white border border-lael-bd cursor-pointer group hover:border-lael-accent transition-all shadow-sm">
                <div className="flex justify-between items-start mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-[#5C6E4E]/20 text-[#5C6E4E] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-lael-accent/10 text-lael-accent flex items-center justify-center">
                     <Target size={20} />
                   </div>
-                  <span className="bg-[#5C6E4E] text-white text-[9px] font-bold px-2 py-1">GRATIS</span>
+                  <span className="bg-lael-accent text-white text-[9px] font-bold px-3 py-1.5 rounded-full tracking-widest uppercase shadow-lg shadow-lael-accent/20">GRATIS</span>
                </div>
-               <h3 className="text-xl font-bold mb-2 text-lael-primary">Prepararme PAES</h3>
+               <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">Prepararme PAES</h3>
                <p className="text-sm text-lael-muted mb-6">Clases en vivo sin costo mensual.</p>
-               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Inscribirme <ChevronRight size={14}/></span>
+               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all">Inscribirme <ChevronRight size={14}/></span>
             </motion.div>
             
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/idiomas')} className="p-8 rounded-3xl bg-lael-secondary/50 border border-lael-bd cursor-pointer group hover:border-lael-accent/50 transition-all">
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/idiomas')} className="p-8 rounded-3xl bg-white border border-lael-bd cursor-pointer group hover:border-lael-accent transition-all shadow-sm">
                <div className="flex justify-between items-start mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-lael-accent/20 text-lael-accent flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-lael-accent/10 text-lael-accent flex items-center justify-center">
                     <Zap size={20} />
                   </div>
-                  <span className="text-lael-muted text-[9px] font-bold px-2 py-1">$9.990/MES</span>
+                  <span className="bg-lael-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-full tracking-widest uppercase">$9.990/MES</span>
                </div>
-               <h3 className="text-xl font-bold mb-2 text-lael-primary">Aprender Inglés</h3>
+               <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">Aprender Inglés</h3>
                <p className="text-sm text-lael-muted mb-6">Fluidez real con simulacros.</p>
-               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
+               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
             </motion.div>
 
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/lsch')} className="p-8 rounded-3xl bg-lael-secondary/50 border border-lael-bd cursor-pointer group hover:border-lael-accent/50 transition-all">
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/lsch')} className="p-8 rounded-3xl bg-white border border-lael-bd cursor-pointer group hover:border-lael-accent transition-all shadow-sm">
                <div className="flex justify-between items-start mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-lael-accent/20 text-lael-accent flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-lael-accent/10 text-lael-accent flex items-center justify-center">
                     <HandHeart size={20} />
                   </div>
-                  <span className="text-lael-muted text-[9px] font-bold px-2 py-1">$14.990/MES</span>
+                  <span className="bg-lael-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-full tracking-widest uppercase">$14.990/MES</span>
                </div>
-               <h3 className="text-xl font-bold mb-2 text-lael-primary">Lengua de Señas</h3>
+               <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">Lengua de Señas</h3>
                <p className="text-sm text-lael-muted mb-6">Inclusión real y cultura sorda.</p>
-               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
+               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
             </motion.div>
 
             <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/diagnostico')} className="p-8 rounded-3xl bg-lael-accent/5 border border-lael-accent/20 cursor-pointer group hover:border-lael-accent/50 transition-all">
@@ -236,9 +241,9 @@ export default function Home() {
                     <HelpCircle size={20} />
                   </div>
                </div>
-               <h3 className="text-xl font-bold mb-2 text-lael-primary">No sé por dónde empezar</h3>
+               <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">No sé por dónde empezar</h3>
                <p className="text-sm text-lael-muted mb-6">Te orientamos gratis en tu proceso.</p>
-               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Hacer diagnóstico <ChevronRight size={14}/></span>
+               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all">Hacer diagnóstico <ChevronRight size={14}/></span>
             </motion.div>
           </div>
         </div>
@@ -247,36 +252,46 @@ export default function Home() {
       {/* ── 2. DOLOR DIRECTO (EL QUIEBRE) ─────────────────────────────── */}
       <section className="relative w-full py-32 bg-lael-primary flex flex-col items-center px-6 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[150px] pointer-events-none" />
-        <div className="max-w-4xl w-full relative z-10 text-center lg:text-left">
-           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.5em] uppercase mb-12 font-bold text-center lg:text-left">La Realidad</motion.p>
+        <div className="max-w-7xl w-full relative z-10">
+           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.5em] uppercase mb-12 font-bold text-center">La Realidad</motion.p>
            
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                 <h3 className="font-display text-4xl lg:text-6xl text-lael-light font-bold leading-tight mb-8">
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center mb-32">
+              <div className="order-2 lg:order-1">
+                 <h3 className="font-display text-4xl lg:text-7xl text-lael-light font-bold leading-tight mb-10">
                   A veces, estudiar más <br />
-                  <span className="accent-italic text-lael-accent">no es la solución.</span>
+                  <span className="accent-italic text-lael-accent underline decoration-lael-accent/30 underline-offset-[10px]">no es la solución.</span>
                 </h3>
-                <div className="space-y-6 text-lael-muted text-lg">
+                <div className="space-y-8 text-lael-muted text-lg lg:text-xl leading-relaxed">
                   <p>Pasas horas frente a los libros. Repites ejercicios. Te esfuerzas. Pero el puntaje parece estar bloqueado.</p>
-                  <p className="font-bold text-lael-light">No es tu falta de capacidad. Es que nadie te ha enseñado a entrenar de verdad.</p>
-                </div>
-
-                {/* HUMAN VOICE COUNTERWEIGHT */}
-                <div className="mt-12 p-8 border border-white/5 bg-white/[0.02] rounded-3xl">
-                  <p className="text-lael-muted text-sm leading-relaxed">
+                  <p className="font-bold text-lael-light p-8 bg-white/5 border border-white/5 rounded-[40px] border-l-lael-accent border-l-4">
+                    No es tu falta de capacidad. Es que nadie te ha enseñado a entrenar de verdad.
+                  </p>
+                  <p>
                     <span className="text-lael-accent font-bold">Entendemos tu frustración.</span> La mayoría de nuestros alumnos llegan sintiéndose agotados y con la idea de que "no les da la cabeza". 
-                    <br/><br/>
-                    En Lael, rompemos esa barrera. Te acompañamos paso a paso, en vivo, para que recuperes la confianza y logres el puntaje que mereces.
                   </p>
                 </div>
               </div>
 
-              <div className="space-y-8">
-                <div className="p-8 bg-lael-accent/5 border-l-2 border-lael-accent rounded-r-2xl">
-                  <p className="text-lael-light font-medium italic italic-playfair">"Lo intenté en preuniversitarios masivos y era solo un número más. En Lael encontraron exactamente por qué me bloqueaba."</p>
-                  <p className="mt-4 text-[10px] uppercase tracking-widest text-lael-muted font-bold">— Constanza, Puntaje Nacional Matemáticas</p>
+              <div className="order-1 lg:order-2 space-y-8">
+                <div className="p-12 bg-lael-accent/5 border border-lael-accent/20 rounded-[50px] relative group overflow-hidden">
+                   <div className="absolute top-0 right-0 p-8 text-lael-accent/10 font-display text-9xl font-bold italic select-none">"</div>
+                   <p className="text-lael-light text-2xl lg:text-3xl font-medium italic italic-playfair relative z-10 leading-relaxed mb-8">
+                     "Lo intenté en preuniversitarios masivos y era solo un número más. En Lael encontraron exactamente por qué me bloqueaba."
+                   </p>
+                   <div className="flex items-center gap-4">
+                      <div className="w-12 h-[1px] bg-lael-accent/50"></div>
+                      <p className="text-[11px] uppercase tracking-[0.3em] text-lael-accent font-bold">Constanza, Puntaje Nacional</p>
+                   </div>
                 </div>
               </div>
+           </div>
+
+           <SignificadoLael />
+
+           <div className="mt-32 p-12 lg:p-20 bg-white/5 border border-white/10 rounded-[60px] text-center max-w-4xl mx-auto backdrop-blur-sm">
+              <p className="text-lael-muted text-lg lg:text-xl leading-relaxed">
+                En Lael, rompemos esa barrera. Te acompañamos paso a paso, en vivo, para que recuperes la confianza y logres el puntaje que mereces.
+              </p>
            </div>
         </div>
       </section>
@@ -365,31 +380,53 @@ export default function Home() {
       </section>
 
       {/* ── 6. RESULTADOS (DATA REAL) ─────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center">
-        <div className="max-w-6xl w-full">
-           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-16 text-center font-bold">Datos Reales</motion.p>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
-                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">
-                   +<AnimatedNumber value={600} />
-                 </p>
-                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Alumnos activos</p>
+      <section className="relative w-full px-6 py-32 flex flex-col items-center bg-lael-secondary/20">
+        <div className="max-w-7xl w-full">
+           <div className="flex flex-col lg:flex-row items-end justify-between mb-20 gap-8">
+              <div className="max-w-2xl">
+                 <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Métricas de Impacto</motion.p>
+                 <h2 className="font-display text-4xl lg:text-7xl text-lael-primary font-bold leading-tight">Resultados que <br/><span className="italic italic-playfair text-lael-accent">se pueden medir.</span></h2>
               </div>
-              <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
-                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">$0</p>
-                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Costo PAES</p>
+              <p className="text-lael-muted text-lg max-w-sm pb-4">No son solo números. Son historias de superación real en cada rincón de Chile.</p>
+           </div>
+
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-32">
+              <div className="relative group">
+                 <div className="p-12 bg-white rounded-[50px] border border-lael-bd cinematic-shadow group-hover:border-lael-accent transition-all duration-500 text-center">
+                    <p className="text-emerald-500 text-7xl font-display font-bold mb-4">
+                      +<AnimatedNumber value={600} />
+                    </p>
+                    <div className="h-[2px] w-12 bg-lael-accent/20 mx-auto mb-4"></div>
+                    <p className="text-lael-primary text-[11px] uppercase tracking-[0.25em] font-bold">Alumnos activos</p>
+                 </div>
               </div>
-              <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
-                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">
-                   <AnimatedNumber value={3} />
-                 </p>
-                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Idiomas</p>
+              
+              <div className="relative group">
+                 <div className="p-12 bg-white rounded-[50px] border border-lael-bd cinematic-shadow group-hover:border-lael-accent transition-all duration-500 text-center">
+                    <p className="text-lael-accent text-7xl font-display font-bold mb-4">$0</p>
+                    <div className="h-[2px] w-12 bg-lael-accent/20 mx-auto mb-4"></div>
+                    <p className="text-lael-primary text-[11px] uppercase tracking-[0.25em] font-bold">Costo PAES</p>
+                 </div>
               </div>
-              <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
-                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">
-                   <AnimatedNumber value={100} />%
-                 </p>
-                 <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Online</p>
+
+              <div className="relative group">
+                 <div className="p-12 bg-white rounded-[50px] border border-lael-bd cinematic-shadow group-hover:border-lael-accent transition-all duration-500 text-center">
+                    <p className="text-lael-primary text-7xl font-display font-bold mb-4">
+                      <AnimatedNumber value={3} />
+                    </p>
+                    <div className="h-[2px] w-12 bg-lael-accent/20 mx-auto mb-4"></div>
+                    <p className="text-lael-primary text-[11px] uppercase tracking-[0.25em] font-bold">Idiomas</p>
+                 </div>
+              </div>
+
+              <div className="relative group">
+                 <div className="p-12 bg-white rounded-[50px] border border-lael-bd cinematic-shadow group-hover:border-lael-accent transition-all duration-500 text-center">
+                    <p className="text-lael-rust text-7xl font-display font-bold mb-4">
+                      <AnimatedNumber value={100} />%
+                    </p>
+                    <div className="h-[2px] w-12 bg-lael-accent/20 mx-auto mb-4"></div>
+                    <p className="text-lael-primary text-[11px] uppercase tracking-[0.25em] font-bold">Online</p>
+                 </div>
               </div>
            </div>
            
@@ -398,10 +435,10 @@ export default function Home() {
       </section>
 
       {/* ── 7. CIERRE (CTA FINAL & FAQ) ───────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center bg-lael-secondary border-t border-lael-bd">
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center bg-white border-t border-lael-bd">
         <motion.div {...fadeUp(0)} className="text-center max-w-3xl">
           <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 font-bold">No es para todos. Es para ti.</p>
-          <h2 className="font-display text-5xl lg:text-7xl text-lael-light font-bold leading-[1] mb-12 uppercase tracking-tight">
+          <h2 className="font-display text-5xl lg:text-7xl text-lael-primary font-bold leading-[1] mb-12 uppercase tracking-tight">
             ¿Empezamos <br/> tu activación?
           </h2>
           <button onClick={handleEvaluation}

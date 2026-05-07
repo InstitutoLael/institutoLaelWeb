@@ -89,7 +89,7 @@ export default function DiagnosticFlow() {
                 <div className="flex items-center gap-6">
                   {opt.icon && <span className="text-3xl">{opt.icon}</span>}
                   <div>
-                    <p className="text-lael-light font-bold text-lg">{opt.label}</p>
+                    <p className="text-lael-primary font-bold text-lg">{opt.label}</p>
                     {opt.desc && <p className="text-lael-muted text-sm mt-1">{opt.desc}</p>}
                   </div>
                 </div>

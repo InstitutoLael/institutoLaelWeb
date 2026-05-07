@@ -79,8 +79,8 @@ Quiero que me orienten para comenzar.`;
             <p className="text-lael-muted text-[11px] tracking-[0.15em] uppercase mb-4">{priceData.label}</p>
           )}
 
-          <p className="text-lael-muted/60 text-[10px] tracking-[0.2em] uppercase mb-3">Inversión mensual</p>
-          <p className="font-display text-6xl lg:text-8xl text-lael-light tracking-[-0.03em] font-bold mb-4">
+          <p className="text-lael-primary/60 text-[10px] tracking-[0.2em] uppercase mb-3">Inversión mensual</p>
+          <p className="font-display text-6xl lg:text-8xl text-lael-primary tracking-[-0.03em] font-bold mb-4">
             {clp(priceData?.totalMonthly ?? 0)}
           </p>
 

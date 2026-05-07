@@ -6,7 +6,7 @@ import {
   Zap, Target, Activity, Layout, Maximize, Play, Pause, RefreshCcw,
   Circle, ChevronRight, Binary, Cpu, MousePointer2, GitCommit,
   Scissors, Type, Eye, EyeOff, Ruler, Menu, X, SlidersHorizontal,
-  Triangle, Share
+  Triangle, Share, Undo2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -29,6 +29,29 @@ export default function AppletCirculos() {
   
   const [startPoint, setStartPoint] = useState(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [history, setHistory] = useState([]);
+
+  const saveToHistory = () => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      setHistory(prev => [...prev.slice(-15), canvas.toDataURL()]);
+    }
+  };
+
+  const undo = () => {
+    if (history.length === 0) return;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+    const img = new Image();
+    
+    const lastState = history[history.length - 1];
+    img.src = lastState;
+    img.onload = () => {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(img, 0, 0);
+    };
+    setHistory(prev => prev.slice(0, -1));
+  };
 
   // Initialize canvas
   useEffect(() => {
@@ -45,6 +68,11 @@ export default function AppletCirculos() {
 
     setCtx(initCanvas(canvasRef));
     setGuideCtx(initCanvas(guideCanvasRef));
+    
+    // Save initial state
+    setTimeout(() => {
+      saveToHistory();
+    }, 100);
 
     const handleResize = () => {
       const parent = canvasRef.current.parentElement;
@@ -83,6 +111,7 @@ export default function AppletCirculos() {
 
   const handleMouseDown = (e) => {
     if (e.touches && e.touches.length > 1) return;
+    saveToHistory(); // Save state BEFORE starting to draw
     const pos = getPos(e);
     setIsDrawing(true);
     setStartPoint(pos);
@@ -298,7 +327,10 @@ export default function AppletCirculos() {
     }
   };
 
-  const clearCanvas = () => ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+  const clearCanvas = () => {
+    saveToHistory();
+    ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+  };
   const downloadImage = () => {
     ctx.save();
     ctx.fillStyle = 'rgba(5, 8, 15, 0.9)';
@@ -413,6 +445,9 @@ export default function AppletCirculos() {
                     </button>
                     <button onClick={() => setShowInscribedAngle(!showInscribedAngle)} className={`p-2.5 rounded-xl border flex items-center justify-center transition-all ${showInscribedAngle ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400' : 'bg-white/5 border-transparent opacity-40'}`}>
                       <Target size={16}/>
+                    </button>
+                    <button onClick={undo} className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-white hover:bg-white/20 transition-all">
+                      <Undo2 size={16}/>
                     </button>
                     <button onClick={clearCanvas} className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all">
                       <Trash2 size={16}/>

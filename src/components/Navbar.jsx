@@ -67,7 +67,7 @@ export default function Navbar() {
         className="fixed left-0 top-0 w-full z-[100] py-8 px-8 flex justify-between items-center transition-all duration-500"
       >
         <Link to="/" className="pointer-events-auto group">
-           <img src={logoNegro} alt="Instituto Lael" className="h-7 w-auto transition-transform group-hover:scale-105" />
+           <img src={isLightPage ? logoNegro : logoBlanco} alt="Instituto Lael" className="h-7 w-auto transition-transform group-hover:scale-105" />
         </Link>
         <Link to="/" className="pointer-events-auto text-[10px] uppercase tracking-[0.3em] text-lael-muted font-bold hover:text-lael-accent transition-colors flex items-center gap-2">
           <span>Salir del modo foco</span>

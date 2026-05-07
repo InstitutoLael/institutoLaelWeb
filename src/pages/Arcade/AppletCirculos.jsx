@@ -5,7 +5,7 @@ import {
   Download, Trash2, Settings, Share2, HelpCircle, ArrowLeft, 
   Zap, Target, Activity, Layout, Maximize, Play, Pause, RefreshCcw,
   Circle, ChevronRight, Binary, Cpu, MousePointer2, GitCommit,
-  Scissors, Type, Eye, EyeOff
+  Scissors, Type, Eye, EyeOff, Ruler
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -21,7 +21,7 @@ export default function AppletCirculos() {
   const [symmetry, setSymmetry] = useState(12);
   const [strokeWidth, setStrokeWidth] = useState(2);
   const [color, setColor] = useState('#00FF9D'); 
-  const [mode, setMode] = useState('pincel'); // pincel, radios, cuerdas, arcos, tangentes
+  const [mode, setMode] = useState('radio'); // radio, cuerda, diametro, tangente
   const [showGuides, setShowGuides] = useState(true);
   const [showInscribedAngle, setShowInscribedAngle] = useState(false);
   
@@ -78,15 +78,10 @@ export default function AppletCirculos() {
   const handleMouseMove = (e) => {
     const pos = getPos(e);
     setMousePos(pos);
-
-    if (isDrawing && ctx) {
-      if (mode === 'pincel') {
-        drawSymmetricLine(lastPos.current, pos);
-        lastPos.current = pos;
-      }
+    if (isDrawing && mode === 'pincel' && ctx) {
+      drawSymmetricLine(lastPos.current, pos);
+      lastPos.current = pos;
     }
-    
-    // Always draw guides on the guide canvas
     drawGuides(pos);
   };
 
@@ -95,9 +90,10 @@ export default function AppletCirculos() {
     const endPos = getPos(e);
     
     if (ctx) {
-      if (mode === 'radios') drawSymmetricRadios(startPoint, endPos);
-      if (mode === 'cuerdas') drawSymmetricChords(startPoint, endPos);
-      if (mode === 'tangentes') drawSymmetricTangents(endPos);
+      if (mode === 'radio') drawSymmetricRadios(startPoint, endPos);
+      if (mode === 'cuerda') drawSymmetricChords(startPoint, endPos);
+      if (mode === 'diametro') drawSymmetricDiameters(startPoint, endPos);
+      if (mode === 'tangente') drawSymmetricTangents(endPos);
     }
 
     setIsDrawing(false);
@@ -163,12 +159,30 @@ export default function AppletCirculos() {
     }
   };
 
+  const drawSymmetricDiameters = (p1, p2) => {
+    const sliceAngle = (Math.PI * 2) / symmetry;
+    const centerX = canvasRef.current.width / 2;
+    const centerY = canvasRef.current.height / 2;
+
+    for (let i = 0; i < symmetry; i++) {
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate(i * sliceAngle);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = strokeWidth;
+      ctx.beginPath();
+      ctx.moveTo(p2.x, p2.y);
+      ctx.lineTo(-p2.x, -p2.y); // Passes through center
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+
   const drawSymmetricTangents = (p) => {
     const sliceAngle = (Math.PI * 2) / symmetry;
     const centerX = canvasRef.current.width / 2;
     const centerY = canvasRef.current.height / 2;
     
-    // Perpendicular vector to (p.x, p.y)
     const length = 200;
     const angle = Math.atan2(p.y, p.x);
     const t1 = { x: p.x + Math.cos(angle + Math.PI/2) * length, y: p.y + Math.sin(angle + Math.PI/2) * length };
@@ -196,26 +210,27 @@ export default function AppletCirculos() {
     const centerY = canvas.height / 2;
 
     if (showGuides) {
-      // Draw Grid & Main Circle
+      // Concentric Circles
       guideCtx.strokeStyle = 'rgba(255,255,255,0.05)';
       guideCtx.lineWidth = 1;
-      guideCtx.beginPath();
-      guideCtx.arc(centerX, centerY, 300, 0, Math.PI * 2);
-      guideCtx.stroke();
+      for (let r = 100; r <= 400; r += 100) {
+        guideCtx.beginPath();
+        guideCtx.arc(centerX, centerY, r, 0, Math.PI * 2);
+        guideCtx.stroke();
+      }
       
-      // Draw Symmetry Lines
+      // Symmetry Lines
       const sliceAngle = (Math.PI * 2) / symmetry;
       for (let i = 0; i < symmetry; i++) {
         guideCtx.beginPath();
         guideCtx.moveTo(centerX, centerY);
-        guideCtx.lineTo(centerX + Math.cos(i * sliceAngle) * 400, centerY + Math.sin(i * sliceAngle) * 400);
+        guideCtx.lineTo(centerX + Math.cos(i * sliceAngle) * 500, centerY + Math.sin(i * sliceAngle) * 500);
         guideCtx.stroke();
       }
     }
 
     if (showInscribedAngle) {
-      // Show Inscribed Angle logic: 
-      // Pick a point on the circle (e.g. top)
+      const sliceAngle = (Math.PI * 2) / symmetry;
       const top = { x: 0, y: -300 };
       const p1 = { x: Math.cos(0) * 300, y: Math.sin(0) * 300 };
       const p2 = { x: Math.cos(sliceAngle) * 300, y: Math.sin(sliceAngle) * 300 };
@@ -225,52 +240,78 @@ export default function AppletCirculos() {
       
       // Central Angle
       guideCtx.strokeStyle = '#00FF9D';
+      guideCtx.lineWidth = 1.5;
       guideCtx.setLineDash([5, 5]);
       guideCtx.beginPath();
       guideCtx.moveTo(0, 0); guideCtx.lineTo(p1.x, p1.y);
       guideCtx.moveTo(0, 0); guideCtx.lineTo(p2.x, p2.y);
       guideCtx.stroke();
       
-      // Inscribed Angle from top to the same arc
-      guideCtx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
+      // Inscribed Angle
+      guideCtx.strokeStyle = '#00F0FF';
       guideCtx.beginPath();
       guideCtx.moveTo(top.x, top.y); guideCtx.lineTo(p1.x, p1.y);
       guideCtx.moveTo(top.x, top.y); guideCtx.lineTo(p2.x, p2.y);
       guideCtx.stroke();
       
+      // Labels
+      guideCtx.fillStyle = '#00FF9D';
+      guideCtx.font = 'bold 10px monospace';
+      guideCtx.fillText(`CENTRAL: ${(360/symmetry).toFixed(1)}°`, 20, 20);
       guideCtx.fillStyle = '#00F0FF';
-      guideCtx.font = '10px monospace';
-      guideCtx.fillText(`Inscribed: ${(360/symmetry/2).toFixed(1)}°`, top.x - 40, top.y - 10);
+      guideCtx.fillText(`INSCRIBED: ${(360/symmetry/2).toFixed(1)}°`, top.x - 40, top.y - 15);
       guideCtx.restore();
     }
 
-    // Draw Preview of current tool
+    // Preview
     if (isDrawing && startPoint) {
        guideCtx.save();
        guideCtx.translate(centerX, centerY);
        guideCtx.strokeStyle = color;
        guideCtx.setLineDash([2, 2]);
-       if (mode === 'radios') {
+       if (mode === 'radio') {
           guideCtx.beginPath(); guideCtx.moveTo(0,0); guideCtx.lineTo(pos.x, pos.y); guideCtx.stroke();
-       } else if (mode === 'cuerdas') {
+       } else if (mode === 'cuerda') {
           guideCtx.beginPath(); guideCtx.moveTo(startPoint.x, startPoint.y); guideCtx.lineTo(pos.x, pos.y); guideCtx.stroke();
+       } else if (mode === 'diametro') {
+          guideCtx.beginPath(); guideCtx.moveTo(pos.x, pos.y); guideCtx.lineTo(-pos.x, -pos.y); guideCtx.stroke();
        }
        guideCtx.restore();
     }
   };
 
   const clearCanvas = () => ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
   const downloadImage = () => {
+    // Add Metadata to Canvas before export
+    ctx.save();
+    ctx.fillStyle = 'rgba(5, 8, 15, 0.8)';
+    ctx.fillRect(0, canvasRef.current.height - 80, 400, 80);
+    ctx.fillStyle = '#00FF9D';
+    ctx.font = 'bold 12px monospace';
+    ctx.fillText(`DIEGO BET | GEOMETRIC DATA`, 30, canvasRef.current.height - 50);
+    ctx.font = '10px monospace';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText(`SYMMETRY: ${symmetry} AXES | CENTRAL ANGLE: ${(360/symmetry).toFixed(1)}°`, 30, canvasRef.current.height - 35);
+    ctx.fillText(`TOOLS: RADIO, CUERDA, DIAMETRO, TANGENTE`, 30, canvasRef.current.height - 20);
+    
     const link = document.createElement('a');
-    link.download = 'diegobet-geometry.jpg';
-    link.href = canvasRef.current.toDataURL('image/jpeg');
+    link.download = `lael-mandala-${symmetry}axes.jpg`;
+    link.href = canvasRef.current.toDataURL('image/jpeg', 0.9);
     link.click();
+    
+    // Restore Canvas (re-clear the data box or just undo)
+    ctx.restore();
+    // We can't really "undo" the pixels unless we store them, so let's just warning the user
+    // or redraw the background if it's plain. 
+    // Actually, I'll just clear the area.
+    ctx.clearRect(0, canvasRef.current.height - 80, 400, 80);
   };
 
   return (
     <div className="relative w-full min-h-screen bg-[#05080F] text-white font-inter overflow-hidden selection:bg-[#00FF9D]/30">
       <Helmet>
-        <title>DIEGO BET | Geometría 3° Medio</title>
+        <title>DIEGO BET | Laboratorio Geométrico</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
@@ -285,8 +326,8 @@ export default function AppletCirculos() {
               <ArrowLeft size={20} />
             </div>
             <div>
-              <h1 className="text-3xl font-black italic italic-playfair tracking-tighter leading-none">DIEGO <span className="text-[#00FF9D]">BET</span></h1>
-              <p className="text-[8px] text-[#00FF9D] font-mono tracking-[0.4em] uppercase mt-1">Geometría de Alto Rendimiento</p>
+              <h1 className="text-3xl font-black italic italic-playfair tracking-tighter leading-none text-white">DIEGO <span className="text-[#00FF9D]">BET</span></h1>
+              <p className="text-[8px] text-[#00FF9D] font-mono tracking-[0.4em] uppercase mt-1">Sistemas Simétricos Circulares</p>
             </div>
           </Link>
         </div>
@@ -303,8 +344,8 @@ export default function AppletCirculos() {
                 <span className="text-sm font-mono text-[#00F0FF] font-bold">{(360/symmetry).toFixed(1)}°</span>
               </div>
            </div>
-           <button onClick={downloadImage} className="bg-[#00FF9D] text-black px-8 rounded-2xl font-bold uppercase text-[10px] tracking-widest hover:shadow-[0_0_30_rgba(0,255,157,0.4)] transition-all">
-              Exportar JPG
+           <button onClick={downloadImage} className="group relative bg-[#00FF9D] text-black px-8 rounded-2xl font-bold uppercase text-[10px] tracking-widest hover:shadow-[0_0_30_rgba(0,255,157,0.4)] transition-all">
+              Guardar con Data
            </button>
         </div>
       </header>
@@ -318,12 +359,13 @@ export default function AppletCirculos() {
             
             {/* Tool Selection */}
             <div className="bg-[#0D121F] border border-white/5 p-6 rounded-[35px] shadow-2xl space-y-2">
-              <p className="text-[8px] text-white/30 uppercase tracking-[0.3em] font-bold mb-4">Herramientas Geométricas</p>
+              <p className="text-[8px] text-white/30 uppercase tracking-[0.3em] font-bold mb-4">Módulos Geométricos</p>
               {[
-                { id: 'pincel', label: 'Pincel Libre', icon: <MousePointer2 size={18}/> },
-                { id: 'radios', label: 'Radios', icon: <Binary size={18}/> },
-                { id: 'cuerdas', label: 'Cuerdas', icon: <GitCommit size={18}/> },
-                { id: 'tangentes', label: 'Tangentes', icon: <Maximize size={18}/> },
+                { id: 'radio', label: 'Radio', icon: <Binary size={18}/> },
+                { id: 'cuerda', label: 'Cuerda', icon: <GitCommit size={18}/> },
+                { id: 'diametro', label: 'Diámetro', icon: <Ruler size={18}/> },
+                { id: 'tangente', label: 'Tangente', icon: <Maximize size={18}/> },
+                { id: 'pincel', label: 'Arco (Libre)', icon: <MousePointer2 size={18}/> },
               ].map(t => (
                 <button 
                   key={t.id} onClick={() => setMode(t.id)}
@@ -338,18 +380,18 @@ export default function AppletCirculos() {
             {/* Config Panel */}
             <div className="bg-[#0D121F] border border-white/5 p-6 rounded-[35px] shadow-2xl space-y-6">
               <div className="space-y-3">
-                 <p className="text-[8px] text-white/30 uppercase tracking-[0.3em] font-bold">Divisiones (N)</p>
+                 <p className="text-[8px] text-white/30 uppercase tracking-[0.3em] font-bold">Simetría (Divisiones)</p>
                  <input type="range" min="2" max="64" value={symmetry} onChange={(e) => setSymmetry(e.target.value)} className="w-full accent-[#00FF9D]" />
               </div>
               <div className="space-y-3">
-                 <p className="text-[8px] text-white/30 uppercase tracking-[0.3em] font-bold">Grosor de Trazo</p>
+                 <p className="text-[8px] text-white/30 uppercase tracking-[0.3em] font-bold">Ancho de Línea</p>
                  <input type="range" min="1" max="20" value={strokeWidth} onChange={(e) => setStrokeWidth(e.target.value)} className="w-full accent-[#00FF9D]" />
               </div>
               <div className="flex gap-4">
                  <button onClick={() => setShowGuides(!showGuides)} className={`flex-1 p-3 rounded-xl border flex items-center justify-center transition-all ${showGuides ? 'bg-white/10 border-white/20' : 'opacity-30 border-transparent'}`}>
                     {showGuides ? <Eye size={18}/> : <EyeOff size={18}/>}
                  </button>
-                 <button onClick={() => setShowInscribedAngle(!showInscribedAngle)} className={`flex-1 p-3 rounded-xl border flex items-center justify-center transition-all ${showInscribedAngle ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400' : 'opacity-30 border-transparent'}`}>
+                 <button onClick={() => setShowInscribedAngle(!showInscribedAngle)} title="Proyectar Ángulo Inscrito" className={`flex-1 p-3 rounded-xl border flex items-center justify-center transition-all ${showInscribedAngle ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400' : 'opacity-30 border-transparent'}`}>
                     <Target size={18}/>
                  </button>
                  <button onClick={clearCanvas} className="flex-1 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white transition-all">
@@ -376,15 +418,15 @@ export default function AppletCirculos() {
           {/* Tech HUD Overlay */}
           <div className="absolute bottom-12 left-1/2 -translate-x-1/2 bg-black/40 backdrop-blur-md px-10 py-4 rounded-full border border-white/5 flex gap-12 pointer-events-none">
              <div className="flex flex-col items-center">
-                <span className="text-[7px] text-white/30 uppercase tracking-[0.4em] mb-1 font-bold">Radial Pos</span>
+                <span className="text-[7px] text-white/30 uppercase tracking-[0.4em] mb-1 font-bold">Radial Distance</span>
                 <span className="text-[10px] font-mono text-[#00FF9D]">{Math.sqrt(mousePos.x**2 + mousePos.y**2).toFixed(1)}u</span>
              </div>
              <div className="flex flex-col items-center">
-                <span className="text-[7px] text-white/30 uppercase tracking-[0.4em] mb-1 font-bold">Angular Dev</span>
+                <span className="text-[7px] text-white/30 uppercase tracking-[0.4em] mb-1 font-bold">Central Angle</span>
                 <span className="text-[10px] font-mono text-[#00FF9D]">{((Math.atan2(mousePos.y, mousePos.x) * 180 / Math.PI + 360) % 360).toFixed(1)}°</span>
              </div>
              <div className="flex flex-col items-center">
-                <span className="text-[7px] text-white/30 uppercase tracking-[0.4em] mb-1 font-bold">Active Module</span>
+                <span className="text-[7px] text-white/30 uppercase tracking-[0.4em] mb-1 font-bold">Geometric Module</span>
                 <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest">{mode}</span>
              </div>
           </div>
@@ -395,7 +437,7 @@ export default function AppletCirculos() {
       {/* FOOTER INFO */}
       <footer className="absolute bottom-8 right-12 z-50 text-right pointer-events-none">
          <p className="text-[8px] text-white/20 tracking-[0.5em] uppercase font-bold">
-           Exclusivo Alumnos 3° Medio <br className="lg:hidden" /> Los Olivos & Lael
+           Arquitectura del Rendimiento <br className="lg:hidden" /> Los Olivos & Lael
          </p>
       </footer>
 

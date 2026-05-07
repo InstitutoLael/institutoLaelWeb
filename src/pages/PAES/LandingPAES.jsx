@@ -56,7 +56,7 @@ export default function LandingPAES() {
             initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
             animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl mb-12"
+            className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-primary font-bold leading-[0.9] max-w-5xl mb-12"
           >
             La mejor versión <br />
             <span className="accent-italic">de tu puntaje.</span>
@@ -84,7 +84,7 @@ export default function LandingPAES() {
               whileHover={{ scale: 1.05, y: -4 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => document.getElementById('metodologia').scrollIntoView({ behavior: 'smooth' })}
-              className="bg-lael-secondary border border-lael-bd text-lael-light px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all h-fit"
+              className="bg-lael-secondary border border-lael-bd text-lael-primary px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all h-fit"
             >
               Ver metodología
             </motion.button>
@@ -107,7 +107,7 @@ export default function LandingPAES() {
       <section className="relative w-full px-6 py-24 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-4xl">
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-16 leading-tight uppercase tracking-widest">
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-primary font-bold text-center mb-16 leading-tight uppercase tracking-widest">
             Estudiar más <br /> no significa mejorar.
           </motion.h2>
 
@@ -129,7 +129,7 @@ export default function LandingPAES() {
 
           <motion.div {...fadeUp(0.4)} className="mt-24 p-10 bg-lael-accent/5 rounded-[40px] border border-lael-accent/10 flex flex-col lg:flex-row items-center gap-10">
              <div className="flex-1">
-                <h3 className="font-display text-2xl text-lael-light italic mb-4">"Aquí el alumno se equivocó en esto..."</h3>
+                <h3 className="font-display text-2xl text-lael-primary italic mb-4">"Aquí el alumno se equivocó en esto..."</h3>
                 <p className="text-lael-muted text-sm leading-relaxed">
                    Mostramos la imperfección. En Lael, las correcciones no son notas, son instrucciones de vuelo para tu próximo ensayo.
                 </p>
@@ -144,7 +144,7 @@ export default function LandingPAES() {
       {/* ── 3. DIFERENCIA TÁCTICA ────────────────────────────────────── */}
       <section className="relative w-full px-6 py-24 flex flex-col items-center bg-lael-secondary border-y border-lael-bd">
         <div className="w-full max-w-4xl">
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-16 uppercase tracking-widest">
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-primary font-bold text-center mb-16 uppercase tracking-widest">
              ¿Por qué Lael es distinto?
           </motion.h2>
 
@@ -175,7 +175,7 @@ export default function LandingPAES() {
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 text-center font-bold">Visualiza tu entrenamiento</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-24 uppercase tracking-tighter leading-none">
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-primary font-bold text-center mb-24 uppercase tracking-tighter leading-none">
             Tu semana <br className="md:hidden" /> <span className="text-lael-accent">Lael.</span>
           </motion.h2>
 
@@ -210,7 +210,7 @@ export default function LandingPAES() {
           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-12 text-center font-bold">Evidencia, no promesas</motion.p>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
             <motion.div {...fadeUp(0.1)}>
-              <h2 className="font-display text-4xl lg:text-5xl text-lael-light mb-10 leading-tight uppercase tracking-tighter">Resultados <br/> que puedes <span className="text-emerald-400">tocar.</span></h2>
+              <h2 className="font-display text-4xl lg:text-5xl text-lael-primary mb-10 leading-tight uppercase tracking-tighter">Resultados <br/> que puedes <span className="text-emerald-400">tocar.</span></h2>
               <p className="text-lael-muted text-lg leading-relaxed mb-12">
                  No prometemos "aprender". Prometemos rendimiento. El 92% de nuestros alumnos sube al menos 120 puntos tras completar su primer ciclo de activación.
               </p>
@@ -267,7 +267,7 @@ export default function LandingPAES() {
       <section className="relative w-full px-6 py-32 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-5xl text-lael-light font-bold text-center mb-24 uppercase tracking-widest">
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-5xl text-lael-primary font-bold text-center mb-24 uppercase tracking-widest">
             Tu Equipo de Entrenamiento.
           </motion.h2>
 
@@ -277,7 +277,7 @@ export default function LandingPAES() {
                 <div className="w-14 h-14 bg-lael-accent/10 rounded-2xl flex items-center justify-center text-3xl mb-8 group-hover:scale-110 transition-transform">
                    {f.icon}
                 </div>
-                <h3 className="text-lael-light text-xl font-bold mb-4 tracking-tight uppercase">{f.title}</h3>
+                <h3 className="text-lael-primary text-xl font-bold mb-4 tracking-tight uppercase">{f.title}</h3>
                 <p className="text-lael-muted text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
@@ -288,11 +288,11 @@ export default function LandingPAES() {
       {/* ── 7. FAQ AVANZADO ───────────────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd">
         <div className="max-w-4xl mx-auto">
-          <motion.h2 {...fadeUp()} className="font-display text-4xl text-lael-light font-bold text-center mb-16 uppercase tracking-widest">Hablemos claro.</motion.h2>
+          <motion.h2 {...fadeUp()} className="font-display text-4xl text-lael-primary font-bold text-center mb-16 uppercase tracking-widest">Hablemos claro.</motion.h2>
           <div className="space-y-6">
              {PAES_FAQS.map((item, i) => (
-                <motion.div key={i} {...fadeUp(i * 0.1)} className="p-10 bg-lael-primary rounded-[40px] border border-lael-bd cinematic-shadow">
-                   <h4 className="text-lael-light font-bold mb-6 text-lg tracking-tight uppercase">{item.q}</h4>
+                <motion.div key={i} {...fadeUp(i * 0.1)} className="p-10 bg-lael-secondary rounded-[40px] border border-lael-bd cinematic-shadow">
+                   <h4 className="text-lael-primary font-bold mb-6 text-lg tracking-tight uppercase">{item.q}</h4>
                    <p className="text-lael-muted text-sm leading-relaxed">{item.a}</p>
                 </motion.div>
               ))}
@@ -304,7 +304,7 @@ export default function LandingPAES() {
       <section className="relative w-full px-6 py-48 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
-          <h2 className="font-display text-5xl lg:text-7xl text-lael-light font-bold leading-none mb-12 uppercase tracking-tighter">
+          <h2 className="font-display text-5xl lg:text-7xl text-lael-primary font-bold leading-none mb-12 uppercase tracking-tighter">
              ¿Empezamos tu <br/> <span className="text-lael-accent">entrenamiento?</span>
           </h2>
           <p className="text-lael-muted text-lg mb-16 leading-relaxed italic italic-playfair">

@@ -151,7 +151,7 @@ export default function Home() {
             initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
             animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] font-bold leading-[0.9] max-w-6xl mb-12"
+            className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-primary font-bold leading-[0.9] max-w-6xl mb-12"
           >
             Tu futuro no <br/>
             <span className="accent-italic">tiene precio.</span>
@@ -175,7 +175,7 @@ export default function Home() {
               whileHover={{ scale: 1.05, y: -4 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate('/paes')}
-              className="bg-lael-secondary border border-lael-bd text-lael-light px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all"
+              className="bg-lael-secondary border border-lael-bd text-lael-primary px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all"
             >
               Ver cómo funciona
             </motion.button>

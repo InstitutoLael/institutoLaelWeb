@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Instagram, Linkedin, Youtube } from 'lucide-react';
-import logo from '../assets/img/Logos/lael-inst-negro.png';
+import logoNegro from '../assets/img/Logos/lael-inst-negro.png';
+import logoBlanco from '../assets/img/Logos/lael-inst-blanco.png';
 import { NAVIGATION } from '../data/navigation';
 
 const SOCIAL = [
@@ -12,6 +13,8 @@ const SOCIAL = [
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const location = useLocation();
+  const isLightPage = ['/', '/nosotros', '/contacto', '/transparencia', '/preguntas', '/diagnostico'].includes(location.pathname);
 
   return (
     <footer className="bg-lael-primary border-t border-lael-bd pt-20 pb-10">
@@ -23,7 +26,7 @@ export default function Footer() {
           {/* Marca */}
           <div className="flex flex-col gap-6 lg:col-span-2">
             <Link to="/">
-              <img src={logo} alt="Instituto Lael" loading="lazy" className="h-7 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+              <img src={logoBlanco} alt="Instituto Lael" loading="lazy" className="h-7 w-auto opacity-90 hover:opacity-100 transition-opacity" />
             </Link>
             <p className="text-lael-muted text-sm leading-relaxed max-w-xs">
               Ingeniería del rendimiento académico. No vendemos cursos, diseñamos el éxito de nuestros alumnos a través de datos y estrategia.

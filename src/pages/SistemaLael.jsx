@@ -86,18 +86,18 @@ export default function SistemaLael() {
         <div className="max-w-4xl mx-auto">
            <motion.div {...fadeUp()} className="space-y-24">
               <div className="flex flex-col lg:flex-row gap-12 items-start">
-                 <div className="w-12 h-12 bg-lael-accent text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">1</div>
+                 <div className="w-12 h-12 bg-lael-accent text-lael-light rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">1</div>
                  <div>
-                    <h3 className="font-display text-3xl text-lael-light mb-6">Diagnóstico de Precisión</h3>
+                    <h3 className="font-display text-3xl text-lael-primary mb-6">Diagnóstico de Precisión</h3>
                     <p className="text-lael-muted leading-relaxed">
                        Antes de la primera clase, evaluamos no solo lo que sabes, sino cómo procesas la información. Usamos data para identificar dónde está el cuello de botella que impide tu crecimiento.
                     </p>
                  </div>
               </div>
               <div className="flex flex-col lg:flex-row gap-12 items-start">
-                 <div className="w-12 h-12 bg-lael-accent text-white rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">2</div>
+                 <div className="w-12 h-12 bg-lael-accent text-lael-light rounded-full flex items-center justify-center font-bold text-xl flex-shrink-0">2</div>
                  <div>
-                    <h3 className="font-display text-3xl text-lael-light mb-6">Activación del Potencial</h3>
+                    <h3 className="font-display text-3xl text-lael-primary mb-6">Activación del Potencial</h3>
                     <p className="text-lael-muted leading-relaxed">
                        Las clases no son conferencias pasivas. Son sesiones de entrenamiento. Aplicamos el modelo de "Dificultad Deseable" para que el cerebro trabaje al máximo nivel de retención.
                     </p>

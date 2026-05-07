@@ -46,9 +46,9 @@ export default function Nosotros() {
       {/* ── 2. HISTORIA ───────────────────────────────────────────────── */}
       <section className="py-32 px-6">
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-1 gap-16">
-          <motion.div {...fadeUp(0.2)} className="space-y-8 text-lael-light leading-relaxed text-lg">
+          <motion.div {...fadeUp(0.2)} className="space-y-8 text-lael-primary leading-relaxed text-lg">
             <p>
-              <strong className="text-white">Lael nació en 2021</strong> como un preuniversitario PAES 100% gratuito. Diego comenzó enseñando matemáticas desde cero, sin infraestructura ni financiamiento externo. En pocos meses, la voz se corrió y llegamos a tener <span className="text-lael-accent font-bold">600 alumnos simultáneos</span> conectados desde todo Chile.
+              <strong className="text-lael-primary">Lael nació en 2021</strong> como un preuniversitario PAES 100% gratuito. Diego comenzó enseñando matemáticas desde cero, sin infraestructura ni financiamiento externo. En pocos meses, la voz se corrió y llegamos a tener <span className="text-lael-accent font-bold">600 alumnos simultáneos</span> conectados desde todo Chile.
             </p>
             <p>
               Luego crecimos. Sumamos Inglés, Coreano y LSCh con Fernanda Gaete —educadora de párvulos y hablante nativa de Lengua de Señas Chilena. Construimos algo que nadie más estaba haciendo: un sistema de alto rendimiento que no filtraba por billetera, sino por compromiso.
@@ -107,7 +107,7 @@ export default function Nosotros() {
       <section className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
-             <h2 className="text-4xl font-display font-bold mb-4 text-white">Nuestros Pilares</h2>
+             <h2 className="text-4xl font-display font-bold mb-4 text-lael-primary uppercase tracking-tight">Nuestros Pilares</h2>
              <p className="text-lael-muted max-w-xl mx-auto">Lo que nos mueve no es el mercado, es la misión.</p>
           </div>
           
@@ -121,12 +121,12 @@ export default function Nosotros() {
               <motion.div 
                 key={v.title}
                 {...fadeUp(i * 0.1)}
-                className="p-8 rounded-[32px] bg-white/[0.03] border border-white/10 hover:border-lael-accent/30 transition-all duration-500 group"
+                className="p-8 rounded-[32px] bg-lael-secondary/10 border border-lael-bd hover:border-lael-accent/30 transition-all duration-500 group"
               >
                 <div className="w-12 h-12 rounded-2xl bg-lael-accent/10 flex items-center justify-center text-lael-accent mb-6 group-hover:scale-110 transition-transform">
                   <v.icon size={24} />
                 </div>
-                <h4 className="text-xl font-bold mb-4">{v.title}</h4>
+                <h4 className="text-xl font-bold mb-4 text-lael-primary uppercase">{v.title}</h4>
                 <p className="text-sm text-lael-muted leading-relaxed">{v.desc}</p>
               </motion.div>
             ))}

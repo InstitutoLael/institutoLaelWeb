@@ -89,7 +89,7 @@ export default function Empresas() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {SERVICES.map((s, i) => (
               <motion.div key={s.id} {...fadeUp(i * 0.1)} className="p-8 lg:p-10 border border-lael-bd rounded-2xl bg-lael-secondary flex flex-col cinematic-shadow hover-card">
-                <h3 className="font-display text-xl text-lael-light font-bold mb-4">{s.title}</h3>
+                <h3 className="font-display text-xl text-lael-primary font-bold mb-4">{s.title}</h3>
                 <p className="text-lael-muted text-sm leading-relaxed mb-8 flex-1">{s.desc}</p>
                 <div className="space-y-2">
                   {s.tags.map(tag => (

@@ -73,7 +73,7 @@ export default function Tecnologia() {
               <div className="mb-8 p-4 bg-lael-primary rounded-2xl w-fit group-hover:scale-110 transition-transform duration-500">
                 {item.icon}
               </div>
-              <h3 className="text-lael-light font-bold text-xl mb-4">{item.title}</h3>
+              <h3 className="text-lael-primary font-bold text-xl mb-4">{item.title}</h3>
               <p className="text-lael-muted text-sm leading-relaxed">{item.desc}</p>
             </motion.div>
           ))}

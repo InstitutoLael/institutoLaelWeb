@@ -46,7 +46,7 @@ export default function LandingIdiomas() {
             initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
             animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-8xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl mb-12"
+            className="font-display text-5xl lg:text-8xl tracking-[-0.04em] text-lael-primary font-bold leading-[0.9] max-w-5xl mb-12"
           >
             No estudias un idioma.<br />
             <span className="accent-italic">Lo hablas desde el primer día.</span>
@@ -58,7 +58,7 @@ export default function LandingIdiomas() {
             whileHover={{ scale: 1.05, y: -4 }}
             whileTap={{ scale: 0.95 }}
             onClick={startDiagnostic} 
-            className="bg-lael-accent text-white px-12 py-6 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all duration-300 shadow-[0_4px_30px_rgba(196,151,62,0.3)]"
+            className="bg-lael-accent text-lael-primary px-12 py-6 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all duration-300 shadow-[0_4px_30px_rgba(196,151,62,0.3)]"
           >
             Quiero hablar con fluidez →
           </motion.button>
@@ -76,21 +76,21 @@ export default function LandingIdiomas() {
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center bg-lael-secondary border-y border-lael-bd">
         <div className="w-full max-w-6xl">
           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-12 text-center font-bold">Output Real</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-5xl lg:text-6xl text-lael-light font-bold text-center mb-24 tracking-tighter">¿QUÉ SERÁS CAPAZ DE HACER?</motion.h2>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-5xl lg:text-6xl text-lael-primary font-bold text-center mb-24 tracking-tighter">¿QUÉ SERÁS CAPAZ DE HACER?</motion.h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
              <motion.div {...fadeUp(0.2)} className="space-y-12">
-                <h3 className="font-display text-3xl text-lael-light italic italic-playfair">Escenarios de Simulación</h3>
+                <h3 className="font-display text-3xl text-lael-primary italic italic-playfair">Escenarios de Simulación</h3>
                 <div className="space-y-6">
                    {[
                       { icon: "💼", title: "Entrevistas Laborales", desc: "Simulamos procesos de selección reales en el idioma objetivo. No respondes preguntas, vendes tu valor." },
                       { icon: "✈️", title: "Inmersión en Viajes", desc: "Desde pedir ayuda médica hasta negociar en un mercado local sin usar traductor." },
                       { icon: "🤝", title: "Networking Profesional", desc: "Cómo presentar tu proyecto, cerrar acuerdos estratégicos y conectar emocionalmente." }
                    ].map(s => (
-                      <div key={s.title} className="flex gap-6 p-8 bg-lael-primary rounded-[30px] border border-lael-bd cinematic-shadow">
+                      <div key={s.title} className="flex gap-6 p-8 bg-lael-secondary rounded-[30px] border border-lael-bd cinematic-shadow">
                          <span className="text-3xl">{s.icon}</span>
                          <div>
-                            <p className="text-lael-light font-bold text-base mb-2 uppercase tracking-wide">{s.title}</p>
+                            <p className="text-lael-primary font-bold text-base mb-2 uppercase tracking-wide">{s.title}</p>
                             <p className="text-lael-muted text-sm leading-relaxed">{s.desc}</p>
                          </div>
                       </div>
@@ -98,21 +98,21 @@ export default function LandingIdiomas() {
                 </div>
              </motion.div>
 
-             <motion.div {...fadeUp(0.4)} className="p-12 lg:p-16 bg-lael-accent rounded-[50px] text-white flex flex-col justify-center shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-8 text-white/10 font-display text-9xl font-bold">Time</div>
+             <motion.div {...fadeUp(0.4)} className="p-12 lg:p-16 bg-lael-accent rounded-[50px] text-lael-light flex flex-col justify-center shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 text-lael-light/10 font-display text-9xl font-bold">Time</div>
                 <h3 className="font-display text-4xl mb-12 relative z-10">Tiempo Estimado <br/> de Ejecución</h3>
                 <div className="space-y-10 relative z-10">
                    <div>
-                      <p className="text-white/60 text-[10px] uppercase tracking-[0.3em] mb-3 font-bold">Conversación Básica</p>
+                      <p className="text-lael-light/60 text-[10px] uppercase tracking-[0.3em] mb-3 font-bold">Conversación Básica</p>
                       <p className="text-4xl font-bold italic italic-playfair">3 a 6 meses</p>
                    </div>
-                   <div className="w-full h-px bg-white/20"></div>
+                   <div className="w-full h-px bg-lael-light/20"></div>
                    <div>
-                      <p className="text-white/60 text-[10px] uppercase tracking-[0.3em] mb-3 font-bold">Fluidez Profesional</p>
+                      <p className="text-lael-light/60 text-[10px] uppercase tracking-[0.3em] mb-3 font-bold">Fluidez Profesional</p>
                       <p className="text-4xl font-bold italic italic-playfair">12 a 18 meses</p>
                    </div>
                 </div>
-                <p className="mt-14 text-[11px] text-white/50 italic italic-playfair">* Basado en un entrenamiento de 4 horas semanales + inmersión pasiva supervisada.</p>
+                <p className="mt-14 text-[11px] text-lael-light/50 italic italic-playfair">* Basado en un entrenamiento de 4 horas semanales + inmersión pasiva supervisada.</p>
              </motion.div>
           </div>
         </div>
@@ -122,7 +122,7 @@ export default function LandingIdiomas() {
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
         <div className="w-full max-w-4xl text-center">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 font-bold">El Método</p>
-          <h2 className="font-display text-5xl lg:text-7xl text-lael-light font-bold mb-12 tracking-tighter">
+          <h2 className="font-display text-5xl lg:text-7xl text-lael-primary font-bold mb-12 tracking-tighter">
             Hackeando el proceso <br className="hidden md:block" /> de aprendizaje.
           </h2>
           <div className="text-lael-muted text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto space-y-8 italic italic-playfair">
@@ -142,7 +142,7 @@ export default function LandingIdiomas() {
             ].map((m, i) => (
               <motion.div key={i} {...fadeUp(i * 0.1)} className="text-center lg:text-left">
                 <div className="font-display text-7xl text-lael-accent/20 font-bold mb-6">{m.step}</div>
-                <h4 className="text-lael-light text-xl font-bold uppercase tracking-widest mb-4">{m.label}</h4>
+                <h4 className="text-lael-primary text-xl font-bold uppercase tracking-widest mb-4">{m.label}</h4>
                 <p className="text-lael-muted text-sm leading-relaxed">{m.desc}</p>
               </motion.div>
             ))}
@@ -179,10 +179,10 @@ export default function LandingIdiomas() {
       <section className="relative w-full px-6 py-32 flex flex-col items-center bg-lael-secondary border-y border-lael-bd">
         <div className="w-full max-w-5xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center font-bold">Diferencia Táctica</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-24 tracking-tighter uppercase">Simulación real, no clases pasivas.</motion.h2>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-primary font-bold text-center mb-24 tracking-tighter uppercase">Simulación real, no clases pasivas.</motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {LANG_FEATURES.map((f, i) => (
-              <motion.div key={f.title} {...fadeUp(i * 0.1)} className="p-10 rounded-[40px] bg-lael-primary hover-card border border-lael-bd cinematic-shadow group">
+              <motion.div key={f.title} {...fadeUp(i * 0.1)} className="p-10 rounded-[40px] bg-lael-secondary hover-card border border-lael-bd cinematic-shadow group">
                 <p className="text-lael-accent text-[10px] tracking-[0.2em] uppercase mb-6 font-bold transition-colors">{f.title}</p>
                 <p className="text-lael-muted text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
@@ -195,7 +195,7 @@ export default function LandingIdiomas() {
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
         <div className="w-full max-w-6xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center font-bold">Programas disponibles</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-24 tracking-tighter uppercase">Elige tu sistema de comunicación.</motion.h2>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-primary font-bold text-center mb-24 tracking-tighter uppercase">Elige tu sistema de comunicación.</motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { 
@@ -229,7 +229,7 @@ export default function LandingIdiomas() {
                   <span className="text-lael-accent text-[10px] font-bold tracking-[0.3em] uppercase">{prog.impact}</span>
                   <span className="text-4xl">{prog.flag}</span>
                 </div>
-                <h3 className="text-2xl font-display font-bold text-lael-light mb-6 group-hover:text-lael-accent transition-colors">{prog.title}</h3>
+                <h3 className="text-2xl font-display font-bold text-lael-primary mb-6 group-hover:text-lael-accent transition-colors">{prog.title}</h3>
                 <p className="text-lael-muted text-sm leading-relaxed mb-8">{prog.desc}</p>
                 <div className="space-y-3">
                   {prog.levels.map(lvl => (
@@ -246,12 +246,12 @@ export default function LandingIdiomas() {
       </section>
 
       {/* ── 6. CTA FINAL ─────────────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-48 flex flex-col items-center bg-lael-primary">
+      <section className="relative w-full px-6 py-48 flex flex-col items-center bg-lael-secondary">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-3xl">
           <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 font-bold">Inicia hoy</p>
-          <h2 className="font-display text-5xl lg:text-7xl text-lael-light font-bold mb-12 uppercase tracking-tighter">Configura tu <br/> sistema ahora.</h2>
-          <button onClick={startDiagnostic} className="bg-lael-accent text-white px-16 py-7 rounded-2xl text-[11px] tracking-[0.3em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-[0_20px_50px_rgba(196,151,62,0.3)]">
+          <h2 className="font-display text-5xl lg:text-7xl text-lael-primary font-bold mb-12 uppercase tracking-tighter">Configura tu <br/> sistema ahora.</h2>
+          <button onClick={startDiagnostic} className="bg-lael-accent text-lael-light px-16 py-7 rounded-2xl text-[11px] tracking-[0.3em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-[0_20px_50px_rgba(196,151,62,0.3)]">
              Iniciar diagnóstico táctico →
           </button>
         </motion.div>

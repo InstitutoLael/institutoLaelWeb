@@ -71,7 +71,7 @@ export default function CasosReales() {
                 <div className="flex flex-wrap items-center gap-4 mb-12">
                   <span className="text-lael-accent text-[10px] tracking-[0.2em] uppercase font-bold">{caso.profile}</span>
                   <div className="h-px w-12 bg-lael-accent/30"></div>
-                  <span className="text-lael-light text-xs font-bold uppercase tracking-widest">{caso.name}</span>
+                  <span className="text-lael-primary text-xs font-bold uppercase tracking-widest">{caso.name}</span>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
@@ -81,7 +81,7 @@ export default function CasosReales() {
                   </div>
                   <div>
                     <p className="text-lael-accent text-[9px] uppercase tracking-widest mb-4 font-bold">El Quiebre</p>
-                    <p className="text-lael-light text-sm leading-relaxed font-bold">"{caso.quiebre}"</p>
+                    <p className="text-lael-primary text-sm leading-relaxed font-bold">"{caso.quiebre}"</p>
                   </div>
                   <div>
                     <p className="text-lael-rust text-[9px] uppercase tracking-widest mb-4 font-bold">Después</p>

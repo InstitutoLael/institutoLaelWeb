@@ -31,7 +31,7 @@ export default function Contacto() {
   };
 
   return (
-    <div className="w-full bg-lael-primary text-white overflow-hidden pt-20">
+    <div className="w-full bg-lael-primary text-lael-primary overflow-hidden pt-20">
       <Helmet>
         <title>Contacto | Instituto Lael SpA</title>
         <meta name="description" content="WhatsApp +56 9 6462 6568 · contacto@institutolael.cl · Santiago, Chile." />
@@ -112,23 +112,23 @@ export default function Contacto() {
                 <form onSubmit={handleSubmit} className="space-y-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
-                      <label className="text-[10px] tracking-[0.3em] uppercase font-bold text-lael-muted ml-1">Nombre Completo</label>
+                      <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-lael-muted ml-1">Nombre Completo</label>
                       <input 
-                        type="text" 
+                        type="text"
                         required
-                        className="w-full bg-white border border-lael-bd px-6 py-5 rounded-2xl text-lael-primary focus:outline-none focus:border-lael-accent transition-all placeholder:text-lael-muted/30"
-                        placeholder="Juan Pérez"
+                        placeholder="Tu nombre real"
+                        className="w-full bg-lael-secondary border border-lael-bd rounded-2xl px-6 py-4 focus:border-lael-accent transition-all text-lael-primary placeholder:text-lael-muted/40"
                         value={formData.nombre}
                         onChange={(e) => setFormData({...formData, nombre: e.target.value})}
                       />
                     </div>
                     <div className="space-y-3">
-                      <label className="text-[10px] tracking-[0.3em] uppercase font-bold text-lael-muted ml-1">Correo Electrónico</label>
+                      <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-lael-muted ml-1">Email de Contacto</label>
                       <input 
-                        type="email" 
+                        type="email"
                         required
-                        className="w-full bg-white border border-lael-bd px-6 py-5 rounded-2xl text-lael-primary focus:outline-none focus:border-lael-accent transition-all placeholder:text-lael-muted/30"
-                        placeholder="juan@email.com"
+                        placeholder="ejemplo@email.com"
+                        className="w-full bg-lael-secondary border border-lael-bd rounded-2xl px-6 py-4 focus:border-lael-accent transition-all text-lael-primary placeholder:text-lael-muted/40"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                       />
@@ -136,26 +136,26 @@ export default function Contacto() {
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] tracking-[0.3em] uppercase font-bold text-lael-muted ml-1">Programa de Interés</label>
+                    <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-lael-muted ml-1">Programa de Interés</label>
                     <select 
-                      className="w-full bg-white border border-lael-bd px-6 py-5 rounded-2xl text-lael-primary focus:outline-none focus:border-lael-accent transition-all appearance-none cursor-pointer"
+                      className="w-full bg-lael-secondary border border-lael-bd rounded-2xl px-6 py-4 focus:border-lael-accent transition-all text-lael-primary"
                       value={formData.programa}
                       onChange={(e) => setFormData({...formData, programa: e.target.value})}
                     >
-                      <option value="PAES">Preuniversitario PAES (Gratis)</option>
-                      <option value="Ingles">Inglés Estratégico</option>
-                      <option value="Coreano">Coreano Inmersivo</option>
-                      <option value="LSCh">LSCh (Lengua de Señas)</option>
+                      <option value="PAES">PAES Gratuito</option>
+                      <option value="Idiomas">Inglés / Coreano</option>
+                      <option value="LSCh">Lengua de Señas (LSCh)</option>
+                      <option value="Otro">Otro requerimiento</option>
                     </select>
                   </div>
 
                   <div className="space-y-3">
-                    <label className="text-[10px] tracking-[0.3em] uppercase font-bold text-lael-muted ml-1">Mensaje</label>
+                    <label className="text-[10px] uppercase tracking-[0.2em] font-bold text-lael-muted ml-1">Tu Mensaje</label>
                     <textarea 
-                      rows="5"
+                      rows="6"
                       required
-                      className="w-full bg-white border border-lael-bd px-6 py-5 rounded-2xl text-lael-primary focus:outline-none focus:border-lael-accent transition-all placeholder:text-lael-muted/30 resize-none"
-                      placeholder="Cuéntanos tus metas..."
+                      placeholder="Cuéntanos cómo podemos ayudarte..."
+                      className="w-full bg-lael-secondary border border-lael-bd rounded-2xl px-6 py-4 focus:border-lael-accent transition-all text-lael-primary placeholder:text-lael-muted/40"
                       value={formData.mensaje}
                       onChange={(e) => setFormData({...formData, mensaje: e.target.value})}
                     ></textarea>
@@ -164,7 +164,8 @@ export default function Contacto() {
                   <motion.button 
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="w-full bg-lael-primary text-white py-6 rounded-2xl text-xs tracking-[0.4em] uppercase font-bold shadow-xl shadow-lael-primary/10 flex items-center justify-center gap-4 hover:bg-lael-rust transition-all"
+                    type="submit" 
+                    className="w-full bg-lael-accent text-white py-6 rounded-2xl font-bold uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 shadow-xl shadow-lael-accent/20"
                   >
                     Enviar Mensaje <Send size={16} />
                   </motion.button>

@@ -15,9 +15,9 @@ export default {
         bd: "var(--border-color)",
         lael: {
           // ─ Earthy 2026 brand palette ─
-          primary:  "#F8F5F0",
-          secondary: "#FFFFFF",
-          light: "#0D0D0D", // Reversing light to be dark text for readability
+          primary:  "#0D0D0D", 
+          secondary: "#F8F5F0",
+          light: "#FFFFFF", 
           accent:   "#C4973E",
           muted: "#8A8A8A",
           rust: "#B85C38",

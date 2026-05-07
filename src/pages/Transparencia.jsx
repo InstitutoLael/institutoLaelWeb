@@ -58,7 +58,7 @@ export default function Transparencia() {
                   <li key={i} className="flex gap-4">
                     <CheckCircle2 className="text-emerald-400 flex-shrink-0 mt-1" size={18} />
                     <div>
-                       <p className="text-lael-light font-bold text-sm mb-1">{item.t}</p>
+                       <p className="text-lael-primary font-bold text-sm mb-1">{item.t}</p>
                        <p className="text-lael-muted text-xs leading-relaxed">{item.d}</p>
                     </div>
                   </li>
@@ -82,7 +82,7 @@ export default function Transparencia() {
                   <li key={i} className="flex gap-4">
                     <XCircle className="text-lael-rust flex-shrink-0 mt-1" size={18} />
                     <div>
-                       <p className="text-lael-light font-bold text-sm mb-1">{item.t}</p>
+                       <p className="text-lael-primary font-bold text-sm mb-1">{item.t}</p>
                        <p className="text-lael-muted text-xs leading-relaxed">{item.d}</p>
                     </div>
                   </li>
@@ -92,7 +92,7 @@ export default function Transparencia() {
         </div>
 
         <motion.div {...fadeUp(0.4)} className="mt-24 p-12 bg-lael-secondary rounded-[40px] border border-lael-bd text-center">
-           <h4 className="font-display text-2xl text-lael-light mb-6">Nuestra Filosofía</h4>
+           <h4 className="font-display text-2xl text-lael-primary mb-6">Nuestra Filosofía</h4>
            <p className="text-lael-muted text-sm max-w-3xl mx-auto leading-relaxed italic">
               "El rendimiento académico no es una cuestión de suerte, es una cuestión de ingeniería. Si controlas las variables, controlas el resultado. Pero no puedes controlar las variables si no estás dispuesto a trabajar duro."
            </p>

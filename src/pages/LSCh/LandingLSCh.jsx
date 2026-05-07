@@ -46,7 +46,7 @@ export default function LandingLSCh() {
             initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
             animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl mb-10"
+            className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-primary font-bold leading-tight max-w-4xl mb-10"
           >
             El idioma que<br />
             <span className="accent-italic">elimina barreras.</span>
@@ -58,7 +58,7 @@ export default function LandingLSCh() {
             whileHover={{ scale: 1.05, y: -4 }}
             whileTap={{ scale: 0.95 }}
             onClick={startDiagnostic}
-            className="bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]"
+            className="bg-lael-accent text-lael-light px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]"
           >
             Aprender LSCh hoy
           </motion.button>
@@ -86,7 +86,7 @@ export default function LandingLSCh() {
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-3xl text-center">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Por qué importa</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold leading-tight mb-10">
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-primary font-bold leading-tight mb-10">
             En Chile, más de 400.000 personas Sordas no pueden acceder a servicios básicos por falta de comunicación.
           </motion.h2>
           <motion.p {...fadeUp(0.25)} className="text-lael-muted text-base leading-relaxed">
@@ -100,7 +100,7 @@ export default function LandingLSCh() {
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-4xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Por qué Lael</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-16">Cultura Sorda + metodología real.</motion.h2>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-primary font-bold text-center mb-16">Cultura Sorda + metodología real.</motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {LSCH_WHY_US.map((item, i) => (
               <motion.div key={item.title} {...fadeUp(i * 0.1)} className="p-8 rounded-2xl bg-lael-secondary hover-card border border-lael-bd cinematic-shadow">
@@ -116,7 +116,7 @@ export default function LandingLSCh() {
       <section className="relative w-full px-6 py-20 lg:py-28 flex flex-col items-center bg-lael-secondary border-y border-lael-bd cinematic-shadow">
         <div className="w-full max-w-4xl text-center">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Inclusión Real</p>
-          <h2 className="font-display text-4xl lg:text-5xl text-lael-light font-bold mb-10">
+          <h2 className="font-display text-4xl lg:text-5xl text-lael-primary font-bold mb-10">
             Más que señas. Cultura y conexión.
           </h2>
           <div className="text-lael-muted text-sm leading-relaxed max-w-2xl mx-auto space-y-6">
@@ -182,7 +182,7 @@ export default function LandingLSCh() {
         <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div {...fadeUp(0)}>
             <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Quien te enseña</p>
-            <h2 className="font-display text-4xl lg:text-5xl text-lael-light font-bold mb-4">{TEACHER_PROFILE.name}</h2>
+            <h2 className="font-display text-4xl lg:text-5xl text-lael-primary font-bold mb-4">{TEACHER_PROFILE.name}</h2>
             <p className="text-lael-muted/50 text-[11px] tracking-[0.15em] uppercase mb-8">{TEACHER_PROFILE.role}</p>
             <p className="text-lael-muted leading-relaxed text-base mb-8">{TEACHER_PROFILE.bio}</p>
             <div className="flex flex-wrap gap-2">
@@ -219,7 +219,7 @@ export default function LandingLSCh() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
              <motion.div {...fadeUp(0.1)} className="p-12 bg-emerald-500/5 rounded-[40px] border border-emerald-500/10">
                 <p className="text-emerald-400 text-[10px] tracking-[0.2em] uppercase mb-6 font-bold">Caso Real</p>
-                <h3 className="font-display text-3xl text-lael-light mb-8 italic">
+                <h3 className="font-display text-3xl text-lael-primary mb-8 italic">
                    "Ahora puedo atender a clientes Sordos en mi local sin intermediarios. La conexión humana es inmediata."
                 </h3>
                 <p className="text-lael-muted text-xs uppercase tracking-widest">— Alumna Nivel A1</p>
@@ -246,8 +246,8 @@ export default function LandingLSCh() {
       <section className="relative w-full px-6 py-20 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
-          <h2 className="font-display text-4xl text-lael-light font-bold mb-8">Elige tu plan y comienza hoy.</h2>
-          <button onClick={startDiagnostic} className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-white transition-all duration-500">
+          <h2 className="font-display text-4xl text-lael-primary font-bold mb-8">Elige tu plan y comienza hoy.</h2>
+          <button onClick={startDiagnostic} className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-lael-light transition-all duration-500">
             Iniciar diagnóstico táctico →
           </button>
         </motion.div>

@@ -70,7 +70,7 @@ export default function MetodoLael() {
       <section className="py-32">
         <div className="max-w-6xl mx-auto px-6">
            <div className="text-center mb-24">
-              <h2 className="font-display text-5xl text-lael-light mb-6">La Solución Táctica.</h2>
+              <h2 className="font-display text-5xl text-lael-primary mb-6">La Solución Táctica.</h2>
               <p className="text-lael-muted max-w-xl mx-auto">No estudiamos más. Estudiamos mejor bajo los parámetros de la neurociencia aplicada.</p>
            </div>
            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -81,7 +81,7 @@ export default function MetodoLael() {
               ].map((item, i) => (
                 <motion.div key={i} {...fadeUp(i * 0.1)} className="space-y-4">
                    <div className="text-lael-accent font-display text-4xl">0{i+1}</div>
-                   <h3 className="text-lael-light font-bold text-xl uppercase tracking-widest">{item.t}</h3>
+                   <h3 className="text-lael-primary font-bold text-xl uppercase tracking-widest">{item.t}</h3>
                    <p className="text-lael-muted text-sm leading-relaxed">{item.d}</p>
                 </motion.div>
               ))}
@@ -95,7 +95,7 @@ export default function MetodoLael() {
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
               <motion.div {...fadeUp()}>
                  <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">La Ejecución</p>
-                 <h2 className="font-display text-4xl lg:text-6xl text-lael-light mb-10">Tu Ruta Táctica.</h2>
+                 <h2 className="font-display text-4xl lg:text-6xl text-lael-primary mb-10">Tu Ruta Táctica.</h2>
                  <div className="space-y-10">
                     {[
                       { t: "Fase 1: El Espejo", d: "Diagnóstico profundo para encontrar tus brechas ciegas." },
@@ -103,9 +103,9 @@ export default function MetodoLael() {
                       { t: "Fase 3: El Fuego", d: "Simulaciones de presión real con mentor asignado." }
                     ].map((f, i) => (
                       <div key={i} className="flex gap-6">
-                         <div className="w-12 h-12 bg-lael-accent text-white flex items-center justify-center rounded-2xl font-bold flex-shrink-0">{i+1}</div>
+                         <div className="w-12 h-12 bg-lael-accent text-lael-light flex items-center justify-center rounded-2xl font-bold flex-shrink-0">{i+1}</div>
                          <div>
-                            <h4 className="text-lael-light font-bold mb-2">{f.t}</h4>
+                            <h4 className="text-lael-primary font-bold mb-2">{f.t}</h4>
                             <p className="text-lael-muted text-sm leading-relaxed">{f.d}</p>
                          </div>
                       </div>

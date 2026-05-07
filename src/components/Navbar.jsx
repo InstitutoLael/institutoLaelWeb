@@ -16,7 +16,6 @@ export default function Navbar() {
 
   const [bannerHeight, setBannerHeight] = useState(0);
 
-  const isLightPage = ['/nosotros', '/contacto', '/transparencia', '/preguntas', '/diagnostico'].includes(location.pathname);
 
   // Scroll detection
   useEffect(() => {

@@ -60,7 +60,7 @@ export default function NivelacionAdultos() {
       <section className="px-6 py-32 bg-lael-secondary border-y border-lael-bd">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div {...fadeUp()}>
-            <h2 className="font-display text-4xl lg:text-5xl text-lael-light mb-10 uppercase tracking-widest">
+            <h2 className="font-display text-4xl lg:text-5xl text-lael-primary mb-10 uppercase tracking-widest">
               {ADULT_CONTENT.problem.title}
             </h2>
             <p className="text-lael-muted text-lg lg:text-xl leading-relaxed mb-12">
@@ -78,7 +78,7 @@ export default function NivelacionAdultos() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-24">
              <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Tu Arquitectura de Éxito</p>
-             <h2 className="font-display text-5xl text-lael-light uppercase tracking-tighter">Cómo lo logramos.</h2>
+             <h2 className="font-display text-5xl text-lael-primary uppercase tracking-tighter">Cómo lo logramos.</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {ADULT_CONTENT.system.features.map((f, i) => (
@@ -89,7 +89,7 @@ export default function NivelacionAdultos() {
                   {i === 2 && <Users size={28}/>}
                   {i === 3 && <Target size={28}/>}
                 </div>
-                <h3 className="text-lael-light font-bold mb-4 tracking-tight text-xl uppercase">{f.title}</h3>
+                <h3 className="text-lael-primary font-bold mb-4 tracking-tight text-xl uppercase">{f.title}</h3>
                 <p className="text-lael-muted text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}

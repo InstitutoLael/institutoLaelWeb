@@ -63,7 +63,7 @@ export default function ResultDashboard() {
           {/* Main Analysis */}
           <motion.div {...fadeUp(0.1)} className="lg:col-span-2 space-y-8">
             <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd cinematic-shadow">
-              <h3 className="font-display text-2xl text-lael-light mb-8 flex items-center gap-3">
+              <h3 className="font-display text-2xl text-lael-primary mb-8 flex items-center gap-3">
                 <Zap className="text-lael-accent" /> Análisis de Ejecución
               </h3>
               <p className="text-lael-muted text-lg leading-relaxed mb-10">
@@ -88,7 +88,7 @@ export default function ResultDashboard() {
                   {result.attributes.map((attr, i) => (
                     <div key={i}>
                       <div className="flex justify-between mb-3 text-xs uppercase tracking-widest font-bold">
-                        <span className="text-lael-light">{attr.label}</span>
+                        <span className="text-lael-primary">{attr.label}</span>
                         <span className="text-lael-accent">{attr.value}</span>
                       </div>
                       <div className="h-1.5 bg-lael-primary rounded-full overflow-hidden">

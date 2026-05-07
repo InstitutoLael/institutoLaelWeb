@@ -48,16 +48,24 @@ export default function AppletCirculos() {
     const handleResize = () => {
       const parent = canvasRef.current.parentElement;
       [canvasRef, guideCanvasRef].forEach(ref => {
-        ref.current.width = parent.clientWidth;
-        ref.current.height = parent.clientHeight;
+        const c = ref.current;
+        c.width = parent.clientWidth;
+        c.height = parent.clientHeight;
+        const context = c.getContext('2d');
+        context.lineCap = 'round';
+        context.lineJoin = 'round';
       });
-      // Redraw guides on resize
       drawGuides(mousePos);
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [mousePos]);
+  }, []); // Empty dependency array to run once on mount
+
+  // Separate effect for guides if needed, or just rely on mouse move
+  useEffect(() => {
+    drawGuides(mousePos);
+  }, [mousePos, symmetry, showGuides, showInscribedAngle, isDrawing, startPoint]);
 
   const getPos = (e) => {
     const rect = canvasRef.current.getBoundingClientRect();

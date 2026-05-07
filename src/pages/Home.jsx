@@ -153,7 +153,7 @@ export default function Home() {
             initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
             animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-6xl mb-12 relative"
+            className="font-display text-5xl lg:text-6xl xl:text-8xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl mb-12 relative"
           >
             Tu futuro no <br/>
             <span className="relative inline-block">
@@ -434,7 +434,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 7. CIERRE (CTA FINAL & FAQ) ───────────────────────────────── */}
+      {/* ── 6. CTA FINAL ─────────────────────────────────────────────── */}
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center bg-white border-t border-lael-bd">
         <motion.div {...fadeUp(0)} className="text-center max-w-3xl">
           <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 font-bold">No es para todos. Es para ti.</p>

@@ -46,10 +46,11 @@ export default function LandingIdiomas() {
             initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
             animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-8xl tracking-[-0.04em] text-lael-primary font-bold leading-[0.9] max-w-5xl mb-12"
+            className="font-display text-5xl lg:text-6xl xl:text-7xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl mb-12 relative"
           >
+            <span className="absolute inset-0 blur-[100px] bg-lael-accent/20 -z-10 rounded-full"></span>
             No estudias un idioma.<br />
-            <span className="accent-italic">Lo hablas desde el primer día.</span>
+            <span className="accent-italic relative z-10">Lo hablas desde el primer día.</span>
           </motion.h1>
           <motion.p {...fadeUp(0.35)} className="text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed italic italic-playfair mb-14">
             Sin apps de repetición. Solo clases en vivo y simulaciones reales que te preparan para la vida profesional.
@@ -122,7 +123,7 @@ export default function LandingIdiomas() {
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
         <div className="w-full max-w-4xl text-center">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 font-bold">El Método</p>
-          <h2 className="font-display text-5xl lg:text-7xl text-lael-primary font-bold mb-12 tracking-tighter">
+          <h2 className="font-display text-5xl lg:text-6xl text-lael-light font-bold mb-12 tracking-tighter">
             Hackeando el proceso <br className="hidden md:block" /> de aprendizaje.
           </h2>
           <div className="text-lael-muted text-lg lg:text-xl leading-relaxed max-w-3xl mx-auto space-y-8 italic italic-playfair">
@@ -142,7 +143,7 @@ export default function LandingIdiomas() {
             ].map((m, i) => (
               <motion.div key={i} {...fadeUp(i * 0.1)} className="text-center lg:text-left">
                 <div className="font-display text-7xl text-lael-accent/20 font-bold mb-6">{m.step}</div>
-                <h4 className="text-lael-primary text-xl font-bold uppercase tracking-widest mb-4">{m.label}</h4>
+                <h4 className="text-lael-light text-xl font-bold uppercase tracking-widest mb-4">{m.label}</h4>
                 <p className="text-lael-muted text-sm leading-relaxed">{m.desc}</p>
               </motion.div>
             ))}
@@ -195,41 +196,41 @@ export default function LandingIdiomas() {
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
         <div className="w-full max-w-6xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center font-bold">Programas disponibles</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-primary font-bold text-center mb-24 tracking-tighter uppercase">Elige tu sistema de comunicación.</motion.h2>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-24 tracking-tighter uppercase">Elige tu sistema de comunicación.</motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { 
                 impact: 'ALTO IMPACTO', 
-                title: 'Dominio Estratégico Inglés', 
+                title: 'Inglés Estratégico Pro', 
                 flag: '🇬🇧',
-                desc: 'Ingeniería inversa del idioma. Estructuras de alto rendimiento para negocios y tecnología.', 
+                desc: 'Olvida la gramática de pizarra. En Lael instalamos el sistema de comunicación que usan los profesionales en tech y negocios.', 
                 levels: ['A1 (Fundamentos)', 'A2', 'B1', 'B2 (Dominio)'] 
               },
               { 
                 impact: 'ALTA DEMANDA', 
-                title: 'Inmersión Estructural Coreana', 
+                title: 'Coreano Estructural', 
                 flag: '🇰🇷',
-                desc: 'Decodificación precisa del sistema Hangul y gramática coreana avanzada.', 
+                desc: 'Decodificamos el Hangul desde su lógica interna. En 6 meses estarás conversando con fluidez estructural real.', 
                 levels: ['Nivel 1 (Fundamentos)', 'Nivel 2', 'Nivel 3'] 
               },
               { 
-                impact: 'INSERCIÓN ESTRATÉGICA', 
-                title: 'Integración para Expats', 
+                impact: 'INSERCIÓN REAL', 
+                title: 'Español para Expats', 
                 flag: '🇨🇱',
-                desc: 'Sistemas prácticos para dominar el español en el entorno chileno. Foco corporativo.', 
+                desc: 'No es español de libro. Te enseñamos a navegar la cultura, el modismo y el entorno laboral chileno con confianza.', 
                 levels: ['A1 (Fundamentos)', 'A2', 'B1 (Dominio)'] 
               },
             ].map((prog, i) => (
               <motion.div 
                 key={prog.title} 
                 {...fadeUp(i * 0.1)} 
-                className="p-10 bg-lael-secondary border border-lael-bd rounded-[40px] hover:border-lael-accent/50 transition-all group"
+                className="p-10 bg-lael-primary border border-lael-bd rounded-[40px] hover:border-lael-accent/50 transition-all group cinematic-shadow"
               >
                 <div className="flex justify-between items-start mb-10">
                   <span className="text-lael-accent text-[10px] font-bold tracking-[0.3em] uppercase">{prog.impact}</span>
                   <span className="text-4xl">{prog.flag}</span>
                 </div>
-                <h3 className="text-2xl font-display font-bold text-lael-primary mb-6 group-hover:text-lael-accent transition-colors">{prog.title}</h3>
+                <h3 className="text-2xl font-display font-bold text-lael-light mb-6 group-hover:text-lael-accent transition-colors">{prog.title}</h3>
                 <p className="text-lael-muted text-sm leading-relaxed mb-8">{prog.desc}</p>
                 <div className="space-y-3">
                   {prog.levels.map(lvl => (
@@ -245,12 +246,93 @@ export default function LandingIdiomas() {
         </div>
       </section>
 
+      {/* ── 5. PLANES DE ENTRENAMIENTO ───────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center bg-lael-secondary border-y border-lael-bd">
+        <div className="w-full max-w-6xl mx-auto">
+          <div className="text-center mb-24">
+            <p className="text-lael-accent text-[11px] tracking-[0.5em] uppercase mb-6 font-bold">Inversión Táctica</p>
+            <h2 className="font-display text-5xl lg:text-7xl text-lael-primary font-bold mb-8 uppercase tracking-tighter">Elige tu sistema.</h2>
+            <div className="flex flex-wrap justify-center gap-4 text-[10px] tracking-[0.2em] uppercase font-bold text-lael-muted/60">
+               <span>Modalidad Grupal</span>
+               <span className="text-lael-accent">·</span>
+               <span>$9.990 Lanzamiento</span>
+               <span className="text-lael-accent">·</span>
+               <span>1 a 1</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+             {/* Plan Mensual */}
+             <motion.div {...fadeUp(0.1)} className="p-12 bg-white border border-lael-bd rounded-[50px] shadow-sm hover:border-lael-accent/30 transition-all duration-700 group relative">
+                <div className="mb-10">
+                   <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase font-bold mb-4">Plan Mensual Flexible</p>
+                   <div className="flex items-baseline gap-2">
+                      <span className="text-5xl lg:text-6xl font-display font-bold text-lael-primary tracking-tighter">$9.990</span>
+                      <span className="text-lael-muted text-sm uppercase tracking-widest font-bold">/mes</span>
+                   </div>
+                   <p className="mt-6 text-lael-muted text-sm italic italic-playfair">Sin contratos, cancela cuando quieras.</p>
+                </div>
+                
+                <div className="space-y-4 mb-12">
+                   {[
+                      "Clases en vivo vía Google Meet",
+                      "Simulacros de fluidez real",
+                      "Material descargable premium",
+                      "Certificado por niveles"
+                   ].map(feat => (
+                      <div key={feat} className="flex items-center gap-3">
+                         <div className="w-1.5 h-1.5 rounded-full bg-lael-accent/40" />
+                         <p className="text-[13px] text-lael-muted font-medium tracking-tight">{feat}</p>
+                      </div>
+                   ))}
+                </div>
+
+                <button className="w-full py-6 bg-lael-secondary border border-lael-bd text-lael-primary rounded-2xl text-[11px] font-bold uppercase tracking-[0.3em] group-hover:bg-lael-primary group-hover:text-white transition-all duration-500">
+                   Iniciar Ahora →
+                </button>
+             </motion.div>
+
+             {/* Plan Trimestral */}
+             <motion.div {...fadeUp(0.2)} className="p-12 bg-lael-primary border border-lael-accent rounded-[50px] shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-8 bg-lael-accent text-white text-[10px] font-bold uppercase tracking-widest rounded-bl-3xl">Doble Impacto</div>
+                
+                <div className="mb-10">
+                   <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase font-bold mb-4">Plan Trimestral (Ahorro)</p>
+                   <div className="flex items-baseline gap-2">
+                      <span className="text-5xl lg:text-6xl font-display font-bold text-lael-light tracking-tighter">$7.990</span>
+                      <span className="text-lael-muted text-sm uppercase tracking-widest font-bold">/mes</span>
+                   </div>
+                   <p className="mt-6 text-lael-muted text-sm italic italic-playfair">Compromiso real con tu fluidez.</p>
+                </div>
+                
+                <div className="space-y-4 mb-12">
+                   {[
+                      "Todo lo del plan mensual",
+                      "🔥 Matrícula $0 garantizada",
+                      "Acceso a Masterclasses exclusivas",
+                      "Garantía de avance acelerado"
+                   ].map(feat => (
+                      <div key={feat} className="flex items-center gap-3">
+                         <div className="w-1.5 h-1.5 rounded-full bg-lael-accent" />
+                         <p className="text-[13px] text-lael-muted font-bold tracking-tight">{feat}</p>
+                      </div>
+                   ))}
+                </div>
+
+                <button className="w-full py-6 bg-lael-accent text-white rounded-2xl text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-lael-rust transition-all duration-500 shadow-xl shadow-lael-accent/20">
+                   Activar Plan Ahorro →
+                </button>
+             </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* ── 6. CTA FINAL ─────────────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-48 flex flex-col items-center bg-lael-secondary">
+      <section className="relative w-full px-6 py-48 flex flex-col items-center bg-lael-primary">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-3xl">
           <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 font-bold">Inicia hoy</p>
-          <h2 className="font-display text-5xl lg:text-7xl text-lael-primary font-bold mb-12 uppercase tracking-tighter">Configura tu <br/> sistema ahora.</h2>
+          <h2 className="font-display text-5xl lg:text-7xl text-lael-light font-bold mb-12 uppercase tracking-tighter">Configura tu <br/> sistema ahora.</h2>
           <button onClick={startDiagnostic} className="bg-lael-accent text-lael-light px-16 py-7 rounded-2xl text-[11px] tracking-[0.3em] uppercase font-bold hover:bg-lael-rust transition-all duration-500 shadow-[0_20px_50px_rgba(196,151,62,0.3)]">
              Iniciar diagnóstico táctico →
           </button>

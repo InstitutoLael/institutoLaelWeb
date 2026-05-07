@@ -31,7 +31,7 @@ export default function Contacto() {
   };
 
   return (
-    <div className="w-full bg-lael-primary text-lael-primary overflow-hidden pt-20">
+    <div className="w-full bg-lael-primary text-lael-light overflow-hidden pt-20">
       <Helmet>
         <title>Contacto | Instituto Lael SpA</title>
         <meta name="description" content="WhatsApp +56 9 6462 6568 · contacto@institutolael.cl · Santiago, Chile." />
@@ -48,7 +48,7 @@ export default function Contacto() {
                   initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
                   animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
                   transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-                  className="text-5xl md:text-6xl font-display font-bold mb-8"
+                  className="text-5xl md:text-6xl font-display font-bold mb-8 text-lael-light"
                 >
                   Estamos a un <br />
                   <span className="italic italic-playfair text-lael-accent">mensaje de distancia.</span>
@@ -65,7 +65,7 @@ export default function Contacto() {
                   </div>
                   <div>
                     <p className="text-[10px] tracking-[0.3em] uppercase font-bold text-lael-muted mb-1">WhatsApp Directo</p>
-                    <p className="text-xl font-bold text-lael-primary">+56 9 6462 6568</p>
+                    <p className="text-xl font-bold text-lael-light">+56 9 6462 6568</p>
                   </div>
                </div>
                <div className="flex items-center gap-8 group">
@@ -74,7 +74,7 @@ export default function Contacto() {
                   </div>
                   <div>
                     <p className="text-[10px] tracking-[0.3em] uppercase font-bold text-lael-muted mb-1">Email Institucional</p>
-                    <p className="text-xl font-bold text-lael-primary">contacto@institutolael.cl</p>
+                    <p className="text-xl font-bold text-lael-light">contacto@institutolael.cl</p>
                   </div>
                </div>
                <div className="flex items-center gap-8 group">
@@ -83,7 +83,7 @@ export default function Contacto() {
                   </div>
                   <div>
                     <p className="text-[10px] tracking-[0.3em] uppercase font-bold text-lael-muted mb-1">Instagram Social</p>
-                    <p className="text-xl font-bold text-lael-primary">@institutolael</p>
+                    <p className="text-xl font-bold text-lael-light">@institutolael</p>
                   </div>
                </div>
                <div className="flex items-center gap-8 group">
@@ -92,7 +92,7 @@ export default function Contacto() {
                   </div>
                   <div>
                     <p className="text-[10px] tracking-[0.3em] uppercase font-bold text-lael-muted mb-1">Horario de Atención</p>
-                    <p className="text-xl font-bold text-lael-primary">Lunes a Viernes · 09:00 - 20:00</p>
+                    <p className="text-xl font-bold text-lael-light">Lunes a Viernes · 09:00 - 20:00</p>
                   </div>
                </div>
             </div>

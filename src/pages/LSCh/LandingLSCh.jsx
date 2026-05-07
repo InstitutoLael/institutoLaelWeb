@@ -46,10 +46,11 @@ export default function LandingLSCh() {
             initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
             animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-primary font-bold leading-tight max-w-4xl mb-10"
+            className="font-display text-5xl lg:text-7xl xl:text-8xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl mb-10 relative"
           >
+            <span className="absolute inset-0 blur-[100px] bg-lael-accent/20 -z-10 rounded-full"></span>
             El idioma que<br />
-            <span className="accent-italic">elimina barreras.</span>
+            <span className="accent-italic relative z-10">elimina barreras.</span>
           </motion.h1>
           <motion.p {...fadeUp(0.35)} className="text-lael-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed mb-12">
             No es solo aprender señas. Es aprender a comunicarte en entornos reales con personas sordas desde el primer día.
@@ -86,7 +87,7 @@ export default function LandingLSCh() {
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-3xl text-center">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Por qué importa</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-primary font-bold leading-tight mb-10">
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold leading-tight mb-10">
             En Chile, más de 400.000 personas Sordas no pueden acceder a servicios básicos por falta de comunicación.
           </motion.h2>
           <motion.p {...fadeUp(0.25)} className="text-lael-muted text-base leading-relaxed">
@@ -100,7 +101,7 @@ export default function LandingLSCh() {
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-4xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Por qué Lael</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-primary font-bold text-center mb-16">Cultura Sorda + metodología real.</motion.h2>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-16 uppercase tracking-widest">Cultura Sorda + metodología real.</motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {LSCH_WHY_US.map((item, i) => (
               <motion.div key={item.title} {...fadeUp(i * 0.1)} className="p-8 rounded-2xl bg-lael-secondary hover-card border border-lael-bd cinematic-shadow">
@@ -182,7 +183,7 @@ export default function LandingLSCh() {
         <div className="w-full max-w-4xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div {...fadeUp(0)}>
             <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6">Quien te enseña</p>
-            <h2 className="font-display text-4xl lg:text-5xl text-lael-primary font-bold mb-4">{TEACHER_PROFILE.name}</h2>
+            <h2 className="font-display text-4xl lg:text-5xl text-lael-light font-bold mb-4">{TEACHER_PROFILE.name}</h2>
             <p className="text-lael-muted/50 text-[11px] tracking-[0.15em] uppercase mb-8">{TEACHER_PROFILE.role}</p>
             <p className="text-lael-muted leading-relaxed text-base mb-8">{TEACHER_PROFILE.bio}</p>
             <div className="flex flex-wrap gap-2">
@@ -215,39 +216,129 @@ export default function LandingLSCh() {
       <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
-          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center">Inclusión en Acción</motion.p>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-             <motion.div {...fadeUp(0.1)} className="p-12 bg-emerald-500/5 rounded-[40px] border border-emerald-500/10">
-                <p className="text-emerald-400 text-[10px] tracking-[0.2em] uppercase mb-6 font-bold">Caso Real</p>
-                <h3 className="font-display text-3xl text-lael-primary mb-8 italic">
+          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center font-bold">Inclusión en Acción</motion.p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
+             <motion.div {...fadeUp(0.1)} className="p-12 bg-lael-primary rounded-[50px] border border-lael-bd cinematic-shadow relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                   <Award size={140} />
+                </div>
+                <p className="text-lael-accent text-[10px] tracking-[0.2em] uppercase mb-8 font-bold">Caso Real / Nivel A1</p>
+                <h3 className="font-display text-3xl lg:text-4xl text-lael-light mb-10 italic leading-tight relative z-10">
                    "Ahora puedo atender a clientes Sordos en mi local sin intermediarios. La conexión humana es inmediata."
                 </h3>
-                <p className="text-lael-muted text-xs uppercase tracking-widest">— Alumna Nivel A1</p>
+                <div className="flex items-center gap-4 relative z-10">
+                   <div className="w-10 h-10 rounded-full bg-lael-accent/20 flex items-center justify-center text-lael-accent font-bold">A</div>
+                   <p className="text-lael-muted text-xs uppercase tracking-widest">— Alumna de Nivelación</p>
+                </div>
              </motion.div>
              <motion.div 
                {...fadeUp(0.2)} 
-               className="p-12 bg-white border border-lael-bd rounded-[40px] shadow-sm relative overflow-hidden"
+               className="p-12 bg-lael-accent rounded-[50px] shadow-2xl relative overflow-hidden flex flex-col justify-center"
              >
-                <div className="flex items-center gap-6">
-                   <div className="w-16 h-16 bg-lael-accent/10 rounded-full flex items-center justify-center text-lael-accent">
+                <div className="absolute top-0 right-0 p-10 text-white/10 font-display text-9xl font-bold">LSCh</div>
+                <div className="relative z-10">
+                   <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center text-white mb-8">
                       <Award size={32} />
                    </div>
-                   <div>
-                      <p className="text-lael-primary font-bold text-lg">Diploma Oficial Lael</p>
-                      <p className="text-lael-muted text-sm">Válido para CV y cumplimiento Ley 21.015</p>
-                   </div>
+                   <h3 className="text-white font-bold text-3xl mb-4 leading-tight">Diploma Oficial Lael</h3>
+                   <p className="text-white/80 text-lg leading-relaxed max-w-sm">
+                      Válido para currículum y cumplimiento de la Ley 21.015 de Inclusión Laboral.
+                   </p>
                 </div>
              </motion.div>
           </div>
         </div>
       </section>
 
+      {/* ── 6. PLANES DE ENTRENAMIENTO ───────────────────────────────── */}
+      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center bg-lael-secondary border-y border-lael-bd">
+        <div className="w-full max-w-6xl mx-auto">
+          <div className="text-center mb-24">
+            <p className="text-lael-accent text-[11px] tracking-[0.5em] uppercase mb-6 font-bold">Inversión Táctica</p>
+            <h2 className="font-display text-5xl lg:text-7xl text-lael-primary font-bold mb-8 uppercase tracking-tighter">Elige tu plan.</h2>
+            <div className="flex flex-wrap justify-center gap-4 text-[10px] tracking-[0.2em] uppercase font-bold text-lael-muted/60">
+               <span>Modalidad Grupal</span>
+               <span className="text-lael-accent">·</span>
+               <span>Convenio Iglesia/Ministerio</span>
+               <span className="text-lael-accent">·</span>
+               <span>1 a 1</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+             {/* Plan Mensual */}
+             <motion.div {...fadeUp(0.1)} className="p-12 bg-white border border-lael-bd rounded-[50px] shadow-sm hover:border-lael-accent/30 transition-all duration-700 group relative">
+                <div className="mb-10">
+                   <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase font-bold mb-4">Plan Mensual Flexible</p>
+                   <div className="flex items-baseline gap-2">
+                      <span className="text-5xl lg:text-6xl font-display font-bold text-lael-primary tracking-tighter">$24.990</span>
+                      <span className="text-lael-muted text-sm uppercase tracking-widest font-bold">/mes</span>
+                   </div>
+                   <p className="mt-6 text-lael-muted text-sm italic italic-playfair">Ideal para ir a tu propio ritmo.</p>
+                </div>
+                
+                <div className="space-y-4 mb-12">
+                   {[
+                      "Clases en vivo vía Zoom",
+                      "Material de apoyo en PDF",
+                      "Acceso a grabaciones por 7 días",
+                      "Diploma de participación"
+                   ].map(feat => (
+                      <div key={feat} className="flex items-center gap-3">
+                         <div className="w-1.5 h-1.5 rounded-full bg-lael-accent/40" />
+                         <p className="text-[13px] text-lael-muted font-medium tracking-tight">{feat}</p>
+                      </div>
+                   ))}
+                </div>
+
+                <button className="w-full py-6 bg-lael-secondary border border-lael-bd text-lael-primary rounded-2xl text-[11px] font-bold uppercase tracking-[0.3em] group-hover:bg-lael-primary group-hover:text-white transition-all duration-500">
+                   Seleccionar Plan →
+                </button>
+             </motion.div>
+
+             {/* Plan Trimestral */}
+             <motion.div {...fadeUp(0.2)} className="p-12 bg-lael-primary border border-lael-accent rounded-[50px] shadow-2xl relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-8 bg-lael-accent text-white text-[10px] font-bold uppercase tracking-widest rounded-bl-3xl">Más Conveniente</div>
+                
+                <div className="mb-10">
+                   <p className="text-lael-accent text-[10px] tracking-[0.3em] uppercase font-bold mb-4">Plan Trimestral (Ahorro)</p>
+                   <div className="flex items-baseline gap-2">
+                      <span className="text-5xl lg:text-6xl font-display font-bold text-lael-light tracking-tighter">$19.990</span>
+                      <span className="text-lael-muted text-sm uppercase tracking-widest font-bold">/mes</span>
+                   </div>
+                   <p className="mt-6 text-lael-muted text-sm italic italic-playfair">Compromiso real con el aprendizaje.</p>
+                </div>
+                
+                <div className="space-y-4 mb-12">
+                   {[
+                      "Todo lo del plan mensual",
+                      "🔥 Matrícula $0 (Ahorras $15.000)",
+                      "Acceso permanente a grabaciones",
+                      "Certificado de Nivel aprobado"
+                   ].map(feat => (
+                      <div key={feat} className="flex items-center gap-3">
+                         <div className="w-1.5 h-1.5 rounded-full bg-lael-accent" />
+                         <p className="text-[13px] text-lael-muted font-bold tracking-tight">{feat}</p>
+                      </div>
+                   ))}
+                </div>
+
+                <button className="w-full py-6 bg-lael-accent text-white rounded-2xl text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-lael-rust transition-all duration-500 shadow-xl shadow-lael-accent/20">
+                   Activar Entrenamiento →
+                </button>
+             </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* TRANSICIÓN */}
-      <section className="relative w-full px-6 py-20 flex flex-col items-center">
+      <section className="relative w-full px-6 py-32 flex flex-col items-center">
         <div className="separator-gradient top-0" />
         <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
-          <h2 className="font-display text-4xl text-lael-primary font-bold mb-8">Elige tu plan y comienza hoy.</h2>
-          <button onClick={startDiagnostic} className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-lael-light transition-all duration-500">
+          <h2 className="font-display text-4xl lg:text-6xl text-lael-light font-bold mb-12 uppercase tracking-tighter leading-none">
+             Configura tu <br/> <span className="text-lael-accent">Inclusión.</span>
+          </h2>
+          <button onClick={startDiagnostic} className="bg-lael-accent/10 border border-lael-accent/30 text-lael-accent px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-accent hover:text-white transition-all duration-500">
             Iniciar diagnóstico táctico →
           </button>
         </motion.div>

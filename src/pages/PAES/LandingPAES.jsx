@@ -56,7 +56,7 @@ export default function LandingPAES() {
             initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
             animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl mb-12 relative"
+            className="font-display text-5xl lg:text-6xl xl:text-8xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl mb-12 relative"
           >
             <span className="absolute inset-0 blur-[100px] bg-lael-accent/20 -z-10 rounded-full"></span>
             La mejor versión <br />

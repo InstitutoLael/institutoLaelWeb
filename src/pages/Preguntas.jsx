@@ -5,11 +5,11 @@ import { ChevronDown, MessageCircle, DollarSign, Clock, Target, HelpCircle } fro
 
 const FAQ_DATA = [
   {
-    category: "Dinero & Inversión",
+    category: "Costos & Acceso",
     icon: <DollarSign size={20} />,
     items: [
-      { q: "¿Por qué es más caro que un preuniversitario tradicional?", a: "Porque no somos una guardería educativa ni una fábrica de clases grabadas. Pagas por un sistema de ingeniería que garantiza un resultado, mentoría 1:1 y una tecnología de seguimiento que reduce tu tiempo de estudio en un 40%." },
-      { q: "¿Tienen planes de financiamiento?", a: "Sí. Contamos con planes mensuales flexibles y facilidades vía MercadoPago/Transbank. La inversión se recupera en la primera beca que obtengas por tu puntaje." }
+      { q: "¿Por qué la PAES es gratis en Lael?", a: "Porque creemos que el talento no tiene estrato social. Nuestra misión es democratizar el acceso a la educación de élite, y lo logramos gracias a un modelo de gestión eficiente y el apoyo de nuestra comunidad." },
+      { q: "¿Hay algún costo oculto o matrícula?", a: "No. En el programa PAES no pagas matrícula, ni mensualidad, ni materiales. Es 100% gratuito de principio a fin." }
     ]
   },
   {
@@ -17,15 +17,15 @@ const FAQ_DATA = [
     icon: <Clock size={20} />,
     items: [
       { q: "¿Cuánto tiempo al día necesito?", a: "El sistema se adapta a ti. Tenemos alumnos que estudian 2 horas diarias de alta eficiencia y logran más que quienes pasan 6 horas en un preuniversitario tradicional disparando a ciegas." },
-      { q: "Tengo un horario difícil, ¿puedo entrar?", a: "Absolutamente. La arquitectura de puntaje está diseñada precisamente para personas con poco tiempo que necesitan máxima efectividad." }
+      { q: "Tengo un horario difícil, ¿puedo entrar?", a: "Absolutamente. Nuestras clases son vespertinas y quedan grabadas para que puedas compatibilizar el estudio con el colegio, el trabajo o tu vida personal." }
     ]
   },
   {
-    category: "Resultados & Garantía",
+    category: "Metodología & Resultados",
     icon: <Target size={20} />,
     items: [
-      { q: "¿Qué pasa si no subo mi puntaje?", a: "Nuestro sistema de diagnóstico detecta fallas antes de la prueba real. Si sigues el plan y no hay avance, reevaluamos tu arquitectura sin costo adicional hasta encontrar el patrón de bloqueo." },
-      { q: "¿Es solo para alumnos brillantes?", a: "Al contrario. Nuestro sistema brilla con alumnos que están estancados en los 500-600 puntos y no saben cómo romper ese techo." }
+      { q: "¿Qué pasa si me bloqueo en la prueba?", a: "Nuestro sistema de diagnóstico detecta fallas antes de la prueba real. Te enseñamos estrategias de manejo de ansiedad y técnicas de descarte para que tu conocimiento se traduzca en puntaje." },
+      { q: "¿Es solo para alumnos brillantes?", a: "Al contrario. Nuestro sistema brilla con alumnos que sienten que 'no les da la cabeza' y necesitan un método claro, paso a paso, para recuperar la confianza." }
     ]
   }
 ];
@@ -37,12 +37,20 @@ export default function Preguntas() {
     <div className="bg-lael-primary min-h-screen pt-32 pb-20 px-6">
       <Helmet>
         <title>Preguntas Frecuentes | Instituto Lael</title>
+        <meta name="description" content="Resolvemos todas tus dudas sobre la PAES gratuita, cursos de idiomas y nuestra metodología de alto rendimiento." />
       </Helmet>
 
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-20">
           <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">FAQ Avanzado</p>
-          <h1 className="font-display text-5xl text-lael-light mb-8">Dudas que merecen una respuesta honesta.</h1>
+          <motion.h1 
+            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
+            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
+            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
+            className="font-display text-5xl text-lael-light mb-8"
+          >
+            Dudas que merecen una respuesta honesta.
+          </motion.h1>
         </div>
 
         <div className="space-y-16">
@@ -88,7 +96,14 @@ export default function Preguntas() {
         <div className="mt-24 p-10 bg-lael-accent rounded-3xl text-white text-center">
            <h3 className="font-display text-2xl mb-6">¿Tu duda es más específica?</h3>
            <p className="text-white/80 text-sm mb-8">Habla directamente con un estratega y resolvamos tu caso hoy mismo.</p>
-           <button className="bg-white text-lael-accent px-10 py-5 rounded-xl text-[11px] font-bold uppercase tracking-widest shadow-xl hover:scale-105 transition-all">Hablar por WhatsApp</button>
+           <motion.button 
+             whileHover={{ scale: 1.05 }}
+             whileTap={{ scale: 0.95 }}
+             onClick={() => window.open('https://wa.me/56964626568', '_blank')}
+             className="bg-white text-lael-accent px-10 py-5 rounded-xl text-[11px] font-bold uppercase tracking-widest shadow-xl transition-all"
+           >
+             Hablar por WhatsApp
+           </motion.button>
         </div>
       </div>
     </div>

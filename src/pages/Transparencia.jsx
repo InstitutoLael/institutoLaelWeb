@@ -15,17 +15,25 @@ export default function Transparencia() {
   return (
     <div className="bg-lael-primary min-h-screen pt-32 pb-20 px-6">
       <Helmet>
-        <title>Transparencia | Instituto Lael</title>
+        <title>Transparencia & Ética | Instituto Lael</title>
+        <meta name="description" content="Conoce nuestra ética de trabajo. Sin promesas vacías, solo ingeniería de resultados y honestidad radical sobre tu rendimiento." />
       </Helmet>
 
       <div className="max-w-5xl mx-auto">
-        <motion.div {...fadeUp()} className="text-center mb-24">
+        <div className="text-center mb-24">
           <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">Ética de Resultados</p>
-          <h1 className="font-display text-5xl lg:text-7xl text-lael-light mb-8">Sin letras pequeñas.</h1>
+          <motion.h1 
+            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
+            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
+            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
+            className="font-display text-5xl lg:text-7xl text-lael-light mb-8"
+          >
+            Sin letras pequeñas.
+          </motion.h1>
           <p className="text-lael-muted text-lg max-w-2xl mx-auto leading-relaxed">
-            Preferimos perder un cliente a prometer un milagro. Aquí detallamos exactamente qué hacemos y qué NO hacemos en el Sistema Lael.
+            Preferimos perder un alumno a prometer un milagro. Aquí detallamos exactamente qué hacemos y qué NO hacemos en el Sistema Lael.
           </p>
-        </motion.div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           {/* LO QUE HACEMOS */}
@@ -61,9 +69,9 @@ export default function Transparencia() {
              <ul className="space-y-8">
                 {[
                   { t: "No hacemos milagros", d: "Si no aplicas el sistema, los resultados no llegarán por arte de magia." },
-                  { t: "No vendemos clases", d: "Vendemos un resultado. Si buscas solo sentarte a ver videos, esto no es para ti." },
+                  { t: "No vendemos humo", d: "Vendemos un resultado. Si buscas solo sentarte a ver videos, esto no es para ti." },
                   { t: "No regalamos puntaje", d: "El éxito en Lael requiere disciplina quirúrgica y honestidad brutal." },
-                  { t: "No aceptamos a todos", d: "Si el diagnóstico muestra que no tienes compromiso, no te venderemos el programa." }
+                  { t: "No aceptamos a todos", d: "Si el diagnóstico muestra que no tienes compromiso, no te inscribiremos en el programa." }
                 ].map((item, i) => (
                   <li key={i} className="flex gap-4">
                     <XCircle className="text-lael-rust flex-shrink-0 mt-1" size={18} />

@@ -1,217 +1,185 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { MessageSquare, Mail, Instagram, Clock, Send, CheckCircle } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import { motion, AnimatePresence } from 'framer-motion';
 
 const ease = [0.16, 1, 0.3, 1];
+
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 1.0, delay, ease },
+  initial: { opacity: 0, y: 40 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-80px' },
+  transition: { duration: 1.1, delay, ease },
 });
 
-const PROGRAMS = ['PAES', 'Inglés', 'Coreano', 'Español para Expats', 'LSCh — Lengua de Señas', 'Empresas / Convenios', 'Otro'];
-
-const INITIAL = { nombre: '', email: '', telefono: '', programa: '', mensaje: '' };
-
 export default function Contacto() {
-  const [form, setForm] = useState(INITIAL);
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({
+    nombre: '',
+    email: '',
+    programa: 'PAES',
+    mensaje: ''
+  });
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-    setError('');
-  };
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!form.nombre || !form.email || !form.programa) {
-      setError('Completa al menos nombre, email y programa de interés.');
-      return;
-    }
-
-    // Save to localStorage
-    try {
-      const key = `lael_contacto_${Date.now()}`;
-      localStorage.setItem(key, JSON.stringify({ ...form, ts: new Date().toISOString() }));
-    } catch (_) {}
-
-    // Open mailto
-    const subject = encodeURIComponent(`Contacto web — ${form.programa} — ${form.nombre}`);
-    const body = encodeURIComponent(
-`Nombre: ${form.nombre}
-Email: ${form.email}
-Teléfono: ${form.telefono || 'No indicado'}
-Programa de interés: ${form.programa}
-
-Mensaje:
-${form.mensaje || '(Sin mensaje adicional)'}`
-    );
-    window.location.href = `mailto:contacto@institutolael.cl?subject=${subject}&body=${body}`;
-
-    setSent(true);
-    setForm(INITIAL);
+    const subject = `Consulta Lael: ${formData.nombre} - ${formData.programa}`;
+    const body = `Nombre: ${formData.nombre}\nEmail: ${formData.email}\nPrograma: ${formData.programa}\n\nMensaje:\n${formData.mensaje}`;
+    window.location.href = `mailto:contacto@institutolael.cl?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setSubmitted(true);
   };
 
   return (
-    <>
+    <div className="w-full bg-lael-primary text-white overflow-hidden pt-20">
       <Helmet>
-        <title>Contacto | Instituto Lael SpA — Santiago, Chile</title>
-        <meta name="description" content="Contacto | Instituto Lael SpA — Santiago, Chile" />
+        <title>Contacto | Instituto Lael SpA</title>
+        <meta name="description" content="WhatsApp +56 9 6462 6568 · contacto@institutolael.cl · Santiago, Chile." />
       </Helmet>
 
-      <main className="bg-lael-primary min-h-screen">
-
-        {/* HERO */}
-        <section className="relative w-full pt-32 pb-20 flex flex-col items-center text-center px-6 overflow-hidden">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-lael-accent/[0.03] rounded-full blur-[100px] pointer-events-none" />
-          <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">Instituto Lael · Contacto</motion.p>
-          <h1 className="font-display text-5xl lg:text-6xl text-lael-light font-bold leading-tight max-w-2xl clip-reveal">
-            Hablemos <span className="accent-italic">ahora.</span>
-          </h1>
-          <motion.p {...fadeUp(0.3)} className="mt-8 text-lael-muted text-base max-w-md mx-auto leading-relaxed">
-            Un mentor estratégico revisará tu mensaje y te responderá en menos de 24 horas hábiles.
-          </motion.p>
-        </section>
-
-        {/* FORM + INFO */}
-        <section className="w-full px-6 pb-32 lg:pb-48 flex flex-col items-center">
-          <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-5 gap-12">
-
-            {/* Info col */}
-            <div className="lg:col-span-2 space-y-10 pt-4">
-              {[
-                { label: 'Email', value: 'contacto@institutolael.cl', href: 'mailto:contacto@institutolael.cl' },
-                { label: 'WhatsApp', value: '+56 9 6462 6568', href: 'https://wa.me/56964626568' },
-                { label: 'Instagram', value: '@institutolael', href: 'https://instagram.com/institutolael' },
-                { label: 'Ubicación', value: 'Santiago, Chile', href: null },
-              ].map(item => (
-                <div key={item.label}>
-                  <p className="text-[10px] tracking-[0.2em] text-lael-muted/40 uppercase mb-2">{item.label}</p>
-                  {item.href ? (
-                    <a href={item.href} target="_blank" rel="noreferrer" className="text-lael-light hover:text-lael-accent transition-colors duration-300 text-sm">
-                      {item.value}
-                    </a>
-                  ) : (
-                    <p className="text-lael-light text-sm">{item.value}</p>
-                  )}
-                </div>
-              ))}
-
-              <div className="pt-6 border-t border-lael-bd">
-                <p className="text-[10px] tracking-[0.15em] text-lael-muted uppercase mb-2">Horario de atención</p>
-                <p className="text-lael-muted text-sm">Lunes a Viernes · 09:00 – 19:00 hrs</p>
+      <section className="py-24 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
+            
+            {/* Left Col: Info */}
+            <motion.div {...fadeUp(0)} className="space-y-12">
+              <div>
+                <motion.h1 
+                  initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
+                  animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
+                  transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
+                  className="text-5xl md:text-6xl font-display font-bold mb-8"
+                >
+                  Estamos a un <br />
+                  <span className="italic italic-playfair text-lael-accent">mensaje de distancia.</span>
+                </motion.h1>
+                <p className="text-lael-muted text-lg leading-relaxed max-w-md">
+                  No importa si eres un alumno con una duda técnica o un apoderado buscando orientación. Respondemos todo.
+                </p>
               </div>
-            </div>
 
-            {/* Form col */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.0, delay: 0.2, ease }}
-              className="lg:col-span-3 bg-lael-secondary border border-lael-bd rounded-2xl p-8 lg:p-12 cinematic-shadow"
-            >
-              <AnimatePresence mode="wait">
-                {sent ? (
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="flex flex-col items-center justify-center text-center h-full py-16"
-                  >
-                    <div className="w-16 h-16 rounded-full border border-lael-accent/40 flex items-center justify-center mb-8">
-                      <span className="text-lael-accent text-2xl">✓</span>
+              <div className="space-y-8">
+                <div className="flex items-start gap-6">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-lael-accent shrink-0">
+                    <MessageSquare size={20} />
+                  </div>
+                  <div>
+                    <h4 className="font-bold mb-1">WhatsApp Directo</h4>
+                    <p className="text-sm text-lael-muted mb-3">Respuesta rápida para inscripciones.</p>
+                    <a href="https://wa.me/56964626568" target="_blank" rel="noreferrer" className="text-lael-accent font-bold hover:underline">
+                      +56 9 6462 6568
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-6">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-lael-accent shrink-0">
+                    <Mail size={20} />
+                  </div>
+                  <div>
+                    <h4 className="font-bold mb-1">Email Institucional</h4>
+                    <p className="text-sm text-lael-muted mb-3">Para consultas formales o empresas.</p>
+                    <a href="mailto:contacto@institutolael.cl" className="text-lael-accent font-bold hover:underline">
+                      contacto@institutolael.cl
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-6">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-lael-accent shrink-0">
+                    <Clock size={20} />
+                  </div>
+                  <div>
+                    <h4 className="font-bold mb-1">Horarios de Atención</h4>
+                    <p className="text-sm text-lael-muted">Lunes a Viernes: 09:00 - 19:00</p>
+                    <p className="text-sm text-lael-muted">Sábados: 10:00 - 14:00</p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Right Col: Form */}
+            <motion.div {...fadeUp(0.2)} className="relative">
+              <div className="absolute inset-0 bg-lael-accent/5 blur-3xl rounded-full -z-10" />
+              <div className="bg-white/[0.03] border border-white/10 p-8 md:p-12 rounded-[40px] shadow-2xl">
+                {submitted ? (
+                  <div className="text-center py-20">
+                    <div className="w-20 h-20 bg-lael-accent/20 text-lael-accent rounded-full flex items-center justify-center mx-auto mb-8">
+                       <CheckCircle size={40} />
                     </div>
-                    <h2 className="font-display text-2xl text-lael-light font-bold mb-4">Mensaje enviado</h2>
-                    <p className="text-lael-muted/60 text-sm leading-relaxed max-w-xs">
-                      Tu cliente de correo se abrió con los datos. Un mentor te responderá pronto.
-                    </p>
-                    <button onClick={() => setSent(false)} className="mt-8 text-[11px] tracking-[0.15em] text-lael-accent/60 uppercase hover:text-lael-accent transition-colors">
-                      Enviar otro mensaje
-                    </button>
-                  </motion.div>
+                    <h3 className="text-2xl font-bold mb-4">¡Mensaje Preparado!</h3>
+                    <p className="text-lael-muted mb-8">Hemos abierto tu gestor de correo para que envíes la consulta. ¡Te responderemos pronto!</p>
+                    <button onClick={() => setSubmitted(false)} className="text-lael-accent font-bold hover:underline">Enviar otro mensaje</button>
+                  </div>
                 ) : (
-                  <motion.form key="form" onSubmit={handleSubmit} className="space-y-6">
-                    <h2 className="font-display text-2xl text-lael-light font-bold mb-8">Solicitud de información</h2>
-
-                    {/* Nombre */}
-                    <div>
-                      <label className="text-[10px] tracking-[0.2em] text-lael-muted/50 uppercase mb-2 block">Nombre completo *</label>
-                      <input
-                        type="text" name="nombre" required value={form.nombre} onChange={handleChange}
-                        placeholder="Ej. María González"
-                        className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/50 text-sm"
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-lael-muted pl-1">Nombre Completo</label>
+                      <input 
+                        required
+                        type="text" 
+                        value={formData.nombre}
+                        onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                        placeholder="Ej: Diego Chaparro"
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-lael-accent/50 transition-colors"
                       />
                     </div>
 
-                    {/* Email */}
-                    <div>
-                      <label className="text-[10px] tracking-[0.2em] text-lael-muted/50 uppercase mb-2 block">Email *</label>
-                      <input
-                        type="email" name="email" required value={form.email} onChange={handleChange}
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-lael-muted pl-1">Correo Electrónico</label>
+                      <input 
+                        required
+                        type="email" 
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
                         placeholder="tu@email.com"
-                        className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/50 text-sm"
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-lael-accent/50 transition-colors"
                       />
                     </div>
 
-                    {/* Teléfono */}
-                    <div>
-                      <label className="text-[10px] tracking-[0.2em] text-lael-muted/50 uppercase mb-2 block">Teléfono</label>
-                      <input
-                        type="tel" name="telefono" value={form.telefono} onChange={handleChange}
-                        placeholder="+56 9..."
-                        className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/50 text-sm"
-                      />
-                    </div>
-
-                    {/* Programa */}
-                    <div>
-                      <label className="text-[10px] tracking-[0.2em] text-lael-muted/50 uppercase mb-2 block">Programa de interés *</label>
-                      <select
-                        name="programa" required value={form.programa} onChange={handleChange}
-                        className="w-full bg-lael-secondary border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 text-sm appearance-none cursor-pointer"
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-lael-muted pl-1">Programa de Interés</label>
+                      <select 
+                        value={formData.programa}
+                        onChange={(e) => setFormData({...formData, programa: e.target.value})}
+                        className="w-full bg-[#1A1A1A] border border-white/10 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-lael-accent/50 transition-colors appearance-none"
                       >
-                        <option value="" disabled>Selecciona un programa...</option>
-                        {PROGRAMS.map(p => <option key={p} value={p}>{p}</option>)}
+                        <option value="PAES">PAES Gratuita</option>
+                        <option value="Inglés">Inglés</option>
+                        <option value="Coreano">Coreano</option>
+                        <option value="LSCh">Lengua de Señas (LSCh)</option>
+                        <option value="Otro">Otro / Consulta General</option>
                       </select>
                     </div>
 
-                    {/* Mensaje */}
-                    <div>
-                      <label className="text-[10px] tracking-[0.2em] text-lael-muted/50 uppercase mb-2 block">Mensaje (opcional)</label>
-                      <textarea
-                        name="mensaje" rows={3} value={form.mensaje} onChange={handleChange}
-                        placeholder="Cuéntanos tu situación o consulta..."
-                        className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/50 text-sm resize-none"
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-widest font-bold text-lael-muted pl-1">Mensaje</label>
+                      <textarea 
+                        required
+                        rows="4"
+                        value={formData.mensaje}
+                        onChange={(e) => setFormData({...formData, mensaje: e.target.value})}
+                        placeholder="Cuéntanos en qué podemos ayudarte..."
+                        className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white focus:outline-none focus:border-lael-accent/50 transition-colors resize-none"
                       />
                     </div>
 
-                    {/* Error */}
-                    <AnimatePresence>
-                      {error && (
-                        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-red-400/70 text-[11px] tracking-wider">
-                          {error}
-                        </motion.p>
-                      )}
-                    </AnimatePresence>
-
-                    <button
+                    <motion.button 
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.97 }}
                       type="submit"
-                      className="w-full bg-lael-accent text-white py-5 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)] hover:shadow-[0_4px_30px_rgba(184,92,56,0.4)] mt-4"
+                      className="w-full bg-lael-accent text-white py-5 rounded-2xl font-bold tracking-widest uppercase text-xs flex items-center justify-center gap-3 hover:bg-lael-rust transition-all shadow-xl shadow-lael-accent/10"
                     >
-                      Enviar solicitud →
-                    </button>
-                    <p className="text-[10px] text-lael-muted/30 tracking-wider text-center">
-                      Abrirá tu cliente de correo con los datos pre-completados.
-                    </p>
-                  </motion.form>
+                      <Send size={16} />
+                      Enviar Mensaje
+                    </motion.button>
+                  </form>
                 )}
-              </AnimatePresence>
+              </div>
             </motion.div>
           </div>
-        </section>
-      </main>
-    </>
+        </div>
+      </section>
+    </div>
   );
 }

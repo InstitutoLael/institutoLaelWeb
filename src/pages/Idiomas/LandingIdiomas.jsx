@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { ChevronDown } from 'lucide-react';
 import { LANGUAGES, LANG_FEATURES } from '../../data/idiomas';
 import { useNavigate } from 'react-router-dom';
@@ -25,6 +26,10 @@ export default function LandingIdiomas() {
   return (
     <div className="w-full bg-lael-primary">
       <ScrollProgress />
+      <Helmet>
+        <title>Inglés y Coreano Online Chile $9.990/mes | Instituto Lael</title>
+        <meta name="description" content="Cursos de idiomas desde $9.990/mes. Clases en vivo. Sin matrícula." />
+      </Helmet>
       {/* HERO (CINEMÁTICO) */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
         {/* Cinematic Background Layer */}
@@ -37,14 +42,24 @@ export default function LandingIdiomas() {
 
         <div className="relative z-20 max-w-7xl mx-auto flex flex-col items-center">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8 font-bold">Idiomas Reales</motion.p>
-          <h1 className="font-display text-5xl lg:text-8xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl clip-reveal mb-12">
+          <motion.h1 
+            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
+            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
+            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
+            className="font-display text-5xl lg:text-8xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl mb-12"
+          >
             No estudias un idioma.<br />
             <span className="accent-italic">Lo hablas desde el primer día.</span>
-          </h1>
+          </motion.h1>
           <motion.p {...fadeUp(0.35)} className="text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed italic italic-playfair mb-14">
             Sin apps de repetición. Solo clases en vivo y simulaciones reales que te preparan para la vida profesional.
           </motion.p>
-          <motion.button {...fadeUp(0.55)} onClick={startDiagnostic} className="bg-lael-accent text-white px-12 py-6 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_30px_rgba(196,151,62,0.3)]">
+          <motion.button 
+            whileHover={{ scale: 1.05, y: -4 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={startDiagnostic} 
+            className="bg-lael-accent text-white px-12 py-6 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all duration-300 shadow-[0_4px_30px_rgba(196,151,62,0.3)]"
+          >
             Quiero hablar con fluidez →
           </motion.button>
         </div>

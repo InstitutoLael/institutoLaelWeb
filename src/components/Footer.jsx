@@ -41,33 +41,30 @@ export default function Footer() {
 
           {/* Programas */}
           <div>
-            <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6 font-bold">Mundos</h4>
+            <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6 font-bold">Entrenamiento</h4>
             <nav className="flex flex-col gap-4">
-              <Link to="/paes" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">PAES</Link>
+              <Link to="/paes" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">PAES Gratuita</Link>
               <Link to="/idiomas" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Idiomas</Link>
-              <Link to="/lsch" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Inclusión LSCh</Link>
-              <Link to="/adultos" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Adultos</Link>
-            </nav>
-          </div>
-
-          {/* El Sistema */}
-          <div>
-            <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6 font-bold">El Sistema</h4>
-            <nav className="flex flex-col gap-4">
-              <Link to="/metodo" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">El Método</Link>
-              <Link to="/tecnologia" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Tecnología</Link>
-              <Link to="/transparencia" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Transparencia</Link>
-              <Link to="/preguntas" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">FAQ Avanzado</Link>
+              <Link to="/lsch" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">LSCh (Señas)</Link>
             </nav>
           </div>
 
           {/* Instituto */}
           <div>
             <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6 font-bold">Instituto</h4>
-            <nav className="flex flex-col gap-4 mb-8">
+            <nav className="flex flex-col gap-4">
               <Link to="/nosotros" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Sobre Nosotros</Link>
               <Link to="/contacto" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Contacto</Link>
-              <Link to="/diagnostico" className="text-sm text-lael-accent font-bold hover:underline transition-colors">Iniciar Diagnóstico</Link>
+              <Link to="/preguntas" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Preguntas Frecuentes</Link>
+            </nav>
+          </div>
+
+          {/* Contacto Directo */}
+          <div>
+            <h4 className="text-[10px] tracking-[0.25em] uppercase text-lael-muted mb-6 font-bold">Legal</h4>
+            <nav className="flex flex-col gap-4">
+              <Link to="/transparencia" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">Transparencia</Link>
+              <a href="mailto:contacto@institutolael.cl" className="text-sm text-lael-muted hover:text-lael-accent transition-colors">contacto@institutolael.cl</a>
             </nav>
           </div>
         </div>
@@ -75,11 +72,11 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-lael-bd pt-12 flex flex-col items-center gap-8 text-center">
           <p className="text-lael-muted text-sm italic max-w-2xl leading-relaxed">
-             “Nacimos en medio de una crisis, con clases gratis en Zoom para quienes no podían pagar un preu. Hoy somos tecnología, pero el espíritu es el mismo: que nadie se quede atrás.”
+             “Nacimos para los que el sistema decidió ignorar. Volvemos con más claridad y el mismo propósito.”
           </p>
           <div className="flex flex-col items-center gap-2">
             <p className="text-[11px] text-lael-muted/60 italic tracking-[0.2em] uppercase font-bold">
-              Jeremías 33:3 · Lucas 4:18
+               Lucas 4:18
             </p>
             <p className="text-[10px] text-lael-muted/40 tracking-widest">
               © {year} Instituto Lael SpA · Santiago, Chile

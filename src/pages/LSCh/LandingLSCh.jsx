@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { ChevronDown } from 'lucide-react';
 import { LSCH_WHY_US, TEACHER_PROFILE, COMPARISON_DATA } from '../../data/lsch';
 import { useNavigate } from 'react-router-dom';
@@ -25,6 +26,10 @@ export default function LandingLSCh() {
   return (
     <div className="w-full bg-lael-primary">
       <ScrollProgress />
+      <Helmet>
+        <title>LSCh Online con Fernanda Gaete | Instituto Lael</title>
+        <meta name="description" content="Lengua de Señas Chilena con educadora nativa. Ley 21.015. $14.990/mes." />
+      </Helmet>
       {/* HERO (CINEMÁTICO) */}
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
         {/* Cinematic Background Layer */}
@@ -37,15 +42,24 @@ export default function LandingLSCh() {
 
         <div className="relative z-20 max-w-7xl mx-auto flex flex-col items-center">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8 font-bold">Inclusión Real</motion.p>
-          <h1 className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal mb-10">
+          <motion.h1 
+            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
+            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
+            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
+            className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl mb-10"
+          >
             El idioma que<br />
             <span className="accent-italic">elimina barreras.</span>
-          </h1>
+          </motion.h1>
           <motion.p {...fadeUp(0.35)} className="text-lael-muted text-base lg:text-lg max-w-xl mx-auto leading-relaxed mb-12">
             No es solo aprender señas. Es aprender a comunicarte en entornos reales con personas sordas desde el primer día.
           </motion.p>
-          <motion.button {...fadeUp(0.55)} onClick={startDiagnostic}
-            className="bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]">
+          <motion.button 
+            whileHover={{ scale: 1.05, y: -4 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={startDiagnostic}
+            className="bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]"
+          >
             Aprender LSCh hoy
           </motion.button>
           

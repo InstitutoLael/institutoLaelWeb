@@ -1,5 +1,4 @@
-import { FaBible, FaHeart, FaLightbulb, FaChalkboardTeacher, FaGraduationCap } from "react-icons/fa";
-import { BsStars } from "react-icons/bs";
+import { Book, Heart, Lightbulb, GraduationCap, Sparkles, BookOpen } from "lucide-react";
 
 // === IMAGES ===
 // (Ideally these should be in assets, using placeholders for now if not available)
@@ -17,9 +16,9 @@ export const ABOUT_DATA = {
         definition: "Perteneciente a Dios",
         description: "Elegimos este nombre (Jeremías 33:3, Lucas 4:18) como declaración de propiedad: esta institución, talentos y alumnos tienen un propósito divino.",
         cards: [
-            { icon: "FaChalkboardTeacher", title: "Pedagogía", desc: "Explicamos fácil lo difícil" },
-            { icon: "FaLightbulb", title: "Mente", desc: "Pensamiento Crítico" },
-            { icon: "FaGraduationCap", title: "Academia", desc: "Rigor Intelectual" }
+            { icon: "BookOpen", title: "Pedagogía", desc: "Explicamos fácil lo difícil" },
+            { icon: "Lightbulb", title: "Mente", desc: "Pensamiento Crítico" },
+            { icon: "GraduationCap", title: "Academia", desc: "Rigor Intelectual" }
         ]
     },
     founder: {
@@ -34,19 +33,19 @@ export const ABOUT_DATA = {
             id: "biblical",
             title: "Cosmovisión Bíblica",
             desc: "No separamos la fe del intelecto. Creemos que toda verdad es verdad de Dios.",
-            iconName: "FaBible"
+            iconName: "Book"
         },
         {
             id: "excellence",
             title: "Excelencia",
             desc: "Hacemos todo como para el Señor. La mediocridad no tiene lugar en nuestra aula.",
-            iconName: "BsStars"
+            iconName: "Sparkles"
         },
         {
             id: "mentoring",
             title: "Mentoring",
             desc: "Más que profesores, somos mentores. Nos importa el carácter tanto como la nota.",
-            iconName: "FaHeart"
+            iconName: "Heart"
         }
     ],
     timeline: [

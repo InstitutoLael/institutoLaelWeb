@@ -8,17 +8,14 @@ export const TESTIMONIALS = [
     {
         id: "t1",
         name: "Daniela R.",
-        program: "LSCh Intermedio",
+        program: "LSCh con Fernanda Gaete",
         quote: "Fernanda es una profesora excelente. Aprendí cultura sorda con una pedagogía muy paciente.",
-        rating: 5,
-        featured: true
-    },
-    {
-        id: "t2",
-        name: "Gerencia RRHH",
-        program: "Corporate",
-        quote: "Resultados inmediatos en el equipo de ventas. Gestión impecable y profesionalismo.",
         rating: 5,
         featured: true
     }
 ];
+
+export const TESTIMONIAL_CALLOUT = {
+    title: "Estamos recopilando historias",
+    text: "Nuestra comunidad está creciendo. Si estudiaste con nosotros, cuéntanos tu historia y sé parte de este muro."
+};

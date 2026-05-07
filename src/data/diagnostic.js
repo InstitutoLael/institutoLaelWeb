@@ -61,7 +61,7 @@ export const getDiagnosticResult = (answers) => {
 
     // LOGIC FOR SURGICAL PROFILES
     if (paes_pain === 'content') {
-      profile.title = "El Alumno 'Materia-Dependiente'";
+      profile.title = "Me va bien en unas, mal en otras";
       profile.subtitle = "Sientes que necesitas saberlo todo antes de empezar, y eso te está frenando.";
       profile.description = "Tu problema no es la falta de estudio, es que estás tratando la PAES como una prueba de memoria. Te falta técnica para aplicar lo que sabes bajo presión. En nuestras clases gratuitas en vivo, te enseñamos a pensar como el examen, no solo a memorizarlo.";
       profile.attributes = [
@@ -74,11 +74,11 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil. Logró +130 puntos al dejar de memorizar y empezar a entrenar estrategia con nosotros.",
         metrics: "+130 pts"
       };
-      profile.wa_msg = "Hola, me salió el perfil 'Alumno Materia-Dependiente'. Quiero unirme a las clases gratis y aprender a aplicar lo que sé.";
+      profile.wa_msg = "Hola, mi perfil es 'Me va bien en unas, mal en otras'. Quiero unirme a las clases gratis y aprender a aplicar lo que sé.";
       profile.entry_product = "Acceso a Clases PAES Gratuitas";
     } 
     else if (paes_pain === 'strategy' && (discipline === 'low' || discipline === 'mid')) {
-      profile.title = "El Bloqueo por Presión";
+      profile.title = "Me bloqueo aunque sepa la materia";
       profile.subtitle = "Sabes la materia, pero los nervios y el reloj te juegan en contra.";
       profile.description = "No te falta inteligencia, te falta un sistema para dominar la ansiedad. Cada minuto que pasa en el ensayo es una distracción que drena tu rendimiento. Te vamos a entrenar en vivo para que el tiempo sea tu aliado, no tu enemigo.";
       profile.attributes = [
@@ -91,11 +91,11 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil. Pasó de 620 a 745 puntos al aprender a dominar el reloj en nuestras sesiones en vivo.",
         metrics: "+125 pts"
       };
-      profile.wa_msg = "Hola, mi perfil es 'Bloqueo por Presión'. Me pasa mucho que me pongo nervioso con el tiempo, quiero entrar a las clases gratis.";
+      profile.wa_msg = "Hola, mi perfil es 'Me bloqueo aunque sepa la materia'. Me pasa mucho que me pongo nervioso con el tiempo, quiero entrar a las clases gratis.";
       profile.entry_product = "Acceso a Clases PAES Gratuitas";
     }
     else if (paes_pain === 'strategy' && discipline === 'high') {
-      profile.title = "El Esfuerzo sin Brújula";
+      profile.title = "No sé cómo estudiar";
       profile.subtitle = "Eres disciplinado, pero estás dedicando tiempo a cosas que no suben tu puntaje.";
       profile.description = "Eres una máquina de estudiar, pero te falta foco. Estás trabajando duro, pero no de forma inteligente. Necesitas identificar tus brechas reales para que tu esfuerzo rinda frutos. Te daremos el mapa táctico que necesitas sin cobrarte un peso.";
       profile.attributes = [
@@ -108,11 +108,11 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil. Logró 960 puntos en Matemáticas tras redirigir su disciplina hacia sus puntos débiles.",
         metrics: "960 pts"
       };
-      profile.wa_msg = "Hola, mi resultado fue 'Esfuerzo sin Brújula'. Tengo las ganas pero necesito el mapa para no perder tiempo. ¡Me inscribo gratis!";
+      profile.wa_msg = "Hola, mi resultado fue 'No sé cómo estudiar'. Tengo las ganas pero necesito el mapa para no perder tiempo. ¡Me inscribo gratis!";
       profile.entry_product = "Acceso a Clases PAES Gratuitas";
     }
     else {
-      profile.title = "La Práctica sin Dirección";
+      profile.title = "Lo intenté antes y no resultó";
       profile.subtitle = "Haces ensayos por cumplir, pero cometes siempre los mismos errores.";
       profile.description = "Estás practicando equivocarte. Sin un sistema de feedback real, solo estás repitiendo fallos. En nuestras sesiones en vivo, detectamos por qué te equivocas y lo corregimos en el momento. Es gratis, solo necesitas disposición.";
       profile.attributes = [
@@ -125,7 +125,7 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil. Estabilizó su puntaje sobre los 800 pts en solo 2 meses de entrenamiento guiado.",
         metrics: "800+ pts"
       };
-      profile.wa_msg = "Hola, me salió 'Práctica sin Dirección'. Me inscribo a las clases gratis para dejar de repetir los mismos errores.";
+      profile.wa_msg = "Hola, me salió 'Lo intenté antes y no resultó'. Me inscribo a las clases gratis para dejar de repetir los mismos errores.";
       profile.entry_product = "Acceso a Clases PAES Gratuitas";
     }
 

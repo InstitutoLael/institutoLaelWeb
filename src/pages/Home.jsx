@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { X, ChevronRight } from 'lucide-react';
@@ -26,6 +26,21 @@ import ObjectionsFAQ from '../components/ObjectionsFAQ';
 const partners = [demre, google, ino, losOlivos, mercadoPago, naama, onepay, transbank];
 const ease = [0.16, 1, 0.3, 1];
 const WA_NUMBER = '56964626568';
+
+function AnimatedNumber({ value, duration = 1.5 }) {
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.round(latest));
+  const ref = React.useRef(null);
+  const inView = useInView(ref, { once: true });
+
+  React.useEffect(() => {
+    if (inView) {
+      animate(count, value, { duration, ease: "easeOut" });
+    }
+  }, [inView, count, value, duration]);
+
+  return <motion.span ref={ref}>{rounded}</motion.span>;
+}
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 40 },
@@ -105,8 +120,8 @@ export default function Home() {
   return (
     <div className="bg-lael-primary text-lael-light overflow-hidden">
       <Helmet>
-        <title>Instituto Lael | No es un preu, es tu arquitectura de éxito</title>
-        <meta name="description" content="Si sientes que estudias y no mejoras, no eres el problema. Es el sistema. Diagnóstico táctico PAES, Idiomas y más en Santiago, Chile." />
+        <title>Instituto Lael | PAES Gratis + Idiomas Online Chile</title>
+        <meta name="description" content="Ecosistema educativo online. PAES 100% gratuita, Inglés, Coreano y LSCh. +600 alumnos. Santiago, Chile. Inicio Junio 2026." />
       </Helmet>
 
       {/* Grain texture */}
@@ -132,10 +147,15 @@ export default function Home() {
              </h2>
           </motion.div>
 
-          <h1 className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] font-bold leading-[0.9] max-w-6xl clip-reveal mb-12">
+          <motion.h1 
+            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
+            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
+            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
+            className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] font-bold leading-[0.9] max-w-6xl mb-12"
+          >
             Tu futuro no <br/>
             <span className="accent-italic">tiene precio.</span>
-          </h1>
+          </motion.h1>
 
           <motion.p {...fadeUp(0.3)} className="text-lael-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-14">
             Clases en vivo con profesores reales, simulacros y comunidad. <br className="hidden md:block" /> 
@@ -143,19 +163,84 @@ export default function Home() {
           </motion.p>
 
           <motion.div {...fadeUp(0.6)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-6">
-            <button onClick={() => navigate('/diagnostico')}
-              className="bg-lael-accent text-white px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-2 transition-all shadow-2xl shadow-lael-accent/20">
+            <motion.button 
+              whileHover={{ scale: 1.05, y: -4 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/diagnostico')}
+              className="bg-lael-accent text-white px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all shadow-2xl shadow-lael-accent/20"
+            >
               Inscribirme Gratis
-            </button>
-            <button onClick={() => navigate('/paes')}
-              className="bg-lael-secondary border border-lael-bd text-lael-light px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-2 transition-all">
+            </motion.button>
+            <motion.button 
+              whileHover={{ scale: 1.05, y: -4 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/paes')}
+              className="bg-lael-secondary border border-lael-bd text-lael-light px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all"
+            >
               Ver cómo funciona
-            </button>
+            </motion.button>
           </motion.div>
           
           <motion.p {...fadeUp(0.9)} className="mt-12 text-[10px] uppercase tracking-[0.3em] text-lael-muted font-bold opacity-60">
             En vivo por Google Meet • Material incluido • $0 costo mensual
           </motion.p>
+        </div>
+      </section>
+
+      {/* ── 1.5 ¿QUÉ NECESITAS HOY? ─────────────────────────────────── */}
+      <section className="py-24 px-6 border-y border-white/5 bg-white/[0.01]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-display font-bold">¿Qué necesitas hoy?</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/paes')} className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 cursor-pointer group hover:border-[#5C6E4E]/50 transition-all">
+               <div className="flex justify-between items-start mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-[#5C6E4E]/20 text-[#5C6E4E] flex items-center justify-center">
+                    <Target size={20} />
+                  </div>
+                  <span className="bg-[#5C6E4E] text-white text-[9px] font-bold px-2 py-1">GRATIS</span>
+               </div>
+               <h3 className="text-xl font-bold mb-2 text-white">Prepararme PAES</h3>
+               <p className="text-sm text-lael-muted mb-6">Clases en vivo sin costo mensual.</p>
+               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Inscribirme <ChevronRight size={14}/></span>
+            </motion.div>
+            
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/idiomas')} className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 cursor-pointer group hover:border-lael-accent/50 transition-all">
+               <div className="flex justify-between items-start mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-lael-accent/20 text-lael-accent flex items-center justify-center">
+                    <Zap size={20} />
+                  </div>
+                  <span className="text-white/60 text-[9px] font-bold px-2 py-1">$9.990/MES</span>
+               </div>
+               <h3 className="text-xl font-bold mb-2 text-white">Aprender Inglés</h3>
+               <p className="text-sm text-lael-muted mb-6">Fluidez real con simulacros.</p>
+               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
+            </motion.div>
+
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/lsch')} className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 cursor-pointer group hover:border-lael-accent/50 transition-all">
+               <div className="flex justify-between items-start mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-lael-accent/20 text-lael-accent flex items-center justify-center">
+                    <HandHeart size={20} />
+                  </div>
+                  <span className="text-white/60 text-[9px] font-bold px-2 py-1">$14.990/MES</span>
+               </div>
+               <h3 className="text-xl font-bold mb-2 text-white">Lengua de Señas</h3>
+               <p className="text-sm text-lael-muted mb-6">Inclusión real y cultura sorda.</p>
+               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
+            </motion.div>
+
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/diagnostico')} className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 cursor-pointer group hover:border-white/50 transition-all">
+               <div className="flex justify-between items-start mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center">
+                    <HelpCircle size={20} />
+                  </div>
+               </div>
+               <h3 className="text-xl font-bold mb-2 text-white">No sé por dónde empezar</h3>
+               <p className="text-sm text-lael-muted mb-6">Te orientamos gratis en tu proceso.</p>
+               <span className="text-white text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Hacer diagnóstico <ChevronRight size={14}/></span>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -198,10 +283,14 @@ export default function Home() {
 
       {/* ── 3. CTA INTERMEDIO (LAEL CHOICE) ───────────────────────────── */}
       <section className="py-20 flex justify-center border-y border-white/[0.03]">
-          <button onClick={() => navigate('/diagnostico')}
-            className="group flex items-center gap-4 text-lael-accent text-xs tracking-[0.4em] uppercase font-bold hover:gap-8 transition-all">
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/diagnostico')}
+            className="group flex items-center gap-4 text-lael-accent text-xs tracking-[0.4em] uppercase font-bold hover:gap-8 transition-all"
+          >
             Identificar mis fallos ahora <ChevronRight size={16} />
-          </button>
+          </motion.button>
       </section>
 
       {/* ── 4. MUNDOS (LAEL SYSTEMS) ──────────────────────────────────── */}
@@ -217,9 +306,9 @@ export default function Home() {
               <motion.div 
                 key={system.id} 
                 {...fadeUp(i * 0.1)}
-                whileHover={{ y: -8, borderColor: '#C4973E' }}
-                transition={{ duration: 0.3 }}
-                className="group relative aspect-[4/5] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow transition-all duration-500"
+                whileHover={{ y: -4, borderColor: '#C4973E' }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+                className="group relative aspect-[4/5] rounded-[48px] overflow-hidden border border-lael-accent/15 cinematic-shadow transition-all duration-300"
               >
                  <img 
                    src={system.bg} 
@@ -271,7 +360,9 @@ export default function Home() {
            <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-16 text-center font-bold">Datos Reales</motion.p>
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
-                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">+600</p>
+                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">
+                   +<AnimatedNumber value={600} />
+                 </p>
                  <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Alumnos activos</p>
               </div>
               <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
@@ -279,11 +370,15 @@ export default function Home() {
                  <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Costo PAES</p>
               </div>
               <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
-                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">3</p>
+                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">
+                   <AnimatedNumber value={3} />
+                 </p>
                  <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Idiomas</p>
               </div>
               <div className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd text-center">
-                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">100%</p>
+                 <p className="text-emerald-400 text-5xl font-display font-bold mb-2">
+                   <AnimatedNumber value={100} />%
+                 </p>
                  <p className="text-lael-muted text-[10px] uppercase tracking-widest font-bold">Online</p>
               </div>
            </div>

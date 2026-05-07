@@ -18,7 +18,7 @@ export default function Navbar() {
 
   // Scroll detection
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 80);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -82,10 +82,10 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed left-0 w-full z-[100] transition-all duration-700 ${
+        className={`fixed left-0 w-full z-[100] transition-all duration-500 ease-in-out ${
           scrolled || mobileOpen
-            ? 'bg-white/80 backdrop-blur-2xl border-b border-black/[0.03] py-3 shadow-[0_10px_30px_rgba(0,0,0,0.04)]'
-            : 'bg-[#F8F5F0]/40 backdrop-blur-md py-6'
+            ? 'bg-white/95 backdrop-blur-md border-b border-black/[0.05] py-3 shadow-lg'
+            : 'bg-transparent py-7'
         }`}
         style={{ top: bannerHeight }}
       >
@@ -96,7 +96,9 @@ export default function Navbar() {
             <img
               src={scrolled || mobileOpen ? logoNegro : logoBlanco}
               alt="Instituto Lael"
-              className="h-8 lg:h-10 w-auto object-contain transition-all duration-700 group-hover:scale-105"
+              className={`w-auto object-contain transition-all duration-500 group-hover:scale-105 ${
+                scrolled ? 'h-7 lg:h-8' : 'h-8 lg:h-10'
+              }`}
             />
             <div className="h-6 w-px bg-lael-bd mx-2 hidden lg:block" />
             <span className="hidden lg:block text-[10px] tracking-[0.4em] uppercase font-bold text-lael-muted opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -120,7 +122,14 @@ export default function Navbar() {
               >
                 {({ isActive }) => (
                   <>
-                    {link.name}
+                    <span className="flex items-center gap-2">
+                      {link.name}
+                      {link.badge && (
+                        <span className="bg-[#5C6E4E] text-white text-[10px] font-bold uppercase px-1.5 py-0.5 leading-none">
+                          {link.badge}
+                        </span>
+                      )}
+                    </span>
                     <span
                       className={`absolute -bottom-1.5 left-0 h-[2px] bg-lael-accent transition-all duration-500 ${
                         isActive ? 'w-full' : 'w-0 group-hover:w-full'
@@ -231,7 +240,16 @@ export default function Navbar() {
                       }`}>
                          <span className="text-[10px] font-bold">{i+1}</span>
                       </div>
-                      <span className="font-display text-2xl font-bold">{link.name}</span>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-3">
+                          <span className="font-display text-2xl font-bold">{link.name}</span>
+                          {link.badge && (
+                            <span className="bg-[#5C6E4E] text-white text-[9px] font-bold uppercase px-2 py-1 leading-none">
+                              {link.badge}
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </NavLink>
                   </motion.div>
                 ))}

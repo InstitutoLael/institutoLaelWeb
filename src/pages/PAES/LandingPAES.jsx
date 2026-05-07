@@ -30,8 +30,8 @@ export default function LandingPAES() {
     <div className="w-full bg-lael-primary">
       <ScrollProgress />
       <Helmet>
-        <title>PAES de Alto Rendimiento | 100% Gratuito | Instituto Lael</title>
-        <meta name="description" content="Entrena con los mejores para la PAES. Clases en vivo, materiales y diagnóstico profundo. Completamente gratis." />
+        <title>Preuniversitario PAES Gratuito Online | Instituto Lael</title>
+        <meta name="description" content="PAES sin costo. M1, M2, Comprensión Lectora, Ciencias e Historia. Clases en vivo Google Meet." />
       </Helmet>
 
       {/* ── 1. HERO NARRATIVO (CINEMÁTICO) ─────────────────────────────── */}
@@ -48,14 +48,19 @@ export default function LandingPAES() {
           <motion.div {...fadeUp()} className="mb-10">
              <h2 className="text-lael-accent font-display text-2xl lg:text-3xl italic italic-playfair font-normal">
                 Clases en vivo por Google Meet. <br className="hidden md:block" />
-                <span className="text-lael-rust not-italic font-sans text-sm tracking-[0.3em] uppercase font-bold">{PAES_CONFIG.FREE_BADGE} • Inicio {PAES_CONFIG.START_DATE}</span>
+                <span className="text-lael-rust not-italic font-sans text-sm tracking-[0.3em] uppercase font-bold">{PAES_CONFIG.FREE_BADGE} • Iniciamos el {PAES_CONFIG.START_DATE_EXACT}</span>
              </h2>
           </motion.div>
 
-          <h1 className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl clip-reveal mb-12">
+          <motion.h1 
+            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
+            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
+            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
+            className="font-display text-5xl lg:text-7xl xl:text-9xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl mb-12"
+          >
             La mejor versión <br />
             <span className="accent-italic">de tu puntaje.</span>
-          </h1>
+          </motion.h1>
 
           <motion.p {...fadeUp(0.35)} className="mt-12 text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed mb-14">
              No es un video grabado. Son profesores reales enseñándote a resolver la prueba en tiempo real. <br className="hidden md:block" /> ¿Listo para empezar tu entrenamiento?
@@ -63,18 +68,26 @@ export default function LandingPAES() {
 
           <motion.div {...fadeUp(0.55)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-6">
             <div className="flex flex-col items-center gap-4">
-              <button onClick={() => navigate('/diagnostico')}
-                className="bg-lael-accent text-white px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-2 transition-all shadow-2xl shadow-lael-accent/20">
+              <motion.button 
+                whileHover={{ scale: 1.05, y: -4 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/diagnostico')}
+                className="bg-lael-accent text-white px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all shadow-2xl shadow-lael-accent/20"
+              >
                 Inscribirme Gratis $0
-              </button>
+              </motion.button>
               <p className="text-lael-rust text-[11px] font-bold tracking-widest animate-pulse">
                 Solo quedan {PAES_CONFIG.AVAILABLE_SPOTS} cupos para {PAES_CONFIG.START_DATE}
               </p>
             </div>
-            <button onClick={() => document.getElementById('metodologia').scrollIntoView({ behavior: 'smooth' })}
-              className="bg-lael-secondary border border-lael-bd text-lael-light px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold hover:-translate-y-2 transition-all h-fit">
+            <motion.button 
+              whileHover={{ scale: 1.05, y: -4 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => document.getElementById('metodologia').scrollIntoView({ behavior: 'smooth' })}
+              className="bg-lael-secondary border border-lael-bd text-lael-light px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all h-fit"
+            >
               Ver metodología
-            </button>
+            </motion.button>
           </motion.div>
 
           <motion.p {...fadeUp(0.8)} className="mt-12 text-[10px] uppercase tracking-[0.3em] text-lael-muted font-bold opacity-60">

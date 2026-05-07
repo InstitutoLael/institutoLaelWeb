@@ -18,39 +18,28 @@ export function computeLangBundle(countSelected) {
   const count = Math.max(0, Number(countSelected || 0));
 
   const PRICES = {
-    SINGLE: 24990,
-    DUO: 39990,
-    POLYGLOT: 54990
+    SINGLE: 9990
   };
 
   let totalMonthly = 0;
   let label = "";
-  let saving = 0;
 
   if (count === 0) {
     totalMonthly = 0;
     label = "Configura tu Programa";
-  } else if (count === 1) {
-    totalMonthly = PRICES.SINGLE;
-    label = "Inmersión Singular";
-  } else if (count === 2) {
-    totalMonthly = PRICES.DUO;
-    label = "Inmersión Dual Estratégica";
-    saving = (PRICES.SINGLE * 2) - PRICES.DUO;
   } else {
-    totalMonthly = PRICES.POLYGLOT;
-    label = "Sistema Políglota Integral";
-    saving = (PRICES.SINGLE * count) - PRICES.POLYGLOT;
+    totalMonthly = PRICES.SINGLE * count;
+    label = count === 1 ? "Inmersión Singular" : "Inmersión Múltiple";
   }
 
   return {
     count,
     label,
     totalMonthly,
-    saving,
+    saving: 0,
     enrollment: ENROLLMENT_FEE,
     totalFirstMonth: totalMonthly + ENROLLMENT_FEE,
-    pricePerLanguage: count > 0 ? Math.round(totalMonthly / count) : 0
+    pricePerLanguage: PRICES.SINGLE
   };
 }
 

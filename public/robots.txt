@@ -1,5 +1,14 @@
 User-agent: *
 Allow: /
-Disallow: /naama-studio
+Allow: /paes
+Allow: /idiomas
+Allow: /lsch
+Allow: /nosotros
+Allow: /contacto
+
+Disallow: /empresas
+Disallow: /adultos
+Disallow: /homeschool
+Disallow: /orientacion
 
 Sitemap: https://institutolael.cl/sitemap.xml

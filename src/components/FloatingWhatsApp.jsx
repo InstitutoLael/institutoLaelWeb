@@ -1,32 +1,83 @@
-import React, { useState } from 'react';
-import { MessageCircle, X, ChevronRight, Zap, Target, HelpCircle } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { MessageCircle, X, ChevronRight, Zap, Target, HelpCircle, HandHeart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import { trackEvent } from '../utils/analytics';
 import { trackFunnelEvent } from '../utils/funnel';
 
-const OPTIONS = [
-  { 
-    id: 'paes_gratis', 
-    label: 'Quiero PAES Gratis', 
-    icon: <Target size={18} />, 
-    msg: 'Hola, quiero unirme a las clases gratuitas de PAES en vivo por Google Meet.' 
-  },
-  { 
-    id: 'mejorar', 
-    label: 'Tengo dudas sobre idiomas', 
-    icon: <Zap size={18} />, 
-    msg: 'Hola, me interesa saber más sobre el programa de Idiomas y cómo funcionan las simulaciones reales.' 
-  },
-  { 
-    id: 'ayuda', 
-    label: 'No sé qué elegir', 
-    icon: <HelpCircle size={18} />, 
-    msg: 'Hola, estoy viendo la web y no sé por dónde empezar. ¿Me pueden orientar?' 
-  }
-];
-
 export default function FloatingWhatsApp() {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  const isContactPage = location.pathname === '/contacto';
+
+  const dynamicOptions = useMemo(() => {
+    const path = location.pathname;
+    
+    const baseOptions = [
+      { 
+        id: 'ayuda', 
+        label: 'No sé qué elegir', 
+        icon: <HelpCircle size={18} />, 
+        msg: 'Hola, estoy viendo la web y no sé por dónde empezar. ¿Me pueden orientar?' 
+      }
+    ];
+
+    if (path === '/paes') {
+      return [
+        { 
+          id: 'paes_gratis', 
+          label: 'Inscribirme PAES Gratis', 
+          icon: <Target size={18} />, 
+          msg: 'Hola, quiero inscribirme en la PAES gratuita de Lael.' 
+        },
+        ...baseOptions
+      ];
+    }
+
+    if (path === '/idiomas') {
+      return [
+        { 
+          id: 'idiomas', 
+          label: 'Consulta de Idiomas', 
+          icon: <Zap size={18} />, 
+          msg: 'Hola, me interesa un curso de idiomas en Lael.' 
+        },
+        ...baseOptions
+      ];
+    }
+
+    if (path === '/lsch') {
+      return [
+        { 
+          id: 'lsch', 
+          label: 'Curso LSCh Fernanda', 
+          icon: <HandHeart size={18} />, 
+          msg: 'Hola, me interesa el curso de LSCh con Fernanda Gaete.' 
+        },
+        ...baseOptions
+      ];
+    }
+
+    // Default / Home / Others
+    return [
+      { 
+        id: 'paes_gratis', 
+        label: 'Quiero PAES Gratis', 
+        icon: <Target size={18} />, 
+        msg: 'Hola, quiero unirme a las clases gratuitas de PAES.' 
+      },
+      { 
+        id: 'idiomas', 
+        label: 'Ver Idiomas', 
+        icon: <Zap size={18} />, 
+        msg: 'Hola, quiero saber más sobre los cursos de idiomas.' 
+      },
+      ...baseOptions
+    ];
+  }, [location.pathname]);
+
+  if (isContactPage) return null;
 
   const handleOpen = () => {
     setIsOpen(!isOpen);
@@ -56,7 +107,7 @@ export default function FloatingWhatsApp() {
               <p className="text-white/80 text-xs">En línea ahora · Respuesta inmediata</p>
             </div>
             <div className="p-4 space-y-2">
-              {OPTIONS.map((opt) => (
+              {dynamicOptions.map((opt) => (
                 <button
                   key={opt.id}
                   onClick={() => handleOption(opt)}
@@ -64,7 +115,7 @@ export default function FloatingWhatsApp() {
                 >
                   <div className="flex items-center gap-3">
                     <span className="text-lael-accent">{opt.icon}</span>
-                    <span className="text-lael-muted text-xs font-bold uppercase tracking-wider">{opt.label}</span>
+                    <span className="text-lael-muted text-[10px] font-bold uppercase tracking-wider">{opt.label}</span>
                   </div>
                   <ChevronRight size={14} className="text-lael-accent/40 group-hover:translate-x-1 transition-transform" />
                 </button>

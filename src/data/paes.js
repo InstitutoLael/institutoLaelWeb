@@ -7,6 +7,8 @@
 
 export const ENROLLMENT_FEE = 10990;
 export const ACADEMIC_MONTHS = 8;
+export const AVAILABLE_SPOTS = 12;
+export const START_DATE_EXACT = "Lunes 2 de Junio";
 
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
@@ -168,8 +170,9 @@ export const PAES_COMBOS = [
    5. VALOR AGREGADO (LO QUE INCLUYE SIEMPRE)
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_CONFIG = {
-  AVAILABLE_SPOTS: 12,
+  AVAILABLE_SPOTS: AVAILABLE_SPOTS,
   START_DATE: "Junio 2026",
+  START_DATE_EXACT: START_DATE_EXACT,
   FREE_BADGE: "100% GRATIS"
 };
 
@@ -182,20 +185,24 @@ export const PAES_FEATURES = [
 
 export const PAES_FAQS = [
   { 
-    q: "¿De verdad es gratis? ¿Hay trampa?", 
-    a: "Sí, es gratis. La PAES en Lael nunca ha tenido costo y nunca lo tendrá. Nuestra misión es que el dinero no sea una barrera para tu futuro." 
+    q: "¿De verdad es gratis? ¿Hay letra chica?", 
+    a: "Sí, es 100% gratis. Sin matrícula, sin mensualidad, sin sorpresas. Nuestra misión es que el dinero no sea una barrera para tu educación." 
   },
   { 
     q: "¿Cómo son las clases?", 
-    a: "Son 100% en vivo por Google Meet. Con fecha y hora fija, donde puedes interactuar con el profesor y resolver tus dudas en el momento." 
+    a: "En vivo por Google Meet. Tienes un horario fijo y un profe real que te conoce por tu nombre y te ayuda a resolver dudas en el momento." 
   },
   { 
     q: "¿Qué pasa si me pierdo una clase?", 
-    a: "No te preocupes. Todas las clases quedan grabadas en tu panel de alumno para que las veas cuando quieras." 
+    a: "No pasa nada. Todas las clases se graban y quedan disponibles en tu panel para que las veas cuando puedas." 
   },
   { 
-    q: "¿Cuántas horas de clases hay a la semana?", 
-    a: "Depende de las materias. En promedio son 2 a 3 horas por asignatura a la semana, enfocadas totalmente en lo que realmente entra en la prueba." 
+    q: "¿Cuántas horas a la semana?", 
+    a: "Depende de las materias que elijas rendir. En promedio dedicamos 2-3 horas semanales por asignatura, enfocadas en técnica y práctica real." 
+  },
+  { 
+    q: "¿Puedo estudiar si trabajo o voy al colegio?", 
+    a: "Sí. Los horarios son vespertinos y están diseñados para ser flexibles, permitiéndote compatibilizar el estudio con tus otras responsabilidades." 
   }
 ];
 

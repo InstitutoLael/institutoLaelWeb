@@ -63,18 +63,21 @@ export default function Navbar() {
 
   if (isFocusPage) {
     return (
-      <header 
-        className="fixed left-0 top-0 w-full z-[100] py-8 px-8 flex justify-between items-center transition-all duration-500"
-      >
-        <Link to="/" className="pointer-events-auto group">
-           <img src={isLightPage ? logoNegro : logoBlanco} alt="Instituto Lael" className="h-7 w-auto transition-transform group-hover:scale-105" />
-        </Link>
-        <Link to="/" className="pointer-events-auto text-[10px] uppercase tracking-[0.3em] text-lael-muted font-bold hover:text-lael-accent transition-colors flex items-center gap-2">
-          <span>Salir del modo foco</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="rotate-45">
-            <line x1="12" y1="4" x2="12" y2="20" />
-            <line x1="7" y1="9" x2="17" y2="9" />
-          </svg>
+      <header className="fixed left-0 top-0 w-full z-[100] p-4 lg:p-8 flex justify-between items-center pointer-events-none transition-all duration-500">
+        <div className="flex items-center gap-4 pointer-events-auto">
+          <Link to="/" className="group">
+            <img src={isLightPage ? logoNegro : logoBlanco} alt="Instituto Lael" className="h-6 lg:h-7 w-auto transition-transform group-hover:scale-105" />
+          </Link>
+          <div className="w-px h-4 bg-white/20 hidden lg:block" />
+          <Link to="/" className="hidden lg:flex items-center gap-2 text-[8px] uppercase tracking-[0.3em] text-white/40 font-bold hover:text-lael-accent transition-colors">
+             Salir del modo foco
+          </Link>
+        </div>
+        
+        {/* Right side is intentionally empty to let Applet controls breathe, 
+            but we add a small Exit icon for mobile */}
+        <Link to="/" className="lg:hidden pointer-events-auto w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center text-white">
+           <X size={20} />
         </Link>
       </header>
     );

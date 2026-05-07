@@ -282,17 +282,14 @@ export default function AppletCirculos() {
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
-      {/* ── MOBILE HEADER ──────────────────────────────────────────────── */}
-      <header className="absolute top-0 left-0 w-full z-50 p-4 lg:p-8 flex justify-between items-center bg-gradient-to-b from-[#05080F] to-transparent">
-        <Link to="/" className="flex items-center gap-3 pointer-events-auto">
-          <div className="w-10 h-10 lg:w-12 lg:h-12 bg-white/5 backdrop-blur-md rounded-xl lg:rounded-2xl flex items-center justify-center border border-white/10 hover:bg-[#00FF9D] hover:text-black transition-all">
-            <ArrowLeft size={18} />
-          </div>
+      {/* ── HEADER DASHBOARD (Integrated with Navbar) ───────────────── */}
+      <header className="absolute top-0 left-0 w-full z-50 p-4 lg:p-8 flex justify-between items-center pointer-events-none">
+        <div className="flex items-center gap-4 lg:ml-20"> {/* Offset to let Navbar logo breathe */}
           <div className="hidden sm:block">
             <h1 className="text-xl lg:text-3xl font-black italic italic-playfair tracking-tighter leading-none text-white">DIEGO <span className="text-[#00FF9D]">BET</span></h1>
-            <p className="text-[7px] text-[#00FF9D] font-mono tracking-[0.4em] uppercase mt-1">Geometría Móvil</p>
+            <p className="text-[7px] text-[#00FF9D] font-mono tracking-[0.4em] uppercase mt-1">Sistemas Simétricos Circulares</p>
           </div>
-        </Link>
+        </div>
 
         <div className="flex gap-2 lg:gap-4 pointer-events-auto">
            <div className="hidden md:flex bg-black/60 backdrop-blur-md px-6 py-2 rounded-xl border border-white/10 items-center gap-4">

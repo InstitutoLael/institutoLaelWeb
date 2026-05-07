@@ -16,6 +16,8 @@ export default function Navbar() {
 
   const [bannerHeight, setBannerHeight] = useState(0);
 
+  const isLightPage = ['/nosotros', '/contacto', '/transparencia', '/preguntas', '/diagnostico'].includes(location.pathname);
+
   // Scroll detection
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -83,7 +85,7 @@ export default function Navbar() {
     <>
       <header
         className={`fixed left-0 w-full z-[100] transition-all duration-500 ease-in-out ${
-          scrolled || mobileOpen
+          scrolled || mobileOpen || isLightPage
             ? 'bg-white/95 backdrop-blur-md border-b border-black/[0.05] py-3 shadow-lg'
             : 'bg-transparent py-7'
         }`}
@@ -94,7 +96,7 @@ export default function Navbar() {
           {/* ── LOGO ───────────────────────────────────────────────────── */}
           <Link to="/" className="z-[110] relative group flex items-center gap-3">
             <img
-              src={scrolled || mobileOpen ? logoNegro : logoBlanco}
+              src={scrolled || mobileOpen || isLightPage ? logoNegro : logoBlanco}
               alt="Instituto Lael"
               className={`w-auto object-contain transition-all duration-500 group-hover:scale-105 ${
                 scrolled ? 'h-7 lg:h-8' : 'h-8 lg:h-10'
@@ -107,36 +109,25 @@ export default function Navbar() {
           </Link>
 
           {/* ── DESKTOP NAV ────────────────────────────────────────────── */}
-          <nav className="hidden lg:flex items-center gap-12">
-            {NAVIGATION.main.map((link) => (
+          <nav className="hidden lg:flex items-center gap-10">
+            {NAVIGATION.main.map((item) => (
               <NavLink
-                key={link.path}
-                to={link.path}
-                className={({ isActive }) =>
-                  `relative text-[11px] tracking-[0.15em] uppercase font-bold transition-all duration-300 group ${
-                    isActive 
-                      ? 'text-lael-accent' 
-                      : (scrolled || mobileOpen ? 'text-black/70 hover:text-black' : 'text-white/70 hover:text-white')
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) => 
+                  `text-[10px] tracking-[0.3em] uppercase font-bold transition-all duration-300 hover:text-lael-accent relative py-2 ${
+                    isActive ? 'text-lael-accent' : (scrolled || mobileOpen || isLightPage ? 'text-lael-primary/70' : 'text-white/70')
                   }`
                 }
               >
-                {({ isActive }) => (
-                  <>
-                    <span className="flex items-center gap-2">
-                      {link.name}
-                      {link.badge && (
-                        <span className="bg-[#5C6E4E] text-white text-[10px] font-bold uppercase px-1.5 py-0.5 leading-none">
-                          {link.badge}
-                        </span>
-                      )}
+                <span className="flex items-center gap-2">
+                  {item.name}
+                  {item.badge && (
+                    <span className="bg-[#5C6E4E] text-white text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-sm">
+                      {item.badge}
                     </span>
-                    <span
-                      className={`absolute -bottom-1.5 left-0 h-[2px] bg-lael-accent transition-all duration-500 ${
-                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                      }`}
-                    />
-                  </>
-                )}
+                  )}
+                </span>
               </NavLink>
             ))}
           </nav>

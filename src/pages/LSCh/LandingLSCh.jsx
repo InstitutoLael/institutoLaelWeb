@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Award } from 'lucide-react';
 import { LSCH_WHY_US, TEACHER_PROFILE, COMPARISON_DATA } from '../../data/lsch';
 import { useNavigate } from 'react-router-dom';
 import lschRealidad from '../../assets/img/Home/mundo_lsch_bg_1777943626827.png';
@@ -133,24 +133,45 @@ export default function LandingLSCh() {
       {/* ── 3.5 REALIDAD INCLUSIVA (VISUAL) ─────────────────────────── */}
       <section className="relative w-full px-6 py-32 flex flex-col items-center overflow-hidden">
         <div className="w-full max-w-7xl">
-          <div className="relative aspect-[21/9] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow">
-             <img 
-               src={lschRealidad} 
-               alt="Comunidad LSCh Lael" 
-               className="w-full h-full object-cover"
-             />
-             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-             <div className="absolute inset-x-0 bottom-0 flex flex-col items-center p-12 lg:p-20 text-center">
-                <motion.div {...fadeUp()}>
-                   <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Comunidad Activa</p>
-                   <h3 className="font-display text-4xl lg:text-6xl text-white font-bold leading-tight mb-8">
-                     Rompe el Silencio <br /> con el Alma.
-                   </h3>
-                   <p className="text-white/70 text-lg leading-relaxed max-w-3xl">
-                     Nuestras sesiones no son solo teoría. Son encuentros donde la comunidad Sorda y oyente se une para derribar las paredes de la incomunicación. Aquí aprendes el lenguaje del corazón.
-                   </p>
-                </motion.div>
-             </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { 
+                level: 'A1 • PRINCIPIANTE', 
+                duration: '3 MESES',
+                title: 'Iniciación Visual', 
+                desc: 'Aprendes el abecedario, saludos, familia y cómo estructurar tus primeras ideas sin usar la voz.' 
+              },
+              { 
+                level: 'A2 • INTERMEDIO', 
+                duration: '3 MESES',
+                title: 'Gramática Espacial', 
+                desc: 'Uso del espacio para describir escenas complejas y verbos direccionales.' 
+              },
+              { 
+                level: 'B1 • AVANZADO', 
+                duration: '4 MESES',
+                title: 'Contexto Profesional', 
+                desc: 'Especialización técnica para salud, educación y atención al público con enfoque en la Ley de Inclusión.' 
+              }
+            ].map((step, i) => (
+              <motion.div 
+                key={step.title} 
+                {...fadeUp(i * 0.1)} 
+                className="p-10 bg-white border border-lael-bd rounded-[40px] shadow-sm hover:border-lael-accent/50 transition-all group"
+              >
+                <div className="flex justify-between items-center mb-10">
+                  <span className="text-lael-accent text-[9px] font-bold tracking-[0.2em] uppercase">{step.level}</span>
+                  <span className="bg-lael-secondary/10 px-3 py-1 rounded-full text-[9px] text-lael-muted font-bold">{step.duration}</span>
+                </div>
+                <h4 className="text-xl font-bold text-lael-primary mb-4 group-hover:text-lael-accent transition-colors uppercase">{step.title}</h4>
+                <p className="text-lael-muted text-sm leading-relaxed">{step.desc}</p>
+                {i === 2 && (
+                  <div className="mt-8 pt-8 border-t border-lael-bd text-[9px] text-lael-muted/60 font-bold uppercase tracking-widest">
+                    Disponible al completar Nivel 2
+                  </div>
+                )}
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -203,18 +224,17 @@ export default function LandingLSCh() {
                 </h3>
                 <p className="text-lael-muted text-xs uppercase tracking-widest">— Alumna Nivel A1</p>
              </motion.div>
-             <motion.div {...fadeUp(0.3)}>
-                <h2 className="font-display text-4xl text-lael-light mb-8">Certificación por Competencias.</h2>
-                <p className="text-lael-muted leading-relaxed mb-10">
-                   Al finalizar cada nivel, recibes un <strong>Diploma de Participación y Competencia</strong> emitido por Instituto Lael, avalando tus horas de inmersión y habilidades prácticas en LSCh.
-                </p>
-                <div className="flex items-center gap-6 p-6 bg-lael-secondary rounded-2xl border border-lael-bd shadow-xl">
-                   <div className="w-16 h-16 bg-lael-accent/20 rounded-full flex items-center justify-center text-lael-accent">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 15l-2 5l2 2l2 -2l-2 -5z"/><circle cx="12" cy="7" r="4"/><path d="M10 11a8.1 8.1 0 0 0 -5 3v2h5m4 -2v-2a8.1 8.1 0 0 1 5 -3"/></svg>
+             <motion.div 
+               {...fadeUp(0.2)} 
+               className="p-12 bg-white border border-lael-bd rounded-[40px] shadow-sm relative overflow-hidden"
+             >
+                <div className="flex items-center gap-6">
+                   <div className="w-16 h-16 bg-lael-accent/10 rounded-full flex items-center justify-center text-lael-accent">
+                      <Award size={32} />
                    </div>
                    <div>
-                      <p className="text-lael-light font-bold text-sm">Diploma Oficial Lael</p>
-                      <p className="text-lael-muted text-xs">Válido para CV y cumplimiento Ley 21.015</p>
+                      <p className="text-lael-primary font-bold text-lg">Diploma Oficial Lael</p>
+                      <p className="text-lael-muted text-sm">Válido para CV y cumplimiento Ley 21.015</p>
                    </div>
                 </div>
              </motion.div>

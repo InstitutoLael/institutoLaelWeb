@@ -34,43 +34,49 @@ export default function Preguntas() {
   const [activeItem, setActiveItem] = useState(null);
 
   return (
-    <div className="bg-lael-primary min-h-screen pt-32 pb-20 px-6">
+    <div className="bg-white min-h-screen pt-32 pb-20 px-6">
       <Helmet>
         <title>Preguntas Frecuentes | Instituto Lael</title>
-        <meta name="description" content="Resolvemos todas tus dudas sobre la PAES gratuita, cursos de idiomas y nuestra metodología de alto rendimiento." />
+        <meta name="description" content="Resolvemos tus dudas sobre el programa PAES gratuito, idiomas y metodología. Honestidad radical desde el primer contacto." />
       </Helmet>
 
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-20">
-          <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">FAQ Avanzado</p>
+        <div className="text-center mb-24">
+          <p className="text-lael-accent text-[10px] tracking-[0.5em] uppercase mb-6 font-bold">FAQ</p>
           <motion.h1 
-            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
-            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
-            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl text-lael-light mb-8"
+            initial={{ clipPath: 'inset(0 100% 0 0)' }}
+            animate={{ clipPath: 'inset(0 0% 0 0)' }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="font-display text-5xl lg:text-7xl text-lael-primary font-bold leading-tight mb-8 uppercase"
           >
-            Dudas que merecen una respuesta honesta.
+            Preguntas <br /> <span className="italic italic-playfair text-lael-accent font-normal capitalize">y Respuestas.</span>
           </motion.h1>
+          <p className="text-lael-muted text-lg leading-relaxed">
+            Sin rodeos. Todo lo que necesitas saber antes de tu diagnóstico táctico.
+          </p>
         </div>
 
         <div className="space-y-16">
-          {FAQ_DATA.map((cat, i) => (
-            <div key={i}>
-              <div className="flex items-center gap-3 mb-8 text-lael-accent">
-                {cat.icon}
-                <h2 className="text-[10px] uppercase tracking-[0.3em] font-bold">{cat.category}</h2>
+          {FAQ_DATA.map((cat, idx) => (
+            <div key={cat.category} className="space-y-8">
+              <div className="flex items-center gap-4 text-lael-accent">
+                <div className="w-10 h-10 rounded-xl bg-lael-accent/10 flex items-center justify-center">
+                  {cat.icon}
+                </div>
+                <h2 className="text-xs tracking-[0.3em] uppercase font-bold">{cat.category}</h2>
               </div>
-              <div className="space-y-4">
-                {cat.items.map((item, j) => {
-                  const id = `${i}-${j}`;
+
+              <div className="grid gap-4">
+                {cat.items.map((item, i) => {
+                  const id = `${idx}-${i}`;
                   const isOpen = activeItem === id;
                   return (
-                    <div key={j} className="border border-lael-bd rounded-2xl bg-lael-secondary overflow-hidden">
+                    <div key={id} className={`rounded-[32px] border transition-all duration-500 overflow-hidden ${isOpen ? 'bg-lael-secondary/30 border-lael-accent/20' : 'bg-white border-lael-bd hover:border-lael-accent/30'}`}>
                       <button 
                         onClick={() => setActiveItem(isOpen ? null : id)}
                         className="w-full p-6 text-left flex justify-between items-center group"
                       >
-                        <span className="text-lael-light font-bold text-base group-hover:text-lael-accent transition-colors">{item.q}</span>
+                        <span className="text-lael-primary font-bold text-base group-hover:text-lael-accent transition-colors">{item.q}</span>
                         <ChevronDown size={20} className={`text-lael-muted transition-transform duration-500 ${isOpen ? 'rotate-180 text-lael-accent' : ''}`} />
                       </button>
                       <AnimatePresence>

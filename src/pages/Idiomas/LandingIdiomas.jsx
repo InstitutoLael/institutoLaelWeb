@@ -133,17 +133,18 @@ export default function LandingIdiomas() {
               Primero instalamos la estructura básica (el algoritmo). Luego, saturamos tus sentidos con simulaciones reales (los datos). El resultado: tu cerebro decodifica el idioma automáticamente, sin necesidad de traducir palabra por palabra.
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-24 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mt-24">
             {[
-              { num: '01', title: 'Inmersión' },
-              { num: '02', title: 'Estructura' },
-              { num: '03', title: 'Simulación' },
-              { num: '04', title: 'Fluidez' }
-            ].map(step => (
-              <div key={step.num}>
-                <p className="font-display text-6xl text-lael-accent/15 font-bold mb-4">{step.num}</p>
-                <p className="text-[11px] tracking-[0.2em] text-lael-light uppercase font-bold">{step.title}</p>
-              </div>
+              { step: '01', label: 'Inmersión', desc: 'No estudias el idioma, lo vives. Exposición constante desde el minuto uno.' },
+              { step: '02', label: 'Estructura', desc: 'Instalamos los algoritmos gramaticales de forma intuitiva, sin memorizar tablas.' },
+              { step: '03', label: 'Simulación', desc: 'Escenarios reales: pides un café, negocias un contrato, haces una entrevista.' },
+              { step: '04', label: 'Fluidez', desc: 'Tu cerebro deja de traducir y comienza a pensar directamente en el código del idioma.' },
+            ].map((m, i) => (
+              <motion.div key={i} {...fadeUp(i * 0.1)} className="text-center lg:text-left">
+                <div className="font-display text-7xl text-lael-accent/20 font-bold mb-6">{m.step}</div>
+                <h4 className="text-lael-light text-xl font-bold uppercase tracking-widest mb-4">{m.label}</h4>
+                <p className="text-lael-muted text-sm leading-relaxed">{m.desc}</p>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -196,18 +197,47 @@ export default function LandingIdiomas() {
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center font-bold">Programas disponibles</motion.p>
           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-24 tracking-tighter uppercase">Elige tu sistema de comunicación.</motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {LANGUAGES.map((lang, i) => (
-              <motion.div key={lang.id} {...fadeUp(i * 0.1)} className="p-10 rounded-[40px] bg-lael-secondary hover-card border border-lael-bd cinematic-shadow">
-                <p className="text-[10px] tracking-[0.2em] text-lael-accent uppercase mb-4 font-bold">{lang.badge}</p>
-                <h3 className="font-display text-3xl text-lael-light font-bold mb-6">{lang.name}</h3>
-                <p className="text-lael-muted text-base leading-relaxed mb-10">{lang.summary}</p>
+            {[
+              { 
+                impact: 'ALTO IMPACTO', 
+                title: 'Dominio Estratégico Inglés', 
+                flag: '🇬🇧',
+                desc: 'Ingeniería inversa del idioma. Estructuras de alto rendimiento para negocios y tecnología.', 
+                levels: ['A1 (Fundamentos)', 'A2', 'B1', 'B2 (Dominio)'] 
+              },
+              { 
+                impact: 'ALTA DEMANDA', 
+                title: 'Inmersión Estructural Coreana', 
+                flag: '🇰🇷',
+                desc: 'Decodificación precisa del sistema Hangul y gramática coreana avanzada.', 
+                levels: ['Nivel 1 (Fundamentos)', 'Nivel 2', 'Nivel 3'] 
+              },
+              { 
+                impact: 'INSERCIÓN ESTRATÉGICA', 
+                title: 'Integración para Expats', 
+                flag: '🇨🇱',
+                desc: 'Sistemas prácticos para dominar el español en el entorno chileno. Foco corporativo.', 
+                levels: ['A1 (Fundamentos)', 'A2', 'B1 (Dominio)'] 
+              },
+            ].map((prog, i) => (
+              <motion.div 
+                key={prog.title} 
+                {...fadeUp(i * 0.1)} 
+                className="p-10 bg-lael-secondary border border-lael-bd rounded-[40px] hover:border-lael-accent/50 transition-all group"
+              >
+                <div className="flex justify-between items-start mb-10">
+                  <span className="text-lael-accent text-[10px] font-bold tracking-[0.3em] uppercase">{prog.impact}</span>
+                  <span className="text-4xl">{prog.flag}</span>
+                </div>
+                <h3 className="text-2xl font-display font-bold text-lael-light mb-6 group-hover:text-lael-accent transition-colors">{prog.title}</h3>
+                <p className="text-lael-muted text-sm leading-relaxed mb-8">{prog.desc}</p>
                 <div className="space-y-3">
-                   {lang.levels.map(lvl => (
-                      <p key={lvl} className="text-xs text-lael-light/70 flex items-center gap-3">
-                         <div className="w-1.5 h-1.5 rounded-full bg-lael-accent/30" />
-                         {lvl}
-                      </p>
-                   ))}
+                  {prog.levels.map(lvl => (
+                    <div key={lvl} className="flex items-center gap-3 text-xs text-lael-muted font-medium">
+                      <div className="w-1.5 h-1.5 rounded-full bg-lael-accent/40" />
+                      {lvl}
+                    </div>
+                  ))}
                 </div>
               </motion.div>
             ))}

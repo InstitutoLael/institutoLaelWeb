@@ -194,51 +194,51 @@ export default function Home() {
             <h2 className="text-3xl font-display font-bold">¿Qué necesitas hoy?</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/paes')} className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 cursor-pointer group hover:border-[#5C6E4E]/50 transition-all">
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/paes')} className="p-8 rounded-3xl bg-lael-secondary/50 border border-lael-bd cursor-pointer group hover:border-[#5C6E4E]/50 transition-all">
                <div className="flex justify-between items-start mb-6">
                   <div className="w-10 h-10 rounded-xl bg-[#5C6E4E]/20 text-[#5C6E4E] flex items-center justify-center">
                     <Target size={20} />
                   </div>
                   <span className="bg-[#5C6E4E] text-white text-[9px] font-bold px-2 py-1">GRATIS</span>
                </div>
-               <h3 className="text-xl font-bold mb-2 text-white">Prepararme PAES</h3>
+               <h3 className="text-xl font-bold mb-2 text-lael-primary">Prepararme PAES</h3>
                <p className="text-sm text-lael-muted mb-6">Clases en vivo sin costo mensual.</p>
                <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Inscribirme <ChevronRight size={14}/></span>
             </motion.div>
             
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/idiomas')} className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 cursor-pointer group hover:border-lael-accent/50 transition-all">
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/idiomas')} className="p-8 rounded-3xl bg-lael-secondary/50 border border-lael-bd cursor-pointer group hover:border-lael-accent/50 transition-all">
                <div className="flex justify-between items-start mb-6">
                   <div className="w-10 h-10 rounded-xl bg-lael-accent/20 text-lael-accent flex items-center justify-center">
                     <Zap size={20} />
                   </div>
-                  <span className="text-white/60 text-[9px] font-bold px-2 py-1">$9.990/MES</span>
+                  <span className="text-lael-muted text-[9px] font-bold px-2 py-1">$9.990/MES</span>
                </div>
-               <h3 className="text-xl font-bold mb-2 text-white">Aprender Inglés</h3>
+               <h3 className="text-xl font-bold mb-2 text-lael-primary">Aprender Inglés</h3>
                <p className="text-sm text-lael-muted mb-6">Fluidez real con simulacros.</p>
                <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
             </motion.div>
 
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/lsch')} className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 cursor-pointer group hover:border-lael-accent/50 transition-all">
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/lsch')} className="p-8 rounded-3xl bg-lael-secondary/50 border border-lael-bd cursor-pointer group hover:border-lael-accent/50 transition-all">
                <div className="flex justify-between items-start mb-6">
                   <div className="w-10 h-10 rounded-xl bg-lael-accent/20 text-lael-accent flex items-center justify-center">
                     <HandHeart size={20} />
                   </div>
-                  <span className="text-white/60 text-[9px] font-bold px-2 py-1">$14.990/MES</span>
+                  <span className="text-lael-muted text-[9px] font-bold px-2 py-1">$14.990/MES</span>
                </div>
-               <h3 className="text-xl font-bold mb-2 text-white">Lengua de Señas</h3>
+               <h3 className="text-xl font-bold mb-2 text-lael-primary">Lengua de Señas</h3>
                <p className="text-sm text-lael-muted mb-6">Inclusión real y cultura sorda.</p>
                <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
             </motion.div>
 
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/diagnostico')} className="p-8 rounded-3xl bg-white/[0.03] border border-white/10 cursor-pointer group hover:border-white/50 transition-all">
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/diagnostico')} className="p-8 rounded-3xl bg-lael-accent/5 border border-lael-accent/20 cursor-pointer group hover:border-lael-accent/50 transition-all">
                <div className="flex justify-between items-start mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-lael-accent/10 text-lael-accent flex items-center justify-center">
                     <HelpCircle size={20} />
                   </div>
                </div>
-               <h3 className="text-xl font-bold mb-2 text-white">No sé por dónde empezar</h3>
+               <h3 className="text-xl font-bold mb-2 text-lael-primary">No sé por dónde empezar</h3>
                <p className="text-sm text-lael-muted mb-6">Te orientamos gratis en tu proceso.</p>
-               <span className="text-white text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Hacer diagnóstico <ChevronRight size={14}/></span>
+               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 group-hover:gap-4 transition-all">Hacer diagnóstico <ChevronRight size={14}/></span>
             </motion.div>
           </div>
         </div>
@@ -282,15 +282,25 @@ export default function Home() {
       </section>
 
       {/* ── 3. CTA INTERMEDIO (LAEL CHOICE) ───────────────────────────── */}
-      <section className="py-20 flex justify-center border-y border-white/[0.03]">
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/diagnostico')}
-            className="group flex items-center gap-4 text-lael-accent text-xs tracking-[0.4em] uppercase font-bold hover:gap-8 transition-all"
+      <section className="py-24 px-6 flex justify-center bg-lael-secondary/30">
+          <motion.div 
+            whileHover={{ scale: 1.02 }}
+            className="max-w-4xl w-full p-12 rounded-[40px] bg-lael-primary border border-lael-bd cinematic-shadow text-center flex flex-col items-center"
           >
-            Identificar mis fallos ahora <ChevronRight size={16} />
-          </motion.button>
+            <p className="text-lael-accent text-[10px] tracking-[0.5em] uppercase mb-6 font-bold">Autodiagnóstico</p>
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-lael-primary mb-8">
+              Deja de disparar a ciegas. <br />
+              <span className="italic italic-playfair text-lael-accent font-normal">Identifica tus bloqueos hoy.</span>
+            </h2>
+            <motion.button 
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/diagnostico')}
+              className="bg-lael-accent text-white px-12 py-5 rounded-2xl text-[11px] tracking-[0.3em] uppercase font-bold shadow-xl shadow-lael-accent/20 hover:bg-lael-rust transition-all"
+            >
+              Iniciar diagnóstico táctico
+            </motion.button>
+          </motion.div>
       </section>
 
       {/* ── 4. MUNDOS (LAEL SYSTEMS) ──────────────────────────────────── */}
@@ -345,8 +355,8 @@ export default function Home() {
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
               {METHOD.map((item, i) => (
                 <motion.div key={i} {...fadeUp(i * 0.1)} className="text-center lg:text-left space-y-6">
-                   <div className="font-display text-7xl text-lael-accent/10 font-bold">{item.step}</div>
-                   <h4 className="text-lael-light text-2xl font-bold uppercase tracking-widest">{item.label}</h4>
+                   <div className="font-display text-7xl text-lael-accent/20 font-bold">{item.step}</div>
+                   <h4 className="text-lael-primary text-2xl font-bold uppercase tracking-widest">{item.label}</h4>
                    <p className="text-lael-muted leading-relaxed">{item.desc}</p>
                 </motion.div>
               ))}

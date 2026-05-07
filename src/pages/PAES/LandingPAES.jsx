@@ -160,9 +160,9 @@ export default function LandingPAES() {
               { feature: 'Profesores', lael: 'Equipo real por Google Meet', other: 'Profesores distantes' },
               { feature: 'Comunidad', lael: 'Apoyo constante y real', other: 'Un alumno más en la lista' },
             ].map((row, i) => (
-              <div key={row.feature} className={`grid grid-cols-3 px-10 py-8 ${i % 2 === 0 ? 'bg-lael-primary' : 'bg-lael-secondary/50'} border-b border-lael-bd last:border-0`}>
+              <div key={row.feature} className={`grid grid-cols-3 px-10 py-8 ${i % 2 === 0 ? 'bg-lael-secondary/10' : 'bg-transparent'} border-b border-lael-bd last:border-0`}>
                 <p className="text-xs text-lael-muted tracking-wider font-bold uppercase">{row.feature}</p>
-                <p className="text-sm text-lael-light font-bold tracking-wide">{row.lael}</p>
+                <p className="text-sm text-lael-primary font-bold tracking-wide">{row.lael}</p>
                 <p className="text-sm text-lael-muted tracking-wide">{row.other}</p>
               </div>
             ))}
@@ -180,22 +180,22 @@ export default function LandingPAES() {
           </motion.h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-             <motion.div {...fadeUp(0.2)} className="p-10 bg-lael-secondary rounded-[40px] border border-lael-bd cinematic-shadow">
-                <div className="text-lael-accent text-xs font-bold mb-8 opacity-20">01 / LUNES - JUEVES</div>
-                <h4 className="text-lael-light font-bold mb-4 text-xl tracking-tight">Activación Táctica</h4>
-                <p className="text-lael-muted text-sm leading-relaxed mb-8">Clases en vivo vía Zoom diseñadas para destruir los fallos de tu diagnóstico inicial.</p>
+             <motion.div {...fadeUp(0.2)} className="p-10 bg-white border border-lael-bd rounded-[40px] shadow-sm hover:shadow-md transition-shadow">
+                <div className="text-lael-accent text-[10px] font-bold mb-8 tracking-[0.2em]">01 / LUNES - JUEVES</div>
+                <h4 className="text-lael-primary font-bold mb-4 text-xl tracking-tight uppercase">Activación Táctica</h4>
+                <p className="text-lael-muted text-sm leading-relaxed mb-8">Clases en vivo vía Google Meet diseñadas para destruir los fallos de tu diagnóstico inicial.</p>
                 <div className="h-px w-12 bg-lael-accent/30" />
              </motion.div>
-             <motion.div {...fadeUp(0.3)} className="p-10 bg-lael-accent/5 rounded-[40px] border border-lael-accent/20 relative overflow-hidden">
+             <motion.div {...fadeUp(0.3)} className="p-10 bg-lael-accent/5 border border-lael-accent/20 rounded-[40px] relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-6 bg-lael-accent/10 text-lael-accent text-[10px] font-bold uppercase tracking-widest">Día de Fuego</div>
-                <div className="text-lael-accent text-xs font-bold mb-8 opacity-40">02 / VIERNES</div>
-                <h4 className="text-lael-light font-bold mb-4 text-xl tracking-tight">Presión Real</h4>
+                <div className="text-lael-accent text-[10px] font-bold mb-8 tracking-[0.2em]">02 / VIERNES</div>
+                <h4 className="text-lael-primary font-bold mb-4 text-xl tracking-tight uppercase">Presión Real</h4>
                 <p className="text-lael-muted text-sm leading-relaxed mb-8">Ensayo semanal cronometrado. Aquí entrenas tu mente para que el día de la prueba no sea una sorpresa.</p>
                 <div className="h-px w-12 bg-lael-accent" />
              </motion.div>
-             <motion.div {...fadeUp(0.4)} className="p-10 bg-lael-secondary rounded-[40px] border border-lael-bd cinematic-shadow">
-                <div className="text-lael-accent text-xs font-bold mb-8 opacity-20">03 / SÁBADO</div>
-                <h4 className="text-lael-light font-bold mb-4 text-xl tracking-tight">Recalibración</h4>
+             <motion.div {...fadeUp(0.4)} className="p-10 bg-white border border-lael-bd rounded-[40px] shadow-sm hover:shadow-md transition-shadow">
+                <div className="text-lael-accent text-[10px] font-bold mb-8 tracking-[0.2em]">03 / SÁBADO</div>
+                <h4 className="text-lael-primary font-bold mb-4 text-xl tracking-tight uppercase">Recalibración</h4>
                 <p className="text-lael-muted text-sm leading-relaxed mb-8">Feedback 1:1 con tu estratega. Si fallaste en algo el viernes, aquí lo arreglamos antes del lunes.</p>
                 <div className="h-px w-12 bg-lael-accent/30" />
              </motion.div>

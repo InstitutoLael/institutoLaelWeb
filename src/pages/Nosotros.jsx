@@ -15,31 +15,32 @@ const fadeUp = (delay = 0) => ({
 
 export default function Nosotros() {
   return (
-    <div className="w-full bg-lael-primary text-white overflow-hidden">
+    <div className="w-full bg-white text-lael-primary overflow-hidden">
       <Helmet>
         <title>Quiénes Somos | Instituto Lael</title>
         <meta name="description" content="Fundado 2021. 600 alumnos. PAES gratuita. Santiago, Chile." />
       </Helmet>
 
       {/* ── 1. HERO ───────────────────────────────────────────────────── */}
-      <section className="relative min-h-[70vh] flex flex-col items-center justify-center text-center px-6 pt-32 pb-20 border-b border-white/5">
-        <motion.div {...fadeUp(0)} className="max-w-4xl">
-          <span className="text-[10px] tracking-[0.4em] uppercase font-bold text-lael-accent mb-6 block">
-            Santiago, Chile · Fundado 2021
-          </span>
-          <motion.h1 
-            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
-            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
-            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="text-5xl md:text-7xl font-display font-bold leading-tight mb-8"
-          >
-            Nacimos para los que el <br /> 
-            <span className="italic italic-playfair text-lael-accent">sistema decidió ignorar.</span>
-          </motion.h1>
-          <p className="text-lael-muted text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-            En 2021 comenzamos con una pizarra y la convicción de que la educación de calidad no puede ser un privilegio. Hoy, volvemos con más claridad y el mismo propósito.
-          </p>
-        </motion.div>
+      <section className="relative min-h-[70vh] flex flex-col items-center justify-center text-center px-6 pt-32 pb-20 bg-lael-secondary/20">
+        <div className="max-w-4xl relative z-10">
+          <motion.div {...fadeUp(0)}>
+            <p className="text-lael-accent text-[10px] tracking-[0.5em] uppercase mb-10 font-bold">Nuestra Génesis</p>
+            <motion.h1 
+              initial={{ clipPath: 'inset(0 100% 0 0)' }}
+              animate={{ clipPath: 'inset(0 0% 0 0)' }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+              className="font-display text-5xl lg:text-8xl text-lael-primary font-bold leading-[0.9] mb-12 uppercase tracking-tighter"
+            >
+              Nacimos para los <br />
+              <span className="italic italic-playfair text-lael-accent font-normal capitalize">que el sistema ignoró.</span>
+            </motion.h1>
+            <p className="text-lael-muted text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto">
+              En 2021 comenzamos con un computador y una convicción radical: la excelencia académica es un derecho divino, no un privilegio de mercado.
+            </p>
+          </motion.div>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-white pointer-events-none" />
       </section>
 
       {/* ── 2. HISTORIA ───────────────────────────────────────────────── */}
@@ -60,23 +61,44 @@ export default function Nosotros() {
       </section>
 
       {/* ── 3. FUNDADOR ───────────────────────────────────────────────── */}
-      <section className="py-32 px-6 bg-white/[0.02] border-y border-white/5">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-16">
-          <motion.div {...fadeUp(0)} className="w-64 h-64 md:w-80 md:h-80 relative flex-shrink-0">
-             <div className="absolute inset-0 border border-lael-accent/30 rounded-full scale-110 animate-pulse" />
-             <img src={diegoAvatar} alt="Diego Chaparro" className="w-full h-full object-cover rounded-full grayscale hover:grayscale-0 transition-all duration-700 shadow-2xl" />
-          </motion.div>
-          <motion.div {...fadeUp(0.2)} className="space-y-6 text-center md:text-left">
-            <div>
-              <h3 className="text-3xl font-display font-bold">Diego Chaparro</h3>
-              <p className="text-lael-accent tracking-widest uppercase text-xs font-bold mt-1">Fundador & Director General</p>
+      <section className="py-32 px-6 flex flex-col items-center">
+        <div className="max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+          <motion.div {...fadeUp(0.2)} className="relative group">
+            <div className="aspect-[4/5] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow">
+               <img 
+                 src={diegoAvatar} 
+                 alt="Diego Chaparro" 
+                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+               />
+               <div className="absolute inset-0 bg-gradient-to-t from-lael-primary/80 via-transparent to-transparent" />
+               <div className="absolute bottom-10 left-10">
+                  <p className="text-white text-3xl font-display font-bold">Diego Chaparro</p>
+                  <p className="text-lael-accent text-[10px] tracking-widest uppercase font-bold">Fundador & Visionario</p>
+               </div>
             </div>
-            <p className="text-lael-muted leading-relaxed">
-              Comenzó enseñando matemáticas en 2021. Llevó el Instituto a 600 alumnos sin financiamiento externo. Cree que la fe y la educación de calidad no son contradictorias, sino que son inseparables en la construcción de un futuro real.
-            </p>
-            <blockquote className="text-2xl italic italic-playfair text-white border-l-4 border-lael-accent pl-6 py-2">
-              "La PAES es gratis. Siempre lo fue. Siempre lo será."
-            </blockquote>
+          </motion.div>
+          
+          <motion.div {...fadeUp(0.4)} className="space-y-12">
+            <div>
+              <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">La Realidad detrás del Código</p>
+              <h2 className="text-4xl lg:text-5xl font-display font-bold text-lael-primary leading-tight uppercase">
+                "La PAES es gratis. <br />
+                <span className="italic italic-playfair text-lael-accent font-normal">Siempre lo fue. Siempre lo será."</span>
+              </h2>
+            </div>
+            
+            <div className="space-y-6 text-lael-muted text-lg leading-relaxed">
+               <p>
+                  Lael nació en 2021 como un acto de rebeldía educativa. Diego comenzó enseñando matemáticas desde cero, sin oficina ni capital, solo con la certeza de que el talento no tiene código postal.
+               </p>
+               <p>
+                  En pocos meses, lo que empezó como un taller se convirtió en un ecosistema de 600 alumnos simultáneos. No escalamos por marketing, escalamos por resultados. En Lael, no eres un número de matrícula; eres una arquitectura en construcción.
+               </p>
+            </div>
+
+            <div className="p-10 bg-lael-secondary/30 border border-lael-bd rounded-[40px] italic italic-playfair text-xl text-lael-primary">
+               "Aquí no vendemos cursos. Activamos propósitos. Si estás aquí, es porque ya no te conformas con ser parte del promedio."
+            </div>
           </motion.div>
         </div>
       </section>

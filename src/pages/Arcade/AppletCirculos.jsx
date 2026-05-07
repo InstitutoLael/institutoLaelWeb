@@ -325,61 +325,61 @@ export default function AppletCirculos() {
               initial={{ x: -100, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: -100, opacity: 0 }}
-              className="absolute left-4 lg:left-8 top-1/2 -translate-y-1/2 w-[280px] lg:w-80 z-40 max-h-[80vh] overflow-y-auto no-scrollbar pointer-events-none"
+              className="absolute left-2 lg:left-8 top-20 lg:top-28 w-[260px] lg:w-72 z-40 max-h-[calc(100vh-120px)] overflow-y-auto no-scrollbar pointer-events-none pb-10"
             >
-              <div className="space-y-4 pointer-events-auto">
+              <div className="space-y-3 pointer-events-auto">
                 {/* Tools Grid */}
-                <div className="bg-[#0D121F]/90 backdrop-blur-xl border border-white/10 p-5 lg:p-6 rounded-[30px] lg:rounded-[35px] shadow-2xl space-y-2">
-                  <p className="text-[8px] text-white/30 uppercase tracking-[0.3em] font-bold mb-3">Geometría Táctica</p>
-                  <div className="grid grid-cols-2 gap-2">
+                <div className="bg-[#0D121F]/95 backdrop-blur-2xl border border-white/10 p-4 lg:p-5 rounded-[25px] lg:rounded-[35px] shadow-2xl space-y-1.5">
+                  <p className="text-[7px] text-white/30 uppercase tracking-[0.3em] font-bold mb-2">Geometría Táctica</p>
+                  <div className="grid grid-cols-2 gap-1.5">
                     {[
-                      { id: 'radio', label: 'Radio', icon: <Binary size={16}/> },
-                      { id: 'cuerda', label: 'Cuerda', icon: <GitCommit size={16}/> },
-                      { id: 'diametro', label: 'Diámetro', icon: <Ruler size={16}/> },
-                      { id: 'tangente', label: 'Tangente', icon: <Maximize size={16}/> },
-                      { id: 'pincel', label: 'Arco', icon: <MousePointer2 size={16}/>, full: true },
+                      { id: 'radio', label: 'Radio', icon: <Binary size={14}/> },
+                      { id: 'cuerda', label: 'Cuerda', icon: <GitCommit size={14}/> },
+                      { id: 'diametro', label: 'Diámetro', icon: <Ruler size={14}/> },
+                      { id: 'tangente', label: 'Tangente', icon: <Maximize size={14}/> },
+                      { id: 'pincel', label: 'Arco', icon: <MousePointer2 size={14}/>, full: true },
                     ].map(t => (
                       <button 
                         key={t.id} onClick={() => setMode(t.id)}
-                        className={`flex items-center justify-center gap-3 p-3 lg:p-4 rounded-xl lg:rounded-2xl border transition-all ${t.full ? 'col-span-2' : ''} ${mode === t.id ? 'bg-[#00FF9D] text-black border-[#00FF9D]' : 'bg-white/5 border-white/5 text-white hover:bg-white/10'}`}
+                        className={`flex items-center justify-center gap-2 p-2.5 lg:p-3 rounded-xl lg:rounded-2xl border transition-all ${t.full ? 'col-span-2' : ''} ${mode === t.id ? 'bg-[#00FF9D] text-black border-[#00FF9D]' : 'bg-white/5 border-white/5 text-white hover:bg-white/10'}`}
                       >
                         {t.icon}
-                        <span className="text-[9px] font-bold uppercase tracking-widest">{t.label}</span>
+                        <span className="text-[8px] lg:text-[9px] font-bold uppercase tracking-widest">{t.label}</span>
                       </button>
                     ))}
                   </div>
                 </div>
 
                 {/* Settings Card */}
-                <div className="bg-[#0D121F]/90 backdrop-blur-xl border border-white/10 p-5 lg:p-6 rounded-[30px] lg:rounded-[35px] shadow-2xl space-y-5">
-                  <div className="space-y-2">
+                <div className="bg-[#0D121F]/95 backdrop-blur-2xl border border-white/10 p-4 lg:p-5 rounded-[25px] lg:rounded-[35px] shadow-2xl space-y-4">
+                  <div className="space-y-1.5">
                     <div className="flex justify-between">
-                      <span className="text-[8px] text-white/40 uppercase tracking-[0.3em] font-bold">Simetría: {symmetry}</span>
-                      <span className="text-[8px] text-[#00FF9D] font-mono">{(360/symmetry).toFixed(1)}°</span>
+                      <span className="text-[7px] text-white/40 uppercase tracking-[0.3em] font-bold">Simetría: {symmetry}</span>
+                      <span className="text-[7px] text-[#00FF9D] font-mono">{(360/symmetry).toFixed(1)}°</span>
                     </div>
-                    <input type="range" min="2" max="48" value={symmetry} onChange={(e) => setSymmetry(e.target.value)} className="w-full accent-[#00FF9D] h-1.5 bg-white/5 rounded-full appearance-none cursor-pointer" />
+                    <input type="range" min="2" max="48" value={symmetry} onChange={(e) => setSymmetry(e.target.value)} className="w-full accent-[#00FF9D] h-1 bg-white/5 rounded-full appearance-none cursor-pointer" />
                   </div>
 
-                  <div className="space-y-2">
-                    <span className="text-[8px] text-white/40 uppercase tracking-[0.3em] font-bold">Grosor: {strokeWidth}px</span>
-                    <input type="range" min="1" max="15" value={strokeWidth} onChange={(e) => setStrokeWidth(e.target.value)} className="w-full accent-[#00FF9D] h-1.5 bg-white/5 rounded-full appearance-none cursor-pointer" />
+                  <div className="space-y-1.5">
+                    <span className="text-[7px] text-white/40 uppercase tracking-[0.3em] font-bold">Grosor: {strokeWidth}px</span>
+                    <input type="range" min="1" max="15" value={strokeWidth} onChange={(e) => setStrokeWidth(e.target.value)} className="w-full accent-[#00FF9D] h-1 bg-white/5 rounded-full appearance-none cursor-pointer" />
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2">
-                    <button onClick={() => setShowGuides(!showGuides)} className={`p-3 rounded-xl border flex items-center justify-center transition-all ${showGuides ? 'bg-white/10 border-white/20 text-[#00FF9D]' : 'bg-white/5 border-transparent opacity-40'}`}>
-                      <Eye size={18}/>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    <button onClick={() => setShowGuides(!showGuides)} className={`p-2.5 rounded-xl border flex items-center justify-center transition-all ${showGuides ? 'bg-white/10 border-white/20 text-[#00FF9D]' : 'bg-white/5 border-transparent opacity-40'}`}>
+                      <Eye size={16}/>
                     </button>
-                    <button onClick={() => setShowInscribedAngle(!showInscribedAngle)} className={`p-3 rounded-xl border flex items-center justify-center transition-all ${showInscribedAngle ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400' : 'bg-white/5 border-transparent opacity-40'}`}>
-                      <Target size={18}/>
+                    <button onClick={() => setShowInscribedAngle(!showInscribedAngle)} className={`p-2.5 rounded-xl border flex items-center justify-center transition-all ${showInscribedAngle ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-400' : 'bg-white/5 border-transparent opacity-40'}`}>
+                      <Target size={16}/>
                     </button>
-                    <button onClick={clearCanvas} className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all">
-                      <Trash2 size={18}/>
+                    <button onClick={clearCanvas} className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white transition-all">
+                      <Trash2 size={16}/>
                     </button>
                   </div>
 
-                  <div className="flex flex-wrap gap-2 pt-2">
+                  <div className="flex flex-wrap gap-1.5 pt-1">
                     {['#00FF9D', '#00F0FF', '#FF00FF', '#F5F5F5', '#FFFB00', '#FF6B00', '#8F00FF', '#FF0055', '#3DFFFD'].map(c => (
-                      <button key={c} onClick={() => setColor(c)} className={`w-8 h-8 rounded-lg border-2 transition-all ${color === c ? 'border-white scale-110 shadow-lg' : 'border-transparent opacity-40'}`} style={{ backgroundColor: c, boxShadow: color === c ? `0 0 15px ${c}66` : 'none' }} />
+                      <button key={c} onClick={() => setColor(c)} className={`w-7 h-7 lg:w-8 lg:h-8 rounded-lg border-2 transition-all ${color === c ? 'border-white scale-110 shadow-lg' : 'border-transparent opacity-40'}`} style={{ backgroundColor: c, boxShadow: color === c ? `0 0 10px ${c}44` : 'none' }} />
                     ))}
                   </div>
                 </div>

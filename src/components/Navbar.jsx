@@ -59,7 +59,7 @@ export default function Navbar() {
 
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
-  const isFocusPage = location.pathname === '/diagnostico' || location.pathname === '/resultado-diagnostico';
+  const isFocusPage = location.pathname === '/diagnostico' || location.pathname === '/resultado-diagnostico' || location.pathname.startsWith('/arcade');
 
   if (isFocusPage) {
     return (

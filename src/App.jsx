@@ -24,6 +24,7 @@ import Tecnologia from "./pages/Tecnologia";
 import Preguntas from "./pages/Preguntas";
 import Transparencia from "./pages/Transparencia";
 import CasosReales from "./pages/CasosReales";
+import AppletCirculos from "./pages/Arcade/AppletCirculos";
 import NotFound from "./pages/NotFound";
 
 import ScrollToTop from "./components/ScrollToTop";
@@ -58,6 +59,8 @@ export default function App() {
             <Route path="/resultado-diagnostico" element={<ResultDashboard />} />
             <Route path="/admin/funnel" element={<FunnelDashboard />} />
             <Route path="/empresas" element={<Empresas />} />
+            <Route path="/arcade/circunferencias" element={<AppletCirculos />} />
+            <Route path="/diegobet" element={<AppletCirculos />} />
             <Route path="/nosotros" element={<Nosotros />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="*" element={<NotFound />} />

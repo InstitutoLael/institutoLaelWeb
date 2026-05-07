@@ -28,12 +28,10 @@ import NotFound from "./pages/NotFound";
 
 import ScrollToTop from "./components/ScrollToTop";
 import GrainCanvas from "./components/ui/GrainCanvas";
-import UrgencyBanner from "./components/UrgencyBanner";
 
 export default function App() {
   return (
     <div className="flex flex-col min-h-screen relative z-10">
-      <UrgencyBanner />
       <ScrollToTop />
       <GrainCanvas opacity={0.12} />
       <Toaster position="top-right" reverseOrder={false} toastOptions={{

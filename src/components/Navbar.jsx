@@ -6,6 +6,7 @@ import logoBlanco from '../assets/img/Logos/lael-inst-blanco.png';
 import logoNegro from '../assets/img/Logos/lael-inst-negro.png';
 import { NAVIGATION } from '../data/navigation';
 import { Plus } from 'lucide-react';
+import UrgencyBanner from './UrgencyBanner';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -63,8 +64,7 @@ export default function Navbar() {
   if (isFocusPage) {
     return (
       <header 
-        className="fixed left-0 w-full z-[100] py-8 px-8 flex justify-between items-center transition-all duration-500"
-        style={{ top: bannerHeight }}
+        className="fixed left-0 top-0 w-full z-[100] py-8 px-8 flex justify-between items-center transition-all duration-500"
       >
         <Link to="/" className="pointer-events-auto group">
            <img src={logoNegro} alt="Instituto Lael" className="h-7 w-auto transition-transform group-hover:scale-105" />
@@ -83,14 +83,16 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed left-0 w-full z-[100] transition-all duration-500 ease-in-out ${
+        className={`fixed left-0 top-0 w-full z-[100] transition-all duration-500 ease-in-out ${
           scrolled || mobileOpen || isLightPage
-            ? 'bg-white/95 backdrop-blur-md border-b border-black/[0.05] py-3 shadow-lg'
-            : 'bg-transparent py-7'
+            ? 'bg-white/95 backdrop-blur-md border-b border-black/[0.05] shadow-lg'
+            : 'bg-transparent'
         }`}
-        style={{ top: bannerHeight }}
       >
-        <div className="max-w-7xl mx-auto px-8 lg:px-12 flex items-center justify-between relative z-10">
+        <UrgencyBanner />
+        <div className={`max-w-7xl mx-auto px-8 lg:px-12 flex items-center justify-between relative z-10 transition-all duration-500 ${
+          scrolled || mobileOpen || isLightPage ? 'py-3' : 'py-7'
+        }`}>
           
           {/* ── LOGO ───────────────────────────────────────────────────── */}
           <Link to="/" className="z-[110] relative group flex items-center gap-3">
@@ -157,8 +159,8 @@ export default function Navbar() {
             >
               <AnimatePresence mode="wait" initial={false}>
                 {mobileOpen ? (
-                  <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
-                    <X size={20} />
+                  <motion.div key="cross" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.2 }}>
+                    <Plus size={24} />
                   </motion.div>
                 ) : (
                   <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.2 }}>
@@ -201,7 +203,7 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-lael-muted hover:bg-black/10"
                 >
-                  <X size={20} />
+                  <Plus size={24} />
                 </button>
               </div>
 
@@ -249,7 +251,7 @@ export default function Navbar() {
               <div className="mt-auto relative z-10 pt-10 border-t border-black/5">
                  <div className="bg-lael-accent/5 p-6 rounded-[30px] border border-lael-accent/10 mb-8">
                     <p className="text-[9px] tracking-[0.3em] uppercase text-lael-muted font-bold mb-4">Misión Lael</p>
-                    <p className="text-sm text-lael-light leading-relaxed italic italic-playfair">
+                    <p className="text-sm text-lael-primary leading-relaxed italic italic-playfair">
                       "No es solo aprender, es pertenecer a un sistema de alto rendimiento espiritual y académico."
                     </p>
                  </div>

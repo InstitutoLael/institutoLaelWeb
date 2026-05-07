@@ -235,11 +235,12 @@ export default function Home() {
                <span className="text-lael-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
             </motion.div>
 
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/diagnostico')} className="p-8 rounded-3xl bg-lael-accent/5 border border-lael-accent/20 cursor-pointer group hover:border-lael-accent/50 transition-all">
+            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/diagnostico')} className="p-8 rounded-3xl bg-white border border-lael-bd cursor-pointer group hover:border-lael-accent transition-all shadow-sm">
                <div className="flex justify-between items-start mb-6">
                   <div className="w-10 h-10 rounded-xl bg-lael-accent/10 text-lael-accent flex items-center justify-center">
                     <HelpCircle size={20} />
                   </div>
+                  <span className="bg-lael-accent text-white text-[9px] font-bold px-3 py-1.5 rounded-full tracking-widest uppercase shadow-lg shadow-lael-accent/20">GRATIS</span>
                </div>
                <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">No sé por dónde empezar</h3>
                <p className="text-sm text-lael-muted mb-6">Te orientamos gratis en tu proceso.</p>

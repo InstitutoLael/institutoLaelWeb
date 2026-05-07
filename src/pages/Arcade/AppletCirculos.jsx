@@ -5,7 +5,8 @@ import {
   Download, Trash2, Settings, Share2, HelpCircle, ArrowLeft, 
   Zap, Target, Activity, Layout, Maximize, Play, Pause, RefreshCcw,
   Circle, ChevronRight, Binary, Cpu, MousePointer2, GitCommit,
-  Scissors, Type, Eye, EyeOff, Ruler, Menu, X, SlidersHorizontal
+  Scissors, Type, Eye, EyeOff, Ruler, Menu, X, SlidersHorizontal,
+  Triangle, Share
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -49,6 +50,7 @@ export default function AppletCirculos() {
       const parent = canvasRef.current.parentElement;
       [canvasRef, guideCanvasRef].forEach(ref => {
         const c = ref.current;
+        if (!c) return;
         c.width = parent.clientWidth;
         c.height = parent.clientHeight;
         const context = c.getContext('2d');
@@ -60,12 +62,11 @@ export default function AppletCirculos() {
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []); // Empty dependency array to run once on mount
+  }, []);
 
-  // Separate effect for guides if needed, or just rely on mouse move
   useEffect(() => {
     drawGuides(mousePos);
-  }, [mousePos, symmetry, showGuides, showInscribedAngle, isDrawing, startPoint]);
+  }, [mousePos, symmetry, showGuides, showInscribedAngle, isDrawing, startPoint, mode]);
 
   const getPos = (e) => {
     const rect = canvasRef.current.getBoundingClientRect();
@@ -81,7 +82,7 @@ export default function AppletCirculos() {
   const lastPos = useRef(null);
 
   const handleMouseDown = (e) => {
-    if (e.touches && e.touches.length > 1) return; // Ignore multi-touch
+    if (e.touches && e.touches.length > 1) return;
     const pos = getPos(e);
     setIsDrawing(true);
     setStartPoint(pos);
@@ -95,7 +96,6 @@ export default function AppletCirculos() {
       drawSymmetricLine(lastPos.current, pos);
       lastPos.current = pos;
     }
-    drawGuides(pos);
   };
 
   const handleMouseUp = (e) => {
@@ -106,6 +106,8 @@ export default function AppletCirculos() {
       if (mode === 'cuerda') drawSymmetricChords(startPoint, endPos);
       if (mode === 'diametro') drawSymmetricDiameters(startPoint, endPos);
       if (mode === 'tangente') drawSymmetricTangents(endPos);
+      if (mode === 'central') drawCentralAngle(endPos);
+      if (mode === 'inscrito') drawInscribedAngleTool(endPos);
     }
     setIsDrawing(false);
     setStartPoint(null);
@@ -123,10 +125,7 @@ export default function AppletCirculos() {
       ctx.rotate(i * sliceAngle);
       ctx.strokeStyle = color;
       ctx.lineWidth = strokeWidth;
-      ctx.beginPath();
-      ctx.moveTo(p1.x, p1.y);
-      ctx.lineTo(p2.x, p2.y);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
       ctx.restore();
     }
   };
@@ -139,12 +138,8 @@ export default function AppletCirculos() {
       ctx.save();
       ctx.translate(centerX, centerY);
       ctx.rotate(i * sliceAngle);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = strokeWidth;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(p2.x, p2.y);
-      ctx.stroke();
+      ctx.strokeStyle = color; ctx.lineWidth = strokeWidth;
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(p2.x, p2.y); ctx.stroke();
       ctx.restore();
     }
   };
@@ -157,12 +152,8 @@ export default function AppletCirculos() {
       ctx.save();
       ctx.translate(centerX, centerY);
       ctx.rotate(i * sliceAngle);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = strokeWidth;
-      ctx.beginPath();
-      ctx.moveTo(p1.x, p1.y);
-      ctx.lineTo(p2.x, p2.y);
-      ctx.stroke();
+      ctx.strokeStyle = color; ctx.lineWidth = strokeWidth;
+      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
       ctx.restore();
     }
   };
@@ -175,12 +166,8 @@ export default function AppletCirculos() {
       ctx.save();
       ctx.translate(centerX, centerY);
       ctx.rotate(i * sliceAngle);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = strokeWidth;
-      ctx.beginPath();
-      ctx.moveTo(p2.x, p2.y);
-      ctx.lineTo(-p2.x, -p2.y);
-      ctx.stroke();
+      ctx.strokeStyle = color; ctx.lineWidth = strokeWidth;
+      ctx.beginPath(); ctx.moveTo(p2.x, p2.y); ctx.lineTo(-p2.x, -p2.y); ctx.stroke();
       ctx.restore();
     }
   };
@@ -189,7 +176,7 @@ export default function AppletCirculos() {
     const sliceAngle = (Math.PI * 2) / symmetry;
     const centerX = canvasRef.current.width / 2;
     const centerY = canvasRef.current.height / 2;
-    const length = 200;
+    const length = 300;
     const angle = Math.atan2(p.y, p.x);
     const t1 = { x: p.x + Math.cos(angle + Math.PI/2) * length, y: p.y + Math.sin(angle + Math.PI/2) * length };
     const t2 = { x: p.x + Math.cos(angle - Math.PI/2) * length, y: p.y + Math.sin(angle - Math.PI/2) * length };
@@ -197,12 +184,56 @@ export default function AppletCirculos() {
       ctx.save();
       ctx.translate(centerX, centerY);
       ctx.rotate(i * sliceAngle);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = strokeWidth;
+      ctx.strokeStyle = color; ctx.lineWidth = strokeWidth;
+      ctx.beginPath(); ctx.moveTo(t1.x, t1.y); ctx.lineTo(t2.x, t2.y); ctx.stroke();
+      ctx.restore();
+    }
+  };
+
+  const drawCentralAngle = (p) => {
+    const sliceAngle = (Math.PI * 2) / symmetry;
+    const centerX = canvasRef.current.width / 2;
+    const centerY = canvasRef.current.height / 2;
+    
+    // Draw 2 radii and arc
+    for (let i = 0; i < symmetry; i++) {
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate(i * sliceAngle);
+      ctx.strokeStyle = color; ctx.lineWidth = strokeWidth;
+      const radius = Math.sqrt(p.x**2 + p.y**2);
+      const angle = Math.atan2(p.y, p.x);
+      
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(p.x, p.y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, 0); ctx.rotate(sliceAngle); ctx.lineTo(p.x, p.y); ctx.stroke();
+      
+      // Arc
       ctx.beginPath();
-      ctx.moveTo(t1.x, t1.y);
-      ctx.lineTo(t2.x, t2.y);
+      ctx.arc(0, 0, radius, angle, angle + sliceAngle);
       ctx.stroke();
+      ctx.restore();
+    }
+  };
+
+  const drawInscribedAngleTool = (p) => {
+    const sliceAngle = (Math.PI * 2) / symmetry;
+    const centerX = canvasRef.current.width / 2;
+    const centerY = canvasRef.current.height / 2;
+    const radius = Math.sqrt(p.x**2 + p.y**2);
+    const angle = Math.atan2(p.y, p.x);
+    
+    // Vertex at the opposite side of the circle
+    const vertex = { x: Math.cos(angle + Math.PI) * radius, y: Math.sin(angle + Math.PI) * radius };
+    const p2 = { x: Math.cos(angle + sliceAngle) * radius, y: Math.sin(angle + sliceAngle) * radius };
+
+    for (let i = 0; i < symmetry; i++) {
+      ctx.save();
+      ctx.translate(centerX, centerY);
+      ctx.rotate(i * sliceAngle);
+      ctx.strokeStyle = color; ctx.lineWidth = strokeWidth;
+      
+      ctx.beginPath(); ctx.moveTo(vertex.x, vertex.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(vertex.x, vertex.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
       ctx.restore();
     }
   };
@@ -210,6 +241,7 @@ export default function AppletCirculos() {
   const drawGuides = (pos) => {
     if (!guideCtx) return;
     const canvas = guideCanvasRef.current;
+    if (!canvas) return;
     guideCtx.clearRect(0, 0, canvas.width, canvas.height);
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
@@ -231,10 +263,10 @@ export default function AppletCirculos() {
 
     if (showInscribedAngle) {
       const sliceAngle = (Math.PI * 2) / symmetry;
-      const radius = 250;
-      const top = { x: 0, y: -radius };
-      const p1 = { x: Math.cos(0) * radius, y: Math.sin(0) * radius };
-      const p2 = { x: Math.cos(sliceAngle) * radius, y: Math.sin(sliceAngle) * radius };
+      const radiusG = 250;
+      const top = { x: 0, y: -radiusG };
+      const p1 = { x: Math.cos(0) * radiusG, y: Math.sin(0) * radiusG };
+      const p2 = { x: Math.cos(sliceAngle) * radiusG, y: Math.sin(sliceAngle) * radiusG };
       guideCtx.save();
       guideCtx.translate(centerX, centerY);
       guideCtx.strokeStyle = '#00FF9D'; guideCtx.lineWidth = 1.5; guideCtx.setLineDash([5, 5]);
@@ -254,6 +286,14 @@ export default function AppletCirculos() {
        if (mode === 'radio') { guideCtx.beginPath(); guideCtx.moveTo(0,0); guideCtx.lineTo(pos.x, pos.y); guideCtx.stroke(); }
        else if (mode === 'cuerda') { guideCtx.beginPath(); guideCtx.moveTo(startPoint.x, startPoint.y); guideCtx.lineTo(pos.x, pos.y); guideCtx.stroke(); }
        else if (mode === 'diametro') { guideCtx.beginPath(); guideCtx.moveTo(pos.x, pos.y); guideCtx.lineTo(-pos.x, -pos.y); guideCtx.stroke(); }
+       else if (mode === 'central') { 
+         const sliceAngle = (Math.PI * 2) / symmetry;
+         const angle = Math.atan2(pos.y, pos.x);
+         const radius = Math.sqrt(pos.x**2 + pos.y**2);
+         guideCtx.beginPath(); guideCtx.moveTo(0,0); guideCtx.lineTo(pos.x, pos.y); guideCtx.stroke();
+         guideCtx.beginPath(); guideCtx.moveTo(0,0); guideCtx.rotate(sliceAngle); guideCtx.lineTo(pos.x, pos.y); guideCtx.stroke();
+         guideCtx.beginPath(); guideCtx.arc(0,0, radius, angle, angle+sliceAngle); guideCtx.stroke();
+       }
        guideCtx.restore();
     }
   };
@@ -278,7 +318,7 @@ export default function AppletCirculos() {
   return (
     <div className="relative w-full h-[100dvh] bg-[#05080F] text-white font-inter overflow-hidden touch-none">
       <Helmet>
-        <title>DIEGO BET | Responsive Geometric Lab</title>
+        <title>DIEGO BET | Laboratorio Geométrico</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
@@ -337,6 +377,8 @@ export default function AppletCirculos() {
                       { id: 'cuerda', label: 'Cuerda', icon: <GitCommit size={14}/> },
                       { id: 'diametro', label: 'Diámetro', icon: <Ruler size={14}/> },
                       { id: 'tangente', label: 'Tangente', icon: <Maximize size={14}/> },
+                      { id: 'central', label: 'Áng. Central', icon: <Triangle size={14}/> },
+                      { id: 'inscrito', label: 'Áng. Inscrito', icon: <Share size={14}/> },
                       { id: 'pincel', label: 'Arco', icon: <MousePointer2 size={14}/>, full: true },
                     ].map(t => (
                       <button 

@@ -2,458 +2,806 @@ import React from 'react';
 import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { X, ChevronRight, Target, Zap, HandHeart, HelpCircle } from 'lucide-react';
+import { ArrowRight, Check, Users, BookOpen, Heart, Target, Star, ChevronRight, Globe, HandHeart } from 'lucide-react';
 
-import demre from '../assets/img/Partners/DEMRE.png';
-import google from '../assets/img/Partners/GoogleWorkspace.png';
-import ino from '../assets/img/Partners/INO.png';
-import losOlivos from '../assets/img/Partners/LosOlivos.png';
-import mercadoPago from '../assets/img/Partners/MercadoPago.png';
-import naama from '../assets/img/Partners/naama-studio.png';
-import onepay from '../assets/img/Partners/onepay.png';
-import transbank from '../assets/img/Partners/Transbank.png';
-import paesBg from '../assets/img/Home/hero_paes_cinematic_human_1778110563659.png';
+// Hero image
+import heroImg from '../assets/img/Home/hero_student_lael.png';
+
+// World backgrounds
 import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.png';
 import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.png';
 import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.png';
 import empresasBg from '../assets/img/Home/mundo_empresas_bg_1777944168670.png';
 
-import SignificadoLael from '../components/SignificadoLael';
-import CharlaGratuita from '../components/CharlaGratuita';
-import InsideLael from '../components/InsideLael';
-import ObjectionsFAQ from '../components/ObjectionsFAQ';
+// ─── BRAND TOKENS ────────────────────────────────────────────────────────────
+const BLUE   = '#071D49';
+const YELLOW = '#D7E400';
+const GRAY   = '#F4F4F4';
+const ease   = [0.16, 1, 0.3, 1];
 
-const partners = [demre, google, ino, losOlivos, mercadoPago, naama, onepay, transbank];
-const ease = [0.16, 1, 0.3, 1];
-const WA_NUMBER = '56964626568';
-
-function AnimatedNumber({ value, duration = 1.5 }) {
+// ─── ANIMATED COUNTER ────────────────────────────────────────────────────────
+function AnimatedNumber({ value, prefix = '', suffix = '', duration = 1.8 }) {
   const count = useMotionValue(0);
-  const rounded = useTransform(count, (latest) => Math.round(latest));
+  const rounded = useTransform(count, (v) => Math.round(v));
   const ref = React.useRef(null);
   const inView = useInView(ref, { once: true });
-
   React.useEffect(() => {
-    if (inView) {
-      animate(count, value, { duration, ease: "easeOut" });
-    }
+    if (inView) animate(count, value, { duration, ease: 'easeOut' });
   }, [inView, count, value, duration]);
-
-  return <motion.span ref={ref}>{rounded}</motion.span>;
+  return (
+    <span ref={ref}>{prefix}<motion.span>{rounded}</motion.span>{suffix}</span>
+  );
 }
 
+// ─── FADE UP HELPER ──────────────────────────────────────────────────────────
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 40 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-80px' },
-  transition: { duration: 1.1, delay, ease },
+  viewport: { once: true, margin: '-60px' },
+  transition: { duration: 1, delay, ease },
 });
 
-const SYSTEMS = [
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const SUBJECTS = [
+  { code: 'M1',  name: 'Matemática 1',          type: 'Obligatoria' },
+  { code: 'M2',  name: 'Matemática 2',          type: 'Electiva' },
+  { code: 'CL',  name: 'Comprensión Lectora',   type: 'Obligatoria' },
+  { code: 'BIO', name: 'Biología',              type: 'Electiva' },
+  { code: 'QUI', name: 'Química',               type: 'Electiva' },
+  { code: 'FIS', name: 'Física',                type: 'Electiva' },
+  { code: 'HIS', name: 'Historia',              type: 'Electiva' },
+];
+
+const WORLDS = [
+  { id: 'ingles', label: 'INGLÉS', title: 'Habla con', accent: 'seguridad.', desc: 'Clases en vivo por Google Meet. Fluidez real sin atajos.', bg: idiomasBg, cta: 'Ver programa', route: '/idiomas', active: true, price: '$9.990/mes' },
+  { id: 'lsch',   label: 'LSCh',   title: 'Inclusión', accent: 'para todos.', desc: 'Lengua de Señas Chilena con instructores nativos. Cultura Sorda.', bg: lschBg,    cta: 'Aprender LSCh', route: '/lsch',   active: true, price: '$19.990/mes' },
+  { id: 'adultos', label: 'NIVELACIÓN', title: 'Tu segunda', accent: 'oportunidad.', desc: 'Termina tus estudios con un programa flexible. Próximamente.', bg: adultosBg, cta: 'Próximamente', route: '/adultos', active: false, price: null },
+];
+
+const TEACHERS = [
+  { id: 'diego',    name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática M1 + M2',    initials: 'DC', color: YELLOW },
+  { id: 'martin',   name: 'Martín',         role: 'Profe de Ciencias', subject: 'Biología + Química',   initials: 'MA', color: YELLOW },
+  { id: 'kathy',    name: 'Kathy',           role: 'Profe de Matemáticas', subject: 'Matemática M2',    initials: 'KA', color: YELLOW },
+  { id: 'fernanda', name: 'Fernanda',        role: 'Instructora LSCh', subject: 'Lengua de Señas Chilena', initials: 'FE', color: YELLOW },
+  { id: 'cl',       name: 'Próximamente',    role: 'Profe de Lenguaje', subject: 'Comprensión Lectora',  initials: '?',  color: '#8D8D8D', placeholder: true },
+];
+
+const WHY_LAEL = [
+  { icon: <Users size={28} />,    title: 'Acompañamiento real',  desc: 'No estudias solo. Profesores que te conocen por tu nombre y se preocupan por tu avance.' },
+  { icon: <Target size={28} />,   title: 'Ensayos y práctica',   desc: 'Preparación constante con simulacros reales para que llegues tranquilo el día de la PAES.' },
+  { icon: <Heart size={28} />,    title: 'Comunidad',            desc: 'Aprende junto a otros estudiantes con el mismo objetivo. Nunca estás solo en el proceso.' },
+  { icon: <BookOpen size={28} />, title: 'Formación integral',   desc: 'Más que puntajes. Desarrollamos tu potencial como persona, no solo como estudiante.' },
+];
+
+const METRICS = [
+  { value: 600, prefix: '+', suffix: '',  label: 'Alumnos activos',  color: YELLOW },
+  { value: 0,   prefix: '$', suffix: '',  label: 'Costo PAES',       color: '#FFFFFF' },
+  { value: 3,   prefix: '',  suffix: '',  label: 'Idiomas activos',  color: YELLOW },
+  { value: 100, prefix: '',  suffix: '%', label: '100% Online',      color: '#FFFFFF' },
+];
+
+const TESTIMONIALS = [
   {
-    id: 'paes',
-    route: '/paes',
-    label: 'PREPARACIÓN PAES',
-    title: 'Prepárate con',
-    accent: 'expertos, gratis.',
-    desc: 'Clases en vivo y simulacros sin costo. Calidad de élite accesible para todos.',
-    bg: paesBg,
-    cta: 'Inscribirme $0',
-  },
-  {
-    id: 'idiomas',
-    route: '/idiomas',
-    label: 'MUNDO IDIOMAS',
-    title: 'Habla con',
-    accent: 'seguridad.',
-    desc: 'Inglés real. Clases en vivo por Google Meet. Sin apps, sin atajos, directo a la fluidez.',
-    bg: idiomasBg,
-    cta: 'Ver idiomas',
-  },
-  {
-    id: 'lsch',
-    route: '/lsch',
-    label: 'MUNDO LSCH',
-    title: 'Inclusión',
-    accent: 'para todos.',
-    desc: 'Lengua de Señas Chilena con instructores nativos. Rompe la barrera de comunicación hoy.',
-    bg: lschBg,
-    cta: 'Aprender LSCh',
-  },
-  {
-    id: 'adultos',
-    route: '/adultos',
-    label: 'MUNDO ADULTOS',
-    title: 'Termina tus',
-    accent: 'estudios.',
-    desc: 'Tu segunda oportunidad es hoy. Nivelación flexible que se adapta a tu ritmo de vida.',
-    bg: adultosBg,
-    cta: 'Comenzar hoy',
-  },
-  {
-    id: 'empresas',
-    route: '/empresas',
-    label: 'MUNDO EMPRESAS',
-    title: 'Capacita a',
-    accent: 'tu equipo.',
-    desc: 'Resultados reales para tu empresa. Talleres estratégicos y cumplimiento de normativa.',
-    bg: empresasBg,
-    cta: 'Cotizar servicio',
+    id: 't1',
+    name: 'Daniela R.',
+    program: 'LSCh con Fernanda',
+    quote: 'Fernanda es una profesora excelente. Aprendí cultura sorda con una pedagogía muy paciente y estructurada.',
+    rating: 5,
+    initials: 'DR',
+    real: true,
   },
 ];
 
-const isLightPage = ['nosotros', 'contacto', 'transparencia', 'preguntas', 'diagnostico'].includes(location.pathname);
-
-const METHOD = [
-  { step: '01', label: 'Diagnóstico', desc: 'Detectamos dónde estás realmente y por qué no has subido tu puntaje.' },
-  { step: '02', label: 'Estrategia', desc: 'Armamos un plan que se adapta a tu meta y al tiempo que tienes hoy.' },
-  { step: '03', label: 'Profesores', desc: 'Profesores reales que te conocen por tu nombre y te ayudan en vivo.' },
-  { step: '04', label: 'Ensayos', desc: 'Entrenamos con ensayos iguales a la prueba real para que vayas tranquilo.' }
-];
-
+// ─── HOME ────────────────────────────────────────────────────────────────────
 export default function Home() {
   const navigate = useNavigate();
 
-  const handleEvaluation = () => {
-    trackEvent('hero_diagnostic_click');
-    navigate('/diagnostico');
-  };
-
   return (
-    <div className="bg-lael-primary text-lael-light overflow-hidden">
+    <div className="overflow-hidden">
       <Helmet>
-        <title>Instituto Lael | PAES Gratis + Idiomas Online Chile</title>
-        <meta name="description" content="Ecosistema educativo online. PAES 100% gratuita, Inglés, Coreano y LSCh. +600 alumnos. Santiago, Chile. Inicio Junio 2026." />
+        <title>Instituto Lael | PAES Gratuita + Idiomas + LSCh — Chile</title>
+        <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES 100% gratuita, Inglés, Coreano y LSCh. Acompañamiento real. Instituto Lael, Chile." />
       </Helmet>
 
-      {/* Grain texture */}
-      <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.05] mix-blend-multiply"
-        style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\'/%3E%3C/svg%3E")' }} />
-
-      {/* ── 1. HERO (CINEMÁTICO & EMOCIONAL) ─────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-32 overflow-hidden">
-        {/* Background Cinematic Image (Placeholder for night student study) */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-lael-primary/40 via-lael-primary/60 to-lael-primary z-10" />
-          <div className="absolute inset-0 bg-lael-primary/20 backdrop-blur-[2px] z-0" />
-          {/* Note: When generated, hero_home_emotional will go here */}
-          <div className="w-full h-full bg-cover bg-center opacity-30 mix-blend-luminosity" 
-            style={{ backgroundImage: `url(${paesBg})` }} /> 
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center">
-          <motion.div {...fadeUp()} className="mb-10">
-             <h2 className="text-lael-accent font-display text-2xl lg:text-3xl italic italic-playfair font-normal">
-                Preparación PAES de alto rendimiento, <br className="hidden md:block" />
-                <span className="text-lael-rust not-italic font-sans text-sm tracking-[0.3em] uppercase font-bold">Ahora 100% gratuita.</span>
-             </h2>
+      {/* ══════════════════════════════════════════════════════════════════
+          BLOQUE 1 — HERO 50/50
+      ══════════════════════════════════════════════════════════════════ */}
+      <section
+        className="min-h-screen grid grid-cols-1 lg:grid-cols-2 relative overflow-hidden"
+        style={{ backgroundColor: BLUE }}
+      >
+        {/* Left — Copy */}
+        <div className="flex flex-col justify-center px-8 sm:px-12 lg:px-20 py-32 lg:py-0 relative z-10">
+          {/* Badge */}
+          <motion.div {...fadeUp(0)} className="mb-8">
+            <span
+              className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.25em] px-4 py-2 rounded-full"
+              style={{ backgroundColor: YELLOW, color: BLUE }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+              PAES 2027 — 100% Gratuita
+            </span>
           </motion.div>
 
-          <motion.h1 
-            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
-            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
-            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-6xl xl:text-8xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl mb-12 relative"
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, ease }}
+            className="text-white leading-[0.92] mb-8"
+            style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(3rem, 7vw, 5.5rem)' }}
           >
-            Tu futuro no <br/>
-            <span className="relative inline-block">
-               <span className="absolute inset-0 blur-3xl bg-lael-accent/20 -z-10 rounded-full animate-pulse"></span>
-               <span className="accent-italic relative z-10">tiene precio.</span>
-            </span>
+            TU FUTURO<br />
+            NO EMPIEZA<br />
+            <span style={{ color: YELLOW }}>DESPUÉS.</span>
           </motion.h1>
 
-          <motion.p {...fadeUp(0.3)} className="text-lael-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed mb-14">
-            Clases en vivo con profesores reales, simulacros y comunidad. <br className="hidden md:block" /> 
-            Sin costos ocultos. Sin barreras. Solo tu esfuerzo y nuestra guía.
+          <motion.p
+            {...fadeUp(0.2)}
+            className="text-white/60 text-lg leading-relaxed mb-10 max-w-md"
+            style={{ fontFamily: 'Inter, sans-serif' }}
+          >
+            <em style={{ color: YELLOW, fontStyle: 'normal', fontWeight: 600 }}>Empieza ahora.</em>{' '}
+            Clases en vivo, profesores reales y comunidad. Sin costo, sin barreras. Solo tu esfuerzo y nuestra guía.
           </motion.p>
 
-          <motion.div {...fadeUp(0.6)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-6">
-            <motion.button 
-              whileHover={{ scale: 1.05, y: -4 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/diagnostico')}
-              className="bg-lael-accent text-white px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all shadow-2xl shadow-lael-accent/20"
+          {/* Buttons */}
+          <motion.div {...fadeUp(0.35)} className="flex flex-col sm:flex-row gap-4">
+            <Link
+              to="/paes"
+              className="inline-flex items-center justify-center gap-2 px-10 py-5 rounded-2xl text-sm font-bold uppercase tracking-wider transition-all hover:opacity-90 hover:-translate-y-0.5 active:scale-95 shadow-xl"
+              style={{ backgroundColor: YELLOW, color: BLUE, fontFamily: 'Montserrat, sans-serif' }}
             >
-              Inscribirme Gratis
-            </motion.button>
-            <motion.button 
-              whileHover={{ scale: 1.05, y: -4 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/paes')}
-              className="bg-lael-secondary border border-lael-bd text-lael-primary px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all"
+              Inscribirme gratis
+              <ArrowRight size={16} />
+            </Link>
+            <Link
+              to="/paes"
+              className="inline-flex items-center justify-center gap-2 px-10 py-5 rounded-2xl text-sm font-bold uppercase tracking-wider transition-all hover:bg-white/10 active:scale-95"
+              style={{ border: `2px solid rgba(255,255,255,0.25)`, color: 'white', fontFamily: 'Montserrat, sans-serif' }}
             >
-              Ver cómo funciona
-            </motion.button>
+              Conocer el programa
+            </Link>
           </motion.div>
-          
-          <motion.p {...fadeUp(0.9)} className="mt-12 text-[10px] uppercase tracking-[0.3em] text-lael-muted font-bold opacity-60">
-            En vivo por Google Meet • Material incluido • $0 costo mensual
+
+          {/* Trust indicators */}
+          <motion.div {...fadeUp(0.5)} className="flex items-center gap-6 mt-12 pt-12 border-t border-white/10">
+            <div className="text-center">
+              <p className="text-white font-bold text-2xl" style={{ fontFamily: 'Montserrat, sans-serif' }}>+600</p>
+              <p className="text-white/40 text-[10px] uppercase tracking-widest">Alumnos</p>
+            </div>
+            <div className="w-px h-10 bg-white/10" />
+            <div className="text-center">
+              <p className="font-bold text-2xl" style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}>$0</p>
+              <p className="text-white/40 text-[10px] uppercase tracking-widest">Costo PAES</p>
+            </div>
+            <div className="w-px h-10 bg-white/10" />
+            <div className="text-center">
+              <p className="text-white font-bold text-2xl" style={{ fontFamily: 'Montserrat, sans-serif' }}>100%</p>
+              <p className="text-white/40 text-[10px] uppercase tracking-widest">Online</p>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Right — Image */}
+        <motion.div
+          initial={{ opacity: 0, scale: 1.05 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.4, ease }}
+          className="relative hidden lg:block"
+        >
+          {/* Gradient overlay on left edge to blend with blue */}
+          <div
+            className="absolute inset-y-0 left-0 w-32 z-10 pointer-events-none"
+            style={{ background: `linear-gradient(to right, ${BLUE}, transparent)` }}
+          />
+          <img
+            src={heroImg}
+            alt="Estudiante Instituto Lael"
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Subtle bottom gradient */}
+          <div
+            className="absolute inset-x-0 bottom-0 h-40 pointer-events-none"
+            style={{ background: `linear-gradient(to top, ${BLUE}CC, transparent)` }}
+          />
+
+          {/* Floating badge */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1, duration: 0.8, ease }}
+            className="absolute top-12 right-12 z-20 rounded-2xl p-5 shadow-2xl"
+            style={{ backgroundColor: YELLOW }}
+          >
+            <p className="font-black text-3xl leading-none" style={{ color: BLUE, fontFamily: 'Montserrat, sans-serif' }}>100%</p>
+            <p className="font-bold text-[10px] uppercase tracking-widest mt-1" style={{ color: BLUE }}>Gratuito</p>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          BLOQUE 2 — NO ERES UN PUNTAJE
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-28 lg:py-40 px-6 bg-white">
+        <div className="max-w-5xl mx-auto text-center">
+          <motion.p
+            {...fadeUp(0)}
+            className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8"
+            style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
+          >
+            Nuestra Creencia
           </motion.p>
+          <motion.h2
+            {...fadeUp(0.1)}
+            className="leading-[0.9] mb-10"
+            style={{
+              fontFamily: 'Montserrat, sans-serif',
+              fontWeight: 900,
+              fontSize: 'clamp(3rem, 8vw, 7rem)',
+              color: BLUE,
+              letterSpacing: '-0.03em',
+            }}
+          >
+            NO ERES<br />UN PUNTAJE.
+          </motion.h2>
+          <motion.div {...fadeUp(0.2)} className="max-w-2xl mx-auto space-y-5">
+            <p className="text-xl leading-relaxed" style={{ color: '#071D49CC' }}>
+              La PAES es importante. Pero detrás de cada resultado hay una historia, esfuerzo y sueños.
+            </p>
+            <p className="text-xl leading-relaxed" style={{ color: '#071D49CC' }}>
+              En Instituto LAEL trabajamos para <strong style={{ color: BLUE }}>desarrollar tu potencial académico y personal.</strong>
+            </p>
+          </motion.div>
+          <motion.div {...fadeUp(0.3)} className="mt-12">
+            <Link
+              to="/nosotros"
+              className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider hover:gap-4 transition-all"
+              style={{ color: BLUE, fontFamily: 'Montserrat, sans-serif' }}
+            >
+              Conoce quiénes somos <ChevronRight size={16} />
+            </Link>
+          </motion.div>
         </div>
       </section>
 
-      {/* ── 1.5 ¿QUÉ NECESITAS HOY? ─────────────────────────────────── */}
-      <section className="py-24 px-6 border-y border-white/5 bg-white/[0.01]">
+      {/* ══════════════════════════════════════════════════════════════════
+          BLOQUE 3 — CARD PAES GRATUITO 2027
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 px-6" style={{ backgroundColor: GRAY }}>
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            {...fadeUp(0)}
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.3 }}
+            className="rounded-[40px] overflow-hidden shadow-2xl"
+            style={{ backgroundColor: BLUE }}
+          >
+            <div className="p-10 lg:p-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Left */}
+              <div>
+                <span
+                  className="inline-block text-[11px] font-black uppercase tracking-widest px-5 py-2.5 rounded-full mb-8 shadow-lg"
+                  style={{ backgroundColor: YELLOW, color: BLUE, fontFamily: 'Montserrat, sans-serif' }}
+                >
+                  100% GRATUITO
+                </span>
+                <h2
+                  className="text-white mb-6 leading-tight"
+                  style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}
+                >
+                  PROGRAMA PAES<br />GRATUITO 2027
+                </h2>
+                <p className="text-white/60 text-lg mb-10 leading-relaxed">
+                  Clases en vivo, simulacros semanales y profesores reales. Sin matrícula, sin mensualidades, sin sorpresas.
+                </p>
+                <Link
+                  to="/paes"
+                  className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-wider transition-all hover:opacity-90 active:scale-95"
+                  style={{ backgroundColor: YELLOW, color: BLUE, fontFamily: 'Montserrat, sans-serif' }}
+                >
+                  Inscribirme ahora <ArrowRight size={16} />
+                </Link>
+              </div>
+
+              {/* Right — Details */}
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: 'Inicio', value: 'Agosto 2025' },
+                  { label: 'Modalidad', value: 'Online' },
+                  { label: 'Cupos', value: 'Limitados' },
+                  { label: 'Costo', value: '$0 / mes' },
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    className="p-6 rounded-3xl flex flex-col gap-2"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}
+                  >
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">{item.label}</p>
+                    <p
+                      className="font-black text-white text-xl leading-tight"
+                      style={{ fontFamily: 'Montserrat, sans-serif' }}
+                    >
+                      {item.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          BLOQUE 4 — DASHBOARD ASIGNATURAS
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-24 px-6" style={{ backgroundColor: BLUE }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-display font-bold">¿Qué necesitas hoy?</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/paes')} className="p-8 rounded-3xl bg-white border border-lael-bd cursor-pointer group hover:border-lael-accent transition-all shadow-sm">
-               <div className="flex justify-between items-start mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-lael-accent/10 text-lael-accent flex items-center justify-center">
-                    <Target size={20} />
-                  </div>
-                  <span className="bg-lael-accent text-white text-[9px] font-bold px-3 py-1.5 rounded-full tracking-widest uppercase shadow-lg shadow-lael-accent/20">GRATIS</span>
-               </div>
-               <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">Preparar mi PAES</h3>
-               <p className="text-sm text-lael-muted mb-6">Clases en vivo sin costo mensual.</p>
-               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all">Inscribirme <ChevronRight size={14}/></span>
-            </motion.div>
-            
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/idiomas')} className="p-8 rounded-3xl bg-white border border-lael-bd cursor-pointer group hover:border-lael-accent transition-all shadow-sm">
-               <div className="flex justify-between items-start mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-lael-accent/10 text-lael-accent flex items-center justify-center">
-                    <Zap size={20} />
-                  </div>
-                  <span className="bg-lael-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-full tracking-widest uppercase">$9.990/MES</span>
-               </div>
-               <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">Aprender Inglés</h3>
-               <p className="text-sm text-lael-muted mb-6">Fluidez real con simulacros.</p>
-               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
-            </motion.div>
-
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/lsch')} className="p-8 rounded-3xl bg-white border border-lael-bd cursor-pointer group hover:border-lael-accent transition-all shadow-sm">
-               <div className="flex justify-between items-start mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-lael-accent/10 text-lael-accent flex items-center justify-center">
-                    <HandHeart size={20} />
-                  </div>
-                  <span className="bg-lael-primary text-white text-[9px] font-bold px-3 py-1.5 rounded-full tracking-widest uppercase">$14.990/MES</span>
-               </div>
-               <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">Lengua de Señas</h3>
-               <p className="text-sm text-lael-muted mb-6">Inclusión real y cultura sorda.</p>
-               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all">Ver programa <ChevronRight size={14}/></span>
-            </motion.div>
-
-            <motion.div whileHover={{ y: -5 }} onClick={() => navigate('/diagnostico')} className="p-8 rounded-3xl bg-white border border-lael-bd cursor-pointer group hover:border-lael-accent transition-all shadow-sm">
-               <div className="flex justify-between items-start mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-lael-accent/10 text-lael-accent flex items-center justify-center">
-                    <HelpCircle size={20} />
-                  </div>
-                  <span className="bg-lael-accent text-white text-[9px] font-bold px-3 py-1.5 rounded-full tracking-widest uppercase shadow-lg shadow-lael-accent/20">GRATIS</span>
-               </div>
-               <h3 className="text-xl font-bold mb-2 text-lael-primary uppercase tracking-tight">No sé por dónde empezar</h3>
-               <p className="text-sm text-lael-muted mb-6">Te orientamos gratis en tu proceso.</p>
-               <span className="text-lael-accent text-[10px] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all">Hacer diagnóstico <ChevronRight size={14}/></span>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 2. DOLOR DIRECTO (EL QUIEBRE) ─────────────────────────────── */}
-      <section className="relative w-full py-32 bg-lael-primary flex flex-col items-center px-6 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[150px] pointer-events-none" />
-        <div className="max-w-7xl w-full relative z-10">
-           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.5em] uppercase mb-12 font-bold text-center">La Realidad</motion.p>
-           
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center mb-32">
-              <div className="order-2 lg:order-1">
-                 <h3 className="font-display text-4xl lg:text-7xl text-lael-light font-bold leading-tight mb-10">
-                  A veces, estudiar más <br />
-                  <span className="accent-italic text-lael-accent underline decoration-lael-accent/30 underline-offset-[10px]">no es la solución.</span>
-                </h3>
-                <div className="space-y-8 text-lael-muted text-lg lg:text-xl leading-relaxed">
-                  <p>Pasas horas frente a los libros. Repites ejercicios. Te esfuerzas. Pero el puntaje parece estar bloqueado.</p>
-                  <p className="font-bold text-lael-light p-8 bg-white/5 border border-white/5 rounded-[40px] border-l-lael-accent border-l-4">
-                    No es tu falta de capacidad. Es que nadie te ha enseñado a entrenar de verdad.
-                  </p>
-                  <p>
-                    <span className="text-lael-accent font-bold">Entendemos tu frustración.</span> La mayoría de nuestros alumnos llegan sintiéndose agotados y con la idea de que "no les da la cabeza". 
-                  </p>
-                </div>
-              </div>
-
-              <div className="order-1 lg:order-2 space-y-8">
-                <div className="p-12 bg-lael-accent/5 border border-lael-accent/20 rounded-[50px] relative group overflow-hidden">
-                   <div className="absolute top-0 right-0 p-8 text-lael-accent/10 font-display text-9xl font-bold italic select-none">"</div>
-                   <p className="text-lael-light text-2xl lg:text-3xl font-medium italic italic-playfair relative z-10 leading-relaxed mb-8">
-                     "Lo intenté en preuniversitarios masivos y era solo un número más. En Lael encontraron exactamente por qué me bloqueaba."
-                   </p>
-                   <div className="flex items-center gap-4">
-                      <div className="w-12 h-[1px] bg-lael-accent/50"></div>
-                      <p className="text-[11px] uppercase tracking-[0.3em] text-lael-accent font-bold">Constanza, Puntaje Nacional</p>
-                   </div>
-                </div>
-              </div>
-           </div>
-
-           <SignificadoLael />
-
-           <div className="mt-32 p-12 lg:p-20 bg-white/5 border border-white/10 rounded-[60px] text-center max-w-4xl mx-auto backdrop-blur-sm">
-              <p className="text-lael-muted text-lg lg:text-xl leading-relaxed">
-                En Lael, rompemos esa barrera. Te acompañamos paso a paso, en vivo, para que recuperes la confianza y logres el puntaje que mereces.
-              </p>
-           </div>
-        </div>
-      </section>
-
-      {/* ── 3. CTA INTERMEDIO (LAEL CHOICE) ───────────────────────────── */}
-      <section className="py-24 px-6 flex justify-center bg-lael-secondary/30">
-          <motion.div 
-            whileHover={{ scale: 1.02 }}
-            className="max-w-4xl w-full p-12 rounded-[40px] bg-lael-primary border border-lael-bd cinematic-shadow text-center flex flex-col items-center"
-          >
-            <p className="text-lael-accent text-[10px] tracking-[0.5em] uppercase mb-6 font-bold">Autodiagnóstico</p>
-            <h2 className="text-3xl md:text-4xl font-display font-bold text-lael-primary mb-8">
-              Deja de disparar a ciegas. <br />
-              <span className="italic italic-playfair text-lael-accent font-normal">Identifica tus bloqueos hoy.</span>
-            </h2>
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/diagnostico')}
-              className="bg-lael-accent text-white px-12 py-5 rounded-2xl text-[11px] tracking-[0.3em] uppercase font-bold shadow-xl shadow-lael-accent/20 hover:bg-lael-rust transition-all"
+            <motion.p
+              {...fadeUp(0)}
+              className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4"
+              style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
             >
-              Iniciar diagnóstico táctico
-            </motion.button>
-          </motion.div>
-      </section>
-
-      {/* ── 4. MUNDOS (LAEL SYSTEMS) ──────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center overflow-hidden">
-        <div className="w-full max-w-7xl">
-          <div className="text-center mb-20">
-             <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">Explora tu sistema</motion.p>
-             <h2 className="font-display text-4xl lg:text-6xl text-lael-light font-bold">Elige tu mundo.</h2>
+              Asignaturas PAES 2027
+            </motion.p>
+            <motion.h2
+              {...fadeUp(0.1)}
+              className="text-white"
+              style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 5vw, 4rem)', letterSpacing: '-0.03em' }}
+            >
+              TODO LO QUE NECESITAS.
+            </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            {SYSTEMS.map((system, i) => (
-              <motion.div 
-                key={system.id} 
-                {...fadeUp(i * 0.1)}
-                whileHover={{ y: -4, borderColor: '#C4973E' }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-                className="group relative aspect-[4/5] rounded-[48px] overflow-hidden border border-lael-accent/15 cinematic-shadow transition-all duration-300"
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {SUBJECTS.map((subject, i) => (
+              <motion.div
+                key={subject.code}
+                {...fadeUp(i * 0.06)}
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ duration: 0.25 }}
+                className="group rounded-[28px] p-6 cursor-pointer transition-all"
+                style={{
+                  backgroundColor: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                }}
               >
-                 <img 
-                   src={system.bg} 
-                   alt={system.label} 
-                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                 />
-                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
-                 
-                 <div className="absolute bottom-12 left-10 right-10 z-20">
-                    <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">{system.label}</p>
-                    <h3 className="font-display text-4xl text-white font-bold leading-tight mb-4">
-                      {system.title} <br/> 
-                      <span className="text-lael-accent italic italic-playfair font-normal">{system.accent}</span>
-                    </h3>
-                    <p className="text-lael-muted/90 text-sm leading-relaxed mb-8 max-w-[300px]">
-                      {system.desc}
-                    </p>
-                    <div className="space-y-3">
-                      <Link to={system.route} className="w-full py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold flex items-center justify-center gap-3 group-hover:bg-lael-rust transition-all duration-500">
-                         {system.cta}
+                {/* Badge code */}
+                <div
+                  className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-5 text-xl font-black group-hover:scale-110 transition-transform"
+                  style={{
+                    backgroundColor: YELLOW,
+                    color: BLUE,
+                    fontFamily: 'Montserrat, sans-serif',
+                  }}
+                >
+                  {subject.code}
+                </div>
+                <h3
+                  className="text-white font-bold text-base leading-tight mb-2"
+                  style={{ fontFamily: 'Montserrat, sans-serif' }}
+                >
+                  {subject.name}
+                </h3>
+                <span
+                  className="text-[9px] font-bold uppercase tracking-widest px-2 py-1 rounded-full"
+                  style={{
+                    backgroundColor: subject.type === 'Obligatoria' ? `${YELLOW}20` : 'rgba(255,255,255,0.08)',
+                    color: subject.type === 'Obligatoria' ? YELLOW : 'rgba(255,255,255,0.4)',
+                  }}
+                >
+                  {subject.type}
+                </span>
+              </motion.div>
+            ))}
+
+            {/* Coming soon card */}
+            <motion.div
+              {...fadeUp(SUBJECTS.length * 0.06)}
+              className="rounded-[28px] p-6 flex flex-col justify-center items-center text-center"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.02)',
+                border: '1px dashed rgba(255,255,255,0.15)',
+              }}
+            >
+              <p className="text-white/30 text-sm font-bold" style={{ fontFamily: 'Montserrat, sans-serif' }}>Más asignaturas</p>
+              <p className="text-white/20 text-[10px] uppercase tracking-widest mt-1">Próximamente</p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          BLOQUE 5 — MUNDOS / OTROS PROGRAMAS
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-28 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <motion.p
+              {...fadeUp(0)}
+              className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4"
+              style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
+            >
+              Más en Instituto Lael
+            </motion.p>
+            <motion.h2
+              {...fadeUp(0.1)}
+              className="leading-tight"
+              style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: BLUE, letterSpacing: '-0.03em' }}
+            >
+              ELIGE TU PROGRAMA.
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {WORLDS.map((world, i) => (
+              <motion.div
+                key={world.id}
+                {...fadeUp(i * 0.1)}
+                whileHover={world.active ? { y: -6 } : {}}
+                className={`relative aspect-[3/4] rounded-[40px] overflow-hidden group ${world.active ? 'cursor-pointer' : 'cursor-default opacity-60'}`}
+              >
+                <img
+                  src={world.bg}
+                  alt={world.label}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(7,29,73,0.95) 0%, rgba(7,29,73,0.4) 50%, transparent 100%)' }} />
+
+                {/* Content */}
+                <div className="absolute bottom-0 inset-x-0 p-8 z-10">
+                  <p
+                    className="text-[9px] font-bold uppercase tracking-[0.3em] mb-3"
+                    style={{ color: world.active ? YELLOW : 'rgba(255,255,255,0.4)' }}
+                  >
+                    {world.label}
+                  </p>
+                  <h3
+                    className="text-white mb-2 leading-tight"
+                    style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 800, fontSize: '1.7rem' }}
+                  >
+                    {world.title}<br />
+                    <span style={{ color: world.active ? YELLOW : 'rgba(255,255,255,0.5)' }}>{world.accent}</span>
+                  </h3>
+                  <p className="text-white/60 text-sm mb-6 leading-relaxed">{world.desc}</p>
+                  {world.active ? (
+                    <div className="flex items-center gap-3">
+                      <Link
+                        to={world.route}
+                        className="flex-1 py-3 rounded-xl text-[10px] font-bold uppercase tracking-wider text-center transition-all group-hover:opacity-90"
+                        style={{ backgroundColor: YELLOW, color: BLUE, fontFamily: 'Montserrat, sans-serif' }}
+                      >
+                        {world.cta}
                       </Link>
+                      {world.price && (
+                        <span className="text-white/40 text-[10px] font-bold">{world.price}</span>
+                      )}
                     </div>
-                 </div>
+                  ) : (
+                    <span
+                      className="inline-block py-3 px-6 rounded-xl text-[10px] font-bold uppercase tracking-wider"
+                      style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.4)' }}
+                    >
+                      Próximamente
+                    </span>
+                  )}
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── 5. PROCESO (ARQUITECTURA) ─────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd flex flex-col items-center">
-        <div className="max-w-5xl w-full">
-           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-16 text-center">Nuestra Arquitectura</motion.p>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-              {METHOD.map((item, i) => (
-                <motion.div key={i} {...fadeUp(i * 0.1)} className="text-center lg:text-left space-y-6">
-                   <div className="font-display text-7xl text-lael-accent/20 font-bold">{item.step}</div>
-                   <h4 className="text-lael-primary text-2xl font-bold uppercase tracking-widest">{item.label}</h4>
-                   <p className="text-lael-muted leading-relaxed">{item.desc}</p>
-                </motion.div>
-              ))}
-           </div>
+      {/* ══════════════════════════════════════════════════════════════════
+          BLOQUE 6 — DOCENTES
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-28 px-6" style={{ backgroundColor: GRAY }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <motion.p
+              {...fadeUp(0)}
+              className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4"
+              style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
+            >
+              Equipo Docente
+            </motion.p>
+            <motion.h2
+              {...fadeUp(0.1)}
+              className="leading-tight"
+              style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: BLUE, letterSpacing: '-0.03em' }}
+            >
+              PERSONAS REALES.<br />RESULTADOS REALES.
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {TEACHERS.map((t, i) => (
+              <motion.div
+                key={t.id}
+                {...fadeUp(i * 0.08)}
+                className={`rounded-[32px] p-8 flex flex-col items-center text-center transition-all ${t.placeholder ? 'opacity-50' : ''}`}
+                style={{
+                  backgroundColor: t.placeholder ? 'transparent' : 'white',
+                  border: t.placeholder ? `2px dashed rgba(7,29,73,0.15)` : '1px solid rgba(7,29,73,0.08)',
+                  boxShadow: t.placeholder ? 'none' : '0 4px 24px rgba(7,29,73,0.06)',
+                }}
+              >
+                {/* Avatar */}
+                <div
+                  className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-black mb-5 shadow-lg"
+                  style={{
+                    backgroundColor: t.placeholder ? '#e5e7eb' : BLUE,
+                    color: t.placeholder ? '#9ca3af' : YELLOW,
+                    fontFamily: 'Montserrat, sans-serif',
+                  }}
+                >
+                  {t.initials}
+                </div>
+                <h3
+                  className="font-bold text-lg mb-1 leading-tight"
+                  style={{ color: t.placeholder ? '#9ca3af' : BLUE, fontFamily: 'Montserrat, sans-serif' }}
+                >
+                  {t.name}
+                </h3>
+                <p
+                  className="text-[11px] font-bold uppercase tracking-wider mb-3"
+                  style={{ color: t.placeholder ? '#9ca3af' : YELLOW }}
+                >
+                  {t.subject}
+                </p>
+                <p
+                  className="text-[11px] uppercase tracking-widest"
+                  style={{ color: t.placeholder ? '#9ca3af' : `${BLUE}80` }}
+                >
+                  {t.role}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── 6. RESULTADOS (DATA REAL) ─────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center bg-lael-secondary/20">
-        <div className="max-w-7xl w-full">
-           <div className="flex flex-col lg:flex-row items-end justify-between mb-20 gap-8">
-              <div className="max-w-2xl">
-                 <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Métricas de Impacto</motion.p>
-                 <h2 className="font-display text-4xl lg:text-7xl text-lael-primary font-bold leading-tight">Resultados que <br/><span className="italic italic-playfair text-lael-accent">se pueden medir.</span></h2>
-              </div>
-              <p className="text-lael-muted text-lg max-w-sm pb-4">No son solo números. Son historias de superación real en cada rincón de Chile.</p>
-           </div>
+      {/* ══════════════════════════════════════════════════════════════════
+          BLOQUE 7 — ¿POR QUÉ LAEL?
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-28 px-6 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <motion.p
+              {...fadeUp(0)}
+              className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4"
+              style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
+            >
+              La diferencia
+            </motion.p>
+            <motion.h2
+              {...fadeUp(0.1)}
+              style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: BLUE, letterSpacing: '-0.03em' }}
+            >
+              ¿POR QUÉ LAEL?
+            </motion.h2>
+          </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-32">
-              <div className="relative group">
-                 <div className="p-12 bg-white rounded-[50px] border border-lael-bd cinematic-shadow group-hover:border-lael-accent transition-all duration-500 text-center">
-                    <p className="text-emerald-500 text-7xl font-display font-bold mb-4">
-                      +<AnimatedNumber value={600} />
-                    </p>
-                    <div className="h-[2px] w-12 bg-lael-accent/20 mx-auto mb-4"></div>
-                    <p className="text-lael-primary text-[11px] uppercase tracking-[0.25em] font-bold">Alumnos activos</p>
-                 </div>
-              </div>
-              
-              <div className="relative group">
-                 <div className="p-12 bg-white rounded-[50px] border border-lael-bd cinematic-shadow group-hover:border-lael-accent transition-all duration-500 text-center">
-                    <p className="text-lael-accent text-7xl font-display font-bold mb-4">$0</p>
-                    <div className="h-[2px] w-12 bg-lael-accent/20 mx-auto mb-4"></div>
-                    <p className="text-lael-primary text-[11px] uppercase tracking-[0.25em] font-bold">Inversión PAES</p>
-                 </div>
-              </div>
-
-              <div className="relative group">
-                 <div className="p-12 bg-white rounded-[50px] border border-lael-bd cinematic-shadow group-hover:border-lael-accent transition-all duration-500 text-center">
-                    <p className="text-lael-primary text-7xl font-display font-bold mb-4">
-                      <AnimatedNumber value={3} />
-                    </p>
-                    <div className="h-[2px] w-12 bg-lael-accent/20 mx-auto mb-4"></div>
-                    <p className="text-lael-primary text-[11px] uppercase tracking-[0.25em] font-bold">Idiomas</p>
-                 </div>
-              </div>
-
-              <div className="relative group">
-                 <div className="p-12 bg-white rounded-[50px] border border-lael-bd cinematic-shadow group-hover:border-lael-accent transition-all duration-500 text-center">
-                    <p className="text-lael-rust text-7xl font-display font-bold mb-4">
-                      <AnimatedNumber value={100} />%
-                    </p>
-                    <div className="h-[2px] w-12 bg-lael-accent/20 mx-auto mb-4"></div>
-                    <p className="text-lael-primary text-[11px] uppercase tracking-[0.25em] font-bold">Online</p>
-                 </div>
-              </div>
-           </div>
-           
-           <InsideLael />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {WHY_LAEL.map((item, i) => (
+              <motion.div
+                key={i}
+                {...fadeUp(i * 0.1)}
+                whileHover={{ y: -6 }}
+                className="rounded-[32px] p-8 group transition-all cursor-default"
+                style={{
+                  border: `2px solid rgba(7,29,73,0.08)`,
+                  backgroundColor: 'white',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = YELLOW;
+                  e.currentTarget.style.backgroundColor = `${YELLOW}08`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(7,29,73,0.08)';
+                  e.currentTarget.style.backgroundColor = 'white';
+                }}
+              >
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-all group-hover:scale-110"
+                  style={{ backgroundColor: `${YELLOW}20`, color: BLUE }}
+                >
+                  {item.icon}
+                </div>
+                <h3
+                  className="font-bold text-xl mb-3 leading-tight"
+                  style={{ color: BLUE, fontFamily: 'Montserrat, sans-serif' }}
+                >
+                  {item.title}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: `${BLUE}80` }}>
+                  {item.desc}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── 6. CTA FINAL ─────────────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 lg:py-48 flex flex-col items-center bg-white border-t border-lael-bd">
-        <motion.div {...fadeUp(0)} className="text-center max-w-3xl">
-          <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-10 font-bold">No es para todos. Es para ti.</p>
-          <h2 className="font-display text-5xl lg:text-7xl text-lael-primary font-bold leading-[1] mb-12 uppercase tracking-tight">
-            ¿Empezamos <br/> tu activación?
-          </h2>
-          <button onClick={handleEvaluation}
-            className="bg-lael-accent text-white px-16 py-7 rounded-2xl text-xs tracking-[0.2em] uppercase font-bold hover:-translate-y-1 transition-all duration-500 shadow-[0_10px_40px_rgba(196,151,62,0.2)]">
-            Iniciar diagnóstico táctico →
-          </button>
-        </motion.div>
-
-        <div className="w-full max-w-5xl mt-32">
-           <ObjectionsFAQ />
+      {/* ══════════════════════════════════════════════════════════════════
+          BLOQUE 8 — MÉTRICAS ANIMADAS
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-28 px-6" style={{ backgroundColor: BLUE }}>
+        <div className="max-w-7xl mx-auto">
+          <motion.p
+            {...fadeUp(0)}
+            className="text-center text-[10px] font-bold uppercase tracking-[0.4em] mb-16"
+            style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
+          >
+            Nuestro impacto
+          </motion.p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {METRICS.map((m, i) => (
+              <motion.div
+                key={i}
+                {...fadeUp(i * 0.1)}
+                className="text-center p-10 rounded-[32px]"
+                style={{ backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                <p
+                  className="font-black leading-none mb-4"
+                  style={{ color: m.color, fontFamily: 'Montserrat, sans-serif', fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}
+                >
+                  <AnimatedNumber value={m.value} prefix={m.prefix} suffix={m.suffix} />
+                </p>
+                <div className="w-8 h-0.5 mx-auto mb-3" style={{ backgroundColor: `${YELLOW}40` }} />
+                <p className="text-white/50 text-[11px] font-bold uppercase tracking-[0.2em]">
+                  {m.label}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
+      {/* ══════════════════════════════════════════════════════════════════
+          BLOQUE 9 — TESTIMONIOS
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-28 px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <motion.p
+              {...fadeUp(0)}
+              className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4"
+              style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
+            >
+              Lo que dicen nuestros alumnos
+            </motion.p>
+            <motion.h2
+              {...fadeUp(0.1)}
+              style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 4vw, 3rem)', color: BLUE, letterSpacing: '-0.02em' }}
+            >
+              HISTORIAS REALES.
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Real testimonial */}
+            {TESTIMONIALS.map((t) => (
+              <motion.div
+                key={t.id}
+                {...fadeUp(0)}
+                className="rounded-[32px] p-8"
+                style={{ backgroundColor: GRAY, border: `2px solid rgba(7,29,73,0.06)` }}
+              >
+                {/* Stars */}
+                <div className="flex gap-1 mb-6">
+                  {Array(t.rating).fill(0).map((_, i) => (
+                    <Star key={i} size={16} fill={YELLOW} color={YELLOW} />
+                  ))}
+                </div>
+                <p
+                  className="text-lg leading-relaxed mb-8 font-medium"
+                  style={{ color: BLUE }}
+                >
+                  "{t.quote}"
+                </p>
+                <div className="flex items-center gap-4">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center font-black text-sm"
+                    style={{ backgroundColor: BLUE, color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
+                  >
+                    {t.initials}
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm" style={{ color: BLUE, fontFamily: 'Montserrat, sans-serif' }}>{t.name}</p>
+                    <p className="text-[11px] uppercase tracking-wider" style={{ color: `${BLUE}60` }}>{t.program}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+
+            {/* Placeholder — próximamente */}
+            <motion.div
+              {...fadeUp(0.1)}
+              className="rounded-[32px] p-8 flex flex-col items-center justify-center text-center"
+              style={{
+                border: `2px dashed rgba(7,29,73,0.12)`,
+                backgroundColor: 'transparent',
+              }}
+            >
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center mb-5"
+                style={{ backgroundColor: `${YELLOW}20` }}
+              >
+                <Star size={24} color={YELLOW} />
+              </div>
+              <p
+                className="font-bold text-base mb-2"
+                style={{ color: BLUE, fontFamily: 'Montserrat, sans-serif' }}
+              >
+                Próximamente más historias
+              </p>
+              <p className="text-sm leading-relaxed max-w-xs" style={{ color: `${BLUE}60` }}>
+                Estamos recopilando las historias de nuestros estudiantes. ¿Estudiaste con nosotros? Cuéntanos.
+              </p>
+              <a
+                href="https://wa.me/56964626568?text=Hola,%20quiero%20compartir%20mi%20testimonio%20con%20Instituto%20Lael"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-6 text-[11px] font-bold uppercase tracking-wider hover:underline transition-all"
+                style={{ color: BLUE }}
+              >
+                Comparte tu historia →
+              </a>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════════
+          BLOQUE 10 — CTA FINAL
+      ══════════════════════════════════════════════════════════════════ */}
+      <section className="py-32 lg:py-48 px-6" style={{ backgroundColor: BLUE }}>
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.p
+            {...fadeUp(0)}
+            className="text-[10px] font-bold uppercase tracking-[0.4em] mb-10"
+            style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
+          >
+            Tu momento es ahora
+          </motion.p>
+          <motion.h2
+            {...fadeUp(0.1)}
+            className="text-white mb-12 leading-[0.9]"
+            style={{
+              fontFamily: 'Montserrat, sans-serif',
+              fontWeight: 900,
+              fontSize: 'clamp(2.5rem, 7vw, 6rem)',
+              letterSpacing: '-0.03em',
+            }}
+          >
+            EL PRÓXIMO<br />PASO ES TUYO.
+          </motion.h2>
+          <motion.div {...fadeUp(0.25)} className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/paes"
+              className="inline-flex items-center justify-center gap-2 px-12 py-6 rounded-2xl font-black text-base uppercase tracking-wider transition-all hover:opacity-90 hover:-translate-y-1 active:scale-95 shadow-2xl"
+              style={{
+                backgroundColor: YELLOW,
+                color: BLUE,
+                fontFamily: 'Montserrat, sans-serif',
+                boxShadow: `0 20px 60px ${YELLOW}40`,
+              }}
+            >
+              INSCRIBIRME AHORA
+              <ArrowRight size={20} />
+            </Link>
+          </motion.div>
+          <motion.p
+            {...fadeUp(0.4)}
+            className="mt-10 text-white/30 text-sm tracking-wider"
+          >
+            institutolael.cl · Sin costos · 100% online
+          </motion.p>
+        </div>
+      </section>
     </div>
   );
 }
-

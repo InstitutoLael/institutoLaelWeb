@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700;1,800&family=Inter:wght@300;400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -6,25 +6,22 @@
 
 @layer base {
   :root {
-    /* ─── COLOR PALETTE (EARTHY LAEL 2026) ─── */
-    --bg-primary:    #F8F5F0;
+    /* ─── COLOR PALETTE — LAEL 2026 ─── */
+    --bg-primary:    #F4F4F4;
     --bg-secondary:  #FFFFFF;
-    --bg-elevated:   #F0EDE6;
-    --text-primary:  #0D0D0D;
-    --text-secondary:#3A3A3A;
-    --text-muted:    #8A8A8A;
-    --accent-gold:   #C4973E;
-    --accent-gold-soft: #E0C48F;
-    --accent-rust:   #B85C38;
-    --accent-olive:  #5C6E4E;
-    --border-color:  rgba(13, 13, 13, 0.08);
+    --bg-elevated:   #FFFFFF;
+    --text-primary:  #071D49;
+    --text-secondary:#0D0D0D;
+    --text-muted:    #8D8D8D;
+    --accent-yellow: #D7E400;
+    --accent-yellow-soft: #EDF280;
+    --border-color:  rgba(7, 29, 73, 0.10);
 
     /* ─── TYPOGRAPHY SYSTEM ─── */
-    --font-title: "Playfair Display", serif;
+    --font-title: "Montserrat", sans-serif;
     --font-body:  "Inter", sans-serif;
   }
 
-  /* Force light/earthy mode by default everywhere */
   html {
     scroll-behavior: smooth;
     font-family: var(--font-body);
@@ -51,71 +48,78 @@
   }
 
   ::selection {
-    background: rgba(196, 151, 62, 0.2); /* Gold glow selection */
-    color: #0D0D0D;
+    background: rgba(215, 228, 0, 0.25);
+    color: #071D49;
   }
 }
 
 @layer utilities {
   .glass {
     @apply backdrop-blur-xl;
-    background: rgba(248, 245, 240, 0.6);
+    background: rgba(255, 255, 255, 0.8);
     border: 1px solid var(--border-color);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
   }
-  
-  .glow-border {
-    border: 1px solid rgba(198, 166, 107, 0.15);
-    box-shadow: inset 0 0 20px rgba(198, 166, 107, 0.05);
-  }
-  
-  .cinematic-shadow {
-    box-shadow: 0 20px 40px rgba(13, 13, 13, 0.08), 0 0 20px rgba(196, 151, 62, 0.05);
+
+  .glass-dark {
+    background: rgba(7, 29, 73, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
   }
 
-  /* ─── NEW GLOBAL UTILITIES ─── */
+  .cinematic-shadow {
+    box-shadow: 0 20px 60px rgba(7, 29, 73, 0.15), 0 4px 12px rgba(7, 29, 73, 0.08);
+  }
+
+  .yellow-glow {
+    box-shadow: 0 0 30px rgba(215, 228, 0, 0.25), 0 4px 12px rgba(215, 228, 0, 0.15);
+  }
+
+  /* Clip reveal animation */
   .clip-reveal {
     animation: clipReveal 1.2s cubic-bezier(0.76, 0, 0.24, 1) forwards;
     clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
   }
 
   @keyframes clipReveal {
-    from {
-      clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%);
-    }
-    to {
-      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    }
+    from { clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%); }
+    to   { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
   }
 
+  /* Section separator */
   .separator-gradient {
     width: 100vw;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent-gold), var(--accent-rust), transparent);
+    background: linear-gradient(90deg, transparent, var(--accent-yellow), transparent);
     left: 50%;
     position: absolute;
     transform: translateX(-50%);
   }
 
-  .hover-card {
-    border: 1px solid rgba(13, 13, 13, 0.08);
-    transition: all 0.3s ease;
-  }
-  
-  .hover-card:hover {
-    border-color: var(--accent-rust);
-    transform: translateY(-4px);
-  }
-  
-  /* Global typography overrides for H1 */
-  h1 {
-    font-family: var(--font-title);
-    color: var(--text-primary);
+  /* Montserrat ExtraBold utility */
+  .font-extrabold-display {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 800;
   }
 
-  h1 .accent-italic {
-    font-style: italic;
-    color: var(--accent-gold);
+  /* Badge pill */
+  .badge-yellow {
+    background-color: #D7E400;
+    color: #071D49;
+    font-weight: 700;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+  }
+
+  /* Global typography */
+  h1 {
+    font-family: var(--font-title);
+    font-weight: 800;
+    color: var(--text-primary);
   }
 }

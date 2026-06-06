@@ -1,332 +1,541 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
-import { PAES_FEATURES, PAES_CONFIG, PAES_FAQS } from '../../data/paes';
-import { useNavigate } from 'react-router-dom';
-import paesMentor from '../../assets/img/Home/paes_mentor_strategy_1777948898105.png';
-import paesBg from '../../assets/img/Home/hero_paes_cinematic_human_1778110563659.png';
-import ScrollProgress from '../../components/ui/ScrollProgress';
-import { Helmet } from 'react-helmet-async';
-import { Target, Zap, Clock, Users, BookOpen } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Video, 
+  BookOpen, 
+  Award, 
+  Heart, 
+  Users, 
+  ChevronDown, 
+  MessageCircle, 
+  Calendar, 
+  Monitor, 
+  UsersRound, 
+  HelpCircle, 
+  ArrowRight,
+  Sparkles,
+  CheckCircle2
+} from 'lucide-react';
+import studentImg from '../../assets/img/Home/hero_student_lael_1780734180709.png';
+
+// Design System Tokens (Local references matching tailwind.config.js / index.css)
+const BLUE = '#071D49';
+const YELLOW = '#D7E400';
+const WHITE = '#FFFFFF';
+const LIGHT_GRAY = '#F4F4F4';
+const MUTED = '#8D8D8D';
 
 const ease = [0.16, 1, 0.3, 1];
-
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 40 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-80px' },
-  transition: { duration: 1.1, delay, ease },
+  viewport: { once: true, margin: '-60px' },
+  transition: { duration: 0.9, delay, ease },
 });
 
-
 export default function LandingPAES() {
-  const navigate = useNavigate();
+  const [openFaq, setOpenFaq] = useState(null);
 
-  const startDiagnostic = () => {
-    navigate('/diagnostico');
-  };
+  const WA_LINK = "https://wa.me/56964626568?text=Hola!%20Quiero%20inscribirme%20gratis%20al%20programa%20PAES%20en%20Instituto%20Lael.";
+  const WA_CONSULTA = "https://wa.me/56964626568?text=Hola!%20Tengo%20algunas%20dudas%20sobre%20el%20programa%20PAES.";
+
+  const features = [
+    {
+      title: "Clases en vivo",
+      desc: "Clases interactivas vía Google Meet en tiempo real. Docentes reales que responden tus dudas en el acto.",
+      icon: <Video className="w-6 h-6 text-[#071D49]" />
+    },
+    {
+      title: "Material de estudio",
+      desc: "Guías teóricas, prácticas y resúmenes semanales diseñados estratégicamente para maximizar tu estudio personal.",
+      icon: <BookOpen className="w-6 h-6 text-[#071D49]" />
+    },
+    {
+      title: "Ensayos PAES",
+      desc: "Simulacros periódicos cronometrados para habituarte a la presión del examen y medir tu puntaje real.",
+      icon: <Award className="w-6 h-6 text-[#071D49]" />
+    },
+    {
+      title: "Acompañamiento",
+      desc: "Apoyo y mentoría constante de un equipo que se preocupa por tu bienestar y desarrollo integral.",
+      icon: <Heart className="w-6 h-6 text-[#071D49]" />
+    },
+    {
+      title: "Comunidad activa",
+      desc: "Un grupo dinámico con tus compañeros para resolver dudas grupales, compartir tips y motivarse día a día.",
+      icon: <Users className="w-6 h-6 text-[#071D49]" />
+    }
+  ];
+
+  const subjects = [
+    {
+      code: "M1",
+      name: "Matemática M1",
+      type: "Obligatoria",
+      desc: "Resolución de problemas lógicos, modelamiento numérico y estadísticas fundamentales para asegurar tu puntaje base.",
+      teacher: "Diego Chaparro"
+    },
+    {
+      code: "M2",
+      name: "Matemática M2",
+      type: "Electiva / Requisito",
+      desc: "Álgebra avanzada, funciones complejas y razonamiento abstracto de alta selectividad para carreras STEM.",
+      teacher: "Diego Chaparro & Kathy"
+    },
+    {
+      code: "CL",
+      name: "Competencia Lectora",
+      type: "Obligatoria",
+      desc: "Comprensión de lectura crítica, análisis de textos y técnicas de descarte rápido bajo presión de tiempo.",
+      teacher: "Próximamente CL"
+    },
+    {
+      code: "HIS",
+      name: "Historia y Ciencias Sociales",
+      type: "Electiva",
+      desc: "Historia de Chile y global del siglo XX, formación ciudadana y análisis dinámico de procesos sociales.",
+      teacher: "Docente Especialista"
+    },
+    {
+      code: "BIO",
+      name: "Ciencias — Biología",
+      type: "Electiva",
+      desc: "Estructuras celulares, genética, evolución de los ecosistemas y el temario oficial del DEMRE.",
+      teacher: "Martín"
+    },
+    {
+      code: "FIS",
+      name: "Ciencias — Física",
+      type: "Electiva",
+      desc: "Ondas, mecánica newtoniana, energía y electricidad explicados de forma aplicable y libre de memorizaciones.",
+      teacher: "Docente Especialista"
+    },
+    {
+      code: "QUI",
+      name: "Ciencias — Química",
+      type: "Electiva",
+      desc: "Modelamiento atómico, reacciones, química orgánica y termodinámica simplificadas al máximo.",
+      teacher: "Martín"
+    }
+  ];
+
+  const teachers = [
+    {
+      name: "Diego Chaparro",
+      subject: "Matemática M1 + M2",
+      bio: "Director de Instituto Lael. Se especializa en simplificar las matemáticas y enseñar la estrategia detrás de cada pregunta para maximizar tu puntaje.",
+      img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=071D49&color=D7E400&size=200&bold=true"
+    },
+    {
+      name: "Martín",
+      subject: "Biología + Química",
+      bio: "Docente del área científica. Experto en desglosar teorías complejas y explicarlas mediante aplicaciones y fenómenos del mundo real.",
+      img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=071D49&color=D7E400&size=200&bold=true"
+    },
+    {
+      name: "Kathy",
+      subject: "Matemática M2",
+      bio: "Docente experta en matemáticas superiores. Apasionada por potenciar las habilidades lógicas avanzadas requeridas en la prueba selectiva.",
+      img: "https://ui-avatars.com/api/?name=Kathy+M2&background=071D49&color=D7E400&size=200&bold=true"
+    },
+    {
+      name: "Próximamente CL",
+      subject: "Competencia Lectora",
+      bio: "Estamos seleccionando al docente de lenguaje con mayor trayectoria y experticia en comprensión de lectura para acompañarte en tu proceso.",
+      img: "https://ui-avatars.com/api/?name=Proximamente+CL&background=F4F4F4&color=8D8D8D&size=200&bold=true"
+    }
+  ];
+
+  const steps = [
+    {
+      num: "01",
+      title: "Inscripción Gratis",
+      desc: "Haz clic en el botón de inscripción y asegura tu cupo en el programa de forma 100% gratuita."
+    },
+    {
+      num: "02",
+      title: "Clases por Asignatura",
+      desc: "Conéctate a nuestras clases vespertinas en vivo a través de Google Meet con profesores reales."
+    },
+    {
+      num: "03",
+      title: "Ensayos Semanales",
+      desc: "Realiza simulacros semanales cronometrados para medir tu avance y habituarte a la prueba real."
+    }
+  ];
+
+  const faqs = [
+    {
+      q: "¿Es realmente gratis? ¿Hay mensualidades ocultas?",
+      a: "Sí, es 100% gratuito. No cobramos matrícula, mensualidades ni cobros por material de estudio. Nuestra meta es que el factor económico jamás limite tu preparación para la educación superior."
+    },
+    {
+      q: "¿Qué necesito para participar en las clases?",
+      a: "Solo requieres un dispositivo (computador, tablet o celular) con conexión a internet y una cuenta de Google para conectarte a las sesiones a través de Google Meet."
+    },
+    {
+      q: "¿Cuántas horas a la semana se dictan?",
+      a: "Se dedican aproximadamente de 2 a 3 horas a la semana por asignatura. Todas las sesiones se programan en horario vespertino para facilitar tu asistencia."
+    },
+    {
+      q: "¿Puedo entrar al programa en cualquier momento?",
+      a: "Sí, puedes unirte en cualquier punto del año. Sin embargo, te recomendamos hacerlo cuanto antes debido a que los cupos en nuestras aulas en vivo son limitados por motivos de capacidad virtual."
+    }
+  ];
 
   return (
-    <div className="w-full bg-lael-primary">
-      <ScrollProgress />
-      <Helmet>
-        <title>Preuniversitario PAES Gratuito Online | Instituto Lael</title>
-        <meta name="description" content="PAES sin costo. M1, M2, Comprensión Lectora, Ciencias e Historia. Clases en vivo Google Meet." />
-      </Helmet>
-
-      {/* ── 1. HERO NARRATIVO (CINEMÁTICO) ─────────────────────────────── */}
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
-        {/* Cinematic Background Layer */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-lael-primary/40 via-lael-primary/70 to-lael-primary z-10" />
-          {/* Note: hero_paes_mentor will be placed here when available */}
-          <div className="w-full h-full bg-cover bg-center opacity-40 mix-blend-luminosity grayscale group-hover:grayscale-0 transition-all duration-1000" 
-            style={{ backgroundImage: `url(${paesBg})` }} /> 
+    <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">
+      
+      {/* ── 1. HERO PAES ────────────────────────────────────────────── */}
+      <section className="relative min-h-[90vh] lg:min-h-screen flex items-center justify-center py-20 px-6 overflow-hidden" style={{ backgroundColor: BLUE }}>
+        <div className="absolute inset-0 z-0 opacity-10">
+          <div className="absolute -top-40 -left-40 w-96 h-96 bg-white rounded-full filter blur-[150px]" />
+          <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#D7E400] rounded-full filter blur-[150px]" />
         </div>
 
-        <div className="relative z-20 max-w-7xl mx-auto flex flex-col items-center">
-          <motion.div {...fadeUp()} className="mb-10">
-             <h2 className="text-lael-accent font-display text-2xl lg:text-3xl italic italic-playfair font-normal">
-                Clases en vivo por Google Meet. <br className="hidden md:block" />
-                <span className="text-lael-rust not-italic font-sans text-sm tracking-[0.3em] uppercase font-bold">{PAES_CONFIG.FREE_BADGE} • Iniciamos el {PAES_CONFIG.START_DATE_EXACT}</span>
-             </h2>
-          </motion.div>
+        <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Left Column (Copy and Actions) */}
+          <div className="lg:col-span-7 flex flex-col text-left">
+            <motion.div {...fadeUp(0)} className="inline-flex w-fit items-center gap-2 mb-8 bg-[#D7E400] text-[#071D49] px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase">
+              <Sparkles size={14} />
+              <span>100% GRATUITO</span>
+            </motion.div>
 
-          <motion.h1 
-            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
-            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
-            transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-5xl lg:text-6xl xl:text-8xl tracking-[-0.04em] text-lael-light font-bold leading-[0.9] max-w-5xl mb-12 relative"
-          >
-            <span className="absolute inset-0 blur-[100px] bg-lael-accent/20 -z-10 rounded-full"></span>
-            La mejor versión <br />
-            <span className="accent-italic relative z-10">de tu puntaje.</span>
-          </motion.h1>
+            <motion.h1 
+              initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
+              animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
+              transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+              className="font-display text-4xl sm:text-5xl md:text-6xl tracking-[-0.04em] text-white font-extrabold leading-[1] max-w-2xl mb-8 uppercase"
+            >
+              PREPARA TU PAES <br />
+              <span className="text-[#D7E400] italic">SIN COSTOS.</span>
+            </motion.h1>
 
-          <motion.p {...fadeUp(0.35)} className="mt-12 text-lael-muted text-lg lg:text-xl max-w-xl mx-auto leading-relaxed mb-14">
-             No es un video grabado. Son profesores reales enseñándote a resolver la prueba en tiempo real. <br className="hidden md:block" /> ¿Listo para empezar tu entrenamiento?
-          </motion.p>
+            <motion.p {...fadeUp(0.2)} className="text-white/70 text-lg sm:text-xl max-w-lg mb-10 leading-relaxed">
+              Accede a clases en vivo por Google Meet, guías de contenido y ensayos cronometrados semanales liderados por profesores dedicados.
+            </motion.p>
 
-          <motion.div {...fadeUp(0.55)} className="flex flex-col sm:flex-row flex-wrap justify-center gap-6">
-            <div className="flex flex-col items-center gap-4">
-              <motion.button 
-                whileHover={{ scale: 1.05, y: -4 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/diagnostico')}
-                className="bg-lael-accent text-white px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all shadow-2xl shadow-lael-accent/20"
+            {/* Key Data grid */}
+            <motion.div {...fadeUp(0.3)} className="grid grid-cols-3 gap-4 border-y border-white/10 py-6 mb-10 max-w-xl">
+              <div>
+                <p className="text-[#D7E400] font-display font-extrabold text-lg sm:text-xl uppercase">Agosto</p>
+                <p className="text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1">Inicio de Clases</p>
+              </div>
+              <div>
+                <p className="text-white font-display font-extrabold text-lg sm:text-xl uppercase">100% Online</p>
+                <p className="text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1">Clases en Vivo</p>
+              </div>
+              <div>
+                <p className="text-[#D7E400] font-display font-extrabold text-lg sm:text-xl uppercase">Limitados</p>
+                <p className="text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1">Cupos Disponibles</p>
+              </div>
+            </motion.div>
+
+            {/* CTA Buttons */}
+            <motion.div {...fadeUp(0.4)} className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+              <a 
+                href={WA_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#D7E400] text-[#071D49] hover:bg-white text-center transition-all duration-300 font-display font-extrabold text-xs uppercase tracking-widest px-10 py-5 rounded-2xl flex items-center justify-center gap-3 group active:scale-95 shadow-xl hover:-translate-y-0.5"
               >
-                Inscribirme Gratis $0
-              </motion.button>
-              <p className="text-lael-rust text-[11px] font-bold tracking-widest animate-pulse">
-                Solo quedan {PAES_CONFIG.AVAILABLE_SPOTS} cupos para {PAES_CONFIG.START_DATE}
-              </p>
+                <span>INSCRIBIRME GRATIS</span>
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+              </a>
+              <a 
+                href="#que-incluye"
+                className="bg-transparent border border-white/20 hover:border-white text-white text-center transition-all duration-300 font-display font-extrabold text-xs uppercase tracking-widest px-8 py-5 rounded-2xl active:scale-95"
+              >
+                Conocer Más
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Right Column (Image Student) */}
+          <motion.div 
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.2, ease }}
+            className="lg:col-span-5 relative flex justify-center items-center h-full min-h-[350px] lg:min-h-[500px]"
+          >
+            <div className="absolute inset-0 bg-[#D7E400]/5 rounded-[40px] border border-white/5 -rotate-3 translate-x-2 translate-y-2" />
+            <div className="relative w-full h-full max-w-[450px] aspect-square rounded-[40px] overflow-hidden border border-white/10 shadow-2xl bg-[#092254]">
+              <img 
+                src={studentImg} 
+                alt="Estudiante Preparando PAES con Instituto Lael" 
+                className="w-full h-full object-cover grayscale mix-blend-luminosity hover:grayscale-0 hover:mix-blend-normal transition-all duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#071D49] via-transparent to-transparent opacity-80" />
+              <div className="absolute bottom-6 left-6 right-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+                <div className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
+                <p className="text-white text-xs font-semibold tracking-wide">Inscripciones abiertas · Ciclo 2026</p>
+              </div>
             </div>
-            <motion.button 
-              whileHover={{ scale: 1.05, y: -4 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => document.getElementById('metodologia').scrollIntoView({ behavior: 'smooth' })}
-              className="bg-lael-secondary border border-lael-bd text-lael-primary px-12 py-6 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all h-fit"
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── 2. ¿QUÉ INCLUYE EL PROGRAMA? ───────────────────────────── */}
+      <section id="que-incluye" className="py-28 px-6 bg-white flex flex-col items-center">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="text-center mb-20">
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Estructura del Sistema</motion.p>
+            <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
+              ¿QUÉ INCLUYE EL PROGRAMA?
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {features.map((feature, i) => (
+              <motion.div 
+                key={feature.title} 
+                {...fadeUp(i * 0.08)} 
+                whileHover={{ y: -8 }}
+                className="group p-8 rounded-[32px] bg-white border border-[#071D49]/10 hover:border-[#D7E400] hover:shadow-lael transition-all duration-500 flex flex-col h-full"
+              >
+                <div className="w-14 h-14 bg-[#071D49]/5 group-hover:bg-[#D7E400]/10 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300">
+                  {feature.icon}
+                </div>
+                <h3 className="text-[#071D49] text-lg font-bold mb-3 font-display uppercase tracking-tight">{feature.title}</h3>
+                <p className="text-[#8D8D8D] text-sm leading-relaxed">{feature.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3. DASHBOARD DE ASIGNATURAS ─────────────────────────────── */}
+      <section className="py-28 px-6 overflow-hidden relative" style={{ backgroundColor: BLUE }}>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.02),transparent)] pointer-events-none" />
+        
+        <div className="max-w-7xl mx-auto w-full relative z-10">
+          <div className="text-center mb-20">
+            <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Domina el Contenido</motion.p>
+            <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-white font-extrabold tracking-[-0.03em] uppercase">
+              DASHBOARD DE ASIGNATURAS
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {subjects.map((subj, i) => (
+              <motion.div 
+                key={subj.code} 
+                {...fadeUp(i * 0.06)} 
+                whileHover={{ y: -6, scale: 1.02 }}
+                className="group rounded-[32px] p-8 bg-white/5 border border-white/10 hover:border-white/20 transition-all duration-300 flex flex-col justify-between h-full"
+              >
+                <div>
+                  {/* Subject Header */}
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-[#D7E400] text-[#071D49] font-display font-extrabold text-base flex items-center justify-center shadow-lg">
+                      {subj.code}
+                    </div>
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-white/55 bg-white/10 px-3 py-1 rounded-full">
+                      {subj.type}
+                    </span>
+                  </div>
+
+                  <h3 className="text-white font-display text-lg font-bold mb-3 uppercase tracking-tight">{subj.name}</h3>
+                  <p className="text-white/60 text-sm leading-relaxed mb-6 h-auto">{subj.desc}</p>
+                </div>
+
+                {/* Dashboard Teacher Area */}
+                <div className="border-t border-white/10 pt-4 mt-auto flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-[#D7E400] text-[#071D49] font-display font-black text-[9px] flex items-center justify-center shadow-inner">
+                    {subj.teacher.includes('&') ? 'T' : subj.teacher.split(' ').map(n=>n[0]).join('')}
+                  </div>
+                  <div>
+                    <p className="text-white text-xs font-semibold">{subj.teacher}</p>
+                    <p className="text-white/45 text-[9px] uppercase tracking-wider mt-0.5">Docente Asignado</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+
+            {/* Prominently Designed "Soporte General" Dashboard Card */}
+            <motion.div 
+              {...fadeUp(subjects.length * 0.06)}
+              className="rounded-[32px] p-8 border border-dashed border-white/20 hover:border-[#D7E400]/40 transition-all flex flex-col justify-center items-center text-center bg-white/[0.02] min-h-[300px]"
             >
-              Ver metodología
-            </motion.button>
+              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white/40 mb-4">
+                <UsersRound size={20} />
+              </div>
+              <h4 className="text-white/80 font-display font-bold text-base uppercase">Comunidad & Soporte</h4>
+              <p className="text-white/45 text-xs max-w-[200px] mt-2 leading-relaxed">Orientación vocacional, acompañamiento socioemocional y resolución de dudas 24/7.</p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4. NUESTROS DOCENTES ───────────────────────────────────── */}
+      <section className="py-28 px-6 bg-white flex flex-col items-center">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="text-center mb-20">
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Mentores de Alto Rendimiento</motion.p>
+            <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
+              NUESTROS DOCENTES
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            {teachers.map((t, i) => (
+              <motion.div 
+                key={t.name} 
+                {...fadeUp(i * 0.1)}
+                className={`rounded-[32px] p-8 border transition-all duration-300 flex flex-col items-center text-center ${t.name.includes('Próximamente') ? 'bg-[#F4F4F4]/50 border-dashed border-[#071D49]/10 opacity-70' : 'bg-white border-[#071D49]/10 shadow-card hover:shadow-lael'}`}
+              >
+                {/* Photo / Avatar */}
+                <div className="w-24 h-24 rounded-full overflow-hidden border border-[#071D49]/15 shadow-md mb-6 flex items-center justify-center bg-[#071D49]/5">
+                  <img src={t.img} alt={`Foto de ${t.name}`} className="w-full h-full object-cover" />
+                </div>
+
+                <h3 className="text-[#071D49] font-display font-extrabold text-lg uppercase tracking-tight mb-1">{t.name}</h3>
+                <p className="text-[#D7E400] text-xs font-bold uppercase tracking-wider mb-4 px-3 py-1 rounded-full bg-[#071D49] w-fit">
+                  {t.subject}
+                </p>
+                <p className="text-[#8D8D8D] text-sm leading-relaxed">{t.bio}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5. ¿CÓMO FUNCIONA? — PROCESO EN 3 PASOS ─────────────────── */}
+      <section className="py-28 px-6 bg-[#F4F4F4] flex flex-col items-center relative overflow-hidden">
+        <div className="max-w-6xl mx-auto w-full relative z-10">
+          <div className="text-center mb-20">
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">El Camino al Éxito</motion.p>
+            <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
+              ¿CÓMO FUNCIONA?
+            </motion.h2>
+          </div>
+
+          {/* Stepper Timeline Layout */}
+          <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-12 mt-12">
+            {/* Visual connector line for large screens */}
+            <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-[#071D49]/5 via-[#071D49]/20 to-[#071D49]/5 transform -translate-y-1/2 hidden lg:block -z-10" />
+            
+            {steps.map((step, i) => (
+              <motion.div 
+                key={step.num} 
+                {...fadeUp(i * 0.12)}
+                className="relative bg-white rounded-[32px] p-8 border border-[#071D49]/10 shadow-sm flex flex-col items-center text-center group"
+              >
+                {/* Step circle */}
+                <div className="w-16 h-16 rounded-full bg-[#071D49] text-[#D7E400] font-display font-extrabold text-xl flex items-center justify-center shadow-lg mb-6 group-hover:scale-110 transition-transform duration-300">
+                  {step.num}
+                </div>
+                
+                <h3 className="text-[#071D49] font-display text-xl font-bold uppercase tracking-tight mb-4">{step.title}</h3>
+                <p className="text-[#8D8D8D] text-sm leading-relaxed max-w-xs">{step.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6. FAQ PAES ─────────────────────────────────────────────── */}
+      <section className="py-28 px-6 bg-white flex flex-col items-center">
+        <div className="max-w-4xl mx-auto w-full">
+          <div className="text-center mb-20">
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Preguntas Frecuentes</motion.p>
+            <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
+              PREGUNTAS FRECUENTES
+            </motion.h2>
+          </div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, idx) => (
+              <motion.div 
+                key={idx}
+                {...fadeUp(idx * 0.06)}
+                className="border border-[#071D49]/10 rounded-[24px] overflow-hidden bg-white shadow-sm"
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                  className="w-full flex items-center justify-between p-6 sm:p-8 text-left hover:bg-[#F4F4F4]/40 transition-colors duration-300 focus:outline-none"
+                >
+                  <span className="text-[#071D49] font-bold text-base sm:text-lg font-display uppercase tracking-tight pr-6">
+                    {faq.q}
+                  </span>
+                  <div className={`w-8 h-8 rounded-full border border-[#071D49]/10 flex items-center justify-center text-[#071D49] flex-shrink-0 transition-transform duration-300 ${openFaq === idx ? 'rotate-180 bg-[#071D49] text-white' : ''}`}>
+                    <ChevronDown size={16} />
+                  </div>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {openFaq === idx && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease }}
+                    >
+                      <div className="px-6 pb-6 sm:px-8 sm:pb-8 text-[#8D8D8D] text-sm sm:text-base leading-relaxed border-t border-[#071D49]/5 pt-4">
+                        {faq.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 7. CTA FINAL PAES ───────────────────────────────────────── */}
+      <section className="relative py-32 lg:py-48 px-6 text-center overflow-hidden" style={{ backgroundColor: BLUE }}>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(215,228,0,0.06),transparent)] pointer-events-none" />
+        
+        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+          <motion.p 
+            {...fadeUp(0)} 
+            className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.4em] mb-8"
+            style={{ color: YELLOW }}
+          >
+            TU MOMENTO ES AHORA
+          </motion.p>
+
+          <motion.h2 
+            {...fadeUp(0.1)} 
+            className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-[-0.03em] leading-[0.95] mb-12 uppercase"
+          >
+            EL PRÓXIMO <br /> PASO ES TUYO.
+          </motion.h2>
+
+          {/* Inscription yellow button */}
+          <motion.div {...fadeUp(0.25)} className="flex flex-col sm:flex-row gap-4 items-center justify-center w-full max-w-md">
+            <a
+              href={WA_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full bg-[#D7E400] text-[#071D49] hover:bg-white transition-all duration-300 font-display font-extrabold text-xs uppercase tracking-widest px-12 py-6 rounded-2xl flex items-center justify-center gap-3 active:scale-95 shadow-2xl hover:-translate-y-1"
+              style={{ boxShadow: '0 20px 50px rgba(215, 228, 0, 0.2)' }}
+            >
+              <span>INSCRIBIRME GRATIS</span>
+              <ArrowRight size={18} />
+            </a>
           </motion.div>
 
-          <motion.p {...fadeUp(0.8)} className="mt-12 text-[10px] uppercase tracking-[0.3em] text-lael-muted font-bold opacity-60">
-             Acceso inmediato • Comunidad en vivo • Material incluido
+          {/* Secondary WhatsApp link for questions */}
+          <motion.div {...fadeUp(0.35)} className="mt-8">
+            <a 
+              href={WA_CONSULTA}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-white/55 hover:text-white transition-colors text-xs font-semibold uppercase tracking-wider hover:underline"
+            >
+              <MessageCircle size={16} className="text-[#D7E400]" />
+              <span>¿Tienes dudas? Escríbenos por WhatsApp</span>
+            </a>
+          </motion.div>
+
+          <motion.p {...fadeUp(0.4)} className="mt-16 text-white/20 text-[10px] sm:text-xs uppercase tracking-[0.2em] font-bold">
+            Instituto Lael · Sin Costo de Matrícula · Clases 100% Online
           </motion.p>
         </div>
-
-        <motion.div 
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-10 animate-bounce text-lael-accent z-20"
-        >
-          <ChevronDown size={24} />
-        </motion.div>
       </section>
 
-      {/* ── 2. EL PROBLEMA REAL (HUMANIZADO) ─────────────────────────── */}
-      <section className="relative w-full px-6 py-24 flex flex-col items-center">
-        <div className="separator-gradient top-0" />
-        <div className="w-full max-w-4xl">
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-16 leading-tight uppercase tracking-widest">
-            Estudiar más <br /> no significa mejorar.
-          </motion.h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { label: 'Horas Perdidas', desc: 'Lees, subrayas, haces resúmenes... pero el puntaje sigue igual. No te falta capacidad, te falta método.' },
-              { label: 'El Ruido del Preu', desc: 'Estar en una sala con 40 personas escuchando a alguien hablar no es aprender. Es solo ver a otro trabajar.' },
-              { label: 'Entrenar Errores', desc: 'Sin un diagnóstico diario, solo estás repitiendo tus fallos una y otra vez. Estudiar sin corregir es hábito, no progreso.' },
-            ].map((item, i) => (
-              <motion.div key={item.label} {...fadeUp(i * 0.1)} className="p-10 rounded-3xl bg-lael-secondary border border-lael-bd cinematic-shadow group">
-                <p className="text-lael-rust text-[10px] tracking-[0.2em] uppercase mb-6 font-bold">{item.label}</p>
-                <p className="text-lael-muted text-sm leading-relaxed mb-6">{item.desc}</p>
-                <button onClick={() => navigate('/diagnostico')} className="text-[9px] uppercase tracking-widest text-lael-accent font-bold hover:underline">
-                   Esto me está pasando →
-                </button>
-              </motion.div>
-            ))}
-          </div>
-
-          <motion.div {...fadeUp(0.4)} className="mt-24 p-10 bg-lael-accent/5 rounded-[40px] border border-lael-accent/10 flex flex-col lg:flex-row items-center gap-10">
-             <div className="flex-1">
-                <h3 className="font-display text-2xl text-lael-light italic mb-4">"Aquí el alumno se equivocó en esto..."</h3>
-                <p className="text-lael-muted text-sm leading-relaxed">
-                   Mostramos la imperfección. En Lael, las correcciones no son notas, son instrucciones de vuelo para tu próximo ensayo.
-                </p>
-             </div>
-             <div className="flex-shrink-0">
-                <button onClick={() => navigate('/casos-reales')} className="px-8 py-4 bg-lael-accent text-white rounded-xl text-[10px] uppercase font-bold tracking-widest">Ver ejemplos reales</button>
-             </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 3. DIFERENCIA TÁCTICA ────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-24 flex flex-col items-center bg-lael-secondary border-y border-lael-bd">
-        <div className="w-full max-w-4xl">
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-primary font-bold text-center mb-16 uppercase tracking-widest">
-             ¿Por qué Lael es distinto?
-          </motion.h2>
-
-          <motion.div {...fadeUp(0.2)} className="rounded-[40px] border border-lael-bd overflow-hidden cinematic-shadow bg-lael-primary">
-            <div className="grid grid-cols-3 px-10 py-6 border-b border-lael-bd bg-black/10">
-              <p className="text-[10px] tracking-[0.2em] text-lael-muted uppercase font-bold">Aspecto</p>
-              <p className="text-[10px] tracking-[0.2em] text-lael-accent uppercase font-bold">Lael</p>
-              <p className="text-[10px] tracking-[0.2em] text-lael-muted uppercase font-bold">Preus Tradicionales</p>
-            </div>
-            {[
-              { feature: 'Costo Mensual', lael: '$0 (Completamente Gratis)', other: '$80.000 - $150.000' },
-              { feature: 'Metodología', lael: 'Clases en vivo 100% interactivas', other: 'Clases masivas o grabadas' },
-              { feature: 'Profesores', lael: 'Equipo real por Google Meet', other: 'Profesores distantes' },
-              { feature: 'Comunidad', lael: 'Apoyo constante y real', other: 'Un alumno más en la lista' },
-            ].map((row, i) => (
-              <div key={row.feature} className={`grid grid-cols-3 px-10 py-8 ${i % 2 === 0 ? 'bg-lael-secondary/10' : 'bg-transparent'} border-b border-lael-bd last:border-0`}>
-                <p className="text-xs text-lael-muted tracking-wider font-bold uppercase">{row.feature}</p>
-                <p className="text-sm text-lael-light font-bold tracking-wide">{row.lael}</p>
-                <p className="text-sm text-lael-muted tracking-wide">{row.other}</p>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 4. UNA SEMANA EN EL SISTEMA (SUBIDA) ─────────────────────── */}
-      <section id="metodologia" className="relative w-full px-6 py-32 flex flex-col items-center">
-        <div className="separator-gradient top-0" />
-        <div className="w-full max-w-5xl">
-          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 text-center font-bold">Visualiza tu entrenamiento</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-6xl text-lael-light font-bold text-center mb-24 uppercase tracking-tighter leading-none">
-            Tu semana <br className="md:hidden" /> <span className="text-lael-accent">Lael.</span>
-          </motion.h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-             <motion.div {...fadeUp(0.2)} className="p-10 bg-white border border-lael-bd rounded-[40px] shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-lael-accent text-[10px] font-bold mb-8 tracking-[0.2em]">01 / LUNES - JUEVES</div>
-                <h4 className="text-lael-primary font-bold mb-4 text-xl tracking-tight uppercase">Activación Táctica</h4>
-                <p className="text-lael-muted text-sm leading-relaxed mb-8">Clases en vivo vía Google Meet diseñadas para destruir los fallos de tu diagnóstico inicial.</p>
-                <div className="h-px w-12 bg-lael-accent/30" />
-             </motion.div>
-             <motion.div {...fadeUp(0.3)} className="p-10 bg-lael-accent/5 border border-lael-accent/20 rounded-[40px] relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-6 bg-lael-accent/10 text-lael-accent text-[10px] font-bold uppercase tracking-widest">Día de Fuego</div>
-                <div className="text-lael-accent text-[10px] font-bold mb-8 tracking-[0.2em]">02 / VIERNES</div>
-                <h4 className="text-lael-primary font-bold mb-4 text-xl tracking-tight uppercase">Presión Real</h4>
-                <p className="text-lael-muted text-sm leading-relaxed mb-8">Ensayo semanal cronometrado. Aquí entrenas tu mente para que el día de la prueba no sea una sorpresa.</p>
-                <div className="h-px w-12 bg-lael-accent" />
-             </motion.div>
-             <motion.div {...fadeUp(0.4)} className="p-10 bg-white border border-lael-bd rounded-[40px] shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-lael-accent text-[10px] font-bold mb-8 tracking-[0.2em]">03 / SÁBADO</div>
-                <h4 className="text-lael-primary font-bold mb-4 text-xl tracking-tight uppercase">Recalibración</h4>
-                <p className="text-lael-muted text-sm leading-relaxed mb-8">Feedback 1:1 con tu estratega. Si fallaste en algo el viernes, aquí lo arreglamos antes del lunes.</p>
-                <div className="h-px w-12 bg-lael-accent/30" />
-             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 5. DATA REAL (SUBIDA) ────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd">
-        {/* ... (keep data content) ... */}
-        <div className="max-w-5xl mx-auto">
-          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-12 text-center font-bold">Evidencia, no promesas</motion.p>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-            <motion.div {...fadeUp(0.1)}>
-              <h2 className="font-display text-4xl lg:text-5xl text-lael-primary mb-10 leading-tight uppercase tracking-tighter">Resultados <br/> que puedes <span className="text-emerald-400">tocar.</span></h2>
-              <p className="text-lael-muted text-lg leading-relaxed mb-12">
-                 No prometemos "aprender". Prometemos rendimiento. El 92% de nuestros alumnos sube al menos 120 puntos tras completar su primer ciclo de activación.
-              </p>
-              <div className="grid grid-cols-2 gap-12">
-                 <div className="p-8 bg-lael-primary rounded-3xl border border-lael-bd">
-                    <p className="text-4xl font-display text-emerald-400 font-bold">+120</p>
-                    <p className="text-[10px] text-lael-muted uppercase tracking-widest mt-2">Puntos promedio</p>
-                 </div>
-                 <div className="p-8 bg-lael-primary rounded-3xl border border-lael-bd">
-                    <p className="text-4xl font-display text-emerald-400 font-bold">92%</p>
-                    <p className="text-[10px] text-lael-muted uppercase tracking-widest mt-2">Éxito en Ciclo 1</p>
-                 </div>
-              </div>
-            </motion.div>
-            <motion.div {...fadeUp(0.3)} className="p-12 bg-lael-primary rounded-[50px] border border-lael-bd relative overflow-hidden cinematic-shadow">
-               <div className="flex items-end gap-4 h-64 border-b border-lael-bd pb-4">
-                  <div className="w-full bg-lael-accent/10 h-[20%] rounded-2xl"></div>
-                  <div className="w-full bg-lael-accent/30 h-[45%] rounded-2xl"></div>
-                  <div className="w-full bg-lael-accent/60 h-[75%] rounded-2xl"></div>
-                  <div className="w-full bg-lael-accent h-full rounded-2xl shadow-[0_0_40px_rgba(196,151,62,0.3)]"></div>
-               </div>
-               <p className="text-center mt-8 text-[11px] text-lael-muted uppercase tracking-[0.3em] font-bold">Evolución del Puntaje PAES</p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 5.5 REALIDAD ESTRATÉGICA (VISUAL) ────────────────────────── */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center overflow-hidden">
-        <div className="w-full max-w-7xl">
-          <div className="relative aspect-[21/9] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow">
-             <img 
-               src={paesMentor} 
-               alt="Mentoría Estratégica Lael" 
-               className="w-full h-full object-cover"
-             />
-             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent" />
-             <div className="absolute inset-y-0 left-0 flex items-center px-12 lg:px-20 max-w-2xl">
-                <motion.div {...fadeUp()}>
-                   <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Mentores, no Profesores</p>
-                   <h3 className="font-display text-4xl lg:text-6xl text-white font-bold leading-tight mb-8">
-                     Análisis Quirúrgico <br /> de tu Rendimiento.
-                   </h3>
-                   <p className="text-white/70 text-lg leading-relaxed">
-                     En Lael no te damos una clase magistral. Te sentamos con un estratega para desglosar cada segundo de tu ejecución. Aquí es donde los puntos se ganan de verdad.
-                   </p>
-                </motion.div>
-             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 6. TU SISTEMA INCLUYE ─────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 flex flex-col items-center">
-        <div className="separator-gradient top-0" />
-        <div className="w-full max-w-5xl">
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-5xl text-lael-light font-bold text-center mb-24 uppercase tracking-widest">
-            Tu Equipo de Entrenamiento.
-          </motion.h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {PAES_FEATURES.map((f, i) => (
-              <motion.div key={f.title} {...fadeUp(i * 0.08)} className="group p-10 rounded-3xl bg-lael-secondary border border-lael-bd hover:border-lael-accent/30 transition-all duration-500 cinematic-shadow">
-                <div className="w-14 h-14 bg-lael-accent/10 rounded-2xl flex items-center justify-center text-3xl mb-8 group-hover:scale-110 transition-transform">
-                   {f.icon}
-                </div>
-                <h3 className="text-lael-primary text-xl font-bold mb-4 tracking-tight uppercase">{f.title}</h3>
-                <p className="text-lael-muted text-sm leading-relaxed">{f.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 7. FAQ AVANZADO ───────────────────────────────────────────── */}
-      <section className="relative w-full px-6 py-32 bg-lael-secondary border-y border-lael-bd">
-        <div className="max-w-4xl mx-auto">
-          <motion.h2 {...fadeUp()} className="font-display text-4xl text-lael-primary font-bold text-center mb-16 uppercase tracking-widest">Hablemos claro.</motion.h2>
-          <div className="space-y-6">
-             {PAES_FAQS.map((item, i) => (
-                <motion.div key={i} {...fadeUp(i * 0.1)} className="p-10 bg-lael-secondary rounded-[40px] border border-lael-bd cinematic-shadow">
-                   <h4 className="text-lael-primary font-bold mb-6 text-lg tracking-tight uppercase">{item.q}</h4>
-                   <p className="text-lael-muted text-sm leading-relaxed">{item.a}</p>
-                </motion.div>
-              ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 8. CTA FINAL (NATURAL) ───────────────────────────────────── */}
-      <section className="relative w-full px-6 py-48 flex flex-col items-center">
-        <div className="separator-gradient top-0" />
-        <motion.div {...fadeUp(0)} className="text-center max-w-2xl">
-          <h2 className="font-display text-5xl lg:text-7xl text-lael-light font-bold leading-none mb-12 uppercase tracking-tighter">
-             ¿Empezamos tu <br/> <span className="text-lael-accent">entrenamiento?</span>
-          </h2>
-          <p className="text-lael-muted text-lg mb-16 leading-relaxed italic italic-playfair">
-             No llegas acá porque te falta capacidad. <br className="hidden md:block" /> Llegas porque nadie te enseñó cómo mejorar.
-          </p>
-          <div className="flex flex-col items-center gap-6">
-            <button
-              onClick={startDiagnostic}
-              className="bg-lael-accent text-white px-16 py-7 rounded-2xl text-[11px] tracking-[0.3em] uppercase font-bold hover:-translate-y-2 transition-all duration-500 shadow-[0_20px_50px_rgba(196,151,62,0.25)]"
-            >
-              Quiero mi diagnóstico gratis →
-            </button>
-            <p className="text-lael-muted text-[10px] uppercase tracking-[0.3em] font-bold opacity-60">
-              Inicio {PAES_CONFIG.START_DATE} • {PAES_CONFIG.FREE_BADGE}
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Visual divider */}
-        <div className="w-px h-32 bg-gradient-to-b from-lael-accent/30 to-transparent mt-24" />
-      </section>
     </div>
   );
 }

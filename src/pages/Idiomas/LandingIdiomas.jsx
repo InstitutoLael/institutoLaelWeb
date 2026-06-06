@@ -183,7 +183,7 @@ export default function LandingIdiomas() {
 
             <motion.div {...fadeUp(0.4)} className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
               <a
-                href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20el%20curso%20de%20Inglés"
+                href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-[#071D49] text-white hover:bg-[#D7E400] hover:text-[#071D49] text-center transition-all duration-300 font-display font-extrabold text-xs uppercase tracking-widest px-10 py-5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 shadow-lg"
@@ -240,7 +240,7 @@ export default function LandingIdiomas() {
                 <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-[10px] text-black/45 uppercase tracking-wider">
                   <span>hace 2 días</span>
                   <a 
-                    href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20el%20curso%20de%20Inglés" 
+                    href="https://forms.gle/H86nFAQ2DJ8CCQ7y6" 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="text-[#071D49] font-bold hover:underline"
@@ -299,7 +299,7 @@ export default function LandingIdiomas() {
                     <span className="text-[#8D8D8D] text-xs font-bold uppercase tracking-widest ml-1">/mes</span>
                   </div>
                   <a
-                    href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20el%20curso%20de%20Coreano"
+                    href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-[#071D49] text-white hover:bg-[#D7E400] hover:text-[#071D49] text-center font-display font-extrabold text-xs uppercase tracking-widest px-8 py-4.5 rounded-xl transition-all duration-300 active:scale-95"
@@ -350,7 +350,7 @@ export default function LandingIdiomas() {
                     <span className="text-[#8D8D8D] text-xs font-bold uppercase tracking-widest ml-1">/mes</span>
                   </div>
                   <a
-                    href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20el%20curso%20de%20Español%20para%20Expats"
+                    href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="bg-[#F4F4F4] text-[#071D49] border border-[#071D49]/10 hover:bg-[#071D49] hover:text-white hover:border-[#071D49] text-center font-display font-extrabold text-xs uppercase tracking-widest px-6 py-4.5 rounded-xl transition-all duration-300 active:scale-95"
@@ -416,7 +416,7 @@ export default function LandingIdiomas() {
                 price: '$9.990',
                 period: '/ mes',
                 features: ['Metodología Inversa y Práctica', 'Preparación IELTS/TOEFL', 'Material de Quiebre Incluido', 'Comunidad y Soporte 24/7'],
-                link: "https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20el%20curso%20de%20Inglés"
+                link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6"
               },
               {
                 name: 'Coreano Estructural',
@@ -424,7 +424,7 @@ export default function LandingIdiomas() {
                 price: '$9.990',
                 period: '/ mes',
                 features: ['Lectura Acelerada de Hangul', 'Vocabulario Corporativo y Social', 'Material de Quiebre Incluido', 'Comunidad y Soporte 24/7'],
-                link: "https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20el%20curso%20de%20Coreano"
+                link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6"
               },
               {
                 name: 'Español para Expats',
@@ -432,7 +432,7 @@ export default function LandingIdiomas() {
                 price: '$9.990',
                 period: '/ mes',
                 features: ['Dialectología y Modismos Chilenos', 'Entrevistas de Alto Rendimiento', 'Material de Quiebre Incluido', 'Comunidad y Soporte 24/7'],
-                link: "https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20el%20curso%20de%20Español%20para%20Expats"
+                link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6"
               }
             ].map((row, idx) => (
               <motion.div

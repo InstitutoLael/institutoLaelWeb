@@ -152,7 +152,7 @@ export default function Navbar() {
           <div className="flex items-center gap-4 z-[110]">
             {/* CTA Inscribirme — amarillo */}
             <a
-              href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20Instituto%20Lael"
+              href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
               target="_blank"
               rel="noopener noreferrer"
               className="hidden lg:inline-flex items-center px-6 py-3 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold transition-all duration-300 shadow-sm bg-lael-accent text-lael-primary hover:bg-[#c4d000] hover:shadow-md"
@@ -262,7 +262,7 @@ export default function Navbar() {
                   "No eres un puntaje. Tu futuro empieza ahora."
                 </p>
                 <a
-                  href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20Instituto%20Lael"
+                  href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}

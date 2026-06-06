@@ -38,8 +38,8 @@ const fadeUp = (delay = 0) => ({
 export default function LandingLSCh() {
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const WA_LINK_MENSUAL = "https://wa.me/56964626568?text=Hola!%20Quiero%20inscribirme%20en%20el%20Plan%20Mensual%20de%20LSCh%20($24.990/mes).";
-  const WA_LINK_TRIMESTRAL = "https://wa.me/56964626568?text=Hola!%20Quiero%20inscribirme%20en%20el%20Plan%20Trimestral%20Ahorro%20de%20LSCh%20($19.990/mes).";
+  const WA_LINK_MENSUAL = "https://forms.gle/H86nFAQ2DJ8CCQ7y6";
+  const WA_LINK_TRIMESTRAL = "https://forms.gle/H86nFAQ2DJ8CCQ7y6";
   const WA_GENERAL = "https://wa.me/56964626568?text=Hola!%20Tengo%20consultas%20sobre%20el%20curso%20de%20Lengua%20de%20Señas%20Chilena%20(LSCh).";
 
   const slides = [

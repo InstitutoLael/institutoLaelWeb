@@ -36,7 +36,7 @@ const fadeUp = (delay = 0) => ({
 export default function LandingPAES() {
   const [openFaq, setOpenFaq] = useState(null);
 
-  const WA_LINK = "https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20el%20Programa%20PAES%20Gratuito%202027";
+  const WA_LINK = "https://forms.gle/H86nFAQ2DJ8CCQ7y6";
 
   const features = [
     {

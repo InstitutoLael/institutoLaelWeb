@@ -161,7 +161,7 @@ export default function Home() {
           {/* Buttons */}
           <motion.div {...fadeUp(0.35)} className="flex flex-col sm:flex-row gap-4 justify-center items-center w-full sm:w-auto">
             <a
-              href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20Instituto%20Lael"
+              href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-10 py-5 rounded-2xl text-sm font-bold uppercase tracking-wider transition-all hover:opacity-90 hover:-translate-y-0.5 active:scale-95 shadow-xl"
@@ -299,7 +299,7 @@ export default function Home() {
               </p>
               <div>
                 <a
-                  href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20Instituto%20Lael"
+                  href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-10 py-5 rounded-2xl font-bold text-sm uppercase tracking-wider transition-all hover:opacity-90 active:scale-95 shadow-xl"
@@ -762,7 +762,7 @@ export default function Home() {
           </motion.h2>
           <motion.div {...fadeUp(0.25)} className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20Instituto%20Lael"
+              href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-12 py-6 rounded-2xl font-black text-base uppercase tracking-wider transition-all hover:opacity-90 hover:-translate-y-1 active:scale-95 shadow-2xl"

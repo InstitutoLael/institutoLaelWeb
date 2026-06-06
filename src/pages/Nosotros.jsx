@@ -1,9 +1,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Users, Heart, Star, ChevronRight, Quote } from 'lucide-react';
+import { Shield, Users, Heart, Star, Quote, Sparkles } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import diegoAvatar from '../assets/img/Home/paes_mentor_strategy_1777948898105.png';
 import SignificadoLael from '../components/SignificadoLael';
+
+// Brand Design Tokens
+const BLUE = '#071D49';
+const YELLOW = '#D7E400';
+const WHITE = '#FFFFFF';
+const LIGHT_GRAY = '#F4F4F4';
+const MUTED = '#8D8D8D';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -11,88 +18,143 @@ const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 40 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-80px' },
-  transition: { duration: 1.1, delay, ease },
+  transition: { duration: 0.9, delay, ease },
 });
 
 export default function Nosotros() {
+  const team = [
+    {
+      name: "Diego Chaparro",
+      role: "Director & Profe Matemáticas",
+      subject: "PAES M1/M2 · Estrategia",
+      bio: "Fundador de Instituto Lael. Se especializa en simplificar las matemáticas y enseñar la estrategia analítica detrás de cada pregunta para asegurar tu puntaje máximo.",
+      img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=071D49&color=D7E400&size=200&bold=true",
+      confirmed: true
+    },
+    {
+      name: "Fernanda Gaete",
+      role: "Educadora & Facilitadora LSCh",
+      subject: "Lengua de Señas Chilena",
+      bio: "Instructora nativa Sorda y Educadora de Párvulos profesional. Combina la inmersión de la cultura sorda con una pedagogía sumamente paciente y estructurada.",
+      img: "https://ui-avatars.com/api/?name=Fernanda+Gaete&background=071D49&color=D7E400&size=200&bold=true",
+      confirmed: true
+    },
+    {
+      name: "Martín",
+      role: "Profe de Ciencias",
+      subject: "Biología · Química · PAES",
+      bio: "Especialista del área científica. Enfocado en desglosar teorías abstractas y explicarlas a través de simulaciones y fenómenos de la vida diaria.",
+      img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=071D49&color=D7E400&size=200&bold=true",
+      confirmed: true
+    },
+    {
+      name: "Kathy",
+      role: "Profe de Matemáticas",
+      subject: "Matemática M2 · PAES",
+      bio: "Docente experta en matemáticas superiores. Apasionada por potenciar y preparar las competencias lógicas necesarias para la prueba selectiva M2.",
+      img: "https://ui-avatars.com/api/?name=Kathy+M2&background=071D49&color=D7E400&size=200&bold=true",
+      confirmed: true
+    },
+    {
+      name: "Próximamente CL",
+      role: "Profe de Lenguaje",
+      subject: "Competencia Lectora",
+      bio: "Estamos seleccionando al docente especialista con la mayor trayectoria en comprensión de lectura crítica y descarte rápido.",
+      img: "https://ui-avatars.com/api/?name=Proximamente+CL&background=F4F4F4&color=8D8D8D&size=200&bold=true",
+      confirmed: false
+    },
+    {
+      name: "Próximamente Electivos",
+      role: "Profe de Ciencias / Historia",
+      subject: "Física · Historia · PAES",
+      bio: "Sumaremos nuevos docentes especialistas dedicados a preparar las electivas de física e historia con alto rendimiento.",
+      img: "https://ui-avatars.com/api/?name=Proximamente+Electivos&background=F4F4F4&color=8D8D8D&size=200&bold=true",
+      confirmed: false
+    }
+  ];
+
   return (
-    <div className="w-full bg-white text-lael-primary overflow-hidden">
+    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden">
       <Helmet>
         <title>Nuestra Génesis | Instituto Lael</title>
-        <meta name="description" content="Fundado 2021. 600 alumnos. PAES gratuita. Santiago, Chile. Conoce nuestra historia y propósito." />
+        <meta name="description" content="Fundado 2021. 600 alumnos. PAES gratuita. Santiago, Chile. Conoce nuestra historia, misión y equipo de mentores." />
       </Helmet>
 
       {/* ── 1. HERO (FIGMA STYLE) ────────────────────────────────────── */}
-      <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-6 pt-32 pb-20 bg-lael-secondary/10">
-        <div className="max-w-7xl w-full relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <motion.div {...fadeUp(0)}>
-            <p className="text-lael-accent text-[11px] tracking-[0.5em] uppercase mb-8 font-bold">Nuestra Génesis</p>
+      <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-6 pt-32 pb-20" style={{ backgroundColor: LIGHT_GRAY }}>
+        <div className="max-w-7xl w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+          <motion.div {...fadeUp(0)} className="lg:col-span-7 text-left">
+            <p className="text-[#071D49] text-[11px] tracking-[0.5em] uppercase mb-8 font-bold flex items-center gap-2">
+              <Sparkles size={12} className="text-[#D7E400]" />
+              <span>NUESTRA GÉNESIS</span>
+            </p>
             <motion.h1 
               initial={{ clipPath: 'inset(0 100% 0 0)' }}
               animate={{ clipPath: 'inset(0 0% 0 0)' }}
               transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display text-6xl lg:text-8xl text-lael-primary font-bold leading-[0.85] mb-12 uppercase tracking-tighter"
+              className="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[0.95] mb-12 uppercase tracking-tighter"
+              style={{ color: BLUE }}
             >
               Nacimos para los <br />
-              <span className="italic italic-playfair text-lael-accent font-normal capitalize">que el sistema ignoró.</span>
+              <span className="italic font-normal text-[#D7E400] capitalize">que el sistema ignoró.</span>
             </motion.h1>
-            <div className="space-y-6 text-lael-muted text-lg lg:text-xl leading-relaxed max-w-xl">
+            <div className="space-y-6 text-[#8D8D8D] text-lg leading-relaxed max-w-xl">
               <p>
-                En 2021 comenzamos con un computador y una convicción radical: la excelencia académica es un derecho divino, no un privilegio de mercado.
+                En 2021 comenzamos con un computador y una convicción radical: la excelencia académica es un derecho fundamental, no un privilegio del mercado.
               </p>
-              <p className="text-sm uppercase tracking-widest font-bold text-lael-primary">Fundado en Santiago de Chile · 2021</p>
+              <p className="text-xs uppercase tracking-widest font-extrabold text-[#071D49]">Fundado en Santiago de Chile · 2021</p>
             </div>
           </motion.div>
           
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.5, ease }}
-            className="relative"
+            className="lg:col-span-5 relative flex justify-center"
           >
-             <div className="aspect-[4/5] rounded-[60px] overflow-hidden border border-lael-bd shadow-2xl relative">
+             <div className="aspect-[4/5] rounded-[48px] overflow-hidden border border-[#071D49]/10 shadow-2xl relative w-full max-w-[380px] bg-[#092254]">
                 <img 
                   src={diegoAvatar} 
                   alt="Diego Chaparro - Fundador" 
-                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+                  className="w-full h-full object-cover grayscale mix-blend-luminosity hover:grayscale-0 hover:mix-blend-normal transition-all duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-lael-primary/90 via-transparent to-transparent" />
-                <div className="absolute bottom-12 left-12 right-12">
-                   <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase font-bold mb-4">Diego Chaparro</p>
-                   <p className="text-white text-3xl font-display font-bold leading-tight">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#071D49]/90 via-transparent to-transparent" />
+                <div className="absolute bottom-12 left-10 right-10 text-left">
+                   <p className="text-[#D7E400] text-[10px] tracking-[0.4em] uppercase font-bold mb-3">Diego Chaparro</p>
+                   <p className="text-white text-2xl font-display font-extrabold leading-tight uppercase">
                      "Aquí no vendemos cursos. <br/> Activamos propósitos."
                    </p>
                 </div>
              </div>
              {/* Decorative element */}
-             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-lael-accent/10 rounded-full blur-3xl animate-pulse" />
+             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-[#D7E400]/10 rounded-full blur-3xl animate-pulse -z-10" />
           </motion.div>
         </div>
       </section>
 
       {/* ── 2. HISTORIA DETALLADA (THE REBELLION) ────────────────────── */}
-      <section className="py-40 px-6 bg-lael-primary text-white">
+      <section className="py-32 px-6 text-white relative" style={{ backgroundColor: BLUE }}>
         <div className="max-w-5xl mx-auto">
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
-              <motion.div {...fadeUp(0)}>
-                 <h2 className="font-display text-4xl lg:text-6xl font-bold leading-tight uppercase tracking-tighter mb-12">
-                   La realidad <br /> <span className="text-lael-accent">detrás del código.</span>
+           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+              <motion.div {...fadeUp(0)} className="lg:col-span-5 text-left">
+                 <h2 className="font-display text-4xl lg:text-5xl font-extrabold leading-tight uppercase tracking-tighter mb-10">
+                   La realidad <br /> <span className="text-[#D7E400]">detrás del código.</span>
                  </h2>
-                 <div className="w-24 h-1 bg-lael-accent/30 mb-12" />
+                 <div className="w-20 h-1 bg-[#D7E400]/30 mb-10" />
               </motion.div>
               
-              <motion.div {...fadeUp(0.2)} className="space-y-10 text-lael-muted text-lg lg:text-xl leading-relaxed">
+              <motion.div {...fadeUp(0.2)} className="lg:col-span-7 space-y-8 text-white/70 text-lg leading-relaxed text-left">
                  <p>
-                   <strong className="text-white">Lael nació como un acto de rebeldía educativa.</strong> Diego comenzó enseñando matemáticas desde cero en 2021, sin oficina ni capital, solo con la certeza de que el talento no tiene código postal.
+                   <strong className="text-white font-extrabold">Lael nació como un acto de rebeldía educativa.</strong> Diego comenzó enseñando matemáticas desde cero en 2021, sin oficina ni capital, solo con la certeza de que el talento no tiene código postal.
                  </p>
                  <p>
-                   En pocos meses, lo que empezó como un taller se convirtió en un ecosistema de <span className="text-lael-accent font-bold">600 alumnos simultáneos</span> conectados desde todo Chile. No escalamos por marketing, escalamos por resultados que el sistema tradicional no podía explicar.
+                   En pocos meses, lo que empezó como un taller se convirtió en un ecosistema de <span className="text-[#D7E400] font-extrabold">600 alumnos simultáneos</span> conectados desde todo Chile. No escalamos por marketing, escalamos por resultados que el sistema tradicional no podía explicar.
                  </p>
                  <p>
                    Luego crecimos. Sumamos Inglés, Coreano y LSCh con Fernanda Gaete. Construimos un sistema de alto rendimiento que no filtraba por billetera, sino por compromiso innegociable.
                  </p>
-                 <div className="pt-10">
-                    <p className="text-lael-accent font-display text-2xl italic italic-playfair leading-relaxed">
+                 <div className="pt-8">
+                    <p className="text-[#D7E400] font-display text-xl italic leading-relaxed">
                        "En 2026 tomamos la decisión más honesta: parar, reestructurar y volver mejor. Este sitio es el resultado de esa pausa sagrada."
                     </p>
                  </div>
@@ -104,20 +166,20 @@ export default function Nosotros() {
       {/* ── 3. SIGNIFICADO DE LAEL (IDENTITY) ────────────────────────── */}
       <SignificadoLael />
 
-      {/* ── 4. PILARES (THE CORE) ─────────────────────────────────────── */}
-      <section className="py-40 px-6 bg-lael-secondary/30">
+      {/* ── 4. PILARES / VALORES (THE CORE) ───────────────────────────── */}
+      <section className="py-32 px-6 bg-[#F4F4F4]">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-end justify-between mb-24 gap-8">
+          <div className="flex flex-col lg:flex-row items-end justify-between mb-20 gap-8 text-left">
              <div className="max-w-2xl">
-                <p className="text-lael-accent text-[11px] tracking-[0.5em] uppercase mb-6 font-bold">Nuestros Pilares</p>
-                <h2 className="font-display text-5xl lg:text-7xl text-lael-primary font-bold leading-tight uppercase tracking-tighter">
-                  Lo que nos mueve <br/> <span className="italic italic-playfair text-lael-accent font-normal capitalize">no es el mercado.</span>
+                <p className="text-[#071D49] text-[11px] tracking-[0.5em] uppercase mb-6 font-bold">Nuestros Pilares</p>
+                <h2 className="font-display text-4xl lg:text-6xl font-extrabold leading-tight uppercase tracking-tighter" style={{ color: BLUE }}>
+                  Lo que nos mueve <br/> <span className="italic font-normal text-[#D7E400] capitalize">no es el mercado.</span>
                 </h2>
              </div>
-             <p className="text-lael-muted text-lg max-w-sm pb-4">La misión es el centro de cada línea de código y cada clase que impartimos.</p>
+             <p className="text-[#8D8D8D] text-base max-w-sm pb-4">La misión es el centro de cada línea de código y cada clase que impartimos.</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               { icon: Heart, title: "Fe Activa", desc: "La fe es nuestro fundamento, no nuestra etiqueta. Se nota en cómo tratamos a cada alumno, no en cuántos versículos publicamos." },
               { icon: Star, title: "Accesibilidad Radical", desc: "La PAES es gratis. Los Talleres de IA son gratis. La barrera para aprender en Lael es cero. Sin excusas." },
@@ -127,31 +189,64 @@ export default function Nosotros() {
               <motion.div 
                 key={v.title}
                 {...fadeUp(i * 0.1)}
-                className="p-12 rounded-[50px] bg-white border border-lael-bd cinematic-shadow hover:border-lael-accent transition-all duration-700 group"
+                className="p-10 rounded-[40px] bg-white border border-[#071D49]/10 shadow-sm hover:border-[#D7E400]/40 transition-all duration-300 group flex flex-col justify-between"
               >
-                <div className="w-16 h-16 rounded-2xl bg-lael-secondary flex items-center justify-center text-lael-accent mb-8 group-hover:bg-lael-accent group-hover:text-white transition-all duration-500">
-                  <v.icon size={28} />
+                <div>
+                  <div className="w-14 h-14 rounded-2xl bg-[#F4F4F4] group-hover:bg-[#D7E400]/15 flex items-center justify-center text-[#071D49] mb-8 transition-colors duration-300">
+                    <v.icon size={24} />
+                  </div>
+                  <h4 className="text-xl font-bold mb-4 text-[#071D49] uppercase tracking-tight font-display">{v.title}</h4>
+                  <p className="text-[#8D8D8D] text-xs sm:text-sm leading-relaxed">{v.desc}</p>
                 </div>
-                <h4 className="text-2xl font-bold mb-6 text-lael-primary uppercase tracking-tight">{v.title}</h4>
-                <p className="text-lael-muted leading-relaxed">{v.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── 5. CIERRE ESPIRITUAL ──────────────────────────────────────── */}
-      <section className="py-48 px-6 text-center bg-white">
+      {/* ── 4.5 EQUIPO COMPLETO (NUEVO SECTOR) ────────────────────────── */}
+      <section className="py-28 px-6 bg-white border-y border-[#071D49]/5 flex flex-col items-center">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="text-center mb-20">
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Acompañamiento Profesional</motion.p>
+            <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
+              EQUIPO DOCENTE
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {team.map((t, i) => (
+              <motion.div 
+                key={t.name}
+                {...fadeUp(i * 0.08)}
+                className={`rounded-[32px] p-8 border transition-all duration-300 flex flex-col items-center text-center ${!t.confirmed ? 'bg-[#F4F4F4]/50 border-dashed border-[#071D49]/10 opacity-70' : 'bg-white border-[#071D49]/10 shadow-sm hover:shadow-card hover:border-[#D7E400]/40'}`}
+              >
+                <div className="w-20 h-20 rounded-full overflow-hidden border border-[#071D49]/10 shadow-md mb-6 flex items-center justify-center bg-[#071D49]/5">
+                  <img src={t.img} alt={`Foto de ${t.name}`} className="w-full h-full object-cover" />
+                </div>
+                <h3 className="text-[#071D49] font-display font-extrabold text-base uppercase tracking-tight mb-1">{t.name}</h3>
+                <p className={`text-[10px] font-bold uppercase tracking-wider mb-4 px-3 py-1 rounded-full ${t.confirmed ? 'bg-[#071D49] text-white' : 'bg-white border border-[#071D49]/15 text-[#8D8D8D]'}`}>
+                  {t.subject}
+                </p>
+                <p className="text-[#8D8D8D] text-xs sm:text-sm leading-relaxed">{t.bio}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5. CIERRE ESPIRITUAL (MANIFIESTO) ────────────────────────── */}
+      <section className="py-32 px-6 text-center bg-[#F4F4F4]">
          <motion.div {...fadeUp(0)} className="max-w-4xl mx-auto">
-            <Quote className="text-lael-accent/20 mx-auto mb-12" size={64} />
-            <p className="text-3xl lg:text-5xl italic italic-playfair text-lael-primary font-medium leading-tight mb-16">
+            <Quote className="text-[#D7E400]/25 mx-auto mb-10" size={56} />
+            <p className="text-2xl sm:text-3xl lg:text-4xl italic text-[#071D49] font-medium leading-relaxed mb-12 max-w-3xl mx-auto">
               "El Espíritu del Señor está sobre mí, por cuanto me ha ungido para dar buenas nuevas a los pobres; Me ha enviado a sanar a los quebrantados de corazón; A pregonar libertad a los cautivos..."
             </p>
             <div className="flex flex-col items-center gap-4">
-               <p className="text-[12px] tracking-[0.5em] uppercase font-bold text-lael-accent">
+               <p className="text-[11px] tracking-[0.5em] uppercase font-bold text-[#071D49]">
                  Lucas 4:18
                </p>
-               <div className="w-px h-24 bg-gradient-to-b from-lael-accent to-transparent" />
+               <div className="w-px h-20 bg-gradient-to-b from-[#071D49]/30 to-transparent" />
             </div>
          </motion.div>
       </section>

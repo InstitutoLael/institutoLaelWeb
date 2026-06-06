@@ -17,7 +17,7 @@ const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 40 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-80px' },
+  viewport: { once: true, margin: '-60px' },
   transition: { duration: 0.9, delay, ease },
 });
 
@@ -42,7 +42,7 @@ export default function Nosotros() {
     {
       name: "Martín",
       role: "Profe de Ciencias",
-      subject: "Biología · Química · PAES",
+      subject: "Biología + Química",
       bio: "Especialista del área científica. Enfocado en desglosar teorías abstractas y explicarlas a través de simulaciones y fenómenos de la vida diaria.",
       img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=071D49&color=D7E400&size=200&bold=true",
       confirmed: true
@@ -50,7 +50,7 @@ export default function Nosotros() {
     {
       name: "Kathy",
       role: "Profe de Matemáticas",
-      subject: "Matemática M2 · PAES",
+      subject: "Matemática M2",
       bio: "Docente experta en matemáticas superiores. Apasionada por potenciar y preparar las competencias lógicas necesarias para la prueba selectiva M2.",
       img: "https://ui-avatars.com/api/?name=Kathy+M2&background=071D49&color=D7E400&size=200&bold=true",
       confirmed: true
@@ -66,7 +66,7 @@ export default function Nosotros() {
     {
       name: "Próximamente Electivos",
       role: "Profe de Ciencias / Historia",
-      subject: "Física · Historia · PAES",
+      subject: "Física + Historia",
       bio: "Sumaremos nuevos docentes especialistas dedicados a preparar las electivas de física e historia con alto rendimiento.",
       img: "https://ui-avatars.com/api/?name=Proximamente+Electivos&background=F4F4F4&color=8D8D8D&size=200&bold=true",
       confirmed: false
@@ -74,19 +74,19 @@ export default function Nosotros() {
   ];
 
   return (
-    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden">
+    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden font-sans">
       <Helmet>
         <title>Nuestra Génesis | Instituto Lael</title>
         <meta name="description" content="Fundado 2021. 600 alumnos. PAES gratuita. Santiago, Chile. Conoce nuestra historia, misión y equipo de mentores." />
       </Helmet>
 
-      {/* ── 1. HERO (FIGMA STYLE) ────────────────────────────────────── */}
+      {/* ── 1. HERO ────────────────────────────────────────────────── */}
       <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-6 pt-32 pb-20" style={{ backgroundColor: LIGHT_GRAY }}>
         <div className="max-w-7xl w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           <motion.div {...fadeUp(0)} className="lg:col-span-7 text-left">
             <p className="text-[#071D49] text-[11px] tracking-[0.5em] uppercase mb-8 font-bold flex items-center gap-2">
               <Sparkles size={12} className="text-[#D7E400]" />
-              <span>NUESTRA GÉNESIS</span>
+              <span>FUNDADO EN SANTIAGO DE CHILE · 2021</span>
             </p>
             <motion.h1 
               initial={{ clipPath: 'inset(0 100% 0 0)' }}
@@ -102,7 +102,6 @@ export default function Nosotros() {
               <p>
                 En 2021 comenzamos con un computador y una convicción radical: la excelencia académica es un derecho fundamental, no un privilegio del mercado.
               </p>
-              <p className="text-xs uppercase tracking-widest font-extrabold text-[#071D49]">Fundado en Santiago de Chile · 2021</p>
             </div>
           </motion.div>
           
@@ -166,7 +165,7 @@ export default function Nosotros() {
       {/* ── 3. SIGNIFICADO DE LAEL (IDENTITY) ────────────────────────── */}
       <SignificadoLael />
 
-      {/* ── 4. PILARES / VALORES (THE CORE) ───────────────────────────── */}
+      {/* ── 4. PILARES / VALORES (EDITORIAL LAYOUT) ───────────────────── */}
       <section className="py-32 px-6 bg-[#F4F4F4]">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row items-end justify-between mb-20 gap-8 text-left">
@@ -179,24 +178,24 @@ export default function Nosotros() {
              <p className="text-[#8D8D8D] text-base max-w-sm pb-4">La misión es el centro de cada línea de código y cada clase que impartimos.</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
             {[
-              { icon: Heart, title: "Fe Activa", desc: "La fe es nuestro fundamento, no nuestra etiqueta. Se nota en cómo tratamos a cada alumno, no en cuántos versículos publicamos." },
-              { icon: Star, title: "Accesibilidad Radical", desc: "La PAES es gratis. Los Talleres de IA son gratis. La barrera para aprender en Lael es cero. Sin excusas." },
-              { icon: Users, title: "Inclusión Real", desc: "LSCh, educación diferencial, adultos sin escolaridad: todos tienen un lugar como estructura, no como estrategia de marketing." },
-              { icon: Shield, title: "Excelencia sin Excusa", desc: "Ser gratuito no justifica ser mediocre. Cada clase preparada. Cada profesor comprometido con tu resultado final." }
+              { icon: Heart, title: "FE ACTIVA", desc: "La fe es nuestro fundamento, no nuestra etiqueta. Se nota en cómo tratamos a cada alumno, no en cuántos versículos publicamos." },
+              { icon: Star, title: "ACCESIBILIDAD RADICAL", desc: "La PAES es gratis. Los talleres de IA son gratis. La barrera para aprender en Lael es cero. Sin excusas." },
+              { icon: Users, title: "INCLUSIÓN REAL", desc: "LSCh, educación diferencial, adultos: todos tienen un lugar como estructura, no como estrategia de marketing." },
+              { icon: Shield, title: "EXCELENCIA SIN EXCUSA", desc: "Ser gratuito no justifica ser mediocre. Cada clase preparada. Cada profesor comprometido con tu resultado final." }
             ].map((v, i) => (
               <motion.div 
                 key={v.title}
-                {...fadeUp(i * 0.1)}
-                className="p-10 rounded-[40px] bg-white border border-[#071D49]/10 shadow-sm hover:border-[#D7E400]/40 transition-all duration-300 group flex flex-col justify-between"
+                {...fadeUp(i * 0.15)}
+                className="flex gap-6 items-start text-left"
               >
+                <div className="w-16 h-16 rounded-2xl bg-[#071D49] text-[#D7E400] flex items-center justify-center flex-shrink-0 shadow-md">
+                  <v.icon size={28} />
+                </div>
                 <div>
-                  <div className="w-14 h-14 rounded-2xl bg-[#F4F4F4] group-hover:bg-[#D7E400]/15 flex items-center justify-center text-[#071D49] mb-8 transition-colors duration-300">
-                    <v.icon size={24} />
-                  </div>
-                  <h4 className="text-xl font-bold mb-4 text-[#071D49] uppercase tracking-tight font-display">{v.title}</h4>
-                  <p className="text-[#8D8D8D] text-xs sm:text-sm leading-relaxed">{v.desc}</p>
+                  <h4 className="text-xl font-black mb-2 text-[#071D49] tracking-wider font-display uppercase">{v.title}</h4>
+                  <p className="text-[#8D8D8D] text-sm leading-relaxed">{v.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -215,22 +214,47 @@ export default function Nosotros() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {team.map((t, i) => (
-              <motion.div 
-                key={t.name}
-                {...fadeUp(i * 0.08)}
-                className={`rounded-[32px] p-8 border transition-all duration-300 flex flex-col items-center text-center ${!t.confirmed ? 'bg-[#F4F4F4]/50 border-dashed border-[#071D49]/10 opacity-70' : 'bg-white border-[#071D49]/10 shadow-sm hover:shadow-card hover:border-[#D7E400]/40'}`}
-              >
-                <div className="w-20 h-20 rounded-full overflow-hidden border border-[#071D49]/10 shadow-md mb-6 flex items-center justify-center bg-[#071D49]/5">
-                  <img src={t.img} alt={`Foto de ${t.name}`} className="w-full h-full object-cover" />
-                </div>
-                <h3 className="text-[#071D49] font-display font-extrabold text-base uppercase tracking-tight mb-1">{t.name}</h3>
-                <p className={`text-[10px] font-bold uppercase tracking-wider mb-4 px-3 py-1 rounded-full ${t.confirmed ? 'bg-[#071D49] text-white' : 'bg-white border border-[#071D49]/15 text-[#8D8D8D]'}`}>
-                  {t.subject}
-                </p>
-                <p className="text-[#8D8D8D] text-xs sm:text-sm leading-relaxed">{t.bio}</p>
-              </motion.div>
-            ))}
+            {team.map((t, i) => {
+              const isDiego = t.name === "Diego Chaparro";
+              const isFernanda = t.name === "Fernanda Gaete";
+              const isPlaceholder = !t.confirmed;
+
+              return (
+                <motion.div 
+                  key={t.name}
+                  {...fadeUp(i * 0.08)}
+                  className={`rounded-[32px] p-8 border transition-all duration-300 flex flex-col items-center text-center ${isPlaceholder ? 'bg-[#F4F4F4]/50 border-dashed border-[#071D49]/10 opacity-70' : 'bg-white border-[#071D49]/10 shadow-sm hover:shadow-card hover:border-[#D7E400]/40'}`}
+                >
+                  <div className="w-20 h-20 rounded-full overflow-hidden border border-[#071D49]/10 shadow-md mb-6 flex items-center justify-center bg-[#071D49]/5 relative">
+                    {isPlaceholder ? (
+                      <span className="text-3xl text-lael-muted font-bold">?</span>
+                    ) : (
+                      <img src={t.img} alt={`Foto de ${t.name}`} className="w-full h-full object-cover" />
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center gap-2 flex-wrap justify-center mb-1">
+                    <h3 className="text-[#071D49] font-display font-extrabold text-base uppercase tracking-tight">{t.name}</h3>
+                    {isDiego && (
+                      <span className="text-[8px] font-black uppercase tracking-wider bg-[#071D49] text-white px-2 py-0.5 rounded">
+                        FUNDADOR
+                      </span>
+                    )}
+                    {isFernanda && (
+                      <span className="text-[8px] font-black uppercase tracking-wider bg-[#D7E400] text-[#071D49] px-2 py-0.5 rounded">
+                        INSTRUCTORA NATIVA
+                      </span>
+                    )}
+                  </div>
+
+                  <p className={`text-[10px] font-bold uppercase tracking-wider mb-4 px-3 py-1 rounded-full ${t.confirmed ? 'bg-[#D7E400] text-[#071D49]' : 'bg-white border border-[#071D49]/15 text-[#8D8D8D]'}`}>
+                    {t.subject}
+                  </p>
+                  
+                  <p className="text-[#8D8D8D] text-xs sm:text-sm leading-relaxed">{t.bio}</p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

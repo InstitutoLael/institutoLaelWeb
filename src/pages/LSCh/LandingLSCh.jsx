@@ -226,7 +226,9 @@ export default function LandingLSCh() {
                   FE
                 </div>
                 <h4 className="text-[#071D49] font-display font-extrabold text-base uppercase">Fernanda Gaete</h4>
-                <p className="text-[#8D8D8D] text-2xs uppercase tracking-widest mt-1">Docente Nativa Sorda</p>
+                <div className="mt-2 bg-[#D7E400] text-[#071D49] text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
+                  DOCENTE NATIVA SORDA 🤟
+                </div>
               </div>
               <div className="absolute bottom-6 left-6 right-6 bg-white/80 backdrop-blur-sm border border-[#071D49]/10 rounded-2xl p-4 text-center">
                 <p className="text-[#071D49] text-xs font-bold uppercase tracking-wider">Foto Real Próximamente</p>

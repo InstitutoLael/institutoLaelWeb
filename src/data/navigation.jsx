@@ -15,9 +15,9 @@ const TikTokIcon = () => (
 export const NAVIGATION = {
     main: [
         { name: "Inicio", path: "/" },
-        { name: "PAES (Admisión Univ.)", path: "/paes", badge: "GRATIS" },
-        { name: "Idiomas (Inglés/Coreano)", path: "/idiomas" },
-        { name: "LSCh (Lengua de Señas)", path: "/lsch" },
+        { name: "PAES", path: "/paes", badge: "GRATIS" },
+        { name: "Idiomas", path: "/idiomas" },
+        { name: "LSCh", path: "/lsch" },
         { name: "Nosotros", path: "/nosotros" },
         { name: "Contacto", path: "/contacto" },
     ],

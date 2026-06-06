@@ -78,7 +78,7 @@ export default function Navbar() {
             <img
               src={isLightPage ? logoColor : logoBlanco}
               alt="Instituto Lael"
-              className="h-6 lg:h-7 w-auto transition-transform group-hover:scale-105"
+              className="h-8 lg:h-10 w-auto transition-transform group-hover:scale-105"
             />
           </Link>
           <div className="w-px h-4 bg-white/20 hidden lg:block" />
@@ -104,7 +104,7 @@ export default function Navbar() {
       >
         <UrgencyBanner />
         <div className={`max-w-7xl mx-auto px-8 lg:px-12 flex items-center justify-between relative z-10 transition-all duration-500 ${
-          isNavSolid ? 'py-3' : 'py-6'
+          isNavSolid ? 'py-3' : 'py-5'
         }`}>
 
           {/* ── LOGO ─────────────────────────────────────────────────── */}
@@ -113,7 +113,7 @@ export default function Navbar() {
               src={activeLogo}
               alt="Instituto Lael"
               className={`w-auto object-contain transition-all duration-500 group-hover:scale-105 ${
-                scrolled ? 'h-7 lg:h-8' : 'h-8 lg:h-10'
+                isNavSolid ? 'h-9 lg:h-10' : 'h-12 lg:h-14'
               }`}
             />
           </Link>
@@ -125,19 +125,21 @@ export default function Navbar() {
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `text-[10px] tracking-[0.3em] uppercase font-bold transition-all duration-300 hover:text-[#071D49] relative py-2 ${
-                    isActive
-                      ? 'text-[#071D49]'
-                      : isNavSolid
-                        ? 'text-[#071D49]/60'
-                        : 'text-white/70'
+                  `text-[10px] tracking-[0.3em] uppercase font-bold transition-all duration-300 relative py-2 ${
+                    isNavSolid
+                      ? isActive
+                        ? 'text-lael-primary'
+                        : 'text-lael-primary/60 hover:text-lael-primary'
+                      : isActive
+                        ? 'text-lael-accent'
+                        : 'text-white/80 hover:text-white'
                   }`
                 }
               >
                 <span className="flex items-center gap-2">
                   {item.name}
                   {item.badge && (
-                    <span className="bg-[#D7E400] text-[#071D49] text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-sm">
+                    <span className="bg-lael-accent text-lael-primary text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-sm">
                       {item.badge}
                     </span>
                   )}
@@ -149,16 +151,14 @@ export default function Navbar() {
           {/* ── RIGHT: CTA + BURGER ──────────────────────────────────── */}
           <div className="flex items-center gap-4 z-[110]">
             {/* CTA Inscribirme — amarillo */}
-            <Link
-              to="/paes"
-              className={`hidden lg:inline-flex items-center px-6 py-3 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold transition-all duration-300 shadow-sm ${
-                isNavSolid
-                  ? 'bg-[#D7E400] text-[#071D49] hover:bg-[#c4d000] shadow-md'
-                  : 'bg-[#D7E400]/90 text-[#071D49] hover:bg-[#D7E400] shadow-lg'
-              }`}
+            <a
+              href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20Instituto%20Lael"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden lg:inline-flex items-center px-6 py-3 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold transition-all duration-300 shadow-sm bg-lael-accent text-lael-primary hover:bg-[#c4d000] hover:shadow-md"
             >
               Inscribirme
-            </Link>
+            </a>
 
             {/* Burger mobile */}
             <button
@@ -166,9 +166,9 @@ export default function Navbar() {
               aria-label="Toggle menu"
               className={`lg:hidden w-11 h-11 flex items-center justify-center rounded-xl transition-all active:scale-95 border ${
                 mobileOpen
-                  ? 'bg-[#071D49] text-white border-[#071D49]'
+                  ? 'bg-lael-primary text-white border-lael-primary'
                   : isNavSolid
-                    ? 'bg-[#071D49] text-white border-[#071D49] shadow-xl'
+                    ? 'bg-lael-primary text-white border-lael-primary shadow-xl'
                     : 'bg-white/10 text-white border-white/20 backdrop-blur-sm'
               }`}
             >
@@ -198,7 +198,7 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
-              className="absolute inset-0 bg-[#071D49]/90 backdrop-blur-lg"
+              className="absolute inset-0 bg-lael-primary/90 backdrop-blur-lg"
             />
 
             {/* Drawer Content */}
@@ -207,16 +207,16 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-white rounded-r-[40px] shadow-2xl flex flex-col p-10 overflow-y-auto"
+              className="absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-lael-primary rounded-r-[40px] shadow-2xl flex flex-col p-10 overflow-y-auto"
             >
               {/* Header inside Drawer */}
               <div className="flex items-center justify-between mb-12 relative z-10">
                 <Link to="/" onClick={() => setMobileOpen(false)}>
-                  <img src={logoColor} alt="Lael" className="h-9 w-auto" />
+                  <img src={logoBlanco} alt="Lael" className="h-10 w-auto" />
                 </Link>
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-[#071D49] hover:bg-black/10"
+                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20"
                 >
                   <X size={20} />
                 </button>
@@ -237,15 +237,15 @@ export default function Navbar() {
                       className={({ isActive }) =>
                         `flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 font-bold text-base ${
                           isActive
-                            ? 'bg-[#071D49] text-white'
-                            : 'text-[#071D49] hover:bg-[#071D49]/5'
+                            ? 'bg-lael-accent text-lael-primary'
+                            : 'text-white/80 hover:bg-white/10'
                         }`
                       }
                     >
                       <span className="flex items-center gap-3">
                         {link.name}
                         {link.badge && (
-                          <span className="bg-[#D7E400] text-[#071D49] text-[9px] font-bold uppercase px-2 py-0.5 rounded-sm">
+                          <span className="bg-lael-accent text-lael-primary text-[9px] font-bold uppercase px-2 py-0.5 rounded-sm">
                             {link.badge}
                           </span>
                         )}
@@ -256,19 +256,21 @@ export default function Navbar() {
               </nav>
 
               {/* Footer Section */}
-              <div className="mt-auto relative z-10 pt-8 border-t border-black/5">
-                <p className="text-xs text-[#071D49]/40 uppercase tracking-widest font-bold mb-4">Misión Lael</p>
-                <p className="text-sm text-[#071D49]/70 leading-relaxed italic mb-8">
+              <div className="mt-auto relative z-10 pt-8 border-t border-white/10">
+                <p className="text-xs text-white/40 uppercase tracking-widest font-bold mb-4">Misión Lael</p>
+                <p className="text-sm text-white/70 leading-relaxed italic mb-8">
                   "No eres un puntaje. Tu futuro empieza ahora."
                 </p>
-                <Link
-                  to="/paes"
+                <a
+                  href="https://wa.me/56964626568?text=Hola,%20quiero%20inscribirme%20en%20Instituto%20Lael"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-3 w-full bg-[#D7E400] text-[#071D49] py-5 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold shadow-xl active:scale-95 transition-all"
+                  className="flex items-center justify-center gap-3 w-full bg-lael-accent text-lael-primary py-5 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold shadow-xl active:scale-95 transition-all hover:bg-[#c4d000]"
                 >
                   <span>Inscribirme Gratis</span>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-                </Link>
+                </a>
               </div>
             </motion.div>
           </div>

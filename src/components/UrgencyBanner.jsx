@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { AlertCircle, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { getTimeUntilNextCycle, getRemainingSpots } from '../utils/urgency';
 
 export default function UrgencyBanner() {
@@ -21,27 +21,36 @@ export default function UrgencyBanner() {
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div 
+        <motion.div
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
-          className="bg-lael-rust text-white overflow-hidden relative z-[70] lael-urgency-banner"
+          style={{ backgroundColor: '#D7E400' }}
+          className="overflow-hidden relative z-[70] lael-urgency-banner"
         >
           <div className="py-2 px-6 flex items-center justify-center gap-4 text-center relative pr-12">
-            <AlertCircle size={14} className="hidden sm:block flex-shrink-0" />
-            <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] leading-tight">
-              Quedan <span className="bg-white text-lael-rust px-1.5 py-0.5 rounded mx-1">{spots} cupos</span> 
-              para el ciclo que inicia este lunes. Si no entras ahora, pierdes 7 días de avance real.
+            {/* Dot animado */}
+            <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#071D49] animate-pulse flex-shrink-0" />
+
+            <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.12em] leading-tight" style={{ color: '#071D49' }}>
+              Quedan{' '}
+              <span className="bg-[#071D49] text-[#D7E400] px-1.5 py-0.5 rounded mx-1">
+                {spots} cupos
+              </span>{' '}
+              para el próximo ciclo PAES.{' '}
+              <span className="opacity-70">Sin costo · 100% online</span>
             </p>
-            <div className="hidden lg:flex items-center gap-2 ml-4 pl-4 border-l border-white/20">
-              <span className="text-[8px] opacity-70 uppercase tracking-tighter">Cierre en:</span>
-              <span className="text-[10px] font-mono font-bold">{time}</span>
+
+            <div className="hidden lg:flex items-center gap-2 ml-4 pl-4 border-l border-[#071D49]/20">
+              <span className="text-[8px] opacity-50 uppercase tracking-tighter" style={{ color: '#071D49' }}>Cierre en:</span>
+              <span className="text-[10px] font-mono font-bold" style={{ color: '#071D49' }}>{time}</span>
             </div>
 
-            <button 
+            <button
               onClick={closeBanner}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-white/10 rounded-full transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-full transition-colors hover:bg-[#071D49]/10"
               aria-label="Cerrar aviso"
+              style={{ color: '#071D49' }}
             >
               <X size={14} />
             </button>

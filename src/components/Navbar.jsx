@@ -113,7 +113,7 @@ export default function Navbar() {
               src={activeLogo}
               alt="Instituto Lael"
               className={`w-auto object-contain transition-all duration-500 group-hover:scale-105 ${
-                isNavSolid ? 'h-9 lg:h-10' : 'h-12 lg:h-14'
+                isNavSolid ? 'h-12 lg:h-14' : 'h-16 lg:h-20'
               }`}
             />
           </Link>

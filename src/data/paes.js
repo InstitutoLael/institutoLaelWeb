@@ -8,7 +8,7 @@
 export const ENROLLMENT_FEE = 10990;
 export const ACADEMIC_MONTHS = 8;
 export const AVAILABLE_SPOTS = 12;
-export const START_DATE_EXACT = "Lunes 2 de Junio";
+export const START_DATE_EXACT = "Lunes 3 de Agosto";
 
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
@@ -171,7 +171,7 @@ export const PAES_COMBOS = [
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_CONFIG = {
   AVAILABLE_SPOTS: AVAILABLE_SPOTS,
-  START_DATE: "Junio 2026",
+  START_DATE: "Agosto 2026",
   START_DATE_EXACT: START_DATE_EXACT,
   FREE_BADGE: "100% GRATIS"
 };

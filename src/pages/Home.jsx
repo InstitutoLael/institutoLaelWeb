@@ -105,7 +105,7 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       <Helmet>
-        <title>Instituto Lael | PAES Gratuita + Idiomas + LSCh — Chile</title>
+        <title>Instituto Lael — PAES Gratuita 2027 | Santiago, Chile</title>
         <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES 100% gratuita, Inglés, Coreano y LSCh. Acompañamiento real. Instituto Lael, Chile." />
       </Helmet>
 

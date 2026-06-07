@@ -26,6 +26,7 @@ import Transparencia from "./pages/Transparencia";
 import CasosReales from "./pages/CasosReales";
 import AppletCirculos from "./pages/Arcade/AppletCirculos";
 import NotFound from "./pages/NotFound";
+import Inscripcion from "./pages/Inscripcion";
 
 import ScrollToTop from "./components/ScrollToTop";
 import GrainCanvas from "./components/ui/GrainCanvas";
@@ -63,6 +64,7 @@ export default function App() {
             <Route path="/diegobet" element={<AppletCirculos />} />
             <Route path="/nosotros" element={<Nosotros />} />
             <Route path="/contacto" element={<Contacto />} />
+            <Route path="/inscripcion" element={<Inscripcion />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </PageTransition>

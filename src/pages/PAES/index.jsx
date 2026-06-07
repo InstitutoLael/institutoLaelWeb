@@ -11,7 +11,7 @@ export default function PAES() {
   return (
     <main className="bg-lael-primary min-h-screen">
       <Helmet>
-        <title>Preuniversitario PAES Gratuito Online | Instituto Lael Santiago</title>
+        <title>PAES Gratuita 2027 — Instituto Lael | Clases en vivo sin costo</title>
         <meta name="description" content="Sistema de preparación PAES de alto rendimiento. Clases en vivo, material de estudio y ensayos semanales sin costo. 100% online y personalizado." />
       </Helmet>
       <LandingPAES />

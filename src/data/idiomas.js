@@ -4,7 +4,7 @@
    1. CONFIGURACIÓN DE INVERSIÓN
    ────────────────────────────────────────────────────────────────────────── */
 
-export const ENROLLMENT_FEE = 10990; 
+export const ENROLLMENT_FEE = 9990;
 export const ACADEMIC_MONTHS = 9;
 
 export const clp = (n) =>
@@ -14,12 +14,13 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-export function computeLangBundle(countSelected) {
+export const PRICE_MONTHLY = 14990;
+export const PRICE_QUARTERLY = 11990; // precio por mes al pagar trimestral
+
+export function computeLangBundle(countSelected, plan = 'monthly') {
   const count = Math.max(0, Number(countSelected || 0));
 
-  const PRICES = {
-    SINGLE: 9990
-  };
+  const pricePerLang = plan === 'quarterly' ? PRICE_QUARTERLY : PRICE_MONTHLY;
 
   let totalMonthly = 0;
   let label = "";
@@ -28,7 +29,7 @@ export function computeLangBundle(countSelected) {
     totalMonthly = 0;
     label = "Configura tu Programa";
   } else {
-    totalMonthly = PRICES.SINGLE * count;
+    totalMonthly = pricePerLang * count;
     label = count === 1 ? "Inmersión Singular" : "Inmersión Múltiple";
   }
 
@@ -36,10 +37,10 @@ export function computeLangBundle(countSelected) {
     count,
     label,
     totalMonthly,
-    saving: 0,
+    saving: plan === 'quarterly' ? (PRICE_MONTHLY - PRICE_QUARTERLY) * count * 3 : 0,
     enrollment: ENROLLMENT_FEE,
     totalFirstMonth: totalMonthly + ENROLLMENT_FEE,
-    pricePerLanguage: PRICES.SINGLE
+    pricePerLanguage: pricePerLang
   };
 }
 
@@ -63,12 +64,13 @@ export const LANGUAGES = [
     comingSoon: false,
     paymentUrl: ""
   },
+  /*
   {
     id: "plan-coreano",
     name: "Inmersión Estructural Coreana",
     emoji: "🇰🇷",
     color: "#C6A66B",
-    badge: "Alta Demanda",
+    badge: "Próximamente",
     summary: "Decodificación precisa del sistema Hangul y gramática coreana avanzada, conectada con su ecosistema cultural.",
     features: [
       "Lectura y escritura acelerada (Hangul)",
@@ -76,9 +78,10 @@ export const LANGUAGES = [
       "Preparación estratégica TOPIK"
     ],
     levels: ["Nivel 1 (Fundamentos)", "Nivel 2", "Nivel 3"],
-    comingSoon: false,
+    comingSoon: true,
     paymentUrl: ""
   },
+  */
   {
     id: "plan-espanol",
     name: "Integración Lingüística para Expats",
@@ -114,10 +117,12 @@ export const SYLLABUS_PREVIEW = {
     { level: "Fundamentos", topics: ["Estructuras base de persuasión", "Tácticas de negociación elemental", "Alineación fonética"] },
     { level: "Dominio", topics: ["Comunicación corporativa asertiva", "Defensa de argumentos complejos", "Optimización gramatical"] }
   ],
+  /*
   coreano: [
     { level: "Nivel 1", topics: ["Decodificación del sistema Hangul", "Arquitectura de la oración (SOV)", "Protocolo base"] },
     { level: "Nivel 2", topics: ["Dominio de partículas complejas", "Análisis de estructuras idiomáticas", "Sistemas numéricos duales"] }
   ],
+  */
   espanol: [
     { level: "Fundamentos", topics: ["Navegación del sistema burocrático", "Comprensión del registro informal", "Adaptación fonética"] },
     { level: "Dominio", topics: ["Dominio del registro formal e informal", "Resolución de conflictos laborales", "Redacción estratégica"] }
@@ -140,7 +145,7 @@ export const COMPARISON_DATA = [
    ────────────────────────────────────────────────────────────────────────── */
 export const TEACHERS_LIST = [
   { name: "Equipo Estratégico Inglés", origin: "🇺🇸", role: "Mentores de Alto Impacto", bio: "Especialistas en fonética y comunicación corporativa.", img: "💼" },
-  { name: "Equipo Estructural Coreano", origin: "🇰🇷", role: "Especialistas en Inmersión", bio: "Dominio técnico del idioma y su psicología cultural.", img: "⛩️" },
+  // { name: "Equipo Estructural Coreano", origin: "🇰🇷", role: "Especialistas en Inmersión", bio: "Dominio técnico del idioma y su psicología cultural.", img: "⛩️" },
   { name: "Equipo Inserción Español", origin: "🇨🇱", role: "Lingüistas Tácticos", bio: "Expertos en dialectología y adaptación social rápida.", img: "🏢" }
 ];
 

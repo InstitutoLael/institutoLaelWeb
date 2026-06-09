@@ -11,8 +11,8 @@ import Home from "./pages/Home";
 import PAES from "./pages/PAES";
 import MetodoLael from "./pages/MetodoLael";
 import Idiomas from "./pages/Idiomas";
+import LandingEspanol from "./pages/Idiomas/LandingEspanol";
 import LSCh from "./pages/LSCh";
-import Empresas from "./pages/Empresas";
 import Nosotros from "./pages/Nosotros";
 import Contacto from "./pages/Contacto";
 import NivelacionAdultos from "./pages/Nivelacion/NivelacionAdultos";
@@ -20,7 +20,6 @@ import SistemaLael from "./pages/SistemaLael";
 import DiagnosticPage from "./pages/DiagnosticPage";
 import ResultDashboard from "./pages/ResultDashboard";
 import FunnelDashboard from "./pages/Admin/FunnelDashboard";
-import Tecnologia from "./pages/Tecnologia";
 import Preguntas from "./pages/Preguntas";
 import Transparencia from "./pages/Transparencia";
 import CasosReales from "./pages/CasosReales";
@@ -49,17 +48,17 @@ export default function App() {
             <Route path="/paes" element={<PAES />} />
             <Route path="/metodo" element={<MetodoLael />} />
             <Route path="/idiomas" element={<Idiomas />} />
+            <Route path="/espanol" element={<LandingEspanol />} />
+            <Route path="/espanol-para-extranjeros" element={<LandingEspanol />} />
             <Route path="/lsch" element={<LSCh />} />
             <Route path="/adultos" element={<NivelacionAdultos />} />
             <Route path="/sistema" element={<SistemaLael />} />
-            <Route path="/tecnologia" element={<Tecnologia />} />
             <Route path="/preguntas" element={<Preguntas />} />
             <Route path="/transparencia" element={<Transparencia />} />
             <Route path="/casos-reales" element={<CasosReales />} />
             <Route path="/diagnostico" element={<DiagnosticPage />} />
             <Route path="/resultado-diagnostico" element={<ResultDashboard />} />
             <Route path="/admin/funnel" element={<FunnelDashboard />} />
-            <Route path="/empresas" element={<Empresas />} />
             <Route path="/arcade/circunferencias" element={<AppletCirculos />} />
             <Route path="/diegobet" element={<AppletCirculos />} />
             <Route path="/nosotros" element={<Nosotros />} />

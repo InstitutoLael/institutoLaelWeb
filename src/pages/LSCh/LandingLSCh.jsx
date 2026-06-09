@@ -18,6 +18,7 @@ import { Helmet } from 'react-helmet-async';
 import lschRealidad from '../../assets/img/Home/mundo_lsch_bg_1777943626827.png';
 import entenderImg from '../../assets/img/Home/media_lsch_entender_1780735268668.jpg';
 import comenzarImg from '../../assets/img/Home/media_lsch_comenzar_1780735268676.jpg';
+import CertificateSection from '../../components/CertificateSection';
 import avanzarImg from '../../assets/img/Home/media_lsch_avanzar_1780735268706.jpg';
 
 // Visual Brand Colors
@@ -279,6 +280,28 @@ export default function LandingLSCh() {
             </motion.h2>
           </div>
 
+          {/* Path visualization */}
+          <motion.div {...fadeUp(0.25)} className="bg-white rounded-[24px] p-6 mb-12 max-w-xl mx-auto border border-[#071D49]/5">
+            <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4 text-center">Progreso de Aprendizaje LSCh</p>
+            <div className="flex items-center justify-between">
+              {['A1', 'A2', 'B1'].map((level, i, arr) => (
+                <React.Fragment key={level}>
+                  <div className="flex flex-col items-center">
+                    <div className="w-10 h-10 rounded-full bg-[#071D49] text-white flex items-center justify-center text-xs font-extrabold shadow-md">
+                      {level}
+                    </div>
+                    <span className="text-[9px] font-bold text-[#8D8D8D] uppercase tracking-wider mt-1.5">
+                      {level === 'B1' ? 'Conversacional' : level === 'A2' ? 'Intermedio' : 'Inicial'}
+                    </span>
+                  </div>
+                  {i < arr.length - 1 && (
+                    <div className="flex-grow h-0.5 bg-[#071D49]/15 mx-4" />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </motion.div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {levels.map((lvl, i) => (
               <motion.div
@@ -364,7 +387,7 @@ export default function LandingLSCh() {
             {/* Plan Trimestral */}
             <motion.div {...fadeUp(0.2)} className="p-10 rounded-[40px] bg-[#071D49] border border-[#D7E400] shadow-lael flex flex-col justify-between relative overflow-hidden group">
               <div className="absolute top-0 right-0 p-6 bg-[#D7E400] text-[#071D49] text-[9px] font-bold uppercase tracking-widest rounded-bl-2xl">
-                Ahorra 20%
+                Ahorra con Trimestral
               </div>
 
               <div>
@@ -377,7 +400,7 @@ export default function LandingLSCh() {
                 <ul className="space-y-4 mb-10 border-t border-white/10 pt-6">
                   {[
                     "Todo lo del plan mensual",
-                    "🔥 Matrícula $0 (Ahorras $15.000)",
+                    "🔥 Matrícula $0 (Ahorras $9.990)",
                     "Acceso permanente a grabaciones de por vida",
                     "Certificado formal de Nivel aprobado"
                   ].map(item => (
@@ -402,6 +425,9 @@ export default function LandingLSCh() {
           </div>
         </div>
       </section>
+
+      {/* ── 4.5 CERTIFICADOS POR NIVEL ─────────────────────────────── */}
+      <CertificateSection defaultLevel="B1" defaultLanguage="Lengua de Señas Chilena (LSCh)" />
 
       {/* ── 5. TESTIMONIO DANIELA ───────────────────────────────────── */}
       <section className="relative py-32 lg:py-40 px-6 text-center overflow-hidden" style={{ backgroundColor: BLUE }}>

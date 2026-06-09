@@ -207,9 +207,9 @@ export default function LandingPAES() {
         <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Left Column (Copy and Actions) */}
           <div className="lg:col-span-7 flex flex-col text-left">
-            <motion.div {...fadeUp(0)} className="mb-4">
-              <span className="text-lael-accent text-xs font-black uppercase tracking-[0.25em]">
-                PROGRAMA PAES 2027
+            <motion.div {...fadeUp(0)} className="mb-4 flex flex-wrap items-center gap-3">
+              <span className="bg-[#D7E400] text-[#071D49] text-xs font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-md animate-pulse">
+                100% Gratuito — Comenzamos Agosto 2026
               </span>
             </motion.div>
 
@@ -256,15 +256,15 @@ export default function LandingPAES() {
                 <span>INSCRIBIRME GRATIS</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </a>
-              <button 
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('estructura')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="bg-transparent border border-white/20 hover:border-white text-white text-center transition-all duration-300 font-display font-extrabold text-xs uppercase tracking-widest px-8 py-5 rounded-2xl active:scale-95 cursor-pointer"
+              <a 
+                href="https://www.youtube.com/@Laelinstituto/videos"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-red-600 hover:bg-red-700 text-white text-center transition-all duration-300 font-display font-extrabold text-xs uppercase tracking-widest px-8 py-5 rounded-2xl active:scale-95 cursor-pointer flex items-center justify-center gap-2"
               >
-                Conocer Más
-              </button>
+                <Video size={16} />
+                <span>CLASES EN YOUTUBE</span>
+              </a>
             </motion.div>
           </div>
 
@@ -521,6 +521,33 @@ export default function LandingPAES() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── 5.5 YOUTUBE CHANNEL BANNER ──────────────────────────────── */}
+      <section className="py-20 px-6 bg-[#071D49] text-white flex flex-col items-center border-t border-white/5 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.08),transparent)] pointer-events-none" />
+        <div className="max-w-4xl mx-auto w-full relative z-10 text-center flex flex-col items-center">
+          <motion.div {...fadeUp(0)} className="w-16 h-16 bg-red-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-red-600/25">
+            <Video className="w-8 h-8 text-white" />
+          </motion.div>
+          <motion.h3 {...fadeUp(0.1)} className="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight mb-4">
+            Mira nuestras clases grabadas en YouTube
+          </motion.h3>
+          <motion.p {...fadeUp(0.2)} className="text-white/70 text-sm sm:text-base leading-relaxed max-w-2xl mb-8">
+            ¿Quieres ver cómo son nuestras clases de matemáticas y ciencias antes de inscribirte? Subimos resoluciones de ensayos, explicaciones rápidas de contenido y consejos estratégicos en nuestro canal oficial. ¡Acceso 100% libre y gratuito!
+          </motion.p>
+          <motion.div {...fadeUp(0.3)}>
+            <a 
+              href="https://www.youtube.com/@Laelinstituto/videos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-red-600 hover:bg-red-700 text-white font-display font-extrabold text-xs uppercase tracking-widest px-8 py-4 rounded-xl flex items-center gap-2 active:scale-95 transition-all duration-300 shadow-md"
+            >
+              <span>VISITAR CANAL DE YOUTUBE</span>
+              <ChevronRight size={16} />
+            </a>
+          </motion.div>
         </div>
       </section>
 

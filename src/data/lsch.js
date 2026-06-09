@@ -5,10 +5,9 @@
    1. CONFIGURACIÓN BASE
    ────────────────────────────────────────────────────────────────────────── */
 
-export const ENROLLMENT_FEE = 15000;
+export const ENROLLMENT_FEE = 9990;
 export const ENROLLMENT_LABEL = "Matrícula Anual y Acceso a Comunidad Lael";
 export const LSCH_TAGLINE = "Rompe la barrera del sonido.";
-export const CHURCH_PRICE = 14990; // Precio social protegido
 
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
@@ -82,7 +81,7 @@ export const LSCH_GROUP_PLANS = [
     badge: "Más Conveniente",
     features: [
       "Todo lo del plan mensual",
-      "🔥 Matrícula $0 (Ahorras $15.000)",
+      "🔥 Matrícula $0 (Ahorras $9.990)",
       "Acceso permanente a grabaciones",
       "Certificado de Nivel aprobado"
     ],
@@ -123,17 +122,8 @@ export const LSCH_WHY_US = [
 /* ──────────────────────────────────────────────────────────────────────────
    6. CALCULADORA DE PRECIOS
    ────────────────────────────────────────────────────────────────────────── */
-export function calculateLschPrice(planId, isChurch = false) {
-  // 1. Si es convenio de iglesia, ignoramos el plan y damos el precio social
-  if (isChurch) {
-    return {
-      price: CHURCH_PRICE,
-      label: "Convenio Iglesia/Ministerio",
-      enrollment: 0 // Usualmente exonerada en convenios
-    };
-  }
-
-  // 2. Buscar en planes grupales
+export function calculateLschPrice(planId) {
+  // Buscar en planes grupales
   const groupPlan = LSCH_GROUP_PLANS.find(p => p.id === planId);
   if (groupPlan) {
     return {
@@ -143,7 +133,7 @@ export function calculateLschPrice(planId, isChurch = false) {
     };
   }
 
-  // 3. Buscar en planes 1 a 1
+  // Buscar en planes 1 a 1
   const soloPlan = LSCH_ONE2ONE_PLANS.find(p => p.id === planId);
   if (soloPlan) {
     return {

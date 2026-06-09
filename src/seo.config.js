@@ -13,7 +13,7 @@ export const BRAND = {
   domain: DOMAIN,
   slogan: "Educación online, pero humana.",
   description:
-    "Transformamos futuros con educación accesible y de calidad. Preuniversitario PAES, Idiomas (Inglés, Coreano) y Lengua de Señas Chilena (LSCh).",
+    "Transformamos futuros con educación accesible y de calidad. Preuniversitario PAES, Idiomas (Inglés) y Lengua de Señas Chilena (LSCh).",
   // Logo principal para metadata (Schema.org)
   logoUrl: `${DOMAIN}/meta/logo-lael.png`, 
 };

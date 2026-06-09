@@ -6,15 +6,14 @@ import { track } from '../../utils/analytics';
 const ease = [0.16, 1, 0.3, 1];
 const WA_NUMBER = '56964626568';
 
-function getPlanLabel(planId, isChurch) {
-  if (isChurch) return 'Convenio Iglesia / Ministerio';
+function getPlanLabel(planId) {
   const all = [...LSCH_GROUP_PLANS, ...LSCH_ONE2ONE_PLANS];
   return all.find(p => p.id === planId)?.title ?? planId;
 }
 
-export default function LSChPricing({ gateData, selectedPlan, isChurch, isConnecting, setIsConnecting }) {
-  const priceData = calculateLschPrice(isChurch ? 'church' : selectedPlan, isChurch);
-  const planLabel = getPlanLabel(isChurch ? 'church' : selectedPlan, isChurch);
+export default function LSChPricing({ gateData, selectedPlan, isConnecting, setIsConnecting }) {
+  const priceData = calculateLschPrice(selectedPlan);
+  const planLabel = getPlanLabel(selectedPlan);
 
   useEffect(() => { track.pricingView('lsch'); }, []);
 

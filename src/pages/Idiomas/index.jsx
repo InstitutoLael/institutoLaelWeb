@@ -6,8 +6,8 @@ export default function Idiomas() {
   return (
     <main className="bg-lael-primary min-h-screen">
       <Helmet>
-        <title>Inglés, Coreano y LSCh — Instituto Lael</title>
-        <meta name="description" content="Programas de idiomas estratégicos. Inglés, Coreano e Inmersión en Español para Expats. Habla desde el primer día con nuestro método de inmersión en vivo." />
+        <title>Inglés y Español para Expats — Instituto Lael</title>
+        <meta name="description" content="Programas de idiomas estratégicos. Inglés e Inmersión en Español para Expats. Habla desde el primer día con nuestro método de inmersión en vivo." />
       </Helmet>
       <LandingIdiomas />
     </main>

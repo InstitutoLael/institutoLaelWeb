@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom';
 const CONFIG = {
   defaultTitle: "Instituto Lael | Educación con Futuro",
   titleTemplate: "%s | Instituto Lael",
-  defaultDescription: "Educación online con acompañamiento real. Preuniversitario PAES, Idiomas (Inglés, Coreano) y Lengua de Señas Chilena (LSCh). Clases en vivo 2026.",
+  defaultDescription: "Educación online con acompañamiento real. Preuniversitario PAES, Idiomas (Inglés) y Lengua de Señas Chilena (LSCh). Clases en vivo 2026.",
   siteUrl: "https://institutolael.cl",
   defaultImage: "/meta/og-lael.jpg", // Relative for build helper or absolute
   twitterHandle: "@institutolael",

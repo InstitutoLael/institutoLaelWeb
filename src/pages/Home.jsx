@@ -59,7 +59,7 @@ const ELECTIVAS = [
 ];
 
 const WORLDS = [
-  { id: 'ingles', label: 'INGLÉS', title: 'Habla con', accent: 'seguridad.', desc: 'Clases en vivo por Google Meet. Fluidez real sin atajos.', bg: idiomasBg, cta: 'Ver programa', route: '/idiomas', active: true, price: '$9.990/mes' },
+  { id: 'ingles', label: 'INGLÉS', title: 'Habla con', accent: 'seguridad.', desc: 'Clases en vivo por Google Meet. Fluidez real sin atajos. Plan Trimestral: $11.990/mes.', bg: idiomasBg, cta: 'Ver programa', route: '/idiomas', active: true, price: '$14.990/mes' },
   { id: 'lsch',   label: 'LSCh',   title: 'Inclusión', accent: 'para todos.', desc: 'Lengua de Señas Chilena con instructores nativos. Cultura Sorda.', bg: lschBg,    cta: 'Aprender LSCh', route: '/lsch',   active: true, price: '$19.990/mes' },
   { id: 'adultos', label: 'NIVELACIÓN', title: 'Tu segunda', accent: 'oportunidad.', desc: 'Termina tus estudios con un programa flexible. Próximamente.', bg: adultosBg, cta: 'Próximamente', route: '/adultos', active: false, price: null },
 ];
@@ -106,7 +106,7 @@ export default function Home() {
     <div className="overflow-hidden">
       <Helmet>
         <title>Instituto Lael — PAES Gratuita 2027 | Santiago, Chile</title>
-        <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES 100% gratuita, Inglés, Coreano y LSCh. Acompañamiento real. Instituto Lael, Chile." />
+        <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES 100% gratuita, Inglés y LSCh. Acompañamiento real. Instituto Lael, Chile." />
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════════════════

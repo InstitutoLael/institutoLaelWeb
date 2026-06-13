@@ -51,7 +51,7 @@ export const ABOUT_DATA = {
     timeline: [
         { year: "2021", title: "El Inicio", desc: "Nace como preuniversitario PAES 100% gratuito. Diego lo construye desde cero." },
         { year: "2022", title: "Peak", desc: "600 alumnos simultáneos. Expansión a idiomas: LSCh, Inglés, Coreano." },
-        { year: "2023-25", title: "Inclusión", desc: "Fernanda Gaete se suma como profesora de LSCh y cultura sorda." },
+        { year: "2023-25", title: "Inclusión", desc: "Incorporación de Lengua de Señas Chilena (LSCh) y cultura sorda." },
         { year: "2026", title: "Relanzamiento", desc: "Estructura más sólida y enfoque en resultados estratégicos." }
     ]
 };

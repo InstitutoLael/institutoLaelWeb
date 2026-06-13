@@ -105,7 +105,7 @@ var LSCH_COURSES = buildCourses([
     mods: [{ n:1, title:'Módulo 1: LSCh Profesional', count:10, start:1 },
            { n:2, title:'Módulo 2: Interpretación', count:10, start:11 },
            { n:3, title:'Módulo 3: Práctica Final', count:5, start:21 }] }
-], 'Fernanda');
+], 'Equipo LSCh');
 
 // --- 4. NIVELACIÓN (4 Ciclos) ---
 var NIVELACION_COURSES = buildCourses([

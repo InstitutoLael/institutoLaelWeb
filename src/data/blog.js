@@ -36,7 +36,7 @@ Tu cerebro necesita consolidar la información. Dormir 8 horas no es un lujo, es
     title: "Guía: Aprende Coreano antes de viajar a Seúl",
     excerpt: "Desde el Hangul básico hasta pedir comida en la calle. Todo lo que necesitas saber antes de subirte al avión.",
     date: "2026-01-25",
-    author: "Fernanda (Coach Coreano)",
+    author: "Ji-woo (Coach Coreano)",
     category: "Idiomas",
     image: "https://images.unsplash.com/photo-1546872935-29e25b15b3b7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
     content: `

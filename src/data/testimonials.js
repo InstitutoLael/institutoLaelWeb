@@ -8,8 +8,8 @@ export const TESTIMONIALS = [
     {
         id: "t1",
         name: "Daniela R.",
-        program: "LSCh con Fernanda Gaete",
-        quote: "Fernanda es una profesora excelente. Aprendí cultura sorda con una pedagogía muy paciente.",
+        program: "Lengua de Señas Chilena",
+        quote: "El curso es excelente. Aprendí cultura sorda con una pedagogía muy paciente y didáctica.",
         rating: 5,
         featured: true
     }

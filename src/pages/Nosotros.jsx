@@ -32,11 +32,11 @@ export default function Nosotros() {
       confirmed: true
     },
     {
-      name: "Fernanda Gaete",
-      role: "Educadora & Facilitadora LSCh",
-      subject: "Lengua de Señas Chilena",
-      bio: "Instructora nativa Sorda y Educadora de Párvulos profesional. Combina la inmersión de la cultura sorda con una pedagogía sumamente paciente y estructurada.",
-      img: "https://ui-avatars.com/api/?name=Fernanda+Gaete&background=071D49&color=D7E400&size=200&bold=true",
+      name: "Monserrat González",
+      role: "Profesora de Inglés",
+      subject: "Inglés Avanzado & Preparación",
+      bio: "Docente de inglés altamente calificada. Especialista en inmersión práctica, fonética y comunicación activa para un dominio fluido desde el primer día.",
+      img: "https://ui-avatars.com/api/?name=Monserrat+Gonzalez&background=071D49&color=D7E400&size=200&bold=true",
       confirmed: true
     },
     {
@@ -149,9 +149,9 @@ export default function Nosotros() {
                  <p>
                    En pocos meses, lo que empezó como un taller se convirtió en un ecosistema de <span className="text-[#D7E400] font-extrabold">600 alumnos simultáneos</span> conectados desde todo Chile. No escalamos por marketing, escalamos por resultados que el sistema tradicional no podía explicar.
                  </p>
-                 <p>
-                   Luego crecimos. Sumamos Inglés, Coreano y LSCh con Fernanda Gaete. Construimos un sistema de alto rendimiento que no filtraba por billetera, sino por compromiso innegociable.
-                 </p>
+                  <p>
+                    Luego crecimos. Sumamos programas de Inglés, Coreano y LSCh. Construimos un sistema de alto rendimiento que no filtraba por billetera, sino por compromiso innegociable.
+                  </p>
                  <div className="pt-8">
                     <p className="text-[#D7E400] font-display text-xl italic leading-relaxed">
                        "En 2026 tomamos la decisión más honesta: parar, reestructurar y volver mejor. Este sitio es el resultado de esa pausa sagrada."
@@ -216,7 +216,7 @@ export default function Nosotros() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {team.map((t, i) => {
               const isDiego = t.name === "Diego Chaparro";
-              const isFernanda = t.name === "Fernanda Gaete";
+              const isMonserrat = t.name === "Monserrat González";
               const isPlaceholder = !t.confirmed;
 
               return (
@@ -240,9 +240,9 @@ export default function Nosotros() {
                         FUNDADOR
                       </span>
                     )}
-                    {isFernanda && (
+                    {isMonserrat && (
                       <span className="text-[8px] font-black uppercase tracking-wider bg-[#D7E400] text-[#071D49] px-2 py-0.5 rounded">
-                        INSTRUCTORA NATIVA
+                        PROFE INGLÉS
                       </span>
                     )}
                   </div>

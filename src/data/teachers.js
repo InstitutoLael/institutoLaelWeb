@@ -15,14 +15,14 @@ export const teachers = [
     featured: true
   },
   {
-    id: "fernanda",
-    name: "Fernanda",
-    role: "Educadora & Facilitadora LSCh",
-    subject: "Lengua de Señas Chilena",
-    bio: "Nuestra profesora nativa (Sorda) y Educadora de Párvulos profesional. Combina la cultura sorda con una pedagogía experta, paciente y estructurada.",
+    id: "monserrat",
+    name: "Monserrat González",
+    role: "Profesora de Inglés",
+    subject: "Inglés Avanzado & Preparación",
+    bio: "Docente de inglés altamente calificada. Especialista en inmersión práctica, fonética y comunicación activa para un dominio fluido desde el primer día.",
     accent: "#10B981", // Emerald
-    img: "https://ui-avatars.com/api/?name=Fernanda+LSCh&background=10B981&color=fff&size=200&bold=true",
-    tags: ["Educa. Sorda", "Educ. Párvulos", "Pedagogía LSCh"],
+    img: "https://ui-avatars.com/api/?name=Monserrat+Gonzalez&background=10B981&color=fff&size=200&bold=true",
+    tags: ["Inglés", "Inmersión", "Fluidez"],
     featured: true
   },
   {

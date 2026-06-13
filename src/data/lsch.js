@@ -147,22 +147,11 @@ export function calculateLschPrice(planId) {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
-   7. TEACHER PROFILE (Fernanda)
-   ────────────────────────────────────────────────────────────────────────── */
-export const TEACHER_PROFILE = {
-  name: "Fernanda",
-  role: "Educadora de Párvulos & Instructora Sorda",
-  img: "👩🏻‍🏫",
-  bio: "Fernanda no solo es hablante nativa de LSCh, es una pedagoga profesional titulada. Esta combinación es única: posee la paciencia y didáctica de una educadora de párvulos, sumado a la autoridad cultural de una persona Sorda. Ella no te enseñará 'español señado', te enseñará a pensar visualmente.",
-  badges: ["Nativa LSCh", "Pedagogía Profesional", "Cultura Sorda", "Experta en Inclusión"]
-};
-
-/* ──────────────────────────────────────────────────────────────────────────
    8. COMPARATIVE DATA (LSCh)
    ────────────────────────────────────────────────────────────────────────── */
 export const COMPARISON_DATA = [
-  { feature: "Profesor", us: "Sordo Nativo + Pedagogo", others: "Oyente (o Sordo sin título)" },
-  { feature: "Metodología", us: "Inmersión Visual (Sin Voz)", others: "Bimodal (Hablan y señan)" },
-  { feature: "Enfoque", us: "Gramática & Cultura", others: "Vocabulario Suelto" },
-  { feature: "Certificación", us: "Por Competencias (Ley 21.015)", others: "Solo asistencia" }
+  { feature: "Profesor", us: "Docentes Especializados", others: "Sin titulación formal" },
+  { feature: "Metodología", us: "Inmersión Visual y Cultural", others: "Bimodal (Hablan y señan)" },
+  { feature: "Enfoque", us: "Gramática & Cultura Sorda", others: "Vocabulario Suelto" },
+  { feature: "Certificación", us: "Por Competencias", others: "Solo asistencia" }
 ];

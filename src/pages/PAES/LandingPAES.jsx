@@ -7,6 +7,7 @@ import {
   Heart, 
   Users, 
   ChevronDown, 
+  ChevronRight,
   MessageCircle, 
   Calendar, 
   Monitor, 

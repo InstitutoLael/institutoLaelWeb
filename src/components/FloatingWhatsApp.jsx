@@ -51,9 +51,9 @@ export default function FloatingWhatsApp() {
       return [
         { 
           id: 'lsch', 
-          label: 'Curso LSCh Fernanda', 
+          label: 'Curso LSCh', 
           icon: <HandHeart size={18} />, 
-          msg: 'Hola, me interesa el curso de LSCh con Fernanda Gaete.' 
+          msg: 'Hola, me interesa el curso de LSCh.' 
         },
         ...baseOptions
       ];

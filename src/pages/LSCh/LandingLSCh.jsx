@@ -134,7 +134,7 @@ export default function LandingLSCh() {
 
             {/* Quick badges */}
             <motion.div {...fadeUp(0.35)} className="flex flex-wrap gap-3 mb-10 text-white/55 text-xs font-bold uppercase tracking-wider">
-              <span className="bg-white/5 border border-white/10 px-4 py-2 rounded-full">Instructora Nativa Sorda</span>
+              <span className="bg-white/5 border border-white/10 px-4 py-2 rounded-full">Inclusión y Comunidad Sorda</span>
               <span className="bg-white/5 border border-white/10 px-4 py-2 rounded-full">100% Online en Vivo</span>
               <span className="bg-white/5 border border-white/10 px-4 py-2 rounded-full">Ley 21.015</span>
             </motion.div>
@@ -151,10 +151,10 @@ export default function LandingLSCh() {
                 <ChevronRight size={16} />
               </a>
               <a 
-                href="#fernanda"
+                href="#programa"
                 className="bg-transparent border border-white/20 hover:border-white text-white text-center transition-all duration-300 font-display font-extrabold text-xs uppercase tracking-widest px-8 py-5 rounded-2xl active:scale-95"
               >
-                Conocer Instructora
+                Ver Programa
               </a>
             </motion.div>
           </div>
@@ -214,64 +214,8 @@ export default function LandingLSCh() {
         </div>
       </section>
 
-      {/* ── 2. PERFIL FERNANDA GAETE ────────────────────────────────── */}
-      <section id="fernanda" className="py-28 px-6 bg-white flex flex-col items-center border-b border-[#071D49]/5">
-        <div className="max-w-4xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          
-          {/* Avatar Area */}
-          <motion.div {...fadeUp(0)} className="lg:col-span-5 flex justify-center">
-            <div className="relative w-full max-w-[280px] aspect-[4/5] rounded-[48px] overflow-hidden border border-[#071D49]/10 shadow-lael bg-[#071D49]/5 flex items-center justify-center">
-              {/* Profile Image fallback */}
-              <div className="absolute inset-0 bg-[#071D49]/5 flex flex-col items-center justify-center text-center p-6">
-                <div className="w-24 h-24 rounded-full bg-[#071D49] text-[#D7E400] font-display font-black text-3xl flex items-center justify-center shadow-lg mb-4">
-                  FE
-                </div>
-                <h4 className="text-[#071D49] font-display font-extrabold text-base uppercase">Fernanda Gaete</h4>
-                <div className="mt-2 bg-[#D7E400] text-[#071D49] text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded">
-                  DOCENTE NATIVA SORDA 🤟
-                </div>
-              </div>
-              <div className="absolute bottom-6 left-6 right-6 bg-white/80 backdrop-blur-sm border border-[#071D49]/10 rounded-2xl p-4 text-center">
-                <p className="text-[#071D49] text-xs font-bold uppercase tracking-wider">Foto Real Próximamente</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Description Area */}
-          <div className="lg:col-span-7 flex flex-col text-left">
-            <motion.div {...fadeUp(0.1)} className="inline-flex items-center gap-2 mb-6 text-[#071D49] text-xs font-bold tracking-widest uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D7E400]" />
-              <span>QUIEN TE ENSEÑA</span>
-            </motion.div>
-
-            <motion.h2 {...fadeUp(0.15)} className="font-display text-3xl sm:text-4xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase mb-4">
-              Fernanda Gaete
-            </motion.h2>
-            <p className="text-[#D7E400] text-xs font-bold uppercase tracking-widest bg-[#071D49] px-3.5 py-1 rounded-full w-fit mb-8">
-              Educadora de Párvulos & Facilitadora LSCh
-            </p>
-
-            <motion.p {...fadeUp(0.25)} className="text-[#8D8D8D] text-sm sm:text-base leading-relaxed mb-8">
-              Nuestra profesora nativa (Sorda) y Educadora de Párvulos profesional. Combina la cultura sorda con una pedagogía experta, sumamente paciente y estructurada para garantizar tu inmersión.
-            </motion.p>
-
-            <motion.div {...fadeUp(0.35)} className="flex flex-wrap gap-2.5">
-              {["Educadora Sorda", "Educación Párvulos", "Pedagogía LSCh", "Cultura Nativa"].map(badge => (
-                <span 
-                  key={badge}
-                  className="text-[10px] tracking-widest font-bold text-[#071D49] border border-[#071D49]/15 px-3 py-1.5 rounded-full uppercase bg-[#F4F4F4]"
-                >
-                  {badge}
-                </span>
-              ))}
-            </motion.div>
-          </div>
-
-        </div>
-      </section>
-
       {/* ── 3. NIVELES A1 / A2 / B1 ─────────────────────────────────── */}
-      <section className="py-28 px-6 bg-[#F4F4F4] flex flex-col items-center">
+      <section id="programa" className="py-28 px-6 bg-[#F4F4F4] flex flex-col items-center">
         <div className="max-w-7xl mx-auto w-full">
           <div className="text-center mb-20">
             <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Progresión por Ciclos</motion.p>
@@ -448,7 +392,7 @@ export default function LandingLSCh() {
             </div>
 
             <p className="font-display text-xl sm:text-2xl italic font-medium text-white leading-relaxed mb-8">
-              "Fernanda es una profesora excelente. Aprendí cultura sorda con una pedagogía muy paciente."
+              "El curso es excelente. Aprendí cultura sorda con una pedagogía muy paciente y didáctica."
             </p>
 
             <div className="flex items-center justify-center gap-4">
@@ -457,7 +401,7 @@ export default function LandingLSCh() {
               </div>
               <div className="text-left">
                 <p className="text-white text-sm font-bold">Daniela R.</p>
-                <p className="text-white/45 text-[10px] uppercase tracking-wider">Alumna LSCh con Fernanda Gaete</p>
+                <p className="text-white/45 text-[10px] uppercase tracking-wider">Alumna LSCh</p>
               </div>
             </div>
           </motion.div>

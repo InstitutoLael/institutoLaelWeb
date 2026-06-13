@@ -22,7 +22,7 @@ INSERT INTO products (name, description, price, category, image_url) VALUES
 
 -- 4. Insert LSCh (Lengua de Señas)
 INSERT INTO products (name, description, price, category, image_url) VALUES
-('LSCh: Plan Mensual Flexible', 'Clases grupales en vivo con Fernanda. Sin compromiso a largo plazo.', 24990, 'LSCH', NULL),
+('LSCh: Plan Mensual Flexible', 'Clases grupales en vivo. Sin compromiso a largo plazo.', 24990, 'LSCH', NULL),
 ('LSCh: Plan Trimestral (Ahorro)', '3 meses de clases con matrícula gratis y acceso permanente.', 59970, 'LSCH', NULL),
 ('LSCh: Pack 4 Sesiones 1-a-1', 'Clases particulares personalizadas para nivelación rápida.', 60000, 'LSCH', NULL),
 ('LSCh: Pack 8 Sesiones 1-a-1', 'Avance acelerado con profesor exclusivo y corrección de video.', 110000, 'LSCH', NULL),

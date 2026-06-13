@@ -68,7 +68,7 @@ const TEACHERS = [
   { id: 'diego',    name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática M1 + M2',    initials: 'DC', color: YELLOW },
   { id: 'martin',   name: 'Martín',         role: 'Profe de Ciencias', subject: 'Biología + Química',   initials: 'MA', color: YELLOW },
   { id: 'kathy',    name: 'Kathy',           role: 'Profe de Matemáticas', subject: 'Matemática M2',    initials: 'KA', color: YELLOW },
-  { id: 'fernanda', name: 'Fernanda',        role: 'Instructora LSCh', subject: 'Lengua de Señas Chilena', initials: 'FE', color: YELLOW },
+  { id: 'monserrat', name: 'Monserrat González', role: 'Profe de Inglés',   subject: 'Inglés',             initials: 'MG', color: YELLOW },
   { id: 'cl',       name: 'Próximamente',    role: 'Profe de Lenguaje', subject: 'Comprensión Lectora',  initials: '?',  color: '#8D8D8D', placeholder: true },
 ];
 
@@ -90,8 +90,8 @@ const TESTIMONIALS = [
   {
     id: 't1',
     name: 'Daniela R.',
-    program: 'LSCh con Fernanda',
-    quote: 'Fernanda es una profesora excelente. Aprendí cultura sorda con una pedagogía muy paciente y estructurada.',
+    program: 'Lengua de Señas Chilena',
+    quote: 'El curso es excelente. Aprendí cultura sorda con una pedagogía muy paciente y estructurada.',
     rating: 5,
     initials: 'DR',
     real: true,
@@ -547,7 +547,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {TEACHERS.map((t, i) => {
               const isDiego = t.id === 'diego';
-              const isFernanda = t.id === 'fernanda';
+              const isMonserrat = t.id === 'monserrat';
               const isPlaceholder = t.placeholder;
 
               return (
@@ -580,9 +580,9 @@ export default function Home() {
                           FUNDADOR
                         </span>
                       )}
-                      {isFernanda && (
+                      {isMonserrat && (
                         <span className="text-[8px] font-black uppercase tracking-wider bg-lael-primary text-white px-2 py-0.5 rounded">
-                          DOCENTE NATIVA SORDA
+                          DOCENTE DE INGLÉS
                         </span>
                       )}
                     </div>

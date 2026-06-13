@@ -65,9 +65,9 @@ const WORLDS = [
 ];
 
 const TEACHERS = [
-  { id: 'diego',    name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática M1 + M2',    initials: 'DC', color: YELLOW },
+  { id: 'diego',    name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática (Colegios & Preu)', initials: 'DC', color: YELLOW },
   { id: 'martin',   name: 'Martín',         role: 'Profe de Ciencias', subject: 'Biología + Química',   initials: 'MA', color: YELLOW },
-  { id: 'kathy',    name: 'Kathy',           role: 'Profe de Matemáticas', subject: 'Matemática M2',    initials: 'KA', color: YELLOW },
+  { id: 'kathy',    name: 'Kathy',           role: 'Profe de HomeSchool', subject: 'Matemática M2 & HomeSchool', initials: 'KA', color: YELLOW },
   { id: 'monserrat', name: 'Monserrat González', role: 'Profe de Inglés',   subject: 'Inglés',             initials: 'MG', color: YELLOW },
   { id: 'cl',       name: 'Próximamente',    role: 'Profe de Lenguaje', subject: 'Comprensión Lectora',  initials: '?',  color: '#8D8D8D', placeholder: true },
 ];

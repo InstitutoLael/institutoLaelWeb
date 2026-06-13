@@ -25,9 +25,9 @@ export default function Nosotros() {
   const team = [
     {
       name: "Diego Chaparro",
-      role: "Director & Profe Matemáticas",
-      subject: "PAES M1/M2 · Estrategia",
-      bio: "Fundador de Instituto Lael. Se especializa en simplificar las matemáticas y enseñar la estrategia analítica detrás de cada pregunta para asegurar tu puntaje máximo.",
+      role: "Fundador & Director",
+      subject: "Matemáticas (Colegio & Preu)",
+      bio: "Fundador de Instituto Lael. El profesor de matemáticas más buscado por colegios y estudiantes de preuniversitario gracias a su efectividad y claridad al enseñar.",
       img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=071D49&color=D7E400&size=200&bold=true",
       confirmed: true
     },
@@ -43,15 +43,15 @@ export default function Nosotros() {
       name: "Martín",
       role: "Profe de Ciencias",
       subject: "Biología + Química",
-      bio: "Especialista del área científica. Enfocado en desglosar teorías abstractas y explicarlas a través de simulaciones y fenómenos de la vida diaria.",
+      bio: "Docente del área científica ampliamente solicitado por su didáctica interactiva, dinámica y cercana. Logra que la Biología y la Química sean sumamente fáciles y apasionantes.",
       img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=071D49&color=D7E400&size=200&bold=true",
       confirmed: true
     },
     {
       name: "Kathy",
-      role: "Profe de Matemáticas",
-      subject: "Matemática M2",
-      bio: "Docente experta en matemáticas superiores. Apasionada por potenciar y preparar las competencias lógicas necesarias para la prueba selectiva M2.",
+      role: "Profe de HomeSchool",
+      subject: "Matemática M2 & HomeSchool",
+      bio: "Docente experta en matemáticas superiores y especialista consolidada en la metodología HomeSchool. Apasionada por potenciar las competencias lógicas y de nivelación.",
       img: "https://ui-avatars.com/api/?name=Kathy+M2&background=071D49&color=D7E400&size=200&bold=true",
       confirmed: true
     },

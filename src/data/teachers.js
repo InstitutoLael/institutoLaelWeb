@@ -5,12 +5,12 @@ export const teachers = [
   {
     id: "diego",
     name: "Diego Chaparro",
-    role: "Director & Profe Matemáticas",
+    role: "Director & Profe de Matemáticas",
     subject: "PAES M1/M2 · Estrategia",
-    bio: "Fundador de Instituto Lael. Comenzó enseñando matemáticas con una pizarra y hoy lidera la visión educativa. Cree firmemente que los números no son difíciles, solo están mal explicados.",
+    bio: "Fundador de Instituto Lael. El profesor de matemáticas más buscado por colegios y estudiantes de preuniversitario gracias a su claridad y efectividad. Comenzó enseñando con una pizarra y hoy lidera la visión educativa de la institución.",
     accent: "#F59E0B", // Gold
     img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=F59E0B&color=fff&size=200&bold=true",
-    tags: ["Matemáticas", "Estrategia PAES", "Visión 2026"],
+    tags: ["Matemáticas", "Estrategia PAES", "Sought-after"],
     social: { linkedin: "#", instagram: "#" },
     featured: true
   },
@@ -30,7 +30,7 @@ export const teachers = [
     name: "Martín",
     role: "Profe de Ciencias",
     subject: "Biología · Química · PAES",
-    bio: "Especialista en Biología y Química. Transforma materias complejas en clases dinámicas, enfocándose en que entiendas el 'por qué' de los fenómenos científicos.",
+    bio: "Docente de ciencias altamente solicitado por su metodología didáctica, dinámica y cercana. Transforma la Biología y la Química en experiencias de aprendizaje sumamente sencillas y apasionantes.",
     accent: "#3B82F6", // Blue
     img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=3B82F6&color=fff&size=200&bold=true",
     tags: ["Biología", "Química", "Ciencia"],

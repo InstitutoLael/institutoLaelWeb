@@ -148,6 +148,16 @@ export default function LandingIdiomas() {
               Inglés Estratégico Pro
             </motion.h2>
 
+            <motion.div {...fadeUp(0.15)} className="flex items-center gap-3 mb-6 bg-[#071D49]/5 border border-[#071D49]/10 rounded-2xl p-3 w-fit">
+              <div className="w-8 h-8 rounded-full bg-[#071D49] text-[#D7E400] font-display font-black text-xs flex items-center justify-center shadow-md">
+                MG
+              </div>
+              <div className="text-left">
+                <p className="text-[#071D49] text-xs font-bold">Docente principal: Monserrat González</p>
+                <p className="text-[#8D8D8D] text-[9px] font-bold uppercase tracking-wider">Especialista en Fluidez e Inmersión</p>
+              </div>
+            </motion.div>
+
             <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg mb-8 leading-relaxed max-w-xl">
               Desarrolla las competencias necesarias para comunicarte fluidamente en el entorno corporativo y digital global. Olvida las clases pasivas y entrena con situaciones reales de networking y trabajo.
             </motion.p>

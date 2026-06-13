@@ -1,4 +1,4 @@
-name = "instituto-lael-web"
+name = "lael-chat"
 main = "src/worker.js"   # <--- ESTO ES LO QUE CONECTA TU ARCHIVO NUEVO
 compatibility_date = "2024-01-01"
 

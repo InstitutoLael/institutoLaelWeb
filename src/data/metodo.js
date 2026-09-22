@@ -3,31 +3,31 @@ import { Target, Compass, Users, LineChart } from "lucide-react";
 export const metodoData = {
   hero: {
     title: "No es cuánto estudias.\nEs cómo lo haces.",
-    subtitle: "El Sistema Lael está diseñado para optimizar tu rendimiento académico mediante estrategia, foco y acompañamiento real.",
+    subtitle: "No se trata de estudiar más horas. Se trata de saber exactamente qué estudiar, cuándo, y tener a alguien al lado que note cuando te estás perdiendo.",
   },
   pillars: [
     {
       id: "diagnostico",
-      title: "Diagnóstico de Precisión",
-      description: "No empezamos a ciegas. Identificamos tu nivel real, tus brechas de conocimiento y tu estilo de aprendizaje para trazar la ruta más corta hacia tu objetivo.",
+      title: "Sabemos dónde estás parado",
+      description: "No arrancamos a ciegas. Vemos qué sabes de verdad y qué se te escapa, antes de armar cualquier plan.",
       icon: Target,
     },
     {
       id: "estrategia",
-      title: "Estrategia Personalizada",
-      description: "Diseñamos un plan de acción a tu medida. Transformamos el contenido complejo en un sistema dominable, priorizando lo que realmente impacta tus resultados.",
+      title: "Un plan hecho para ti",
+      description: "Nada de guías iguales para todos. Priorizamos lo que a ti te va a subir el puntaje, no lo que se ve bien en un temario.",
       icon: Compass,
     },
     {
       id: "acompanamiento",
-      title: "Acompañamiento Táctico",
-      description: "No te dejamos solo. Mentores expertos guían tu proceso, ajustan la estrategia en tiempo real y aseguran que mantengas el ritmo sin desgastarte.",
+      title: "No estás solo en esto",
+      description: "Un profe real revisa cómo vas y ajusta el plan si hace falta — te avisa si te estás quedando atrás, antes de que sea tarde.",
       icon: Users,
     },
     {
       id: "evaluacion",
-      title: "Medición de Rendimiento",
-      description: "Monitoreamos tu progreso con métricas claras. Simulamos el entorno real para que domines no solo el conocimiento, sino también la presión del momento.",
+      title: "Practicas la presión, no solo la materia",
+      description: "Simulacros que se sienten como el día real, para que ese día no sea la primera vez que sientes el reloj corriendo.",
       icon: LineChart,
     }
   ]

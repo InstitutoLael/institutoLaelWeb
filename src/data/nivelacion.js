@@ -5,7 +5,7 @@ export const ADULT_CONTENT = {
   hero: {
     title: "El colegio no es la meta.",
     subtitle: "Es el inicio de tu nueva vida.",
-    description: "No estamos aquí solo para que saques un cartón. Estamos aquí para que recuperes el tiempo y desbloquees el futuro que dejaste en pausa. Escuela de Sueños."
+    description: "No es solo sacarte un papel. Es terminar algo que quedó pendiente, a tu ritmo, sin que nadie te mire en menos por volver a intentarlo."
   },
   problem: {
     title: "Tu sueño no tiene fecha de vencimiento.",
@@ -13,19 +13,19 @@ export const ADULT_CONTENT = {
     solution: "Lael Adultos es el puente diseñado para que tu pasado no limite tu futuro."
   },
   system: {
-    title: "Tu Arquitectura de Éxito",
+    title: "Cómo lo hacemos",
     features: [
-      { id: 1, title: "Respeto a tu Tiempo", desc: "Sabemos que eres adulto. El sistema se adapta a tu trabajo y familia, no al revés." },
-      { id: 2, title: "Foco en el Futuro", desc: "No te enseñamos cosas que no usarás. Te damos las herramientas para tu próximo paso." },
-      { id: 3, title: "Mentores de Vida", desc: "No son solo profesores. Son guías que han estado donde tú estás hoy." },
-      { id: 4, title: "Validación Real", desc: "Te acompañamos hasta que tengas tu licencia en la mano y la confianza en el cielo." }
+      { id: 1, title: "Respeto a tu tiempo", desc: "Sabemos que eres adulto. El horario se adapta a tu trabajo y tu familia, no al revés." },
+      { id: 2, title: "Foco en lo que sigue", desc: "No perdemos tiempo en contenido que no vas a usar. Vamos directo a lo que necesitas para tu próximo paso." },
+      { id: 3, title: "Profesores que ya pasaron por esto", desc: "No son solo profesores. Entienden lo que es volver a estudiar siendo adulto, porque también lo vivieron." },
+      { id: 4, title: "Licencia real, sin atajos", desc: "Te acompañamos hasta que tengas tu licencia en la mano — no antes, y sin promesas vacías." }
     ]
   },
   process: [
-    { step: "01", label: "Diagnóstico de Sueños", desc: "¿Qué quieres lograr realmente? La licencia es solo el inicio." },
-    { step: "02", label: "Mapa Estratégico", desc: "Trazamos la ruta más corta y segura hacia tu meta." },
-    { step: "03", label: "Entrenamiento Activo", desc: "Clases que no aburren. Contenido que sirve para la vida real." },
-    { step: "04", label: "Cumplimiento de Meta", desc: "Exámenes validados y el inicio de tu nueva etapa profesional." }
+    { step: "01", label: "Qué quieres lograr", desc: "La licencia es el punto de partida, no la meta final — hablamos de qué sigue después." },
+    { step: "02", label: "Un plan concreto", desc: "Trazamos la ruta más corta y realista hacia tu meta, según tu tiempo disponible." },
+    { step: "03", label: "Clases que se sostienen", desc: "Contenido que sirve para la vida real, no solo para pasar un examen." },
+    { step: "04", label: "Licencia en mano", desc: "Exámenes validados y el inicio de tu próxima etapa." }
   ],
   target: {
     forYou: [

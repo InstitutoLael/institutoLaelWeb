@@ -28,13 +28,11 @@ import NotFound from "./pages/NotFound";
 import Inscripcion from "./pages/Inscripcion";
 
 import ScrollToTop from "./components/ScrollToTop";
-import GrainCanvas from "./components/ui/GrainCanvas";
 
 export default function App() {
   return (
     <div className="flex flex-col min-h-screen relative z-10">
       <ScrollToTop />
-      <GrainCanvas opacity={0.12} />
       <Toaster position="top-right" reverseOrder={false} toastOptions={{
         style: { background: '#1A1A1A', color: '#F5F5F5', border: '1px solid rgba(255,255,255,0.05)' }
       }} />

@@ -1,3 +1,7 @@
+# Local tooling (dev server helper scripts, editor/agent config)
+.claude/
+dev-with-path.cmd
+
 # Logs
 logs
 *.log

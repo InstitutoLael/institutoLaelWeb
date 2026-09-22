@@ -113,7 +113,7 @@ export default function Home() {
           BLOQUE 1 — HERO REDISEÑADO
       ══════════════════════════════════════════════════════════════════ */}
       <section
-        className="min-h-screen relative flex flex-col justify-center items-center px-6 py-32 lg:py-40 text-center overflow-hidden"
+        className="-mt-20 min-h-screen relative flex flex-col justify-center items-center px-6 py-32 lg:py-40 text-center overflow-hidden"
         style={{ backgroundColor: BLUE }}
       >
         {/* Background Image Overlay */}

@@ -106,7 +106,7 @@ export function cumpleRequisitosExtra(carrera, puntajes) {
  * @param {number} corte - Puntaje de corte del año anterior
  */
 export function etiquetaChance(ppp, corte) {
-  if (!ppp || !corte) return { text: "—", color: "gray", icon: "⚪️" };
+  if (!ppp || !corte) return { text: "-", color: "gray", icon: "⚪️" };
 
   const diff = ppp - corte;
 

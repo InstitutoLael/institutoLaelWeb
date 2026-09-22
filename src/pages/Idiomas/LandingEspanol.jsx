@@ -64,7 +64,7 @@ export default function LandingEspanol() {
   return (
     <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">
       <Helmet>
-        <title>Español para Extranjeros | Instituto Lael — Chile</title>
+        <title>Español para Extranjeros | Instituto Lael - Chile</title>
         <meta name="description" content="Domina el español y conéctate con Chile. Programa optimizado para hispanohablantes en el extranjero o extranjeros viviendo en el país. Inmersión práctica." />
       </Helmet>
       

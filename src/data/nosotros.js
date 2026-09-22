@@ -15,7 +15,7 @@ export const THE_NAME = {
 export const STATS = [
     { id: 1, value: '+600', label: 'Alumnos en el Peak' },
     { id: 2, value: '100%', label: 'Online y en Vivo' },
-    { id: 3, value: '$0', label: 'La PAES siempre gratis' },
+    { id: 3, value: '$34.990', label: 'Tope mensual del Plan Completo PAES' },
     { id: 4, value: '3', label: 'Idiomas Disponibles' },
 ];
 
@@ -29,7 +29,7 @@ export const VALUES = [
     { 
         id: "inclusion",
         title: "Inclusión Radical", 
-        desc: "Desde LSCh hasta la preparación PAES gratuita. Aquí celebramos la diversidad y el propósito de cada estudiante.",
+        desc: "Desde LSCh hasta la preparación PAES accesible. Aquí celebramos la diversidad y el propósito de cada estudiante.",
         icon: "🤝"
     },
     { 

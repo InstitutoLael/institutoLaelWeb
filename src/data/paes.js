@@ -8,7 +8,7 @@
 export const ENROLLMENT_FEE = 10990;
 export const ACADEMIC_MONTHS = 8;
 export const AVAILABLE_SPOTS = 12;
-export const START_DATE_EXACT = "Lunes 3 de Agosto";
+export const START_DATE_EXACT = "Inicios de marzo";
 
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
@@ -21,43 +21,55 @@ export const clp = (n) =>
    2. EL CEREBRO: CALCULADORA DE INVERSIÓN
    ────────────────────────────────────────────────────────────────────────── */
 
+// Cada profe cobra por SU ramo, independiente de si el alumno paga por
+// asignatura o toma el Plan Completo. Si el pack hace que el alumno pague
+// menos que la suma de sus ramos, la diferencia la absorbe el instituto -
+// nunca el profe.
+export const OBLIGATORIA_PRICE = 12000;
+export const ELECTIVA_PRICE = 10000;
+export const PACK_PRICE = 34990;
+export const PACK_MIN_SUBJECTS = 4;
+
 export function computePaesPrice(selectedIds = []) {
   const count = selectedIds.length;
 
-  // El modelo ahora es 100% gratuito
-  const TIER_PRICES = {
-    1: 0,
-    2: 0,
-    3: 0,
-    FULL: 0
-  };
-
-  let totalMonthly = 0;
-  let label = "";
-  let saving = 0;
-
   if (count === 0) {
-    totalMonthly = 0;
-    label = "Inicia tu preparación";
-  } else {
-    totalMonthly = 0;
-    label = "Sistema de Alto Rendimiento — Gratis";
-    saving = 0;
+    return {
+      count,
+      label: "Inicia tu preparación",
+      totalMonthly: 0,
+      nominalTotal: 0,
+      saving: 0,
+      enrollment: 0, // Matrícula $0
+      totalFirstMonth: 0,
+      pricePerSubject: 0
+    };
   }
+
+  // nominalTotal es lo que se le paga a cada profe según su ramo - no cambia
+  // aunque el alumno esté en el Plan Completo.
+  const nominalTotal = selectedIds.reduce((sum, id) => {
+    const subject = PAES_SUBJECTS.find((s) => s.id === id);
+    const isObligatoria = subject?.category === "Prueba Obligatoria";
+    return sum + (isObligatoria ? OBLIGATORIA_PRICE : ELECTIVA_PRICE);
+  }, 0);
+
+  const usesPack = count >= PACK_MIN_SUBJECTS && nominalTotal > PACK_PRICE;
+  const totalMonthly = usesPack ? PACK_PRICE : nominalTotal;
 
   return {
     count,
-    label,
-    totalMonthly: 0,
-    saving: 0,
+    label: usesPack ? "Plan Completo" : "Plan por asignatura",
+    totalMonthly,
+    nominalTotal, // lo que reciben los profes en conjunto, sea cual sea el plan
+    saving: usesPack ? nominalTotal - PACK_PRICE : 0,
     enrollment: 0, // Matrícula $0
-    totalFirstMonth: 0,
-    pricePerSubject: 0
+    totalFirstMonth: totalMonthly,
+    pricePerSubject: Math.round(totalMonthly / count)
   };
 }
 
 export const priceForSubjects = (ids) => computePaesPrice(ids).totalMonthly;
-export const priceForCount = (count) => computePaesPrice(Array(count).fill(0)).totalMonthly;
 
 /* ──────────────────────────────────────────────────────────────────────────
    3. MÓDULOS DE ENTRENAMIENTO (DATA DETALLADA)
@@ -101,7 +113,7 @@ export const PAES_SUBJECTS = [
   },
   {
     id: "bio",
-    name: "Ciencias — Biología",
+    name: "Ciencias - Biología",
     category: "Prueba Electiva",
     icon: "🧬",
     color: "#C6A66B",
@@ -110,7 +122,7 @@ export const PAES_SUBJECTS = [
   },
   {
     id: "fis",
-    name: "Ciencias — Física",
+    name: "Ciencias - Física",
     category: "Prueba Electiva",
     icon: "⚡",
     color: "#C6A66B",
@@ -119,7 +131,7 @@ export const PAES_SUBJECTS = [
   },
   {
     id: "qui",
-    name: "Ciencias — Química",
+    name: "Ciencias - Química",
     category: "Prueba Electiva",
     icon: "🧪",
     color: "#C6A66B",
@@ -136,10 +148,10 @@ export const PAES_COMBOS = [
     id: "combo-humanista",
     title: "Estrategia Humanista",
     subtitle: "Comprensión Lectora + Perspectiva Histórica + M1",
-    subjects: ["len", "his", "m1"], 
-    price: 0,
+    subjects: ["len", "his", "m1"],
+    price: 34000,
     color: "amber",
-    tag: "100% Gratuito",
+    tag: "$34.000/mes",
     features: ["Clases en vivo por Google Meet", "Simulacros de Presión", "Material de Quiebre", "Comunidad de Apoyo"],
     paymentUrl: "" 
   },
@@ -147,10 +159,10 @@ export const PAES_COMBOS = [
     id: "combo-cientifico",
     title: "Estrategia STEM",
     subtitle: "M1 + M2 + Ciencias Específicas",
-    subjects: ["m1", "m2", "bio", "fis"], 
-    price: 0,
+    subjects: ["m1", "m2", "bio", "fis"],
+    price: 34990,
     color: "teal",
-    tag: "100% Gratuito",
+    tag: "$34.990/mes · Plan Completo",
     features: ["Enfoque 100% Lógico", "Preparación M2 Intensiva", "Clases en vivo", "Simulacros Semanales"],
     paymentUrl: "" 
   },
@@ -159,8 +171,9 @@ export const PAES_COMBOS = [
     title: "Sistema Integral Lael",
     subtitle: "Dominio absoluto para asegurar tu objetivo",
     subjects: ["len", "m1", "m2", "his", "bio"],
-    price: 0,
+    price: 34990,
     color: "indigo",
+    tag: "$34.990/mes · Plan Completo",
     features: ["Acceso a Todo el Sistema", "Orientación Vocacional", "Clases en vivo", "Soporte de Comunidad"],
     paymentUrl: "" 
   }
@@ -171,9 +184,9 @@ export const PAES_COMBOS = [
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_CONFIG = {
   AVAILABLE_SPOTS: AVAILABLE_SPOTS,
-  START_DATE: "Agosto 2026",
+  START_DATE: "Marzo 2027",
   START_DATE_EXACT: START_DATE_EXACT,
-  FREE_BADGE: "100% GRATIS"
+  FREE_BADGE: "DESDE $10.000/MES"
 };
 
 export const PAES_FEATURES = [
@@ -184,9 +197,9 @@ export const PAES_FEATURES = [
 ];
 
 export const PAES_FAQS = [
-  { 
-    q: "¿De verdad es gratis? ¿Hay letra chica?", 
-    a: "Sí, es 100% gratis. Sin matrícula, sin mensualidad, sin sorpresas. Nuestra misión es que el dinero no sea una barrera para tu educación." 
+  {
+    q: "¿Cuánto cuesta? ¿Hay letra chica?",
+    a: "Matrícula gratis. Cada asignatura tiene su propio valor (desde $10.000/mes), y si tomas 4 o más, pagas el Plan Completo a $34.990/mes en vez de la suma. Sin sorpresas, y si aun así no lo puedes cubrir, puedes postular a una beca."
   },
   { 
     q: "¿Cómo son las clases?", 

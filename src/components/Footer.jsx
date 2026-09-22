@@ -16,7 +16,7 @@ const SOCIAL = [
 ];
 
 const LINKS_PROGRAMAS = [
-  { name: 'PAES Gratuita', path: '/paes' },
+  { name: 'PAES', path: '/paes' },
   { name: 'Idiomas (Inglés)', path: '/idiomas' },
   { name: 'LSCh (Señas)', path: '/lsch' },
 ];
@@ -41,7 +41,7 @@ export default function Footer() {
         {/* Top grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
 
-          {/* Marca — ocupa 2 columnas */}
+          {/* Marca - ocupa 2 columnas */}
           <div className="flex flex-col gap-6 lg:col-span-2">
             <Link to="/">
               <img
@@ -124,7 +124,7 @@ export default function Footer() {
         <div className="mb-12 p-8 rounded-3xl border border-white/10 bg-white/[0.03] flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
             <p className="text-[10px] tracking-[0.3em] uppercase text-[#D7E400] font-bold mb-1">PAES 2027</p>
-            <p className="text-white font-bold text-lg">Empieza a prepararte. Es gratis.</p>
+            <p className="text-white font-bold text-lg">Empieza a prepararte. Matrícula gratis.</p>
           </div>
           <Link
             to="/paes"

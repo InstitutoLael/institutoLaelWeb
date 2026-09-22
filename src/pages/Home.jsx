@@ -61,6 +61,7 @@ const ELECTIVAS = [
 const WORLDS = [
   { id: 'ingles', label: 'INGLÉS', title: 'Habla con', accent: 'seguridad.', desc: 'Clases en vivo por Google Meet. Fluidez real sin atajos. Plan Trimestral: $11.990/mes.', bg: idiomasBg, cta: 'Ver programa', route: '/idiomas', active: true, price: '$14.990/mes' },
   { id: 'lsch',   label: 'LSCh',   title: 'Inclusión', accent: 'para todos.', desc: 'Lengua de Señas Chilena con instructores nativos. Cultura Sorda.', bg: lschBg,    cta: 'Aprender LSCh', route: '/lsch',   active: true, price: '$19.990/mes' },
+  { id: 'coreano', label: 'COREANO', title: 'Prepárate para', accent: 'el TOPIK.', desc: 'Clases en vivo con docente nativa. Estamos armando la planificación completa antes de abrir cupos.', bg: idiomasBg, cta: 'Próximamente', route: '/coreano', active: false, price: null },
   { id: 'adultos', label: 'NIVELACIÓN', title: 'Tu segunda', accent: 'oportunidad.', desc: 'Termina tus estudios con un programa flexible. Próximamente.', bg: adultosBg, cta: 'Próximamente', route: '/adultos', active: false, price: null },
 ];
 
@@ -81,7 +82,7 @@ const WHY_LAEL = [
 
 const METRICS = [
   { value: 600, prefix: '+', suffix: '',  label: 'Alumnos activos',  color: YELLOW },
-  { value: 0,   prefix: '$', suffix: '',  label: 'Costo PAES',       color: '#FFFFFF' },
+  { value: 0,   prefix: '$', suffix: '',  label: 'Costo matrícula',  color: '#FFFFFF' },
   { value: 3,   prefix: '',  suffix: '',  label: 'Idiomas activos',  color: YELLOW },
   { value: 100, prefix: '',  suffix: '%', label: '100% Online',      color: '#FFFFFF' },
 ];
@@ -105,15 +106,15 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       <Helmet>
-        <title>Instituto Lael — PAES Gratuita 2027 | Santiago, Chile</title>
-        <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES 100% gratuita, Inglés y LSCh. Acompañamiento real. Instituto Lael, Chile." />
+        <title>Instituto Lael - Preuniversitario PAES 2027 | Santiago, Chile</title>
+        <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES desde $10.000/mes por ramo, con becas para quien lo necesite. Inglés y LSCh. Acompañamiento real. Instituto Lael, Chile." />
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 1 — HERO REDISEÑADO
+          BLOQUE 1 - HERO REDISEÑADO
       ══════════════════════════════════════════════════════════════════ */}
       <section
-        className="min-h-screen relative flex flex-col justify-center items-center px-6 py-32 lg:py-40 text-center overflow-hidden"
+        className="-mt-20 min-h-screen relative flex flex-col justify-center items-center px-6 py-32 lg:py-40 text-center overflow-hidden"
         style={{ backgroundColor: BLUE }}
       >
         {/* Background Image Overlay */}
@@ -155,7 +156,7 @@ export default function Home() {
             {...fadeUp(0.2)}
             className="text-white/70 text-lg md:text-xl leading-relaxed mb-10 max-w-xl text-center"
           >
-            <span className="text-white font-extrabold">Empieza ahora.</span> Clases en vivo, profesores reales y comunidad. Sin costo, sin barreras. Solo tu esfuerzo y nuestra guía.
+            <span className="text-white font-extrabold">Empieza ahora.</span> Clases en vivo con profesores que saben tu nombre, no tu número de lista. Matrícula gratis, desde $10.000/mes por ramo, becas para quien lo necesite.
           </motion.p>
 
           {/* Buttons */}
@@ -180,11 +181,11 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Right Costado — Métricas Verticales en Desktop */}
-        <div className="absolute right-8 lg:right-16 top-1/2 -translate-y-1/2 hidden lg:flex flex-col gap-8 z-10 border-l border-white/10 pl-6 py-4">
+        {/* Right Costado - Métricas Verticales en Desktop */}
+        <div className="absolute right-8 xl:right-16 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-8 z-10 border-l border-white/10 pl-6 py-4">
           {[
             { label: 'Alumnos', value: '+600' },
-            { label: 'Costo PAES', value: '$0' },
+            { label: 'Becas', value: 'DISPONIBLES' },
             { label: 'Online', value: '100%' },
             { label: 'Matrícula', value: 'GRATIS' },
           ].map((item, idx) => (
@@ -194,7 +195,7 @@ export default function Home() {
               className="text-left"
             >
               <p className="text-white font-black text-2xl leading-none" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                {item.value === '$0' || item.value === 'GRATIS' ? (
+                {item.value === 'DISPONIBLES' || item.value === 'GRATIS' ? (
                   <span style={{ color: YELLOW }}>{item.value}</span>
                 ) : (
                   item.value
@@ -207,7 +208,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 2 — NO ERES UN PUNTAJE (MEJORADO)
+          BLOQUE 2 - NO ERES UN PUNTAJE (MEJORADO)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-28 lg:py-40 px-6 bg-white">
         <div className="max-w-5xl mx-auto text-center">
@@ -233,7 +234,7 @@ export default function Home() {
           </motion.h2>
           <motion.div {...fadeUp(0.2)} className="max-w-3xl mx-auto space-y-4 mb-16 text-lg md:text-xl leading-relaxed text-lael-primary/80">
             <p>
-              Eres esfuerzo, constancia, aprendizaje y sueños — y eso no se mide con números.
+              Tu sueño no tiene fecha de vencimiento. Aquí no compites contra nadie - hay acompañamiento real, respeto y seguimiento, no presión.
             </p>
             <p>
               Detrás de cada estudiante hay una historia única, y cada proceso importa.
@@ -245,7 +246,7 @@ export default function Home() {
             {[
               { icon: <Users className="text-lael-primary" size={24} />, text: 'Detrás de cada estudiante hay una historia.' },
               { icon: <Target className="text-lael-primary" size={24} />, text: 'Cada proceso importa.' },
-              { icon: <Heart className="text-lael-primary" size={24} />, text: 'Tu potencial es más grande de lo que imaginas.' },
+              { icon: <Heart className="text-lael-primary" size={24} />, text: 'No eres un número más.' },
             ].map((item, idx) => (
               <motion.div
                 key={idx}
@@ -275,7 +276,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 3 — PROGRAMA PAES (DISEÑO EDITORIAL 2 COLUMNAS)
+          BLOQUE 3 - PROGRAMA PAES (DISEÑO EDITORIAL 2 COLUMNAS)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-24 px-6 bg-lael-secondary">
         <div className="max-w-6xl mx-auto">
@@ -286,13 +287,13 @@ export default function Home() {
             {/* Columna Izquierda (60%) */}
             <div className="lg:col-span-6 p-8 md:p-16 flex flex-col justify-center text-left" style={{ backgroundColor: BLUE }}>
               <span className="text-lael-accent text-xs font-black uppercase tracking-[0.3em] mb-4">
-                100% GRATUITO
+                DESDE $10.000/MES
               </span>
               <h2
                 className="text-white mb-6 leading-tight"
                 style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}
               >
-                PROGRAMA PAES<br />GRATUITO 2027
+                PROGRAMA PAES<br />2027
               </h2>
               <p className="text-white/70 text-lg mb-10 leading-relaxed italic">
                 "Creamos el preu que nos habría gustado tener."
@@ -314,10 +315,10 @@ export default function Home() {
             <div className="lg:col-span-4 p-8 md:p-16 flex flex-col justify-center" style={{ backgroundColor: YELLOW }}>
               <div className="grid grid-cols-2 gap-8">
                 {[
-                  { label: 'INICIO', value: 'Agosto 2026' },
+                  { label: 'INICIO', value: 'Marzo 2027' },
                   { label: 'MODALIDAD', value: 'Online' },
                   { label: 'CUPOS', value: 'Limitados' },
-                  { label: 'COSTO', value: '$0 / mes' },
+                  { label: 'COSTO', value: 'Desde $10.000' },
                 ].map((item, idx) => (
                   <div key={idx} className="border-b border-lael-primary/10 pb-4">
                     <p className="text-[10px] font-black tracking-widest text-lael-primary/50 mb-1">{item.label}</p>
@@ -333,7 +334,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 4 — DASHBOARD ASIGNATURAS (LISTADO 2 COLUMNAS)
+          BLOQUE 4 - DASHBOARD ASIGNATURAS (LISTADO 2 COLUMNAS)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-24 px-6" style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto">
@@ -432,7 +433,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 5 — MUNDOS / OTROS PROGRAMAS
+          BLOQUE 5 - MUNDOS / OTROS PROGRAMAS
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-28 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
@@ -453,7 +454,7 @@ export default function Home() {
             </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {WORLDS.map((world, i) => (
               <motion.div
                 key={world.id}
@@ -523,7 +524,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 6 — DOCENTES (CARDS HORIZONTALES CON BADGES)
+          BLOQUE 6 - DOCENTES (CARDS HORIZONTALES CON BADGES)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-28 px-6 bg-lael-secondary">
         <div className="max-w-7xl mx-auto">
@@ -601,12 +602,12 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE NUEVO — SIGNIFICADO LAEL
+          BLOQUE NUEVO - SIGNIFICADO LAEL
       ══════════════════════════════════════════════════════════════════ */}
       <SignificadoLael />
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 8 — MÉTRICAS ANIMADAS (ANIMACIÓN REPARADA)
+          BLOQUE 8 - MÉTRICAS ANIMADAS (ANIMACIÓN REPARADA)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-28 px-6" style={{ backgroundColor: BLUE }}>
         <div className="max-w-7xl mx-auto">
@@ -642,7 +643,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 9 — TESTIMONIOS
+          BLOQUE 9 - TESTIMONIOS
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-28 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
@@ -698,7 +699,7 @@ export default function Home() {
               </motion.div>
             ))}
 
-            {/* Placeholder — próximamente */}
+            {/* Placeholder - próximamente */}
             <motion.div
               {...fadeUp(0.1)}
               className="rounded-[32px] p-8 flex flex-col items-center justify-center text-center"
@@ -737,7 +738,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 10 — CTA FINAL
+          BLOQUE 10 - CTA FINAL
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-32 lg:py-48 px-6" style={{ backgroundColor: BLUE }}>
         <div className="max-w-4xl mx-auto text-center">
@@ -781,7 +782,7 @@ export default function Home() {
             {...fadeUp(0.4)}
             className="mt-10 text-white/30 text-sm tracking-wider"
           >
-            institutolael.cl · Sin costos · 100% online
+            institutolael.cl · Matrícula gratis · 100% online
           </motion.p>
         </div>
       </section>

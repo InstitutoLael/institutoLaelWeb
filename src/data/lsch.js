@@ -1,5 +1,5 @@
 // src/data/lsch.js
-// === Lengua de Señas Chilena (LSCh) — El Idioma de las Manos ===
+// === Lengua de Señas Chilena (LSCh) - El Idioma de las Manos ===
 
 /* ──────────────────────────────────────────────────────────────────────────
    1. CONFIGURACIÓN BASE

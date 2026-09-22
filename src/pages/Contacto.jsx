@@ -191,7 +191,7 @@ export default function Contacto() {
                       value={formData.programa}
                       onChange={(e) => setFormData({...formData, programa: e.target.value})}
                     >
-                      <option value="PAES">PAES Gratuito</option>
+                      <option value="PAES">PAES</option>
                       <option value="Idiomas">Inglés / Español</option>
                       <option value="LSCh">Lengua de Señas (LSCh)</option>
                       <option value="Otro">Otro requerimiento</option>

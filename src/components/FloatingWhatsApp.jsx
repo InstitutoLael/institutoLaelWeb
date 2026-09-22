@@ -26,10 +26,10 @@ export default function FloatingWhatsApp() {
     if (path === '/paes') {
       return [
         { 
-          id: 'paes_gratis', 
-          label: 'Inscribirme PAES Gratis', 
-          icon: <Target size={18} />, 
-          msg: 'Hola, quiero inscribirme en la PAES gratuita de Lael.' 
+          id: 'paes_gratis',
+          label: 'Inscribirme a PAES',
+          icon: <Target size={18} />,
+          msg: 'Hola, quiero inscribirme a la PAES de Lael.'
         },
         ...baseOptions
       ];
@@ -62,10 +62,10 @@ export default function FloatingWhatsApp() {
     // Default / Home / Others
     return [
       { 
-        id: 'paes_gratis', 
-        label: 'Quiero PAES Gratis', 
-        icon: <Target size={18} />, 
-        msg: 'Hola, quiero unirme a las clases gratuitas de PAES.' 
+        id: 'paes_gratis',
+        label: 'Quiero inscribirme a PAES',
+        icon: <Target size={18} />,
+        msg: 'Hola, quiero unirme a las clases de PAES.'
       },
       { 
         id: 'idiomas', 

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const ease = [0.16, 1, 0.3, 1];
 
 // The outer section enters as one cinematic unit:
-// blur lifts, y rises — "access granted" feeling
+// blur lifts, y rises - "access granted" feeling
 const sectionVariants = {
   hidden: { opacity: 0, y: 100, filter: 'blur(12px)' },
   visible: {
@@ -42,7 +42,7 @@ export default function SystemReveal({ children }) {
       animate="visible"
       className="w-full px-6 pt-32 lg:pt-48 flex flex-col items-center"
     >
-      {/* Title block — first to appear */}
+      {/* Title block - first to appear */}
       <motion.header
         variants={revealChildVariant}
         custom={0.2}
@@ -52,7 +52,7 @@ export default function SystemReveal({ children }) {
         <h2 className="font-display text-4xl lg:text-5xl text-lael-light">Arquitectura de Rendimiento</h2>
       </motion.header>
 
-      {/* Module selector — second */}
+      {/* Module selector - second */}
       <motion.div
         variants={revealChildVariant}
         custom={0.55}

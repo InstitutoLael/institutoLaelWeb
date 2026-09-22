@@ -23,8 +23,8 @@ const FAQ_DATA = [
     category: "Costos & Acceso",
     icon: <DollarSign size={20} className="text-[#071D49]" />,
     items: [
-      { q: "¿Por qué la PAES es gratis en Lael?", a: "Porque creemos que el talento no tiene estrato social. Nuestra misión es democratizar el acceso a la educación de élite, y lo logramos gracias a un modelo de gestión eficiente y el apoyo de nuestra comunidad." },
-      { q: "¿Hay algún costo oculto o matrícula?", a: "No. En el programa PAES no pagas matrícula, ni mensualidad, ni materiales. Es 100% gratuito de principio a fin." }
+      { q: "¿Por qué la PAES es tan accesible en Lael?", a: "Porque creemos que el talento no tiene estrato social. Pagas por ramo desde $10.000 al mes, con un tope de $34.990 si tomas 4 o más - una fracción de lo que cobra un preuniversitario tradicional. Y si no te alcanza, puedes postular a una beca. La meta es que el dinero nunca sea la razón por la que alguien se queda fuera." },
+      { q: "¿Hay algún costo oculto o matrícula?", a: "No hay costos ocultos. La matrícula es gratis; solo pagas tus asignaturas, sin cargos extra por materiales." }
     ]
   },
   {
@@ -52,7 +52,7 @@ export default function Preguntas() {
     <div className="min-h-screen pt-32 pb-20 px-6" style={{ backgroundColor: LIGHT_GRAY }}>
       <Helmet>
         <title>Preguntas Frecuentes | Instituto Lael</title>
-        <meta name="description" content="Resolvemos tus dudas sobre el programa PAES gratuito, idiomas y metodología. Honestidad radical desde el primer contacto." />
+        <meta name="description" content="Resolvemos tus dudas sobre el programa PAES, idiomas y metodología. Honestidad radical desde el primer contacto." />
       </Helmet>
 
       <div className="max-w-4xl mx-auto">

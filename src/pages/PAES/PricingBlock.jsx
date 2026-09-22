@@ -5,7 +5,7 @@ import { track } from '../../utils/analytics';
 
 const ease = [0.16, 1, 0.3, 1];
 
-// WhatsApp number — Instituto Lael
+// WhatsApp number - Instituto Lael
 const WA_NUMBER = '56964626568';
 
 export default function PricingBlock({ gateData, selectedModules, priceData, isConnecting, setIsConnecting, setStep }) {
@@ -96,7 +96,7 @@ Me gustaría avanzar al siguiente paso con un mentor.`;
             </p>
           )}
 
-          {/* Price — dominant */}
+          {/* Price - dominant */}
           <div className="mb-4">
             <p className="text-lael-muted/60 text-[10px] tracking-[0.2em] uppercase mb-3">Inversión mensual</p>
             <p className="font-display text-6xl lg:text-8xl text-lael-light tracking-[-0.03em] font-bold">

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const ease = [0.16, 1, 0.3, 1];
 const INITIAL = { nombre: '', empresa: '', tamano: '', email: '', programa: '', mensaje: '' };
 const TAMAÑOS = ['1 - 10 empleados', '11 - 50 empleados', '51 - 200 empleados', 'Más de 200 empleados'];
-const PROGRAMAS = ['PAES Institucional', 'Idiomas Corporativos', 'LSCh — Ley 21.015', 'Otro'];
+const PROGRAMAS = ['PAES Institucional', 'Idiomas Corporativos', 'LSCh - Ley 21.015', 'Otro'];
 
 export default function EmpresasForm() {
   const [form, setForm] = useState(INITIAL);
@@ -28,7 +28,7 @@ export default function EmpresasForm() {
       localStorage.setItem(key, JSON.stringify({ ...form, ts: new Date().toISOString() }));
     } catch (_) {}
 
-    const subject = encodeURIComponent(`Cotización Empresa: ${form.empresa} — ${form.programa}`);
+    const subject = encodeURIComponent(`Cotización Empresa: ${form.empresa} - ${form.programa}`);
     const body = encodeURIComponent(
 `Nombre: ${form.nombre}
 Empresa: ${form.empresa}

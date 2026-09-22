@@ -23,6 +23,7 @@ import FunnelDashboard from "./pages/Admin/FunnelDashboard";
 import Preguntas from "./pages/Preguntas";
 import Transparencia from "./pages/Transparencia";
 import CasosReales from "./pages/CasosReales";
+import Empresas from "./pages/Empresas";
 import AppletCirculos from "./pages/Arcade/AppletCirculos";
 import NotFound from "./pages/NotFound";
 import Inscripcion from "./pages/Inscripcion";
@@ -54,6 +55,7 @@ export default function App() {
             <Route path="/preguntas" element={<Preguntas />} />
             <Route path="/transparencia" element={<Transparencia />} />
             <Route path="/casos-reales" element={<CasosReales />} />
+            <Route path="/empresas" element={<Empresas />} />
             <Route path="/diagnostico" element={<DiagnosticPage />} />
             <Route path="/resultado-diagnostico" element={<ResultDashboard />} />
             <Route path="/admin/funnel" element={<FunnelDashboard />} />

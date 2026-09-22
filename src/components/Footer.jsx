@@ -19,6 +19,7 @@ const LINKS_PROGRAMAS = [
   { name: 'PAES', path: '/paes' },
   { name: 'Idiomas (Inglés)', path: '/idiomas' },
   { name: 'LSCh (Señas)', path: '/lsch' },
+  { name: 'Empresas', path: '/empresas' },
 ];
 
 const LINKS_INSTITUTO = [

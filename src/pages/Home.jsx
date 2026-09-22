@@ -97,6 +97,15 @@ const TESTIMONIALS = [
     initials: 'DR',
     real: true,
   },
+  {
+    id: 't2',
+    name: 'Rocío R.',
+    program: 'PAES · 2025',
+    quote: 'Cambió mi forma de organizarme frente a distintos horarios de clases, ayudándome a adaptarme a cambios que me beneficiarán a futuro, además de traerme aprendizajes que no vi en el colegio.',
+    rating: 5,
+    initials: 'RR',
+    real: true,
+  },
 ];
 
 // ─── HOME ────────────────────────────────────────────────────────────────────

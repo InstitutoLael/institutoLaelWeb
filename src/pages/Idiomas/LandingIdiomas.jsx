@@ -54,7 +54,7 @@ export default function LandingIdiomas() {
   const reasons = [
     {
       title: "Profesores nativos y especializados",
-      desc: "Aprende de docentes con dominio nativo o bilingües certificados con amplia experiencia y pedagogía activa.",
+      desc: "Clases con quien realmente habla el idioma, no con quien lo memorizó para dar clases.",
       icon: <GraduationCap className="w-6 h-6 text-[#071D49]" />
     },
     {
@@ -69,7 +69,7 @@ export default function LandingIdiomas() {
     },
     {
       title: "Comunidad de práctica",
-      desc: "Sesiones de conversación extra y grupos de interacción dinámica para que uses el idioma en contextos reales.",
+      desc: "Espacios de conversación extra con otros alumnos, para que uses el idioma antes de necesitarlo de verdad.",
       icon: <Users className="w-6 h-6 text-[#071D49]" />
     }
   ];
@@ -159,7 +159,7 @@ export default function LandingIdiomas() {
             </motion.div>
 
             <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg mb-8 leading-relaxed max-w-xl">
-              Desarrolla las competencias necesarias para comunicarte fluidamente en el entorno corporativo y digital global. Olvida las clases pasivas y entrena con situaciones reales de networking y trabajo.
+              Habla con seguridad en el trabajo, en una entrevista o viajando — no solo en el papel. Nada de clases pasivas: practicas conversaciones que de verdad vas a tener.
             </motion.p>
 
             {/* Path visualization */}

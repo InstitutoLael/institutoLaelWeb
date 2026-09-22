@@ -129,7 +129,7 @@ export default function LandingLSCh() {
             </motion.h1>
 
             <motion.p {...fadeUp(0.25)} className="text-white/70 text-lg mb-10 leading-relaxed max-w-md">
-              Una decisión que transforma la forma de comunicar y abre nuevas oportunidades de conexión. Conéctate con la inclusión real guiado por docentes nativos.
+              Aprende con instructores sordos nativos, no con un curso genérico traducido. Cultura Sorda de verdad, no una clase de señas sueltas.
             </motion.p>
 
             {/* Quick badges */}

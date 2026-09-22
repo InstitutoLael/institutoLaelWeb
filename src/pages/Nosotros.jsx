@@ -27,7 +27,7 @@ export default function Nosotros() {
       name: "Diego Chaparro",
       role: "Fundador & Director",
       subject: "Matemáticas (Colegio & Preu)",
-      bio: "Fundador de Instituto Lael. El profesor de matemáticas más buscado por colegios y estudiantes de preuniversitario gracias a su efectividad y claridad al enseñar.",
+      bio: "Fundador de Instituto Lael. Enseña matemáticas con la misma exigencia con la que dirige el instituto: sin atajos, pero sin dejar a nadie atrás.",
       img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=071D49&color=D7E400&size=200&bold=true",
       confirmed: true
     },
@@ -35,7 +35,7 @@ export default function Nosotros() {
       name: "Monserrat González",
       role: "Profesora de Inglés",
       subject: "Inglés Avanzado & Preparación",
-      bio: "Docente de inglés altamente calificada. Especialista en inmersión práctica, fonética y comunicación activa para un dominio fluido desde el primer día.",
+      bio: "Enseña inglés desde la práctica real, no desde la gramática memorizada. Conversación desde la primera clase, no desde el mes tres.",
       img: "https://ui-avatars.com/api/?name=Monserrat+Gonzalez&background=071D49&color=D7E400&size=200&bold=true",
       confirmed: true
     },
@@ -43,7 +43,7 @@ export default function Nosotros() {
       name: "Martín",
       role: "Profe de Ciencias",
       subject: "Biología + Química",
-      bio: "Docente del área científica ampliamente solicitado por su didáctica interactiva, dinámica y cercana. Logra que la Biología y la Química sean sumamente fáciles y apasionantes.",
+      bio: "Convierte biología y química en algo que se entiende, no que se memoriza. Cercano y directo, sin vueltas.",
       img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=071D49&color=D7E400&size=200&bold=true",
       confirmed: true
     },
@@ -51,7 +51,7 @@ export default function Nosotros() {
       name: "Kathy",
       role: "Profe de HomeSchool",
       subject: "Matemática M2 & HomeSchool",
-      bio: "Docente experta en matemáticas superiores y especialista consolidada en la metodología HomeSchool. Apasionada por potenciar las competencias lógicas y de nivelación.",
+      bio: "Matemática superior y HomeSchool. Le importa que entiendas el porqué, no solo el cómo.",
       img: "https://ui-avatars.com/api/?name=Kathy+M2&background=071D49&color=D7E400&size=200&bold=true",
       confirmed: true
     },
@@ -121,7 +121,7 @@ export default function Nosotros() {
                 <div className="absolute bottom-12 left-10 right-10 text-left">
                    <p className="text-[#D7E400] text-[10px] tracking-[0.4em] uppercase font-bold mb-3">Diego Chaparro</p>
                    <p className="text-white text-2xl font-display font-extrabold leading-tight uppercase">
-                     "Aquí no vendemos cursos. <br/> Activamos propósitos."
+                     "El instituto no es mío. <br/> Es de Dios."
                    </p>
                 </div>
              </div>
@@ -175,7 +175,7 @@ export default function Nosotros() {
                   Lo que nos mueve <br/> <span className="italic font-normal text-[#D7E400] capitalize">no es el mercado.</span>
                 </h2>
              </div>
-             <p className="text-[#8D8D8D] text-base max-w-sm pb-4">La misión es el centro de cada línea de código y cada clase que impartimos.</p>
+             <p className="text-[#8D8D8D] text-base max-w-sm pb-4">Cada decisión, cada clase, pasa por la misión primero.</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">

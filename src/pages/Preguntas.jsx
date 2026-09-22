@@ -108,6 +108,14 @@ export default function Preguntas() {
            >
              Hablar por WhatsApp
            </motion.a>
+           <a
+             href="https://docs.google.com/forms/d/e/1FAIpQLSehVHEaZpQaQpSDKzHarHhPfgVzEPqyl5Q--Wa5r5KJFQwh9g/viewform"
+             target="_blank"
+             rel="noopener noreferrer"
+             className="block mt-6 text-white/50 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors underline underline-offset-4"
+           >
+             ¿El costo es una barrera? Postula a una beca
+           </a>
         </div>
       </div>
     </div>

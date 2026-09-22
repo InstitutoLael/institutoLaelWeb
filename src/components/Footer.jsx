@@ -10,6 +10,8 @@ const TikTokIcon = ({ size = 16 }) => (
   </svg>
 );
 
+const BECAS_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSehVHEaZpQaQpSDKzHarHhPfgVzEPqyl5Q--Wa5r5KJFQwh9g/viewform';
+
 const SOCIAL = [
   { name: 'Instagram', href: 'https://instagram.com/institutolael', Icon: Instagram },
   { name: 'TikTok', href: 'https://tiktok.com/@institutolael', Icon: TikTokIcon },
@@ -26,6 +28,7 @@ const LINKS_INSTITUTO = [
   { name: 'Sobre Nosotros', path: '/nosotros' },
   { name: 'Contacto', path: '/contacto' },
   { name: 'Preguntas Frecuentes', path: '/preguntas' },
+  { name: 'Postula a una Beca', path: BECAS_FORM_URL, external: true },
 ];
 
 const LINKS_LEGAL = [
@@ -101,9 +104,15 @@ export default function Footer() {
             <h4 className="text-[10px] tracking-[0.25em] uppercase text-white/40 mb-6 font-bold">Instituto</h4>
             <nav className="flex flex-col gap-4">
               {LINKS_INSTITUTO.map(l => (
-                <Link key={l.path} to={l.path} className="text-sm text-white/60 hover:text-white transition-colors">
-                  {l.name}
-                </Link>
+                l.external ? (
+                  <a key={l.path} href={l.path} target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-white transition-colors">
+                    {l.name}
+                  </a>
+                ) : (
+                  <Link key={l.path} to={l.path} className="text-sm text-white/60 hover:text-white transition-colors">
+                    {l.name}
+                  </Link>
+                )
               ))}
             </nav>
           </div>

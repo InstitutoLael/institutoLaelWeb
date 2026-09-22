@@ -16,10 +16,8 @@ import {
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import lschRealidad from '../../assets/img/Home/mundo_lsch_bg_1777943626827.png';
-import entenderImg from '../../assets/img/Home/media_lsch_entender_1780735268668.jpg';
-import comenzarImg from '../../assets/img/Home/media_lsch_comenzar_1780735268676.jpg';
 import CertificateSection from '../../components/CertificateSection';
-import avanzarImg from '../../assets/img/Home/media_lsch_avanzar_1780735268706.jpg';
+import { LANDING_SLIDES, LANDING_LEVELS } from '../../data/lsch';
 
 // Visual Brand Colors
 const BLUE = '#071D49';
@@ -43,26 +41,7 @@ export default function LandingLSCh() {
   const WA_LINK_TRIMESTRAL = "https://forms.gle/H86nFAQ2DJ8CCQ7y6";
   const WA_GENERAL = "https://wa.me/56964626568?text=Hola!%20Tengo%20consultas%20sobre%20el%20curso%20de%20Lengua%20de%20Señas%20Chilena%20(LSCh).";
 
-  const slides = [
-    {
-      img: entenderImg,
-      title: "Aprender señas es entender",
-      desc: "Una decisión que transforma la forma de comunicar.",
-      badge: "ENTENDER"
-    },
-    {
-      img: comenzarImg,
-      title: "Aprender señas es comenzar",
-      desc: "Abre nuevas oportunidades de comunicación y conexión.",
-      badge: "COMENZAR"
-    },
-    {
-      img: avanzarImg,
-      title: "Aprender señas es avanzar",
-      desc: "Porque cada persona aprende de manera distinta.",
-      badge: "AVANZAR"
-    }
-  ];
+  const slides = LANDING_SLIDES;
 
   // Auto rotate slides every 5 seconds
   useEffect(() => {
@@ -72,29 +51,7 @@ export default function LandingLSCh() {
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  const levels = [
-    {
-      code: "A1",
-      name: "Nivel Inicial",
-      duration: "3 Meses",
-      desc: "Comienza desde cero. Aprende el abecedario dactilológico, vocabulario cotidiano, saludos formales e informales, y cómo estructurar tus primeras ideas sin usar la voz.",
-      items: ["Abecedario y números", "Familia y entorno social", "Saludos y expresiones básicas", "Estructura espacial inicial"]
-    },
-    {
-      code: "A2",
-      name: "Nivel Intermedio",
-      duration: "3 Meses",
-      desc: "Profundiza tus habilidades comunicativas. Incorpora la gramática espacial tridimensional, clasificadores visuales y verbos direccionales para describir escenas complejas.",
-      items: ["Direccionalidad verbal", "Clasificadores espaciales", "Descripción de trayectorias", "Vocabulario extendido"]
-    },
-    {
-      code: "B1",
-      name: "Nivel Conversacional",
-      duration: "4 Meses",
-      desc: "Desarrolla mayor fluidez y confianza. Orientado a contextos profesionales, atención al público y cumplimiento de los parámetros de la Ley de Inclusión Laboral 21.015.",
-      items: ["Entornos laborales y de atención", "Léxico técnico de inclusión", "Conversación espontánea", "Inmersión cultural Sorda"]
-    }
-  ];
+  const levels = LANDING_LEVELS;
 
   return (
     <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">

@@ -59,13 +59,13 @@ export default function Empresas() {
           Instituto Lael · Soluciones Corporativas
         </motion.p>
         <motion.h1 {...fadeUp(0.15)} className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal" style={{ animationDelay: '0.15s' }}>
-          Capacitación estratégica<br />
+          Capacitación para<br />
           <span className="accent-italic">
-            para equipos de alto nivel.
+            tu equipo, en serio.
           </span>
         </motion.h1>
         <motion.p {...fadeUp(0.35)} className="mt-10 text-lael-muted text-base max-w-xl mx-auto leading-relaxed">
-          No son talleres genéricos. Son sistemas de rendimiento adaptados a las necesidades reales de tu organización.
+          Nada de taller genérico de un día. El mismo acompañamiento real que le damos a un alumno, adaptado a tu empresa.
         </motion.p>
         <motion.button {...fadeUp(0.55)} onClick={handleContact}
           className="mt-14 bg-lael-accent text-white px-10 py-5 rounded-lg text-[11px] tracking-[0.2em] uppercase font-bold hover:bg-lael-rust hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]">
@@ -110,7 +110,7 @@ export default function Empresas() {
                <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8">Enfoque en ROI</p>
                <h2 className="font-display text-4xl text-lael-light mb-8">Capacitación que impacta en el balance.</h2>
                <p className="text-lael-muted leading-relaxed mb-8">
-                  No medimos el éxito por la cantidad de horas dictadas, sino por la mejora en el rendimiento de tu equipo. Menos fricción en la comunicación, mejor clima laboral y cumplimiento estricto de normativas vigentes.
+                  El éxito no se mide en horas dictadas, sino en que tu equipo realmente lo use: mejor comunicación, cumplimiento real de la ley, y gente que se queda porque aprendió de verdad.
                </p>
                <ul className="space-y-4">
                   <li className="flex items-center gap-3 text-lael-light text-sm font-medium">
@@ -161,7 +161,7 @@ export default function Empresas() {
                      Innovación que <br /> se ejecuta.
                    </h3>
                    <p className="text-white/70 text-lg leading-relaxed">
-                     Llevamos la ingeniería del aprendizaje a tu empresa para transformar la capacidad operativa de tus líderes y equipos. No enseñamos, optimizamos el capital humano.
+                     Llevamos el mismo acompañamiento real de nuestras clases a tu empresa. No "optimizamos capital humano" — le enseñamos a personas.
                    </p>
                 </motion.div>
              </div>

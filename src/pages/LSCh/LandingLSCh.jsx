@@ -37,7 +37,6 @@ const fadeUp = (delay = 0) => ({
 export default function LandingLSCh() {
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const WA_LINK_MENSUAL = "https://forms.gle/H86nFAQ2DJ8CCQ7y6";
   const WA_LINK_TRIMESTRAL = "https://forms.gle/H86nFAQ2DJ8CCQ7y6";
   const WA_GENERAL = "https://wa.me/56964626568?text=Hola!%20Tengo%20consultas%20sobre%20el%20curso%20de%20Lengua%20de%20Señas%20Chilena%20(LSCh).";
 
@@ -250,59 +249,25 @@ export default function LandingLSCh() {
           <div className="text-center mb-20">
             <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Inversión y Matrícula</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
-              Elige tu Plan de Aprendizaje
+              Un solo plan, sin letra chica
             </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
-            
-            {/* Plan Mensual */}
-            <motion.div {...fadeUp(0.1)} className="p-10 rounded-[40px] bg-white border border-[#071D49]/10 shadow-sm hover:border-[#D7E400]/40 transition-all duration-300 flex flex-col justify-between group">
+          <div className="max-w-md mx-auto">
+            <motion.div {...fadeUp(0.1)} className="p-10 rounded-[40px] bg-[#071D49] border border-[#D7E400] shadow-lael flex flex-col justify-between relative overflow-hidden group">
               <div>
-                <p className="text-[#8D8D8D] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Flexibilidad Mensual</p>
-                <div className="flex items-baseline gap-1.5 mb-8">
-                  <span className="text-4xl sm:text-5xl font-display font-extrabold text-[#071D49]">$24.990</span>
-                  <span className="text-[#8D8D8D] text-xs font-bold uppercase tracking-widest">/mes</span>
-                </div>
-                
-                <ul className="space-y-4 mb-10 border-t border-[#071D49]/5 pt-6">
-                  {["Clases en vivo vía Zoom", "Material de apoyo digital (PDF)", "Acceso a grabaciones por 7 días", "Diploma de participación por nivel"].map(item => (
-                    <li key={item} className="flex items-center gap-3 text-xs text-[#8D8D8D]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#071D49]/40" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <a
-                href={WA_LINK_MENSUAL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-4.5 bg-[#F4F4F4] hover:bg-[#071D49] text-[#071D49] hover:text-white rounded-2xl text-[10px] font-bold uppercase tracking-[0.25em] flex items-center justify-center transition-all duration-300 active:scale-95"
-              >
-                Seleccionar Plan Mensual
-              </a>
-            </motion.div>
-
-            {/* Plan Trimestral */}
-            <motion.div {...fadeUp(0.2)} className="p-10 rounded-[40px] bg-[#071D49] border border-[#D7E400] shadow-lael flex flex-col justify-between relative overflow-hidden group">
-              <div className="absolute top-0 right-0 p-6 bg-[#D7E400] text-[#071D49] text-[9px] font-bold uppercase tracking-widest rounded-bl-2xl">
-                Ahorra con Trimestral
-              </div>
-
-              <div>
-                <p className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Plan Ahorro Trimestral</p>
-                <div className="flex items-baseline gap-1.5 mb-8">
+                <p className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Plan Único</p>
+                <div className="flex items-baseline gap-1.5 mb-2">
                   <span className="text-4xl sm:text-5xl font-display font-extrabold text-white">$19.990</span>
                   <span className="text-white/55 text-xs font-bold uppercase tracking-widest">/mes</span>
                 </div>
-                
+                <p className="text-white/50 text-xs font-bold uppercase tracking-widest mb-8">Matrícula gratis</p>
+
                 <ul className="space-y-4 mb-10 border-t border-white/10 pt-6">
                   {[
-                    "Todo lo del plan mensual",
-                    "🔥 Matrícula $0 (Ahorras $9.990)",
-                    "Acceso permanente a grabaciones de por vida",
+                    "Clases en vivo vía Zoom",
+                    "Material de apoyo digital (PDF)",
+                    "Acceso a grabaciones por 7 días",
                     "Certificado formal de Nivel aprobado"
                   ].map(item => (
                     <li key={item} className="flex items-center gap-3 text-xs text-white/80">
@@ -319,10 +284,9 @@ export default function LandingLSCh() {
                 rel="noopener noreferrer"
                 className="w-full py-4.5 bg-[#D7E400] hover:bg-white text-[#071D49] rounded-2xl text-[10px] font-bold uppercase tracking-[0.25em] flex items-center justify-center transition-all duration-300 active:scale-95 shadow-md"
               >
-                Activar Plan Ahorro
+                Inscribirme
               </a>
             </motion.div>
-
           </div>
         </div>
       </section>

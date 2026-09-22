@@ -114,7 +114,7 @@ export const getDiagnosticResult = (answers) => {
     else {
       profile.title = "Lo intenté antes y no resultó";
       profile.subtitle = "Haces ensayos por cumplir, pero cometes siempre los mismos errores.";
-      profile.description = "Estás practicando equivocarte. Sin un sistema de feedback real, solo estás repitiendo fallos. En nuestras sesiones en vivo, detectamos por qué te equivocas y lo corregimos en el momento. Solo necesitas disposición — y si el costo es una barrera, puedes postular a una beca.";
+      profile.description = "Estás practicando equivocarte. Sin un sistema de feedback real, solo estás repitiendo fallos. En nuestras sesiones en vivo, detectamos por qué te equivocas y lo corregimos en el momento. Solo necesitas disposición - y si el costo es una barrera, puedes postular a una beca.";
       profile.attributes = [
         { label: "Hábito de Feedback", value: "Ausente", score: 5 },
         { label: "Consistencia de Puntaje", value: "Baja", score: 20 },

@@ -30,7 +30,7 @@ const SERVICES = [
   },
   {
     id: 'lsch',
-    title: 'LSCh — Inclusión Real',
+    title: 'LSCh - Inclusión Real',
     desc: 'Capacitación en Lengua de Señas Chilena para empresas que deben cumplir con la Ley 21.015 de inclusión laboral.',
     tags: ['Cumplimiento Ley 21.015', 'Instructora Sorda nativa', 'Certificado por competencias'],
   },

@@ -23,7 +23,7 @@ export const clp = (n) =>
 
 // Cada profe cobra por SU ramo, independiente de si el alumno paga por
 // asignatura o toma el Plan Completo. Si el pack hace que el alumno pague
-// menos que la suma de sus ramos, la diferencia la absorbe el instituto —
+// menos que la suma de sus ramos, la diferencia la absorbe el instituto -
 // nunca el profe.
 export const OBLIGATORIA_PRICE = 12000;
 export const ELECTIVA_PRICE = 10000;
@@ -46,7 +46,7 @@ export function computePaesPrice(selectedIds = []) {
     };
   }
 
-  // nominalTotal es lo que se le paga a cada profe según su ramo — no cambia
+  // nominalTotal es lo que se le paga a cada profe según su ramo - no cambia
   // aunque el alumno esté en el Plan Completo.
   const nominalTotal = selectedIds.reduce((sum, id) => {
     const subject = PAES_SUBJECTS.find((s) => s.id === id);
@@ -113,7 +113,7 @@ export const PAES_SUBJECTS = [
   },
   {
     id: "bio",
-    name: "Ciencias — Biología",
+    name: "Ciencias - Biología",
     category: "Prueba Electiva",
     icon: "🧬",
     color: "#C6A66B",
@@ -122,7 +122,7 @@ export const PAES_SUBJECTS = [
   },
   {
     id: "fis",
-    name: "Ciencias — Física",
+    name: "Ciencias - Física",
     category: "Prueba Electiva",
     icon: "⚡",
     color: "#C6A66B",
@@ -131,7 +131,7 @@ export const PAES_SUBJECTS = [
   },
   {
     id: "qui",
-    name: "Ciencias — Química",
+    name: "Ciencias - Química",
     category: "Prueba Electiva",
     icon: "🧪",
     color: "#C6A66B",

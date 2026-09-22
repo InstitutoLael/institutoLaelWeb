@@ -41,7 +41,7 @@ export default function Footer() {
         {/* Top grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
 
-          {/* Marca — ocupa 2 columnas */}
+          {/* Marca - ocupa 2 columnas */}
           <div className="flex flex-col gap-6 lg:col-span-2">
             <Link to="/">
               <img

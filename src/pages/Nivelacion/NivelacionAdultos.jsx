@@ -25,7 +25,7 @@ export default function NivelacionAdultos() {
   return (
     <div className="bg-lael-primary min-h-screen pt-20">
       <Helmet>
-        <title>Escuela de Sueños | Instituto Lael — Nivelación Adultos</title>
+        <title>Escuela de Sueños | Instituto Lael - Nivelación Adultos</title>
         <meta name="description" content="No es solo el colegio. Es tu nueva vida. Escuela de Sueños de Instituto Lael. Nivelación de estudios para adultos con un sistema que sí funciona." />
       </Helmet>
 

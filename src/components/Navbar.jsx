@@ -150,7 +150,7 @@ export default function Navbar() {
 
           {/* ── RIGHT: CTA + BURGER ──────────────────────────────────── */}
           <div className="flex items-center gap-4 z-[110]">
-            {/* CTA Inscribirme — amarillo */}
+            {/* CTA Inscribirme - amarillo */}
             <a
               href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
               target="_blank"

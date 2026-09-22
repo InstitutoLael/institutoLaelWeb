@@ -77,7 +77,7 @@ export default function LandingIdiomas() {
   return (
     <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">
       <Helmet>
-        <title>Instituto Lael | Programas de Idiomas — Chile</title>
+        <title>Instituto Lael | Programas de Idiomas - Chile</title>
         <meta name="description" content="Abre tu mundo con el idioma correcto. Cursos de Inglés, Coreano y Español para Expats con inmersión práctica desde el primer día." />
       </Helmet>
       
@@ -134,7 +134,7 @@ export default function LandingIdiomas() {
         </div>
       </section>
 
-      {/* ── 2. INGLÉS — PROGRAMA PRINCIPAL ──────────────────────────── */}
+      {/* ── 2. INGLÉS - PROGRAMA PRINCIPAL ──────────────────────────── */}
       <section id="ingles" className="py-28 px-6 bg-white flex flex-col items-center border-b border-[#071D49]/5">
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           {/* Text and info */}
@@ -275,7 +275,7 @@ export default function LandingIdiomas() {
         </div>
       </section>
 
-      {/* ── 3. ESPAÑOL PARA EXTANJEROS — PROGRAMA DE INMERSIÓN ────────── */}
+      {/* ── 3. ESPAÑOL PARA EXTANJEROS - PROGRAMA DE INMERSIÓN ────────── */}
       <section id="espanol" className="py-28 px-6 bg-[#F4F4F4] flex flex-col items-center border-b border-[#071D49]/5">
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           {/* Text and info */}

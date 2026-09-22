@@ -106,12 +106,12 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       <Helmet>
-        <title>Instituto Lael — Preuniversitario PAES 2027 | Santiago, Chile</title>
+        <title>Instituto Lael - Preuniversitario PAES 2027 | Santiago, Chile</title>
         <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES desde $10.000/mes por ramo, con becas para quien lo necesite. Inglés y LSCh. Acompañamiento real. Instituto Lael, Chile." />
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 1 — HERO REDISEÑADO
+          BLOQUE 1 - HERO REDISEÑADO
       ══════════════════════════════════════════════════════════════════ */}
       <section
         className="-mt-20 min-h-screen relative flex flex-col justify-center items-center px-6 py-32 lg:py-40 text-center overflow-hidden"
@@ -181,7 +181,7 @@ export default function Home() {
           </motion.div>
         </div>
 
-        {/* Right Costado — Métricas Verticales en Desktop */}
+        {/* Right Costado - Métricas Verticales en Desktop */}
         <div className="absolute right-8 xl:right-16 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-8 z-10 border-l border-white/10 pl-6 py-4">
           {[
             { label: 'Alumnos', value: '+600' },
@@ -208,7 +208,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 2 — NO ERES UN PUNTAJE (MEJORADO)
+          BLOQUE 2 - NO ERES UN PUNTAJE (MEJORADO)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-28 lg:py-40 px-6 bg-white">
         <div className="max-w-5xl mx-auto text-center">
@@ -234,7 +234,7 @@ export default function Home() {
           </motion.h2>
           <motion.div {...fadeUp(0.2)} className="max-w-3xl mx-auto space-y-4 mb-16 text-lg md:text-xl leading-relaxed text-lael-primary/80">
             <p>
-              Tu sueño no tiene fecha de vencimiento. Aquí no compites contra nadie — hay acompañamiento real, respeto y seguimiento, no presión.
+              Tu sueño no tiene fecha de vencimiento. Aquí no compites contra nadie - hay acompañamiento real, respeto y seguimiento, no presión.
             </p>
             <p>
               Detrás de cada estudiante hay una historia única, y cada proceso importa.
@@ -276,7 +276,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 3 — PROGRAMA PAES (DISEÑO EDITORIAL 2 COLUMNAS)
+          BLOQUE 3 - PROGRAMA PAES (DISEÑO EDITORIAL 2 COLUMNAS)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-24 px-6 bg-lael-secondary">
         <div className="max-w-6xl mx-auto">
@@ -334,7 +334,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 4 — DASHBOARD ASIGNATURAS (LISTADO 2 COLUMNAS)
+          BLOQUE 4 - DASHBOARD ASIGNATURAS (LISTADO 2 COLUMNAS)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-24 px-6" style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto">
@@ -433,7 +433,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 5 — MUNDOS / OTROS PROGRAMAS
+          BLOQUE 5 - MUNDOS / OTROS PROGRAMAS
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-28 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
@@ -524,7 +524,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 6 — DOCENTES (CARDS HORIZONTALES CON BADGES)
+          BLOQUE 6 - DOCENTES (CARDS HORIZONTALES CON BADGES)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-28 px-6 bg-lael-secondary">
         <div className="max-w-7xl mx-auto">
@@ -602,12 +602,12 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE NUEVO — SIGNIFICADO LAEL
+          BLOQUE NUEVO - SIGNIFICADO LAEL
       ══════════════════════════════════════════════════════════════════ */}
       <SignificadoLael />
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 8 — MÉTRICAS ANIMADAS (ANIMACIÓN REPARADA)
+          BLOQUE 8 - MÉTRICAS ANIMADAS (ANIMACIÓN REPARADA)
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-28 px-6" style={{ backgroundColor: BLUE }}>
         <div className="max-w-7xl mx-auto">
@@ -643,7 +643,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 9 — TESTIMONIOS
+          BLOQUE 9 - TESTIMONIOS
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-28 px-6 bg-white">
         <div className="max-w-5xl mx-auto">
@@ -699,7 +699,7 @@ export default function Home() {
               </motion.div>
             ))}
 
-            {/* Placeholder — próximamente */}
+            {/* Placeholder - próximamente */}
             <motion.div
               {...fadeUp(0.1)}
               className="rounded-[32px] p-8 flex flex-col items-center justify-center text-center"
@@ -738,7 +738,7 @@ export default function Home() {
       </section>
 
       {/* ══════════════════════════════════════════════════════════════════
-          BLOQUE 10 — CTA FINAL
+          BLOQUE 10 - CTA FINAL
       ══════════════════════════════════════════════════════════════════ */}
       <section className="py-32 lg:py-48 px-6" style={{ backgroundColor: BLUE }}>
         <div className="max-w-4xl mx-auto text-center">

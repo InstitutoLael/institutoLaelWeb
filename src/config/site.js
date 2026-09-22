@@ -11,7 +11,7 @@ export const SITE = {
     transfer: {
       name: "Instituto Lael SpA",
       rut: "78.084.019-6",
-      bank: "Cuenta Vista — Mercado Pago",
+      bank: "Cuenta Vista - Mercado Pago",
       accountNumber: "1088183168",
       email: "pagos@institutolael.cl",
       site: "www.institutolael.cl",

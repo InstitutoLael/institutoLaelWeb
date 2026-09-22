@@ -98,21 +98,21 @@ export default function LandingPAES() {
     },
     {
       code: "BIO",
-      name: "Ciencias — Biología",
+      name: "Ciencias - Biología",
       type: "Electiva",
       desc: "Estructuras celulares, genética, evolución de los ecosistemas y el temario oficial del DEMRE.",
       teacher: "Martín"
     },
     {
       code: "FIS",
-      name: "Ciencias — Física",
+      name: "Ciencias - Física",
       type: "Electiva",
       desc: "Ondas, mecánica newtoniana, energía y electricidad explicados de forma aplicable y libre de memorizaciones.",
       teacher: "Docente Especialista"
     },
     {
       code: "QUI",
-      name: "Ciencias — Química",
+      name: "Ciencias - Química",
       type: "Electiva",
       desc: "Modelamiento atómico, reacciones, química orgánica y termodinámica simplificadas al máximo.",
       teacher: "Martín"
@@ -150,7 +150,7 @@ export default function LandingPAES() {
     {
       num: "01",
       title: "Inscripción Gratis",
-      desc: "Haz clic en el botón de inscripción y asegura tu cupo — la matrícula no tiene costo."
+      desc: "Haz clic en el botón de inscripción y asegura tu cupo - la matrícula no tiene costo."
     },
     {
       num: "02",
@@ -167,7 +167,7 @@ export default function LandingPAES() {
   const faqs = [
     {
       q: "¿Cuánto cuesta? ¿Hay costos ocultos?",
-      a: "La matrícula es gratis. Cada ramo tiene su propio valor desde $10.000/mes, y si tomas 4 o más, nunca pagas sobre $34.990 — sin letra chica ni cobros extra por material. Si aun así no puedes cubrirlo, puedes postular a una beca: la revisamos caso a caso."
+      a: "La matrícula es gratis. Cada ramo tiene su propio valor desde $10.000/mes, y si tomas 4 o más, nunca pagas sobre $34.990 - sin letra chica ni cobros extra por material. Si aun así no puedes cubrirlo, puedes postular a una beca: la revisamos caso a caso."
     },
     {
       q: "¿Qué necesito para participar en las clases?",
@@ -210,7 +210,7 @@ export default function LandingPAES() {
           <div className="lg:col-span-7 flex flex-col text-left">
             <motion.div {...fadeUp(0)} className="mb-4 flex flex-wrap items-center gap-3">
               <span className="bg-[#D7E400] text-[#071D49] text-xs font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-md animate-pulse">
-                Desde $10.000/mes — Comenzamos Marzo 2027
+                Desde $10.000/mes - Comenzamos Marzo 2027
               </span>
             </motion.div>
 
@@ -483,7 +483,7 @@ export default function LandingPAES() {
         </div>
       </section>
 
-      {/* ── 5. ¿CÓMO FUNCIONA? — PROCESO EN 3 PASOS ─────────────────── */}
+      {/* ── 5. ¿CÓMO FUNCIONA? - PROCESO EN 3 PASOS ─────────────────── */}
       <section className="py-28 px-6 bg-[#F4F4F4] flex flex-col items-center relative overflow-hidden">
         <div className="max-w-6xl mx-auto w-full relative z-10">
           <div className="text-center mb-20">

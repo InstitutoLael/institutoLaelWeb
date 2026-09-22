@@ -19,7 +19,7 @@ export default function IdiomaPricing({ gateData, selectedLanguages, priceData, 
       .join(', ');
 
     const message =
-`Hola, soy ${gateData?.name || '—'}.
+`Hola, soy ${gateData?.name || '-'}.
 
 Quiero activar mi programa de idiomas en Instituto Lael.
 

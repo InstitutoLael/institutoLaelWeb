@@ -22,7 +22,7 @@ export default function LSChPricing({ gateData, selectedPlan, isConnecting, setI
     track.whatsappClick('lsch');
 
     const message =
-`Hola, soy ${gateData?.name || '—'}.
+`Hola, soy ${gateData?.name || '-'}.
 
 Estoy interesado en el programa de Lengua de Señas Chilena de Instituto Lael.
 

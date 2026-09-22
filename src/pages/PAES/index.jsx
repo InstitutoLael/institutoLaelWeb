@@ -11,7 +11,7 @@ export default function PAES() {
   return (
     <main className="bg-lael-primary min-h-screen">
       <Helmet>
-        <title>PAES 2027 — Instituto Lael | Clases en vivo, matrícula gratis</title>
+        <title>PAES 2027 - Instituto Lael | Clases en vivo, matrícula gratis</title>
         <meta name="description" content="Sistema de preparación PAES de alto rendimiento. Clases en vivo, material de estudio y ensayos semanales desde $10.000/mes por ramo, con becas disponibles. 100% online y personalizado." />
       </Helmet>
       <LandingPAES />

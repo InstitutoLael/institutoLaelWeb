@@ -23,7 +23,7 @@ const FAQ_DATA = [
     category: "Costos & Acceso",
     icon: <DollarSign size={20} className="text-[#071D49]" />,
     items: [
-      { q: "¿Por qué la PAES es tan accesible en Lael?", a: "Porque creemos que el talento no tiene estrato social. Pagas por ramo desde $10.000 al mes, con un tope de $34.990 si tomas 4 o más — una fracción de lo que cobra un preuniversitario tradicional. Y si no te alcanza, puedes postular a una beca. La meta es que el dinero nunca sea la razón por la que alguien se queda fuera." },
+      { q: "¿Por qué la PAES es tan accesible en Lael?", a: "Porque creemos que el talento no tiene estrato social. Pagas por ramo desde $10.000 al mes, con un tope de $34.990 si tomas 4 o más - una fracción de lo que cobra un preuniversitario tradicional. Y si no te alcanza, puedes postular a una beca. La meta es que el dinero nunca sea la razón por la que alguien se queda fuera." },
       { q: "¿Hay algún costo oculto o matrícula?", a: "No hay costos ocultos. La matrícula es gratis; solo pagas tus asignaturas, sin cargos extra por materiales." }
     ]
   },

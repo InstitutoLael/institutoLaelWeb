@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Video, 
-  BookOpen, 
-  Award, 
-  Heart, 
-  Users, 
-  ChevronDown, 
+import {
+  Video,
+  ChevronDown,
   ChevronRight,
-  MessageCircle, 
-  Calendar, 
-  Monitor, 
-  UsersRound, 
-  HelpCircle, 
+  MessageCircle,
+  Calendar,
+  Monitor,
+  UsersRound,
+  HelpCircle,
   ArrowRight,
   Sparkles,
   CheckCircle2
 } from 'lucide-react';
 import studentImg from '../../assets/img/Home/hero_student_lael_1780734180709.png';
+import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS } from '../../data/paes';
 
 // Design System Tokens (Local references matching tailwind.config.js / index.css)
 const BLUE = '#071D49';
@@ -39,161 +36,11 @@ export default function LandingPAES() {
 
   const WA_LINK = "https://forms.gle/H86nFAQ2DJ8CCQ7y6";
 
-  const features = [
-    {
-      title: "Clases en vivo",
-      desc: "Clases interactivas vía Google Meet en tiempo real. Docentes reales que responden tus dudas en el acto.",
-      icon: <Video className="w-6 h-6 text-[#071D49]" />
-    },
-    {
-      title: "Material de estudio",
-      desc: "Guías teóricas, prácticas y resúmenes semanales diseñados estratégicamente para maximizar tu estudio personal.",
-      icon: <BookOpen className="w-6 h-6 text-[#071D49]" />
-    },
-    {
-      title: "Ensayos PAES",
-      desc: "Simulacros periódicos cronometrados para habituarte a la presión del examen y medir tu puntaje real.",
-      icon: <Award className="w-6 h-6 text-[#071D49]" />
-    },
-    {
-      title: "Acompañamiento",
-      desc: "Apoyo y mentoría constante de un equipo que se preocupa por tu bienestar y desarrollo integral.",
-      icon: <Heart className="w-6 h-6 text-[#071D49]" />
-    },
-    {
-      title: "Comunidad activa",
-      desc: "Un grupo dinámico con tus compañeros para resolver dudas grupales, compartir tips y motivarse día a día.",
-      icon: <Users className="w-6 h-6 text-[#071D49]" />
-    }
-  ];
-
-  const subjects = [
-    {
-      code: "M1",
-      name: "Matemática M1",
-      type: "Obligatoria",
-      desc: "Resolución de problemas lógicos, modelamiento numérico y estadísticas fundamentales para asegurar tu puntaje base.",
-      teacher: "Diego Chaparro"
-    },
-    {
-      code: "M2",
-      name: "Matemática M2",
-      type: "Electiva",
-      desc: "Álgebra avanzada, funciones complejas y razonamiento abstracto de alta selectividad para carreras STEM.",
-      teacher: "Diego Chaparro & Kathy"
-    },
-    {
-      code: "CL",
-      name: "Competencia Lectora",
-      type: "Obligatoria",
-      desc: "Comprensión de lectura crítica, análisis de textos y técnicas de descarte rápido bajo presión de tiempo.",
-      teacher: "Próximamente CL"
-    },
-    {
-      code: "HIS",
-      name: "Historia y Ciencias Sociales",
-      type: "Electiva",
-      desc: "Historia de Chile y global del siglo XX, formación ciudadana y análisis dinámico de procesos sociales.",
-      teacher: "Docente Especialista"
-    },
-    {
-      code: "BIO",
-      name: "Ciencias - Biología",
-      type: "Electiva",
-      desc: "Estructuras celulares, genética, evolución de los ecosistemas y el temario oficial del DEMRE.",
-      teacher: "Martín"
-    },
-    {
-      code: "FIS",
-      name: "Ciencias - Física",
-      type: "Electiva",
-      desc: "Ondas, mecánica newtoniana, energía y electricidad explicados de forma aplicable y libre de memorizaciones.",
-      teacher: "Docente Especialista"
-    },
-    {
-      code: "QUI",
-      name: "Ciencias - Química",
-      type: "Electiva",
-      desc: "Modelamiento atómico, reacciones, química orgánica y termodinámica simplificadas al máximo.",
-      teacher: "Martín"
-    }
-  ];
-
-  const teachers = [
-    {
-      name: "Diego Chaparro",
-      subject: "Matemática M1 + M2",
-      bio: "Director de Instituto Lael. Se especializa en simplificar las matemáticas y enseñar la estrategia detrás de cada pregunta para maximizar tu puntaje.",
-      img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=071D49&color=D7E400&size=200&bold=true"
-    },
-    {
-      name: "Martín",
-      subject: "Biología + Química",
-      bio: "Docente del área científica. Experto en desglosar teorías complejas y explicarlas mediante aplicaciones y fenómenos del mundo real.",
-      img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=071D49&color=D7E400&size=200&bold=true"
-    },
-    {
-      name: "Kathy",
-      subject: "Matemática M2",
-      bio: "Docente experta en matemáticas superiores. Apasionada por potenciar las habilidades lógicas avanzadas requeridas en la prueba selectiva.",
-      img: "https://ui-avatars.com/api/?name=Kathy+M2&background=071D49&color=D7E400&size=200&bold=true"
-    },
-    {
-      name: "Próximamente CL",
-      subject: "Competencia Lectora",
-      bio: "Estamos seleccionando al docente de lenguaje con mayor trayectoria y experticia en comprensión de lectura para acompañarte en tu proceso.",
-      img: "https://ui-avatars.com/api/?name=Proximamente+CL&background=F4F4F4&color=8D8D8D&size=200&bold=true"
-    }
-  ];
-
-  const steps = [
-    {
-      num: "01",
-      title: "Inscripción Gratis",
-      desc: "Haz clic en el botón de inscripción y asegura tu cupo - la matrícula no tiene costo."
-    },
-    {
-      num: "02",
-      title: "Clases por Asignatura",
-      desc: "Conéctate a nuestras clases vespertinas en vivo a través de Google Meet con profesores reales."
-    },
-    {
-      num: "03",
-      title: "Ensayos Semanales",
-      desc: "Realiza simulacros semanales cronometrados para medir tu avance y habituarte a la prueba real."
-    }
-  ];
-
-  const faqs = [
-    {
-      q: "¿Cuánto cuesta? ¿Hay costos ocultos?",
-      a: "La matrícula es gratis. Cada ramo tiene su propio valor desde $10.000/mes, y si tomas 4 o más, nunca pagas sobre $34.990 - sin letra chica ni cobros extra por material. Si aun así no puedes cubrirlo, puedes postular a una beca: la revisamos caso a caso."
-    },
-    {
-      q: "¿Qué necesito para participar en las clases?",
-      a: "Solo requieres un dispositivo (computador, tablet o celular) con conexión a internet y una cuenta de Google para conectarte a las sesiones a través de Google Meet."
-    },
-    {
-      q: "¿Cuántas horas a la semana se dictan?",
-      a: "Se dedican aproximadamente de 2 a 3 horas a la semana por asignatura. Todas las sesiones se programan en horario vespertino para facilitar tu asistencia."
-    },
-    {
-      q: "¿Puedo entrar al programa en cualquier momento?",
-      a: "Sí, puedes unirte en cualquier punto del año. Sin embargo, te recomendamos hacerlo cuanto antes debido a que los cupos en nuestras aulas en vivo son limitados por motivos de capacidad virtual."
-    },
-    {
-      q: "¿Cómo me inscribo?",
-      a: "Haz clic en el botón INSCRIBIRME y llenarás un formulario breve. También puedes escribirnos por WhatsApp."
-    },
-    {
-      q: "¿En qué horario son las clases?",
-      a: "Las clases son en horario vespertino. Los horarios exactos se comunican al momento de inscribirse."
-    },
-    {
-      q: "¿Sirve si voy a rendir PAES en noviembre?",
-      a: "Sí, el programa comienza en agosto y está diseñado para los 3-4 meses previos al examen."
-    }
-  ];
+  const features = LANDING_FEATURES;
+  const subjects = LANDING_SUBJECTS;
+  const teachers = LANDING_TEACHERS;
+  const steps = LANDING_STEPS;
+  const faqs = LANDING_FAQS;
 
   return (
     <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">
@@ -312,7 +159,7 @@ export default function LandingPAES() {
                 className="group p-8 rounded-[32px] bg-white border border-[#071D49]/10 hover:border-[#D7E400] hover:shadow-lael transition-all duration-500 flex flex-col h-full"
               >
                 <div className="w-14 h-14 bg-[#071D49]/5 group-hover:bg-[#D7E400]/10 rounded-2xl flex items-center justify-center mb-6 transition-colors duration-300">
-                  {feature.icon}
+                  <feature.icon className="w-6 h-6 text-[#071D49]" />
                 </div>
                 <h3 className="text-[#071D49] text-lg font-bold mb-3 font-display uppercase tracking-tight">{feature.title}</h3>
                 <p className="text-[#8D8D8D] text-sm leading-relaxed">{feature.desc}</p>

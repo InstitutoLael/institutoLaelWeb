@@ -5,7 +5,7 @@ import { Plus, Minus } from 'lucide-react';
 const FAQS = [
   {
     q: "¿Y si no tengo plata?",
-    a: "No importa. El entrenamiento PAES en Lael es 100% gratuito. Nuestra misión es que el dinero no sea el motivo por el que no entras a la carrera que quieres. Para los otros mundos (Idiomas o LSCh), tenemos opciones flexibles, pero PAES es costo $0 para siempre."
+    a: "El plan mensual de PAES es $9.990 — muy por debajo de cualquier preuniversitario tradicional — y la matrícula siempre es gratis. Si aun así no lo puedes cubrir, puedes postular a una beca: nuestra misión es que el dinero no sea el motivo por el que no entras a la carrera que quieres."
   },
   {
     q: "¿Y si no tengo tiempo?",

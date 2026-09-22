@@ -63,7 +63,7 @@ export const getDiagnosticResult = (answers) => {
     if (paes_pain === 'content') {
       profile.title = "Me va bien en unas, mal en otras";
       profile.subtitle = "Sientes que necesitas saberlo todo antes de empezar, y eso te está frenando.";
-      profile.description = "Tu problema no es la falta de estudio, es que estás tratando la PAES como una prueba de memoria. Te falta técnica para aplicar lo que sabes bajo presión. En nuestras clases gratuitas en vivo, te enseñamos a pensar como el examen, no solo a memorizarlo.";
+      profile.description = "Tu problema no es la falta de estudio, es que estás tratando la PAES como una prueba de memoria. Te falta técnica para aplicar lo que sabes bajo presión. En nuestras clases en vivo, te enseñamos a pensar como el examen, no solo a memorizarlo.";
       profile.attributes = [
         { label: "Base Teórica", value: "Sólida", score: 80 },
         { label: "Técnica de Descarte", value: "Baja", score: 20 },
@@ -74,8 +74,8 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil. Logró +130 puntos al dejar de memorizar y empezar a entrenar estrategia con nosotros.",
         metrics: "+130 pts"
       };
-      profile.wa_msg = "Hola, mi perfil es 'Me va bien en unas, mal en otras'. Quiero unirme a las clases gratis y aprender a aplicar lo que sé.";
-      profile.entry_product = "Acceso a Clases PAES Gratuitas";
+      profile.wa_msg = "Hola, mi perfil es 'Me va bien en unas, mal en otras'. Quiero unirme a las clases y aprender a aplicar lo que sé.";
+      profile.entry_product = "Acceso a Clases PAES";
     } 
     else if (paes_pain === 'strategy' && (discipline === 'low' || discipline === 'mid')) {
       profile.title = "Me bloqueo aunque sepa la materia";
@@ -91,8 +91,8 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil. Pasó de 620 a 745 puntos al aprender a dominar el reloj en nuestras sesiones en vivo.",
         metrics: "+125 pts"
       };
-      profile.wa_msg = "Hola, mi perfil es 'Me bloqueo aunque sepa la materia'. Me pasa mucho que me pongo nervioso con el tiempo, quiero entrar a las clases gratis.";
-      profile.entry_product = "Acceso a Clases PAES Gratuitas";
+      profile.wa_msg = "Hola, mi perfil es 'Me bloqueo aunque sepa la materia'. Me pasa mucho que me pongo nervioso con el tiempo, quiero entrar a las clases.";
+      profile.entry_product = "Acceso a Clases PAES";
     }
     else if (paes_pain === 'strategy' && discipline === 'high') {
       profile.title = "No sé cómo estudiar";
@@ -108,13 +108,13 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil. Logró 960 puntos en Matemáticas tras redirigir su disciplina hacia sus puntos débiles.",
         metrics: "960 pts"
       };
-      profile.wa_msg = "Hola, mi resultado fue 'No sé cómo estudiar'. Tengo las ganas pero necesito el mapa para no perder tiempo. ¡Me inscribo gratis!";
-      profile.entry_product = "Acceso a Clases PAES Gratuitas";
+      profile.wa_msg = "Hola, mi resultado fue 'No sé cómo estudiar'. Tengo las ganas pero necesito el mapa para no perder tiempo. ¡Me inscribo ahora!";
+      profile.entry_product = "Acceso a Clases PAES";
     }
     else {
       profile.title = "Lo intenté antes y no resultó";
       profile.subtitle = "Haces ensayos por cumplir, pero cometes siempre los mismos errores.";
-      profile.description = "Estás practicando equivocarte. Sin un sistema de feedback real, solo estás repitiendo fallos. En nuestras sesiones en vivo, detectamos por qué te equivocas y lo corregimos en el momento. Es gratis, solo necesitas disposición.";
+      profile.description = "Estás practicando equivocarte. Sin un sistema de feedback real, solo estás repitiendo fallos. En nuestras sesiones en vivo, detectamos por qué te equivocas y lo corregimos en el momento. Solo necesitas disposición — y si el costo es una barrera, puedes postular a una beca.";
       profile.attributes = [
         { label: "Hábito de Feedback", value: "Ausente", score: 5 },
         { label: "Consistencia de Puntaje", value: "Baja", score: 20 },
@@ -125,14 +125,14 @@ export const getDiagnosticResult = (answers) => {
         text: "Mismo perfil. Estabilizó su puntaje sobre los 800 pts en solo 2 meses de entrenamiento guiado.",
         metrics: "800+ pts"
       };
-      profile.wa_msg = "Hola, me salió 'Lo intenté antes y no resultó'. Me inscribo a las clases gratis para dejar de repetir los mismos errores.";
-      profile.entry_product = "Acceso a Clases PAES Gratuitas";
+      profile.wa_msg = "Hola, me salió 'Lo intenté antes y no resultó'. Quiero inscribirme para dejar de repetir los mismos errores.";
+      profile.entry_product = "Acceso a Clases PAES";
     }
 
     profile.stats = [
       { label: "Potencial Real", value: paes_target === 'elite' ? '940+' : '820+' },
       { label: "Estado de Urgencia", value: "Activo" },
-      { label: "Costo Mensual", value: "$0" }
+      { label: "Costo Mensual", value: "$9.990" }
     ];
 
     return profile;

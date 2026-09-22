@@ -38,7 +38,7 @@ export default function UrgencyBanner() {
                 {spots} cupos
               </span>{' '}
               para el próximo ciclo PAES.{' '}
-              <span className="opacity-70">Sin costo · 100% online</span>
+              <span className="opacity-70">Matrícula gratis · 100% online</span>
             </p>
 
             <div className="hidden lg:flex items-center gap-2 ml-4 pl-4 border-l border-[#071D49]/20">

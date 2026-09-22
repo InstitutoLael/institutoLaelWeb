@@ -81,7 +81,7 @@ const WHY_LAEL = [
 
 const METRICS = [
   { value: 600, prefix: '+', suffix: '',  label: 'Alumnos activos',  color: YELLOW },
-  { value: 0,   prefix: '$', suffix: '',  label: 'Costo PAES',       color: '#FFFFFF' },
+  { value: 0,   prefix: '$', suffix: '',  label: 'Costo matrícula',  color: '#FFFFFF' },
   { value: 3,   prefix: '',  suffix: '',  label: 'Idiomas activos',  color: YELLOW },
   { value: 100, prefix: '',  suffix: '%', label: '100% Online',      color: '#FFFFFF' },
 ];
@@ -105,8 +105,8 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       <Helmet>
-        <title>Instituto Lael — PAES Gratuita 2027 | Santiago, Chile</title>
-        <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES 100% gratuita, Inglés y LSCh. Acompañamiento real. Instituto Lael, Chile." />
+        <title>Instituto Lael — Preuniversitario PAES 2027 | Santiago, Chile</title>
+        <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES desde $9.990/mes, con becas para quien lo necesite. Inglés y LSCh. Acompañamiento real. Instituto Lael, Chile." />
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════════════════
@@ -155,7 +155,7 @@ export default function Home() {
             {...fadeUp(0.2)}
             className="text-white/70 text-lg md:text-xl leading-relaxed mb-10 max-w-xl text-center"
           >
-            <span className="text-white font-extrabold">Empieza ahora.</span> Clases en vivo, profesores reales y comunidad. Sin costo, sin barreras. Solo tu esfuerzo y nuestra guía.
+            <span className="text-white font-extrabold">Empieza ahora.</span> Clases en vivo, profesores que te conocen por tu nombre, y acompañamiento real hasta la PAES. Matrícula gratis, planes desde $9.990/mes, becas para quien lo necesite.
           </motion.p>
 
           {/* Buttons */}
@@ -184,7 +184,7 @@ export default function Home() {
         <div className="absolute right-8 lg:right-16 top-1/2 -translate-y-1/2 hidden lg:flex flex-col gap-8 z-10 border-l border-white/10 pl-6 py-4">
           {[
             { label: 'Alumnos', value: '+600' },
-            { label: 'Costo PAES', value: '$0' },
+            { label: 'Becas', value: 'DISPONIBLES' },
             { label: 'Online', value: '100%' },
             { label: 'Matrícula', value: 'GRATIS' },
           ].map((item, idx) => (
@@ -194,7 +194,7 @@ export default function Home() {
               className="text-left"
             >
               <p className="text-white font-black text-2xl leading-none" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                {item.value === '$0' || item.value === 'GRATIS' ? (
+                {item.value === 'DISPONIBLES' || item.value === 'GRATIS' ? (
                   <span style={{ color: YELLOW }}>{item.value}</span>
                 ) : (
                   item.value
@@ -233,7 +233,7 @@ export default function Home() {
           </motion.h2>
           <motion.div {...fadeUp(0.2)} className="max-w-3xl mx-auto space-y-4 mb-16 text-lg md:text-xl leading-relaxed text-lael-primary/80">
             <p>
-              Eres esfuerzo, constancia, aprendizaje y sueños — y eso no se mide con números.
+              Tu sueño no tiene fecha de vencimiento. Aquí no compites contra nadie — hay acompañamiento real, respeto y seguimiento, no presión.
             </p>
             <p>
               Detrás de cada estudiante hay una historia única, y cada proceso importa.
@@ -245,7 +245,7 @@ export default function Home() {
             {[
               { icon: <Users className="text-lael-primary" size={24} />, text: 'Detrás de cada estudiante hay una historia.' },
               { icon: <Target className="text-lael-primary" size={24} />, text: 'Cada proceso importa.' },
-              { icon: <Heart className="text-lael-primary" size={24} />, text: 'Tu potencial es más grande de lo que imaginas.' },
+              { icon: <Heart className="text-lael-primary" size={24} />, text: 'No eres un número más.' },
             ].map((item, idx) => (
               <motion.div
                 key={idx}
@@ -286,13 +286,13 @@ export default function Home() {
             {/* Columna Izquierda (60%) */}
             <div className="lg:col-span-6 p-8 md:p-16 flex flex-col justify-center text-left" style={{ backgroundColor: BLUE }}>
               <span className="text-lael-accent text-xs font-black uppercase tracking-[0.3em] mb-4">
-                100% GRATUITO
+                DESDE $9.990/MES
               </span>
               <h2
                 className="text-white mb-6 leading-tight"
                 style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}
               >
-                PROGRAMA PAES<br />GRATUITO 2027
+                PROGRAMA PAES<br />2027
               </h2>
               <p className="text-white/70 text-lg mb-10 leading-relaxed italic">
                 "Creamos el preu que nos habría gustado tener."
@@ -314,10 +314,10 @@ export default function Home() {
             <div className="lg:col-span-4 p-8 md:p-16 flex flex-col justify-center" style={{ backgroundColor: YELLOW }}>
               <div className="grid grid-cols-2 gap-8">
                 {[
-                  { label: 'INICIO', value: 'Agosto 2026' },
+                  { label: 'INICIO', value: 'Marzo 2027' },
                   { label: 'MODALIDAD', value: 'Online' },
                   { label: 'CUPOS', value: 'Limitados' },
-                  { label: 'COSTO', value: '$0 / mes' },
+                  { label: 'COSTO', value: '$9.990 / mes' },
                 ].map((item, idx) => (
                   <div key={idx} className="border-b border-lael-primary/10 pb-4">
                     <p className="text-[10px] font-black tracking-widest text-lael-primary/50 mb-1">{item.label}</p>
@@ -781,7 +781,7 @@ export default function Home() {
             {...fadeUp(0.4)}
             className="mt-10 text-white/30 text-sm tracking-wider"
           >
-            institutolael.cl · Sin costos · 100% online
+            institutolael.cl · Matrícula gratis · 100% online
           </motion.p>
         </div>
       </section>

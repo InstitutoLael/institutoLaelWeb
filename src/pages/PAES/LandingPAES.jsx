@@ -150,7 +150,7 @@ export default function LandingPAES() {
     {
       num: "01",
       title: "Inscripción Gratis",
-      desc: "Haz clic en el botón de inscripción y asegura tu cupo en el programa de forma 100% gratuita."
+      desc: "Haz clic en el botón de inscripción y asegura tu cupo — la matrícula no tiene costo."
     },
     {
       num: "02",
@@ -166,8 +166,8 @@ export default function LandingPAES() {
 
   const faqs = [
     {
-      q: "¿Es realmente gratis? ¿Hay mensualidades ocultas?",
-      a: "Sí, es 100% gratuito. No cobramos matrícula, mensualidades ni cobros por material de estudio. Nuestra meta es que el factor económico jamás limite tu preparación para la educación superior."
+      q: "¿Cuánto cuesta? ¿Hay costos ocultos?",
+      a: "La matrícula es gratis. El plan mensual es $9.990, sin letra chica ni cobros extra por material. Si no puedes cubrirlo, puedes postular a una beca — la revisamos caso a caso, porque nuestra meta es que el factor económico jamás limite tu preparación."
     },
     {
       q: "¿Qué necesito para participar en las clases?",
@@ -210,7 +210,7 @@ export default function LandingPAES() {
           <div className="lg:col-span-7 flex flex-col text-left">
             <motion.div {...fadeUp(0)} className="mb-4 flex flex-wrap items-center gap-3">
               <span className="bg-[#D7E400] text-[#071D49] text-xs font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-md animate-pulse">
-                100% Gratuito — Comenzamos Agosto 2026
+                Desde $9.990/mes — Comenzamos Marzo 2027
               </span>
             </motion.div>
 
@@ -223,17 +223,17 @@ export default function LandingPAES() {
               CREAMOS EL PREU <br />
               QUE NOS HABRÍA <br />
               GUSTADO TENER. <br />
-              <span className="text-[#D7E400] font-bold">Y LO MEJOR: ES GRATIS.</span>
+              <span className="text-[#D7E400] font-bold">Y LO MEJOR: NADIE SE QUEDA AFUERA.</span>
             </motion.h1>
 
             <motion.p {...fadeUp(0.2)} className="text-white/70 text-lg sm:text-xl max-w-lg mb-10 leading-relaxed">
-              Clases en vivo por Google Meet, guías de contenido y ensayos cronometrados semanales. Sin matrícula. Sin mensualidades. Solo tu esfuerzo.
+              Clases en vivo por Google Meet, guías de contenido y ensayos cronometrados semanales. Sin matrícula. Plan mensual $9.990, con becas para quien lo necesite.
             </motion.p>
 
             {/* Key Data grid */}
             <motion.div {...fadeUp(0.3)} className="grid grid-cols-3 gap-4 border-y border-white/10 py-6 mb-10 max-w-xl">
               <div>
-                <p className="text-[#D7E400] font-display font-extrabold text-lg sm:text-xl uppercase">Agosto</p>
+                <p className="text-[#D7E400] font-display font-extrabold text-lg sm:text-xl uppercase">Marzo</p>
                 <p className="text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1">Inicio de Clases</p>
               </div>
               <div>
@@ -286,7 +286,7 @@ export default function LandingPAES() {
               <div className="absolute inset-0 bg-gradient-to-t from-[#071D49] via-transparent to-transparent opacity-80" />
               <div className="absolute bottom-6 left-6 right-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex items-center gap-3">
                 <div className="w-3 h-3 rounded-full bg-emerald-400 animate-ping" />
-                <p className="text-white text-xs font-semibold tracking-wide">Inscripciones abiertas · Ciclo 2026</p>
+                <p className="text-white text-xs font-semibold tracking-wide">Inscripciones abiertas · Ciclo 2027</p>
               </div>
             </div>
           </motion.div>

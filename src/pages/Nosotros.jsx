@@ -77,7 +77,7 @@ export default function Nosotros() {
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden font-sans">
       <Helmet>
         <title>Nuestra Génesis | Instituto Lael</title>
-        <meta name="description" content="Fundado 2021. 600 alumnos. PAES gratuita. Santiago, Chile. Conoce nuestra historia, misión y equipo de mentores." />
+        <meta name="description" content="Fundado 2021. 600 alumnos. PAES desde $9.990/mes, becas disponibles. Santiago, Chile. Conoce nuestra historia, misión y equipo de mentores." />
       </Helmet>
 
       {/* ── 1. HERO ────────────────────────────────────────────────── */}
@@ -181,9 +181,9 @@ export default function Nosotros() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
             {[
               { icon: Heart, title: "FE ACTIVA", desc: "La fe es nuestro fundamento, no nuestra etiqueta. Se nota en cómo tratamos a cada alumno, no en cuántos versículos publicamos." },
-              { icon: Star, title: "ACCESIBILIDAD RADICAL", desc: "La PAES es gratis. Los talleres de IA son gratis. La barrera para aprender en Lael es cero. Sin excusas." },
+              { icon: Star, title: "ACCESIBILIDAD RADICAL", desc: "La matrícula es gratis y hay becas para quien lo necesite. La barrera para aprender en Lael es cero. Sin excusas." },
               { icon: Users, title: "INCLUSIÓN REAL", desc: "LSCh, educación diferencial, adultos: todos tienen un lugar como estructura, no como estrategia de marketing." },
-              { icon: Shield, title: "EXCELENCIA SIN EXCUSA", desc: "Ser gratuito no justifica ser mediocre. Cada clase preparada. Cada profesor comprometido con tu resultado final." }
+              { icon: Shield, title: "EXCELENCIA SIN EXCUSA", desc: "Ser accesible no justifica ser mediocre. Cada clase preparada. Cada profesor comprometido con tu resultado final." }
             ].map((v, i) => (
               <motion.div 
                 key={v.title}

@@ -8,7 +8,7 @@
 export const ENROLLMENT_FEE = 10990;
 export const ACADEMIC_MONTHS = 8;
 export const AVAILABLE_SPOTS = 12;
-export const START_DATE_EXACT = "Lunes 3 de Agosto";
+export const START_DATE_EXACT = "Inicios de marzo";
 
 export const clp = (n) =>
   Number(n || 0).toLocaleString("es-CL", {
@@ -24,35 +24,28 @@ export const clp = (n) =>
 export function computePaesPrice(selectedIds = []) {
   const count = selectedIds.length;
 
-  // El modelo ahora es 100% gratuito
-  const TIER_PRICES = {
-    1: 0,
-    2: 0,
-    3: 0,
-    FULL: 0
-  };
+  // Plan mensual único, sin importar cuántas asignaturas se elijan
+  const MONTHLY_PLAN = 9990;
 
   let totalMonthly = 0;
   let label = "";
-  let saving = 0;
 
   if (count === 0) {
     totalMonthly = 0;
     label = "Inicia tu preparación";
   } else {
-    totalMonthly = 0;
-    label = "Sistema de Alto Rendimiento — Gratis";
-    saving = 0;
+    totalMonthly = MONTHLY_PLAN;
+    label = "Sistema de Alto Rendimiento — Plan mensual";
   }
 
   return {
     count,
     label,
-    totalMonthly: 0,
+    totalMonthly,
     saving: 0,
     enrollment: 0, // Matrícula $0
-    totalFirstMonth: 0,
-    pricePerSubject: 0
+    totalFirstMonth: totalMonthly,
+    pricePerSubject: count > 0 ? Math.round(totalMonthly / count) : 0
   };
 }
 
@@ -136,10 +129,10 @@ export const PAES_COMBOS = [
     id: "combo-humanista",
     title: "Estrategia Humanista",
     subtitle: "Comprensión Lectora + Perspectiva Histórica + M1",
-    subjects: ["len", "his", "m1"], 
-    price: 0,
+    subjects: ["len", "his", "m1"],
+    price: 9990,
     color: "amber",
-    tag: "100% Gratuito",
+    tag: "$9.990/mes",
     features: ["Clases en vivo por Google Meet", "Simulacros de Presión", "Material de Quiebre", "Comunidad de Apoyo"],
     paymentUrl: "" 
   },
@@ -147,10 +140,10 @@ export const PAES_COMBOS = [
     id: "combo-cientifico",
     title: "Estrategia STEM",
     subtitle: "M1 + M2 + Ciencias Específicas",
-    subjects: ["m1", "m2", "bio", "fis"], 
-    price: 0,
+    subjects: ["m1", "m2", "bio", "fis"],
+    price: 9990,
     color: "teal",
-    tag: "100% Gratuito",
+    tag: "$9.990/mes",
     features: ["Enfoque 100% Lógico", "Preparación M2 Intensiva", "Clases en vivo", "Simulacros Semanales"],
     paymentUrl: "" 
   },
@@ -159,7 +152,7 @@ export const PAES_COMBOS = [
     title: "Sistema Integral Lael",
     subtitle: "Dominio absoluto para asegurar tu objetivo",
     subjects: ["len", "m1", "m2", "his", "bio"],
-    price: 0,
+    price: 9990,
     color: "indigo",
     features: ["Acceso a Todo el Sistema", "Orientación Vocacional", "Clases en vivo", "Soporte de Comunidad"],
     paymentUrl: "" 
@@ -171,9 +164,9 @@ export const PAES_COMBOS = [
    ────────────────────────────────────────────────────────────────────────── */
 export const PAES_CONFIG = {
   AVAILABLE_SPOTS: AVAILABLE_SPOTS,
-  START_DATE: "Agosto 2026",
+  START_DATE: "Marzo 2027",
   START_DATE_EXACT: START_DATE_EXACT,
-  FREE_BADGE: "100% GRATIS"
+  FREE_BADGE: "BECAS DISPONIBLES"
 };
 
 export const PAES_FEATURES = [
@@ -184,9 +177,9 @@ export const PAES_FEATURES = [
 ];
 
 export const PAES_FAQS = [
-  { 
-    q: "¿De verdad es gratis? ¿Hay letra chica?", 
-    a: "Sí, es 100% gratis. Sin matrícula, sin mensualidad, sin sorpresas. Nuestra misión es que el dinero no sea una barrera para tu educación." 
+  {
+    q: "¿Cuánto cuesta? ¿Hay letra chica?",
+    a: "La matrícula es gratis. El plan mensual es $9.990, sin sorpresas. Si no lo puedes cubrir, puedes postular a una beca — nuestra misión es que el dinero no sea una barrera para tu educación."
   },
   { 
     q: "¿Cómo son las clases?", 

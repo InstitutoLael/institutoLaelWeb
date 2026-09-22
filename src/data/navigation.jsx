@@ -15,7 +15,7 @@ const TikTokIcon = () => (
 export const NAVIGATION = {
     main: [
         { name: "Inicio", path: "/" },
-        { name: "PAES", path: "/paes", badge: "GRATIS" },
+        { name: "PAES", path: "/paes", badge: "BECAS" },
         { name: "Idiomas", path: "/idiomas" },
         { name: "LSCh", path: "/lsch" },
         { name: "Nosotros", path: "/nosotros" },
@@ -24,7 +24,7 @@ export const NAVIGATION = {
     
     footer: {
         programs: [
-            { name: "PAES Gratuita", path: "/paes" },
+            { name: "PAES", path: "/paes" },
             { name: "Idiomas", path: "/idiomas" },
             { name: "LSCh Inclusión", path: "/lsch" },
         ],

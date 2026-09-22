@@ -279,7 +279,7 @@ export default function LandingPAES() {
       <section className="py-28 px-6 bg-white flex flex-col items-center">
         <div className="max-w-7xl mx-auto w-full">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Mentores de Alto Rendimiento</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Gente Real, No un Call Center</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
               NUESTROS DOCENTES
             </motion.h2>

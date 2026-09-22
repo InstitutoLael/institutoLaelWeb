@@ -5,7 +5,7 @@ import { Plus, Minus } from 'lucide-react';
 const FAQS = [
   {
     q: "¿Y si no tengo plata?",
-    a: "El plan mensual de PAES es $9.990 — muy por debajo de cualquier preuniversitario tradicional — y la matrícula siempre es gratis. Si aun así no lo puedes cubrir, puedes postular a una beca: nuestra misión es que el dinero no sea el motivo por el que no entras a la carrera que quieres."
+    a: "Pagas por ramo desde $10.000 al mes, y si tomas 4 o más, nunca más de $34.990 — muy por debajo de cualquier preuniversitario tradicional. La matrícula siempre es gratis. Y si aun así no te alcanza, puedes postular a una beca: el dinero no puede ser el motivo por el que no entras a la carrera que quieres."
   },
   {
     q: "¿Y si no tengo tiempo?",

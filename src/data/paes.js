@@ -21,36 +21,55 @@ export const clp = (n) =>
    2. EL CEREBRO: CALCULADORA DE INVERSIÓN
    ────────────────────────────────────────────────────────────────────────── */
 
+// Cada profe cobra por SU ramo, independiente de si el alumno paga por
+// asignatura o toma el Plan Completo. Si el pack hace que el alumno pague
+// menos que la suma de sus ramos, la diferencia la absorbe el instituto —
+// nunca el profe.
+export const OBLIGATORIA_PRICE = 12000;
+export const ELECTIVA_PRICE = 10000;
+export const PACK_PRICE = 34990;
+export const PACK_MIN_SUBJECTS = 4;
+
 export function computePaesPrice(selectedIds = []) {
   const count = selectedIds.length;
 
-  // Plan mensual único, sin importar cuántas asignaturas se elijan
-  const MONTHLY_PLAN = 9990;
-
-  let totalMonthly = 0;
-  let label = "";
-
   if (count === 0) {
-    totalMonthly = 0;
-    label = "Inicia tu preparación";
-  } else {
-    totalMonthly = MONTHLY_PLAN;
-    label = "Sistema de Alto Rendimiento — Plan mensual";
+    return {
+      count,
+      label: "Inicia tu preparación",
+      totalMonthly: 0,
+      nominalTotal: 0,
+      saving: 0,
+      enrollment: 0, // Matrícula $0
+      totalFirstMonth: 0,
+      pricePerSubject: 0
+    };
   }
+
+  // nominalTotal es lo que se le paga a cada profe según su ramo — no cambia
+  // aunque el alumno esté en el Plan Completo.
+  const nominalTotal = selectedIds.reduce((sum, id) => {
+    const subject = PAES_SUBJECTS.find((s) => s.id === id);
+    const isObligatoria = subject?.category === "Prueba Obligatoria";
+    return sum + (isObligatoria ? OBLIGATORIA_PRICE : ELECTIVA_PRICE);
+  }, 0);
+
+  const usesPack = count >= PACK_MIN_SUBJECTS && nominalTotal > PACK_PRICE;
+  const totalMonthly = usesPack ? PACK_PRICE : nominalTotal;
 
   return {
     count,
-    label,
+    label: usesPack ? "Plan Completo" : "Plan por asignatura",
     totalMonthly,
-    saving: 0,
+    nominalTotal, // lo que reciben los profes en conjunto, sea cual sea el plan
+    saving: usesPack ? nominalTotal - PACK_PRICE : 0,
     enrollment: 0, // Matrícula $0
     totalFirstMonth: totalMonthly,
-    pricePerSubject: count > 0 ? Math.round(totalMonthly / count) : 0
+    pricePerSubject: Math.round(totalMonthly / count)
   };
 }
 
 export const priceForSubjects = (ids) => computePaesPrice(ids).totalMonthly;
-export const priceForCount = (count) => computePaesPrice(Array(count).fill(0)).totalMonthly;
 
 /* ──────────────────────────────────────────────────────────────────────────
    3. MÓDULOS DE ENTRENAMIENTO (DATA DETALLADA)
@@ -130,9 +149,9 @@ export const PAES_COMBOS = [
     title: "Estrategia Humanista",
     subtitle: "Comprensión Lectora + Perspectiva Histórica + M1",
     subjects: ["len", "his", "m1"],
-    price: 9990,
+    price: 34000,
     color: "amber",
-    tag: "$9.990/mes",
+    tag: "$34.000/mes",
     features: ["Clases en vivo por Google Meet", "Simulacros de Presión", "Material de Quiebre", "Comunidad de Apoyo"],
     paymentUrl: "" 
   },
@@ -141,9 +160,9 @@ export const PAES_COMBOS = [
     title: "Estrategia STEM",
     subtitle: "M1 + M2 + Ciencias Específicas",
     subjects: ["m1", "m2", "bio", "fis"],
-    price: 9990,
+    price: 34990,
     color: "teal",
-    tag: "$9.990/mes",
+    tag: "$34.990/mes · Plan Completo",
     features: ["Enfoque 100% Lógico", "Preparación M2 Intensiva", "Clases en vivo", "Simulacros Semanales"],
     paymentUrl: "" 
   },
@@ -152,8 +171,9 @@ export const PAES_COMBOS = [
     title: "Sistema Integral Lael",
     subtitle: "Dominio absoluto para asegurar tu objetivo",
     subjects: ["len", "m1", "m2", "his", "bio"],
-    price: 9990,
+    price: 34990,
     color: "indigo",
+    tag: "$34.990/mes · Plan Completo",
     features: ["Acceso a Todo el Sistema", "Orientación Vocacional", "Clases en vivo", "Soporte de Comunidad"],
     paymentUrl: "" 
   }
@@ -166,7 +186,7 @@ export const PAES_CONFIG = {
   AVAILABLE_SPOTS: AVAILABLE_SPOTS,
   START_DATE: "Marzo 2027",
   START_DATE_EXACT: START_DATE_EXACT,
-  FREE_BADGE: "BECAS DISPONIBLES"
+  FREE_BADGE: "DESDE $10.000/MES"
 };
 
 export const PAES_FEATURES = [
@@ -179,7 +199,7 @@ export const PAES_FEATURES = [
 export const PAES_FAQS = [
   {
     q: "¿Cuánto cuesta? ¿Hay letra chica?",
-    a: "La matrícula es gratis. El plan mensual es $9.990, sin sorpresas. Si no lo puedes cubrir, puedes postular a una beca — nuestra misión es que el dinero no sea una barrera para tu educación."
+    a: "Matrícula gratis. Cada asignatura tiene su propio valor (desde $10.000/mes), y si tomas 4 o más, pagas el Plan Completo a $34.990/mes en vez de la suma. Sin sorpresas, y si aun así no lo puedes cubrir, puedes postular a una beca."
   },
   { 
     q: "¿Cómo son las clases?", 

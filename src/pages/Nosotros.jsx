@@ -77,7 +77,7 @@ export default function Nosotros() {
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden font-sans">
       <Helmet>
         <title>Nuestra Génesis | Instituto Lael</title>
-        <meta name="description" content="Fundado 2021. 600 alumnos. PAES desde $9.990/mes, becas disponibles. Santiago, Chile. Conoce nuestra historia, misión y equipo de mentores." />
+        <meta name="description" content="Fundado 2021. 600 alumnos. PAES desde $10.000/mes por ramo, becas disponibles. Santiago, Chile. Conoce nuestra historia, misión y equipo de mentores." />
       </Helmet>
 
       {/* ── 1. HERO ────────────────────────────────────────────────── */}

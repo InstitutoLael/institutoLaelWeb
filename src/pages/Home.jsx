@@ -61,6 +61,7 @@ const ELECTIVAS = [
 const WORLDS = [
   { id: 'ingles', label: 'INGLÉS', title: 'Habla con', accent: 'seguridad.', desc: 'Clases en vivo por Google Meet. Fluidez real sin atajos. Plan Trimestral: $11.990/mes.', bg: idiomasBg, cta: 'Ver programa', route: '/idiomas', active: true, price: '$14.990/mes' },
   { id: 'lsch',   label: 'LSCh',   title: 'Inclusión', accent: 'para todos.', desc: 'Lengua de Señas Chilena con instructores nativos. Cultura Sorda.', bg: lschBg,    cta: 'Aprender LSCh', route: '/lsch',   active: true, price: '$19.990/mes' },
+  { id: 'coreano', label: 'COREANO', title: 'Prepárate para', accent: 'el TOPIK.', desc: 'Clases en vivo con docente nativa. Estamos armando la planificación completa antes de abrir cupos.', bg: idiomasBg, cta: 'Próximamente', route: '/coreano', active: false, price: null },
   { id: 'adultos', label: 'NIVELACIÓN', title: 'Tu segunda', accent: 'oportunidad.', desc: 'Termina tus estudios con un programa flexible. Próximamente.', bg: adultosBg, cta: 'Próximamente', route: '/adultos', active: false, price: null },
 ];
 
@@ -106,7 +107,7 @@ export default function Home() {
     <div className="overflow-hidden">
       <Helmet>
         <title>Instituto Lael — Preuniversitario PAES 2027 | Santiago, Chile</title>
-        <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES desde $9.990/mes, con becas para quien lo necesite. Inglés y LSCh. Acompañamiento real. Instituto Lael, Chile." />
+        <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES desde $10.000/mes por ramo, con becas para quien lo necesite. Inglés y LSCh. Acompañamiento real. Instituto Lael, Chile." />
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════════════════
@@ -155,7 +156,7 @@ export default function Home() {
             {...fadeUp(0.2)}
             className="text-white/70 text-lg md:text-xl leading-relaxed mb-10 max-w-xl text-center"
           >
-            <span className="text-white font-extrabold">Empieza ahora.</span> Clases en vivo, profesores que te conocen por tu nombre, y acompañamiento real hasta la PAES. Matrícula gratis, planes desde $9.990/mes, becas para quien lo necesite.
+            <span className="text-white font-extrabold">Empieza ahora.</span> Clases en vivo con profesores que saben tu nombre, no tu número de lista. Matrícula gratis, desde $10.000/mes por ramo, becas para quien lo necesite.
           </motion.p>
 
           {/* Buttons */}
@@ -181,7 +182,7 @@ export default function Home() {
         </div>
 
         {/* Right Costado — Métricas Verticales en Desktop */}
-        <div className="absolute right-8 lg:right-16 top-1/2 -translate-y-1/2 hidden lg:flex flex-col gap-8 z-10 border-l border-white/10 pl-6 py-4">
+        <div className="absolute right-8 xl:right-16 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-8 z-10 border-l border-white/10 pl-6 py-4">
           {[
             { label: 'Alumnos', value: '+600' },
             { label: 'Becas', value: 'DISPONIBLES' },
@@ -286,7 +287,7 @@ export default function Home() {
             {/* Columna Izquierda (60%) */}
             <div className="lg:col-span-6 p-8 md:p-16 flex flex-col justify-center text-left" style={{ backgroundColor: BLUE }}>
               <span className="text-lael-accent text-xs font-black uppercase tracking-[0.3em] mb-4">
-                DESDE $9.990/MES
+                DESDE $10.000/MES
               </span>
               <h2
                 className="text-white mb-6 leading-tight"
@@ -317,7 +318,7 @@ export default function Home() {
                   { label: 'INICIO', value: 'Marzo 2027' },
                   { label: 'MODALIDAD', value: 'Online' },
                   { label: 'CUPOS', value: 'Limitados' },
-                  { label: 'COSTO', value: '$9.990 / mes' },
+                  { label: 'COSTO', value: 'Desde $10.000' },
                 ].map((item, idx) => (
                   <div key={idx} className="border-b border-lael-primary/10 pb-4">
                     <p className="text-[10px] font-black tracking-widest text-lael-primary/50 mb-1">{item.label}</p>
@@ -453,7 +454,7 @@ export default function Home() {
             </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {WORLDS.map((world, i) => (
               <motion.div
                 key={world.id}

@@ -15,7 +15,7 @@ export const THE_NAME = {
 export const STATS = [
     { id: 1, value: '+600', label: 'Alumnos en el Peak' },
     { id: 2, value: '100%', label: 'Online y en Vivo' },
-    { id: 3, value: '$9.990', label: 'PAES al mes, becas disponibles' },
+    { id: 3, value: '$34.990', label: 'Tope mensual del Plan Completo PAES' },
     { id: 4, value: '3', label: 'Idiomas Disponibles' },
 ];
 

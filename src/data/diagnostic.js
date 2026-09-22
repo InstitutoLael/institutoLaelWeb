@@ -132,7 +132,7 @@ export const getDiagnosticResult = (answers) => {
     profile.stats = [
       { label: "Potencial Real", value: paes_target === 'elite' ? '940+' : '820+' },
       { label: "Estado de Urgencia", value: "Activo" },
-      { label: "Costo Mensual", value: "$9.990" }
+      { label: "Costo Mensual", value: "Desde $10.000" }
     ];
 
     return profile;

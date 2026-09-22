@@ -19,6 +19,7 @@ export const NAVIGATION = {
         { name: "Idiomas", path: "/idiomas" },
         { name: "LSCh", path: "/lsch" },
         { name: "Nosotros", path: "/nosotros" },
+        { name: "Preguntas", path: "/preguntas" },
         { name: "Contacto", path: "/contacto" },
     ],
     

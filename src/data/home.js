@@ -66,4 +66,22 @@ export const TESTIMONIALS = [
     initials: 'RR',
     real: true,
   },
+  {
+    id: 't3',
+    name: 'Victoria',
+    program: 'Ex alumna Lael',
+    quote: 'Me inscribí con una gran expectativa y la verdad fue muy motivador seguir esforzándome en aprender después de eso — la profesora era muy simpática y muy dinámica en sus clases.',
+    rating: 5,
+    initials: 'V',
+    real: true,
+  },
+  {
+    id: 't4',
+    name: 'Matías M.',
+    program: 'PAES · Ex alumno',
+    quote: 'Me dio seguridad y confianza. Tener buenos profes hizo que fuera una instancia de aprendizaje cálido y agradable, lo que me ayudó mucho a bajar la ansiedad antes de la PAES.',
+    rating: 5,
+    initials: 'MM',
+    real: true,
+  },
 ];

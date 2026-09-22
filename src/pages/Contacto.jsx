@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MessageSquare, Mail, Instagram, Clock, Send, CheckCircle } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { CONTACT_INFO } from '../data/contact';
 
 // Brand Design Tokens
 const BLUE = '#071D49';
@@ -40,7 +41,7 @@ export default function Contacto() {
     e.preventDefault();
     const subject = `Consulta Lael: ${formData.nombre} - ${formData.programa}`;
     const body = `Nombre: ${formData.nombre}\nEmail: ${formData.email}\nPrograma: ${formData.programa}\n\nMensaje:\n${formData.mensaje}`;
-    window.location.href = `mailto:contacto@institutolael.cl?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:${CONTACT_INFO.email.address}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSubmitted(true);
   };
 
@@ -75,8 +76,8 @@ export default function Contacto() {
 
               {/* Contact Methods */}
               <div className="space-y-6">
-                <a 
-                  href="https://wa.me/56964626568?text=Hola,%20tengo%20una%20consulta."
+                <a
+                  href={CONTACT_INFO.whatsapp.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-6 group hover:translate-x-1 transition-transform"
@@ -85,26 +86,26 @@ export default function Contacto() {
                     <MessageSquare size={20} />
                   </div>
                   <div>
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">WhatsApp Directo</p>
-                    <p className="text-base font-bold text-[#071D49]">+56 9 6462 6568</p>
+                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">{CONTACT_INFO.whatsapp.label}</p>
+                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.whatsapp.number}</p>
                   </div>
                 </a>
 
-                <a 
-                  href="mailto:contacto@institutolael.cl"
+                <a
+                  href={`mailto:${CONTACT_INFO.email.address}`}
                   className="flex items-center gap-6 group hover:translate-x-1 transition-transform"
                 >
                   <div className="w-12 h-12 rounded-xl bg-white border border-[#071D49]/10 flex items-center justify-center text-[#071D49] group-hover:bg-[#D7E400]/20 group-hover:border-[#D7E400]/40 transition-all">
                     <Mail size={20} />
                   </div>
                   <div>
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">Email Institucional</p>
-                    <p className="text-base font-bold text-[#071D49]">contacto@institutolael.cl</p>
+                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">{CONTACT_INFO.email.label}</p>
+                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.email.address}</p>
                   </div>
                 </a>
 
-                <a 
-                  href="https://instagram.com/institutolael"
+                <a
+                  href={CONTACT_INFO.instagram.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-6 group hover:translate-x-1 transition-transform"
@@ -114,12 +115,12 @@ export default function Contacto() {
                   </div>
                   <div>
                     <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">Instagram</p>
-                    <p className="text-base font-bold text-[#071D49]">@institutolael</p>
+                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.instagram.user}</p>
                   </div>
                 </a>
 
-                <a 
-                  href="https://tiktok.com/@institutolael"
+                <a
+                  href={CONTACT_INFO.tiktok.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-6 group hover:translate-x-1 transition-transform"
@@ -129,7 +130,7 @@ export default function Contacto() {
                   </div>
                   <div>
                     <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">TikTok</p>
-                    <p className="text-base font-bold text-[#071D49]">@institutolael</p>
+                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.tiktok.user}</p>
                   </div>
                 </a>
 
@@ -138,8 +139,8 @@ export default function Contacto() {
                     <Clock size={20} />
                   </div>
                   <div>
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">Horario de Soporte</p>
-                    <p className="text-base font-bold text-[#071D49]">Lunes a Viernes · 09:00 - 20:00</p>
+                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">{CONTACT_INFO.schedule.label}</p>
+                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.schedule.week}</p>
                   </div>
                 </div>
               </div>

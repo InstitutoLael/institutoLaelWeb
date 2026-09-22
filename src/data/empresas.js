@@ -6,6 +6,31 @@
 export const WAPP_INTL = "56964626568";
 
 /**
+ * CONTENIDO REAL DE LA PÁGINA /empresas (pages/Empresas/index.jsx)
+ * Más simple que el cotizador de abajo, que todavía no está conectado.
+ */
+export const LANDING_SERVICES = [
+  {
+    id: 'paes',
+    title: 'PAES Institucional',
+    desc: 'Preparación colectiva para colegios y liceos. Sistema de alto rendimiento adaptado al contexto institucional con métricas por curso.',
+    tags: ['Puntaje promedio medido', 'Docentes especializados', 'Reportes por alumno'],
+  },
+  {
+    id: 'idiomas',
+    title: 'Idiomas Corporativos',
+    desc: 'Programas intensivos de inglés, coreano o español para equipos que necesitan comunicarse en entornos internacionales.',
+    tags: ['Grupos reducidos', 'Horario flexible', 'Certificación institucional'],
+  },
+  {
+    id: 'lsch',
+    title: 'LSCh - Inclusión Real',
+    desc: 'Capacitación en Lengua de Señas Chilena para empresas que deben cumplir con la Ley 21.015 de inclusión laboral.',
+    tags: ['Cumplimiento Ley 21.015', 'Instructora Sorda nativa', 'Certificado por competencias'],
+  },
+];
+
+/**
  * 📊 LÍNEAS DE SERVICIO
  * Configuración centralizada de precios y lógica de cobro.
  * * - type: "hourly" -> Se cobra por hora/persona (Idiomas, Talleres)

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import EmpresasForm from './EmpresasForm';
 import empresasRealidad from '../../assets/img/Home/mundo_empresas_bg_1777944168670.png';
+import { LANDING_SERVICES } from '../../data/empresas';
 
 const ease = [0.16, 1, 0.3, 1];
 const WA_NUMBER = '56964626568';
@@ -15,26 +16,7 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 1.1, delay, ease },
 });
 
-const SERVICES = [
-  {
-    id: 'paes',
-    title: 'PAES Institucional',
-    desc: 'Preparación colectiva para colegios y liceos. Sistema de alto rendimiento adaptado al contexto institucional con métricas por curso.',
-    tags: ['Puntaje promedio medido', 'Docentes especializados', 'Reportes por alumno'],
-  },
-  {
-    id: 'idiomas',
-    title: 'Idiomas Corporativos',
-    desc: 'Programas intensivos de inglés, coreano o español para equipos que necesitan comunicarse en entornos internacionales.',
-    tags: ['Grupos reducidos', 'Horario flexible', 'Certificación institucional'],
-  },
-  {
-    id: 'lsch',
-    title: 'LSCh - Inclusión Real',
-    desc: 'Capacitación en Lengua de Señas Chilena para empresas que deben cumplir con la Ley 21.015 de inclusión laboral.',
-    tags: ['Cumplimiento Ley 21.015', 'Instructora Sorda nativa', 'Certificado por competencias'],
-  },
-];
+const SERVICES = LANDING_SERVICES;
 
 export default function Empresas() {
   const handleContact = () => {

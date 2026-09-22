@@ -4,6 +4,47 @@
    1. CONFIGURACIÓN DE INVERSIÓN
    ────────────────────────────────────────────────────────────────────────── */
 
+import { GraduationCap, Bookmark, Award, Users } from 'lucide-react';
+
+/* ──────────────────────────────────────────────────────────────────────────
+   CONTENIDO DE LA PÁGINA /idiomas (LandingIdiomas.jsx)
+   ────────────────────────────────────────────────────────────────────────── */
+
+export const LANDING_SELECTOR = [
+  { id: 'ingles', label: 'Inglés', flag: '🇺🇸', tag: 'Programa Principal' },
+  { id: 'espanol', label: 'Español para Expats', flag: '🇨🇱', tag: 'Para Expats' }
+];
+
+export const LANDING_REASONS = [
+  { title: "Profesores nativos y especializados", desc: "Clases con quien realmente habla el idioma, no con quien lo memorizó para dar clases.", icon: GraduationCap },
+  { title: "Progresión por niveles", desc: "Estructura alineada al Marco Común Europeo (MCER) con metas de aprendizaje y fluidez claras en cada etapa.", icon: Bookmark },
+  { title: "Certificación Lael", desc: "Valida tus competencias comunicativas al finalizar cada nivel con una certificación formal de nuestra institución.", icon: Award },
+  { title: "Comunidad de práctica", desc: "Espacios de conversación extra con otros alumnos, para que uses el idioma antes de necesitarlo de verdad.", icon: Users }
+];
+
+export const LANDING_PLANS = [
+  {
+    name: 'Inglés Estratégico Pro',
+    flag: '🇺🇸',
+    priceMonthly: '$14.990',
+    priceQuarterly: '$11.990',
+    enrollment: '$9.990',
+    features: ['Metodología Inversa y Práctica', 'Preparación IELTS/TOEFL', 'Material de Quiebre Incluido', 'Comunidad y Soporte 24/7'],
+    link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6",
+    comingSoon: false,
+  },
+  {
+    name: 'Español para Expats',
+    flag: '🇨🇱',
+    priceMonthly: '$14.990',
+    priceQuarterly: '$11.990',
+    enrollment: '$9.990',
+    features: ['Dialectología y Modismos Chilenos', 'Entrevistas de Alto Rendimiento', 'Material de Quiebre Incluido', 'Comunidad y Soporte 24/7'],
+    link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6",
+    comingSoon: false,
+  }
+];
+
 export const ENROLLMENT_FEE = 9990;
 export const ACADEMIC_MONTHS = 9;
 

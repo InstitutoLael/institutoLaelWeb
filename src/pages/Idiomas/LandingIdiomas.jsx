@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { 
-  Globe, 
-  MessageSquare, 
-  Heart, 
-  Users, 
-  ChevronRight, 
-  Award, 
-  GraduationCap, 
-  Bookmark, 
-  Zap, 
+import {
+  Globe,
+  MessageSquare,
+  Heart,
+  ChevronRight,
+  Zap,
   Instagram,
   Check,
   CheckCircle2
@@ -19,6 +15,7 @@ import languagesBg from '../../assets/img/Home/idiomas_execution_bg_177794899729
 import igPost1 from '../../assets/img/Home/media_ig_post_1780732980390.png';
 import igPost2 from '../../assets/img/Home/media_ig_post_1780733562637.png';
 import CertificateSection from '../../components/CertificateSection';
+import { LANDING_SELECTOR, LANDING_REASONS, LANDING_PLANS } from '../../data/idiomas';
 
 // Visual Brand Colors
 const BLUE = '#071D49';
@@ -46,33 +43,8 @@ export default function LandingIdiomas() {
     }
   };
 
-  const selectorLanguages = [
-    { id: 'ingles', label: 'Inglés', flag: '🇺🇸', tag: 'Programa Principal' },
-    { id: 'espanol', label: 'Español para Expats', flag: '🇨🇱', tag: 'Para Expats' }
-  ];
-
-  const reasons = [
-    {
-      title: "Profesores nativos y especializados",
-      desc: "Clases con quien realmente habla el idioma, no con quien lo memorizó para dar clases.",
-      icon: <GraduationCap className="w-6 h-6 text-[#071D49]" />
-    },
-    {
-      title: "Progresión por niveles",
-      desc: "Estructura alineada al Marco Común Europeo (MCER) con metas de aprendizaje y fluidez claras en cada etapa.",
-      icon: <Bookmark className="w-6 h-6 text-[#071D49]" />
-    },
-    {
-      title: "Certificación Lael",
-      desc: "Valida tus competencias comunicativas al finalizar cada nivel con una certificación formal de nuestra institución.",
-      icon: <Award className="w-6 h-6 text-[#071D49]" />
-    },
-    {
-      title: "Comunidad de práctica",
-      desc: "Espacios de conversación extra con otros alumnos, para que uses el idioma antes de necesitarlo de verdad.",
-      icon: <Users className="w-6 h-6 text-[#071D49]" />
-    }
-  ];
+  const selectorLanguages = LANDING_SELECTOR;
+  const reasons = LANDING_REASONS;
 
   return (
     <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">
@@ -424,7 +396,7 @@ export default function LandingIdiomas() {
                 className="p-8 rounded-[32px] border border-[#071D49]/10 hover:border-[#D7E400]/40 hover:bg-[#F4F4F4]/20 transition-all duration-300"
               >
                 <div className="w-12 h-12 rounded-2xl bg-[#071D49]/5 flex items-center justify-center mb-6">
-                  {reason.icon}
+                  <reason.icon className="w-6 h-6 text-[#071D49]" />
                 </div>
                 <h3 className="text-[#071D49] font-display font-bold text-base uppercase tracking-tight mb-3">
                   {reason.title}
@@ -453,28 +425,7 @@ export default function LandingIdiomas() {
 
           {/* Pricing Comparison Cards (2 activos) */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl mx-auto mb-12">
-            {[
-              {
-                name: 'Inglés Estratégico Pro',
-                flag: '🇺🇸',
-                priceMonthly: '$14.990',
-                priceQuarterly: '$11.990',
-                enrollment: '$9.990',
-                features: ['Metodología Inversa y Práctica', 'Preparación IELTS/TOEFL', 'Material de Quiebre Incluido', 'Comunidad y Soporte 24/7'],
-                link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6",
-                comingSoon: false,
-              },
-              {
-                name: 'Español para Expats',
-                flag: '🇨🇱',
-                priceMonthly: '$14.990',
-                priceQuarterly: '$11.990',
-                enrollment: '$9.990',
-                features: ['Dialectología y Modismos Chilenos', 'Entrevistas de Alto Rendimiento', 'Material de Quiebre Incluido', 'Comunidad y Soporte 24/7'],
-                link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6",
-                comingSoon: false,
-              }
-            ].map((row, idx) => (
+            {LANDING_PLANS.map((row, idx) => (
               <motion.div
                 key={idx}
                 {...fadeUp(idx * 0.1)}

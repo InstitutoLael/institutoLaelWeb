@@ -18,7 +18,7 @@ export default function Inscripcion() {
     <main className="min-h-screen" style={{ backgroundColor: GRAY }}>
       <Helmet>
         <title>Inscripción - Instituto Lael | Formulario de Matrícula</title>
-        <meta name="description" content="Inscríbete en Instituto Lael. PAES, Inglés, Lengua de Señas Chilena. Completa el formulario y comienza tu futuro hoy." />
+        <meta name="description" content="Inscríbete en Instituto Lael: PAES, Inglés o Lengua de Señas Chilena. Completa el formulario; la matrícula es gratis." />
       </Helmet>
 
       {/* ── HEADER SECTION ──────────────────────────────────────────── */}

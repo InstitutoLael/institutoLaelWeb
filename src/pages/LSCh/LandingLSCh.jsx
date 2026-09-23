@@ -15,7 +15,7 @@ import {
   Volume2
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import lschRealidad from '../../assets/img/Home/mundo_lsch_bg_1777943626827.png';
+import lschRealidad from '../../assets/img/Home/mundo_lsch_bg_1777943626827.webp';
 import CertificateSection from '../../components/CertificateSection';
 import { LANDING_SLIDES, LANDING_LEVELS } from '../../data/lsch';
 
@@ -85,13 +85,13 @@ export default function LandingLSCh() {
             </motion.h1>
 
             <motion.p {...fadeUp(0.25)} className="text-white/70 text-lg mb-10 leading-relaxed max-w-md">
-              Aprende con instructores sordos nativos, no con un curso genérico traducido. Cultura Sorda de verdad, no una clase de señas sueltas.
+              Aprende con instructores Sordos, que tienen la LSCh como lengua propia. Además de señas, conoces la cultura de la comunidad Sorda.
             </motion.p>
 
             {/* Quick badges */}
             <motion.div {...fadeUp(0.35)} className="flex flex-wrap gap-3 mb-10 text-white/55 text-xs font-bold uppercase tracking-wider">
-              <span className="bg-white/5 border border-white/10 px-4 py-2 rounded-full">Inclusión y Comunidad Sorda</span>
-              <span className="bg-white/5 border border-white/10 px-4 py-2 rounded-full">100% Online en Vivo</span>
+              <span className="bg-white/5 border border-white/10 px-4 py-2 rounded-full">Comunidad Sorda</span>
+              <span className="bg-white/5 border border-white/10 px-4 py-2 rounded-full">Online y en vivo</span>
               <span className="bg-white/5 border border-white/10 px-4 py-2 rounded-full">Ley 21.015</span>
             </motion.div>
 
@@ -145,7 +145,7 @@ export default function LandingLSCh() {
               {/* Overlay with info */}
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent p-6 pt-16 flex flex-col justify-end text-left">
                 <span className="text-[#D7E400] text-[9px] font-bold tracking-[0.2em] uppercase mb-2">
-                  Creative {slides[activeSlide].badge}
+                  {slides[activeSlide].badge}
                 </span>
                 <p className="text-white font-display font-extrabold text-base uppercase leading-tight">
                   {slides[activeSlide].title}
@@ -174,15 +174,15 @@ export default function LandingLSCh() {
       <section id="programa" className="py-28 px-6 bg-[#F4F4F4] flex flex-col items-center">
         <div className="max-w-7xl mx-auto w-full">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Progresión por Ciclos</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Tres niveles</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
-              Ruta Formativa LSCh
+              Niveles de LSCh
             </motion.h2>
           </div>
 
           {/* Path visualization */}
           <motion.div {...fadeUp(0.25)} className="bg-white rounded-[24px] p-6 mb-12 max-w-xl mx-auto border border-[#071D49]/5">
-            <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4 text-center">Progreso de Aprendizaje LSCh</p>
+            <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4 text-center">Tu avance en LSCh</p>
             <div className="flex items-center justify-between">
               {['A1', 'A2', 'B1'].map((level, i, arr) => (
                 <React.Fragment key={level}>
@@ -247,7 +247,7 @@ export default function LandingLSCh() {
       <section className="py-28 px-6 bg-white flex flex-col items-center border-t border-[#071D49]/5">
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Inversión y Matrícula</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Precio</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
               Un solo plan, sin letra chica
             </motion.h2>
@@ -265,10 +265,10 @@ export default function LandingLSCh() {
 
                 <ul className="space-y-4 mb-10 border-t border-white/10 pt-6">
                   {[
-                    "Clases en vivo vía Zoom",
+                    "Clases en vivo por Google Meet",
                     "Material de apoyo digital (PDF)",
                     "Acceso a grabaciones por 7 días",
-                    "Certificado formal de Nivel aprobado"
+                    "Certificado al aprobar cada nivel"
                   ].map(item => (
                     <li key={item} className="flex items-center gap-3 text-xs text-white/80">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#D7E400]" />
@@ -299,7 +299,7 @@ export default function LandingLSCh() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(215,228,0,0.04),transparent)] pointer-events-none" />
         
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
-          <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-8">Experiencia de Alumnos</motion.p>
+          <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-8">Lo que dicen los alumnos</motion.p>
           
           <motion.div 
             {...fadeUp(0.15)}

@@ -11,9 +11,9 @@ import {
   Check,
   CheckCircle2
 } from 'lucide-react';
-import languagesBg from '../../assets/img/Home/idiomas_execution_bg_1777948997295.png';
-import igPost1 from '../../assets/img/Home/media_ig_post_1780732980390.png';
-import igPost2 from '../../assets/img/Home/media_ig_post_1780733562637.png';
+import languagesBg from '../../assets/img/Home/idiomas_execution_bg_1777948997295.webp';
+import igPost1 from '../../assets/img/Home/media_ig_post_1780732980390.webp';
+import igPost2 from '../../assets/img/Home/media_ig_post_1780733562637.webp';
 import CertificateSection from '../../components/CertificateSection';
 import { LANDING_SELECTOR, LANDING_REASONS, LANDING_PLANS } from '../../data/idiomas';
 
@@ -50,7 +50,7 @@ export default function LandingIdiomas() {
     <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">
       <Helmet>
         <title>Instituto Lael | Programas de Idiomas - Chile</title>
-        <meta name="description" content="Abre tu mundo con el idioma correcto. Cursos de Inglés, Coreano y Español para Expats con inmersión práctica desde el primer día." />
+        <meta name="description" content="Cursos online de Inglés y Español para Expats con clases en vivo. Hablas y practicas desde la primera clase." />
       </Helmet>
       
       {/* ── 1. HERO IDIOMAS ────────────────────────────────────────── */}
@@ -66,7 +66,7 @@ export default function LandingIdiomas() {
         <div className="relative z-20 max-w-5xl mx-auto text-center flex flex-col items-center">
           <motion.div {...fadeUp(0)} className="mb-6">
             <span className="text-[#D7E400] text-xs font-bold tracking-[0.3em] uppercase bg-white/5 border border-white/10 px-4 py-2 rounded-full">
-              MUNDO IDIOMAS LAEL
+              IDIOMAS EN LAEL
             </span>
           </motion.div>
 
@@ -76,12 +76,12 @@ export default function LandingIdiomas() {
             transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-[-0.03em] leading-[1.05] uppercase mb-8 max-w-4xl"
           >
-            Abre tu mundo <br />
-            con el <span className="text-[#D7E400] italic font-normal">idioma correcto.</span>
+            Aprende a hablar <br />
+            otro <span className="text-[#D7E400] italic font-normal">idioma.</span>
           </motion.h1>
 
           <motion.p {...fadeUp(0.25)} className="text-white/70 text-base sm:text-lg md:text-xl max-w-2xl mb-16 leading-relaxed">
-            Sin metodologías lentas. Inmersión práctica desde el primer día.
+            Clases online en vivo. Hablas y practicas desde la primera clase.
           </motion.p>
 
           {/* Visual Selector Cards */}
@@ -117,7 +117,7 @@ export default function LandingIdiomas() {
             </motion.div>
 
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase mb-6 leading-[1.05]">
-              Inglés Estratégico Pro
+              Inglés en Vivo
             </motion.h2>
 
             <motion.div {...fadeUp(0.15)} className="flex items-center gap-3 mb-6 bg-[#071D49]/5 border border-[#071D49]/10 rounded-2xl p-3 w-fit">
@@ -126,17 +126,17 @@ export default function LandingIdiomas() {
               </div>
               <div className="text-left">
                 <p className="text-[#071D49] text-xs font-bold">Docente principal: Monserrat González</p>
-                <p className="text-[#8D8D8D] text-[9px] font-bold uppercase tracking-wider">Especialista en Fluidez e Inmersión</p>
+                <p className="text-[#8D8D8D] text-[9px] font-bold uppercase tracking-wider">Profesora de inglés</p>
               </div>
             </motion.div>
 
             <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg mb-8 leading-relaxed max-w-xl">
-              Habla con seguridad en el trabajo, en una entrevista o viajando — no solo en el papel. Nada de clases pasivas: practicas conversaciones que de verdad vas a tener.
+              Habla con seguridad en el trabajo, en una entrevista o viajando, no solo en el papel. En cada clase practicas conversaciones que de verdad vas a tener.
             </motion.p>
 
             {/* Path visualization */}
             <motion.div {...fadeUp(0.3)} className="bg-[#F4F4F4] rounded-[24px] p-6 mb-8 max-w-xl border border-[#071D49]/5">
-              <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Ruta Formativa de Fluidez</p>
+              <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Tus niveles de inglés</p>
               <div className="flex items-center justify-between">
                 {['A1', 'A2', 'B1', 'B2'].map((level, i, arr) => (
                   <React.Fragment key={level}>
@@ -228,7 +228,7 @@ export default function LandingIdiomas() {
                 </div>
                 <p className="text-xs text-[#8D8D8D] leading-relaxed">
                   <span className="font-bold text-[#071D49] mr-2">institutolael</span>
-                  Entrena tu oído, formula tus ideas y habla con confianza. Programa 100% online y en vivo.
+                  Entrena tu oído, arma tus ideas y habla con confianza. Clases online y en vivo.
                 </p>
                 <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-[10px] text-black/45 uppercase tracking-wider">
                   <span>hace 2 días</span>
@@ -254,7 +254,7 @@ export default function LandingIdiomas() {
           <div className="lg:col-span-7 flex flex-col text-left">
             <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 mb-6 bg-[#071D49] text-[#D7E400] px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase w-fit">
               <Zap size={12} />
-              <span>PROGRAMA DE INMERSIÓN</span>
+              <span>ESPAÑOL EN CHILE</span>
             </motion.div>
 
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase mb-6 leading-[1.05]">
@@ -262,12 +262,12 @@ export default function LandingIdiomas() {
             </motion.h2>
 
             <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg mb-8 leading-relaxed max-w-xl">
-              Optimizado para extranjeros viviendo en Chile o profesionales trabajando con equipos hispanohablantes. Aprende de forma práctica a navegar situaciones de negocios, reuniones sociales, modismos locales y la cultura laboral del país con total seguridad.
+              Para extranjeros que viven en Chile o que trabajan con equipos que hablan español. Practicas reuniones de trabajo, conversaciones sociales, modismos chilenos y cómo funciona el trabajo en Chile.
             </motion.p>
 
             {/* Path visualization */}
             <motion.div {...fadeUp(0.3)} className="bg-white rounded-[24px] p-6 mb-8 max-w-xl border border-[#071D49]/5">
-              <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Ruta Formativa de Inmersión</p>
+              <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Tus niveles de español</p>
               <div className="flex items-center justify-between">
                 {['A1', 'A2', 'B1'].map((level, i, arr) => (
                   <React.Fragment key={level}>
@@ -276,7 +276,7 @@ export default function LandingIdiomas() {
                         {level}
                       </div>
                       <span className="text-[9px] font-bold text-[#8D8D8D] uppercase tracking-wider mt-1.5">
-                        {level === 'B1' ? 'Dominio Expats' : `Nivel ${i+1}`}
+                        {level === 'B1' ? 'Intermedio' : `Nivel ${i+1}`}
                       </span>
                     </div>
                     {i < arr.length - 1 && (
@@ -359,7 +359,7 @@ export default function LandingIdiomas() {
                 </div>
                 <p className="text-xs text-[#8D8D8D] leading-relaxed">
                   <span className="font-bold text-[#071D49] mr-2">institutolael</span>
-                  Entiende los modismos locales de Chile y desenvuélvete con fluidez en entornos de trabajo. Método dinámico e interactivo.
+                  Entiende los modismos de Chile y desenvuélvete mejor en el trabajo. Clases en vivo, con mucha conversación.
                 </p>
                 <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-[10px] text-black/45 uppercase tracking-wider">
                   <span>hace 1 día</span>
@@ -382,7 +382,7 @@ export default function LandingIdiomas() {
       <section className="py-28 px-6 bg-white flex flex-col items-center">
         <div className="max-w-7xl mx-auto w-full">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Metodología Comprobada</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Cómo trabajamos</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
               ¿POR QUÉ APRENDER CON LAEL?
             </motion.h2>
@@ -411,14 +411,14 @@ export default function LandingIdiomas() {
       </section>
 
       {/* ── 4. CERTIFICADOS POR NIVEL ─────────────────────────────── */}
-      <CertificateSection defaultLevel="B2" defaultLanguage="Inglés Estratégico Pro" />
+      <CertificateSection defaultLevel="B2" defaultLanguage="Inglés en Vivo" />
 
       {/* ── 5. CTA + PRICING (COMPARATIVA REDISEÑADA A 2 COLUMNAS) ───── */}
       <section className="relative py-28 px-6 bg-[#071D49] text-center overflow-hidden flex flex-col items-center">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02),transparent)] pointer-events-none" />
         
         <div className="relative z-10 max-w-6xl mx-auto w-full text-center">
-          <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Inversión Uniforme</motion.p>
+          <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Mismo precio para ambos</motion.p>
           <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-white font-extrabold tracking-[-0.03em] uppercase mb-16">
             PROGRAMAS & MATRÍCULA
           </motion.h2>
@@ -472,7 +472,7 @@ export default function LandingIdiomas() {
           </div>
 
           <motion.div {...fadeUp(0.35)} className="text-white/45 text-xs">
-            Todos los cursos se realizan de forma 100% online con profesores reales. Consulta por precios de clases 1 a 1 personalizadas.
+            Todos los cursos son online y en vivo, con un docente. Pregúntanos por el precio de clases 1 a 1.
           </motion.div>
         </div>
       </section>

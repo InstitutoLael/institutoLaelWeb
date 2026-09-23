@@ -70,7 +70,7 @@ export default function Contacto() {
                   <span className="italic font-normal text-[#D7E400] capitalize">mensaje de distancia.</span>
                 </motion.h1>
                 <p className="text-[#8D8D8D] text-sm sm:text-base leading-relaxed max-w-md">
-                  No importa si eres un alumno con una duda técnica, un apoderado buscando orientación o quieres consultarnos sobre inscripciones. Respondemos todo de forma directa.
+                  Da lo mismo si eres alumno, apoderado o quieres saber cómo inscribirte. Escríbenos por WhatsApp o correo y te respondemos.
                 </p>
               </div>
 
@@ -153,9 +153,9 @@ export default function Contacto() {
                    <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
                       <CheckCircle size={32} />
                    </div>
-                   <h3 className="text-2xl font-display font-extrabold text-[#071D49] mb-4">¡MENSAJE ENVIADO!</h3>
+                   <h3 className="text-2xl font-display font-extrabold text-[#071D49] mb-4">¡Ya casi!</h3>
                    <p className="text-[#8D8D8D] text-sm leading-relaxed max-w-sm mx-auto">
-                     Hemos abierto tu cliente de correo para enviar la consulta. Te responderemos a la brevedad.
+                     Se abrió tu correo con la consulta lista. Solo falta que la envíes y te responderemos pronto.
                    </p>
                 </div>
               ) : (
@@ -166,14 +166,14 @@ export default function Contacto() {
                       <input 
                         type="text"
                         required
-                        placeholder="Tu nombre real"
+                        placeholder="Tu nombre"
                         className="w-full bg-[#F4F4F4] border border-[#071D49]/10 rounded-2xl px-6 py-4 focus:bg-white focus:border-[#D7E400] focus:ring-0 transition-all text-[#071D49] text-sm placeholder:text-[#8D8D8D]/40 outline-none"
                         value={formData.nombre}
                         onChange={(e) => setFormData({...formData, nombre: e.target.value})}
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[9px] uppercase tracking-[0.25em] font-extrabold text-[#071D49] ml-1">Email de Contacto</label>
+                      <label className="text-[9px] uppercase tracking-[0.25em] font-extrabold text-[#071D49] ml-1">Tu correo</label>
                       <input 
                         type="email"
                         required
@@ -195,7 +195,7 @@ export default function Contacto() {
                       <option value="PAES">PAES</option>
                       <option value="Idiomas">Inglés / Español</option>
                       <option value="LSCh">Lengua de Señas (LSCh)</option>
-                      <option value="Otro">Otro requerimiento</option>
+                      <option value="Otro">Otra consulta</option>
                     </select>
                   </div>
 
@@ -217,7 +217,7 @@ export default function Contacto() {
                     type="submit" 
                     className="w-full bg-[#071D49] hover:bg-[#D7E400] text-white hover:text-[#071D49] py-5 rounded-2xl font-display font-extrabold uppercase tracking-[0.3em] text-[10px] flex items-center justify-center gap-3 transition-colors duration-300 shadow-md outline-none"
                   >
-                    <span>ENVIAR CONSULTA</span>
+                    <span>Enviar consulta</span>
                     <Send size={14} />
                   </motion.button>
                 </form>

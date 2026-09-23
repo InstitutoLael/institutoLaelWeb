@@ -9,8 +9,8 @@ export default function MethodSteps({ steps }) {
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-20">
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">El Sistema Lael</h2>
-          <p className="text-lael-muted max-w-2xl mx-auto text-lg">Un proceso lineal diseñado con precisión de ingeniería para garantizar el dominio del contenido bajo presión.</p>
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-6">Paso a paso</h2>
+          <p className="text-lael-muted max-w-2xl mx-auto text-lg">Lo que pasa desde que entras hasta el día de la prueba.</p>
         </div>
 
         <div className="relative">

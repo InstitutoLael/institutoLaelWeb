@@ -7,7 +7,7 @@ export default function Idiomas() {
     <main className="bg-lael-primary min-h-screen">
       <Helmet>
         <title>Inglés y Español para Expats - Instituto Lael</title>
-        <meta name="description" content="Programas de idiomas estratégicos. Inglés e Inmersión en Español para Expats. Habla desde el primer día con nuestro método de inmersión en vivo." />
+        <meta name="description" content="Cursos online de Inglés y Español para Expats. Clases en vivo con docente, donde hablas y practicas desde la primera clase." />
       </Helmet>
       <LandingIdiomas />
     </main>

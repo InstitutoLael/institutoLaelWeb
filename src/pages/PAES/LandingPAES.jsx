@@ -13,8 +13,8 @@ import {
   Sparkles,
   CheckCircle2
 } from 'lucide-react';
-import studentImg from '../../assets/img/Home/hero_student_lael_1780734180709.png';
-import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS } from '../../data/paes';
+import studentImg from '../../assets/img/Home/hero_student_lael_1780734180709.webp';
+import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS, PAES_PLANS, PAES_PLAN_INCLUDES, PAES_FORM_URL, BECAS_FORM_URL } from '../../data/paes';
 
 // Design System Tokens (Local references matching tailwind.config.js / index.css)
 const BLUE = '#071D49';
@@ -34,7 +34,8 @@ const fadeUp = (delay = 0) => ({
 export default function LandingPAES() {
   const [openFaq, setOpenFaq] = useState(null);
 
-  const WA_LINK = "https://forms.gle/H86nFAQ2DJ8CCQ7y6";
+  const WA_LINK = PAES_FORM_URL;
+  const WHATSAPP_LINK = "https://wa.me/56964626568?text=Hola,%20tengo%20dudas%20sobre%20el%20preu%20PAES";
 
   const features = LANDING_FEATURES;
   const subjects = LANDING_SUBJECTS;
@@ -74,7 +75,7 @@ export default function LandingPAES() {
             </motion.h1>
 
             <motion.p {...fadeUp(0.2)} className="text-white/70 text-lg sm:text-xl max-w-lg mb-10 leading-relaxed">
-              Clases en vivo por Google Meet, guías de contenido y ensayos cronometrados semanales. Sin matrícula. Desde $10.000/mes por ramo, con becas para quien lo necesite.
+              Clases en vivo por Google Meet, grabaciones para repasar y un ensayo cronometrado cada mes. Sin matrícula. Desde $10.000/mes por ramo, con becas para quien lo necesite.
             </motion.p>
 
             {/* Key Data grid */}
@@ -144,7 +145,7 @@ export default function LandingPAES() {
       <section id="estructura" className="py-28 px-6 bg-white flex flex-col items-center">
         <div className="max-w-7xl mx-auto w-full">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Estructura del Sistema</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Lo que recibes</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
               ¿QUÉ INCLUYE EL PROGRAMA?
             </motion.h2>
@@ -175,9 +176,9 @@ export default function LandingPAES() {
         
         <div className="max-w-7xl mx-auto w-full relative z-10">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Domina el Contenido</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Elige tus ramos</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-white font-extrabold tracking-[-0.03em] uppercase">
-              DASHBOARD DE ASIGNATURAS
+              ASIGNATURAS
             </motion.h2>
           </div>
 
@@ -206,15 +207,17 @@ export default function LandingPAES() {
                       <p className="text-white/60 text-xs leading-relaxed mb-4">{subj.desc}</p>
                     </div>
                     
+                    {subj.teacher && (
                     <div className="border-t border-white/5 pt-3 flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[#D7E400] text-[#071D49] font-display font-black text-[9px] flex items-center justify-center shadow-inner">
-                        {subj.teacher.includes('Próximamente') ? '?' : subj.teacher.split(' ').map(n=>n[0]).join('')}
+                        {subj.teacher.split(/ & | /).map(n => n[0]).join('').slice(0, 2)}
                       </div>
                       <div>
                         <p className="text-white text-xs font-semibold">{subj.teacher}</p>
                         <p className="text-white/45 text-[8px] uppercase tracking-wider">Docente Asignado</p>
                       </div>
                     </div>
+                    )}
                   </motion.div>
                 ))}
               </div>
@@ -243,15 +246,17 @@ export default function LandingPAES() {
                       <p className="text-white/60 text-xs leading-relaxed mb-4">{subj.desc}</p>
                     </div>
                     
+                    {subj.teacher && (
                     <div className="border-t border-white/5 pt-3 flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-[#D7E400] text-[#071D49] font-display font-black text-[9px] flex items-center justify-center shadow-inner">
-                        {subj.teacher.includes('&') ? 'T' : subj.teacher.split(' ').map(n=>n[0]).join('')}
+                        {subj.teacher.split(/ & | /).map(n => n[0]).join('').slice(0, 2)}
                       </div>
                       <div>
                         <p className="text-white text-xs font-semibold">{subj.teacher}</p>
                         <p className="text-white/45 text-[8px] uppercase tracking-wider">Docente Asignado</p>
                       </div>
                     </div>
+                    )}
                   </motion.div>
                 ))}
 
@@ -265,13 +270,75 @@ export default function LandingPAES() {
                   </div>
                   <div className="text-left">
                     <h4 className="text-white/80 font-display font-bold text-sm uppercase">Comunidad & Soporte</h4>
-                    <p className="text-white/45 text-xs mt-1 leading-relaxed">Orientación vocacional, acompañamiento socioemocional y resolución de dudas 24/7.</p>
+                    <p className="text-white/45 text-xs mt-1 leading-relaxed">Orientación vocacional, acompañamiento cercano y dudas resueltas por WhatsApp.</p>
                   </div>
                 </motion.div>
               </div>
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* ── 3.5 PLANES Y PRECIOS ──────────────────────────────────────── */}
+      <section id="planes" className="py-28 px-6 bg-[#F4F4F4] flex flex-col items-center">
+        <div className="max-w-6xl mx-auto w-full">
+          <div className="text-center mb-16">
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Matrícula gratis</motion.p>
+            <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
+              PLANES Y PRECIOS
+            </motion.h2>
+            <motion.p {...fadeUp(0.15)} className="text-[#8D8D8D] text-base max-w-xl mx-auto mt-6 leading-relaxed">
+              Pagas solo por los ramos que tomas. Desde el cuarto ramo, el precio deja de subir.
+            </motion.p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+            {PAES_PLANS.map((plan, i) => (
+              <motion.div
+                key={plan.id}
+                {...fadeUp(i * 0.08)}
+                className={`relative rounded-[32px] p-8 flex flex-col border transition-all duration-300 ${plan.featured ? 'bg-[#071D49] border-[#071D49] text-white shadow-2xl md:-translate-y-3' : 'bg-white border-[#071D49]/10 text-[#071D49] shadow-sm'}`}
+              >
+                {plan.featured && (
+                  <span className="absolute -top-3 left-8 bg-[#D7E400] text-[#071D49] text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full">
+                    Más conveniente
+                  </span>
+                )}
+                <h3 className="font-display text-lg font-extrabold uppercase tracking-tight mb-2">{plan.name}</h3>
+                <p className={`text-sm leading-relaxed mb-6 ${plan.featured ? 'text-white/70' : 'text-[#8D8D8D]'}`}>{plan.desc}</p>
+                <p className="mb-6">
+                  <span className={`font-display text-4xl font-black ${plan.featured ? 'text-[#D7E400]' : ''}`}>{plan.priceLabel}</span>
+                  <span className={`text-xs font-semibold ml-1 ${plan.featured ? 'text-white/60' : 'text-[#8D8D8D]'}`}>{plan.period}</span>
+                </p>
+                <ul className="space-y-3 mb-8 flex-grow">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm leading-snug">
+                      <CheckCircle2 size={16} className={`flex-shrink-0 mt-0.5 ${plan.featured ? 'text-[#D7E400]' : 'text-[#071D49]'}`} />
+                      <span className={plan.featured ? 'text-white/85' : 'text-[#071D49]/80'}>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href={WA_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`text-center font-display font-extrabold text-xs uppercase tracking-widest px-6 py-4 rounded-2xl transition-all duration-300 active:scale-95 ${plan.featured ? 'bg-[#D7E400] text-[#071D49] hover:bg-white' : 'bg-[#071D49] text-white hover:bg-[#0B2A66]'}`}
+                >
+                  Inscribirme
+                </a>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.p {...fadeUp(0.2)} className="text-center text-[#8D8D8D] text-sm mt-12 max-w-2xl mx-auto leading-relaxed">
+            {PAES_PLAN_INCLUDES}{' '}
+            ¿No te alcanza?{' '}
+            <a href={BECAS_FORM_URL} target="_blank" rel="noopener noreferrer" className="text-[#071D49] font-bold underline underline-offset-4 hover:text-[#0B2A66]">
+              Postula a una beca
+            </a>
+            , la revisamos caso a caso.
+          </motion.p>
         </div>
       </section>
 
@@ -285,24 +352,19 @@ export default function LandingPAES() {
             </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {teachers.map((t, i) => {
               const isDiego = t.name === "Diego Chaparro";
-              const isPlaceholder = t.name.includes("Próximamente");
 
               return (
                 <motion.div 
                   key={t.name} 
                   {...fadeUp(i * 0.1)}
-                  className={`rounded-[32px] p-8 border transition-all duration-300 flex flex-col items-center text-center ${isPlaceholder ? 'bg-[#F4F4F4]/50 border-dashed border-[#071D49]/10 opacity-70' : 'bg-white border-[#071D49]/10 shadow-card hover:shadow-lael'}`}
+                  className="rounded-[32px] p-8 border transition-all duration-300 flex flex-col items-center text-center bg-white border-[#071D49]/10 shadow-card hover:shadow-lael"
                 >
                   {/* Photo / Avatar */}
                   <div className="w-24 h-24 rounded-full overflow-hidden border border-[#071D49]/15 shadow-md mb-6 flex items-center justify-center bg-[#071D49]/5 relative">
-                    {isPlaceholder ? (
-                      <span className="text-3xl text-lael-muted font-bold">?</span>
-                    ) : (
-                      <img src={t.img} alt={`Foto de ${t.name}`} className="w-full h-full object-cover" />
-                    )}
+                    <img src={t.img} alt={`Foto de ${t.name}`} className="w-full h-full object-cover" />
                   </div>
 
                   <div className="flex items-center gap-2 flex-wrap justify-center mb-1">
@@ -334,7 +396,7 @@ export default function LandingPAES() {
       <section className="py-28 px-6 bg-[#F4F4F4] flex flex-col items-center relative overflow-hidden">
         <div className="max-w-6xl mx-auto w-full relative z-10">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">El Camino al Éxito</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Así de simple</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
               ¿CÓMO FUNCIONA?
             </motion.h2>
@@ -489,7 +551,7 @@ export default function LandingPAES() {
           {/* Secondary WhatsApp link for questions */}
           <motion.div {...fadeUp(0.35)} className="mt-8">
             <a 
-              href={WA_LINK}
+              href={WHATSAPP_LINK}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-white/55 hover:text-white transition-colors text-xs font-semibold uppercase tracking-wider hover:underline"

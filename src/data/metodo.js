@@ -21,13 +21,13 @@ export const metodoData = {
     {
       id: "acompanamiento",
       title: "No estás solo en esto",
-      description: "Un profe real revisa cómo vas y ajusta el plan si hace falta — te avisa si te estás quedando atrás, antes de que sea tarde.",
+      description: "Un profe real revisa cómo vas y ajusta el plan si hace falta. Te avisa si te estás quedando atrás, antes de que sea tarde.",
       icon: Users,
     },
     {
       id: "evaluacion",
       title: "Practicas la presión, no solo la materia",
-      description: "Simulacros que se sienten como el día real, para que ese día no sea la primera vez que sientes el reloj corriendo.",
+      description: "Un ensayo PAES cada mes, con tiempo real, para que el día de la prueba no sea la primera vez que corres contra el reloj.",
       icon: LineChart,
     }
   ]

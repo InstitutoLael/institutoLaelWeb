@@ -16,20 +16,20 @@ export const LANDING_SELECTOR = [
 ];
 
 export const LANDING_REASONS = [
-  { title: "Profesores nativos y especializados", desc: "Clases con quien realmente habla el idioma, no con quien lo memorizó para dar clases.", icon: GraduationCap },
-  { title: "Progresión por niveles", desc: "Estructura alineada al Marco Común Europeo (MCER) con metas de aprendizaje y fluidez claras en cada etapa.", icon: Bookmark },
-  { title: "Certificación Lael", desc: "Valida tus competencias comunicativas al finalizar cada nivel con una certificación formal de nuestra institución.", icon: Award },
-  { title: "Comunidad de práctica", desc: "Espacios de conversación extra con otros alumnos, para que uses el idioma antes de necesitarlo de verdad.", icon: Users }
+  { title: "Profesores en vivo", desc: "Clases en vivo con un docente que te escucha, te corrige en el momento y responde tus dudas.", icon: GraduationCap },
+  { title: "Progresión por niveles", desc: "Niveles basados en el Marco Común Europeo (MCER), con lo que vas a aprender en cada etapa definido desde el inicio.", icon: Bookmark },
+  { title: "Certificación Lael", desc: "Al aprobar cada nivel recibes un certificado del Instituto Lael que indica el nivel alcanzado.", icon: Award },
+  { title: "Comunidad de práctica", desc: "Sesiones de conversación con otros alumnos, para que practiques el idioma antes de necesitarlo de verdad.", icon: Users }
 ];
 
 export const LANDING_PLANS = [
   {
-    name: 'Inglés Estratégico Pro',
+    name: 'Inglés en Vivo',
     flag: '🇺🇸',
     priceMonthly: '$14.990',
     priceQuarterly: '$11.990',
     enrollment: '$9.990',
-    features: ['Metodología Inversa y Práctica', 'Preparación IELTS/TOEFL', 'Material de Quiebre Incluido', 'Comunidad y Soporte 24/7'],
+    features: ['Clases en vivo con mucha conversación', 'Preparación para IELTS/TOEFL', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'],
     link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6",
     comingSoon: false,
   },
@@ -39,7 +39,7 @@ export const LANDING_PLANS = [
     priceMonthly: '$14.990',
     priceQuarterly: '$11.990',
     enrollment: '$9.990',
-    features: ['Dialectología y Modismos Chilenos', 'Entrevistas de Alto Rendimiento', 'Material de Quiebre Incluido', 'Comunidad y Soporte 24/7'],
+    features: ['Modismos y chilenismos', 'Práctica de entrevistas de trabajo', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'],
     link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6",
     comingSoon: false,
   }
@@ -58,144 +58,29 @@ export const clp = (n) =>
 export const PRICE_MONTHLY = 14990;
 export const PRICE_QUARTERLY = 11990; // precio por mes al pagar trimestral
 
-export function computeLangBundle(countSelected, plan = 'monthly') {
-  const count = Math.max(0, Number(countSelected || 0));
-
-  const pricePerLang = plan === 'quarterly' ? PRICE_QUARTERLY : PRICE_MONTHLY;
-
-  let totalMonthly = 0;
-  let label = "";
-
-  if (count === 0) {
-    totalMonthly = 0;
-    label = "Configura tu Programa";
-  } else {
-    totalMonthly = pricePerLang * count;
-    label = count === 1 ? "Inmersión Singular" : "Inmersión Múltiple";
-  }
-
-  return {
-    count,
-    label,
-    totalMonthly,
-    saving: plan === 'quarterly' ? (PRICE_MONTHLY - PRICE_QUARTERLY) * count * 3 : 0,
-    enrollment: ENROLLMENT_FEE,
-    totalFirstMonth: totalMonthly + ENROLLMENT_FEE,
-    pricePerLanguage: pricePerLang
-  };
-}
-
 /* ──────────────────────────────────────────────────────────────────────────
    2. PROGRAMAS DE INMERSIÓN
    ────────────────────────────────────────────────────────────────────────── */
-export const LANGUAGES = [
-  {
-    id: "plan-ingles",
-    name: "Dominio Estratégico Inglés",
-    emoji: "🇺🇸",
-    color: "#C6A66B",
-    badge: "Alto Impacto",
-    summary: "Ingeniería inversa del idioma. Estructuras de alto rendimiento para negocios, tecnología y certificación internacional.",
-    features: [
-      "Preparación táctica para IELTS/TOEFL",
-      "Estructuras comunicativas corporativas",
-      "Simulacros de speaking de alta presión"
-    ],
-    levels: ["A1 (Fundamentos)", "A2", "B1", "B2 (Dominio)"],
-    comingSoon: false,
-    paymentUrl: ""
-  },
-  /*
-  {
-    id: "plan-coreano",
-    name: "Inmersión Estructural Coreana",
-    emoji: "🇰🇷",
-    color: "#C6A66B",
-    badge: "Próximamente",
-    summary: "Decodificación precisa del sistema Hangul y gramática coreana avanzada, conectada con su ecosistema cultural.",
-    features: [
-      "Lectura y escritura acelerada (Hangul)",
-      "Sistema de honoríficos y jerarquía",
-      "Preparación estratégica TOPIK"
-    ],
-    levels: ["Nivel 1 (Fundamentos)", "Nivel 2", "Nivel 3"],
-    comingSoon: true,
-    paymentUrl: ""
-  },
-  */
-  {
-    id: "plan-espanol",
-    name: "Integración Lingüística para Expats",
-    emoji: "🇨🇱",
-    color: "#C6A66B",
-    badge: "Inserción Estratégica",
-    summary: "Sistemas prácticos para dominar el español en el entorno chileno. Foco corporativo y de inmersión social profunda.",
-    features: [
-      "Desmitificación de la dialectología local",
-      "Estructuras para entrevistas de alto nivel",
-      "Negociación y persuasión en español"
-    ],
-    levels: ["A1 (Fundamentos)", "A2", "B1 (Dominio)"],
-    comingSoon: false,
-    paymentUrl: ""
-  }
-];
-
 /* ──────────────────────────────────────────────────────────────────────────
    3. VALOR AGREGADO
    ────────────────────────────────────────────────────────────────────────── */
-export const LANG_FEATURES = [
-  { title: "Sistemas Dinámicos", desc: "No hay clases pasivas. Interacción constante y simulación de entornos reales.", icon: "🎥" },
-  { title: "Entornos Exclusivos", desc: "Secciones de alta concentración para asegurar tu tiempo de participación.", icon: "👥" },
-  { title: "Certificación Estratégica", desc: "Acreditación de dominio orientada a demostrar tu capacidad en el mercado.", icon: "📜" }
-];
-
 /* ──────────────────────────────────────────────────────────────────────────
    4. SYLLABUS PREVIEW
    ────────────────────────────────────────────────────────────────────────── */
-export const SYLLABUS_PREVIEW = {
-  ingles: [
-    { level: "Fundamentos", topics: ["Estructuras base de persuasión", "Tácticas de negociación elemental", "Alineación fonética"] },
-    { level: "Dominio", topics: ["Comunicación corporativa asertiva", "Defensa de argumentos complejos", "Optimización gramatical"] }
-  ],
-  /*
-  coreano: [
-    { level: "Nivel 1", topics: ["Decodificación del sistema Hangul", "Arquitectura de la oración (SOV)", "Protocolo base"] },
-    { level: "Nivel 2", topics: ["Dominio de partículas complejas", "Análisis de estructuras idiomáticas", "Sistemas numéricos duales"] }
-  ],
-  */
-  espanol: [
-    { level: "Fundamentos", topics: ["Navegación del sistema burocrático", "Comprensión del registro informal", "Adaptación fonética"] },
-    { level: "Dominio", topics: ["Dominio del registro formal e informal", "Resolución de conflictos laborales", "Redacción estratégica"] }
-  ]
-};
-
 /* ──────────────────────────────────────────────────────────────────────────
    5. ESTRATEGIA COMPARATIVA
    ────────────────────────────────────────────────────────────────────────── */
 export const COMPARISON_DATA = [
-  { feature: "Enfoque del Programa", lael: "Resultados y Dominio", app: "Repetición Mecánica", institute: "Gramática Teórica" },
-  { feature: "Metodología", lael: "Sistemas Estructurales", app: "Algoritmos", institute: "Libros Genéricos" },
-  { feature: "Interacción", lael: "Simulacros Reales", app: "Nula", institute: "Pasiva" },
-  { feature: "Entorno Visual", lael: "Premium", app: "Básico", institute: "Convencional" },
-  { feature: "Inversión Mensual", lael: "Alta Eficiencia", app: "Baja Eficiencia", institute: "Sobrevalorada" }
+  { feature: "Enfoque", lael: "Conversación", app: "Repetición", institute: "Gramática" },
+  { feature: "Clases", lael: "En vivo con docente", app: "Sin docente", institute: "En sala" },
+  { feature: "Práctica oral", lael: "En cada clase", app: "Poca", institute: "Variable" },
+  { feature: "Corrección", lael: "Del docente, al momento", app: "Automática", institute: "En pruebas" },
+  { feature: "Pago", lael: "Mensual o trimestral", app: "Suscripción", institute: "Variable" }
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
    6. EXPERTOS (Mentores Estratégicos)
    ────────────────────────────────────────────────────────────────────────── */
-export const TEACHERS_LIST = [
-  { name: "Equipo Estratégico Inglés", origin: "🇺🇸", role: "Mentores de Alto Impacto", bio: "Especialistas en fonética y comunicación corporativa.", img: "💼" },
-  // { name: "Equipo Estructural Coreano", origin: "🇰🇷", role: "Especialistas en Inmersión", bio: "Dominio técnico del idioma y su psicología cultural.", img: "⛩️" },
-  { name: "Equipo Inserción Español", origin: "🇨🇱", role: "Lingüistas Tácticos", bio: "Expertos en dialectología y adaptación social rápida.", img: "🏢" }
-];
-
 /* ──────────────────────────────────────────────────────────────────────────
    7. FAQS TÁCTICAS
    ────────────────────────────────────────────────────────────────────────── */
-export const IDIOMAS_FAQS = [
-  { q: "¿Cuál es el tiempo estimado de dominio?", a: "Nuestro sistema prioriza la fluidez funcional rápida. Podrás ejecutar interacciones estratégicas en el primer nivel (3-4 meses), y alcanzar dominio conversacional profundo en ciclos posteriores." },
-  { q: "¿Existe un registro de mi progreso?", a: "Absolutamente. Toda sesión estratégica queda respaldada en nuestra plataforma cinemática para tu revisión y optimización de fallos." },
-  { q: "¿La certificación es válida?", a: "Emitimos una Certificación Institucional verificable que acredita tu dominio de la estructura, perfecta para respaldar competencias laborales." },
-  { q: "¿Cómo es el seguimiento?", a: "No te dejamos a tu suerte. Tienes contacto directo con el equipo de mentores para corregir tu trayectoria fuera de los simulacros en vivo." }
-];

@@ -2,9 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Quote, Sparkles } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import diegoAvatar from '../assets/img/Home/paes_mentor_strategy_1777948898105.png';
+import diegoAvatar from '../assets/img/Home/paes_mentor_strategy_1777948898105.webp';
 import SignificadoLael from '../components/SignificadoLael';
-import { HERO, HISTORY, PILLARS, TEAM, CLOSING_QUOTE } from '../data/nosotros';
+import { HERO, HISTORY, PILLARS, TEAM, TIMELINE, CLOSING_QUOTE } from '../data/nosotros';
 
 // Brand Design Tokens
 const BLUE = '#071D49';
@@ -26,8 +26,8 @@ export default function Nosotros() {
   return (
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden font-sans">
       <Helmet>
-        <title>Nuestra Génesis | Instituto Lael</title>
-        <meta name="description" content="Fundado 2021. 600 alumnos. PAES desde $10.000/mes por ramo, becas disponibles. Santiago, Chile. Conoce nuestra historia, misión y equipo de mentores." />
+        <title>Nosotros | Instituto Lael</title>
+        <meta name="description" content="Fundado en 2021. Más de 1000 alumnos. PAES desde $10.000/mes por ramo, becas disponibles. Santiago, Chile. Conoce nuestra historia, misión y equipo de mentores." />
       </Helmet>
 
       {/* ── 1. HERO ────────────────────────────────────────────────── */}
@@ -103,6 +103,17 @@ export default function Nosotros() {
                  </div>
               </motion.div>
            </div>
+
+           {/* Línea de tiempo */}
+           <div className="mt-24 grid grid-cols-2 lg:grid-cols-4 gap-6 border-t border-white/10 pt-12">
+              {TIMELINE.map((item, i) => (
+                <motion.div key={item.year} {...fadeUp(i * 0.1)} className="text-left">
+                  <p className="font-display text-3xl font-black text-[#D7E400] mb-2">{item.year}</p>
+                  <h3 className="text-white font-bold uppercase tracking-tight mb-2">{item.title}</h3>
+                  <p className="text-white/60 text-sm leading-relaxed">{item.desc}</p>
+                </motion.div>
+              ))}
+           </div>
         </div>
       </section>
 
@@ -152,8 +163,8 @@ export default function Nosotros() {
             </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {TEAM.map((t, i) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {TEAM.filter((t) => t.confirmed).map((t, i) => {
               const isDiego = t.name === "Diego Chaparro";
               const isMonserrat = t.name === "Monserrat González";
               const isPlaceholder = !t.confirmed;

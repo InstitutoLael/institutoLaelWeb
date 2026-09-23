@@ -19,12 +19,10 @@ import NivelacionAdultos from "./pages/Nivelacion/NivelacionAdultos";
 import SistemaLael from "./pages/SistemaLael";
 import DiagnosticPage from "./pages/DiagnosticPage";
 import ResultDashboard from "./pages/ResultDashboard";
-import FunnelDashboard from "./pages/Admin/FunnelDashboard";
 import Preguntas from "./pages/Preguntas";
 import Transparencia from "./pages/Transparencia";
 import CasosReales from "./pages/CasosReales";
 import Empresas from "./pages/Empresas";
-import AppletCirculos from "./pages/Arcade/AppletCirculos";
 import NotFound from "./pages/NotFound";
 import Inscripcion from "./pages/Inscripcion";
 
@@ -58,9 +56,6 @@ export default function App() {
             <Route path="/empresas" element={<Empresas />} />
             <Route path="/diagnostico" element={<DiagnosticPage />} />
             <Route path="/resultado-diagnostico" element={<ResultDashboard />} />
-            <Route path="/admin/funnel" element={<FunnelDashboard />} />
-            <Route path="/arcade/circunferencias" element={<AppletCirculos />} />
-            <Route path="/diegobet" element={<AppletCirculos />} />
             <Route path="/nosotros" element={<Nosotros />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/inscripcion" element={<Inscripcion />} />

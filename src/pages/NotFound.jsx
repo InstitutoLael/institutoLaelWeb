@@ -31,7 +31,7 @@ export default function NotFound() {
           transition={{ delay: 0.2 }}
           className="text-2xl md:text-3xl font-display font-bold mb-6 text-lael-light"
         >
-          Te has desviado del camino.
+          Esta página no existe.
         </motion.h2>
 
         <motion.p
@@ -40,7 +40,7 @@ export default function NotFound() {
           transition={{ delay: 0.3 }}
           className="text-lael-muted text-lg mb-10 max-w-lg mx-auto leading-relaxed"
         >
-          La página que buscas no existe o quizás se mudó de ruta. No te preocupes, en Lael siempre hay sistemas alternativos.
+          Puede que el enlace esté mal escrito o que la página se haya movido. Vuelve al inicio o revisa el preu PAES.
         </motion.p>
 
         <motion.div
@@ -62,7 +62,7 @@ export default function NotFound() {
             className="group w-full md:w-auto px-8 py-4 bg-lael-secondary border border-lael-bd text-lael-light font-bold rounded-xl flex items-center justify-center gap-2 hover:border-lael-accent transition-colors uppercase tracking-[0.15em] text-xs hover:-translate-y-1"
           >
             <Compass size={18} className="text-lael-accent group-hover:rotate-45 transition-transform" />
-            Explorar PAES
+            Ver PAES
           </Link>
         </motion.div>
       </div>

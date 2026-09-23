@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { ADULT_CONTENT } from '../../data/nivelacion';
 import { CheckCircle2, Target, BookOpen, Clock, Users, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import adultosRealidad from '../../assets/img/Home/mundo_adultos_bg_1777944001677.png';
+import adultosRealidad from '../../assets/img/Home/mundo_adultos_bg_1777944001677.webp';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -26,7 +26,7 @@ export default function NivelacionAdultos() {
     <div className="bg-lael-primary min-h-screen pt-20">
       <Helmet>
         <title>Escuela de Sueños | Instituto Lael - Nivelación Adultos</title>
-        <meta name="description" content="No es solo el colegio. Es tu nueva vida. Escuela de Sueños de Instituto Lael. Nivelación de estudios para adultos con un sistema que sí funciona." />
+        <meta name="description" content="Termina tu enseñanza media siendo adulto, a tu ritmo y con profes que te acompañan hasta tener tu licencia. Escuela de Sueños de Instituto Lael." />
       </Helmet>
 
       {/* ── 1. HERO EMOCIONAL (CINEMÁTICO) ─────────────────────────────── */}
@@ -77,8 +77,8 @@ export default function NivelacionAdultos() {
       <section className="px-6 py-32 lg:py-48">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-24">
-             <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Tu Arquitectura de Éxito</p>
-             <h2 className="font-display text-5xl text-lael-primary uppercase tracking-tighter">Cómo lo logramos.</h2>
+             <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Cómo funciona</p>
+             <h2 className="font-display text-5xl text-lael-primary uppercase tracking-tighter">Cómo lo hacemos.</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {ADULT_CONTENT.system.features.map((f, i) => (
@@ -114,7 +114,7 @@ export default function NivelacionAdultos() {
                      Nunca es tarde <br /> para ser quien eres.
                    </h3>
                    <p className="text-white/70 text-lg leading-relaxed">
-                     Terminar tu educación no es solo obtener un papel. Es demostrarte a ti mismo que puedes conquistar lo que el tiempo dejó pendiente. En Lael, te acompañamos hasta la meta.
+                     Terminar tu educación no es solo obtener un papel. Es demostrarte que puedes cerrar lo que quedó pendiente. En Lael te acompañamos hasta el final.
                    </p>
                 </motion.div>
              </div>
@@ -142,7 +142,7 @@ export default function NivelacionAdultos() {
           <motion.div {...fadeUp(0.2)} className="space-y-10">
             <h3 className="font-display text-3xl text-lael-light flex items-center gap-4 uppercase tracking-widest">
               <ArrowRight className="text-lael-accent" size={32} />
-              Tu nueva realidad:
+              Lo que te llevas:
             </h3>
             <ul className="space-y-6">
               {ADULT_CONTENT.target.outcome.map((item, i) => (
@@ -163,7 +163,7 @@ export default function NivelacionAdultos() {
             {ADULT_CONTENT.message}
          </motion.p>
          <motion.button onClick={startDiagnostic} {...fadeUp(0.2)} className="bg-lael-accent text-white px-16 py-7 rounded-2xl text-xs tracking-[0.3em] uppercase font-bold hover:-translate-y-2 transition-all duration-500 shadow-[0_20px_50px_rgba(196,151,62,0.25)]">
-            Iniciar mi transformación →
+            Quiero terminar la media →
          </motion.button>
       </section>
     </div>

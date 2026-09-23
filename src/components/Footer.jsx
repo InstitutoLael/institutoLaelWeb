@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram } from 'lucide-react';
 import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.png';
+import { BECAS_FORM_URL } from '../data/paes';
 
 // TikTok SVG icon (no está en Lucide)
 const TikTokIcon = ({ size = 16 }) => (
@@ -9,8 +10,6 @@ const TikTokIcon = ({ size = 16 }) => (
     <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.89a8.27 8.27 0 0 0 4.83 1.55V7.01a4.85 4.85 0 0 1-1.06-.32z"/>
   </svg>
 );
-
-const BECAS_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSehVHEaZpQaQpSDKzHarHhPfgVzEPqyl5Q--Wa5r5KJFQwh9g/viewform';
 
 const SOCIAL = [
   { name: 'Instagram', href: 'https://instagram.com/institutolael', Icon: Instagram },
@@ -26,6 +25,9 @@ const LINKS_PROGRAMAS = [
 
 const LINKS_INSTITUTO = [
   { name: 'Sobre Nosotros', path: '/nosotros' },
+  { name: 'Cómo funciona', path: '/sistema' },
+  { name: 'Nuestro método', path: '/metodo' },
+  { name: 'Casos reales', path: '/casos-reales' },
   { name: 'Contacto', path: '/contacto' },
   { name: 'Preguntas Frecuentes', path: '/preguntas' },
   { name: 'Postula a una Beca', path: BECAS_FORM_URL, external: true },

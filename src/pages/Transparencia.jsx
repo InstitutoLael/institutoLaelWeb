@@ -22,8 +22,8 @@ export default function Transparencia() {
   return (
     <div className="min-h-screen text-[#071D49] pt-20" style={{ backgroundColor: WHITE }}>
       <Helmet>
-        <title>Transparencia & Ética Radical | Instituto Lael</title>
-        <meta name="description" content="Nuestra ética de resultados. Sin promesas vacías, solo ingeniería de rendimiento y honestidad radical sobre tu proceso educativo." />
+        <title>Transparencia | Instituto Lael</title>
+        <meta name="description" content="Qué hacemos y qué no hacemos en Instituto Lael. Sin promesas de puntaje, sin letra chica y con canales claros para tus dudas." />
       </Helmet>
 
       {/* ── 1. HERO (MINIMALIST & BOLD) ───────────────────────────────── */}
@@ -34,7 +34,7 @@ export default function Transparencia() {
         
         <div className="max-w-4xl relative z-10">
           <motion.div {...fadeUp(0)}>
-            <p className="text-[#071D49] text-[11px] tracking-[0.5em] uppercase mb-8 font-bold">Ética de Resultados</p>
+            <p className="text-[#071D49] text-[11px] tracking-[0.5em] uppercase mb-8 font-bold">Transparencia</p>
             <motion.h1 
               initial={{ clipPath: 'inset(0 100% 0 0)' }}
               animate={{ clipPath: 'inset(0 0% 0 0)' }}
@@ -42,11 +42,11 @@ export default function Transparencia() {
               className="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[0.95] mb-10 uppercase tracking-tighter"
               style={{ color: BLUE }}
             >
-              Honestidad <br />
-              <span className="italic font-normal text-[#D7E400] capitalize">radical.</span>
+              Hablemos <br />
+              <span className="italic font-normal text-[#D7E400] capitalize">claro.</span>
             </motion.h1>
             <p className="text-[#8D8D8D] text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto italic font-medium">
-              "Preferimos perder un alumno a alimentar una falsa esperanza."
+              "Preferimos decirte la verdad antes que prometerte algo que no podemos cumplir."
             </p>
           </motion.div>
         </div>
@@ -61,14 +61,14 @@ export default function Transparencia() {
                <div className="absolute top-0 right-0 p-10 text-emerald-500/5"><ShieldCheck size={140} /></div>
                <div className="flex items-center gap-4 mb-10 relative z-10">
                   <div className="w-12 h-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600"><ShieldCheck size={22} /></div>
-                  <h3 className="font-display text-2xl font-extrabold uppercase tracking-tight text-[#071D49]">Lo que sí garantizamos</h3>
+                  <h3 className="font-display text-2xl font-extrabold uppercase tracking-tight text-[#071D49]">Lo que sí hacemos</h3>
                </div>
                <ul className="space-y-8 relative z-10">
                   {[
-                    { t: "Diagnóstico Clínico", d: "Identificamos tus brechas aunque duela. No te diremos lo que quieres oír, sino lo que necesitas arreglar." },
-                    { t: "Ingeniería de Datos", d: "Cada ensayo se desglosa en variables tácticas. Sabemos exactamente dónde pierdes tiempo y puntos." },
-                    { t: "Actualización Quirúrgica", d: "Nuestro material muta con cada cambio del DEMRE. Si algo cambia el lunes, el martes ya está en tu dashboard." },
-                    { t: "Entorno de Alta Presión", d: "Te entrenamos para que el día de la prueba real sea el momento de mayor calma de tu semana." }
+                    { t: "Te decimos qué te falta", d: "Si hay algo que te cuesta, te lo decimos claro, aunque no sea lo que quieres escuchar." },
+                    { t: "Ensayos con revisión", d: "Hacemos un ensayo PAES cada mes y revisamos contigo en qué preguntas pierdes puntos." },
+                    { t: "Material al día", d: "Seguimos los temarios oficiales del DEMRE y actualizamos el material cuando cambian." },
+                    { t: "Práctica con tiempo real", d: "Los ensayos se hacen con el tiempo de la prueba, para que llegues acostumbrado al reloj." }
                   ].map((item, i) => (
                     <li key={i} className="flex gap-5 group">
                       <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-1 transition-transform group-hover:scale-110"><CheckCircle2 className="text-emerald-600" size={14} /></div>
@@ -90,10 +90,10 @@ export default function Transparencia() {
                </div>
                <ul className="space-y-8 relative z-10">
                   {[
-                    { t: "Sin Promesas de Puntaje", d: "El puntaje es una consecuencia de tu trabajo, no un producto que se pueda comprar por catálogo." },
-                    { t: "Cero Contenido Pasivo", d: "No vendemos videos para que los mires mientras haces otra cosa. En Lael se viene a ejecutar en vivo." },
-                    { t: "Filtro de Compromiso", d: "Si el diagnóstico muestra falta de voluntad para el cambio, no permitiremos tu ingreso al sistema." },
-                    { t: "Sin Atajos Mágicos", d: "No hay 'trucos' que reemplacen la disciplina. Hay estrategia, técnica y muchas horas de práctica real." }
+                    { t: "Sin promesas de puntaje", d: "El puntaje es una consecuencia de tu trabajo, no un producto que se pueda comprar por catálogo." },
+                    { t: "No son solo videos", d: "Las clases son en vivo por Google Meet, con un profe al que le puedes preguntar en el momento." },
+                    { t: "Sin presión para inscribirte", d: "Si después de conversar vemos que Lael no es lo que necesitas, te lo vamos a decir." },
+                    { t: "Sin atajos mágicos", d: "No hay 'trucos' que reemplacen la constancia. Hay técnica, orden y muchas horas de práctica." }
                   ].map((item, i) => (
                     <li key={i} className="flex gap-5 group">
                       <div className="w-6 h-6 rounded-full bg-rose-500/20 flex items-center justify-center flex-shrink-0 mt-1 transition-transform group-hover:scale-110"><XCircle className="text-rose-600" size={14} /></div>
@@ -110,9 +110,9 @@ export default function Transparencia() {
           {/* ── 3. PILARES LEGALES & PRIVACIDAD ───────────────────────────── */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
              {[
-                { icon: Scale, title: "Ética Comercial", desc: "No hay renovaciones automáticas sorpresa ni cláusulas de permanencia. Te quedas porque te sirve, no porque te obligamos." },
-                { icon: Eye, title: "Transparencia de Datos", desc: "Tus datos de rendimiento son tuyos. Puedes exportar tu historial de progreso en cualquier momento de tu ciclo." },
-                { icon: Lock, title: "Seguridad Institucional", desc: "Instituto Lael SpA es una entidad constituida bajo las leyes chilenas, con domicilio real en Santiago de Chile." }
+                { icon: Scale, title: "Sin letra chica", desc: "No hay renovaciones automáticas sorpresa ni cláusulas de permanencia. Te quedas porque te sirve, no porque te obligamos." },
+                { icon: Eye, title: "Tus datos", desc: "Tus datos son tuyos. Los usamos solo para tus clases y para contactarte, y puedes pedirnos que los borremos." },
+                { icon: Lock, title: "Quiénes somos", desc: "Instituto Lael SpA es una empresa constituida bajo las leyes chilenas, con domicilio en Santiago de Chile." }
              ].map((item, i) => (
                 <motion.div key={i} {...fadeUp(i * 0.1)} className="p-8 rounded-[32px] border border-[#071D49]/10 bg-white hover:border-[#D7E400]/40 transition-all duration-300">
                    <item.icon className="text-[#071D49] mb-5" size={24} />
@@ -129,13 +129,13 @@ export default function Transparencia() {
         <div className="max-w-4xl mx-auto">
            <motion.div {...fadeUp(0)}>
               <FileText className="text-[#D7E400] mx-auto mb-8" size={40} />
-              <h2 className="font-display text-3xl sm:text-4xl font-extrabold mb-6 uppercase tracking-tight">Canal de Cumplimiento</h2>
+              <h2 className="font-display text-3xl sm:text-4xl font-extrabold mb-6 uppercase tracking-tight">Dudas y reclamos</h2>
               <p className="text-white/60 text-base max-w-xl mx-auto mb-12 leading-relaxed">
-                 Si tienes alguna duda sobre nuestra gestión, términos de servicio o políticas de reembolso, nuestro canal legal está abierto permanentemente.
+                 Si tienes dudas sobre pagos, términos del servicio o reembolsos, escríbele a la dirección del instituto o háblanos por WhatsApp.
               </p>
               <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-                 <a href="mailto:legal@institutolael.cl" className="w-full sm:w-auto px-10 py-4.5 bg-white text-[#071D49] rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#D7E400] hover:text-[#071D49] transition-all">legal@institutolael.cl</a>
-                 <a href="https://wa.me/56964626568" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-10 py-4.5 bg-[#D7E400] text-[#071D49] rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-all">Atención Directa</a>
+                 <a href="mailto:director@institutolael.cl" className="w-full sm:w-auto px-10 py-4.5 bg-white text-[#071D49] rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-[#D7E400] hover:text-[#071D49] transition-all">director@institutolael.cl</a>
+                 <a href="https://wa.me/56964626568" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-10 py-4.5 bg-[#D7E400] text-[#071D49] rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-white transition-all">Escribir por WhatsApp</a>
               </div>
            </motion.div>
         </div>
@@ -145,11 +145,11 @@ export default function Transparencia() {
       <section className="py-32 px-6 text-center">
         <motion.div {...fadeUp(0.2)} className="max-w-3xl mx-auto flex flex-col items-center">
            <p className="text-[#071D49] text-xl sm:text-2xl font-display font-medium leading-relaxed italic max-w-2xl">
-              "En Lael, no vendemos la idea de que todos pueden ser lo que quieran. Vendemos la ingeniería necesaria para que el que esté dispuesto a trabajar, logre exactamente lo que se propuso."
+              "En Lael no te prometemos que va a ser fácil. Te ofrecemos clases bien hechas y un equipo que te acompaña, si tú también pones de tu parte."
            </p>
            <div className="mt-10 flex flex-col items-center gap-4">
               <div className="w-12 h-0.5 bg-[#071D49]/15" />
-              <p className="text-[10px] tracking-[0.4em] uppercase font-bold text-[#8D8D8D]">Ecosistema Lael SpA</p>
+              <p className="text-[10px] tracking-[0.4em] uppercase font-bold text-[#8D8D8D]">Instituto Lael SpA</p>
            </div>
         </motion.div>
       </section>

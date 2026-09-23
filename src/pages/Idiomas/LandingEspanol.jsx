@@ -15,8 +15,8 @@ import {
   Check,
   CheckCircle2
 } from 'lucide-react';
-import languagesBg from '../../assets/img/Home/idiomas_execution_bg_1777948997295.png';
-import igPost2 from '../../assets/img/Home/media_ig_post_1780733562637.png';
+import languagesBg from '../../assets/img/Home/idiomas_execution_bg_1777948997295.webp';
+import igPost2 from '../../assets/img/Home/media_ig_post_1780733562637.webp';
 import CertificateSection from '../../components/CertificateSection';
 
 // Visual Brand Colors
@@ -40,23 +40,23 @@ export default function LandingEspanol() {
 
   const reasons = [
     {
-      title: "Profesores nativos y especializados",
-      desc: "Aprende de docentes chilenos con dominio nativo y amplia experiencia en la enseñanza de español como segunda lengua.",
+      title: "Profesores chilenos",
+      desc: "Aprende con docentes chilenos que enseñan español como segunda lengua y te corrigen en el momento.",
       icon: <GraduationCap className="w-6 h-6 text-[#071D49]" />
     },
     {
       title: "Progresión por niveles",
-      desc: "Estructura alineada al Marco Común Europeo (MCER) con metas de aprendizaje claras para tu inserción en el país.",
+      desc: "Niveles basados en el Marco Común Europeo (MCER), con lo que vas a aprender en cada etapa definido desde el inicio.",
       icon: <Bookmark className="w-6 h-6 text-[#071D49]" />
     },
     {
       title: "Certificación Lael",
-      desc: "Valida tus competencias comunicativas al finalizar cada nivel con una certificación formal de nuestra institución.",
+      desc: "Al aprobar cada nivel recibes un certificado del Instituto Lael que indica el nivel alcanzado.",
       icon: <Award className="w-6 h-6 text-[#071D49]" />
     },
     {
       title: "Comunidad de práctica",
-      desc: "Sesiones de conversación extra y grupos de interacción dinámica para que uses el español en contextos reales.",
+      desc: "Sesiones de conversación con otros alumnos para que uses el español en situaciones reales.",
       icon: <Users className="w-6 h-6 text-[#071D49]" />
     }
   ];
@@ -65,7 +65,7 @@ export default function LandingEspanol() {
     <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">
       <Helmet>
         <title>Español para Extranjeros | Instituto Lael - Chile</title>
-        <meta name="description" content="Domina el español y conéctate con Chile. Programa optimizado para hispanohablantes en el extranjero o extranjeros viviendo en el país. Inmersión práctica." />
+        <meta name="description" content="Curso online de español para extranjeros que viven en Chile o trabajan con equipos chilenos. Clases en vivo, modismos y español para el trabajo." />
       </Helmet>
       
       {/* ── 1. HERO ESPAÑOL ────────────────────────────────────────── */}
@@ -96,7 +96,7 @@ export default function LandingEspanol() {
           </motion.h1>
 
           <motion.p {...fadeUp(0.25)} className="text-white/70 text-base sm:text-lg md:text-xl max-w-2xl mb-12 leading-relaxed">
-            Sin metodologías lentas. Domina modismos, chilenismos y desenvuélvete en el entorno profesional y social con total seguridad.
+            Aprende los modismos y chilenismos que escuchas a diario y desenvuélvete mejor en el trabajo y con tus amigos.
           </motion.p>
 
           <motion.div {...fadeUp(0.35)}>
@@ -118,7 +118,7 @@ export default function LandingEspanol() {
           <div className="lg:col-span-7 flex flex-col text-left">
             <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 mb-6 bg-[#071D49] text-[#D7E400] px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase w-fit">
               <Zap size={12} />
-              <span>PROGRAMA DE INMERSIÓN</span>
+              <span>ESPAÑOL EN CHILE</span>
             </motion.div>
 
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase mb-6 leading-[1.05]">
@@ -126,12 +126,12 @@ export default function LandingEspanol() {
             </motion.h2>
 
             <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg mb-8 leading-relaxed max-w-xl">
-              Optimizado para extranjeros viviendo en Chile o profesionales trabajando con equipos hispanohablantes. Aprende de forma práctica a navegar situaciones de negocios, reuniones sociales, modismos locales y cultura laboral del país.
+              Para extranjeros que viven en Chile o que trabajan con equipos que hablan español. Practicas reuniones de trabajo, conversaciones sociales, modismos chilenos y cómo funciona el trabajo en Chile.
             </motion.p>
 
             {/* Path visualization */}
             <motion.div {...fadeUp(0.3)} className="bg-[#F4F4F4] rounded-[24px] p-6 mb-8 max-w-xl border border-[#071D49]/5">
-              <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Ruta Formativa de Inmersión</p>
+              <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Tus niveles de español</p>
               <div className="flex items-center justify-between">
                 {['A1', 'A2', 'B1'].map((level, i, arr) => (
                   <React.Fragment key={level}>
@@ -140,7 +140,7 @@ export default function LandingEspanol() {
                         {level}
                       </div>
                       <span className="text-[9px] font-bold text-[#8D8D8D] uppercase tracking-wider mt-1.5">
-                        {level === 'B1' ? 'Dominio Expats' : `Nivel ${i+1}`}
+                        {level === 'B1' ? 'Intermedio' : `Nivel ${i+1}`}
                       </span>
                     </div>
                     {i < arr.length - 1 && (
@@ -223,7 +223,7 @@ export default function LandingEspanol() {
                 </div>
                 <p className="text-xs text-[#8D8D8D] leading-relaxed">
                   <span className="font-bold text-[#071D49] mr-2">institutolael</span>
-                  Entiende los modismos locales de Chile y desenvuélvete con fluidez en entornos de trabajo. Método dinámico e interactivo.
+                  Entiende los modismos de Chile y desenvuélvete mejor en el trabajo. Clases en vivo, con mucha conversación.
                 </p>
                 <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-[10px] text-black/45 uppercase tracking-wider">
                   <span>hace 1 día</span>
@@ -246,7 +246,7 @@ export default function LandingEspanol() {
       <section className="py-28 px-6 bg-[#F4F4F4] flex flex-col items-center">
         <div className="max-w-7xl mx-auto w-full">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Metodología de Inserción</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Cómo trabajamos</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
               ¿POR QUÉ APRENDER CON LAEL?
             </motion.h2>
@@ -282,7 +282,7 @@ export default function LandingEspanol() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02),transparent)] pointer-events-none" />
         
         <div className="relative z-10 max-w-4xl mx-auto w-full text-center">
-          <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Inversión Conveniente</motion.p>
+          <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Precio</motion.p>
           <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-white font-extrabold tracking-[-0.03em] uppercase mb-16">
             PROGRAMA & PRECIOS
           </motion.h2>
@@ -307,7 +307,7 @@ export default function LandingEspanol() {
               </p>
             </div>
             <ul className="space-y-3 mb-8">
-              {['Dialectología y Modismos Chilenos', 'Entrevistas de Alto Rendimiento', 'Material de Quiebre Incluido', 'Comunidad y Soporte 24/7'].map((feat, fIdx) => (
+              {['Modismos y chilenismos', 'Práctica de entrevistas de trabajo', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'].map((feat, fIdx) => (
                 <li key={fIdx} className="flex items-center gap-2 text-xs text-white/70">
                   <Check size={14} className="text-[#D7E400] flex-shrink-0" />
                   <span>{feat}</span>

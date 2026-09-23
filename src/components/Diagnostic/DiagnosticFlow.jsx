@@ -59,7 +59,7 @@ export default function DiagnosticFlow() {
           <ArrowLeft size={14} /> Atrás
         </button>
         <span className="text-lael-accent font-display text-sm font-bold">
-          Sesión Táctica {currentStep + 1}/{filteredQuestions.length}
+          Pregunta {currentStep + 1}/{filteredQuestions.length}
         </span>
       </div>
 

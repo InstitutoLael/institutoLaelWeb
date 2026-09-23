@@ -10,7 +10,7 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.9, delay, ease },
 });
 
-export default function CertificateSection({ defaultLevel = "B2", defaultLanguage = "Inglés Estratégico Pro" }) {
+export default function CertificateSection({ defaultLevel = "B2", defaultLanguage = "Inglés en Vivo" }) {
   const [selectedLevel, setSelectedLevel] = useState(defaultLevel);
   const levels = ["A1", "A2", "B1", "B2"];
 

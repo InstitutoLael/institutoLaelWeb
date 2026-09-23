@@ -7,7 +7,7 @@ export const DIAGNOSTIC_QUESTIONS = [
     options: [
       { label: "Estoy en el colegio (o saliendo)", value: "paes", icon: "🏫" },
       { label: "Necesito terminar mi enseñanza media", value: "adultos", icon: "🎓" },
-      { label: "Soy profesional y busco crecer", value: "idiomas", icon: "💼" },
+      { label: "Quiero aprender otro idioma", value: "idiomas", icon: "💼" },
       { label: "Represento a una empresa", value: "empresas", icon: "🏢" }
     ]
   },
@@ -28,7 +28,7 @@ export const DIAGNOSTIC_QUESTIONS = [
     options: [
       { label: "Básico (600 - 700)", value: "basic" },
       { label: "Medio (700 - 850)", value: "mid" },
-      { label: "Élite (850 - 1000)", value: "elite" }
+      { label: "Alto (850 - 1000)", value: "elite" }
     ]
   },
   {
@@ -37,13 +37,13 @@ export const DIAGNOSTIC_QUESTIONS = [
     options: [
       { label: "Bajo (Necesito que me empujen)", value: "low" },
       { label: "Medio (Estudio pero me distraigo)", value: "mid" },
-      { label: "Alto (Soy autodidacta pero quiero técnica)", value: "high" }
+      { label: "Alto (Estudio solo, pero quiero orden)", value: "high" }
     ]
   }
 ];
 
 export const getDiagnosticResult = (answers) => {
-  const { category, paes_pain, paes_target, discipline } = answers;
+  const { category, paes_pain, discipline } = answers;
 
   if (category === 'paes') {
     let profile = {
@@ -52,8 +52,8 @@ export const getDiagnosticResult = (answers) => {
       description: "",
       tone: "direct",
       wa_msg: "",
-      cta: "Activar mi Ruta Lael",
-      entry_product: "Sesión de Diagnóstico Profundo (Gratuita)",
+      cta: "Quiero inscribirme",
+      entry_product: "Clases PAES en vivo",
       stats: [],
       attributes: [], // Data metrics for the profile
       case_study: null
@@ -63,75 +63,55 @@ export const getDiagnosticResult = (answers) => {
     if (paes_pain === 'content') {
       profile.title = "Me va bien en unas, mal en otras";
       profile.subtitle = "Sientes que necesitas saberlo todo antes de empezar, y eso te está frenando.";
-      profile.description = "Tu problema no es la falta de estudio, es que estás tratando la PAES como una prueba de memoria. Te falta técnica para aplicar lo que sabes bajo presión. En nuestras clases en vivo, te enseñamos a pensar como el examen, no solo a memorizarlo.";
+      profile.description = "Tu problema no es que estudies poco. Es que estás tratando la PAES como una prueba de memoria, y te falta práctica para aplicar lo que sabes con el reloj corriendo. En las clases en vivo trabajamos cómo pensar las preguntas, no solo la materia.";
       profile.attributes = [
         { label: "Base Teórica", value: "Sólida", score: 80 },
         { label: "Técnica de Descarte", value: "Baja", score: 20 },
         { label: "Confianza al Responder", value: "Baja", score: 15 }
       ];
-      profile.case_study = {
-        name: "Caso Javiera",
-        text: "Mismo perfil. Logró +130 puntos al dejar de memorizar y empezar a entrenar estrategia con nosotros.",
-        metrics: "+130 pts"
-      };
       profile.wa_msg = "Hola, mi perfil es 'Me va bien en unas, mal en otras'. Quiero unirme a las clases y aprender a aplicar lo que sé.";
       profile.entry_product = "Acceso a Clases PAES";
     } 
     else if (paes_pain === 'strategy' && (discipline === 'low' || discipline === 'mid')) {
       profile.title = "Me bloqueo aunque sepa la materia";
       profile.subtitle = "Sabes la materia, pero los nervios y el reloj te juegan en contra.";
-      profile.description = "No te falta inteligencia, te falta un sistema para dominar la ansiedad. Cada minuto que pasa en el ensayo es una distracción que drena tu rendimiento. Te vamos a entrenar en vivo para que el tiempo sea tu aliado, no tu enemigo.";
+      profile.description = "No te falta inteligencia, te falta práctica con tiempo. Los nervios y el reloj te hacen perder puntos en preguntas que sí sabes. Con los ensayos y las clases en vivo aprendes a repartir el tiempo y a no bloquearte.";
       profile.attributes = [
-        { label: "Manejo de Estrés", value: "Crítico", score: 10 },
+        { label: "Manejo de Nervios", value: "Por trabajar", score: 10 },
         { label: "Velocidad de Respuesta", value: "Media", score: 45 },
         { label: "Lógica de Examen", value: "Media", score: 50 }
       ];
-      profile.case_study = {
-        name: "Caso Matías",
-        text: "Mismo perfil. Pasó de 620 a 745 puntos al aprender a dominar el reloj en nuestras sesiones en vivo.",
-        metrics: "+125 pts"
-      };
       profile.wa_msg = "Hola, mi perfil es 'Me bloqueo aunque sepa la materia'. Me pasa mucho que me pongo nervioso con el tiempo, quiero entrar a las clases.";
       profile.entry_product = "Acceso a Clases PAES";
     }
     else if (paes_pain === 'strategy' && discipline === 'high') {
       profile.title = "No sé cómo estudiar";
       profile.subtitle = "Eres disciplinado, pero estás dedicando tiempo a cosas que no suben tu puntaje.";
-      profile.description = "Eres una máquina de estudiar, pero te falta foco. Estás trabajando duro, pero no de forma inteligente. Necesitas identificar tus brechas reales para que tu esfuerzo rinda frutos. Te daremos el mapa táctico que necesitas sin cobrarte un peso.";
+      profile.description = "Eres constante y le pones horas, pero parte de ese tiempo se va en temas que no te suben el puntaje. Necesitas saber qué te falta de verdad para ordenar tu estudio. Eso lo vemos contigo en clases y con los ensayos mensuales.";
       profile.attributes = [
-        { label: "Disciplina de Estudio", value: "Excelente", score: 95 },
-        { label: "Foco Estratégico", value: "Bajo", score: 10 },
-        { label: "Retorno de Esfuerzo", value: "Bajo", score: 30 }
+        { label: "Disciplina de Estudio", value: "Alta", score: 95 },
+        { label: "Foco en lo Importante", value: "Bajo", score: 10 },
+        { label: "Resultado del Esfuerzo", value: "Bajo", score: 30 }
       ];
-      profile.case_study = {
-        name: "Caso Sofía",
-        text: "Mismo perfil. Logró 960 puntos en Matemáticas tras redirigir su disciplina hacia sus puntos débiles.",
-        metrics: "960 pts"
-      };
-      profile.wa_msg = "Hola, mi resultado fue 'No sé cómo estudiar'. Tengo las ganas pero necesito el mapa para no perder tiempo. ¡Me inscribo ahora!";
+      profile.wa_msg = "Hola, mi resultado fue 'No sé cómo estudiar'. Tengo las ganas, pero necesito orden para no perder tiempo. ¿Cómo me inscribo?";
       profile.entry_product = "Acceso a Clases PAES";
     }
     else {
       profile.title = "Lo intenté antes y no resultó";
       profile.subtitle = "Haces ensayos por cumplir, pero cometes siempre los mismos errores.";
-      profile.description = "Estás practicando equivocarte. Sin un sistema de feedback real, solo estás repitiendo fallos. En nuestras sesiones en vivo, detectamos por qué te equivocas y lo corregimos en el momento. Solo necesitas disposición - y si el costo es una barrera, puedes postular a una beca.";
+      profile.description = "Estás practicando equivocarte. Si haces ensayos y nadie los revisa contigo, repites los mismos errores. En las clases en vivo vemos por qué te equivocas y lo corregimos. Solo necesitas ganas, y si el costo es una barrera, puedes postular a una beca.";
       profile.attributes = [
-        { label: "Hábito de Feedback", value: "Ausente", score: 5 },
+        { label: "Revisión de Errores", value: "Por construir", score: 5 },
         { label: "Consistencia de Puntaje", value: "Baja", score: 20 },
-        { label: "Detección de Error", value: "Crítica", score: 10 }
+        { label: "Detección de Error", value: "Baja", score: 10 }
       ];
-      profile.case_study = {
-        name: "Caso Diego",
-        text: "Mismo perfil. Estabilizó su puntaje sobre los 800 pts en solo 2 meses de entrenamiento guiado.",
-        metrics: "800+ pts"
-      };
       profile.wa_msg = "Hola, me salió 'Lo intenté antes y no resultó'. Quiero inscribirme para dejar de repetir los mismos errores.";
       profile.entry_product = "Acceso a Clases PAES";
     }
 
     profile.stats = [
-      { label: "Potencial Real", value: paes_target === 'elite' ? '940+' : '820+' },
-      { label: "Estado de Urgencia", value: "Activo" },
+      { label: "Clases", value: "En vivo" },
+      { label: "Ensayos PAES", value: "Mensuales" },
       { label: "Costo Mensual", value: "Desde $10.000" }
     ];
 
@@ -140,59 +120,59 @@ export const getDiagnosticResult = (answers) => {
 
   if (category === 'adultos') {
     return {
-      title: "El Arquitecto de su Propio Destino",
-      subtitle: "Detectamos que tu problema no fue la capacidad, sino el contexto.",
-      description: "Dejar los estudios no fue un fracaso, fue una pausa obligatoria por la vida. Hoy, tu madurez es tu mayor activo. No necesitas un colegio, necesitas un sistema que respete tu tiempo y potencie tu experiencia real.",
+      title: "Listo para terminar lo pendiente",
+      subtitle: "Lo que te frenó no fue la capacidad, fue el contexto.",
+      description: "Dejar los estudios no fue un fracaso: la vida se puso en medio. Hoy tienes experiencia y claridad sobre lo que quieres. Lo que necesitas es un plan que se acomode a tu trabajo y tu familia, y alguien que te acompañe hasta tener tu licencia.",
       tone: "empathetic",
-      wa_msg: "Hola, me salió 'El Arquitecto de su Propio Destino'. Quiero terminar mi enseñanza media con la Escuela de Sueños Lael.",
-      cta: "Iniciar mi Plan de Sueños",
-      entry_product: "Sesión de Nivelación Inicial (Gratis)",
+      wa_msg: "Hola, me salió 'Listo para terminar lo pendiente'. Quiero terminar mi enseñanza media con la Escuela de Sueños Lael.",
+      cta: "Quiero terminar la media",
+      entry_product: "Nivelación de Estudios para Adultos",
       attributes: [
-        { label: "Madurez Operativa", value: "Máxima", score: 90 },
+        { label: "Experiencia de Vida", value: "Mucha", score: 90 },
         { label: "Foco en Metas", value: "Alto", score: 80 },
         { label: "Disponibilidad Horaria", value: "Flexible", score: 100 }
       ],
       stats: [
-        { label: "Potencial Laboral", value: "+45%" },
-        { label: "Tiempo Meta", value: "6-8 meses" },
-        { label: "Factibilidad", value: "99%" }
+        { label: "Modalidad", value: "Online" },
+        { label: "Clases", value: "En vivo" },
+        { label: "Tu ritmo", value: "Flexible" }
       ]
     };
   }
 
   if (category === 'idiomas') {
     return {
-      title: "El Comunicador Global Estratégico",
+      title: "Quieres hablar, no solo estudiar",
       subtitle: "Buscas fluidez, no teoría gramatical.",
-      description: "Tu cerebro ya domina un código (español). Ahora necesita instalar los drivers de un nuevo sistema de comunicación. No te enseñaremos a conjugar verbos en una pizarra, te entrenaremos para que cierres negocios y navegues el mundo sin fricción.",
+      description: "Ya aprendiste un idioma una vez: el tuyo. Ahora se trata de practicar mucho en voz alta. En nuestras clases en vivo hablas desde el principio, con situaciones reales de trabajo y de viaje, y el profe te corrige en el momento.",
       tone: "direct",
-      wa_msg: "Hola, mi resultado fue 'Comunicador Global'. Busco fluidez real para mi carrera profesional.",
-      cta: "Configurar mi Programa",
-      entry_product: "Diagnóstico de Nivel Comunicativo",
+      wa_msg: "Hola, mi resultado fue 'Quieres hablar, no solo estudiar'. Quiero información sobre los cursos de idiomas.",
+      cta: "Quiero información",
+      entry_product: "Cursos de Idiomas en Vivo",
       attributes: [
-        { label: "Lógica de Estructura", value: "Profesional", score: 75 },
+        { label: "Base para Aprender", value: "Buena", score: 75 },
         { label: "Miedo al Error", value: "A trabajar", score: 40 },
-        { label: "Potencial de Fluidez", value: "Alto", score: 85 }
+        { label: "Ganas de Hablar", value: "Altas", score: 85 }
       ],
       stats: [
-        { label: "Crecimiento Laboral", value: "3x" },
-        { label: "Enfoque", value: "Simulación" }
+        { label: "Clases", value: "En vivo" },
+        { label: "Enfoque", value: "Conversación" }
       ]
     };
   }
 
   // Fallback for other categories (Empresas)
   return {
-    title: "Socio de Rendimiento Organizacional",
-    subtitle: "Analizando la arquitectura de tu equipo...",
-    description: "Las empresas no necesitan cursos, necesitan resultados medibles. El sistema Lael para empresas optimiza el rendimiento humano a través de datos y acompañamiento táctico.",
+    title: "Capacitación para tu equipo",
+    subtitle: "Conversemos qué necesita tu equipo.",
+    description: "Hacemos cursos para empresas: idiomas, Lengua de Señas Chilena y preparación PAES para colegios, con clases en vivo. Cuéntanos qué necesitas y te enviamos una propuesta.",
     tone: "professional",
-    wa_msg: "Hola, busco una solución corporativa basada en el sistema de rendimiento Lael.",
-    cta: "Solicitar Propuesta Técnica",
-    entry_product: "Auditoría de Capacitación",
+    wa_msg: "Hola, busco capacitación para el equipo de mi empresa.",
+    cta: "Pedir una propuesta",
+    entry_product: "Propuesta para tu Empresa",
     stats: [
-      { label: "ROI Estimado", value: "High" },
-      { label: "Personalización", value: "100%" }
+      { label: "Formato", value: "A medida" },
+      { label: "Modalidad", value: "En vivo" }
     ]
   };
 };

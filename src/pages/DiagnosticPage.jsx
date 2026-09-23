@@ -6,8 +6,8 @@ export default function DiagnosticPage() {
   return (
     <main className="bg-lael-primary min-h-screen">
       <Helmet>
-        <title>Diagnóstico Táctico | Ingeniería del Rendimiento Lael</title>
-        <meta name="description" content="No eres tú, es el sistema. Descubre por qué no estás mejorando con nuestro test de arquitectura de rendimiento académico." />
+        <title>Diagnóstico | Instituto Lael</title>
+        <meta name="description" content="Responde unas preguntas rápidas y te decimos por dónde partir: preu PAES, nivelación de estudios, idiomas o cursos para empresas." />
       </Helmet>
       
       <section className="relative pt-20 overflow-hidden">

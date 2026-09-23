@@ -27,7 +27,7 @@ export default function Preguntas() {
     <div className="min-h-screen pt-32 pb-20 px-6" style={{ backgroundColor: LIGHT_GRAY }}>
       <Helmet>
         <title>Preguntas Frecuentes | Instituto Lael</title>
-        <meta name="description" content="Resolvemos tus dudas sobre el programa PAES, idiomas y metodología. Honestidad radical desde el primer contacto." />
+        <meta name="description" content="Respuestas claras sobre el preu PAES, idiomas, precios, horarios y cómo son las clases en Instituto Lael." />
       </Helmet>
 
       <div className="max-w-4xl mx-auto">
@@ -43,7 +43,7 @@ export default function Preguntas() {
             Preguntas <br /> <span className="italic font-normal text-[#D7E400] capitalize">y Respuestas.</span>
           </motion.h1>
           <p className="text-[#8D8D8D] text-sm sm:text-base leading-relaxed">
-            Sin rodeos. Todo lo que necesitas saber sobre nuestro ecosistema educativo.
+            Sin rodeos. Lo que más nos preguntan sobre precios, horarios y clases.
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export default function Preguntas() {
         {/* Support block */}
         <div className="mt-20 p-10 rounded-[32px] text-white text-center shadow-lael" style={{ backgroundColor: BLUE }}>
            <h3 className="font-display font-extrabold text-xl sm:text-2xl uppercase tracking-tight mb-4">¿Tu duda es más específica?</h3>
-           <p className="text-white/60 text-xs sm:text-sm max-w-md mx-auto mb-8 leading-relaxed">Escríbenos directamente por WhatsApp y resolveremos tus dudas hoy mismo.</p>
+           <p className="text-white/60 text-xs sm:text-sm max-w-md mx-auto mb-8 leading-relaxed">Escríbenos por WhatsApp y te respondemos lo antes posible.</p>
            <motion.a 
              whileHover={{ scale: 1.02 }}
              whileTap={{ scale: 0.98 }}

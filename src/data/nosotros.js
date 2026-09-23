@@ -4,7 +4,7 @@ export const HERO = {
   eyebrow: "FUNDADO EN SANTIAGO DE CHILE · 2021",
   title: "Nacimos para los",
   accent: "que el sistema ignoró.",
-  description: "En 2021 comenzamos con un computador y una convicción radical: la excelencia académica es un derecho fundamental, no un privilegio del mercado.",
+  description: "En 2021 empezamos con un computador y una idea simple: una buena educación no debería ser solo para quien puede pagarla.",
   founderQuote: {
     line1: "El instituto no es mío.",
     line2: "Es de Dios."
@@ -12,30 +12,37 @@ export const HERO = {
 };
 
 export const HISTORY = {
-  title: "La realidad",
-  accent: "detrás del código.",
+  title: "Cómo",
+  accent: "empezó todo.",
   paragraphs: [
     {
-      strong: "Lael nació como un acto de rebeldía educativa.",
-      rest: " Diego comenzó enseñando matemáticas desde cero en 2021, sin oficina ni capital, solo con la certeza de que el talento no tiene código postal."
+      strong: "Lael nació en 2021 con una pizarra y un computador.",
+      rest: " Diego empezó enseñando matemáticas gratis, sin oficina ni capital, convencido de que prepararse bien para la PAES no debería depender de cuánto puede pagar tu familia."
     },
     {
       strong: null,
-      rest: "En pocos meses, lo que empezó como un taller se convirtió en un ecosistema de 600 alumnos simultáneos conectados desde todo Chile. No escalamos por marketing, escalamos por resultados que el sistema tradicional no podía explicar."
+      rest: "En pocos meses, ese taller llegó a tener 600 alumnos conectados a la vez desde distintas partes de Chile."
     },
     {
       strong: null,
-      rest: "Luego crecimos. Sumamos programas de Inglés, Coreano y LSCh. Construimos un sistema de alto rendimiento que no filtraba por billetera, sino por compromiso innegociable."
+      rest: "Después sumamos Inglés, Coreano y Lengua de Señas Chilena. La regla siguió siendo la misma: si alguien quiere aprender y se compromete, buscamos la forma de que pueda."
     }
   ],
-  closingQuote: "En 2026 tomamos la decisión más honesta: parar, reestructurar y volver mejor. Este sitio es el resultado de esa pausa sagrada."
+  closingQuote: "Desde 2021 han pasado más de 1000 alumnos por Lael. En 2026 decidimos parar, ordenar la casa y empezar de nuevo. No es el fin del camino: el propósito sigue vigente."
 };
 
 export const PILLARS = [
-  { icon: Heart, title: "FE ACTIVA", desc: "La fe es nuestro fundamento, no nuestra etiqueta. Se nota en cómo tratamos a cada alumno, no en cuántos versículos publicamos." },
-  { icon: Star, title: "ACCESIBILIDAD RADICAL", desc: "La matrícula es gratis y hay becas para quien lo necesite. La barrera para aprender en Lael es cero. Sin excusas." },
-  { icon: Users, title: "INCLUSIÓN REAL", desc: "LSCh, educación diferencial, adultos: todos tienen un lugar como estructura, no como estrategia de marketing." },
-  { icon: Shield, title: "EXCELENCIA SIN EXCUSA", desc: "Ser accesible no justifica ser mediocre. Cada clase preparada. Cada profesor comprometido con tu resultado final." }
+  { icon: Heart, title: "FE ACTIVA", desc: "Una mirada centrada en Cristo, sin clichés. Se nota en los detalles: en cómo tratamos a cada alumno y en una palabra de aliento al final de la clase." },
+  { icon: Star, title: "ACCESIBLE", desc: "La matrícula es gratis y hay becas para quien lo necesite. Que el dinero no sea lo que te deja afuera." },
+  { icon: Users, title: "INCLUSIÓN REAL", desc: "Lengua de Señas, educación diferencial, adultos que vuelven a estudiar: aquí todos tienen un lugar." },
+  { icon: Shield, title: "BIEN HECHO", desc: "Ser accesible no es excusa para hacer las cosas a medias. Cada clase se prepara y cada profe se hace cargo de tu avance." }
+];
+
+export const TIMELINE = [
+  { year: "2021", title: "El inicio", desc: "Nace como preuniversitario PAES gratuito. Diego lo arma desde cero." },
+  { year: "2022", title: "600 alumnos", desc: "Llegamos a 600 alumnos a la vez y sumamos Inglés y Coreano." },
+  { year: "2023-25", title: "Inclusión", desc: "Incorporamos Lengua de Señas Chilena y cultura Sorda." },
+  { year: "2026", title: "Nuevo comienzo", desc: "Más de 1000 alumnos después, paramos, ordenamos y volvemos con más orden y el mismo propósito." }
 ];
 
 export const TEAM = [

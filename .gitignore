@@ -74,3 +74,9 @@ node_modules/
 
 # Build output
 /dist
+
+# Archivos locales del editor, del sistema y de herramientas (no van al repo)
+.DS_Store
+.idea/
+.wrangler/
+supabase/.temp/

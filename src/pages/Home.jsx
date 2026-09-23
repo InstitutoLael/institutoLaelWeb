@@ -5,9 +5,10 @@ import { Helmet } from 'react-helmet-async';
 import { ArrowRight, Check, Users, Heart, Target, Star, ChevronRight, Globe, HandHeart, Sparkles } from 'lucide-react';
 import SignificadoLael from '../components/SignificadoLael';
 import { OBLIGATORIAS, ELECTIVAS, WORLDS, TEACHERS, METRICS, TESTIMONIALS } from '../data/home';
+import { SHARE_STORY_URL } from '../data/testimonials';
 
 // Hero image
-import heroImg from '../assets/img/Home/hero_student_lael.png';
+import heroImg from '../assets/img/Home/hero_student_lael_1780734180709.webp';
 
 // ─── BRAND TOKENS ────────────────────────────────────────────────────────────
 const BLUE   = '#071D49';
@@ -124,7 +125,7 @@ export default function Home() {
         {/* Right Costado - Métricas Verticales en Desktop */}
         <div className="absolute right-8 xl:right-16 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-8 z-10 border-l border-white/10 pl-6 py-4">
           {[
-            { label: 'Alumnos', value: '+600' },
+            { label: 'Alumnos', value: '+1000' },
             { label: 'Becas', value: 'DISPONIBLES' },
             { label: 'Online', value: '100%' },
             { label: 'Matrícula', value: 'GRATIS' },
@@ -315,7 +316,7 @@ export default function Home() {
                       </div>
                       <div>
                         <h4 className="text-white font-bold text-base font-display">{sub.name}</h4>
-                        <p className="text-white/40 text-xs">Docente: {sub.doc}</p>
+                        {sub.doc && <p className="text-white/40 text-xs">Docente: {sub.doc}</p>}
                       </div>
                     </div>
                     <div>
@@ -353,7 +354,7 @@ export default function Home() {
                       </div>
                       <div>
                         <h4 className="text-white font-bold text-base font-display">{sub.name}</h4>
-                        <p className="text-white/40 text-xs">Docente: {sub.doc}</p>
+                        {sub.doc && <p className="text-white/40 text-xs">Docente: {sub.doc}</p>}
                       </div>
                     </div>
                     <div>
@@ -481,11 +482,11 @@ export default function Home() {
               className="leading-tight"
               style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: BLUE, letterSpacing: '-0.03em' }}
             >
-              PERSONAS REALES. RESULTADOS REALES.
+              PROFES QUE TE CONOCEN.
             </motion.h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {TEACHERS.map((t, i) => {
               const isDiego = t.id === 'diego';
               const isMonserrat = t.id === 'monserrat';
@@ -642,7 +643,7 @@ export default function Home() {
             {/* Placeholder - próximamente */}
             <motion.div
               {...fadeUp(0.1)}
-              className="rounded-[32px] p-8 flex flex-col items-center justify-center text-center"
+              className="md:col-span-2 rounded-[32px] p-8 flex flex-col items-center justify-center text-center"
               style={{
                 border: `2px dashed rgba(7,29,73,0.12)`,
                 backgroundColor: 'transparent',
@@ -658,20 +659,29 @@ export default function Home() {
                 className="font-bold text-base mb-2 font-display"
                 style={{ color: BLUE }}
               >
-                Próximamente más historias
+                ¿Estudiaste con nosotros?
               </p>
-              <p className="text-sm leading-relaxed max-w-xs" style={{ color: `${BLUE}60` }}>
-                Estamos recopilando las historias de nuestros estudiantes. ¿Estudiaste con nosotros? Cuéntanos.
+              <p className="text-sm leading-relaxed max-w-md" style={{ color: `${BLUE}60` }}>
+                Estamos juntando más historias de alumnos, con nombre y autorización. Si quieres contar la tuya, escríbenos.
               </p>
-              <a
-                href="https://wa.me/56964626568?text=Hola,%20quiero%20compartir%20mi%20testimonio%20con%20Instituto%20Lael"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-6 text-[11px] font-bold uppercase tracking-wider hover:underline transition-all font-display"
-                style={{ color: BLUE }}
-              >
-                Comparte tu historia →
-              </a>
+              <div className="mt-6 flex flex-col sm:flex-row gap-4 sm:gap-8 items-center">
+                <a
+                  href={SHARE_STORY_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[11px] font-bold uppercase tracking-wider hover:underline transition-all font-display"
+                  style={{ color: BLUE }}
+                >
+                  Comparte tu historia →
+                </a>
+                <Link
+                  to="/casos-reales"
+                  className="text-[11px] font-bold uppercase tracking-wider hover:underline transition-all font-display"
+                  style={{ color: BLUE }}
+                >
+                  Ver todas las historias →
+                </Link>
+              </div>
             </motion.div>
           </div>
         </div>

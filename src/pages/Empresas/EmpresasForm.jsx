@@ -58,8 +58,8 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
       <div className="relative z-10">
         <div className="text-center mb-12">
           <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-4">Cotización corporativa</p>
-          <h2 className="font-display text-3xl lg:text-5xl text-lael-light font-bold mb-4">Inicia tu programa corporativo.</h2>
-          <p className="text-lael-muted text-sm max-w-lg mx-auto">Te enviaremos una propuesta detallada en menos de 24 horas hábiles. Sin compromiso.</p>
+          <h2 className="font-display text-3xl lg:text-5xl text-lael-light font-bold mb-4">Pide una propuesta para tu equipo.</h2>
+          <p className="text-lael-muted text-sm max-w-lg mx-auto">Cuéntanos qué necesitas y te respondemos por correo con una propuesta. Sin compromiso.</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -72,7 +72,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
             >
               <div className="w-20 h-20 rounded-full bg-lael-accent/10 border border-lael-accent/30 flex items-center justify-center mb-8 text-lael-accent text-3xl">✓</div>
               <h3 className="font-display text-2xl text-lael-light font-bold mb-4">Solicitud enviada</h3>
-              <p className="text-lael-muted mb-8 max-w-md mx-auto">Tu cliente de correo se abrió con los datos precompletados. Pronto un asesor B2B se pondrá en contacto contigo.</p>
+              <p className="text-lael-muted mb-8 max-w-md mx-auto">Se abrió tu correo con los datos listos. Envíalo y te responderemos con una propuesta.</p>
               <button onClick={() => setSent(false)} className="text-[11px] tracking-[0.15em] text-lael-accent/60 uppercase hover:text-lael-accent transition-colors">Enviar otra solicitud</button>
             </motion.div>
           ) : (
@@ -122,7 +122,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
 
               <div className="md:col-span-2 mt-4">
                 <label className="text-[10px] tracking-[0.2em] text-lael-muted/70 uppercase mb-2 block">Detalles o requerimientos adicionales</label>
-                <textarea name="mensaje" rows={3} value={form.mensaje} onChange={handleChange} placeholder="Cuéntanos un poco más sobre lo que buscan..."
+                <textarea name="mensaje" rows={3} value={form.mensaje} onChange={handleChange} placeholder="Cuántas personas, qué necesitan aprender, horarios..."
                   className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/40 text-sm resize-none" />
               </div>
 

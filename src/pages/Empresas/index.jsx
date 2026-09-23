@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import EmpresasForm from './EmpresasForm';
-import empresasRealidad from '../../assets/img/Home/mundo_empresas_bg_1777944168670.png';
+import empresasRealidad from '../../assets/img/Home/mundo_empresas_bg_1777944168670.webp';
 import { LANDING_SERVICES } from '../../data/empresas';
 
 const ease = [0.16, 1, 0.3, 1];
@@ -30,7 +30,7 @@ export default function Empresas() {
     <>
       <Helmet>
         <title>Capacitación para Empresas | Instituto Lael Corporativo</title>
-        <meta name="description" content="Sistemas de rendimiento adaptados a tu organización. PAES Institucional, Idiomas Corporativos y LSCh para cumplimiento de la Ley 21.015." />
+        <meta name="description" content="Capacitación online para empresas y colegios: preparación PAES, idiomas para equipos y Lengua de Señas Chilena (LSCh) con contexto de la Ley 21.015." />
       </Helmet>
       <main className="bg-lael-primary min-h-screen">
 
@@ -38,7 +38,7 @@ export default function Empresas() {
       <section className="relative w-full min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
         <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.35em] uppercase mb-8">
-          Instituto Lael · Soluciones Corporativas
+          Instituto Lael · Empresas y colegios
         </motion.p>
         <motion.h1 {...fadeUp(0.15)} className="font-display text-5xl lg:text-7xl tracking-[-0.02em] text-lael-light font-bold leading-tight max-w-4xl clip-reveal" style={{ animationDelay: '0.15s' }}>
           Capacitación para<br />
@@ -66,7 +66,7 @@ export default function Empresas() {
         <div className="w-full max-w-5xl">
           <motion.p {...fadeUp(0)} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-6 text-center">Programas disponibles</motion.p>
           <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl lg:text-5xl text-lael-light font-bold text-center mb-16">
-            Elige el sistema que necesita tu equipo.
+            Elige el programa para tu equipo.
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {SERVICES.map((s, i) => (
@@ -89,38 +89,38 @@ export default function Empresas() {
          <div className="absolute top-0 right-0 w-96 h-96 bg-lael-accent/5 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2"></div>
          <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeUp()}>
-               <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8">Enfoque en ROI</p>
-               <h2 className="font-display text-4xl text-lael-light mb-8">Capacitación que impacta en el balance.</h2>
+               <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-8">Qué buscamos</p>
+               <h2 className="font-display text-4xl text-lael-light mb-8">Capacitación que tu equipo sí usa.</h2>
                <p className="text-lael-muted leading-relaxed mb-8">
-                  El éxito no se mide en horas dictadas, sino en que tu equipo realmente lo use: mejor comunicación, cumplimiento real de la ley, y gente que se queda porque aprendió de verdad.
+                  Lo importante no son las horas dictadas, sino que tu equipo use lo que aprende: que se comunique mejor, que conozca la Ley 21.015 y que avance con un plan claro.
                </p>
                <ul className="space-y-4">
                   <li className="flex items-center gap-3 text-lael-light text-sm font-medium">
                      <span className="w-1.5 h-1.5 rounded-full bg-lael-accent"></span>
-                     Reducción de brechas comunicacionales.
+                     Clases en vivo, con docente.
                   </li>
                   <li className="flex items-center gap-3 text-lael-light text-sm font-medium">
                      <span className="w-1.5 h-1.5 rounded-full bg-lael-accent"></span>
-                     Cumplimiento de Ley 21.015 (Inclusión).
+                     Contenidos de la Ley 21.015 (Inclusión).
                   </li>
                   <li className="flex items-center gap-3 text-lael-light text-sm font-medium">
                      <span className="w-1.5 h-1.5 rounded-full bg-lael-accent"></span>
-                     Métricas de progreso por departamento.
+                     Reportes de avance de tu equipo.
                   </li>
                </ul>
             </motion.div>
             <motion.div {...fadeUp(0.2)} className="grid grid-cols-2 gap-4">
                <div className="p-8 bg-lael-primary rounded-2xl border border-lael-bd text-center">
-                  <p className="text-3xl font-display text-lael-accent font-bold mb-2">+30%</p>
-                  <p className="text-[9px] text-lael-muted uppercase tracking-widest">Efectividad en equipos</p>
+                  <p className="text-3xl font-display text-lael-accent font-bold mb-2">3</p>
+                  <p className="text-[9px] text-lael-muted uppercase tracking-widest">Programas para equipos</p>
                </div>
                <div className="p-8 bg-lael-primary rounded-2xl border border-lael-bd text-center">
-                  <p className="text-3xl font-display text-lael-accent font-bold mb-2">100%</p>
-                  <p className="text-[9px] text-lael-muted uppercase tracking-widest">Apego normativo</p>
+                  <p className="text-3xl font-display text-lael-accent font-bold mb-2">Online</p>
+                  <p className="text-[9px] text-lael-muted uppercase tracking-widest">Clases en vivo</p>
                </div>
                <div className="p-8 bg-lael-primary rounded-2xl border border-lael-bd text-center col-span-2">
-                  <p className="text-lael-light font-bold mb-2 italic">"Sistemas, no talleres"</p>
-                  <p className="text-[9px] text-lael-muted uppercase tracking-widest">Filosofía Corporativa Lael</p>
+                  <p className="text-lael-light font-bold mb-2 italic">"Cursos completos, no charlas sueltas"</p>
+                  <p className="text-[9px] text-lael-muted uppercase tracking-widest">Cómo trabajamos</p>
                </div>
             </motion.div>
          </div>
@@ -132,18 +132,18 @@ export default function Empresas() {
           <div className="relative aspect-[21/9] rounded-[48px] overflow-hidden border border-lael-bd cinematic-shadow">
              <img 
                src={empresasRealidad} 
-               alt="Impacto Corporativo Lael" 
+               alt="Capacitación de Instituto Lael para empresas" 
                className="w-full h-full object-cover"
              />
              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent" />
              <div className="absolute inset-y-0 left-0 flex items-center px-12 lg:px-20 max-w-2xl">
                 <motion.div {...fadeUp()}>
-                   <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Rendimiento Organizacional</p>
+                   <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-6 font-bold">Para tu equipo</p>
                    <h3 className="font-display text-4xl lg:text-6xl text-white font-bold leading-tight mb-8">
-                     Innovación que <br /> se ejecuta.
+                     Clases reales <br /> para tu equipo.
                    </h3>
                    <p className="text-white/70 text-lg leading-relaxed">
-                     Llevamos el mismo acompañamiento real de nuestras clases a tu empresa. No "optimizamos capital humano" — le enseñamos a personas.
+                     Llevamos a tu empresa el mismo acompañamiento que damos en nuestras clases. No hablamos de "capital humano": le enseñamos a personas.
                    </p>
                 </motion.div>
              </div>
@@ -156,7 +156,7 @@ export default function Empresas() {
         <div className="separator-gradient top-0" />
         <div className="w-full max-w-5xl">
           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-10 text-center">Trayectoria</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-20 leading-tight">Empresas que confían en nuestro sistema.</motion.h2>
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-4xl text-lael-light font-bold text-center mb-20 leading-tight">Empresas que ya trabajaron con nosotros.</motion.h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
              <motion.div {...fadeUp(0.2)} className="p-10 bg-lael-secondary rounded-3xl border border-lael-bd">

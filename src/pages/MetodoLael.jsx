@@ -18,19 +18,19 @@ export default function MetodoLael() {
   return (
     <>
       <Helmet>
-        <title>El Método Lael | Arquitectura de Rendimiento</title>
-        <meta name="description" content="Conoce la ingeniería detrás del Sistema Lael. Un método comprobado para dominar cualquier área académica." />
+        <title>Cómo enseñamos | Instituto Lael</title>
+        <meta name="description" content="Así trabajamos en Lael: clases en vivo por Google Meet, un ensayo PAES cada mes y un profe que sigue tu avance." />
       </Helmet>
 
       <section className="relative pt-32 pb-24 bg-lael-primary overflow-hidden">
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">La Ciencia del Éxito</motion.p>
+          <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">Cómo trabajamos</motion.p>
           <motion.h1 {...fadeUp(0.1)} className="text-5xl md:text-8xl font-display font-bold leading-tight mb-8 text-lael-light">
-            Arquitectura del <br />
-            <span className="text-lael-accent italic italic-playfair">Rendimiento</span>
+            Nuestra forma <br />
+            <span className="text-lael-accent italic italic-playfair">de enseñar</span>
           </motion.h1>
           <motion.p {...fadeUp(0.2)} className="text-xl text-lael-muted leading-relaxed max-w-2xl mx-auto">
-            El 95% de los preuniversitarios fallan porque son fábricas de contenido. Nosotros somos una ingeniería de resultados.
+            No te llenamos de videos. Clases en vivo, grabaciones para repasar, un ensayo cada mes y un profe que sabe cómo vas.
           </motion.p>
         </div>
       </section>
@@ -40,16 +40,16 @@ export default function MetodoLael() {
         <div className="max-w-6xl mx-auto px-6">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
               <motion.div {...fadeUp()}>
-                 <h2 className="font-display text-4xl text-lael-rust mb-8">El Error Tradicional.</h2>
+                 <h2 className="font-display text-4xl text-lael-rust mb-8">Lo que no funciona.</h2>
                  <p className="text-lael-muted leading-relaxed mb-10">
-                    La mayoría de las personas creen que para mejorar necesitan "más materia". Se inscriben en cursos con miles de videos y clases grabadas. Esto solo genera <strong>infoxicación</strong>.
+                    Mucha gente cree que para mejorar necesita "más materia". Se inscribe en cursos con cientos de videos y termina <strong>saturada</strong>, sin saber por dónde seguir.
                  </p>
                  <ul className="space-y-6">
                     {[
-                      "Clases magistrales pasivas (donde solo escuchas).",
-                      "Ensayos sin retroalimentación inmediata.",
-                      "Estudio basado en memorización lineal.",
-                      "Falta de medición de fatiga cognitiva."
+                      "Clases donde solo escuchas y nunca practicas.",
+                      "Ensayos que nadie revisa contigo.",
+                      "Memorizar sin entender para qué sirve.",
+                      "Estudiar horas seguidas, sin pausas ni orden."
                     ].map((t, i) => (
                       <li key={i} className="flex gap-4 text-sm text-lael-muted/60">
                          <div className="w-5 h-5 rounded-full bg-lael-rust/20 flex items-center justify-center text-lael-rust flex-shrink-0">✕</div>
@@ -59,7 +59,7 @@ export default function MetodoLael() {
                  </ul>
               </motion.div>
               <motion.div {...fadeUp(0.2)} className="p-12 bg-lael-primary rounded-[40px] border border-lael-bd cinematic-shadow">
-                 <p className="text-lael-rust text-[10px] tracking-[0.3em] uppercase mb-6 font-bold">Resultado de esto:</p>
+                 <p className="text-lael-rust text-[10px] tracking-[0.3em] uppercase mb-6 font-bold">Lo que pasa:</p>
                  <p className="text-2xl text-lael-light italic">"Estudias 8 horas y el puntaje sigue estancado. Te sientes cansado, pero no más inteligente."</p>
               </motion.div>
            </div>
@@ -70,14 +70,14 @@ export default function MetodoLael() {
       <section className="py-32">
         <div className="max-w-6xl mx-auto px-6">
            <div className="text-center mb-24">
-              <h2 className="font-display text-5xl text-lael-primary mb-6">La Solución Táctica.</h2>
-              <p className="text-lael-muted max-w-xl mx-auto">No estudiamos más. Estudiamos mejor bajo los parámetros de la neurociencia aplicada.</p>
+              <h2 className="font-display text-5xl text-lael-primary mb-6">Lo que sí hacemos.</h2>
+              <p className="text-lael-muted max-w-xl mx-auto">No se trata de estudiar más horas, sino de estudiar mejor y con alguien que te guíe.</p>
            </div>
            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {[
-                { t: "Estudio Espaciado", d: "Optimizamos la retención a largo plazo mediante algoritmos de repetición." },
-                { t: "Entrenamiento Activo", d: "El cerebro solo aprende cuando resuelve. El 80% de Lael es acción." },
-                { t: "Gestión de Variables", d: "Medimos ansiedad, tiempo y precisión para crear un perfil invencible." }
+                { t: "Repaso Espaciado", d: "Volvemos a los temas cada cierto tiempo para que no se te olviden." },
+                { t: "Práctica Activa", d: "En clase resuelves ejercicios, no solo escuchas. Se aprende haciendo." },
+                { t: "Seguimiento", d: "Con el ensayo de cada mes vemos en qué preguntas fallas y dónde se te va el tiempo." }
               ].map((item, i) => (
                 <motion.div key={i} {...fadeUp(i * 0.1)} className="space-y-4">
                    <div className="text-lael-accent font-display text-4xl">0{i+1}</div>
@@ -94,13 +94,13 @@ export default function MetodoLael() {
         <div className="max-w-6xl mx-auto px-6">
            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
               <motion.div {...fadeUp()}>
-                 <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">La Ejecución</p>
-                 <h2 className="font-display text-4xl lg:text-6xl text-lael-primary mb-10">Tu Ruta Táctica.</h2>
+                 <p className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">Paso a paso</p>
+                 <h2 className="font-display text-4xl lg:text-6xl text-lael-primary mb-10">Cómo partes.</h2>
                  <div className="space-y-10">
                     {[
-                      { t: "Fase 1: El Espejo", d: "Diagnóstico profundo para encontrar tus brechas ciegas." },
-                      { t: "Fase 2: Arquitectura", d: "Diseño de tu plan de entrenamiento semanal personalizado." },
-                      { t: "Fase 3: El Fuego", d: "Simulaciones de presión real con mentor asignado." }
+                      { t: "Paso 1: Ver dónde estás", d: "Un primer diagnóstico para saber qué te cuesta más." },
+                      { t: "Paso 2: Armar tu plan", d: "Ordenamos qué ramos y temas priorizar según tu tiempo." },
+                      { t: "Paso 3: Practicar", d: "Clases en vivo por Google Meet en la tarde y un ensayo PAES cada mes." }
                     ].map((f, i) => (
                       <div key={i} className="flex gap-6">
                          <div className="w-12 h-12 bg-lael-accent text-lael-light flex items-center justify-center rounded-2xl font-bold flex-shrink-0">{i+1}</div>
@@ -127,24 +127,24 @@ export default function MetodoLael() {
       {/* 4. EVIDENCIA */}
       <section className="py-32 bg-lael-primary">
          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="font-display text-4xl text-lael-light mb-12">No es una opinión. <br/> Es evidencia.</h2>
+            <h2 className="font-display text-4xl text-lael-light mb-12">Lo concreto. <br/> Sin letra chica.</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
                <div className="p-8 bg-lael-secondary rounded-2xl border border-lael-bd">
-                  <p className="text-emerald-400 font-bold text-3xl mb-2">+240 pts</p>
-                  <p className="text-lael-muted text-sm">Mejora promedio en estudiantes que completan 6 meses de Arquitectura Lael.</p>
+                  <p className="text-emerald-400 font-bold text-3xl mb-2">En vivo</p>
+                  <p className="text-lael-muted text-sm">Clases por Google Meet en la tarde, con un profe al que le puedes preguntar.</p>
                </div>
                <div className="p-8 bg-lael-secondary rounded-2xl border border-lael-bd">
-                  <p className="text-emerald-400 font-bold text-3xl mb-2">98.2%</p>
-                  <p className="text-lael-muted text-sm">Tasa de precisión en nuestro motor de diagnóstico táctico.</p>
+                  <p className="text-emerald-400 font-bold text-3xl mb-2">Mensual</p>
+                  <p className="text-lael-muted text-sm">Un ensayo PAES cada mes para medir cómo vas y qué te falta.</p>
                </div>
             </div>
          </div>
       </section>
 
       <CTASection 
-        title="Diseña tu éxito."
+        title="Parte por saber dónde estás."
         subtitle="Empieza con el diagnóstico gratuito y deja de estudiar a ciegas."
-        btnText="Iniciar Diagnóstico"
+        btnText="Hacer el diagnóstico"
       />
     </>
   );

@@ -1,21 +1,20 @@
-import { Users, Target, Heart, BookOpen } from 'lucide-react';
-import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.png';
-import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.png';
-import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.png';
+import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.webp';
+import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.webp';
+import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.webp';
 
 const YELLOW = '#D7E400';
 
 export const OBLIGATORIAS = [
   { code: 'M1', name: 'Matemática M1', doc: 'Diego Chaparro' },
-  { code: 'CL', name: 'Competencia Lectora', doc: 'Por confirmar' }
+  { code: 'CL', name: 'Competencia Lectora', doc: null }
 ];
 
 export const ELECTIVAS = [
   { code: 'M2', name: 'Matemática M2', doc: 'Diego / Kathy' },
   { code: 'BIO', name: 'Biología', doc: 'Martín' },
   { code: 'QUI', name: 'Química', doc: 'Martín' },
-  { code: 'FIS', name: 'Física', doc: 'Por confirmar' },
-  { code: 'HIS', name: 'Historia', doc: 'Por confirmar' }
+  { code: 'FIS', name: 'Física', doc: null },
+  { code: 'HIS', name: 'Historia', doc: null }
 ];
 
 export const WORLDS = [
@@ -30,58 +29,15 @@ export const TEACHERS = [
   { id: 'martin', name: 'Martín', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'MA', color: YELLOW },
   { id: 'kathy', name: 'Kathy', role: 'Profe de HomeSchool', subject: 'Matemática M2 & HomeSchool', initials: 'KA', color: YELLOW },
   { id: 'monserrat', name: 'Monserrat González', role: 'Profe de Inglés', subject: 'Inglés', initials: 'MG', color: YELLOW },
-  { id: 'cl', name: 'Próximamente', role: 'Profe de Lenguaje', subject: 'Comprensión Lectora', initials: '?', color: '#8D8D8D', placeholder: true },
-];
-
-export const WHY_LAEL = [
-  { icon: Users, title: 'Acompañamiento real', desc: 'No estudias solo. Profesores que te conocen por tu nombre y se preocupan por tu avance.' },
-  { icon: Target, title: 'Ensayos y práctica', desc: 'Preparación constante con simulacros reales para que llegues tranquilo el día de la PAES.' },
-  { icon: Heart, title: 'Comunidad', desc: 'Aprende junto a otros estudiantes con el mismo objetivo. Nunca estás solo en el proceso.' },
-  { icon: BookOpen, title: 'Formación integral', desc: 'Más que puntajes. Desarrollamos tu potencial como persona, no solo como estudiante.' },
 ];
 
 export const METRICS = [
-  { value: 600, prefix: '+', suffix: '', label: 'Alumnos activos', color: YELLOW },
+  { value: 1000, prefix: '+', suffix: '', label: 'Alumnos desde 2021', color: YELLOW },
   { value: 0, prefix: '$', suffix: '', label: 'Costo matrícula', color: '#FFFFFF' },
   { value: 3, prefix: '', suffix: '', label: 'Idiomas activos', color: YELLOW },
   { value: 100, prefix: '', suffix: '%', label: '100% Online', color: '#FFFFFF' },
 ];
 
-export const TESTIMONIALS = [
-  {
-    id: 't1',
-    name: 'Daniela R.',
-    program: 'Lengua de Señas Chilena',
-    quote: 'El curso es excelente. Aprendí cultura sorda con una pedagogía muy paciente y estructurada.',
-    rating: 5,
-    initials: 'DR',
-    real: true,
-  },
-  {
-    id: 't2',
-    name: 'Rocío R.',
-    program: 'PAES · 2025',
-    quote: 'Cambió mi forma de organizarme frente a distintos horarios de clases, ayudándome a adaptarme a cambios que me beneficiarán a futuro, además de traerme aprendizajes que no vi en el colegio.',
-    rating: 5,
-    initials: 'RR',
-    real: true,
-  },
-  {
-    id: 't3',
-    name: 'Victoria',
-    program: 'Ex alumna Lael',
-    quote: 'Me inscribí con una gran expectativa y la verdad fue muy motivador seguir esforzándome en aprender después de eso — la profesora era muy simpática y muy dinámica en sus clases.',
-    rating: 5,
-    initials: 'V',
-    real: true,
-  },
-  {
-    id: 't4',
-    name: 'Matías M.',
-    program: 'PAES · Ex alumno',
-    quote: 'Me dio seguridad y confianza. Tener buenos profes hizo que fuera una instancia de aprendizaje cálido y agradable, lo que me ayudó mucho a bajar la ansiedad antes de la PAES.',
-    rating: 5,
-    initials: 'MM',
-    real: true,
-  },
-];
+// Los testimonios viven en data/testimonials.js (los comparte /casos-reales).
+import { TESTIMONIALS as ALL_TESTIMONIALS } from './testimonials';
+export const TESTIMONIALS = ALL_TESTIMONIALS.filter((t) => t.featured);

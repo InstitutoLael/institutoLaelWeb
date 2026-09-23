@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, Users, Heart, Target, Star, ChevronRight } from 'lucide-react';
 import SignificadoLael from '../components/SignificadoLael';
-import WordReveal from '../components/ui/WordReveal';
+import HeroCarousel from '../components/HeroCarousel';
 import { OBLIGATORIAS, ELECTIVAS, WORLDS, TEACHERS, METRICS, TESTIMONIALS } from '../data/home';
 import { SHARE_STORY_URL } from '../data/testimonials';
 
@@ -16,6 +16,46 @@ const BLUE   = '#071D49';
 const YELLOW = '#D7E400';
 const ease   = [0.16, 1, 0.3, 1];
 const FORM_URL = '/inscripcion?programa=paes';
+
+// Portada rotativa: cada lámina es un programa. El orden importa: la primera
+// es la que se ve al entrar.
+const HERO_SLIDES = [
+  {
+    id: 'paes',
+    badge: 'PAES 2027',
+    title: [
+      { text: 'Tu sueño', breakAfter: 'sm' },
+      { text: 'no tiene fecha', breakAfter: 'sm' },
+      { text: 'de vencimiento.', style: { color: '#D7E400' } },
+    ],
+    text: 'Da lo mismo si vas en cuarto medio, si la PAES te fue mal la primera vez o si dejaste el colegio hace años. Te ayudamos a llegar. Matrícula gratis y becas para quien las necesite.',
+    cta: { label: 'Inscribirme gratis', href: FORM_URL },
+    more: { label: 'Conocer el preu', href: '/paes' },
+  },
+  {
+    id: 'adultos',
+    badge: 'Escuela de Sueños',
+    title: [
+      { text: 'El colegio', breakAfter: 'sm' },
+      { text: 'no es la meta.', breakAfter: true },
+      { text: 'Es el inicio de tu nueva vida.', style: { color: '#D7E400' } },
+    ],
+    text: 'Si eres mayor de 18, te preparamos gratis para los exámenes libres del Mineduc. Clases online en la noche, a tu ritmo.',
+    cta: { label: 'Quiero terminar el colegio', href: '/inscripcion?programa=adultos' },
+    more: { label: 'Cómo funciona', href: '/adultos' },
+  },
+  {
+    id: 'ingles',
+    badge: 'Inglés · Hablar sin miedo',
+    title: [
+      { text: 'Habla inglés', breakAfter: true },
+      { text: 'sin miedo.', style: { color: '#D7E400' } },
+    ],
+    text: 'Casi todos entendemos más de lo que nos atrevemos a decir. Clases en vivo donde hablas desde el primer día.',
+    cta: { label: 'Inscribirme', href: '/inscripcion?programa=ingles' },
+    more: { label: 'Ver el programa', href: '/idiomas' },
+  },
+];
 
 // ─── ANIMATED COUNTER ────────────────────────────────────────────────────────
 function AnimatedNumber({ value, prefix = '', suffix = '', duration = 1.8 }) {
@@ -87,47 +127,10 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center">
-          <motion.div {...fadeUp(0)} className="mb-6">
-            <span
-              className="inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.2em] px-4 py-2 rounded-full"
-              style={{ backgroundColor: YELLOW, color: BLUE }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-current" />
-              PAES 2027
-            </span>
-          </motion.div>
-
-          <WordReveal
-            className="text-white font-display font-black uppercase leading-[0.95] tracking-tight mb-6 sm:mb-8 text-[2rem] min-[380px]:text-4xl sm:text-6xl lg:text-7xl xl:text-[5.25rem]"
-            segments={[
-              { text: 'Tu sueño', breakAfter: 'sm' },
-              { text: 'no tiene fecha', breakAfter: 'sm' },
-              { text: 'de vencimiento.', style: { color: YELLOW } },
-            ]}
+          <HeroCarousel
+            titleClassName="text-white font-display font-black uppercase leading-[0.95] tracking-tight mb-6 sm:mb-8 text-[2rem] min-[380px]:text-4xl sm:text-6xl lg:text-7xl xl:text-[5.25rem]"
+            slides={HERO_SLIDES}
           />
-
-          <motion.p
-            {...fadeUp(0.15)}
-            className="text-white/75 text-base sm:text-lg md:text-xl leading-relaxed mb-8 sm:mb-10 max-w-xl"
-          >
-            Da lo mismo si vas en cuarto medio, si la PAES te fue mal la primera vez o si dejaste el colegio hace años. <span className="text-white font-extrabold">Te ayudamos a llegar.</span> Matrícula gratis y becas para quien las necesite.
-          </motion.p>
-
-          <motion.div {...fadeUp(0.25)} className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch w-full sm:w-auto">
-            <a
-              href={FORM_URL}
-              className={`${BTN} w-full sm:w-auto bg-[#D7E400] text-[#071D49] hover:opacity-90 shadow-xl`}
-            >
-              Inscribirme gratis
-              <ArrowRight size={16} />
-            </a>
-            <Link
-              to="/paes"
-              className={`${BTN} w-full sm:w-auto text-white border-2 border-white/30 hover:bg-white/10`}
-            >
-              Conocer el programa
-            </Link>
-          </motion.div>
 
           {/* Stats row (was a vertical column that collided with the headline) */}
           <motion.div

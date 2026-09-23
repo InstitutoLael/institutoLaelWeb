@@ -56,3 +56,19 @@ export const ADULT_FAQS = [
   { q: '¿Cómo se aprueba?', a: 'Hay una prueba por cada asignatura del nivel. Apruebas con nota 4,0 o más en todas. En media, si repruebas una igual puedes pasar con promedio 4,5 o más (5,0 si la reprobada es Lenguaje o Matemática).' },
   { q: '¿Y si no apruebo?', a: 'Te puedes volver a inscribir en el siguiente período. Con nosotros sigues en el ciclo siguiente sin costo.' },
 ];
+
+// Paquete "Nivelación + PAES": terminas el colegio gratis con la Escuela de
+// Sueños y sigues al preu PAES con descuento.
+// Propuesto, confirmar con Diego: 30% de descuento en el primer semestre del preu PAES.
+export const ADULT_PAES_PACK = {
+  eyebrow: 'Nivelación + PAES',
+  title: 'Termina el colegio',
+  accent: 'y sigue a la educación superior.',
+  desc: 'Si tu meta es estudiar una carrera, puedes hacer todo el camino con nosotros.',
+  discount: '30%',
+  steps: [
+    { title: 'Terminas el colegio gratis', desc: 'Con la Escuela de Sueños te preparas para los exámenes libres y sacas tu Licencia de Enseñanza Media.' },
+    { title: 'Sigues en el preu PAES', desc: 'Con tu licencia, entras al preu PAES de Lael con 30% de descuento en el primer semestre.' },
+  ],
+  whatsapp: 'Hola, quiero información sobre Nivelación + PAES en Lael',
+};

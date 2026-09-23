@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import WordReveal from '../../components/ui/WordReveal';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { ArrowRight, MessageCircle, ChevronDown, CalendarDays, Heart } from 'lucide-react';
 import adultosImg from '../../assets/img/Home/mundo_adultos_bg_1777944001677.webp';
-import { ADULT_HERO, ADULT_FREE_NOTE, ADULT_LEVELS, ADULT_CYCLES, ADULT_STEPS, ADULT_FAQS } from '../../data/nivelacion';
+import { ADULT_HERO, ADULT_FREE_NOTE, ADULT_LEVELS, ADULT_CYCLES, ADULT_STEPS, ADULT_FAQS, ADULT_PAES_PACK } from '../../data/nivelacion';
 
 const BLUE = '#071D49';
 const YELLOW = '#D7E400';
@@ -145,6 +146,44 @@ export default function NivelacionAdultos() {
             <p className="text-[#071D49]/80 text-sm leading-relaxed">{ADULT_FREE_NOTE}</p>
           </motion.div>
         </div>
+      </section>
+
+      {/* ── NIVELACIÓN + PAES ────────────────────────────────────────── */}
+      <section id="nivelacion-paes" className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28 scroll-mt-24">
+        <motion.div {...fadeUp(0)} className="max-w-5xl mx-auto rounded-[28px] p-6 sm:p-10 lg:p-14 text-white shadow-lael grid grid-cols-1 lg:grid-cols-2 gap-10 items-center" style={{ backgroundColor: BLUE }}>
+          <div className="text-center lg:text-left">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] mb-4" style={{ color: YELLOW }}>{ADULT_PAES_PACK.eyebrow}</p>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight leading-[1.05] mb-5">
+              {ADULT_PAES_PACK.title} <span style={{ color: YELLOW }}>{ADULT_PAES_PACK.accent}</span>
+            </h2>
+            <p className="text-white/75 leading-relaxed">{ADULT_PAES_PACK.desc}</p>
+            <div className="mt-8 inline-flex items-center gap-3 rounded-2xl px-5 py-3 text-left" style={{ backgroundColor: YELLOW, color: BLUE }}>
+              <span className="font-display text-4xl font-black leading-none">{ADULT_PAES_PACK.discount}</span>
+              <span className="text-xs sm:text-sm font-bold uppercase tracking-wider leading-tight">de descuento en el<br />primer semestre</span>
+            </div>
+          </div>
+          <div>
+            <ol className="space-y-4 mb-8">
+              {ADULT_PAES_PACK.steps.map((s, i) => (
+                <li key={s.title} className="rounded-[24px] p-5 sm:p-6 bg-white/5 border border-white/10 flex gap-4">
+                  <span className="font-display text-2xl font-black flex-shrink-0" style={{ color: YELLOW }}>{String(i + 1).padStart(2, '0')}</span>
+                  <span>
+                    <span className="block font-display font-extrabold uppercase tracking-tight mb-1">{s.title}</span>
+                    <span className="block text-white/75 text-sm leading-relaxed">{s.desc}</span>
+                  </span>
+                </li>
+              ))}
+            </ol>
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-3">
+              <a href={`https://wa.me/56964626568?text=${encodeURIComponent(ADULT_PAES_PACK.whatsapp)}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[48px] px-6 py-4 rounded-2xl transition-all active:scale-95">
+                <MessageCircle size={16} /> Quiero este camino
+              </a>
+              <Link to="/paes" className="inline-flex items-center justify-center gap-2 border border-white/25 hover:border-white text-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[48px] px-6 py-4 rounded-2xl transition-all active:scale-95">
+                Ver preu PAES <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────────────────── */}

@@ -4,4 +4,4 @@ Allow: /
 Disallow: /resultado-diagnostico
 Disallow: /gracias
 
-Sitemap: https://institutolael.cl/sitemap.xml
+Sitemap: https://www.institutolael.cl/sitemap.xml

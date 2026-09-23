@@ -16,7 +16,7 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
-const SITE = 'https://institutolael.cl';
+const SITE = 'https://www.institutolael.cl';
 
 // Ruta → archivo con su <Helmet>
 const PAGES = {

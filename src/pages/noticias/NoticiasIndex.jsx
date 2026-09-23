@@ -7,7 +7,7 @@ import { CATEGORIES, getAllNoticias, formatFecha } from '../../data/noticias';
 import NoticiaCard from '../../components/noticias/NoticiaCard';
 import CategoryIcon from '../../components/noticias/CategoryIcon';
 
-const SITE = 'https://institutolael.cl';
+const SITE = 'https://www.institutolael.cl';
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },

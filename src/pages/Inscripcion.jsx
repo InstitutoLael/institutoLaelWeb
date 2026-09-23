@@ -18,7 +18,7 @@ export default function Inscripcion() {
     <main className="min-h-screen" style={{ backgroundColor: GRAY }}>
       <Helmet>
         <title>Inscripción - Instituto Lael | Formulario de Matrícula</title>
-        <meta name="description" content="Inscríbete en Instituto Lael: PAES, Inglés o Lengua de Señas Chilena. Completa el formulario; la matrícula es gratis." />
+        <meta name="description" content="Inscríbete en Instituto Lael: preu PAES, inglés, español o nivelación para adultos. Llenas el formulario y listo, la matrícula es gratis." />
       </Helmet>
 
       {/* ── HEADER SECTION ──────────────────────────────────────────── */}
@@ -53,7 +53,7 @@ export default function Inscripcion() {
               <span style={{ color: YELLOW }}>Instituto Lael</span>
             </h1>
             <p className="text-white/60 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
-              Completa el formulario a continuación para inscribirte en nuestros programas.
+              Llena el formulario de abajo para inscribirte. La matrícula es gratis.
               Si tienes dudas, escríbenos directamente por WhatsApp.
             </p>
           </motion.div>

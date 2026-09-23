@@ -66,7 +66,7 @@ export default function LandingIdiomas() {
         <div className="relative z-20 max-w-5xl mx-auto text-center flex flex-col items-center">
           <motion.div {...fadeUp(0)} className="mb-6">
             <span className="text-[#D7E400] text-xs font-bold tracking-[0.3em] uppercase bg-white/5 border border-white/10 px-4 py-2 rounded-full">
-              IDIOMAS EN LAEL
+              INGLÉS EN LAEL · HABLAR SIN MIEDO
             </span>
           </motion.div>
 
@@ -76,12 +76,12 @@ export default function LandingIdiomas() {
             transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-[-0.03em] leading-[1.05] uppercase mb-8 max-w-4xl"
           >
-            Aprende a hablar <br />
-            otro <span className="text-[#D7E400] italic font-normal">idioma.</span>
+            Habla inglés <br />
+            sin <span className="text-[#D7E400] italic font-normal">miedo.</span>
           </motion.h1>
 
           <motion.p {...fadeUp(0.25)} className="text-white/70 text-base sm:text-lg md:text-xl max-w-2xl mb-16 leading-relaxed">
-            Clases online en vivo. Hablas y practicas desde la primera clase.
+            Casi todos entendemos más de lo que nos atrevemos a decir. Con Monse hablas desde la primera clase, te equivocas tranquilo y vas ganando confianza.
           </motion.p>
 
           {/* Visual Selector Cards */}
@@ -131,7 +131,7 @@ export default function LandingIdiomas() {
             </motion.div>
 
             <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg mb-8 leading-relaxed max-w-xl">
-              Habla con seguridad en el trabajo, en una entrevista o viajando, no solo en el papel. En cada clase practicas conversaciones que de verdad vas a tener.
+              Para que te puedas defender en una entrevista, en una reunión de pega o viajando. En cada clase practicas conversaciones parecidas a las que vas a tener afuera.
             </motion.p>
 
             {/* Path visualization */}
@@ -228,7 +228,7 @@ export default function LandingIdiomas() {
                 </div>
                 <p className="text-xs text-[#8D8D8D] leading-relaxed">
                   <span className="font-bold text-[#071D49] mr-2">institutolael</span>
-                  Entrena tu oído, arma tus ideas y habla con confianza. Clases online y en vivo.
+                  Si entiendes inglés pero te bloqueas al hablar, esto es para ti. Clases online y en vivo.
                 </p>
                 <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-[10px] text-black/45 uppercase tracking-wider">
                   <span>hace 2 días</span>
@@ -262,7 +262,7 @@ export default function LandingIdiomas() {
             </motion.h2>
 
             <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg mb-8 leading-relaxed max-w-xl">
-              Para extranjeros que viven en Chile o que trabajan con equipos que hablan español. Practicas reuniones de trabajo, conversaciones sociales, modismos chilenos y cómo funciona el trabajo en Chile.
+              Es para ti si vives en Chile o trabajas con un equipo chileno. En clase practicamos reuniones de pega, conversaciones del día a día, modismos y cómo se trabaja acá.
             </motion.p>
 
             {/* Path visualization */}
@@ -359,7 +359,7 @@ export default function LandingIdiomas() {
                 </div>
                 <p className="text-xs text-[#8D8D8D] leading-relaxed">
                   <span className="font-bold text-[#071D49] mr-2">institutolael</span>
-                  Entiende los modismos de Chile y desenvuélvete mejor en el trabajo. Clases en vivo, con mucha conversación.
+                  ¿Te perdiste con un "cachai" o un "al tiro"? Te lo explicamos. Clases en vivo, con harta conversación.
                 </p>
                 <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-[10px] text-black/45 uppercase tracking-wider">
                   <span>hace 1 día</span>
@@ -420,7 +420,7 @@ export default function LandingIdiomas() {
         <div className="relative z-10 max-w-6xl mx-auto w-full text-center">
           <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Mismo precio para ambos</motion.p>
           <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-white font-extrabold tracking-[-0.03em] uppercase mb-16">
-            PROGRAMAS & MATRÍCULA
+            PRECIOS
           </motion.h2>
 
           {/* Pricing Comparison Cards (2 activos) */}

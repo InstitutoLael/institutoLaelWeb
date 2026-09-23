@@ -21,14 +21,14 @@ export default function CasosReales() {
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden font-sans">
       <Helmet>
         <title>Casos Reales | Instituto Lael</title>
-        <meta name="description" content="Lo que dicen alumnos y empresas que estudiaron con Instituto Lael. Solo testimonios reales, con nombre y autorización." />
+        <meta name="description" content="Lo que dicen alumnos y empresas que estudiaron con Instituto Lael. Cada testimonio tiene nombre y autorización de quien lo dio." />
       </Helmet>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="px-6 pt-32 pb-20">
         <div className="max-w-4xl mx-auto text-center">
           <motion.p {...fadeUp(0)} className="text-[10px] font-bold uppercase tracking-[0.4em] mb-6">
-            Historias reales
+            Testimonios
           </motion.p>
           <motion.h1
             {...fadeUp(0.1)}

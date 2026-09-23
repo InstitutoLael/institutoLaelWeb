@@ -31,12 +31,12 @@ const STEPS = [
   {
     icon: Video,
     title: 'Vas a clases en vivo',
-    desc: 'Dos clases de una hora a la semana por ramo, por Google Meet y en la tarde. Cada semana recibes las grabaciones para repasar.',
+    desc: 'Dos clases de una hora a la semana por ramo, por Google Meet, desde las 18:00. Cada semana recibes las grabaciones para repasar.',
   },
   {
     icon: Timer,
     title: 'Practicas y revisamos',
-    desc: 'Cada mes haces un ensayo con el tiempo real de la prueba. Vemos tus resultados y ajustamos en qué poner el foco.',
+    desc: 'Cada mes haces un ensayo con el mismo tiempo que da la PAES. Vemos tus resultados y ajustamos en qué poner el foco.',
   },
 ];
 
@@ -67,7 +67,7 @@ export default function SistemaLael() {
             Así funciona <br /> <span className="bg-[#071D49] text-[#D7E400] px-3">Lael.</span>
           </motion.h1>
           <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg max-w-2xl mx-auto leading-relaxed">
-            Desde que nos escribes hasta tu primer ensayo. Sin letra chica.
+            Desde que nos escribes hasta tu primer ensayo, contado simple.
           </motion.p>
         </div>
       </section>

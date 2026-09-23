@@ -26,11 +26,11 @@ export default function CertificateSection({ defaultLevel = "B2", defaultLanguag
           </motion.div>
 
           <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase mb-6 leading-[1.05]">
-            Valida tus Logros Académicos
+            Un certificado por cada nivel
           </motion.h2>
 
           <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-base sm:text-lg mb-8 leading-relaxed max-w-xl">
-            Al finalizar y aprobar cada nivel de tu programa, recibirás un certificado institucional verificable que acredita tus competencias comunicativas, alineado a los estándares internacionales del Marco Común Europeo (MCER).
+            Cada vez que apruebas un nivel te entregamos un certificado de Instituto Lael que dice qué nivel alcanzaste, según el Marco Común Europeo (MCER). Te sirve para el CV o para mostrarlo en la pega.
           </motion.p>
 
           {/* Level Selector Buttons */}
@@ -53,9 +53,9 @@ export default function CertificateSection({ defaultLevel = "B2", defaultLanguag
           {/* Benefits List */}
           <div className="space-y-4 mb-8 max-w-xl">
             {[
-              { title: "Alineación con MCER", desc: "Cumple rigurosamente con las competencias del Marco Común Europeo.", icon: <ShieldCheck size={18} className="text-[#071D49]" /> },
-              { title: "Verificable en Línea", desc: "Cada certificado cuenta con un código único de autenticidad para reclutadores.", icon: <Check size={18} className="text-[#071D49]" /> },
-              { title: "Listo para LinkedIn & CV", desc: "Añade tu credencial digital con un solo clic a tu perfil profesional.", icon: <Share2 size={18} className="text-[#071D49]" /> },
+              { title: "Niveles del MCER", desc: "Usamos los niveles del Marco Común Europeo, que se reconocen en muchos países.", icon: <ShieldCheck size={18} className="text-[#071D49]" /> },
+              { title: "Con código de verificación", desc: "Cada certificado trae un código para que quien lo reciba pueda comprobar que es auténtico.", icon: <Check size={18} className="text-[#071D49]" /> },
+              { title: "Para LinkedIn y tu CV", desc: "Lo puedes agregar a tu perfil de LinkedIn o adjuntarlo cuando postules a un trabajo.", icon: <Share2 size={18} className="text-[#071D49]" /> },
             ].map((benefit, i) => (
               <motion.div key={benefit.title} {...fadeUp(0.3 + i * 0.05)} className="flex items-start gap-4">
                 <div className="w-8 h-8 rounded-lg bg-[#F4F4F4] flex items-center justify-center flex-shrink-0 mt-0.5">

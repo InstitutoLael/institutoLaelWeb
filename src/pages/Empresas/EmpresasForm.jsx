@@ -40,7 +40,7 @@ Programa de interés: ${form.programa}
 Mensaje / Requerimientos:
 ${form.mensaje || '(Sin mensaje adicional)'}`
     );
-    window.location.href = `mailto:contacto@institutolael.cl?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:coordinacion@institutolael.cl?subject=${subject}&body=${body}`;
 
     setSent(true);
     setForm(INITIAL);
@@ -58,9 +58,9 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
       
       <div className="relative z-10">
         <div className="text-center mb-12">
-          <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-4">Cotización corporativa</p>
+          <p className="text-lael-accent text-[10px] tracking-[0.25em] uppercase mb-4">Cotiza sin compromiso</p>
           <h2 className="font-display text-3xl lg:text-5xl text-lael-light font-bold mb-4">Pide una propuesta para tu equipo.</h2>
-          <p className="text-lael-muted text-sm max-w-lg mx-auto">Cuéntanos qué necesitas y te respondemos por correo con una propuesta. Sin compromiso.</p>
+          <p className="text-lael-muted text-sm max-w-lg mx-auto">Cuéntanos qué necesita tu equipo y te respondemos por correo con una propuesta.</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -86,13 +86,13 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
               </div>
               
               <div>
-                <label className="text-[10px] tracking-[0.2em] text-lael-muted/70 uppercase mb-2 block">Nombre de la Empresa *</label>
+                <label className="text-[10px] tracking-[0.2em] text-lael-muted/70 uppercase mb-2 block">Empresa *</label>
                 <input type="text" name="empresa" required value={form.empresa} onChange={handleChange} placeholder="Ej. ACME Corp"
                   className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/40 text-sm" />
               </div>
               
               <div>
-                <label className="text-[10px] tracking-[0.2em] text-lael-muted/70 uppercase mb-2 block">Email Corporativo *</label>
+                <label className="text-[10px] tracking-[0.2em] text-lael-muted/70 uppercase mb-2 block">Correo de trabajo *</label>
                 <input type="email" name="email" required value={form.email} onChange={handleChange} placeholder="nombre@empresa.com"
                   className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/40 text-sm" />
               </div>
@@ -122,7 +122,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
               </div>
 
               <div className="md:col-span-2 mt-4">
-                <label className="text-[10px] tracking-[0.2em] text-lael-muted/70 uppercase mb-2 block">Detalles o requerimientos adicionales</label>
+                <label className="text-[10px] tracking-[0.2em] text-lael-muted/70 uppercase mb-2 block">Algo más que debamos saber</label>
                 <textarea name="mensaje" rows={3} value={form.mensaje} onChange={handleChange} placeholder="Cuántas personas, qué necesitan aprender, horarios..."
                   className="w-full bg-transparent border-b border-lael-bd px-0 py-3 text-lael-light focus:outline-none focus:border-lael-accent transition-colors duration-300 placeholder:text-lael-muted/40 text-sm resize-none" />
               </div>
@@ -132,7 +132,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
                   {error && <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-lael-rust text-[11px] tracking-wider mb-4 text-center">{error}</motion.p>}
                 </AnimatePresence>
                 <button type="submit" className="w-full bg-lael-accent text-white py-6 rounded-xl text-xs tracking-[0.2em] uppercase font-bold hover:bg-lael-rust hover:-translate-y-1 transition-all duration-300 shadow-[0_4px_20px_rgba(196,151,62,0.3)]">
-                  Solicitar Cotización →
+                  Pedir propuesta →
                 </button>
               </div>
             </motion.form>

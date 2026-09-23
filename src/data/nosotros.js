@@ -33,17 +33,17 @@ export const HISTORY = {
 };
 
 export const PILLARS = [
-  { icon: Heart, title: "FE ACTIVA", desc: "Una mirada centrada en Cristo, sin clichés. Se nota en los detalles: en cómo tratamos a cada alumno y en una palabra de aliento al final de la clase." },
+  { icon: Heart, title: "FE ACTIVA", desc: "Creemos en Cristo y eso se nota en lo cotidiano: en cómo tratamos a cada alumno y en una palabra de aliento al final de la clase." },
   { icon: Star, title: "ACCESIBLE", desc: "La matrícula es gratis y hay becas para quien lo necesite. Que el dinero no sea lo que te deja afuera." },
-  { icon: Users, title: "INCLUSIÓN REAL", desc: "Lengua de Señas, educación diferencial, adultos que vuelven a estudiar: aquí todos tienen un lugar." },
-  { icon: Shield, title: "BIEN HECHO", desc: "Ser accesible no es excusa para hacer las cosas a medias. Cada clase se prepara y cada profe se hace cargo de tu avance." }
+  { icon: Users, title: "INCLUSIÓN", desc: "Adultos que vuelven a estudiar, alumnos de educación diferencial, gente que quiere aprender señas. Aquí hay espacio para todos." },
+  { icon: Shield, title: "BIEN HECHO", desc: "Que sea barato no significa que lo hagamos a la rápida. Las clases se preparan con tiempo y cada profe está pendiente de cómo vas." }
 ];
 
 export const TIMELINE = [
   { year: "2021", title: "El inicio", desc: "Nace como preuniversitario PAES gratuito. Diego lo arma desde cero." },
   { year: "2022", title: "600 alumnos", desc: "Llegamos a 600 alumnos a la vez y sumamos Inglés y Coreano." },
   { year: "2023-25", title: "Inclusión", desc: "Incorporamos Lengua de Señas Chilena y cultura Sorda." },
-  { year: "2027", title: "Nueva temporada", desc: "Más de 1000 alumnos después, arrancamos en marzo con más ramos, más orden y el mismo propósito." }
+  { year: "2027", title: "Nueva temporada", desc: "Más de 1000 alumnos después, volvemos en marzo con más ramos y mejor organizados." }
 ];
 
 export const TEAM = [
@@ -51,7 +51,7 @@ export const TEAM = [
     name: "Diego Chaparro",
     role: "Fundador & Director",
     subject: "Matemáticas (Colegio & Preu)",
-    bio: "Fundador de Instituto Lael. Enseña matemáticas con la misma exigencia con la que dirige el instituto: sin atajos, pero sin dejar a nadie atrás.",
+    bio: "Fundó Lael en 2021 y hace las clases de matemática. Es exigente, pero si alguien se queda atrás, para y lo vuelve a explicar.",
     img: diegoPhoto,
     confirmed: true
   },
@@ -59,7 +59,7 @@ export const TEAM = [
     name: "Monserrat González",
     role: "Profesora de Inglés",
     subject: "Inglés Avanzado & Preparación",
-    bio: "Enseña inglés desde la práctica real, no desde la gramática memorizada. Conversación desde la primera clase, no desde el mes tres.",
+    bio: "En sus clases se habla inglés desde el primer día. La gramática la vas aprendiendo mientras conversas.",
     img: "https://ui-avatars.com/api/?name=Monserrat+Gonzalez&background=071D49&color=D7E400&size=200&bold=true",
     confirmed: true
   },
@@ -67,7 +67,7 @@ export const TEAM = [
     name: "Martín",
     role: "Profe de Ciencias",
     subject: "Biología + Química",
-    bio: "Convierte biología y química en algo que se entiende, no que se memoriza. Cercano y directo, sin vueltas.",
+    bio: "Hace biología y química. Explica directo y con calma, para que entiendas la materia en vez de aprenderla de memoria.",
     img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=071D49&color=D7E400&size=200&bold=true",
     confirmed: true
   },
@@ -75,7 +75,7 @@ export const TEAM = [
     name: "Kathy",
     role: "Profe de HomeSchool",
     subject: "Matemática M2 & HomeSchool",
-    bio: "Matemática superior y HomeSchool. Le importa que entiendas el porqué, no solo el cómo.",
+    bio: "Hace M2 y trabaja con alumnos de HomeSchool. Antes de pasar a la fórmula, se asegura de que entiendas de dónde sale.",
     img: "https://ui-avatars.com/api/?name=Kathy+M2&background=071D49&color=D7E400&size=200&bold=true",
     confirmed: true
   },
@@ -83,7 +83,7 @@ export const TEAM = [
     name: "Próximamente CL",
     role: "Profe de Lenguaje",
     subject: "Competencia Lectora",
-    bio: "Estamos seleccionando al docente especialista con la mayor trayectoria en comprensión de lectura crítica y descarte rápido.",
+    bio: "Estamos buscando profe de Competencia Lectora. Apenas esté confirmado, lo presentamos acá.",
     img: "https://ui-avatars.com/api/?name=Proximamente+CL&background=F4F4F4&color=8D8D8D&size=200&bold=true",
     confirmed: false
   },
@@ -91,7 +91,7 @@ export const TEAM = [
     name: "Próximamente Electivos",
     role: "Profe de Ciencias / Historia",
     subject: "Física + Historia",
-    bio: "Sumaremos nuevos docentes especialistas dedicados a preparar las electivas de física e historia con alto rendimiento.",
+    bio: "Estamos buscando profes para Física e Historia. Apenas estén confirmados, los presentamos acá.",
     img: "https://ui-avatars.com/api/?name=Proximamente+Electivos&background=F4F4F4&color=8D8D8D&size=200&bold=true",
     confirmed: false
   }

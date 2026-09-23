@@ -3,10 +3,10 @@
 export const DIAGNOSTIC_QUESTIONS = [
   {
     id: 'category',
-    question: "¿En qué etapa de tu vida te encuentras hoy?",
+    question: "¿En qué estás hoy?",
     options: [
       { label: "Estoy en el colegio (o saliendo)", value: "paes", icon: "🏫" },
-      { label: "Necesito terminar mi enseñanza media", value: "adultos", icon: "🎓" },
+      { label: "Necesito terminar el colegio (básica o media)", value: "adultos", icon: "🎓" },
       { label: "Quiero aprender otro idioma", value: "idiomas", icon: "💼" },
       { label: "Represento a una empresa", value: "empresas", icon: "🏢" }
     ]
@@ -63,7 +63,7 @@ export const getDiagnosticResult = (answers) => {
     if (paes_pain === 'content') {
       profile.title = "Me va bien en unas, mal en otras";
       profile.subtitle = "Sientes que necesitas saberlo todo antes de empezar, y eso te está frenando.";
-      profile.description = "Tu problema no es que estudies poco. Es que estás tratando la PAES como una prueba de memoria, y te falta práctica para aplicar lo que sabes con el reloj corriendo. En las clases en vivo trabajamos cómo pensar las preguntas, no solo la materia.";
+      profile.description = "Estudias, pero estás tratando la PAES como una prueba de memoria. Te falta practicar cómo aplicar lo que sabes con el reloj corriendo, y eso es justo lo que hacemos en las clases en vivo.";
       profile.attributes = [
         { label: "Base Teórica", value: "Sólida", score: 80 },
         { label: "Técnica de Descarte", value: "Baja", score: 20 },
@@ -75,7 +75,7 @@ export const getDiagnosticResult = (answers) => {
     else if (paes_pain === 'strategy' && (discipline === 'low' || discipline === 'mid')) {
       profile.title = "Me bloqueo aunque sepa la materia";
       profile.subtitle = "Sabes la materia, pero los nervios y el reloj te juegan en contra.";
-      profile.description = "No te falta inteligencia, te falta práctica con tiempo. Los nervios y el reloj te hacen perder puntos en preguntas que sí sabes. Con los ensayos y las clases en vivo aprendes a repartir el tiempo y a no bloquearte.";
+      profile.description = "Te pasa algo muy común: los nervios y el reloj te hacen perder puntos en preguntas que sí sabes. Con el ensayo de cada mes y las clases en vivo aprendes a repartir el tiempo y a mantener la calma.";
       profile.attributes = [
         { label: "Manejo de Nervios", value: "Por trabajar", score: 10 },
         { label: "Velocidad de Respuesta", value: "Media", score: 45 },
@@ -87,7 +87,7 @@ export const getDiagnosticResult = (answers) => {
     else if (paes_pain === 'strategy' && discipline === 'high') {
       profile.title = "No sé cómo estudiar";
       profile.subtitle = "Eres disciplinado, pero estás dedicando tiempo a cosas que no suben tu puntaje.";
-      profile.description = "Eres constante y le pones horas, pero parte de ese tiempo se va en temas que no te suben el puntaje. Necesitas saber qué te falta de verdad para ordenar tu estudio. Eso lo vemos contigo en clases y con los ensayos mensuales.";
+      profile.description = "Eres constante y le pones horas, pero parte de ese tiempo se va en temas que no te suben el puntaje. Necesitas saber bien qué te falta para ordenar tu estudio. Eso lo vemos contigo en clases y con los ensayos mensuales.";
       profile.attributes = [
         { label: "Disciplina de Estudio", value: "Alta", score: 95 },
         { label: "Foco en lo Importante", value: "Bajo", score: 10 },
@@ -99,7 +99,7 @@ export const getDiagnosticResult = (answers) => {
     else {
       profile.title = "Lo intenté antes y no resultó";
       profile.subtitle = "Haces ensayos por cumplir, pero cometes siempre los mismos errores.";
-      profile.description = "Estás practicando equivocarte. Si haces ensayos y nadie los revisa contigo, repites los mismos errores. En las clases en vivo vemos por qué te equivocas y lo corregimos. Solo necesitas ganas, y si el costo es una barrera, puedes postular a una beca.";
+      profile.description = "Si haces ensayos y nadie los revisa contigo, es fácil repetir los mismos errores una y otra vez. En las clases en vivo vemos por qué te equivocas y lo corregimos. Y si no te alcanza para pagar, puedes postular a una beca.";
       profile.attributes = [
         { label: "Revisión de Errores", value: "Por construir", score: 5 },
         { label: "Consistencia de Puntaje", value: "Baja", score: 20 },
@@ -121,8 +121,8 @@ export const getDiagnosticResult = (answers) => {
   if (category === 'adultos') {
     return {
       title: "Listo para terminar lo pendiente",
-      subtitle: "Lo que te frenó no fue la capacidad, fue el contexto.",
-      description: "Dejar los estudios no fue un fracaso: la vida se puso en medio. Hoy tienes experiencia y claridad sobre lo que quieres. Lo que necesitas es un plan que se acomode a tu trabajo y tu familia, y alguien que te acompañe hasta tener tu licencia.",
+      subtitle: "Si dejaste el colegio, fue por algo. Ahora te toca terminarlo.",
+      description: "A mucha gente la vida se le cruzó: el trabajo, los hijos, la casa. La preparación en Lael es gratis y las clases son de noche, desde las 20:00, para que la puedas combinar con tu trabajo y tu familia. Te acompañamos hasta que rindas los exámenes libres.",
       tone: "empathetic",
       wa_msg: "Hola, me salió 'Listo para terminar lo pendiente'. Quiero terminar mi enseñanza media con la Escuela de Sueños Lael.",
       cta: "Quiero terminar la media",
@@ -135,18 +135,18 @@ export const getDiagnosticResult = (answers) => {
       stats: [
         { label: "Modalidad", value: "Online" },
         { label: "Clases", value: "En vivo" },
-        { label: "Tu ritmo", value: "Flexible" }
+        { label: "Horario", value: "Desde las 20:00" }
       ]
     };
   }
 
   if (category === 'idiomas') {
     return {
-      title: "Quieres hablar, no solo estudiar",
-      subtitle: "Buscas fluidez, no teoría gramatical.",
-      description: "Ya aprendiste un idioma una vez: el tuyo. Ahora se trata de practicar mucho en voz alta. En nuestras clases en vivo hablas desde el principio, con situaciones reales de trabajo y de viaje, y el profe te corrige en el momento.",
+      title: "Quieres soltarte a hablar",
+      subtitle: "Lo que buscas es poder conversar tranquilo.",
+      description: "Ya aprendiste un idioma una vez: el tuyo. Ahora se trata de practicar mucho en voz alta. En nuestras clases en vivo hablas desde el principio, con situaciones de trabajo y de viaje, y el profe te corrige en el momento.",
       tone: "direct",
-      wa_msg: "Hola, mi resultado fue 'Quieres hablar, no solo estudiar'. Quiero información sobre los cursos de idiomas.",
+      wa_msg: "Hola, mi resultado fue 'Quieres soltarte a hablar'. Quiero información sobre los cursos de idiomas.",
       cta: "Quiero información",
       entry_product: "Cursos de Idiomas en Vivo",
       attributes: [
@@ -165,7 +165,7 @@ export const getDiagnosticResult = (answers) => {
   return {
     title: "Capacitación para tu equipo",
     subtitle: "Conversemos qué necesita tu equipo.",
-    description: "Hacemos cursos para empresas: idiomas, Lengua de Señas Chilena y preparación PAES para colegios, con clases en vivo. Cuéntanos qué necesitas y te enviamos una propuesta.",
+    description: "Hacemos talleres de IA, inglés para equipos, nivelación de estudios para trabajadores y preu PAES para sus hijos, online o presencial en Santiago. Cuéntanos qué necesitas y te enviamos una propuesta.",
     tone: "professional",
     wa_msg: "Hola, busco capacitación para el equipo de mi empresa.",
     cta: "Pedir una propuesta",

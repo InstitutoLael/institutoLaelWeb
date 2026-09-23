@@ -59,7 +59,7 @@ export default function LandingPAES() {
           <div className="lg:col-span-7 flex flex-col text-left">
             <motion.div {...fadeUp(0)} className="mb-4 flex flex-wrap items-center gap-3">
               <span className="bg-[#D7E400] text-[#071D49] text-xs font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-md animate-pulse">
-                Desde $10.000/mes - Partimos en marzo 2027
+                Desde $10.000/mes · Partimos en marzo 2027
               </span>
             </motion.div>
 
@@ -72,11 +72,11 @@ export default function LandingPAES() {
               CREAMOS EL PREU <br />
               QUE NOS HABRÍA <br />
               GUSTADO TENER. <br />
-              <span className="text-[#D7E400] font-bold">Y LO MEJOR: NADIE SE QUEDA AFUERA.</span>
+              <span className="text-[#D7E400] font-bold">NADIE SE QUEDA AFUERA.</span>
             </motion.h1>
 
             <motion.p {...fadeUp(0.2)} className="text-white/70 text-lg sm:text-xl max-w-lg mb-10 leading-relaxed">
-              Clases en vivo por Google Meet, grabaciones para repasar y un ensayo cronometrado cada mes. Sin matrícula. Desde $10.000/mes por ramo, con becas para quien lo necesite.
+              Cursos de máximo 20, clases en vivo que después puedes volver a ver y un profe al que le puedes preguntar todo. Pagas solo los ramos que tomas, desde $10.000 al mes. Y si no te alcanza, postulas a una beca.
             </motion.p>
 
             {/* Key Data grid */}
@@ -215,7 +215,7 @@ export default function LandingPAES() {
                       </div>
                       <div>
                         <p className="text-white text-xs font-semibold">{subj.teacher}</p>
-                        <p className="text-white/45 text-[8px] uppercase tracking-wider">Docente Asignado</p>
+                        <p className="text-white/45 text-[8px] uppercase tracking-wider">Profe</p>
                       </div>
                     </div>
                     )}
@@ -228,7 +228,7 @@ export default function LandingPAES() {
             <div className="space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <h3 className="text-white font-black text-lg tracking-wider font-display uppercase">PRUEBAS ELECTIVAS</h3>
-                <span className="text-[10px] bg-white/10 text-white/60 font-bold px-3 py-1 rounded-full uppercase">Selección</span>
+                <span className="text-[10px] bg-white/10 text-white/60 font-bold px-3 py-1 rounded-full uppercase">Eliges tú</span>
               </div>
               <div className="space-y-4">
                 {subjects.filter(s => s.type !== "Obligatoria").map((subj, i) => (
@@ -254,7 +254,7 @@ export default function LandingPAES() {
                       </div>
                       <div>
                         <p className="text-white text-xs font-semibold">{subj.teacher}</p>
-                        <p className="text-white/45 text-[8px] uppercase tracking-wider">Docente Asignado</p>
+                        <p className="text-white/45 text-[8px] uppercase tracking-wider">Profe</p>
                       </div>
                     </div>
                     )}
@@ -270,8 +270,8 @@ export default function LandingPAES() {
                     <UsersRound size={18} />
                   </div>
                   <div className="text-left">
-                    <h4 className="text-white/80 font-display font-bold text-sm uppercase">Comunidad & Soporte</h4>
-                    <p className="text-white/45 text-xs mt-1 leading-relaxed">Orientación vocacional, acompañamiento cercano y dudas resueltas por WhatsApp.</p>
+                    <h4 className="text-white/80 font-display font-bold text-sm uppercase">Dudas y orientación</h4>
+                    <p className="text-white/45 text-xs mt-1 leading-relaxed">Si te queda una duda fuera de clase o no sabes qué carrera elegir, nos escribes por WhatsApp.</p>
                   </div>
                 </motion.div>
               </div>
@@ -365,9 +365,9 @@ export default function LandingPAES() {
       <section className="py-28 px-6 bg-white flex flex-col items-center">
         <div className="max-w-7xl mx-auto w-full">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Gente Real, No un Call Center</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Quiénes te hacen clases</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
-              NUESTROS DOCENTES
+              TUS PROFES
             </motion.h2>
           </div>
 
@@ -464,7 +464,7 @@ export default function LandingPAES() {
             Mira nuestras clases grabadas en YouTube
           </motion.h3>
           <motion.p {...fadeUp(0.2)} className="text-white/70 text-sm sm:text-base leading-relaxed max-w-2xl mb-8">
-            ¿Quieres ver cómo son nuestras clases de matemáticas y ciencias antes de inscribirte? Subimos resoluciones de ensayos, explicaciones rápidas de contenido y consejos estratégicos en nuestro canal oficial. ¡Acceso 100% libre y gratuito!
+            Antes de inscribirte, mira cómo explicamos matemática y ciencias. En el canal subimos ensayos resueltos, explicaciones cortas de materia y consejos para el día de la prueba. Es gratis.
           </motion.p>
           <motion.div {...fadeUp(0.3)}>
             <a 
@@ -484,7 +484,7 @@ export default function LandingPAES() {
       <section className="py-28 px-6 bg-white flex flex-col items-center">
         <div className="max-w-4xl mx-auto w-full">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Preguntas Frecuentes</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Lo que más nos preguntan</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
               PREGUNTAS FRECUENTES
             </motion.h2>
@@ -539,18 +539,18 @@ export default function LandingPAES() {
             className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.4em] mb-8"
             style={{ color: YELLOW }}
           >
-            TU MOMENTO ES AHORA
+            PARTIMOS EN MARZO 2027
           </motion.p>
 
           <motion.h2 
             {...fadeUp(0.1)} 
             className="font-display text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-[-0.03em] leading-[0.95] mb-4 uppercase"
           >
-            EL PRÓXIMO <br /> PASO ES TUYO.
+            RESERVA <br /> TU CUPO.
           </motion.h2>
 
           <motion.p {...fadeUp(0.15)} className="text-white/70 text-lg sm:text-xl max-w-lg mb-12 leading-relaxed">
-            No importa dónde estés hoy. Lo importante es dónde quieres llegar.
+            Cada curso es de máximo 20 alumnos. La matrícula es gratis y el formulario es corto.
           </motion.p>
 
           {/* Inscription yellow button */}

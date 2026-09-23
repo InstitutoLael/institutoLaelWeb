@@ -48,7 +48,7 @@ export default function Home() {
     <div className="overflow-hidden">
       <Helmet>
         <title>Instituto Lael - Preuniversitario PAES 2027 | Santiago, Chile</title>
-        <meta name="description" content="Tu futuro no empieza después. Empieza ahora. PAES desde $10.000/mes por ramo, con becas para quien lo necesite. Inglés y LSCh. Acompañamiento real. Instituto Lael, Chile." />
+        <meta name="description" content="Tu sueño no tiene fecha de vencimiento. Preuniversitario PAES online desde $10.000/mes por ramo, inglés y nivelación de estudios gratis para adultos. Matrícula gratis y becas. Instituto Lael, Chile." />
       </Helmet>
 
       {/* ══════════════════════════════════════════════════════════════════
@@ -88,16 +88,16 @@ export default function Home() {
             transition={{ duration: 1.1, ease }}
             className="text-white leading-[0.9] mb-8 font-display font-black text-5xl sm:text-7xl lg:text-[7.5rem] tracking-tight max-w-4xl"
           >
-            TU FUTURO<br />
-            NO EMPIEZA<br />
-            <span style={{ color: YELLOW }}>DESPUÉS.</span>
+            TU SUEÑO<br />
+            NO TIENE FECHA<br />
+            <span style={{ color: YELLOW }}>DE VENCIMIENTO.</span>
           </motion.h1>
 
           <motion.p
             {...fadeUp(0.2)}
             className="text-white/70 text-lg md:text-xl leading-relaxed mb-10 max-w-xl text-center"
           >
-            <span className="text-white font-extrabold">Empieza ahora.</span> Clases en vivo con profesores que saben tu nombre, no tu número de lista. Matrícula gratis, desde $10.000/mes por ramo, becas para quien lo necesite.
+            Da lo mismo si vas en cuarto medio, si la PAES te fue mal la primera vez o si dejaste el colegio hace años. <span className="text-white font-extrabold">Te ayudamos a llegar.</span> Matrícula gratis y becas para quien las necesite.
           </motion.p>
 
           {/* Buttons */}
@@ -158,7 +158,7 @@ export default function Home() {
             className="text-[10px] font-bold uppercase tracking-[0.4em] mb-8"
             style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
           >
-            Nuestra Creencia
+            Cómo trabajamos
           </motion.p>
           <motion.h2
             {...fadeUp(0.1)}
@@ -175,19 +175,19 @@ export default function Home() {
           </motion.h2>
           <motion.div {...fadeUp(0.2)} className="max-w-3xl mx-auto space-y-4 mb-16 text-lg md:text-xl leading-relaxed text-lael-primary/80">
             <p>
-              Tu sueño no tiene fecha de vencimiento. Aquí no compites contra nadie - hay acompañamiento real, respeto y seguimiento, no presión.
+              Aquí nadie compite contra nadie. Los cursos son chicos, tu profe sabe cómo te llamas y se da cuenta cuando te estás quedando atrás.
             </p>
             <p>
-              Detrás de cada estudiante hay una historia única, y cada proceso importa.
+              Hay quien viene saliendo de cuarto medio y quien lleva años sin abrir un cuaderno. A todos los recibimos igual.
             </p>
           </motion.div>
 
           {/* 3 Columnas de iconos */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-16">
             {[
-              { icon: <Users className="text-lael-primary" size={24} />, text: 'Detrás de cada estudiante hay una historia.' },
-              { icon: <Target className="text-lael-primary" size={24} />, text: 'Cada proceso importa.' },
-              { icon: <Heart className="text-lael-primary" size={24} />, text: 'No eres un número más.' },
+              { icon: <Users className="text-lael-primary" size={24} />, text: 'Clases en vivo por Google Meet.' },
+              { icon: <Target className="text-lael-primary" size={24} />, text: 'Máximo 20 alumnos por curso.' },
+              { icon: <Heart className="text-lael-primary" size={24} />, text: 'Si faltas, cada semana te compartimos las grabaciones.' },
             ].map((item, idx) => (
               <motion.div
                 key={idx}
@@ -258,7 +258,7 @@ export default function Home() {
                 {[
                   { label: 'INICIO', value: 'Marzo 2027' },
                   { label: 'MODALIDAD', value: 'Online' },
-                  { label: 'CUPOS', value: 'Limitados' },
+                  { label: 'CUPOS', value: '20 por curso' },
                   { label: 'COSTO', value: 'Desde $10.000' },
                 ].map((item, idx) => (
                   <div key={idx} className="border-b border-lael-primary/10 pb-4">
@@ -285,14 +285,14 @@ export default function Home() {
               className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4"
               style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
             >
-              Plan de Estudios PAES 2027
+              Ramos PAES 2027
             </motion.p>
             <motion.h2
               {...fadeUp(0.1)}
               className="text-white"
               style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 5vw, 3.5rem)', letterSpacing: '-0.03em' }}
             >
-              TUS ASIGNATURAS. TU ELECCIÓN.
+              TOMA SOLO LOS RAMOS QUE NECESITAS.
             </motion.h2>
           </div>
 
@@ -384,14 +384,14 @@ export default function Home() {
               className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4"
               style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
             >
-              Más en Instituto Lael
+              Además del preu
             </motion.p>
             <motion.h2
               {...fadeUp(0.1)}
               className="leading-tight"
               style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: BLUE, letterSpacing: '-0.03em' }}
             >
-              ELIGE TU PROGRAMA.
+              OTROS PROGRAMAS.
             </motion.h2>
           </div>
 
@@ -475,14 +475,14 @@ export default function Home() {
               className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4"
               style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
             >
-              Equipo Docente
+              Los profes
             </motion.p>
             <motion.h2
               {...fadeUp(0.1)}
               className="leading-tight"
               style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 4.5vw, 3.5rem)', color: BLUE, letterSpacing: '-0.03em' }}
             >
-              PROFES QUE TE CONOCEN.
+              ESTOS SON TUS PROFES.
             </motion.h2>
           </div>
 
@@ -517,7 +517,7 @@ export default function Home() {
                   <div className="text-left flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
                       <h4 className="font-bold text-lael-primary text-base truncate font-display">
-                        {isPlaceholder ? 'Buscando al mejor' : t.name}
+                        {isPlaceholder ? 'Profe por confirmar' : t.name}
                       </h4>
                       {isDiego && (
                         <span className="text-[8px] font-black uppercase tracking-wider bg-lael-accent text-lael-primary px-2 py-0.5 rounded">
@@ -534,7 +534,7 @@ export default function Home() {
                       {t.subject}
                     </p>
                     <p className="text-xs text-lael-muted">
-                      {isPlaceholder ? 'Preparando Comprensión Lectora' : t.role}
+                      {isPlaceholder ? 'Estamos buscando profe de Lectora' : t.role}
                     </p>
                   </div>
                 </motion.div>
@@ -559,7 +559,7 @@ export default function Home() {
             className="text-center text-[10px] font-bold uppercase tracking-[0.4em] mb-16"
             style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
           >
-            Nuestro impacto
+            Desde 2021
           </motion.p>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {METRICS.map((m, i) => (
@@ -596,13 +596,13 @@ export default function Home() {
               className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4"
               style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
             >
-              Lo que dicen nuestros alumnos
+              Lo que cuentan los alumnos
             </motion.p>
             <motion.h2
               {...fadeUp(0.1)}
               style={{ fontFamily: 'Montserrat, sans-serif', fontWeight: 900, fontSize: 'clamp(2rem, 4vw, 3rem)', color: BLUE, letterSpacing: '-0.02em' }}
             >
-              HISTORIAS REALES.
+              EN SUS PALABRAS.
             </motion.h2>
           </div>
 
@@ -699,7 +699,7 @@ export default function Home() {
             className="text-[10px] font-bold uppercase tracking-[0.4em] mb-10"
             style={{ color: YELLOW, fontFamily: 'Montserrat, sans-serif' }}
           >
-            Tu momento es ahora
+            ¿Te animas?
           </motion.p>
           <motion.h2
             {...fadeUp(0.1)}
@@ -711,7 +711,7 @@ export default function Home() {
               letterSpacing: '-0.03em',
             }}
           >
-            EL PRÓXIMO<br />PASO ES TUYO.
+            INSCRÍBETE.<br />LA MATRÍCULA ES GRATIS.
           </motion.h2>
           <motion.div {...fadeUp(0.25)} className="flex flex-col sm:flex-row gap-4 justify-center">
             <a

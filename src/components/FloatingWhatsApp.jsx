@@ -103,8 +103,8 @@ export default function FloatingWhatsApp() {
             className="mb-4 w-72 bg-[#F8F5F0] rounded-3xl shadow-2xl border border-lael-bd overflow-hidden"
           >
             <div className="bg-[#25D366] p-6 text-white">
-              <p className="font-display text-xl font-bold">Estrategas Lael</p>
-              <p className="text-white/80 text-xs">En línea ahora · Respuesta inmediata</p>
+              <p className="font-display text-xl font-bold">Equipo Lael</p>
+              <p className="text-white/80 text-xs">Escríbenos y te respondemos por acá</p>
             </div>
             <div className="p-4 space-y-2">
               {dynamicOptions.map((opt) => (

@@ -27,7 +27,7 @@ export default function Preguntas() {
     <div className="min-h-screen pt-32 pb-20 px-6" style={{ backgroundColor: LIGHT_GRAY }}>
       <Helmet>
         <title>Preguntas Frecuentes | Instituto Lael</title>
-        <meta name="description" content="Respuestas claras sobre el preu PAES, idiomas, precios, horarios y cómo son las clases en Instituto Lael." />
+        <meta name="description" content="Lo que más nos preguntan sobre el preu PAES, idiomas, precios, horarios y cómo son las clases en Instituto Lael." />
       </Helmet>
 
       <div className="max-w-4xl mx-auto">
@@ -43,7 +43,7 @@ export default function Preguntas() {
             Preguntas <br /> <span className="italic font-normal text-[#D7E400] capitalize">y Respuestas.</span>
           </motion.h1>
           <p className="text-[#8D8D8D] text-sm sm:text-base leading-relaxed">
-            Sin rodeos. Lo que más nos preguntan sobre precios, horarios y clases.
+            Lo que más nos preguntan sobre precios, horarios y clases.
           </p>
         </div>
 
@@ -114,7 +114,7 @@ export default function Preguntas() {
              rel="noopener noreferrer"
              className="block mt-6 text-white/50 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors underline underline-offset-4"
            >
-             ¿El costo es una barrera? Postula a una beca
+             ¿No te alcanza? Postula a una beca
            </a>
         </div>
       </div>

@@ -11,13 +11,13 @@ import avanzarImg from '../assets/img/Home/media_lsch_avanzar_1780735268706.webp
 export const LANDING_SLIDES = [
   { img: entenderImg, title: "Aprender señas es entender", desc: "Aprendes a comunicarte con personas Sordas.", badge: "ENTENDER" },
   { img: comenzarImg, title: "Aprender señas es comenzar", desc: "Empiezas desde cero, sin saber ninguna seña.", badge: "COMENZAR" },
-  { img: avanzarImg, title: "Aprender señas es avanzar", desc: "Avanzas por niveles, a tu ritmo.", badge: "AVANZAR" }
+  { img: avanzarImg, title: "Aprender señas es avanzar", desc: "Vas nivel por nivel, del A1 al B1.", badge: "AVANZAR" }
 ];
 
 export const LANDING_LEVELS = [
-  { code: "A1", name: "Nivel Inicial", duration: "3 Meses", desc: "Comienza desde cero. Aprende el abecedario dactilológico, vocabulario cotidiano, saludos formales e informales, y cómo estructurar tus primeras ideas sin usar la voz.", items: ["Abecedario y números", "Familia y entorno social", "Saludos y expresiones básicas", "Estructura espacial inicial"] },
-  { code: "A2", name: "Nivel Intermedio", duration: "3 Meses", desc: "Profundiza tus habilidades comunicativas. Aprendes a usar el espacio al señar, los clasificadores y los verbos direccionales para describir lugares y situaciones.", items: ["Direccionalidad verbal", "Clasificadores espaciales", "Descripción de trayectorias", "Vocabulario extendido"] },
-  { code: "B1", name: "Nivel Conversacional", duration: "4 Meses", desc: "Ganas fluidez y confianza. Practicas situaciones de trabajo y atención al público, con contexto de la Ley de Inclusión Laboral 21.015.", items: ["Entornos laborales y de atención", "Vocabulario de inclusión", "Conversación espontánea", "Cultura de la comunidad Sorda"] }
+  { code: "A1", name: "Nivel Inicial", duration: "3 Meses", desc: "Partes de cero: el abecedario con las manos (dactilológico), saludos, vocabulario del día a día y tus primeras frases sin usar la voz.", items: ["Abecedario y números", "Familia y entorno social", "Saludos y expresiones básicas", "Estructura espacial inicial"] },
+  { code: "A2", name: "Nivel Intermedio", duration: "3 Meses", desc: "Aquí aprendes a usar el espacio al señar, los clasificadores y los verbos direccionales, para describir un lugar o contar algo que pasó.", items: ["Direccionalidad verbal", "Clasificadores espaciales", "Descripción de trayectorias", "Vocabulario extendido"] },
+  { code: "B1", name: "Nivel Conversacional", duration: "4 Meses", desc: "Ya conversas con más soltura. Practicas situaciones de trabajo y atención al público, y vemos qué dice la Ley de Inclusión Laboral 21.015.", items: ["Entornos laborales y de atención", "Vocabulario de inclusión", "Conversación espontánea", "Cultura de la comunidad Sorda"] }
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────

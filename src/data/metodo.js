@@ -9,7 +9,7 @@ export const metodoData = {
     {
       id: "diagnostico",
       title: "Sabemos dónde estás parado",
-      description: "No arrancamos a ciegas. Vemos qué sabes de verdad y qué se te escapa, antes de armar cualquier plan.",
+      description: "No arrancamos a ciegas. Vemos qué manejas y qué se te escapa, antes de armar cualquier plan.",
       icon: Target,
     },
     {
@@ -21,13 +21,13 @@ export const metodoData = {
     {
       id: "acompanamiento",
       title: "No estás solo en esto",
-      description: "Un profe real revisa cómo vas y ajusta el plan si hace falta. Te avisa si te estás quedando atrás, antes de que sea tarde.",
+      description: "Tu profe revisa cómo vas y ajusta el plan si hace falta. Te avisa si te estás quedando atrás, antes de que sea tarde.",
       icon: Users,
     },
     {
       id: "evaluacion",
-      title: "Practicas la presión, no solo la materia",
-      description: "Un ensayo PAES cada mes, con tiempo real, para que el día de la prueba no sea la primera vez que corres contra el reloj.",
+      title: "Practicas con el reloj encima",
+      description: "Un ensayo PAES cada mes, con el mismo tiempo de la prueba, para que el día de la prueba no sea la primera vez que corres contra el reloj.",
       icon: LineChart,
     }
   ]

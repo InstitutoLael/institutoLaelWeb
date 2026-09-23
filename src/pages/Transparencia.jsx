@@ -23,7 +23,7 @@ export default function Transparencia() {
     <div className="min-h-screen text-[#071D49] pt-20" style={{ backgroundColor: WHITE }}>
       <Helmet>
         <title>Transparencia | Instituto Lael</title>
-        <meta name="description" content="Qué hacemos y qué no hacemos en Instituto Lael. Sin promesas de puntaje, sin letra chica y con canales claros para tus dudas." />
+        <meta name="description" content="Qué hacemos y qué no hacemos en Instituto Lael: no prometemos puntajes, no cobramos extras y te decimos dónde reclamar." />
       </Helmet>
 
       {/* ── 1. HERO (MINIMALIST & BOLD) ───────────────────────────────── */}
@@ -68,7 +68,7 @@ export default function Transparencia() {
                     { t: "Te decimos qué te falta", d: "Si hay algo que te cuesta, te lo decimos claro, aunque no sea lo que quieres escuchar." },
                     { t: "Ensayos con revisión", d: "Hacemos un ensayo PAES cada mes y revisamos contigo en qué preguntas pierdes puntos." },
                     { t: "Material al día", d: "Seguimos los temarios oficiales del DEMRE y actualizamos el material cuando cambian." },
-                    { t: "Práctica con tiempo real", d: "Los ensayos se hacen con el tiempo de la prueba, para que llegues acostumbrado al reloj." }
+                    { t: "Ensayos con reloj", d: "Los ensayos se hacen con el tiempo de la prueba, para que llegues acostumbrado al reloj." }
                   ].map((item, i) => (
                     <li key={i} className="flex gap-5 group">
                       <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0 mt-1 transition-transform group-hover:scale-110"><CheckCircle2 className="text-emerald-600" size={14} /></div>
@@ -90,10 +90,10 @@ export default function Transparencia() {
                </div>
                <ul className="space-y-8 relative z-10">
                   {[
-                    { t: "Sin promesas de puntaje", d: "El puntaje es una consecuencia de tu trabajo, no un producto que se pueda comprar por catálogo." },
+                    { t: "Sin promesas de puntaje", d: "Nadie te puede asegurar un puntaje. Depende de cuánto trabajes tú, y nosotros te ayudamos a que ese trabajo rinda." },
                     { t: "No son solo videos", d: "Las clases son en vivo por Google Meet, con un profe al que le puedes preguntar en el momento." },
                     { t: "Sin presión para inscribirte", d: "Si después de conversar vemos que Lael no es lo que necesitas, te lo vamos a decir." },
-                    { t: "Sin atajos mágicos", d: "No hay 'trucos' que reemplacen la constancia. Hay técnica, orden y muchas horas de práctica." }
+                    { t: "Sin atajos mágicos", d: "No hay truco que reemplace estudiar seguido. Te enseñamos técnicas, pero igual hay que practicar harto." }
                   ].map((item, i) => (
                     <li key={i} className="flex gap-5 group">
                       <div className="w-6 h-6 rounded-full bg-rose-500/20 flex items-center justify-center flex-shrink-0 mt-1 transition-transform group-hover:scale-110"><XCircle className="text-rose-600" size={14} /></div>
@@ -110,7 +110,7 @@ export default function Transparencia() {
           {/* ── 3. PILARES LEGALES & PRIVACIDAD ───────────────────────────── */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
              {[
-                { icon: Scale, title: "Sin letra chica", desc: "Pagas tu mensualidad y nada más: sin cobros escondidos ni cargos por material. La idea es acompañarte hasta el final." },
+                { icon: Scale, title: "Lo que pagas", desc: "Pagas tu mensualidad y nada más. No hay cobros escondidos y el material no se cobra aparte." },
                 { icon: Eye, title: "Tus datos", desc: "Tus datos son tuyos. Los usamos solo para tus clases y para contactarte, y puedes pedirnos que los borremos." },
                 { icon: Lock, title: "Quiénes somos", desc: "Instituto Lael SpA es una empresa constituida bajo las leyes chilenas, con domicilio en Santiago de Chile." }
              ].map((item, i) => (
@@ -145,7 +145,7 @@ export default function Transparencia() {
       <section className="py-32 px-6 text-center">
         <motion.div {...fadeUp(0.2)} className="max-w-3xl mx-auto flex flex-col items-center">
            <p className="text-[#071D49] text-xl sm:text-2xl font-display font-medium leading-relaxed italic max-w-2xl">
-              "En Lael no te prometemos que va a ser fácil. Te ofrecemos clases bien hechas y un equipo que te acompaña, si tú también pones de tu parte."
+              "Va a costar, eso te lo decimos de entrada. Nosotros preparamos bien cada clase y estamos pendientes de ti. El resto lo pones tú."
            </p>
            <div className="mt-10 flex flex-col items-center gap-4">
               <div className="w-12 h-0.5 bg-[#071D49]/15" />

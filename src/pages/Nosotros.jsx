@@ -27,7 +27,7 @@ export default function Nosotros() {
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden font-sans">
       <Helmet>
         <title>Nosotros | Instituto Lael</title>
-        <meta name="description" content="Fundado en 2021. Más de 1000 alumnos. PAES desde $10.000/mes por ramo, becas disponibles. Santiago, Chile. Conoce nuestra historia, misión y equipo de mentores." />
+        <meta name="description" content="Fundado en 2021. Más de 1000 alumnos. PAES desde $10.000/mes por ramo, becas disponibles. Santiago, Chile. Cómo partimos y quiénes son los profes." />
       </Helmet>
 
       {/* ── 1. HERO ────────────────────────────────────────────────── */}
@@ -125,12 +125,12 @@ export default function Nosotros() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col lg:flex-row items-end justify-between mb-20 gap-8 text-left">
              <div className="max-w-2xl">
-                <p className="text-[#071D49] text-[11px] tracking-[0.5em] uppercase mb-6 font-bold">Nuestros Pilares</p>
+                <p className="text-[#071D49] text-[11px] tracking-[0.5em] uppercase mb-6 font-bold">En qué creemos</p>
                 <h2 className="font-display text-4xl lg:text-6xl font-extrabold leading-tight uppercase tracking-tighter" style={{ color: BLUE }}>
-                  Lo que nos mueve <br/> <span className="italic font-normal text-[#D7E400] capitalize">no es el mercado.</span>
+                  Por qué hacemos <br/> <span className="italic font-normal text-[#D7E400] capitalize">lo que hacemos.</span>
                 </h2>
              </div>
-             <p className="text-[#8D8D8D] text-base max-w-sm pb-4">Cada decisión, cada clase, pasa por la misión primero.</p>
+             <p className="text-[#8D8D8D] text-base max-w-sm pb-4">Son cuatro cosas que tratamos de cuidar en cada clase.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
@@ -157,9 +157,9 @@ export default function Nosotros() {
       <section className="py-28 px-6 bg-white border-y border-[#071D49]/5 flex flex-col items-center">
         <div className="max-w-7xl mx-auto w-full">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Acompañamiento Profesional</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Quiénes hacen las clases</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
-              EQUIPO DOCENTE
+              LOS PROFES
             </motion.h2>
           </div>
 

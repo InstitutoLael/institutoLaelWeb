@@ -259,7 +259,7 @@ export default function Navbar() {
               <div className="mt-auto relative z-10 pt-8 border-t border-white/10">
                 <p className="text-xs text-white/40 uppercase tracking-widest font-bold mb-4">Misión Lael</p>
                 <p className="text-sm text-white/70 leading-relaxed italic mb-8">
-                  "No eres un puntaje. Tu futuro empieza ahora."
+                  "No eres un puntaje. Te ayudamos a llegar."
                 </p>
                 <a
                   href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"

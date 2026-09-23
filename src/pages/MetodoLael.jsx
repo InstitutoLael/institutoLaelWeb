@@ -30,7 +30,7 @@ export default function MetodoLael() {
             <span className="text-lael-accent italic italic-playfair">de enseñar</span>
           </motion.h1>
           <motion.p {...fadeUp(0.2)} className="text-xl text-lael-muted leading-relaxed max-w-2xl mx-auto">
-            No te llenamos de videos. Clases en vivo, grabaciones para repasar, un ensayo cada mes y un profe que sabe cómo vas.
+            Explicamos hasta que se entienda, con paciencia y sin apuro. Después tienes la grabación para repasar y, cada mes, un ensayo para ver cómo vas.
           </motion.p>
         </div>
       </section>
@@ -60,7 +60,7 @@ export default function MetodoLael() {
               </motion.div>
               <motion.div {...fadeUp(0.2)} className="p-12 bg-lael-primary rounded-[40px] border border-lael-bd cinematic-shadow">
                  <p className="text-lael-rust text-[10px] tracking-[0.3em] uppercase mb-6 font-bold">Lo que pasa:</p>
-                 <p className="text-2xl text-lael-light italic">"Estudias 8 horas y el puntaje sigue estancado. Te sientes cansado, pero no más inteligente."</p>
+                 <p className="text-2xl text-lael-light italic">"Estudias 8 horas, el puntaje no se mueve y terminas agotado."</p>
               </motion.div>
            </div>
         </div>
@@ -71,12 +71,12 @@ export default function MetodoLael() {
         <div className="max-w-6xl mx-auto px-6">
            <div className="text-center mb-24">
               <h2 className="font-display text-5xl text-lael-primary mb-6">Lo que sí hacemos.</h2>
-              <p className="text-lael-muted max-w-xl mx-auto">No se trata de estudiar más horas, sino de estudiar mejor y con alguien que te guíe.</p>
+              <p className="text-lael-muted max-w-xl mx-auto">Estudiar más horas sirve poco si nadie te muestra en qué te estás equivocando.</p>
            </div>
            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {[
                 { t: "Repaso Espaciado", d: "Volvemos a los temas cada cierto tiempo para que no se te olviden." },
-                { t: "Práctica Activa", d: "En clase resuelves ejercicios, no solo escuchas. Se aprende haciendo." },
+                { t: "Práctica Activa", d: "En clase te toca resolver ejercicios. La materia se queda cuando la haces tú." },
                 { t: "Seguimiento", d: "Con el ensayo de cada mes vemos en qué preguntas fallas y dónde se te va el tiempo." }
               ].map((item, i) => (
                 <motion.div key={i} {...fadeUp(i * 0.1)} className="space-y-4">
@@ -100,7 +100,7 @@ export default function MetodoLael() {
                     {[
                       { t: "Paso 1: Ver dónde estás", d: "Un primer diagnóstico para saber qué te cuesta más." },
                       { t: "Paso 2: Armar tu plan", d: "Ordenamos qué ramos y temas priorizar según tu tiempo." },
-                      { t: "Paso 3: Practicar", d: "Clases en vivo por Google Meet en la tarde y un ensayo PAES cada mes." }
+                      { t: "Paso 3: Practicar", d: "Clases en vivo por Google Meet desde las 18:00 y un ensayo PAES cada mes." }
                     ].map((f, i) => (
                       <div key={i} className="flex gap-6">
                          <div className="w-12 h-12 bg-lael-accent text-lael-light flex items-center justify-center rounded-2xl font-bold flex-shrink-0">{i+1}</div>
@@ -127,11 +127,11 @@ export default function MetodoLael() {
       {/* 4. EVIDENCIA */}
       <section className="py-32 bg-lael-primary">
          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="font-display text-4xl text-lael-light mb-12">Lo concreto. <br/> Sin letra chica.</h2>
+            <h2 className="font-display text-4xl text-lael-light mb-12">En corto, <br/> esto es lo que hay.</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
                <div className="p-8 bg-lael-secondary rounded-2xl border border-lael-bd">
                   <p className="text-emerald-400 font-bold text-3xl mb-2">En vivo</p>
-                  <p className="text-lael-muted text-sm">Clases por Google Meet en la tarde, con un profe al que le puedes preguntar.</p>
+                  <p className="text-lael-muted text-sm">Clases por Google Meet desde las 18:00, con un profe al que le puedes preguntar.</p>
                </div>
                <div className="p-8 bg-lael-secondary rounded-2xl border border-lael-bd">
                   <p className="text-emerald-400 font-bold text-3xl mb-2">Mensual</p>
@@ -143,7 +143,7 @@ export default function MetodoLael() {
 
       <CTASection 
         title="Parte por saber dónde estás."
-        subtitle="Empieza con el diagnóstico gratuito y deja de estudiar a ciegas."
+        subtitle="Haz el diagnóstico gratis y te decimos por dónde empezar."
         btnText="Hacer el diagnóstico"
       />
     </>

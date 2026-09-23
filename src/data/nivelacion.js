@@ -5,10 +5,10 @@
 // Revisar cada año: las fechas de inscripción y examen cambian.
 
 export const ADULT_HERO = {
-  eyebrow: 'Nivelación de estudios · Mayores de 18',
-  title: 'Termina el colegio.',
-  accent: 'Nunca es tarde.',
-  desc: 'Te preparamos para rendir los exámenes libres del Mineduc y sacar tu enseñanza básica o media. Clases online en vivo, a tu ritmo y gratis.',
+  eyebrow: 'Escuela de Sueños · Nivelación de estudios para mayores de 18',
+  title: 'El colegio no es la meta.',
+  accent: 'Es el inicio de tu nueva vida.',
+  desc: 'No es solo sacarte un papel. Es terminar algo que quedó pendiente, a tu ritmo, sin que nadie te mire en menos por volver a intentarlo. Te preparamos gratis para los exámenes libres del Mineduc.',
 };
 
 export const ADULT_FREE_NOTE = 'La nivelación para adultos es gratis. La sostenemos con lo que aportan nuestros otros programas y las empresas, porque creemos que terminar el colegio no debería depender del bolsillo.';
@@ -44,7 +44,7 @@ export const ADULT_CYCLES = [
 export const ADULT_STEPS = [
   { num: '01', title: 'Nos escribes', desc: 'Vemos juntos hasta qué curso llegaste y qué nivel te toca rendir.' },
   { num: '02', title: 'Te inscribes en el Mineduc', desc: 'La inscripción es personal y gratuita en ayudamineduc.cl. Te explicamos paso a paso qué documentos necesitas.' },
-  { num: '03', title: 'Clases en vivo', desc: 'Estudias con nosotros por Google Meet los temarios oficiales de cada asignatura. Las clases quedan grabadas.' },
+  { num: '03', title: 'Clases en vivo', desc: 'En la noche, desde las 20:00, por Google Meet. Vemos los temarios oficiales de cada asignatura y las clases quedan grabadas.' },
   { num: '04', title: 'Rindes y apruebas', desc: 'Das los exámenes en el colegio que te asigna el Mineduc. Con nota 4,0 o más en todo, apruebas el nivel.' },
 ];
 

@@ -16,11 +16,11 @@ export default function SignificadoLael() {
     },
     {
       title: 'El Infinito',
-      content: 'Las letras LAEL forman visualmente un símbolo de infinito (∞). El aprendizaje no tiene fin. El potencial humano es ilimitado.'
+      content: 'Las letras LAEL forman visualmente un símbolo de infinito (∞). Nos recuerda que nunca se termina de aprender, tengas la edad que tengas.'
     },
     {
       title: 'La "E" Dorada',
-      content: 'La letra E es la única en dorado - EL en hebreo significa "Dios". Es el centro de todo lo que hacemos.'
+      content: 'La E es la única letra en dorado, porque EL en hebreo significa "Dios". Él está al centro de lo que hacemos.'
     }
   ];
 
@@ -33,7 +33,7 @@ export default function SignificadoLael() {
           viewport={{ once: true }}
           className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold"
         >
-          Nuestra Identidad
+          Por qué nos llamamos así
         </motion.p>
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
@@ -41,7 +41,7 @@ export default function SignificadoLael() {
           viewport={{ once: true }}
           className="font-display text-4xl lg:text-5xl text-lael-primary font-black mb-16 leading-tight"
         >
-          MÁS QUE UN LOGO - <br/><span className="text-lael-primary/70">UNA DECLARACIÓN DE FE</span>
+          LO QUE HAY DETRÁS <br/><span className="text-lael-primary/70">DE NUESTRO LOGO</span>
         </motion.h2>
 
         {/* Logo and Callouts Diagram */}
@@ -56,7 +56,7 @@ export default function SignificadoLael() {
             </div>
             <div className="group cursor-pointer">
               <p className="text-xs font-black uppercase tracking-wider text-lael-accent mb-1">El infinito</p>
-              <p className="text-lael-primary font-bold text-sm">Aprendizaje sin límites</p>
+              <p className="text-lael-primary font-bold text-sm">Nunca se deja de aprender</p>
               <div className="h-0.5 w-12 bg-lael-accent/50 ml-auto mr-auto lg:mr-0 mt-2 transition-all group-hover:w-20" />
             </div>
           </div>
@@ -74,12 +74,12 @@ export default function SignificadoLael() {
           <div className="flex flex-col gap-8 lg:w-1/3 text-center lg:text-left">
             <div className="group cursor-pointer">
               <p className="text-xs font-black uppercase tracking-wider text-lael-accent mb-1">La "E" dorada</p>
-              <p className="text-lael-primary font-bold text-sm">EL - Nombre de Dios</p>
+              <p className="text-lael-primary font-bold text-sm">EL: nombre de Dios</p>
               <div className="h-0.5 w-12 bg-lael-accent/50 mr-auto ml-auto lg:ml-0 mt-2 transition-all group-hover:w-20" />
             </div>
             <div className="group cursor-pointer">
               <p className="text-xs font-black uppercase tracking-wider text-lael-accent mb-1 text-right lg:text-left">El subtítulo</p>
-              <p className="text-lael-primary font-bold text-sm">Instituto - Comunidad de formación</p>
+              <p className="text-lael-primary font-bold text-sm">Instituto: aprendemos en comunidad</p>
               <div className="h-0.5 w-12 bg-lael-accent/50 mr-auto ml-auto lg:ml-0 mt-2 transition-all group-hover:w-20" />
             </div>
           </div>

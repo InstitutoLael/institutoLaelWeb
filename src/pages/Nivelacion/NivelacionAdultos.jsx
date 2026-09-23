@@ -23,7 +23,7 @@ export default function NivelacionAdultos() {
   return (
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden font-sans">
       <Helmet>
-        <title>Nivelación de Estudios para Adultos (gratis) | Instituto Lael</title>
+        <title>Escuela de Sueños: Nivelación de Estudios para Adultos (gratis) | Instituto Lael</title>
         <meta name="description" content="Termina tu enseñanza básica o media siendo mayor de 18. Te preparamos gratis para los exámenes libres del Mineduc, con clases online en vivo." />
       </Helmet>
 
@@ -52,7 +52,7 @@ export default function NivelacionAdultos() {
             </a>
           </motion.div>
           <motion.div {...fadeUp(0.4)} className="grid grid-cols-3 gap-4 border-t border-white/10 pt-8 mt-14 max-w-xl mx-auto">
-            {[['Gratis', 'Preparación'], ['2 veces', 'Al año rindes'], ['+18', 'Años']].map(([v, l]) => (
+            {[['Gratis', 'Preparación'], ['20:00', 'Clases en la noche'], ['+18', 'Años']].map(([v, l]) => (
               <div key={l}>
                 <p className="font-display font-extrabold text-xl uppercase" style={{ color: YELLOW }}>{v}</p>
                 <p className="text-white/40 text-[10px] font-bold uppercase tracking-wider mt-1">{l}</p>
@@ -66,7 +66,7 @@ export default function NivelacionAdultos() {
       <section id="niveles" className="px-6 py-28 scroll-mt-24">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <motion.p {...fadeUp(0)} className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Cubrimos todo</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Básica y media</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl font-extrabold uppercase tracking-[-0.03em]">
               ¿Qué nivel te toca?
             </motion.h2>
@@ -179,7 +179,7 @@ export default function NivelacionAdultos() {
       {/* ── CTA ──────────────────────────────────────────────────────── */}
       <section className="px-6 py-28 text-center text-white" style={{ backgroundColor: BLUE }}>
         <motion.h2 {...fadeUp(0)} className="font-display text-3xl sm:text-5xl font-extrabold uppercase tracking-tight mb-6">
-          Tu sueño no tiene <br /> <span style={{ color: YELLOW }}>fecha de vencimiento.</span>
+          Nunca es tarde para ser <br /> <span style={{ color: YELLOW }}>lo que podrías haber sido.</span>
         </motion.h2>
         <motion.p {...fadeUp(0.1)} className="text-white/70 text-lg max-w-xl mx-auto mb-10">
           Escríbenos y vemos juntos por dónde partir.

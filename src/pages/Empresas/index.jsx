@@ -35,13 +35,13 @@ export default function Empresas() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/70 to-[#071D49]" />
         <div className="relative z-10 max-w-5xl mx-auto text-center">
           <motion.p {...fadeUp(0)} className="text-[10px] font-bold uppercase tracking-[0.4em] mb-6" style={{ color: YELLOW }}>
-            Lael Empresas
+            Lael Empresas · Crecer juntos
           </motion.p>
           <motion.h1 {...fadeUp(0.1)} className="font-display text-4xl sm:text-6xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-8">
             Capacitación que <br /> <span style={{ color: YELLOW }}>tu equipo sí usa.</span>
           </motion.h1>
           <motion.p {...fadeUp(0.2)} className="text-white/70 text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-            Talleres de inteligencia artificial, inglés y nivelación de estudios para tus trabajadores. Online o presencial, con una propuesta hecha para tu empresa.
+            Talleres de inteligencia artificial, inglés y nivelación de estudios para tus trabajadores. Online, o presencial en Santiago. Nos cuentas qué necesitas y armamos la propuesta.
           </motion.p>
           <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="#cotizar" className="inline-flex items-center justify-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs uppercase tracking-widest px-8 py-5 rounded-2xl transition-all active:scale-95">
@@ -94,7 +94,7 @@ export default function Empresas() {
           <div className="text-center mb-16">
             <motion.p {...fadeUp(0)} className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Así trabajamos</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl font-extrabold uppercase tracking-[-0.03em]">
-              Simple y a tu medida
+              En cuatro pasos
             </motion.h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

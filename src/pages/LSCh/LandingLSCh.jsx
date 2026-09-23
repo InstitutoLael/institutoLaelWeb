@@ -82,8 +82,8 @@ export default function LandingLSCh() {
               transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
               className="font-display text-4xl sm:text-5xl md:text-6xl tracking-[-0.03em] text-white font-extrabold leading-[1] max-w-xl mb-8 uppercase"
             >
-              Aprender señas <br />
-              es <span className="text-[#D7E400] italic font-normal">avanzar.</span>
+              Las manos <br />
+              también <span className="text-[#D7E400] italic font-normal">tienen voz.</span>
             </motion.h1>
 
             <motion.p {...fadeUp(0.25)} className="text-white/70 text-lg mb-10 leading-relaxed max-w-md">
@@ -251,7 +251,7 @@ export default function LandingLSCh() {
           <div className="text-center mb-20">
             <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Precio al abrir</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
-              Un solo plan, sin letra chica
+              Un solo plan mensual
             </motion.h2>
           </div>
 

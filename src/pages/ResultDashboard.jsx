@@ -112,7 +112,7 @@ export default function ResultDashboard() {
                <div className="absolute top-0 right-0 p-4 bg-white/10 text-[9px] font-bold uppercase tracking-widest">Matrícula gratis</div>
                <h3 className="font-display text-3xl mb-8">{result.entry_product}</h3>
                <p className="text-white/80 text-sm leading-relaxed mb-10">
-                  Escríbenos por WhatsApp y te contamos horarios, precios y cómo partir. La matrícula es gratis y, si el costo es una barrera, puedes postular a una beca.
+                  Escríbenos por WhatsApp y te contamos horarios, precios y cómo partir. La matrícula es gratis y, si no te alcanza, puedes postular a una beca.
                </p>
                
                <div className="space-y-4">

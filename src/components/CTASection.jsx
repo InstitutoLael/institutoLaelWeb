@@ -19,9 +19,9 @@ export default function CTASection({ title, subtitle, btnText = "Postula ahora",
           {/* Subtle inner top glow */}
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-lael-accent/30 to-transparent" />
 
-          <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-lael-light">{title || "Comienza tu proceso hoy"}</h2>
+          <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-lael-light">{title || "¿Partimos?"}</h2>
           <p className="text-xl text-lael-muted mb-10 max-w-2xl mx-auto">
-            {subtitle || "No aceptamos a cualquiera, buscamos a quienes están dispuestos a seguir el sistema y obtener resultados reales."}
+            {subtitle || "Escríbenos y vemos juntos por dónde empezar."}
           </p>
           
           <Button size="lg" variant="primary" to={btnLink} className="w-full sm:w-auto">

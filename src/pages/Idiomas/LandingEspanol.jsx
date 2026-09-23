@@ -56,7 +56,7 @@ export default function LandingEspanol() {
     },
     {
       title: "Comunidad de práctica",
-      desc: "Sesiones de conversación con otros alumnos para que uses el español en situaciones reales.",
+      desc: "Sesiones de conversación con otros alumnos, para que uses el español como lo harías en la calle o en la pega.",
       icon: <Users className="w-6 h-6 text-[#071D49]" />
     }
   ];
@@ -81,7 +81,7 @@ export default function LandingEspanol() {
         <div className="relative z-20 max-w-5xl mx-auto text-center flex flex-col items-center">
           <motion.div {...fadeUp(0)} className="mb-6">
             <span className="text-[#D7E400] text-xs font-bold tracking-[0.3em] uppercase bg-white/5 border border-white/10 px-4 py-2 rounded-full">
-              PROGRAMA DE ESPAÑOL PARA EXPATS
+              ESPAÑOL PARA EXTRANJEROS
             </span>
           </motion.div>
 
@@ -91,12 +91,12 @@ export default function LandingEspanol() {
             transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
             className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-[-0.03em] leading-[1.05] uppercase mb-8 max-w-4xl"
           >
-            Conéctate con Chile <br />
-            a través del <span className="text-[#D7E400] italic font-normal">español.</span>
+            Chile también <br />
+            es tu <span className="text-[#D7E400] italic font-normal">casa.</span>
           </motion.h1>
 
           <motion.p {...fadeUp(0.25)} className="text-white/70 text-base sm:text-lg md:text-xl max-w-2xl mb-12 leading-relaxed">
-            Aprende los modismos y chilenismos que escuchas a diario y desenvuélvete mejor en el trabajo y con tus amigos.
+            Llegaste a un país donde el español suena distinto. Te enseñamos a entender los chilenismos, a moverte en el trabajo y a conversar tranquilo con tus vecinos y amigos.
           </motion.p>
 
           <motion.div {...fadeUp(0.35)}>
@@ -126,7 +126,7 @@ export default function LandingEspanol() {
             </motion.h2>
 
             <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg mb-8 leading-relaxed max-w-xl">
-              Para extranjeros que viven en Chile o que trabajan con equipos que hablan español. Practicas reuniones de trabajo, conversaciones sociales, modismos chilenos y cómo funciona el trabajo en Chile.
+              Es para ti si vives en Chile o trabajas con un equipo chileno. En clase practicamos reuniones de pega, conversaciones del día a día, modismos y cómo se trabaja acá.
             </motion.p>
 
             {/* Path visualization */}
@@ -223,7 +223,7 @@ export default function LandingEspanol() {
                 </div>
                 <p className="text-xs text-[#8D8D8D] leading-relaxed">
                   <span className="font-bold text-[#071D49] mr-2">institutolael</span>
-                  Entiende los modismos de Chile y desenvuélvete mejor en el trabajo. Clases en vivo, con mucha conversación.
+                  ¿Te perdiste con un "cachai" o un "al tiro"? Te lo explicamos. Clases en vivo, con harta conversación.
                 </p>
                 <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-[10px] text-black/45 uppercase tracking-wider">
                   <span>hace 1 día</span>
@@ -284,7 +284,7 @@ export default function LandingEspanol() {
         <div className="relative z-10 max-w-4xl mx-auto w-full text-center">
           <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Precio</motion.p>
           <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-white font-extrabold tracking-[-0.03em] uppercase mb-16">
-            PROGRAMA & PRECIOS
+            CUÁNTO CUESTA
           </motion.h2>
 
           <div className="max-w-md mx-auto rounded-[32px] p-8 border border-white/10 bg-[#0a265b] text-left relative overflow-hidden shadow-2xl">

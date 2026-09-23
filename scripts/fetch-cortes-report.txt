@@ -1,0 +1,141 @@
+fetch-cortes.cjs — reporte 2026-09-23
+Carreras con puntaje de corte: 287 de 2116 (13.6%)
+Universidades con fuente oficial: 7 de 47
+Sin conflictos de valores.
+
+   60 /  60  UNIVERSIDAD DE CHILE
+   58 /  58  PONTIFICIA UNIVERSIDAD CATÓLICA DE CHILE
+   35 /  35  UNIVERSIDAD CATÓLICA DE LA SANTÍSIMA CONCEPCIÓN
+   66 /  66  PONTIFICIA UNIVERSIDAD CATÓLICA DE VALPARAÍSO
+   40 /  41  UNIVERSIDAD DE TALCA
+   22 /  22  UNIVERSIDAD ADOLFO IBÁÑEZ
+    6 /  17  UNIVERSIDAD DE LOS ANDES
+
+Universidades sin fuente oficial abierta encontrada (no se muestra corte):
+  - UNIVERSIDAD ACADEMIA DE HUMANISMO CRISTIANO
+  - UNIVERSIDAD ADVENTISTA DE CHILE
+  - UNIVERSIDAD ALBERTO HURTADO
+  - UNIVERSIDAD ANDRÉS BELLO
+  - UNIVERSIDAD ARTURO PRAT
+  - UNIVERSIDAD AUSTRAL DE CHILE
+  - UNIVERSIDAD AUTÓNOMA DE CHILE
+  - UNIVERSIDAD BERNARDO O'HIGGINS
+  - UNIVERSIDAD CATÓLICA DE TEMUCO
+  - UNIVERSIDAD CATÓLICA DEL MAULE
+  - UNIVERSIDAD CATÓLICA DEL NORTE
+  - UNIVERSIDAD CATÓLICA SILVA HENRÍQUEZ
+  - UNIVERSIDAD CENTRAL DE CHILE
+  - UNIVERSIDAD DE ANTOFAGASTA
+  - UNIVERSIDAD DE ATACAMA
+  - UNIVERSIDAD DE AYSÉN
+  - UNIVERSIDAD DE CONCEPCIÓN
+  - UNIVERSIDAD DE LA FRONTERA
+  - UNIVERSIDAD DE LA SERENA
+  - UNIVERSIDAD DE LAS AMÉRICAS
+  - UNIVERSIDAD DE LOS LAGOS
+  - UNIVERSIDAD DE MAGALLANES
+  - UNIVERSIDAD DE O'HIGGINS
+  - UNIVERSIDAD DE PLAYA ANCHA
+  - UNIVERSIDAD DE SANTIAGO DE CHILE
+  - UNIVERSIDAD DE TARAPACÁ
+  - UNIVERSIDAD DE VALPARAÍSO
+  - UNIVERSIDAD DEL ALBA
+  - UNIVERSIDAD DEL BÍO-BÍO
+  - UNIVERSIDAD DEL DESARROLLO
+  - UNIVERSIDAD DIEGO PORTALES
+  - UNIVERSIDAD FINIS TERRAE
+  - UNIVERSIDAD GABRIELA MISTRAL
+  - UNIVERSIDAD MAYOR
+  - UNIVERSIDAD METROPOLITANA DE CS. DE LA EDUCACIÓN
+  - UNIVERSIDAD SAN SEBASTIÁN
+  - UNIVERSIDAD SANTO TOMÁS
+  - UNIVERSIDAD TÉCNICA FEDERICO SANTA MARÍA
+  - UNIVERSIDAD TECNOLÓGICA METROPOLITANA
+  - UNIVERSIDAD VIÑA DEL MAR
+
+## UNIVERSIDAD DE CHILE  [tipo s]  https://uchile.cl/admision-y-matriculas/admision-regular-pregrado/puntajes-de-ingreso
+  filas leídas: 61
+  código 11078 no es de UNIVERSIDAD DE CHILE: PROGRAMA ACADÉMICO DE BACHILLERATO
+
+## PONTIFICIA UNIVERSIDAD CATÓLICA DE CHILE  [tipo m]  https://admision.uc.cl/recursos/puntajes-de-ultimos-matriculados-admisiones-anteriores/
+  filas leídas: 58
+  revisar (aproximados / alias / sede deducida):
+    [aprox] "Música" -> 12059 Licenciatura en Música (Santiago) = 664.08
+    [aprox] "Pedagogía en Educación Física y Salud" -> 12050 Pedagogía en Educación Física y Salud para Educación Básica y Media (Santiago) = 754.8
+    [aprox] "Pedagogía en Inglés" -> 12070 Pedagogía en Inglés para Educación Básica y Media (Santiago) = 772.2
+    [aprox] "Pedagogía General Básica (Santiago)" -> 12024 Pedagogía en Educación General Básica (Santiago) = 702.75
+    [aprox] "Pedagogía General Básica (Campus Villarrica)" -> 12096 Pedagogía en Educación General Básica (Villarrica) = 487
+
+## UNIVERSIDAD CATÓLICA DE LA SANTÍSIMA CONCEPCIÓN  [tipo s]  https://admision.ucsc.cl/puntajes-de-seleccion/
+  filas leídas: 35
+
+## PONTIFICIA UNIVERSIDAD CATÓLICA DE VALPARAÍSO  [tipo m]  https://estudiantespucv.cl/dpd/puntajes-de-matriculas/
+  filas leídas: 67
+  sin puntaje publicado: ADMINISTRACION PUBLICA (Vespertina)
+  revisar (aproximados / alias / sede deducida):
+    [alias] "INTERPRETACIÓN-TRADUCCIÓN INGLÉS ESPAÑOL" -> 14038 Interpretación o Traducción (Inglés-Español) (Viña del Mar) = 571.9
+    [alias] "LICENCIATURA EN FÍSICA" -> 14090 Licenciatura en Física o Licenciatura en Física mención Astronomía (Valparaíso) = 474.3
+    [alias] "PEDAGOGIA EN EDUCACION BASICA" -> 14033 Pedagogía en Educación Básica con menciones (Viña del Mar) = 614.4
+    [alias] "PEDAGOGIA EN EDUCACION ESPECIAL" -> 14032 Pedagogía en Educación Especial, con menciones (Viña del Mar) = 573.3
+    [alias] "DISEÑO" -> 14003 Diseño, con menciones (Viña del Mar) = 602.85
+    [alias] "ADMINISTRACION PUBLICA (DIURNA)" -> 14201 Administración Publica (Valparaíso) = 642.6
+    [alias] "OCEANOGRAFIA O BIOLOGIA MARINA(PLAN COMUN)" -> 14080 Oceanografía o Biología Marina (Valparaíso) = 636.8
+
+## UNIVERSIDAD DE TALCA  [tipo s]  https://admision.utalca.cl/ponderaciones-vacantes-puntajes/
+  filas leídas: 42
+  sin match: [tabla Linares] PEDAGOGÍA EN EDUCACIÓN PARVULARIA MENCIÓN EN INGLÉS *
+  sin puntaje válido: [tabla Talca] INTERPRETACIÓN Y FORMACIÓN MUSICAL -> "N/A"
+  revisar (aproximados / alias / sede deducida):
+    [nombre + sede de la tabla] "[tabla Linares] PEDAGOGÍA EN EDUCACIÓN MEDIA EN INGLÉS *" -> 34048 Pedagogía en Educación Media en Inglés (Linares) = 478.3
+    [nombre + sede de la tabla] "[tabla Linares] PEDAGOGÍA EN EDUCACIÓN GENERAL BÁSICA MENCIÓN INGLÉS *" -> 34029 Pedagogía en Educación General Básica mención Inglés (Linares) = 485.8
+    [nombre + sede de la tabla] "[tabla Linares] PEDAGOGÍA EN EDUCACIÓN MEDIA EN BIOLOGÍA Y QUÍMICA *" -> 34085 Pedagogía en Educación Media en Biología y Química (Linares) = 571.6
+    [nombre + sede de la tabla] "[tabla Linares] PEDAGOGÍA EN EDUCACIÓN MEDIA EN MATEMÁTICA Y FÍSICA *" -> 34084 Pedagogía en Educación Media en Matemática y Física (Linares) = 552.4
+    [nombre + sede de la tabla] "[tabla Talca] ADMINISTRACIÓN PÚBLICA" -> 34088 Administración Pública (Talca) = 680.1
+    [nombre + sede de la tabla] "[tabla Talca] AGRONOMÍA" -> 34003 Agronomía (Talca) = 658
+    [nombre + sede de la tabla] "[tabla Talca] ARQUITECTURA" -> 34060 Arquitectura (Talca) = 724.75
+    [nombre + sede de la tabla] "[tabla Talca] AUDITORÍA E INGENIERÍA EN CONTROL DE GESTIÓN" -> 34055 Auditoria e Ingeniería en Control de Gestión (Talca) = 654.2
+    [nombre + sede de la tabla] "[tabla Talca] BIOQUÍMICA" -> 34086 Bioquímica (Talca) = 713.95
+    [nombre + sede de la tabla] "[tabla Talca] CONTADOR PÚBLICO Y AUDITOR" -> 34011 Contador Público y Auditor (Talca) = 676.9
+    [nombre + sede de la tabla] "[tabla Talca] DERECHO" -> 34051 Derecho (Talca) = 751.3
+    [nombre + sede de la tabla] "[tabla Talca] DISEÑO" -> 34062 Diseño (Talca) = 680.5
+    [nombre + sede de la tabla] "[tabla Talca] ENFERMERÍA" -> 34026 Enfermería (Talca) = 725.75
+    [nombre + sede de la tabla] "[tabla Talca] FONOAUDIOLOGÍA" -> 34025 Fonoaudiología (Talca) = 649.4
+    [nombre + sede de la tabla] "[tabla Talca] INGENIERÍA COMERCIAL" -> 34018 Ingenieria Comercial (Talca) = 668.8
+    [nombre + sede de la tabla] "[tabla Talca] INGENIERÍA INFORMÁTICA EMPRESARIAL" -> 34019 Ingeniería Informática Empresarial (Talca) = 636.5
+    [nombre + sede de la tabla] "[tabla Talca] INGENIERÍA CIVIL EN BIOINFORMÁTICA" -> 34030 Ingeniería Civil en Bioinformática (Talca) = 531.5
+    [nombre + sede de la tabla] "[tabla Talca] INGENIERÍA CIVIL EN SISTEMAS INTELIGENTES Y VIDEOJUEGOS" -> 34106 Ingeniería Civil en Sistemas Inteligentes y Videojuegos (Talca) = 574.5
+    [nombre + sede de la tabla] "[tabla Talca] INGENIERÍA CIVIL INDUSTRIAL" -> 34104 Ingeniería Civil Industrial Talca (Talca) = 789.3
+    [nombre + sede de la tabla] "[tabla Talca] KINESIOLOGÍA" -> 34024 Kinesiología (Talca) = 700.45
+    [nombre + sede de la tabla] "[tabla Talca] NUTRICIÓN Y DIETÉTICA" -> 34027 Nutrición y Dietética (Talca) = 641.1
+    [nombre + sede de la tabla] "[tabla Talca] ODONTOLOGÍA" -> 34023 Odontología (Talca) = 818.7
+    [nombre + sede de la tabla] "[tabla Talca] PSICOLOGÍA" -> 34041 Psicología (Talca) = 704.2
+    [nombre + sede de la tabla] "[tabla Talca] QUÍMICA Y FARMACIA" -> 34105 Química y Farmacia (Talca) = 814.6
+    [nombre + sede de la tabla] "[tabla Talca] TECNOLOGÍA MÉDICA" -> 34022 Tecnología Medica (Talca) = 731.8
+    [nombre + sede de la tabla] "[tabla Talca] TERAPIA OCUPACIONAL" -> 34101 Terapia Ocupacional (Talca) = 704.45
+    [nombre + sede de la tabla] "[tabla Talca] PLAN COMÚN DE INGENIERÍA CIVIL" -> 34102 Ingeniería Civil Plan Común Talca (Talca) = 649.6
+    [nombre + sede de la tabla] "[tabla Talca] MEDICINA" -> 34020 Medicina (Talca) = 914.5
+    [nombre + sede de la tabla] "[tabla Talca] OBSTETRICIA Y PUERICULTURA" -> 34021 Obstetricia y Puericultura (Talca) = 720.1
+    [nombre + sede de la tabla] "[tabla Curicó] INGENIERÍA CIVIL DE MINAS" -> 34068 Ingenieria Civil de Minas (Curicó) = 665.6
+    [nombre + sede de la tabla] "[tabla Curicó] INGENIERÍA CIVIL EN COMPUTACIÓN" -> 34007 Ingenieria Civil en Computación (Curicó) = 659.1
+    [nombre + sede de la tabla] "[tabla Curicó] INGENIERÍA CIVIL INDUSTRIAL" -> 34006 Ingeniería Civil Industrial (Curicó) = 655.2
+    [nombre + sede de la tabla] "[tabla Curicó] INGENIERÍA CIVIL ELÉCTRICA" -> 34078 Ingeniería Civil Eléctrica (Curicó) = 711.3
+    [nombre + sede de la tabla] "[tabla Curicó] INGENIERÍA CIVIL EN OBRAS CIVILES" -> 34037 Ingeniería Civil en Obras Civiles (Curicó) = 583
+    [nombre + sede de la tabla] "[tabla Curicó] INGENIERÍA CIVIL MECATRÓNICA" -> 34038 Ingeniería Civil Mecatrónica (Curicó) = 611.1
+    [nombre + sede de la tabla] "[tabla Curicó] INGENIERÍA CIVIL MECÁNICA" -> 34039 Ingeniería Civil Mecánica (Curicó) = 655.9
+    [nombre + sede de la tabla] "[tabla Curicó] PLAN COMÚN DE INGENIERÍA CIVIL" -> 34103 Ingeniería Civil Plan Común Curicó (Curicó) = 625.2
+    [nombre + sede de la tabla] "[tabla Santiago- Lbi] PEDAGOGÍA EN EDUCACIÓN GENERAL BÁSICA CON MENCIÓN EN ALEMÁN *" -> 34069 Pedagogía en Educación General Básica con mención en Alemán (Santiago- Lbi) = 692.3
+    [nombre + sede de la tabla] "[tabla Santiago- Lbi] PEDAGOGÍA EN EDUCACIÓN MEDIA EN ALEMÁN *" -> 34049 Pedagogía en Educación Media en Alemán (Santiago- Lbi) = 518.5
+    [nombre + sede de la tabla] "[tabla Santiago- Lbi] PEDAGOGÍA EN EDUCACIÓN PARVULARIA CON MENCIÓN EN ALEMÁN *" -> 34042 Pedagogía en Educación Parvularia con mención en Alemán (Santiago- Lbi) = 556.4
+
+## UNIVERSIDAD ADOLFO IBÁÑEZ  [tipo c]  https://www.uai.cl/admision/ponderaciones-y-puntajes/puntajes
+  filas leídas: 22
+  revisar (aproximados / alias / sede deducida):
+    [alias] "Santiago | Ingeniería Civil (plan común) (2) (3)" -> 42002 Ingeniería Civil (Plan Común) – 7 Carreras o Especialidades (Santiago) = 815
+    [aprox] "Santiago | Comunicación Estratégica + Periodismo" -> 42005 Comunicación Estratégica - Periodismo, Doble Título (Santiago) = 697.9
+    [alias] "Viña del Mar | Ingeniería Civil (plan común) (2) (3)" -> 42022 Ingeniería Civil (Plan Común) – 4 Carreras o Especialidades (Viña del Mar) = 712.1
+    [aprox] "Viña del Mar | Comunicación Estratégica + Periodismo" -> 42025 Comunicación Estratégica - Periodismo, Doble Título (Viña del Mar) = 660.9
+
+## UNIVERSIDAD DE LOS ANDES  [tipo c]  https://admision.uandes.cl/puntajes-de-corte
+  filas leídas: 8
+  sin match: Enfermería
+  sin match: Psicología

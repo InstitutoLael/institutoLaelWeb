@@ -1,15 +1,25 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { Search, Check, X, AlertCircle, ArrowRight, Calculator } from 'lucide-react';
+import { Search, ArrowRight, Calculator, Star, ArrowDown } from 'lucide-react';
+import CareerCard from '../components/calculadora/CareerCard';
+import NemCalculator from '../components/calculadora/NemCalculator';
+import ComparePanel from '../components/calculadora/ComparePanel';
+import { computeScore, clM1, titleCase, norm, loadFavs, saveFavs, MAX_FAVS } from '../components/calculadora/utils';
 
-// Datos: DEMRE, Oferta Definitiva de Carreras, Vacantes y Ponderaciones.
-// Se generan con scripts/parse-demre.cjs a partir del PDF oficial. Cuando el
-// DEMRE publique el proceso siguiente, se vuelve a correr el script.
+// Datos (todos se cargan con import() para que la página pese poco):
+//  - carreras-2026.json: DEMRE, Oferta Definitiva de Carreras, Vacantes y
+//    Ponderaciones (scripts/parse-demre.cjs a partir del PDF oficial).
+//  - cortes-2026.json: puntajes de corte publicados por cada universidad
+//    (scripts/fetch-cortes.cjs; ver scripts/fetch-cortes-report.txt).
+//  - regiones-sedes.json: región de cada sede (scripts/check-regiones.cjs).
+//  - nem-tablas.json: tablas oficiales NEM del DEMRE (scripts/fetch-nem.cjs),
+//    se carga sólo al abrir la calculadora NEM.
 const BLUE = '#071D49';
 const YELLOW = '#D7E400';
 const STORAGE_KEY = 'lael_calculadora_puntajes';
+const MAX_RESULTS = 60;
 
 const FIELDS = [
   { key: 'nem', label: 'NEM', hint: 'Puntaje de notas' },
@@ -21,79 +31,98 @@ const FIELDS = [
   { key: 'cie', label: 'Ciencias', hint: 'Opcional' },
 ];
 
-const LOWER = new Set(['de', 'del', 'la', 'las', 'los', 'y', 'en', 'e']);
-const titleCase = (s) =>
-  s.toLowerCase().split(' ').map((w, i) => (i > 0 && LOWER.has(w) ? w : w.charAt(0).toUpperCase() + w.slice(1))).join(' ');
-const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const CUTOFF_LABEL = { s: 'Último seleccionado', m: 'Último matriculado', c: 'Puntaje de corte' };
 
 function loadScores() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (_) { return {}; }
 }
 
-// Calcula el puntaje ponderado de una carrera. Devuelve { value } o { missing: [...] }.
-function computeScore(w, sc) {
-  const val = (k) => {
-    const n = Number(sc[k]);
-    return n >= 100 && n <= 1000 ? n : null;
-  };
-  if (w.esp) return { special: true };
-  const missing = [];
-  let total = 0;
-  for (const k of ['nem', 'rank', 'cl', 'm1', 'm2', 'his', 'cie']) {
-    if (!w[k]) continue;
-    const v = val(k);
-    if (v == null) missing.push(k);
-    else total += (w[k] / 100) * v;
-  }
-  if (w.hc) {
-    const best = Math.max(val('his') ?? -1, val('cie') ?? -1);
-    if (best < 0) missing.push('his o cie');
-    else total += (w.hc / 100) * best;
-  }
-  if (missing.length) return { missing };
-  return { value: Math.round(total * 10) / 10 };
-}
-
-const LABEL = { nem: 'NEM', rank: 'Ranking', cl: 'C. Lectora', m1: 'M1', m2: 'M2', his: 'Historia', cie: 'Ciencias', 'his o cie': 'Historia o Ciencias' };
-
 export default function Calculadora() {
   const [data, setData] = useState(null);
+  const [cortes, setCortes] = useState(null);
+  const [regiones, setRegiones] = useState(null);
   const [scores, setScores] = useState(loadScores);
   const [query, setQuery] = useState('');
   const [uni, setUni] = useState('');
+  const [region, setRegion] = useState('');
+  const [favs, setFavs] = useState(loadFavs);
+  const [toast, setToast] = useState('');
+  const compareRef = useRef(null);
+  const nemRef = useRef(null);
 
   useEffect(() => {
     import('../data/carreras-2026.json').then((m) => setData(m.default || m));
+    import('../data/cortes-2026.json').then((m) => setCortes(m.default || m)).catch(() => setCortes({ d: {} }));
+    import('../data/regiones-sedes.json').then((m) => setRegiones(m.default || m)).catch(() => {});
   }, []);
 
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(scores)); } catch (_) {}
   }, [scores]);
 
+  useEffect(() => { saveFavs(favs); }, [favs]);
+
+  useEffect(() => {
+    if (!toast) return undefined;
+    const t = setTimeout(() => setToast(''), 2500);
+    return () => clearTimeout(t);
+  }, [toast]);
+
   const careers = useMemo(() => {
     if (!data) return [];
-    return data.universidades.flatMap((u) => u.c.map((c) => ({ ...c, u: titleCase(u.u), key: `${u.u}-${c.id}` })));
+    return data.universidades.flatMap((u) =>
+      u.c.map((c) => ({ ...c, U: u.u, u: titleCase(u.u), key: `${u.u}-${c.id}` })),
+    );
   }, [data]);
 
+  const byId = useMemo(() => new Map(careers.map((c) => [c.id, c])), [careers]);
   const universities = useMemo(() => (data ? data.universidades.map((u) => titleCase(u.u)) : []), [data]);
 
-  const results = useMemo(() => {
+  const regionCode = (c) => (regiones ? regiones.sedes[`${c.U}|${c.s}`] : null);
+  const regionName = (c) => {
+    const r = regionCode(c);
+    return r ? regiones.regiones[r] : null;
+  };
+
+  const withScore = (c) => ({ ...c, r: computeScore(c.w, scores), clm1: clM1(scores) });
+
+  const { results, total } = useMemo(() => {
     const q = norm(query.trim());
-    if (q.length < 3 && !uni) return [];
-    return careers
-      .filter((c) => (!uni || c.u === uni) && (!q || norm(c.n).includes(q) || norm(c.u).includes(q)))
-      .slice(0, 60)
-      .map((c) => {
-        const r = computeScore(c.w, scores);
-        const clm1 = Number(scores.cl) && Number(scores.m1) ? (Number(scores.cl) + Number(scores.m1)) / 2 : null;
-        return { ...c, r, clm1 };
-      });
-  }, [careers, query, uni, scores]);
+    if (q.length < 3 && !uni && !region) return { results: [], total: 0 };
+    const all = careers.filter(
+      (c) =>
+        (!uni || c.u === uni) &&
+        (!region || (regiones && regiones.sedes[`${c.U}|${c.s}`] === region)) &&
+        (q.length < 3 || norm(c.n).includes(q) || norm(c.u).includes(q)),
+    );
+    return { results: all.slice(0, MAX_RESULTS).map(withScore), total: all.length };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [careers, query, uni, region, scores, regiones]);
+
+  const favItems = useMemo(() => favs.map((id) => byId.get(id)).filter(Boolean).map(withScore),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [favs, byId, scores]);
 
   const setScore = (k, v) => setScores((s) => ({ ...s, [k]: v.replace(/[^0-9]/g, '').slice(0, 4) }));
 
+  const toggleFav = (id) =>
+    setFavs((f) => (f.includes(id) ? f.filter((x) => x !== id) : f.length >= MAX_FAVS ? f : [...f, id]));
+
+  // Pone el NEM calculado en su casilla y la resalta un momento (sin enfocar,
+  // para no abrir el teclado en el celular).
+  const [nemFlash, setNemFlash] = useState(false);
+  const applyNem = (v) => {
+    setScore('nem', v);
+    setNemFlash(true);
+    setTimeout(() => setNemFlash(false), 1600);
+    if (nemRef.current) nemRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  const cutoffYear = cortes?.proceso || 2026;
+  const cutoffOf = (id) => (cortes && cortes.d[id] ? cortes.d[id] : null);
+
   return (
-    <div className="w-full bg-[#F4F4F4] text-[#071D49] font-sans">
+    <div className="w-full bg-[#F4F4F4] text-[#071D49] font-sans overflow-x-clip">
       <Helmet>
         <title>Calculadora de Puntaje Ponderado PAES | Instituto Lael</title>
         <meta name="description" content="Calcula gratis tu puntaje ponderado PAES para más de 2.000 carreras de 47 universidades, con las ponderaciones oficiales del DEMRE." />
@@ -115,9 +144,9 @@ export default function Calculadora() {
       </section>
 
       <section className="px-4 sm:px-6 py-10 sm:py-12">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-6 items-start">
           {/* ── PUNTAJES ──────────────────────────────────────────── */}
-          <div className="bg-white rounded-[28px] p-5 sm:p-6 border border-[#071D49]/5 shadow-card lg:sticky lg:top-28">
+          <div className="bg-white rounded-[28px] p-5 sm:p-6 border border-[#071D49]/5 shadow-card lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
             <h2 className="font-display text-lg font-extrabold uppercase tracking-tight mb-1">1. Tus puntajes</h2>
             <p className="text-sm text-[#071D49]/70 mb-4 leading-relaxed">De 100 a 1.000. Si no has dado la PAES, prueba con puntajes de ensayo.</p>
             <div className="grid grid-cols-2 gap-3">
@@ -125,11 +154,12 @@ export default function Calculadora() {
                 <label key={f.key} className="block">
                   <span className="block text-xs font-bold mb-1">{f.label}</span>
                   <input
+                    ref={f.key === 'nem' ? nemRef : undefined}
                     inputMode="numeric"
                     value={scores[f.key] || ''}
                     onChange={(e) => setScore(f.key, e.target.value)}
                     placeholder={f.hint}
-                    className="w-full rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] px-3 py-3 min-h-[48px] text-base font-semibold focus:outline-none focus:ring-2 focus:ring-[#071D49] placeholder:text-[#071D49]/45 placeholder:font-normal placeholder:text-sm"
+                    className={`w-full rounded-xl border border-[#071D49]/15 px-3 py-3 min-h-[48px] text-base font-semibold focus:outline-none focus:ring-2 focus:ring-[#071D49] placeholder:text-[#071D49]/45 placeholder:font-normal placeholder:text-sm transition-colors duration-500 ${f.key === 'nem' && nemFlash ? 'bg-[#D7E400] ring-2 ring-[#071D49]' : 'bg-[#F4F4F4]'}`}
                   />
                 </label>
               ))}
@@ -137,92 +167,128 @@ export default function Calculadora() {
             <button onClick={() => setScores({})} className="mt-2 min-h-[44px] text-sm font-semibold underline underline-offset-4 text-[#071D49]/70 hover:text-[#071D49]">
               Borrar puntajes
             </button>
+
+            <NemCalculator onUse={applyNem} />
           </div>
 
           {/* ── BUSCADOR Y RESULTADOS ─────────────────────────────── */}
-          <div>
+          <div className="min-w-0">
             <div className="bg-white rounded-[28px] p-5 sm:p-6 border border-[#071D49]/5 shadow-card mb-4">
               <h2 className="font-display text-lg font-extrabold uppercase tracking-tight mb-4">2. Busca la carrera</h2>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="relative flex-1">
-                  <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#071D49]/40" />
-                  <input
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Ej: medicina, derecho, ingeniería"
-                    className="w-full rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] pl-10 pr-3 py-3 min-h-[48px] text-base focus:outline-none focus:ring-2 focus:ring-[#071D49]"
-                  />
-                </div>
+              <div className="relative">
+                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#071D49]/40" />
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Ej: medicina, derecho, ingeniería"
+                  aria-label="Buscar carrera o universidad"
+                  className="w-full rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] pl-10 pr-3 py-3 min-h-[48px] text-base focus:outline-none focus:ring-2 focus:ring-[#071D49]"
+                />
+              </div>
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <select
                   value={uni}
                   onChange={(e) => setUni(e.target.value)}
-                  className="sm:w-64 min-h-[48px] rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] px-3 py-3 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#071D49]"
+                  aria-label="Universidad"
+                  className="min-w-0 min-h-[48px] rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] px-3 py-3 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#071D49]"
                 >
                   <option value="">Todas las universidades</option>
                   {universities.map((u) => <option key={u} value={u}>{u}</option>)}
                 </select>
+                <select
+                  value={region}
+                  onChange={(e) => setRegion(e.target.value)}
+                  aria-label="Región"
+                  className="min-w-0 min-h-[48px] rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] px-3 py-3 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#071D49]"
+                >
+                  <option value="">Todas las regiones</option>
+                  {regiones && regiones.orden.map((r) => (
+                    <option key={r} value={r}>{r === 'RM' ? 'Región Metropolitana' : `Región de ${regiones.regiones[r]}`}</option>
+                  ))}
+                </select>
               </div>
             </div>
+
+            {favItems.length > 0 && (
+              <div className="rounded-[20px] p-4 sm:p-5 mb-4 text-white flex flex-col sm:flex-row sm:items-center gap-3" style={{ backgroundColor: BLUE }}>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold flex items-center gap-2">
+                    <Star size={16} className="fill-[#D7E400] text-[#D7E400]" /> {favItems.length} de {MAX_FAVS} carreras para comparar
+                  </p>
+                  <p className="text-xs text-white/75 mt-1 truncate">{favItems.map((c) => c.n).join(' · ')}</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => compareRef.current && compareRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                  className="min-h-[48px] w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-2xl bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs uppercase tracking-wider px-5 transition-colors"
+                >
+                  Ver comparación <ArrowDown size={16} />
+                </button>
+              </div>
+            )}
 
             {!data && <p className="text-center text-sm text-[#071D49]/70 py-10">Cargando carreras…</p>}
             {data && results.length === 0 && (
               <p className="text-center text-sm text-[#071D49]/70 py-10">
-                Escribe al menos 3 letras del nombre de la carrera, o elige una universidad.
+                {query.trim().length >= 3 || uni || region
+                  ? 'No encontramos carreras con esos filtros.'
+                  : 'Escribe al menos 3 letras del nombre de la carrera, o elige una universidad o región.'}
+              </p>
+            )}
+            {total > MAX_RESULTS && (
+              <p className="text-sm text-[#071D49]/70 mb-3">
+                Mostrando {MAX_RESULTS} de {total.toLocaleString('es-CL')} carreras. Escribe el nombre de la carrera para afinar.
               </p>
             )}
 
-            <div className="space-y-3">
+            <div className="space-y-3" id="resultados">
               {results.map((c) => {
-                const { r } = c;
-                const passesMin = r.value != null && (c.min == null || r.value >= c.min);
-                const passesClM1 = c.clm1 == null || c.minClM1 == null || c.clm1 >= c.minClM1;
-                const ok = r.value != null && passesMin && passesClM1;
+                const cut = cutoffOf(c.id);
                 return (
-                  <div key={c.key} className="bg-white rounded-[20px] p-4 sm:p-5 border border-[#071D49]/5 shadow-card">
-                    <div className="flex items-start gap-3 sm:gap-4">
-                      <div className="flex-1 min-w-0">
-                        <p className="font-display font-extrabold leading-tight">{c.n}</p>
-                        <p className="text-sm text-[#071D49]/70 mt-0.5">{c.u} · {c.s}</p>
-                      </div>
-                      {r.value != null && (
-                        <div className="text-right flex-shrink-0">
-                          <p className="font-display text-2xl sm:text-3xl font-black leading-none tabular-nums">{r.value.toLocaleString('es-CL')}</p>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="mt-3">
-                      {r.value != null && (
-                        <p className={`text-xs font-bold inline-flex items-center gap-1 px-2.5 py-1 rounded-full ${ok ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'}`}>
-                          {ok ? <Check size={14} /> : <X size={14} />}
-                          {ok ? 'Puedes postular' : !passesClM1 ? 'No llegas al promedio mínimo' : 'Bajo el mínimo para postular'}
-                        </p>
-                      )}
-                      {r.special && (
-                        <p className="text-xs font-semibold inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#F4F4F4] text-[#071D49]/80"><AlertCircle size={14} className="flex-shrink-0" /> Pide prueba especial de la universidad</p>
-                      )}
-                      {r.missing && (
-                        <p className="text-xs font-semibold inline-flex px-2.5 py-1 rounded-xl bg-[#F4F4F4] text-[#071D49]/80">Te falta: {r.missing.map((m) => LABEL[m]).join(', ')}</p>
-                      )}
-                    </div>
-
-                    <p className="text-xs text-[#071D49]/70 leading-relaxed mt-3 pt-3 border-t border-[#071D49]/5">
-                      {Object.entries(c.w).filter(([k, v]) => typeof v === 'number' && v > 0).map(([k, v]) => `${k === 'hc' ? 'Hist. o Cs.' : k === 'esp' ? 'Prueba especial' : LABEL[k]} ${v}%`).join(' · ')}
-                      {c.min != null && ` · Mínimo ponderado ${c.min}`}
-                      {c.minClM1 != null && ` · Promedio C.Lectora y M1 mínimo ${c.minClM1}`}
-                      {c.vac != null && ` · ${c.vac} vacantes`}
-                    </p>
-                  </div>
+                  <CareerCard
+                    key={c.key}
+                    c={c}
+                    cutoff={cut ? cut[0] : null}
+                    cutoffLabel={cut ? CUTOFF_LABEL[cut[1]] : ''}
+                    cutoffYear={cutoffYear}
+                    region={regionName(c)}
+                    isFav={favs.includes(c.id)}
+                    canFav={favs.length < MAX_FAVS}
+                    onToggleFav={toggleFav}
+                    onShared={(how) => how === 'whatsapp' && setToast('Abrimos WhatsApp con tu resultado')}
+                  />
                 );
               })}
             </div>
 
-            <p className="text-xs text-[#071D49]/70 mt-6 leading-relaxed">
-              Ponderaciones oficiales del DEMRE, Proceso de Admisión {data?.proceso || 2026}. Las del proceso 2027 las publica el DEMRE a fines de septiembre y las actualizaremos. Cumplir los mínimos no asegura el ingreso: depende del puntaje de corte de cada año. Confirma siempre en demre.cl y en la universidad.
-            </p>
+            <div className="text-xs text-[#071D49]/70 mt-6 leading-relaxed space-y-2">
+              <p>
+                Ponderaciones oficiales del DEMRE, Proceso de Admisión {data?.proceso || 2026}. Las del proceso 2027 las publica el DEMRE a fines de septiembre y las actualizaremos. Cumplir los mínimos no asegura el ingreso: depende del puntaje de corte de cada año. Confirma siempre en demre.cl y en la universidad.
+              </p>
+              <p>
+                Puntajes de corte: proceso {cutoffYear}, tal como los publica cada universidad en su sitio oficial (algunas informan el último seleccionado y otras el último matriculado). Cambian cada año y son solo una referencia. Si una carrera no muestra corte es porque su universidad no lo publicó en una fuente oficial que pudimos revisar.
+              </p>
+            </div>
           </div>
         </div>
       </section>
+
+      {/* ── COMPARAR ─────────────────────────────────────────────────── */}
+      {favItems.length > 0 && (
+        <section ref={compareRef} className="px-4 sm:px-6 pb-10 sm:pb-12 scroll-mt-32">
+          <div className="max-w-6xl mx-auto">
+            <ComparePanel
+              items={favItems}
+              cutoffs={cortes ? cortes.d : {}}
+              cutoffLabel={(t) => CUTOFF_LABEL[t]}
+              cutoffYear={cutoffYear}
+              regionOf={regionName}
+              onRemove={toggleFav}
+              onClear={() => setFavs([])}
+            />
+          </div>
+        </section>
+      )}
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
       <section className="px-5 sm:px-6 pb-16 sm:pb-20 lg:pb-28">
@@ -236,6 +302,12 @@ export default function Calculadora() {
           </Link>
         </div>
       </section>
+
+      {toast && (
+        <div role="status" className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 rounded-2xl bg-[#071D49] text-white text-sm font-semibold px-4 py-3 shadow-lael">
+          {toast}
+        </div>
+      )}
     </div>
   );
 }

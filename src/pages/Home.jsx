@@ -45,7 +45,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-x-clip">
       <Helmet>
         <title>Instituto Lael - Preuniversitario PAES 2027 | Santiago, Chile</title>
         <meta name="description" content="Tu sueño no tiene fecha de vencimiento. Preuniversitario PAES online desde $10.000/mes por ramo, inglés y nivelación de estudios gratis para adultos. Matrícula gratis y becas. Instituto Lael, Chile." />

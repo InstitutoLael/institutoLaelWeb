@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Instagram, Youtube } from 'lucide-react';
-import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.png';
+import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.webp';
 import { BECAS_FORM_URL } from '../data/paes';
 
 const SOCIAL = [

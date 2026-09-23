@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
+import { MotionConfig } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PageTransition from "./components/PageTransition";
@@ -33,6 +34,7 @@ const Calculadora = lazy(() => import("./pages/Calculadora"));
 
 export default function App() {
   return (
+    <MotionConfig reducedMotion="user">
     <div className="flex flex-col min-h-screen relative z-10">
       <ScrollToTop />
       <Toaster position="top-right" reverseOrder={false} toastOptions={{
@@ -75,5 +77,6 @@ export default function App() {
       <FloatingWhatsApp />
       <Footer />
     </div>
+    </MotionConfig>
   );
 }

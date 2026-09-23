@@ -18,7 +18,7 @@ const fadeUp = (delay = 0) => ({
 
 export default function Verano() {
   return (
-    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden font-sans">
+    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
         <title>Verano Lael 2027: cursos de enero | Instituto Lael</title>
         <meta name="description" content="Cursos cortos en enero: Arranque PAES (M1 y Competencia Lectora), IA para estudiar gratis, inglés de conversación y charlas gratis para terminar el colegio. Online por Google Meet." />

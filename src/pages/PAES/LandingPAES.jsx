@@ -45,10 +45,10 @@ export default function LandingPAES() {
   const faqs = LANDING_FAQS;
 
   return (
-    <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">
+    <div className="w-full bg-[#F4F4F4] overflow-x-clip font-sans">
       
       {/* ── 1. HERO PAES REDISEÑADO ─────────────────────────────────── */}
-      <section className="relative min-h-[90vh] lg:min-h-screen flex items-center justify-center py-20 px-6 overflow-hidden" style={{ backgroundColor: BLUE }}>
+      <section className="relative -mt-20 min-h-[90vh] lg:min-h-screen flex items-center justify-center pt-40 pb-20 px-6 overflow-hidden" style={{ backgroundColor: BLUE }}>
         <div className="absolute inset-0 z-0 opacity-10">
           <div className="absolute -top-40 -left-40 w-96 h-96 bg-white rounded-full filter blur-[150px]" />
           <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#D7E400] rounded-full filter blur-[150px]" />

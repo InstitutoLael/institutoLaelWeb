@@ -62,14 +62,14 @@ export default function LandingEspanol() {
   ];
 
   return (
-    <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">
+    <div className="w-full bg-[#F4F4F4] overflow-x-clip font-sans">
       <Helmet>
         <title>Español para Extranjeros | Instituto Lael - Chile</title>
         <meta name="description" content="Curso online de español para extranjeros que viven en Chile o trabajan con equipos chilenos. Clases en vivo, modismos y español para el trabajo." />
       </Helmet>
       
       {/* ── 1. HERO ESPAÑOL ────────────────────────────────────────── */}
-      <section className="relative min-h-[70vh] flex items-center justify-center py-24 px-6 overflow-hidden" style={{ backgroundColor: BLUE }}>
+      <section className="relative -mt-20 min-h-[70vh] flex items-center justify-center pt-44 pb-24 px-6 overflow-hidden" style={{ backgroundColor: BLUE }}>
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/50 via-[#071D49]/80 to-[#071D49] z-10" />
           <div 

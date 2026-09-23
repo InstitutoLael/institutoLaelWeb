@@ -58,10 +58,10 @@ export default function LandingLSCh() {
   const levels = LANDING_LEVELS;
 
   return (
-    <div className="w-full bg-[#F4F4F4] overflow-x-hidden font-sans">
+    <div className="w-full bg-[#F4F4F4] overflow-x-clip font-sans">
       
       {/* ── 1. HERO LSCh ────────────────────────────────────────────── */}
-      <section className="relative min-h-[90vh] lg:min-h-screen flex items-center justify-center py-20 px-6 overflow-hidden" style={{ backgroundColor: BLUE }}>
+      <section className="relative -mt-20 min-h-[90vh] lg:min-h-screen flex items-center justify-center pt-40 pb-20 px-6 overflow-hidden" style={{ backgroundColor: BLUE }}>
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/50 via-[#071D49]/80 to-[#071D49] z-10" />
           <div 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import laelLogo from '../assets/img/Logos/lael-nuevo-logo.png';
+import laelLogo from '../assets/img/Logos/lael-nuevo-logo.webp';
 
 export default function SignificadoLael() {
   const [activeTab, setActiveTab] = useState(0);

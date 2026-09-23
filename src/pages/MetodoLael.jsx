@@ -22,7 +22,7 @@ export default function MetodoLael() {
         <meta name="description" content="Así trabajamos en Lael: clases en vivo por Google Meet, un ensayo PAES cada mes y un profe que sigue tu avance." />
       </Helmet>
 
-      <section className="relative pt-32 pb-24 bg-lael-primary overflow-hidden">
+      <section className="relative -mt-20 pt-52 pb-24 bg-lael-primary overflow-hidden">
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
           <motion.p {...fadeUp()} className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold">Cómo trabajamos</motion.p>
           <motion.h1 {...fadeUp(0.1)} className="text-5xl md:text-8xl font-display font-bold leading-tight mb-8 text-lael-light">

@@ -21,7 +21,7 @@ const fadeUp = (delay = 0) => ({
 
 export default function Empresas() {
   return (
-    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden font-sans">
+    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
         <title>Capacitación para Empresas | Instituto Lael</title>
         <meta name="description" content="Capacitación para equipos: talleres de IA, inglés, nivelación de estudios para trabajadores y preu PAES para sus hijos. Online o presencial, cotización a medida." />

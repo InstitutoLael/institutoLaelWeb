@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Plus } from 'lucide-react';
-import logoColor from '../assets/img/Logos/lael-nuevo-logo.png';
-import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.png';
+import logoColor from '../assets/img/Logos/lael-nuevo-logo.webp';
+import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.webp';
 import { NAVIGATION } from '../data/navigation';
 import UrgencyBanner from './UrgencyBanner';
 
@@ -113,19 +113,19 @@ export default function Navbar() {
               src={activeLogo}
               alt="Instituto Lael"
               className={`w-auto object-contain transition-all duration-500 group-hover:scale-105 ${
-                isNavSolid ? 'h-12 lg:h-14' : 'h-16 lg:h-20'
+                isNavSolid ? 'h-9 xl:h-10' : 'h-10 xl:h-12'
               }`}
             />
           </Link>
 
           {/* ── DESKTOP NAV ──────────────────────────────────────────── */}
-          <nav className="hidden lg:flex items-center gap-10">
+          <nav className="hidden xl:flex items-center gap-7">
             {NAVIGATION.main.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `text-[10px] tracking-[0.3em] uppercase font-bold transition-all duration-300 relative py-2 ${
+                  `text-[13px] tracking-[0.06em] uppercase font-bold transition-all duration-300 relative py-2 ${
                     isNavSolid
                       ? isActive
                         ? 'text-lael-primary'
@@ -139,7 +139,7 @@ export default function Navbar() {
                 <span className="flex items-center gap-2">
                   {item.name}
                   {item.badge && (
-                    <span className="bg-lael-accent text-lael-primary text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-sm">
+                    <span className="bg-lael-accent text-lael-primary text-[10px] tracking-normal font-bold uppercase px-1.5 py-0.5 rounded">
                       {item.badge}
                     </span>
                   )}
@@ -155,7 +155,7 @@ export default function Navbar() {
               href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden lg:inline-flex items-center px-6 py-3 rounded-xl text-[10px] tracking-[0.2em] uppercase font-bold transition-all duration-300 shadow-sm bg-lael-accent text-lael-primary hover:bg-[#c4d000] hover:shadow-md"
+              className="hidden xl:inline-flex items-center px-6 py-3 rounded-xl text-[13px] tracking-[0.06em] uppercase font-bold transition-all duration-300 shadow-sm bg-lael-accent text-lael-primary hover:bg-[#c4d000] hover:shadow-md"
             >
               Inscribirme
             </a>
@@ -164,7 +164,7 @@ export default function Navbar() {
             <button
               onClick={() => setMobileOpen(v => !v)}
               aria-label="Toggle menu"
-              className={`lg:hidden w-11 h-11 flex items-center justify-center rounded-xl transition-all active:scale-95 border ${
+              className={`xl:hidden w-11 h-11 flex items-center justify-center rounded-xl transition-all active:scale-95 border ${
                 mobileOpen
                   ? 'bg-lael-primary text-white border-lael-primary'
                   : isNavSolid

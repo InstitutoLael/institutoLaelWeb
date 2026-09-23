@@ -21,7 +21,7 @@ export default function NivelacionAdultos() {
   const [openFaq, setOpenFaq] = useState(null);
 
   return (
-    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-hidden font-sans">
+    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
         <title>Escuela de Sueños: Nivelación de Estudios para Adultos (gratis) | Instituto Lael</title>
         <meta name="description" content="Termina tu enseñanza básica o media siendo mayor de 18. Te preparamos gratis para los exámenes libres del Mineduc, con clases online en vivo." />

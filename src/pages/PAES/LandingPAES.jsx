@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import WordReveal from '../../components/ui/WordReveal';
+import NoticiasDestacadas from '../../components/NoticiasDestacadas';
 import {
   Video,
   ChevronDown,
@@ -487,6 +488,9 @@ export default function LandingPAES() {
           </div>
         </div>
       </section>
+
+      {/* ── 8.5 GUÍAS PAES ───────────────────────────────────────────── */}
+      <NoticiasDestacadas category="PAES" title="Guías para tu PAES" />
 
       {/* ── 9. CTA FINAL ─────────────────────────────────────────────── */}
       <section className={`${SECTION} relative text-center overflow-hidden bg-[#071D49]`}>

@@ -17,6 +17,10 @@ const LINKS_PROGRAMAS = [
   { name: 'Español para extranjeros', path: '/espanol' },
   { name: 'Nivelación adultos', path: '/adultos' },
   { name: 'LSCh (Señas)', path: '/lsch' },
+  { name: 'Reforzamiento escolar', path: '/reforzamiento' },
+  { name: 'Talleres de IA', path: '/talleres-ia' },
+  { name: 'Orientación vocacional', path: '/orientacion' },
+  { name: 'Ensayo PAES gratis', path: '/ensayo-gratis' },
   { name: 'Empresas', path: '/empresas' },
 ];
 
@@ -25,6 +29,12 @@ const LINKS_INSTITUTO = [
   { name: 'Cómo funciona', path: '/sistema' },
   { name: 'Nuestro método', path: '/metodo' },
   { name: 'Casos reales', path: '/casos-reales' },
+  { name: 'Noticias y guías', path: '/noticias' },
+  { name: 'Alumnos Lael', path: '/alumnos' },
+  { name: 'Trae un amigo', path: '/trae-un-amigo' },
+  { name: 'Charla para apoderados', path: '/apoderados' },
+  { name: 'Alianzas', path: '/alianzas' },
+  { name: 'Deja tu testimonio', path: '/testimonio' },
   { name: 'Contacto', path: '/contacto' },
   { name: 'Preguntas Frecuentes', path: '/preguntas' },
   { name: 'Postula a una Beca', path: BECAS_FORM_URL, external: true },

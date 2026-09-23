@@ -2,6 +2,6 @@ User-agent: *
 Allow: /
 
 Disallow: /resultado-diagnostico
-Disallow: /inscripcion
+Disallow: /gracias
 
 Sitemap: https://institutolael.cl/sitemap.xml

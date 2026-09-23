@@ -6,6 +6,7 @@ import logoColor from '../assets/img/Logos/lael-nuevo-logo.webp';
 import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.webp';
 import { NAVIGATION } from '../data/navigation';
 import UrgencyBanner from './UrgencyBanner';
+import ProgramasDropdown from './ProgramasDropdown';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -143,7 +144,9 @@ export default function Navbar() {
 
           {/* ── DESKTOP NAV ──────────────────────────────────────────── */}
           <nav className="hidden xl:flex items-center gap-7">
-            {NAVIGATION.main.map((item) => (
+            {NAVIGATION.main.map((item) => item.dropdown ? (
+              <ProgramasDropdown key="programas" solid={isNavSolid} />
+            ) : (
               <NavLink
                 key={item.path}
                 to={item.path}

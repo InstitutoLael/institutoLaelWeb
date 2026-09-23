@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 import { ArrowRight, Users, Heart, Target, Star, ChevronRight } from 'lucide-react';
 import SignificadoLael from '../components/SignificadoLael';
 import HeroCarousel from '../components/HeroCarousel';
+import NoticiasDestacadas from '../components/NoticiasDestacadas';
 import { OBLIGATORIAS, ELECTIVAS, WORLDS, TEACHERS, METRICS, TESTIMONIALS } from '../data/home';
 import { SHARE_STORY_URL } from '../data/testimonials';
 
@@ -558,6 +559,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ══ 8.5 NOTICIAS Y GUÍAS ══════════════════════════════════════════ */}
+      <NoticiasDestacadas bg="gray" />
 
       {/* ══ 9. CTA FINAL ═══════════════════════════════════════════════════ */}
       <section className={SECTION} style={{ backgroundColor: BLUE }}>

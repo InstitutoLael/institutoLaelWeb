@@ -8,12 +8,11 @@ import {
 export const NAVIGATION = {
     main: [
         { name: "Inicio", path: "/" },
-        { name: "PAES", path: "/paes", badge: "BECAS" },
-        { name: "Verano", path: "/verano", badge: "NUEVO" },
-        { name: "Idiomas", path: "/idiomas" },
-        { name: "LSCh", path: "/lsch" },
-        { name: "Nosotros", path: "/nosotros" },
+        { name: "Programas", dropdown: true },
         { name: "Calculadora", path: "/calculadora" },
+        { name: "Noticias", path: "/noticias" },
+        { name: "Nosotros", path: "/nosotros" },
+        { name: "Alumnos", path: "/alumnos" },
         { name: "Contacto", path: "/contacto" },
     ],
     

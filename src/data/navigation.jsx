@@ -13,7 +13,7 @@ export const NAVIGATION = {
         { name: "Idiomas", path: "/idiomas" },
         { name: "LSCh", path: "/lsch" },
         { name: "Nosotros", path: "/nosotros" },
-        { name: "Preguntas", path: "/preguntas" },
+        { name: "Calculadora", path: "/calculadora" },
         { name: "Contacto", path: "/contacto" },
     ],
     
@@ -30,7 +30,7 @@ export const NAVIGATION = {
         ],
         legal: [
             { name: "Transparencia", path: "/transparencia" },
-            { name: "Preguntas", path: "/preguntas" },
+            { name: "Calculadora", path: "/calculadora" },
         ]
     },
 

@@ -12,6 +12,7 @@ const SOCIAL = [
 const LINKS_PROGRAMAS = [
   { name: 'PAES', path: '/paes' },
   { name: 'Verano Lael', path: '/verano' },
+  { name: 'Calculadora de puntaje', path: '/calculadora' },
   { name: 'Idiomas (Inglés)', path: '/idiomas' },
   { name: 'Español para extranjeros', path: '/espanol' },
   { name: 'Nivelación adultos', path: '/adultos' },

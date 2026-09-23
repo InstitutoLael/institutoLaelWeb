@@ -1,0 +1,167 @@
+REPORTE parse-demre.cjs
+Fuente: DEMRE, Oferta Definitiva de Carreras, Vacantes y Ponderaciones, Proceso de Admisión 2026
+PDF: oferta2026.pdf  |  generado 2026-09-23T13:53:46.085Z
+
+== TOTALES POR UNIVERSIDAD (conservadas / filas leídas) ==
+ 1 PONTIFICIA UNIVERSIDAD CATÓLICA DE CHILE               58 /   58  (100%)  págs 15+  códigos 12xxx:58
+ 2 PONTIFICIA UNIVERSIDAD CATÓLICA DE VALPARAÍSO          66 /   66  (100%)  págs 46+  códigos 14xxx:66
+ 3 UNIVERSIDAD ACADEMIA DE HUMANISMO CRISTIANO            22 /   22  (100%)  págs 58+  códigos 52xxx:22
+ 4 UNIVERSIDAD ADOLFO IBÁÑEZ                              22 /   22  (100%)  págs 85+  códigos 42xxx:22
+ 5 UNIVERSIDAD ADVENTISTA DE CHILE                        18 /   18  (100%)  págs 107+  códigos 58xxx:18
+ 6 UNIVERSIDAD ALBERTO HURTADO                            30 /   30  (100%)  págs 112+  códigos 45xxx:30
+ 7 UNIVERSIDAD ANDRÉS BELLO                              126 /  126  (100%)  págs 122+  códigos 41xxx:126
+ 8 UNIVERSIDAD ARTURO PRAT                                36 /   36  (100%)  págs 140+  códigos 23xxx:36
+ 9 UNIVERSIDAD AUSTRAL DE CHILE                           64 /   64  (100%)  págs 146+  códigos 17xxx:64
+10 UNIVERSIDAD AUTÓNOMA DE CHILE                          87 /   87  (100%)  págs 158+  códigos 49xxx:87
+11 UNIVERSIDAD BERNARDO O'HIGGINS                         25 /   25  (100%)  págs 174+  códigos 53xxx:25
+12 UNIVERSIDAD CATÓLICA DE LA SANTÍSIMA CONCEPCIÓN        35 /   35  (100%)  págs 191+  códigos 36xxx:35
+13 UNIVERSIDAD CATÓLICA DE TEMUCO                         45 /   45  (100%)  págs 197+  códigos 37xxx:45
+14 UNIVERSIDAD CATÓLICA DEL MAULE                         52 /   53  (98%)  págs 202+  códigos 35xxx:53
+15 UNIVERSIDAD CATÓLICA DEL NORTE                         47 /   47  (100%)  págs 209+  códigos 18xxx:47
+16 UNIVERSIDAD CATÓLICA SILVA HENRÍQUEZ                   25 /   25  (100%)  págs 218+  códigos 46xxx:25
+17 UNIVERSIDAD CENTRAL DE CHILE                           51 /   51  (100%)  págs 225+  códigos 51xxx:51
+18 UNIVERSIDAD DE ANTOFAGASTA                             39 /   39  (100%)  págs 235+  códigos 24xxx:39
+19 UNIVERSIDAD DE ATACAMA                                 24 /   24  (100%)  págs 243+  códigos 27xxx:24
+20 UNIVERSIDAD DE AYSÉN                                   13 /   13  (100%)  págs 248+  códigos 48xxx:13
+21 UNIVERSIDAD DE CHILE                                   60 /   61  (98%)  págs 253+  códigos 11xxx:61
+22 UNIVERSIDAD DE CONCEPCIÓN                              91 /   91  (100%)  págs 279+  códigos 13xxx:91
+23 UNIVERSIDAD DE LA FRONTERA                             41 /   44  (93%)  págs 289+  códigos 30xxx:44
+24 UNIVERSIDAD DE LA SERENA                               39 /   39  (100%)  págs 297+  códigos 25xxx:39
+25 UNIVERSIDAD DE LAS AMÉRICAS                            66 /   67  (99%)  págs 304+  códigos 56xxx:67
+26 UNIVERSIDAD DE LOS ANDES                               17 /   31  (55%)  págs 316+  códigos 43xxx:31
+27 UNIVERSIDAD DE LOS LAGOS                               51 /   51  (100%)  págs 326+  códigos 32xxx:51
+28 UNIVERSIDAD DE MAGALLANES                              26 /   26  (100%)  págs 333+  códigos 33xxx:26
+29 UNIVERSIDAD DE O'HIGGINS                               22 /   22  (100%)  págs 338+  códigos 47xxx:22
+30 UNIVERSIDAD DE PLAYA ANCHA                             40 /   40  (100%)  págs 355+  códigos 26xxx:40
+31 UNIVERSIDAD DE SANTIAGO DE CHILE                       72 /   72  (100%)  págs 364+  códigos 16xxx:72
+32 UNIVERSIDAD DE TALCA                                   41 /   42  (98%)  págs 378+  códigos 34xxx:42
+33 UNIVERSIDAD DE TARAPACÁ                                43 /   43  (100%)  págs 395+  códigos 22xxx:43
+34 UNIVERSIDAD DE VALPARAÍSO                              59 /   59  (100%)  págs 403+  códigos 19xxx:59
+35 UNIVERSIDAD DEL ALBA                                   30 /   30  (100%)  págs 410+  códigos 60xxx:30
+36 UNIVERSIDAD DEL BÍO-BÍO                                43 /   43  (100%)  págs 419+  códigos 29xxx:43
+37 UNIVERSIDAD DEL DESARROLLO                             46 /   46  (100%)  págs 425+  códigos 44xxx:46
+38 UNIVERSIDAD DIEGO PORTALES                             35 /   35  (100%)  págs 453+  códigos 38xxx:35
+39 UNIVERSIDAD FINIS TERRAE                               32 /   32  (100%)  págs 461+  códigos 40xxx:32
+40 UNIVERSIDAD GABRIELA MISTRAL                           10 /   10  (100%)  págs 469+  códigos 54xxx:10
+41 UNIVERSIDAD MAYOR                                      50 /   50  (100%)  págs 477+  códigos 39xxx:50
+42 UNIVERSIDAD METROPOLITANA DE CS. DE LA EDUCACIÓN       23 /   23  (100%)  págs 493+  códigos 20xxx:23
+43 UNIVERSIDAD SAN SEBASTIÁN                              94 /   94  (100%)  págs 500+  códigos 50xxx:94
+44 UNIVERSIDAD SANTO TOMÁS                               101 /  114  (89%)  págs 514+  códigos 55xxx:114
+45 UNIVERSIDAD TÉCNICA FEDERICO SANTA MARÍA               46 /   46  (100%)  págs 531+  códigos 15xxx:46
+46 UNIVERSIDAD TECNOLÓGICA METROPOLITANA                  32 /   32  (100%)  págs 546+  códigos 21xxx:32
+47 UNIVERSIDAD VIÑA DEL MAR                               21 /   21  (100%)  págs 552+  códigos 59xxx:21
+
+TOTAL conservadas: 2116
+TOTAL descartadas: 34
+TOTAL filas leídas: 2150  (cobertura 98.4%)
+
+== SPOT-CHECK MANUAL contra el PDF (28/28 coinciden) ==
+Valores transcritos a mano desde las páginas del PDF (tabla SPOT en scripts/parse-demre.cjs) y comparados con lo que extrajo el parser.
+[OK] 12039 PUC "Ingeniería" / Santiago (pág 16): PDF nem=20 rank=20 cl=10 m1=25 m2=10 cie=15 | min null | C.L+M1 485 | vac 650
+[OK] 12014 PUC "Ingeniería Comercial" / Santiago (pág 16): PDF nem=20 rank=20 cl=10 m1=30 m2=10 hc=10 (Hist o Cs) | min null | C.L+M1 485 | vac 418
+[OK] 12058 PUC "Medicina" / Santiago (pág 17): PDF nem=20 rank=20 cl=15 m1=20 cie=25 | min null | C.L+M1 485 | vac 82
+[OK] 12029 PUC "Licenciatura en Interpretación Musical" / Santiago (pág 17): PDF nem=12 rank=12 cl=12 m1=14 hc=10 esp=40 (Hist o Cs) | min null | C.L+M1 485 | vac 16
+[OK] 11083 U. de Chile "Medicina" / Santiago (pág 256): PDF nem=10 rank=20 cl=15 m1=20 cie=35 | min null | C.L+M1 458 | vac 190
+[OK] 11523 U. de Chile "Pedagogía en Educación Básica" / Santiago (pág 256): PDF nem=10 rank=20 cl=25 m1=25 hc=20 (Hist o Cs) | min null | C.L+M1 458 | vac 30
+[OK] 13086 UdeC "Medicina" / Concepción (pág 283): PDF nem=15 rank=25 cl=15 m1=35 cie=10 | min 500 | C.L+M1 485 | vac 100
+[OK] 13002 UdeC "Licenciatura en Matemática" / Concepción (pág 283): PDF nem=10 rank=15 cl=15 m1=30 m2=20 cie=10 | min 500 | C.L+M1 485 | vac 20
+[OK] 15111 UTFSM "Ingeniería Civil" / Campus Casa Central Valparaíso (pág 531): PDF nem=15 rank=20 cl=10 m1=35 m2=10 hc=10 (Hist o Cs) | min 600 | C.L+M1 485 | vac 60
+[OK] 15180 UTFSM "Arquitectura" / Campus Casa Central Valparaíso (pág 531): PDF nem=15 rank=25 cl=10 m1=40 hc=10 (Hist o Cs) | min 550 | C.L+M1 485 | vac 80
+[OK] 16091 USACH "Medicina" / Región Metropolitana (pág 368): PDF nem=10 rank=40 cl=15 m1=15 cie=20 | min 600 | C.L+M1 485 | vac 40
+[OK] 16049 USACH "Pedagogía en Física y Matemática" / Región Metropolitana (pág 368): PDF nem=10 rank=40 cl=10 m1=20 m2=10 cie=10 | min 550 | C.L+M1 485 | vac 25
+[OK] 19039 UV "Medicina" / Campus San Felipe (pág 406): PDF nem=10 rank=30 cl=20 m1=20 cie=20 | min null | C.L+M1 458 | vac 50
+[OK] 19010 UV "Pedagogía en Filosofía" / Casa Central (pág 406): PDF nem=10 rank=40 cl=20 m1=10 his=20 | min null | C.L+M1 626 | vac 20
+[OK] 48001 U. de Aysén "Enfermería" / Coyhaique (pág 248): PDF nem=10 rank=40 cl=10 m1=30 hc=10 (Hist o Cs) | min 465 | C.L+M1 465 | vac 37
+[OK] 48004 U. de Aysén "Ingeniería Civil Industrial" / Coyhaique (pág 248): PDF nem=10 rank=40 cl=10 m1=25 m2=5 cie=10 | min 458 | C.L+M1 458 | vac 20
+[OK] 18087 UCN "Medicina" / Campus Guayacán Coquimbo (pág 212): PDF nem=10 rank=20 cl=25 m1=25 cie=20 | min 500 | C.L+M1 458 | vac 54
+[OK] 22050 U. de Tarapacá "Medicina" / Arica (pág 397): PDF nem=10 rank=40 cl=10 m1=20 cie=20 | min 625 | C.L+M1 625 | vac 41
+[OK] 22025 U. de Tarapacá "Pedagogía en Física y Matemática" / Arica (pág 397): PDF nem=10 rank=40 cl=10 m1=25 m2=5 hc=10 (Hist o Cs) | min 458 | C.L+M1 458 | vac 10
+[OK] 34020 U. de Talca "Medicina" / Talca (pág 380): PDF nem=20 rank=30 cl=10 m1=25 cie=15 | min null | C.L+M1 485 | vac 75
+[OK] 34087 U. de Talca "Licenciatura en Interpretación y Formación Musical Especializada" / Talca (pág 380): PDF nem=10 rank=10 cl=10 m1=10 his=10 esp=50 | min null | C.L+M1 485 | vac 15
+[OK] 52020 UAHC "Danza" / Campus Serrano (pág 58): PDF nem=10 rank=40 cl=30 m1=10 hc=10 (Hist o Cs) | min null | C.L+M1 458 | vac 40
+[OK] 55092 U. Santo Tomás "Derecho" / Concepción (pág 515): PDF nem=10 rank=10 cl=40 m1=20 hc=20 (Hist o Cs) | min null | C.L+M1 458 | vac 40
+[OK] 33053 U. de Magallanes "Medicina" / Punta Arenas (pág 333): PDF nem=20 rank=25 cl=15 m1=25 hc=15 (Hist o Cs) | min 650 | C.L+M1 600 | vac 50
+[OK] 41056 UNAB "Medicina" / Santiago (pág 128): PDF nem=10 rank=30 cl=15 m1=20 cie=25 | min null | C.L+M1 458 | vac 140
+[OK] 17031 UACh "Medicina: Campo Clínico Osorno, Licenciatura en Medicina" / Campus Isla Teja - Valdivia (pág 150): PDF nem=10 rank=30 cl=15 m1=30 cie=15 | min null | C.L+M1 500 | vac 19
+[OK] 43001 U. de los Andes "Bachillerato de Medicina" / Santiago (pág 316): PDF nem=10 rank=15 cl=20 m1=35 cie=20 | min 680 | C.L+M1 500 | vac 100
+[OK] 56118 UDLA "Medicina Veterinaria" / Providencia (pág 306): PDF nem=10 rank=30 cl=25 m1=25 hc=10 (Hist o Cs) | min null | C.L+M1 458 | vac 120
+
+== FILAS DESCARTADAS ==
+Nota: las filas "Historia y Ciencias con peso pero sin \"o\"" vienen así en el PDF (U. de los Andes, U. Santo Tomás, U. de
+Chile Bachillerato, UFRO, U. de Talca). Contando ambas pruebas suman >100, por lo que casi seguro es "Historia O Ciencias",
+pero el PDF no lo dice: se dejan fuera hasta confirmarlo con la universidad. Las de "suma = 95/90" y "celda vacía" también son
+así en el PDF (verificado en las páginas 205 y 291).
+Formato: página | código | nombre | sede | tokens numéricos de la fila  ->  motivo
+pág 205 | 35087 | PSICOLOGÍA(3)(4) | CURICÓ | 10 40 20 20 10 o 10 500 485 45 2 9
+    -> celda vacía en m2   [UNIVERSIDAD CATÓLICA DEL MAULE]
+pág 253 | 11078 | BACHILLERATO, PROGRAMA ACADÉMICO DE (1)(4) | SANTIAGO | 20 20 25 25 10 10 --- --- --- 458 300 --- --- 10 4
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE CHILE]
+pág 289 | 30065 | BACHILLERATO EN CIENCIAS SOCIALES (1) (2) | TEMUCO | 10 50 15 10 15 15 --- --- 485 30 --- 2 8
+    -> Historia (15) y Ciencias (15) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LA FRONTERA]
+pág 291 | 30058 | PEDAGOGÍA MATEMÁTICA (3) | TEMUCO | 10 40 10 25 --- 10 --- --- 485 30 --- 2 8
+    -> suma de ponderaciones = 95   [UNIVERSIDAD DE LA FRONTERA]
+pág 292 | 30076 | PLAN COMÚN INGENIERÍA CIVIL (4) | TEMUCO | 10 40 10 20 --- 10 --- --- 485 100 4 2 12
+    -> suma de ponderaciones = 90   [UNIVERSIDAD DE LA FRONTERA]
+pág 307 | 56224 | PSICOLOGÍA | SANTIAGO CENTRO | 10 30 25 25 10 0 10 --- --- 458 200 --- 1
+    -> celda vacía en aep   [UNIVERSIDAD DE LAS AMÉRICAS]
+pág 316 | 43019 | ADMINISTRACIÓN DE SERVICIOS (1) | SANTIAGO | 10 15 25 40 10 10 --- --- 600 500 25 --- 2
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 316 | 43005 | BACHILLERATO DE INGENIERÍA COMERCIAL (1) | SANTIAGO | 10 10 10 60 10 10 --- --- 580 500 60 --- 5
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 316 | 43034 | BACHILLERATO DE PSICOLOGÍA (1) | SANTIAGO | 20 25 20 20 15 15 --- --- 550 500 35 --- 2
+    -> Historia (15) y Ciencias (15) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 316 | 43023 | EDUCACIÓN DE PÁRVULOS CON MENCIONES (1) (2) | SANTIAGO | 20 25 25 20 10 10 --- --- 550 502 30 --- 5
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 316 | 43024 | ENFERMERÍA | SANTIAGO | 20 20 20 30 10 --- --- 620 500 95 --- 1
+    -> celda vacía en his   [UNIVERSIDAD DE LOS ANDES]
+pág 316 | 43026 | FILOSOFÍA (1) | SANTIAGO | 10 20 30 20 20 20 --- --- 630 500 10 --- 2
+    -> Historia (20) y Ciencias (20) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 317 | 43010 | INGENIERÍA COMERCIAL (1) (4) | SANTIAGO | 10 25 10 40 10 10 5 --- 610 600 160 --- 5
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 317 | 43040 | INTERNATIONAL BUSINESS (1) (3) (4) | SANTIAGO | 10 25 10 40 10 10 5 APROBADA 610 600 80 --- 0
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 317 | 43028 | LITERATURA (1) | SANTIAGO | 25 25 25 15 10 10 --- --- 600 500 10 --- 2
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 317 | 43037 | MARKETING Y PUBLICIDAD (1) | SANTIAGO | 10 25 40 15 10 10 --- --- 550 500 40 --- 5
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 317 | 43039 | PEDAGOGÍA BÁSICA BILINGÜE INGLÉS/ESPAÑOL (1) (2) | SANTIAGO | 10 15 30 35 10 10 --- --- 550 502 50 --- 5
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 317 | 43020 | PEDAGOGÍA BÁSICA CON MENCIONES (1) (2) | SANTIAGO | 20 25 25 20 10 10 --- --- 550 502 25 --- 5
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 317 | 43036 | PERIODISMO Y COMUNICACIÓN ESTRATÉGICA (1) | SANTIAGO | 10 20 40 20 10 10 --- --- 550 500 56 --- 5
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 317 | 43025 | PSICOLOGÍA (1) | SANTIAGO | 20 25 20 20 15 15 --- --- 620 500 80 --- 2
+    -> Historia (15) y Ciencias (15) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE LOS ANDES]
+pág 381 | 34028 | PEDAGOGÍA EN EDUCACIÓN PARVULARIA MENCIÓN EN INGLÉS (36)(*) | LINARES | 20 30 30 10 10 10 --- --- SI --- 485 25 --- 3 13
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD DE TALCA]
+pág 514 | 55001 | AGRONOMÍA | SANTIAGO | 10 10 30 40 10 10 --- --- --- 458 45 ---
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55127 | AGRONOMÍA | TALCA | 10 10 30 40 10 10 --- --- --- 458 40 ---
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55090 | BIOTECNOLOGÍA | SANTIAGO | 20 30 10 20 20 20 --- --- --- 458 35 5
+    -> Historia (20) y Ciencias (20) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55004 | CIENCIAS DEL DEPORTE Y ACTIVIDAD FÍSICA | SANTIAGO | 10 10 35 35 10 10 --- --- --- 458 45 ---
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55116 | CIENCIAS DEL DEPORTE Y ACTIVIDAD FÍSICA | TALCA | 10 10 35 35 10 10 --- --- --- 458 45 ---
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55091 | CONTADOR PÚBLICO Y AUDITOR | SANTIAGO | 20 30 10 30 10 10 --- --- --- 458 40 ---
+    -> Historia (10) y Ciencias (10) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55005 | DERECHO | ANTOFAGASTA | 10 10 40 20 20 20 --- --- --- 458 35 ---
+    -> Historia (20) y Ciencias (20) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55006 | DERECHO | IQUIQUE | 10 10 40 20 20 20 --- --- --- 458 45 ---
+    -> Historia (20) y Ciencias (20) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55007 | DERECHO | LA SERENA | 10 10 40 20 20 20 --- --- --- 458 45 ---
+    -> Historia (20) y Ciencias (20) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55008 | DERECHO | LOS ÁNGELES | 10 10 40 20 20 20 --- --- --- 458 45 ---
+    -> Historia (20) y Ciencias (20) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55009 | DERECHO | SANTIAGO | 10 10 40 20 20 20 --- --- --- 458 90 ---
+    -> Historia (20) y Ciencias (20) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55010 | DERECHO | TALCA | 10 10 40 20 20 20 --- --- --- 458 90 ---
+    -> Historia (20) y Ciencias (20) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+pág 514 | 55011 | DERECHO | VIÑA DEL MAR | 10 10 40 20 20 20 --- --- --- 458 65 ---
+    -> Historia (20) y Ciencias (20) con peso pero sin "o": ambiguo   [UNIVERSIDAD SANTO TOMÁS]
+
+== AVISOS ==
+Página 11: 1 códigos pero sin encabezado de ponderaciones reconocible (tabla distinta, se ignora)
+Página 36: 6 códigos pero sin encabezado de ponderaciones reconocible (tabla distinta, se ignora)
+Página 97: 1 códigos pero sin encabezado de ponderaciones reconocible (tabla distinta, se ignora)

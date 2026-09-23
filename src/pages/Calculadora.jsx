@@ -159,7 +159,7 @@ export default function Calculadora() {
                     value={scores[f.key] || ''}
                     onChange={(e) => setScore(f.key, e.target.value)}
                     placeholder={f.hint}
-                    className={`w-full rounded-xl border border-[#071D49]/15 px-3 py-3 min-h-[48px] text-base font-semibold focus:outline-none focus:ring-2 focus:ring-[#071D49] placeholder:text-[#071D49]/45 placeholder:font-normal placeholder:text-sm transition-colors duration-500 ${f.key === 'nem' && nemFlash ? 'bg-[#D7E400] ring-2 ring-[#071D49]' : 'bg-[#F4F4F4]'}`}
+                    className={`w-full rounded-xl border border-[#071D49]/15 px-3 py-3 min-h-[48px] text-base font-semibold focus:outline-none focus:ring-2 focus:ring-[#071D49] placeholder:text-[#071D49]/60 placeholder:font-normal placeholder:text-sm transition-colors duration-500 ${f.key === 'nem' && nemFlash ? 'bg-[#D7E400] ring-2 ring-[#071D49]' : 'bg-[#F4F4F4]'}`}
                   />
                 </label>
               ))}

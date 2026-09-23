@@ -59,7 +59,7 @@ export default function ComparePanel({ items, cutoffs, cutoffLabel, cutoffYear, 
                   type="button"
                   onClick={() => onRemove(c.id)}
                   aria-label={`Quitar ${c.n} de la comparación`}
-                  className="-mt-2 -mr-2 h-11 w-11 flex-shrink-0 inline-flex items-center justify-center rounded-full text-[#071D49]/60 hover:bg-[#F4F4F4] hover:text-[#071D49]"
+                  className="-mt-2 -mr-2 h-11 w-11 flex-shrink-0 inline-flex items-center justify-center rounded-full text-[#071D49]/70 hover:bg-[#F4F4F4] hover:text-[#071D49]"
                 >
                   <X size={16} />
                 </button>
@@ -87,7 +87,7 @@ export default function ComparePanel({ items, cutoffs, cutoffLabel, cutoffYear, 
           <Row label={`Corte ${cutoffYear}`}>
             {(c) => {
               const cut = cutoffs[c.id];
-              if (!cut) return <span className="text-[#071D49]/60">Sin dato</span>;
+              if (!cut) return <span className="text-[#071D49]/70">Sin dato</span>;
               return (
                 <div className="space-y-1">
                   <p className="font-bold tabular-nums">{fmt(cut[0])}</p>
@@ -102,7 +102,7 @@ export default function ComparePanel({ items, cutoffs, cutoffLabel, cutoffYear, 
           <Row label="Vacantes">{(c) => (c.vac != null ? <span className="tabular-nums">{c.vac}</span> : '—')}</Row>
           {weightRows.map((k) => (
             <Row key={k} label={LABEL[k]}>
-              {(c) => (c.w[k] ? <span className="tabular-nums font-semibold">{c.w[k]}%</span> : <span className="text-[#071D49]/40">—</span>)}
+              {(c) => (c.w[k] ? <span className="tabular-nums font-semibold">{c.w[k]}%</span> : <span className="text-[#071D49]/70"><span aria-hidden="true">—</span><span className="sr-only">Sin dato</span></span>)}
             </Row>
           ))}
         </div>

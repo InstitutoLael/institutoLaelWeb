@@ -40,6 +40,7 @@ export default function HeroCarousel({ slides, titleClassName }) {
       aria-roledescription="carrusel"
       aria-label="Programas de Instituto Lael"
     >
+      <div className="w-full" aria-live={auto ? 'off' : 'polite'}>
       <AnimatePresence mode="wait">
         <motion.div
           key={s.id}
@@ -48,7 +49,9 @@ export default function HeroCarousel({ slides, titleClassName }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, y: -12 }}
           transition={{ duration: 0.35 }}
-          aria-live={auto ? 'off' : 'polite'}
+          role="group"
+          aria-roledescription="diapositiva"
+          aria-label={`${i + 1} de ${slides.length}: ${s.badge}`}
         >
           <span className="inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.2em] px-4 py-2 rounded-full mb-6" style={{ backgroundColor: YELLOW, color: '#071D49' }}>
             <span className="w-1.5 h-1.5 rounded-full bg-current" aria-hidden="true" />
@@ -66,12 +69,14 @@ export default function HeroCarousel({ slides, titleClassName }) {
           </div>
         </motion.div>
       </AnimatePresence>
+      </div>
 
       {/* Controles */}
       <div className="mt-8 flex items-center gap-3">
         {slides.map((sl, n) => (
           <button
             key={sl.id}
+            type="button"
             onClick={() => ir(n)}
             aria-label={`Ver ${sl.badge}`}
             aria-current={n === i}
@@ -85,7 +90,7 @@ export default function HeroCarousel({ slides, titleClassName }) {
           </button>
         ))}
         {!reduce && (
-          <button onClick={() => setPausado((p) => !p)} aria-label={pausado ? 'Reanudar carrusel' : 'Pausar carrusel'} className="w-11 h-11 rounded-full flex items-center justify-center text-white/70 hover:text-white">
+          <button type="button" onClick={() => setPausado((p) => !p)} aria-label={pausado ? 'Reanudar carrusel' : 'Pausar carrusel'} className="w-11 h-11 rounded-full flex items-center justify-center text-white/70 hover:text-white">
             {pausado ? <Play size={16} /> : <Pause size={16} />}
           </button>
         )}

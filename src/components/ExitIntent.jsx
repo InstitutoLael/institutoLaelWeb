@@ -20,6 +20,7 @@ export default function ExitIntent() {
   const location = useLocation();
   const inicio = useRef(Date.now());
   const closeRef = useRef(null);
+  const dialogRef = useRef(null);
   const bloqueada = NO_MOSTRAR_EN.some((p) => location.pathname.startsWith(p));
 
   useEffect(() => {
@@ -45,26 +46,41 @@ export default function ExitIntent() {
 
   useEffect(() => {
     if (!open) return undefined;
+    // Foco adentro al abrir, Tab no se escapa, Escape cierra y el foco
+    // vuelve a donde estaba.
+    const previo = document.activeElement;
     closeRef.current && closeRef.current.focus();
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    const onKey = (e) => {
+      if (e.key === 'Escape') { setOpen(false); return; }
+      if (e.key !== 'Tab' || !dialogRef.current) return;
+      const els = Array.from(dialogRef.current.querySelectorAll('a[href], button:not([disabled])'));
+      if (!els.length) return;
+      const first = els[0]; const last = els[els.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      else if (!dialogRef.current.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    };
     document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      if (previo && previo.focus && document.body.contains(previo)) previo.focus({ preventScroll: true });
+    };
   }, [open]);
 
   return (
     <AnimatePresence>
       {open && (
         <motion.div className="fixed inset-0 z-[300] flex items-end sm:items-center justify-center p-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-          <div className="absolute inset-0 bg-[#071D49]/60 backdrop-blur-sm" onClick={() => setOpen(false)} />
-          <motion.div role="dialog" aria-modal="true" aria-labelledby="exit-title"
+          <div className="absolute inset-0 bg-[#071D49]/60 backdrop-blur-sm" onClick={() => setOpen(false)} aria-hidden="true" />
+          <motion.div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="exit-title" aria-describedby="exit-desc"
             initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 28 }}
             className="relative w-full max-w-md bg-white text-[#071D49] rounded-[28px] p-7 shadow-2xl">
-            <button ref={closeRef} onClick={() => setOpen(false)} aria-label="Cerrar" className="absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center hover:bg-[#071D49]/5">
+            <button ref={closeRef} type="button" onClick={() => setOpen(false)} aria-label="Cerrar" className="absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center hover:bg-[#071D49]/5">
               <X size={20} />
             </button>
             <p className="text-xs font-bold uppercase tracking-[0.2em] mb-3 inline-flex items-center gap-2"><span className="w-5 h-1.5 rounded-full bg-[#D7E400]" aria-hidden="true" />Antes de irte</p>
             <h2 id="exit-title" className="font-display text-2xl font-extrabold uppercase tracking-tight leading-tight mb-3">¿Todavía no te decides?</h2>
-            <p className="text-[#071D49]/75 leading-relaxed mb-6">Prueba una clase en vivo gratis, sin compromiso. O calcula si te alcanza para la carrera que quieres.</p>
+            <p id="exit-desc" className="text-[#071D49]/75 leading-relaxed mb-6">Prueba una clase en vivo gratis, sin compromiso. O calcula si te alcanza para la carrera que quieres.</p>
             <div className="space-y-3">
               <Link to="/inscripcion?programa=clase-prueba" onClick={() => { setOpen(false); trackEvent('ventana_salida_clic', { opcion: 'clase_prueba' }); }}
                 className="w-full min-h-[52px] rounded-2xl bg-[#D7E400] text-[#071D49] font-display font-extrabold text-sm uppercase tracking-wider inline-flex items-center justify-center gap-2">

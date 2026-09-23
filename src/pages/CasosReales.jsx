@@ -53,7 +53,7 @@ export default function CasosReales() {
               {...fadeUp(i * 0.08)}
               className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#071D49]/5 shadow-card flex flex-col"
             >
-              <div className="flex gap-1 mb-5" aria-label={`${t.rating} de 5 estrellas`}>
+              <div className="flex gap-1 mb-5" role="img" aria-label={`${t.rating} de 5 estrellas`}>
                 {Array(t.rating).fill(0).map((_, j) => (
                   <Star key={j} size={18} fill={YELLOW} color={BLUE} strokeWidth={1.5} />
                 ))}

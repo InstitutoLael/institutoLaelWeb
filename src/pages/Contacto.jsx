@@ -15,7 +15,7 @@ const fadeUp = (delay = 0) => ({
 });
 
 const FIELD =
-  'w-full min-h-[52px] bg-[#F4F4F4] border border-[#071D49]/15 rounded-2xl px-4 sm:px-5 py-3 text-base text-[#071D49] placeholder:text-[#071D49]/40 transition-colors hover:border-[#071D49]/30 focus:bg-white focus:border-[#071D49] focus:outline-none focus:ring-4 focus:ring-[#071D49]/10';
+  'w-full min-h-[52px] bg-[#F4F4F4] border border-[#071D49]/15 rounded-2xl px-4 sm:px-5 py-3 text-base text-[#071D49] placeholder:text-[#071D49]/60 transition-colors hover:border-[#071D49]/30 focus:bg-white focus:border-[#071D49] focus:outline-none focus:ring-4 focus:ring-[#071D49]/10';
 const LABEL = 'block text-sm font-bold text-[#071D49] mb-2';
 
 const METHODS = [

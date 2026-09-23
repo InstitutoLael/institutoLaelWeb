@@ -61,7 +61,7 @@ export default function NemCalculator({ onUse }) {
               onChange={(e) => { setGrade(e.target.value.replace(/[^0-9.,]/g, '').slice(0, 4)); setUsed(false); }}
               placeholder="Ej: 6,25"
               aria-invalid={showError}
-              className="w-full rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] px-3 py-3 min-h-[48px] text-base font-semibold focus:outline-none focus:ring-2 focus:ring-[#071D49] placeholder:text-[#071D49]/45 placeholder:font-normal placeholder:text-sm"
+              className="w-full rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] px-3 py-3 min-h-[48px] text-base font-semibold focus:outline-none focus:ring-2 focus:ring-[#071D49] placeholder:text-[#071D49]/60 placeholder:font-normal placeholder:text-sm"
             />
           </label>
           {showError && <p className="text-xs font-semibold text-rose-700 mt-1">Escribe un promedio entre 4,0 y 7,0 (ej: 5,85).</p>}

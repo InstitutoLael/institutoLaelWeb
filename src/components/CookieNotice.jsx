@@ -39,8 +39,8 @@ export default function CookieNotice() {
         <Link to="/privacidad" className="underline font-semibold">Más información</Link>
       </p>
       <div className="flex gap-2">
-        <button onClick={() => decide('si')} className="flex-1 min-h-[44px] rounded-xl bg-[#071D49] text-white text-sm font-bold">Aceptar</button>
-        <button onClick={() => decide('no')} className="flex-1 min-h-[44px] rounded-xl border border-[#071D49]/20 text-sm font-bold">Solo las necesarias</button>
+        <button type="button" onClick={() => decide('si')} className="flex-1 min-h-[44px] rounded-xl bg-[#071D49] text-white text-sm font-bold">Aceptar</button>
+        <button type="button" onClick={() => decide('no')} className="flex-1 min-h-[44px] rounded-xl border border-[#071D49]/20 text-sm font-bold">Solo las necesarias</button>
       </div>
     </div>
   );

@@ -21,13 +21,19 @@ export const PROGRAMAS_MENU = [
 export default function ProgramasDropdown({ solid }) {
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+  const btnRef = useRef(null);
   const location = useLocation();
   const activo = PROGRAMAS_MENU.some((p) => location.pathname.startsWith(p.path));
 
   useEffect(() => { setOpen(false); }, [location.pathname]);
   useEffect(() => {
     if (!open) return undefined;
-    const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        if (ref.current && ref.current.contains(document.activeElement)) btnRef.current && btnRef.current.focus();
+      }
+    };
     const onClick = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
     document.addEventListener('keydown', onKey);
     document.addEventListener('mousedown', onClick);
@@ -35,15 +41,22 @@ export default function ProgramasDropdown({ solid }) {
   }, [open]);
 
   const color = solid
-    ? activo ? 'text-lael-primary' : 'text-lael-primary/60 hover:text-lael-primary'
+    ? activo ? 'text-lael-primary' : 'text-lael-primary/75 hover:text-lael-primary'
     : activo ? 'text-lael-accent' : 'text-white/80 hover:text-white';
 
   return (
-    <div ref={ref} className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+    <div
+      ref={ref}
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+      onBlur={(e) => { if (ref.current && !ref.current.contains(e.relatedTarget)) setOpen(false); }}
+    >
       <button
         type="button"
+        ref={btnRef}
         aria-expanded={open}
-        aria-haspopup="true"
+        aria-controls="menu-programas"
         onClick={() => setOpen((o) => !o)}
         className={`flex items-center gap-1.5 text-[13px] tracking-[0.06em] uppercase font-bold py-2 transition-colors ${color}`}
       >
@@ -56,13 +69,14 @@ export default function ProgramasDropdown({ solid }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.18 }}
+            id="menu-programas"
             className="absolute left-1/2 -translate-x-1/2 top-full pt-3 w-[560px]"
           >
             <div className="bg-white rounded-2xl shadow-2xl border border-[#071D49]/10 p-3 grid grid-cols-2 gap-1">
               {PROGRAMAS_MENU.map((p) => (
-                <Link key={p.path} to={p.path} className="rounded-xl px-4 py-3 hover:bg-[#F4F4F4] focus-visible:bg-[#F4F4F4] focus:outline-none">
+                <Link key={p.path} to={p.path} className="rounded-xl px-4 py-3 hover:bg-[#F4F4F4] focus-visible:bg-[#F4F4F4]">
                   <span className="block text-sm font-bold text-[#071D49]">{p.name}</span>
-                  <span className="block text-xs text-[#071D49]/60 mt-0.5">{p.tag}</span>
+                  <span className="block text-xs text-[#071D49]/70 mt-0.5">{p.tag}</span>
                 </Link>
               ))}
             </div>

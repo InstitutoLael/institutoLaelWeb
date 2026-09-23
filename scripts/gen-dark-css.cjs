@@ -12,6 +12,10 @@
  *  - Textos azul Lael pasan a casi blanco (con la misma transparencia),
  *    salvo cuando van sobre amarillo (botones y etiquetas), que siguen azules.
  *  - Bordes azules pasan a bordes blancos suaves.
+ *  - Lo que tenga data-keep-light (p. ej. el certificado de papel o la
+ *    cabecera verde de WhatsApp) no se toca: se ve igual que en modo claro.
+ *  - Los fondos de estado (verde, rojo, ámbar muy claros) pasan a su versión
+ *    oscura y su texto a un tono claro, para que el contraste siga >= 4.5:1.
  * -----------------------------------------------------------------------------
  */
 const fs = require('fs');
@@ -48,6 +52,9 @@ const alpha = (a) => (a == null ? 1 : a.startsWith('[') ? Number(a.slice(1, -1))
 // Excluir lo que va sobre amarillo (texto navy en botón amarillo debe seguir navy)
 const NOT_ON_YELLOW = ':not([class~="bg-[#D7E400]"]):not([class~="bg-[#D7E400]"] *):not([class~="bg-lael-accent"]):not([class~="bg-lael-accent"] *):not([style*="background-color: rgb(215, 228, 0)"]):not([style*="background-color: rgb(215, 228, 0)"] *)';
 
+// Nada dentro de [data-keep-light] cambia en modo oscuro.
+const KEEP = ':not([data-keep-light]):not([data-keep-light] *)';
+
 const rules = [];
 for (const t of [...tokens].sort()) {
   const m = /^(?:(hover|focus|group-hover|placeholder|focus-visible):)?(text|bg|border|ring|placeholder)-(.+?)(?:\/(.+))?$/.exec(t);
@@ -55,12 +62,12 @@ for (const t of [...tokens].sort()) {
   const [, variant, prop, colorRaw, a] = m;
   const color = colorRaw.toLowerCase();
   const al = alpha(a);
-  let sel = `html.dark ${esc(t)}`;
+  let sel = `html.dark ${esc(t)}${KEEP}`;
   let pseudo = '';
   if (variant === 'hover') pseudo = ':hover';
   if (variant === 'focus') pseudo = ':focus';
   if (variant === 'focus-visible') pseudo = ':focus-visible';
-  if (variant === 'group-hover') sel = `html.dark .group:hover ${esc(t)}`;
+  if (variant === 'group-hover') sel = `html.dark .group:hover ${esc(t)}${KEEP}`;
   if (variant === 'placeholder' || prop === 'placeholder') pseudo = '::placeholder';
 
   let decl = null;
@@ -84,9 +91,9 @@ const css = `/* ARCHIVO GENERADO por scripts/gen-dark-css.cjs — no editar a ma
 html.dark { color-scheme: dark; }
 html.dark, html.dark body { background-color: ${PAGE} !important; color: rgb(${INK}); }
 /* Textos azules escritos como estilo en línea (style={{ color: BLUE }}) */
-html.dark [style*="color: rgb(7, 29, 73)"]:not([style*="background-color: rgb(215, 228, 0)"]):not([style*="background-color: rgb(215, 228, 0)"] *):not([class~="bg-[#D7E400]"]):not([class~="bg-[#D7E400]"] *) { color: rgb(${INK}) !important; }
-html.dark [style*="background-color: rgb(244, 244, 244)"] { background-color: ${PAGE} !important; }
-html.dark [style*="background-color: rgb(255, 255, 255)"] { background-color: ${CARD} !important; }
+html.dark [style*="color: rgb(7, 29, 73)"]${KEEP}:not([style*="background-color: rgb(215, 228, 0)"]):not([style*="background-color: rgb(215, 228, 0)"] *):not([class~="bg-[#D7E400]"]):not([class~="bg-[#D7E400]"] *) { color: rgb(${INK}) !important; }
+html.dark [style*="background-color: rgb(244, 244, 244)"]${KEEP} { background-color: ${PAGE} !important; }
+html.dark [style*="background-color: rgb(255, 255, 255)"]${KEEP} { background-color: ${CARD} !important; }
 /* Botones azules sobre tarjetas oscuras: un poco más claros para que se vean */
 html.dark a[class~="bg-[#071D49]"], html.dark button[class~="bg-[#071D49]"] { background-color: #1E3A7A !important; }
 html.dark a[class~="bg-[#071D49]"]:hover, html.dark button[class~="bg-[#071D49]"]:hover { background-color: #27498F !important; }
@@ -101,6 +108,18 @@ html.dark img[alt*="INO"], html.dark img[alt*="Olivos"], html.dark img[alt*="Mer
 /* Formularios */
 html.dark input, html.dark select, html.dark textarea { color: rgb(${INK}); }
 html.dark select option { background: ${CARD}; color: rgb(${INK}); }
+/* Fondos de estado (éxito / error / aviso) y su texto, con contraste AA */
+html.dark [class~="bg-emerald-50"]${KEEP} { background-color: rgba(16, 185, 129, 0.14) !important; }
+html.dark [class~="bg-emerald-100"]${KEEP} { background-color: rgba(16, 185, 129, 0.22) !important; }
+html.dark [class~="bg-rose-50"]${KEEP} { background-color: rgba(244, 63, 94, 0.14) !important; }
+html.dark [class~="bg-amber-50"]${KEEP} { background-color: rgba(245, 158, 11, 0.14) !important; }
+html.dark [class~="bg-[#E7F8D7]"]${KEEP} { background-color: rgba(37, 211, 102, 0.16) !important; }
+html.dark [class~="text-emerald-700"]${KEEP}, html.dark [class~="text-emerald-800"]${KEEP} { color: #6EE7B7 !important; }
+html.dark [class~="text-rose-700"]${KEEP}, html.dark [class~="text-rose-800"]${KEEP} { color: #FDA4AF !important; }
+html.dark [class~="text-amber-900"]${KEEP} { color: #FCD34D !important; }
+html.dark [class~="border-rose-200"]${KEEP} { border-color: rgba(244, 63, 94, 0.4) !important; }
+html.dark [class~="border-emerald-600/10"]${KEEP} { border-color: rgba(16, 185, 129, 0.25) !important; }
+html.dark [class~="border-rose-600/10"]${KEEP} { border-color: rgba(244, 63, 94, 0.25) !important; }
 ${rules.join('\n')}
 `;
 

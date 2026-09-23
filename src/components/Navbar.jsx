@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Plus } from 'lucide-react';
@@ -40,9 +40,11 @@ export default function Navbar() {
   const location = useLocation();
 
   const [bannerHeight, setBannerHeight] = useState(0);
+  const burgerRef = useRef(null);
+  const drawerRef = useRef(null);
 
   // Páginas con fondo claro (Navbar fondo blanco/sólido siempre)
-  const isLightPage = ['/nosotros', '/contacto', '/transparencia', '/preguntas', '/diagnostico', '/casos-reales', '/sistema', '/privacidad'].includes(location.pathname);
+  const isLightPage = ['/nosotros', '/contacto', '/transparencia', '/preguntas', '/diagnostico', '/casos-reales', '/sistema', '/privacidad', '/iconos'].includes(location.pathname);
 
   // Scroll detection
   useEffect(() => {
@@ -84,6 +86,37 @@ export default function Navbar() {
   }, [mobileOpen]);
 
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
+
+  // Menú de celular accesible: foco adentro al abrir, Tab no se escapa,
+  // Escape cierra y el foco vuelve al botón de menú.
+  useEffect(() => {
+    if (!mobileOpen) return undefined;
+    const burger = burgerRef.current;
+    const t = setTimeout(() => {
+      const first = drawerRef.current && drawerRef.current.querySelector('a[href], button');
+      if (first) first.focus();
+    }, 50);
+    const onKey = (e) => {
+      if (e.key === 'Escape') { setMobileOpen(false); return; }
+      if (e.key !== 'Tab' || !drawerRef.current) return;
+      const els = Array.from(drawerRef.current.querySelectorAll('a[href], button:not([disabled])'));
+      if (!els.length) return;
+      const first = els[0]; const last = els[els.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      else if (!drawerRef.current.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => {
+      clearTimeout(t);
+      document.removeEventListener('keydown', onKey);
+      // Si se cerró con Escape o con la X, el foco vuelve al botón de menú.
+      // Si se cerró porque cambió la página, el foco ya está en el contenido.
+      const a = document.activeElement;
+      const drawer = drawerRef.current;
+      if (burger && document.body.contains(burger) && (a === document.body || (drawer && drawer.contains(a)))) burger.focus({ preventScroll: true });
+    };
+  }, [mobileOpen]);
 
   const isFocusPage =
     location.pathname === '/diagnostico' ||
@@ -144,7 +177,7 @@ export default function Navbar() {
           </Link>
 
           {/* ── DESKTOP NAV ──────────────────────────────────────────── */}
-          <nav className="hidden xl:flex items-center gap-7">
+          <nav aria-label="Principal" className="hidden xl:flex items-center gap-7">
             {NAVIGATION.main.map((item) => item.dropdown ? (
               <ProgramasDropdown key="programas" solid={isNavSolid} />
             ) : (
@@ -156,7 +189,7 @@ export default function Navbar() {
                     isNavSolid
                       ? isActive
                         ? 'text-lael-primary'
-                        : 'text-lael-primary/60 hover:text-lael-primary'
+                        : 'text-lael-primary/75 hover:text-lael-primary'
                       : isActive
                         ? 'text-lael-accent'
                         : 'text-white/80 hover:text-white'
@@ -198,8 +231,12 @@ export default function Navbar() {
 
             {/* Burger mobile */}
             <button
+              ref={burgerRef}
+              type="button"
               onClick={() => setMobileOpen(v => !v)}
-              aria-label="Toggle menu"
+              aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+              aria-expanded={mobileOpen}
+              aria-controls="menu-movil"
               className={`xl:hidden w-11 h-11 flex items-center justify-center rounded-xl transition-all active:scale-95 border ${
                 mobileOpen
                   ? 'bg-lael-primary text-white border-lael-primary'
@@ -234,11 +271,17 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setMobileOpen(false)}
+              aria-hidden="true"
               className="absolute inset-0 bg-lael-primary/90 backdrop-blur-lg"
             />
 
             {/* Drawer Content */}
             <motion.div
+              ref={drawerRef}
+              id="menu-movil"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menú"
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
@@ -248,9 +291,10 @@ export default function Navbar() {
               {/* Header inside Drawer */}
               <div className="flex items-center justify-between mb-8 relative z-10">
                 <Link to="/" onClick={() => setMobileOpen(false)}>
-                  <img src={logoBlanco} alt="Lael" className="h-10 w-auto" />
+                  <img src={logoBlanco} alt="Instituto Lael, ir al inicio" className="h-10 w-auto" />
                 </Link>
                 <button
+                  type="button"
                   onClick={() => setMobileOpen(false)}
                   aria-label="Cerrar menú"
                   className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20"
@@ -263,7 +307,7 @@ export default function Navbar() {
               <nav aria-label="Menú principal" className="relative z-10 flex-1 space-y-7">
                 {MOBILE_MENU.map((sec, si) => (
                   <motion.div key={sec.title} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 + si * 0.06 }}>
-                    <p className="text-xs font-bold uppercase tracking-[0.15em] text-white/60 mb-2 px-1">{sec.title}</p>
+                    <h2 className="text-xs font-bold uppercase tracking-[0.15em] text-white/70 mb-2 px-1">{sec.title}</h2>
                     <div className={sec.grid ? 'grid grid-cols-2 gap-2' : 'space-y-1'}>
                       {sec.items.map((it) => (
                         <NavLink

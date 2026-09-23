@@ -81,7 +81,7 @@ export default function CertificateSection({ defaultLevel = "B2", defaultLanguag
           className="lg:col-span-6 flex flex-col items-center justify-center"
         >
           {/* Mockup Frame */}
-          <div aria-hidden="true" className="w-full max-w-[500px] min-h-[260px] sm:min-h-0 sm:aspect-[1.414/1] bg-[#FCFAF2] border-[12px] border-[#071D49] p-6 shadow-2xl relative flex flex-col justify-between overflow-hidden rounded-md text-left font-serif select-none">
+          <div aria-hidden="true" data-keep-light className="w-full max-w-[500px] min-h-[260px] sm:min-h-0 sm:aspect-[1.414/1] bg-[#FCFAF2] border-[12px] border-[#071D49] p-6 shadow-2xl relative flex flex-col justify-between overflow-hidden rounded-md text-left font-serif select-none">
             {/* Delicate inner border */}
             <div className="absolute inset-2 border border-[#C6A66B]/50 pointer-events-none" />
             {/* Decorative corners */}
@@ -99,11 +99,11 @@ export default function CertificateSection({ defaultLevel = "B2", defaultLanguag
 
             {/* Body */}
             <div className="text-center my-4 z-10 font-sans">
-              <p className="text-[8px] sm:text-[9px] italic text-[#8D8D8D]">Se otorga el presente documento a</p>
+              <p className="text-[8px] sm:text-[9px] italic text-[#5F6470]">Se otorga el presente documento a</p>
               <p className="text-base sm:text-xl font-bold text-[#071D49] border-b border-[#071D49]/10 w-fit mx-auto px-6 py-1 my-2 font-display uppercase tracking-wide">
                 [Nombre del Alumno]
               </p>
-              <p className="text-[8px] sm:text-[9px] leading-relaxed text-[#8D8D8D] max-w-[320px] mx-auto mt-2">
+              <p className="text-[8px] sm:text-[9px] leading-relaxed text-[#5F6470] max-w-[320px] mx-auto mt-2">
                 Por haber completado y aprobado satisfactoriamente las exigencias académicas y evaluaciones del programa de
                 <strong className="text-[#071D49] ml-1 font-bold">{defaultLanguage}</strong>, alcanzando el nivel de suficiencia:
               </p>
@@ -119,21 +119,21 @@ export default function CertificateSection({ defaultLevel = "B2", defaultLanguag
               <div className="text-center w-24">
                 <div className="border-t border-[#8D8D8D]/40 pt-1.5">
                   <p className="text-[6px] sm:text-[7px] font-black text-[#071D49] uppercase">Diego Chaparro</p>
-                  <p className="text-[5px] text-[#8D8D8D] uppercase tracking-wider">Director General</p>
+                  <p className="text-[5px] text-[#5F6470] uppercase tracking-wider">Director General</p>
                 </div>
               </div>
 
               {/* Emblem / Seal */}
               <div className="w-10 h-10 rounded-full border-2 border-[#C6A66B] flex items-center justify-center relative bg-white/40">
                 <div className="w-8 h-8 rounded-full bg-[#C6A66B]/15 flex items-center justify-center">
-                  <span className="text-[#C6A66B] text-[7px] font-black tracking-tighter">LAEL</span>
+                  <span className="text-[#7A5E2E] text-[7px] font-black tracking-tighter">LAEL</span>
                 </div>
               </div>
 
               <div className="text-center w-24">
                 <div className="border-t border-[#8D8D8D]/40 pt-1.5">
                   <p className="text-[6px] sm:text-[7px] font-black text-[#071D49] uppercase">Comité Académico</p>
-                  <p className="text-[5px] text-[#8D8D8D] uppercase tracking-wider">Acreditación</p>
+                  <p className="text-[5px] text-[#5F6470] uppercase tracking-wider">Acreditación</p>
                 </div>
               </div>
             </div>

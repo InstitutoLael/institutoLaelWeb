@@ -56,7 +56,7 @@ export default function Verano() {
                 >
                   {c.tag}
                 </span>
-                <span className={`inline-flex items-center gap-1.5 text-xs font-semibold ${c.featured ? 'text-white/70' : 'text-[#071D49]/60'}`}>
+                <span className={`inline-flex items-center gap-1.5 text-xs font-semibold ${c.featured ? 'text-white/70' : 'text-[#071D49]/70'}`}>
                   <CalendarDays size={14} /> {c.when}
                 </span>
               </div>

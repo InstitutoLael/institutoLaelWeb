@@ -506,7 +506,7 @@ export default function Home() {
                 {...fadeUp(0)}
                 className="rounded-[28px] p-6 sm:p-8 bg-[#F4F4F4] border border-[#071D49]/5"
               >
-                <div className="flex gap-1 mb-5" aria-label={`${t.rating} de 5 estrellas`}>
+                <div className="flex gap-1 mb-5" role="img" aria-label={`${t.rating} de 5 estrellas`}>
                   {Array(t.rating).fill(0).map((_, i) => (
                     <Star key={i} size={18} fill={YELLOW} color={BLUE} strokeWidth={1.5} />
                   ))}

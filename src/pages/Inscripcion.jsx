@@ -14,17 +14,17 @@ import { trackEvent } from '../utils/analytics';
 const BLUE = '#071D49';
 const YELLOW = '#D7E400';
 
-const INPUT = 'w-full rounded-xl border border-[#071D49]/20 bg-white px-4 min-h-[52px] text-base text-[#071D49] placeholder:text-[#071D49]/40 focus:outline-none focus:border-[#071D49] focus:ring-4 focus:ring-[#071D49]/10';
+const INPUT = 'w-full rounded-xl border border-[#071D49]/20 bg-white px-4 min-h-[52px] text-base text-[#071D49] placeholder:text-[#071D49]/60 focus:outline-none focus:border-[#071D49] focus:ring-4 focus:ring-[#071D49]/10';
 const LABEL = 'block text-sm font-bold mb-1.5';
 
 function Field({ label, htmlFor, children, hint, optional }) {
   return (
     <div>
       <label htmlFor={htmlFor} className={LABEL}>
-        {label} {optional && <span className="font-normal text-[#071D49]/50">(opcional)</span>}
+        {label} {optional && <span className="font-normal text-[#071D49]/70">(opcional)</span>}
       </label>
       {children}
-      {hint && <p className="text-xs text-[#071D49]/60 mt-1.5">{hint}</p>}
+      {hint && <p className="text-xs text-[#071D49]/70 mt-1.5">{hint}</p>}
     </div>
   );
 }
@@ -67,6 +67,10 @@ export default function Inscripcion() {
   const [form, setForm] = useState(() => ({ ...EMPTY, referido: params.get('amigo') || '' }));
   const [estado, setEstado] = useState('idle'); // idle | enviando | error
   const [error, setError] = useState('');
+  const [errorCampo, setErrorCampo] = useState('');
+  // Marca el campo con error para lectores de pantalla (aria-invalid) y lo
+  // enlaza al mensaje (aria-describedby).
+  const inv = (id) => (errorCampo === id ? { 'aria-invalid': true, 'aria-describedby': 'form-error' } : {});
 
   const programa = programaPorId(programaId);
   const precio = useMemo(() => precioPaes(ramos), [ramos]);
@@ -91,20 +95,26 @@ export default function Inscripcion() {
   };
 
   const validar = () => {
-    if (programa.eleccion === 'ramos' && ramos.length === 0) return 'Elige al menos un ramo.';
-    if (['verano', 'prueba', 'nivel', 'asignatura'].includes(programa.eleccion) && !opcion) return 'Elige una opción en el paso 1.';
-    if (form.nombre.trim().length < 3) return 'Escribe tu nombre completo.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.correo.trim())) return 'Revisa tu correo.';
-    if (!/^[+\d][\d\s-]{7,18}$/.test(form.telefono.trim())) return 'Revisa tu teléfono (ej: +56 9 1234 5678).';
-    if (esMenor && (!form.apoderado_nombre.trim() || !/^[+\d][\d\s-]{7,18}$/.test(form.apoderado_telefono.trim()))) return 'Como eres menor de edad, necesitamos el nombre y teléfono de tu apoderado.';
-    if (!form.acepta_privacidad) return 'Debes aceptar la política de privacidad para enviar.';
-    return '';
+    if (programa.eleccion === 'ramos' && ramos.length === 0) return ['Elige al menos un ramo.', ''];
+    if (['verano', 'prueba', 'nivel', 'asignatura'].includes(programa.eleccion) && !opcion) return ['Elige una opción en el paso 1.', ''];
+    if (form.nombre.trim().length < 3) return ['Escribe tu nombre completo.', 'nombre'];
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.correo.trim())) return ['Revisa tu correo.', 'correo'];
+    if (!/^[+\d][\d\s-]{7,18}$/.test(form.telefono.trim())) return ['Revisa tu teléfono (ej: +56 9 1234 5678).', 'telefono'];
+    if (esMenor && (!form.apoderado_nombre.trim() || !/^[+\d][\d\s-]{7,18}$/.test(form.apoderado_telefono.trim()))) return ['Como eres menor de edad, necesitamos el nombre y teléfono de tu apoderado.', (form.apoderado_nombre.trim() ? 'apoderado_telefono' : 'apoderado_nombre')];
+    if (!form.acepta_privacidad) return ['Debes aceptar la política de privacidad para enviar.', 'acepta_privacidad'];
+    return ['', ''];
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const msg = validar();
-    if (msg) { setError(msg); return; }
+    const [msg, campo] = validar();
+    setErrorCampo(campo);
+    if (msg) {
+      setError(msg);
+      const el = campo && document.getElementById(campo);
+      if (el) el.focus();
+      return;
+    }
     setError('');
     setEstado('enviando');
     const payload = {
@@ -195,7 +205,7 @@ export default function Inscripcion() {
                       <Chip key={r.cupo} active={activo} disabled={lleno && !activo} onClick={() => setRamos((rs) => (rs.includes(r.cupo) ? rs.filter((x) => x !== r.cupo) : [...rs, r.cupo]))}>
                         <span className="flex-1">
                           {r.nombre}
-                          <span className={`block text-xs font-normal ${activo ? 'text-white/70' : 'text-[#071D49]/60'}`}>
+                          <span className={`block text-xs font-normal ${activo ? 'text-white/70' : 'text-[#071D49]/70'}`}>
                             {r.obligatoria ? 'Obligatoria' : 'Electiva'}
                             {q != null && (lleno ? ' · Sin cupos' : ` · Quedan ${q} cupos`)}
                           </span>
@@ -222,7 +232,7 @@ export default function Inscripcion() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {VERANO_OPCIONES.map((o) => (
                     <Chip key={o.cupo} active={opcion === o.cupo} onClick={() => setOpcion(o.cupo)}>
-                      <span className="flex-1">{o.nombre}<span className={`block text-xs font-normal ${opcion === o.cupo ? 'text-white/70' : 'text-[#071D49]/60'}`}>{o.precio}</span></span>
+                      <span className="flex-1">{o.nombre}<span className={`block text-xs font-normal ${opcion === o.cupo ? 'text-white/70' : 'text-[#071D49]/70'}`}>{o.precio}</span></span>
                     </Chip>
                   ))}
                 </div>
@@ -246,9 +256,9 @@ export default function Inscripcion() {
             <legend className="sr-only">Tus datos</legend>
             <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight mb-5">2. Tus datos</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="sm:col-span-2"><Field label="Nombre completo" htmlFor="nombre"><input id="nombre" autoComplete="name" className={INPUT} value={form.nombre} onChange={set('nombre')} /></Field></div>
-              <Field label="Correo" htmlFor="correo"><input id="correo" type="email" autoComplete="email" inputMode="email" className={INPUT} value={form.correo} onChange={set('correo')} /></Field>
-              <Field label="WhatsApp" htmlFor="telefono" hint="Te escribimos por aquí."><input id="telefono" type="tel" autoComplete="tel" inputMode="tel" placeholder="+56 9 1234 5678" className={INPUT} value={form.telefono} onChange={set('telefono')} /></Field>
+              <div className="sm:col-span-2"><Field label="Nombre completo" htmlFor="nombre"><input id="nombre" {...inv('nombre')} autoComplete="name" className={INPUT} value={form.nombre} onChange={set('nombre')} /></Field></div>
+              <Field label="Correo" htmlFor="correo"><input id="correo" {...inv('correo')} type="email" autoComplete="email" inputMode="email" className={INPUT} value={form.correo} onChange={set('correo')} /></Field>
+              <Field label="WhatsApp" htmlFor="telefono" hint="Te escribimos por aquí."><input id="telefono" {...inv('telefono')} type="tel" autoComplete="tel" inputMode="tel" placeholder="+56 9 1234 5678" className={INPUT} value={form.telefono} onChange={set('telefono')} /></Field>
               <Field label="Edad" htmlFor="edad"><input id="edad" inputMode="numeric" className={INPUT} value={form.edad} onChange={(e) => setForm((f) => ({ ...f, edad: e.target.value.replace(/\D/g, '').slice(0, 2) }))} /></Field>
               <Field label="Curso o nivel actual" htmlFor="curso_actual" optional><input id="curso_actual" placeholder="Ej: 4° medio, egresado" className={INPUT} value={form.curso_actual} onChange={set('curso_actual')} /></Field>
               <div className="sm:col-span-2"><Field label="Comuna y región" htmlFor="comuna" optional><input id="comuna" autoComplete="address-level2" className={INPUT} value={form.comuna} onChange={set('comuna')} /></Field></div>
@@ -259,8 +269,8 @@ export default function Inscripcion() {
                 <p className="font-bold mb-1">Datos de tu apoderado</p>
                 <p className="text-sm text-[#071D49]/70 mb-4">Como eres menor de edad, necesitamos avisarle a tu mamá, papá o apoderado.</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="sm:col-span-2"><Field label="Nombre del apoderado" htmlFor="apoderado_nombre"><input id="apoderado_nombre" className={INPUT} value={form.apoderado_nombre} onChange={set('apoderado_nombre')} /></Field></div>
-                  <Field label="Teléfono del apoderado" htmlFor="apoderado_telefono"><input id="apoderado_telefono" type="tel" inputMode="tel" className={INPUT} value={form.apoderado_telefono} onChange={set('apoderado_telefono')} /></Field>
+                  <div className="sm:col-span-2"><Field label="Nombre del apoderado" htmlFor="apoderado_nombre"><input id="apoderado_nombre" {...inv('apoderado_nombre')} className={INPUT} value={form.apoderado_nombre} onChange={set('apoderado_nombre')} /></Field></div>
+                  <Field label="Teléfono del apoderado" htmlFor="apoderado_telefono"><input id="apoderado_telefono" {...inv('apoderado_telefono')} type="tel" inputMode="tel" className={INPUT} value={form.apoderado_telefono} onChange={set('apoderado_telefono')} /></Field>
                   <Field label="Correo del apoderado" htmlFor="apoderado_correo" optional><input id="apoderado_correo" type="email" inputMode="email" className={INPUT} value={form.apoderado_correo} onChange={set('apoderado_correo')} /></Field>
                 </div>
               </div>
@@ -270,7 +280,7 @@ export default function Inscripcion() {
           {/* PASO 3 */}
           <fieldset className="bg-white rounded-[28px] p-5 sm:p-8 border border-[#071D49]/5 shadow-card">
             <legend className="sr-only">Algo más</legend>
-            <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight mb-5">3. Algo más <span className="text-sm font-normal normal-case tracking-normal text-[#071D49]/60">(opcional)</span></h2>
+            <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight mb-5">3. Algo más <span className="text-sm font-normal normal-case tracking-normal text-[#071D49]/70">(opcional)</span></h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Field label="¿Vienes de parte de alguien?" htmlFor="referido" hint="Si un amigo te invitó, a él le hacemos descuento."><input id="referido" className={INPUT} value={form.referido} onChange={set('referido')} /></Field>
               <Field label="¿Cómo nos conociste?" htmlFor="como_conocio">
@@ -290,7 +300,7 @@ export default function Inscripcion() {
           {/* ENVIAR */}
           <div className="bg-white rounded-[28px] p-5 sm:p-8 border border-[#071D49]/5 shadow-card space-y-3">
             <label className="flex items-start gap-3 cursor-pointer min-h-[44px]">
-              <input type="checkbox" className="mt-1 w-5 h-5 rounded border-[#071D49]/30 text-[#071D49] focus:ring-[#071D49]" checked={form.acepta_privacidad} onChange={set('acepta_privacidad')} />
+              <input id="acepta_privacidad" {...inv('acepta_privacidad')} type="checkbox" className="mt-1 w-5 h-5 rounded border-[#071D49]/30 text-[#071D49] focus:ring-[#071D49]" checked={form.acepta_privacidad} onChange={set('acepta_privacidad')} />
               <span className="text-sm">Acepto la <Link to="/privacidad" className="underline font-semibold" target="_blank">política de privacidad</Link> de Instituto Lael.</span>
             </label>
             <label className="flex items-start gap-3 cursor-pointer min-h-[44px]">
@@ -298,12 +308,12 @@ export default function Inscripcion() {
               <span className="text-sm">Quiero recibir avisos de cursos, becas y fechas importantes.</span>
             </label>
 
-            {error && <p role="alert" className="text-sm font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-xl px-4 py-3">{error}</p>}
+            {error && <p id="form-error" role="alert" className="text-sm font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-xl px-4 py-3">{error}</p>}
 
             <button type="submit" disabled={estado === 'enviando'} className="w-full min-h-[56px] rounded-2xl bg-[#D7E400] text-[#071D49] font-display font-extrabold text-sm uppercase tracking-wider inline-flex items-center justify-center gap-2 disabled:opacity-70">
               {estado === 'enviando' ? <><Loader2 size={18} className="animate-spin" /> Enviando…</> : <>{programa.tipo === 'clase-prueba' ? 'Pedir mi clase de prueba' : programa.tipo === 'aviso' ? 'Avísenme cuando abra' : 'Asegurar mi cupo'} <ArrowRight size={18} /></>}
             </button>
-            <p className="text-xs text-[#071D49]/60 flex items-center gap-1.5 justify-center"><ShieldCheck size={14} /> Tus datos solo los ve el equipo de Lael.</p>
+            <p className="text-xs text-[#071D49]/70 flex items-center gap-1.5 justify-center"><ShieldCheck size={14} /> Tus datos solo los ve el equipo de Lael.</p>
           </div>
 
           <p className="text-center text-sm text-[#071D49]/70">

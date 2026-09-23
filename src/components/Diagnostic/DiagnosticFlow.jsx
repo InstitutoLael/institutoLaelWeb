@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DIAGNOSTIC_QUESTIONS } from '../../data/diagnostic';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,10 @@ export default function DiagnosticFlow() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState({});
   const navigate = useNavigate();
+  // Al cambiar de pregunta, el foco pasa al título nuevo (lectores de pantalla
+  // y teclado saben que hay una pregunta nueva).
+  const headingRef = useRef(null);
+  const moved = useRef(false);
 
   useEffect(() => {
     trackFunnelEvent('start');
@@ -38,6 +42,7 @@ export default function DiagnosticFlow() {
   const handleSelect = (value) => {
     const newAnswers = { ...answers, [question.id]: value };
     setAnswers(newAnswers);
+    moved.current = true;
 
     if (currentStep < filteredQuestions.length - 1) {
       setCurrentStep(currentStep + 1);
@@ -49,7 +54,7 @@ export default function DiagnosticFlow() {
   };
 
   const goBack = () => {
-    if (currentStep > 0) setCurrentStep(currentStep - 1);
+    if (currentStep > 0) { moved.current = true; setCurrentStep(currentStep - 1); }
   };
 
   if (!question) return null;
@@ -77,6 +82,7 @@ export default function DiagnosticFlow() {
         <div
           className="w-full bg-[#071D49]/10 h-2 rounded-full overflow-hidden"
           role="progressbar"
+          aria-label="Avance del diagnóstico"
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={Math.round(progress)}
@@ -98,10 +104,16 @@ export default function DiagnosticFlow() {
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.35, ease }}
           className="space-y-6 sm:space-y-8"
+          onAnimationComplete={(def) => {
+            if (def && def.opacity === 1 && moved.current && headingRef.current) {
+              moved.current = false;
+              headingRef.current.focus({ preventScroll: true });
+            }
+          }}
         >
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] text-[#071D49]">
+          <h1 ref={headingRef} tabIndex={-1} className="focus:outline-none font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.1] text-[#071D49]">
             {question.question}
-          </h2>
+          </h1>
 
           <div className="grid grid-cols-1 gap-3 sm:gap-4">
             {question.options.map((opt, i) => (

@@ -43,6 +43,13 @@ export default function App() {
   return (
     <MotionConfig reducedMotion="user">
     <div className="flex flex-col min-h-screen relative z-10">
+      <a
+        href="#contenido"
+        data-keep-light
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[1000] focus:px-5 focus:py-3 focus:rounded-xl focus:bg-[#D7E400] focus:text-[#071D49] focus:font-bold focus:shadow-xl"
+      >
+        Saltar al contenido
+      </a>
       <ScrollToTop />
       <AnalyticsTracker />
       <Toaster position="top-right" reverseOrder={false} toastOptions={{
@@ -50,7 +57,7 @@ export default function App() {
       }} />
       <Navbar />
 
-      <main className="flex-grow pt-20">
+      <main id="contenido" tabIndex={-1} className="flex-grow pt-20">
         <PageTransition>
           <Suspense fallback={<div className="min-h-[60vh]" />}>
           <Routes>

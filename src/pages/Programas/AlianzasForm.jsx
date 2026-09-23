@@ -8,7 +8,7 @@ import { waLink, inscripcionLink, fadeUp } from './shared';
 // Por ahora abre un correo prellenado a coordinación (igual que EmpresasForm).
 const INITIAL = { tipo: '', nombre: '', institucion: '', cargo: '', email: '', telefono: '', mensaje: '' };
 const LABEL = 'block text-sm font-bold text-[#071D49] mb-2';
-const INPUT = 'w-full min-h-[48px] bg-white border border-[#071D49]/25 rounded-2xl px-4 text-base text-[#071D49] placeholder:text-[#071D49]/45 hover:border-[#071D49]/50 focus:outline-none focus:border-[#071D49] focus:ring-2 focus:ring-[#071D49]/30 transition-colors';
+const INPUT = 'w-full min-h-[48px] bg-white border border-[#071D49]/25 rounded-2xl px-4 text-base text-[#071D49] placeholder:text-[#071D49]/60 hover:border-[#071D49]/50 focus:outline-none focus:border-[#071D49] focus:ring-2 focus:ring-[#071D49]/30 transition-colors';
 
 export default function AlianzasForm() {
   const [form, setForm] = useState(INITIAL);

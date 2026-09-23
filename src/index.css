@@ -148,3 +148,28 @@
     transform: translateX(3px);
   }
 }
+
+/* ── Accesibilidad ────────────────────────────────────────────────────
+   Anillo de foco visible al navegar con teclado: borde azul marino +
+   contorno amarillo, así se ve tanto sobre fondos claros como oscuros. */
+:where(a, button, summary, select, [tabindex]:not([tabindex="-1"]), [role="button"], [role="tab"], input[type="checkbox"], input[type="radio"], input[type="range"], input[type="file"]):focus-visible {
+  outline: 3px solid #D7E400 !important;
+  outline-offset: 2px !important;
+  box-shadow: 0 0 0 2px #071D49 !important;
+}
+
+/* El contenido principal recibe el foco desde "Saltar al contenido"; no
+   necesita anillo porque no es un control. */
+main:focus { outline: none; }
+
+/* Si la persona pidió menos movimiento: sin animaciones CSS infinitas
+   (pulsos, pings) ni desplazamiento suave. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

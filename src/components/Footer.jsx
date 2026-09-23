@@ -58,10 +58,10 @@ export default function Footer() {
 
           {/* Marca - ocupa 2 columnas */}
           <div className="flex flex-col gap-6 lg:col-span-2">
-            <Link to="/">
+            <Link to="/" aria-label="Instituto Lael, ir al inicio">
               <img
                 src={logoBlanco}
-                alt="Instituto Lael"
+                alt=""
                 loading="lazy"
                 className="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity"
               />
@@ -89,8 +89,8 @@ export default function Footer() {
                   href={href}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label={name}
-                  className="w-9 h-9 flex items-center justify-center rounded-lg bg-white/5 border border-white/10 text-white/50 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+                  aria-label={`${name} (se abre en otra pestaña)`}
+                  className="w-11 h-11 flex items-center justify-center rounded-lg bg-white/5 border border-white/10 text-white/75 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300"
                 >
                   <Icon size={16} />
                 </a>
@@ -100,8 +100,8 @@ export default function Footer() {
 
           {/* Programas */}
           <div>
-            <h4 className="text-xs tracking-[0.15em] uppercase text-white/60 mb-5 font-bold">Programas</h4>
-            <nav className="flex flex-col gap-4">
+            <h2 id="footer-programas" className="text-xs tracking-[0.15em] uppercase text-white/70 mb-5 font-bold">Programas</h2>
+            <nav aria-labelledby="footer-programas" className="flex flex-col gap-4">
               {LINKS_PROGRAMAS.map(l => (
                 <Link key={l.path} to={l.path} className="text-sm text-white/75 hover:text-white transition-colors">
                   {l.name}
@@ -112,8 +112,8 @@ export default function Footer() {
 
           {/* Instituto */}
           <div>
-            <h4 className="text-xs tracking-[0.15em] uppercase text-white/60 mb-5 font-bold">Instituto</h4>
-            <nav className="flex flex-col gap-4">
+            <h2 id="footer-instituto" className="text-xs tracking-[0.15em] uppercase text-white/70 mb-5 font-bold">Instituto</h2>
+            <nav aria-labelledby="footer-instituto" className="flex flex-col gap-4">
               {LINKS_INSTITUTO.map(l => (
                 l.external ? (
                   <a key={l.path} href={l.path} target="_blank" rel="noopener noreferrer" className="text-sm text-white/75 hover:text-white transition-colors">
@@ -130,8 +130,8 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-xs tracking-[0.15em] uppercase text-white/60 mb-5 font-bold">Legal</h4>
-            <nav className="flex flex-col gap-4">
+            <h2 id="footer-legal" className="text-xs tracking-[0.15em] uppercase text-white/70 mb-5 font-bold">Legal</h2>
+            <nav aria-labelledby="footer-legal" className="flex flex-col gap-4">
               {LINKS_LEGAL.map(l => (
                 <Link key={l.path} to={l.path} className="text-sm text-white/75 hover:text-white transition-colors">
                   {l.name}
@@ -158,10 +158,10 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-10 flex flex-col items-center gap-3 text-center">
-          <p className="text-xs text-white/50 italic tracking-[0.1em] uppercase font-bold">
+          <p className="text-xs text-white/60 italic tracking-[0.1em] uppercase font-bold">
             Lucas 4:18
           </p>
-          <p className="text-xs text-white/50 tracking-wide">
+          <p className="text-xs text-white/60 tracking-wide">
             © {year} Instituto Lael SpA · Santiago, Chile
           </p>
           <ThemeToggle className="mt-2" />

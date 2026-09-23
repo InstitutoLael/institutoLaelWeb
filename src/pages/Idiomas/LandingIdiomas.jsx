@@ -146,7 +146,7 @@ function InstagramCard({ img, tag, caption, ago }) {
             <p className="text-[#071D49]/70 text-xs">Santiago, Chile</p>
           </div>
         </div>
-        <Instagram size={18} className="text-[#071D49]/50" aria-hidden="true" />
+        <Instagram size={18} className="text-[#071D49]/70" aria-hidden="true" />
       </div>
       <div className="w-full aspect-square overflow-hidden bg-[#071D49]/5">
         <img src={img} alt="Instituto Lael Instagram Post" loading="lazy" className="w-full h-full object-cover" />
@@ -160,7 +160,7 @@ function InstagramCard({ img, tag, caption, ago }) {
           <span className="font-bold text-[#071D49] mr-2">institutolael</span>
           {caption}
         </p>
-        <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-xs text-[#071D49]/60">
+        <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-xs text-[#071D49]/70">
           <span>{ago}</span>
           <a href={FORM_URL} className="text-[#071D49] font-bold hover:underline py-2">
             Ver detalles en chat →

@@ -32,15 +32,16 @@ export default function UrgencyBanner() {
           className="overflow-hidden relative z-[70] lael-urgency-banner"
         >
           <div className="py-2 px-6 flex items-center justify-center gap-4 text-center relative pr-12">
-            <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#071D49] animate-pulse flex-shrink-0" />
+            <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#071D49] animate-pulse [animation-iteration-count:2] flex-shrink-0" aria-hidden="true" />
             <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.06em] leading-tight" style={{ color: '#071D49' }}>
               Verano Lael: cursos en enero, algunos gratis.{' '}
               <Link to="/verano" onClick={closeBanner} className="underline underline-offset-2">Ver cursos</Link>
-              <span className="hidden sm:inline opacity-70"> · En marzo partimos de lleno</span>
+              <span className="hidden sm:inline opacity-80"> · En marzo partimos de lleno</span>
             </p>
             <button
+              type="button"
               onClick={closeBanner}
-              className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-full transition-colors hover:bg-[#071D49]/10"
+              className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:bg-[#071D49]/10"
               aria-label="Cerrar aviso"
               style={{ color: '#071D49' }}
             >

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { MessageCircle, X, ChevronRight, Zap, Target, HelpCircle, HandHeart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
@@ -75,6 +75,15 @@ export default function FloatingWhatsApp() {
   const location = useLocation();
 
   const isContactPage = location.pathname === '/contacto';
+  const btnRef = useRef(null);
+
+  // Escape cierra el menú y devuelve el foco al botón.
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onKey = (e) => { if (e.key === 'Escape') { setIsOpen(false); btnRef.current && btnRef.current.focus(); } };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [isOpen]);
 
   // Opciones de WhatsApp según la página: así sabes al tiro qué le interesa
   // a quien te escribe. Para agregar una página, suma una entrada a CONTEXTOS.
@@ -100,23 +109,25 @@ export default function FloatingWhatsApp() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] flex flex-col items-end">
+    <aside aria-label="WhatsApp" className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] flex flex-col items-end">
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            id="menu-whatsapp"
             className="mb-4 w-72 bg-[#F4F4F4] rounded-3xl shadow-2xl border border-[#071D49]/10 overflow-hidden"
           >
-            <div className="bg-[#25D366] p-6 text-white">
+            <div data-keep-light className="bg-[#25D366] p-6 text-[#071D49]">
               <p className="font-display text-xl font-bold">Equipo Lael</p>
-              <p className="text-white/80 text-xs">Escríbenos y te respondemos por acá</p>
+              <p className="text-[#071D49]/80 text-xs">Escríbenos y te respondemos por acá</p>
             </div>
             <div className="p-4 space-y-2">
               {dynamicOptions.map((opt) => (
                 <button
                   key={opt.id}
+                  type="button"
                   onClick={() => handleOption(opt)}
                   className="w-full p-4 min-h-[52px] bg-white hover:bg-white border border-transparent hover:border-[#071D49]/20 rounded-2xl text-left flex items-center justify-between group transition-all"
                 >
@@ -124,7 +135,7 @@ export default function FloatingWhatsApp() {
                     <span className="text-[#071D49]">{opt.icon}</span>
                     <span className="text-[#071D49] text-sm font-semibold">{opt.label}</span>
                   </div>
-                  <ChevronRight size={14} className="text-[#071D49]/40 group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight size={14} className="text-[#071D49]/70 group-hover:translate-x-1 transition-transform" />
                 </button>
               ))}
             </div>
@@ -133,14 +144,19 @@ export default function FloatingWhatsApp() {
       </AnimatePresence>
 
       <motion.button
+        ref={btnRef}
+        type="button"
         onClick={handleOpen}
+        aria-label={isOpen ? 'Cerrar menú de WhatsApp' : 'Escríbenos por WhatsApp'}
+        aria-expanded={isOpen}
+        aria-controls="menu-whatsapp"
         animate={!isOpen ? { 
           scale: [1, 1.08, 1],
         } : {}}
         transition={!isOpen ? {
           duration: 0.6,
-          repeat: Infinity,
-          repeatDelay: 4,
+          repeat: 1,
+          repeatDelay: 3,
           ease: "easeInOut"
         } : {}}
         className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ${
@@ -152,10 +168,10 @@ export default function FloatingWhatsApp() {
         {isOpen ? <X size={28} /> : <MessageCircle size={32} />}
         
         {!isOpen && (
-          <span className="absolute inset-0 rounded-full border-4 border-[#25D366] animate-ping opacity-25"></span>
+          <span className="absolute inset-0 rounded-full border-4 border-[#25D366] animate-ping [animation-iteration-count:4] opacity-25"></span>
         )}
       </motion.button>
-    </div>
+    </aside>
   );
 }
 

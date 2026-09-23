@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, ChevronRight, MessageSquare, Star } from 'lucide-react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { CheckCircle2, ChevronRight, MessageSquare, Star, Pause, Play } from 'lucide-react';
 import { TESTIMONIALS } from '../../data/testimonials';
 import lschRealidad from '../../assets/img/Home/mundo_lsch_bg_1777943626827.webp';
 import CertificateSection from '../../components/CertificateSection';
@@ -21,6 +21,10 @@ const ease = [0.16, 1, 0.3, 1];
 
 export default function LandingLSCh() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [pausado, setPausado] = useState(false);
+  const [hover, setHover] = useState(false);
+  const reduce = useReducedMotion();
+  const auto = !pausado && !hover && !reduce;
 
   // Curso en pausa hasta confirmar al instructor/a (de la comunidad Sorda).
   // Cuando abra, cambiar este link de vuelta al formulario de inscripción.
@@ -29,13 +33,15 @@ export default function LandingLSCh() {
 
   const slides = LANDING_SLIDES;
 
-  // Auto rotate slides every 5 seconds
+  // Cambia sola cada 5 segundos, salvo que esté en pausa, con el mouse o el
+  // foco encima, o si la persona pidió menos movimiento.
   useEffect(() => {
+    if (!auto) return undefined;
     const interval = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, [slides.length]);
+  }, [slides.length, auto]);
 
   const levels = LANDING_LEVELS;
 
@@ -108,7 +114,16 @@ export default function LandingLSCh() {
 
             {/* Carrusel de piezas de Instagram */}
             <motion.div {...fadeUp(0.15)} className="flex justify-center">
-              <div className="relative w-full max-w-[420px] aspect-square rounded-[28px] overflow-hidden border border-[#071D49]/5 shadow-card bg-[#092254]">
+              <div
+                className="relative w-full max-w-[420px] aspect-square rounded-[28px] overflow-hidden border border-[#071D49]/5 shadow-card bg-[#092254]"
+                role="region"
+                aria-roledescription="carrusel"
+                aria-label="Piezas de Lengua de Señas"
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+                onFocusCapture={() => setHover(true)}
+                onBlurCapture={() => setHover(false)}
+              >
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeSlide}
@@ -144,11 +159,22 @@ export default function LandingLSCh() {
                       onClick={() => setActiveSlide(idx)}
                       aria-label={`Ver: ${s.title}`}
                       aria-current={idx === activeSlide}
-                      className="h-9 px-1.5 flex items-center"
+                      type="button"
+                      className="h-11 min-w-[24px] px-2 flex items-center justify-center"
                     >
                       <span className={`block h-2.5 rounded-full transition-all duration-300 ${idx === activeSlide ? 'bg-[#D7E400] w-6' : 'bg-white/50 w-2.5'}`} />
                     </button>
                   ))}
+                  {!reduce && (
+                    <button
+                      type="button"
+                      onClick={() => setPausado((v) => !v)}
+                      aria-label={pausado ? 'Reanudar carrusel' : 'Pausar carrusel'}
+                      className="w-11 h-11 flex items-center justify-center text-white/80 hover:text-white"
+                    >
+                      {pausado ? <Play size={14} /> : <Pause size={14} />}
+                    </button>
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -242,7 +268,7 @@ export default function LandingLSCh() {
                 {...fadeUp(0.1 + idx * 0.1)}
                 className="w-full bg-white/5 border border-white/10 rounded-[28px] p-6 sm:p-10"
               >
-                <div className="flex justify-center gap-1 mb-6" aria-label="5 de 5 estrellas">
+                <div className="flex justify-center gap-1 mb-6" role="img" aria-label="5 de 5 estrellas">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} size={18} className="fill-[#D7E400] text-[#D7E400]" aria-hidden="true" />
                   ))}

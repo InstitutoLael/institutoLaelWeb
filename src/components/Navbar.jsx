@@ -9,6 +9,29 @@ import UrgencyBanner from './UrgencyBanner';
 
 const ease = [0.16, 1, 0.3, 1];
 
+// Menú de celular: programas con su precio, herramientas e instituto.
+const MOBILE_MENU = [
+  { title: 'Programas', grid: true, items: [
+    { name: 'Preu PAES', path: '/paes', tag: 'Desde $10.000', highlight: true },
+    { name: 'Escuela de Sueños', path: '/adultos', tag: 'Gratis', highlight: true },
+    { name: 'Inglés', path: '/idiomas', tag: '$14.990/mes' },
+    { name: 'Verano Lael', path: '/verano', tag: 'Enero' },
+    { name: 'Reforzamiento', path: '/reforzamiento', tag: '7° a 2° medio' },
+    { name: 'Empresas', path: '/empresas', tag: 'Cotiza' },
+  ] },
+  { title: 'Herramientas gratis', items: [
+    { name: 'Calculadora de puntaje', path: '/calculadora', tag: '2.000+ carreras' },
+    { name: 'Diagnóstico', path: '/diagnostico', tag: '2 minutos' },
+    { name: 'Noticias y guías', path: '/noticias' },
+  ] },
+  { title: 'Instituto', grid: true, items: [
+    { name: 'Nosotros', path: '/nosotros' },
+    { name: 'Casos reales', path: '/casos-reales' },
+    { name: 'Preguntas', path: '/preguntas' },
+    { name: 'Contacto', path: '/contacto' },
+  ] },
+];
+
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -163,9 +186,7 @@ export default function Navbar() {
           <div className="flex items-center gap-4 z-[110]">
             {/* CTA Inscribirme - amarillo */}
             <a
-              href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/inscripcion"
               className="hidden xl:inline-flex items-center px-6 py-3 rounded-xl text-[13px] tracking-[0.06em] uppercase font-bold transition-all duration-300 shadow-sm bg-lael-accent text-lael-primary hover:bg-[#c4d000] hover:shadow-md"
             >
               Inscribirme
@@ -218,69 +239,71 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-lael-primary rounded-r-[40px] shadow-2xl flex flex-col p-10 overflow-y-auto"
+              className="absolute left-0 top-0 bottom-0 w-[92%] max-w-md bg-lael-primary rounded-r-[32px] shadow-2xl flex flex-col px-6 sm:px-8 pt-6 pb-4 overflow-y-auto"
             >
               {/* Header inside Drawer */}
-              <div className="flex items-center justify-between mb-12 relative z-10">
+              <div className="flex items-center justify-between mb-8 relative z-10">
                 <Link to="/" onClick={() => setMobileOpen(false)}>
                   <img src={logoBlanco} alt="Lael" className="h-10 w-auto" />
                 </Link>
                 <button
                   onClick={() => setMobileOpen(false)}
-                  className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20"
+                  aria-label="Cerrar menú"
+                  className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20"
                 >
                   <X size={20} />
                 </button>
               </div>
 
-              {/* Links */}
-              <nav className="flex flex-col gap-2 relative z-10">
-                {NAVIGATION.main.map((link, i) => (
-                  <motion.div
-                    key={link.path}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.15 + (i * 0.07) }}
-                  >
-                    <NavLink
-                      to={link.path}
-                      onClick={() => setMobileOpen(false)}
-                      className={({ isActive }) =>
-                        `flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 font-bold text-base ${
-                          isActive
-                            ? 'bg-lael-accent text-lael-primary'
-                            : 'text-white/80 hover:bg-white/10'
-                        }`
-                      }
-                    >
-                      <span className="flex items-center gap-3">
-                        {link.name}
-                        {link.badge && (
-                          <span className="bg-lael-accent text-lael-primary text-[9px] font-bold uppercase px-2 py-0.5 rounded-sm">
-                            {link.badge}
-                          </span>
-                        )}
-                      </span>
-                    </NavLink>
+              {/* Secciones del menú */}
+              <nav aria-label="Menú principal" className="relative z-10 flex-1 space-y-7">
+                {MOBILE_MENU.map((sec, si) => (
+                  <motion.div key={sec.title} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 + si * 0.06 }}>
+                    <p className="text-xs font-bold uppercase tracking-[0.15em] text-white/60 mb-2 px-1">{sec.title}</p>
+                    <div className={sec.grid ? 'grid grid-cols-2 gap-2' : 'space-y-1'}>
+                      {sec.items.map((it) => (
+                        <NavLink
+                          key={it.path}
+                          to={it.path}
+                          onClick={() => setMobileOpen(false)}
+                          className={({ isActive }) =>
+                            `flex gap-3 rounded-2xl transition-colors min-h-[52px] ${sec.grid ? 'flex-col items-start justify-center p-3' : 'items-center justify-between px-4 py-3'} ${
+                              isActive ? 'bg-lael-accent text-lael-primary' : 'bg-white/[0.06] text-white hover:bg-white/10'
+                            }`
+                          }
+                        >
+                          {({ isActive }) => (
+                            <>
+                              <span className="font-bold text-[15px] leading-tight">{it.name}</span>
+                              {it.tag && (
+                                <span className={`text-xs font-semibold ${isActive ? 'text-lael-primary/80' : it.highlight ? 'text-lael-accent' : 'text-white/60'}`}>{it.tag}</span>
+                              )}
+                            </>
+                          )}
+                        </NavLink>
+                      ))}
+                    </div>
                   </motion.div>
                 ))}
               </nav>
 
-              {/* Footer Section */}
-              <div className="mt-auto relative z-10 pt-8 border-t border-white/10">
-                <p className="text-xs text-white/40 uppercase tracking-widest font-bold mb-4">Misión Lael</p>
-                <p className="text-sm text-white/70 leading-relaxed italic mb-8">
-                  "No eres un puntaje. Te ayudamos a llegar."
-                </p>
+              {/* Acciones fijas */}
+              <div className="sticky bottom-0 -mx-6 sm:-mx-8 px-6 sm:px-8 pt-5 pb-2 mt-8 bg-lael-primary border-t border-white/10 relative z-10 space-y-3">
                 <a
-                  href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
+                  href="/inscripcion"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full bg-lael-accent text-lael-primary min-h-[56px] rounded-2xl text-sm tracking-wider uppercase font-display font-extrabold shadow-xl active:scale-95 transition-all"
+                >
+                  Inscribirme gratis
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                </a>
+                <a
+                  href="https://wa.me/56964626568?text=Hola!%20Tengo%20una%20consulta%20sobre%20Instituto%20Lael"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-3 w-full bg-lael-accent text-lael-primary py-5 rounded-2xl text-[11px] tracking-[0.2em] uppercase font-bold shadow-xl active:scale-95 transition-all hover:bg-[#c4d000]"
+                  className="flex items-center justify-center gap-2 w-full min-h-[48px] rounded-2xl text-sm font-bold text-white border border-white/20"
                 >
-                  <span>Inscribirme Gratis</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                  Escribir por WhatsApp
                 </a>
               </div>
             </motion.div>

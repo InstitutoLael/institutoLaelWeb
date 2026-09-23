@@ -5,76 +5,83 @@ import { useLocation } from 'react-router-dom';
 import { trackEvent } from '../utils/analytics';
 import { trackFunnelEvent } from '../utils/funnel';
 
+const ICONOS = {
+  paes: <Target size={18} />,
+  idiomas: <Zap size={18} />,
+  lsch: <HandHeart size={18} />,
+  ayuda: <HelpCircle size={18} />,
+};
+
+const AYUDA = { id: 'ayuda', label: 'No sé qué elegir', icon: <HelpCircle size={18} />, msg: 'Hola, estoy viendo la web de Lael y no sé por dónde empezar. ¿Me pueden orientar?' };
+
+const CONTEXTOS = [
+  { match: ['/paes', '/preuniversitario'], opciones: [
+    { id: 'paes_inscribir', label: 'Inscribirme al preu PAES', icon: 'paes', msg: 'Hola! Vi el preu PAES en la web y quiero inscribirme.' },
+    { id: 'paes_prueba', label: 'Pedir una clase de prueba', icon: 'paes', msg: 'Hola! Me gustaría una clase de prueba gratis del preu PAES.' },
+    { id: 'paes_beca', label: 'Preguntar por becas', icon: 'paes', msg: 'Hola! Quiero saber cómo postular a una beca del preu PAES.' },
+  ] },
+  { match: ['/calculadora'], opciones: [
+    { id: 'calc_puntaje', label: 'Me faltan puntos, ¿me ayudan?', icon: 'paes', msg: 'Hola! Usé la calculadora de puntaje y me faltan puntos para la carrera que quiero. ¿Cómo me pueden ayudar?' },
+  ] },
+  { match: ['/adultos'], opciones: [
+    { id: 'adultos', label: 'Quiero terminar el colegio', icon: 'ayuda', msg: 'Hola! Quiero terminar mis estudios con la Escuela de Sueños.' },
+  ] },
+  { match: ['/idiomas'], opciones: [
+    { id: 'ingles', label: 'Clases de inglés', icon: 'idiomas', msg: 'Hola! Me interesan las clases de inglés de Lael.' },
+    { id: 'ingles_prueba', label: 'Clase de prueba de inglés', icon: 'idiomas', msg: 'Hola! Me gustaría una clase de prueba gratis de inglés.' },
+  ] },
+  { match: ['/espanol', '/espanol-para-extranjeros'], opciones: [
+    { id: 'espanol', label: 'Clases de español', icon: 'idiomas', msg: 'Hola! Me interesan las clases de español para extranjeros.' },
+  ] },
+  { match: ['/lsch'], opciones: [
+    { id: 'lsch', label: 'Avísenme cuando abra LSCh', icon: 'lsch', msg: 'Hola! Quiero que me avisen cuando abra el curso de Lengua de Señas Chilena.' },
+  ] },
+  { match: ['/empresas'], opciones: [
+    { id: 'empresas', label: 'Cotizar para mi empresa', icon: 'ayuda', msg: 'Hola! Quiero cotizar una capacitación para mi empresa.' },
+  ] },
+  { match: ['/verano'], opciones: [
+    { id: 'verano', label: 'Cursos de verano', icon: 'paes', msg: 'Hola! Quiero información de los cursos de Verano Lael.' },
+  ] },
+  { match: ['/reforzamiento'], opciones: [
+    { id: 'reforzamiento', label: 'Reforzamiento escolar', icon: 'paes', msg: 'Hola! Me interesa el reforzamiento escolar.' },
+  ] },
+  { match: ['/orientacion'], opciones: [
+    { id: 'orientacion', label: 'Orientación vocacional', icon: 'ayuda', msg: 'Hola! Quiero agendar una orientación vocacional.' },
+  ] },
+  { match: ['/apoderados'], opciones: [
+    { id: 'apoderados', label: 'Charla para apoderados', icon: 'ayuda', msg: 'Hola! Soy apoderado y quiero información de la charla sobre la PAES.' },
+  ] },
+  { match: ['/ensayo-gratis'], opciones: [
+    { id: 'ensayo', label: 'Ensayo PAES gratis', icon: 'paes', msg: 'Hola! Quiero inscribirme al próximo ensayo PAES gratis.' },
+  ] },
+  { match: ['/talleres-ia'], opciones: [
+    { id: 'talleres_ia', label: 'Talleres de IA', icon: 'idiomas', msg: 'Hola! Me interesan los talleres de IA para estudiantes.' },
+  ] },
+  { match: ['/alianzas'], opciones: [
+    { id: 'alianzas', label: 'Hacer una alianza', icon: 'ayuda', msg: 'Hola! Represento a una institución y quiero conversar sobre una alianza con Lael.' },
+  ] },
+  { match: ['/alumnos'], opciones: [
+    { id: 'alumnos', label: 'Soy alumno y tengo una duda', icon: 'ayuda', msg: 'Hola! Soy alumno de Lael y tengo una duda.' },
+  ] },
+];
+
+const CONTEXTO_GENERAL = { opciones: [
+  { id: 'paes_general', label: 'Quiero inscribirme al preu PAES', icon: 'paes', msg: 'Hola! Quiero información del preu PAES de Lael.' },
+  { id: 'ingles_general', label: 'Clases de inglés', icon: 'idiomas', msg: 'Hola! Quiero saber más sobre las clases de inglés.' },
+] };
+
 export default function FloatingWhatsApp() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
   const isContactPage = location.pathname === '/contacto';
 
+  // Opciones de WhatsApp según la página: así sabes al tiro qué le interesa
+  // a quien te escribe. Para agregar una página, suma una entrada a CONTEXTOS.
   const dynamicOptions = useMemo(() => {
     const path = location.pathname;
-    
-    const baseOptions = [
-      { 
-        id: 'ayuda', 
-        label: 'No sé qué elegir', 
-        icon: <HelpCircle size={18} />, 
-        msg: 'Hola, estoy viendo la web y no sé por dónde empezar. ¿Me pueden orientar?' 
-      }
-    ];
-
-    if (path === '/paes') {
-      return [
-        { 
-          id: 'paes_gratis',
-          label: 'Inscribirme a PAES',
-          icon: <Target size={18} />,
-          msg: 'Hola, quiero inscribirme a la PAES de Lael.'
-        },
-        ...baseOptions
-      ];
-    }
-
-    if (path === '/idiomas') {
-      return [
-        { 
-          id: 'idiomas', 
-          label: 'Consulta de Idiomas', 
-          icon: <Zap size={18} />, 
-          msg: 'Hola, me interesa un curso de idiomas en Lael.' 
-        },
-        ...baseOptions
-      ];
-    }
-
-    if (path === '/lsch') {
-      return [
-        { 
-          id: 'lsch', 
-          label: 'Curso LSCh', 
-          icon: <HandHeart size={18} />, 
-          msg: 'Hola, me interesa el curso de LSCh.' 
-        },
-        ...baseOptions
-      ];
-    }
-
-    // Default / Home / Others
-    return [
-      { 
-        id: 'paes_gratis',
-        label: 'Quiero inscribirme a PAES',
-        icon: <Target size={18} />,
-        msg: 'Hola, quiero unirme a las clases de PAES.'
-      },
-      { 
-        id: 'idiomas', 
-        label: 'Ver Idiomas', 
-        icon: <Zap size={18} />, 
-        msg: 'Hola, quiero saber más sobre los cursos de idiomas.' 
-      },
-      ...baseOptions
-    ];
+    const ctx = CONTEXTOS.find((c) => c.match.some((m) => path === m || path.startsWith(m + '/'))) || CONTEXTO_GENERAL;
+    return [...ctx.opciones.map((o) => ({ ...o, icon: ICONOS[o.icon] || <MessageCircle size={18} /> })), AYUDA];
   }, [location.pathname]);
 
   if (isContactPage) return null;

@@ -7,6 +7,9 @@ import Footer from "./components/Footer";
 import PageTransition from "./components/PageTransition";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
 import ScrollToTop from "./components/ScrollToTop";
+import AnalyticsTracker from "./components/AnalyticsTracker";
+import CookieNotice from "./components/CookieNotice";
+import ExitIntent from "./components/ExitIntent";
 
 // Pages
 import Home from "./pages/Home";
@@ -31,12 +34,17 @@ const Verano = lazy(() => import("./pages/Verano"));
 const Privacidad = lazy(() => import("./pages/Privacidad"));
 const Calculadora = lazy(() => import("./pages/Calculadora"));
 
+// Rutas extra: cada archivo en src/routes/*.jsx exporta un arreglo `routes`
+// con { path, element }. Así se agregan páginas sin tocar este archivo.
+const extraRoutes = Object.values(import.meta.glob("./routes/*.jsx", { eager: true })).flatMap((m) => m.routes || []);
+
 
 export default function App() {
   return (
     <MotionConfig reducedMotion="user">
     <div className="flex flex-col min-h-screen relative z-10">
       <ScrollToTop />
+      <AnalyticsTracker />
       <Toaster position="top-right" reverseOrder={false} toastOptions={{
         style: { background: '#1A1A1A', color: '#F5F5F5', border: '1px solid rgba(255,255,255,0.05)' }
       }} />
@@ -68,6 +76,7 @@ export default function App() {
             <Route path="/verano" element={<Verano />} />
             <Route path="/privacidad" element={<Privacidad />} />
             <Route path="/calculadora" element={<Calculadora />} />
+            {extraRoutes.map((r) => <Route key={r.path} path={r.path} element={r.element} />)}
             <Route path="*" element={<NotFound />} />
           </Routes>
           </Suspense>
@@ -75,6 +84,8 @@ export default function App() {
       </main>
 
       <FloatingWhatsApp />
+      <ExitIntent />
+      <CookieNotice />
       <Footer />
     </div>
     </MotionConfig>

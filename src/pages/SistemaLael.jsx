@@ -133,8 +133,6 @@ export default function SistemaLael() {
             </Link>
             <a
               href={PAES_FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white min-h-[48px] font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all active:scale-95"
             >
               Inscribirme gratis

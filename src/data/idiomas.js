@@ -30,7 +30,7 @@ export const LANDING_PLANS = [
     priceQuarterly: '$11.990',
     enrollment: 'gratis',
     features: ['Clases en vivo con mucha conversación', 'Preparación para IELTS/TOEFL', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'],
-    link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6",
+    link: "/inscripcion?programa=ingles",
     comingSoon: false,
   },
   {
@@ -40,7 +40,7 @@ export const LANDING_PLANS = [
     priceQuarterly: '$11.990',
     enrollment: 'gratis',
     features: ['Modismos y chilenismos', 'Práctica de entrevistas de trabajo', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'],
-    link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6",
+    link: "/inscripcion?programa=ingles",
     comingSoon: false,
   }
 ];

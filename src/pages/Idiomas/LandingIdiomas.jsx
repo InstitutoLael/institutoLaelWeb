@@ -9,7 +9,7 @@ import CertificateSection from '../../components/CertificateSection';
 import { LANDING_SELECTOR, LANDING_REASONS, LANDING_PLANS } from '../../data/idiomas';
 
 const BLUE = '#071D49';
-const FORM_URL = 'https://forms.gle/H86nFAQ2DJ8CCQ7y6';
+const FORM_URL = '/inscripcion?programa=ingles';
 
 const ease = [0.16, 1, 0.3, 1];
 export const fadeUp = (delay = 0) => ({
@@ -118,7 +118,7 @@ export function ProgramBlock({ id, gray, badge, title, teacher, desc, levelsTitl
           </motion.div>
 
           <motion.div {...fadeUp(0.35)}>
-            <a href={FORM_URL} target="_blank" rel="noopener noreferrer" className={`${BTN_NAVY} w-full sm:w-auto px-10`}>
+            <a href={FORM_URL} className={`${BTN_NAVY} w-full sm:w-auto px-10`}>
               <span>INSCRIBIRME AHORA</span>
               <ChevronRight size={16} aria-hidden="true" />
             </a>
@@ -162,7 +162,7 @@ function InstagramCard({ img, tag, caption, ago }) {
         </p>
         <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-xs text-[#071D49]/60">
           <span>{ago}</span>
-          <a href={FORM_URL} target="_blank" rel="noopener noreferrer" className="text-[#071D49] font-bold hover:underline py-2">
+          <a href={FORM_URL} className="text-[#071D49] font-bold hover:underline py-2">
             Ver detalles en chat →
           </a>
         </div>
@@ -231,7 +231,7 @@ export function PriceCard({ plan, delay = 0, note }) {
           ))}
         </ul>
       </div>
-      <a href={plan.link} target="_blank" rel="noopener noreferrer" className={`${BTN_PRIMARY} w-full`}>
+      <a href={plan.link} className={`${BTN_PRIMARY} w-full`}>
         Inscribirme
       </a>
     </motion.div>

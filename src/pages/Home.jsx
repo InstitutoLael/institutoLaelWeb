@@ -15,7 +15,7 @@ import heroImg from '../assets/img/Home/hero_student_lael_1780734180709.webp';
 const BLUE   = '#071D49';
 const YELLOW = '#D7E400';
 const ease   = [0.16, 1, 0.3, 1];
-const FORM_URL = 'https://forms.gle/H86nFAQ2DJ8CCQ7y6';
+const FORM_URL = '/inscripcion?programa=paes';
 
 // ─── ANIMATED COUNTER ────────────────────────────────────────────────────────
 function AnimatedNumber({ value, prefix = '', suffix = '', duration = 1.8 }) {
@@ -116,8 +116,6 @@ export default function Home() {
           <motion.div {...fadeUp(0.25)} className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch w-full sm:w-auto">
             <a
               href={FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
               className={`${BTN} w-full sm:w-auto bg-[#D7E400] text-[#071D49] hover:opacity-90 shadow-xl`}
             >
               Inscribirme gratis
@@ -222,8 +220,6 @@ export default function Home() {
               <div>
                 <a
                   href={FORM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className={`${BTN} w-full sm:w-auto bg-[#D7E400] text-[#071D49] hover:opacity-90 shadow-xl`}
                 >
                   Inscribirme ahora <ArrowRight size={16} />
@@ -573,8 +569,6 @@ export default function Home() {
           <motion.div {...fadeUp(0.1)} className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
               href={FORM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
               className={`${BTN} w-full sm:w-auto sm:px-12 sm:py-5 bg-[#D7E400] text-[#071D49] hover:opacity-90 hover:-translate-y-0.5`}
               style={{ boxShadow: `0 20px 60px ${YELLOW}40` }}
             >

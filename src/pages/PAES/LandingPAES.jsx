@@ -132,8 +132,6 @@ export default function LandingPAES() {
             <motion.div {...fadeUp(0.25)} className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <a
                 href={WA_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
                 className={`${BTN} bg-[#D7E400] text-[#071D49] hover:bg-white group shadow-xl`}
               >
                 <span>INSCRIBIRME GRATIS</span>
@@ -246,8 +244,6 @@ export default function LandingPAES() {
                 </ul>
                 <a
                   href={WA_LINK}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className={`${BTN} w-full ${plan.featured ? 'bg-[#D7E400] text-[#071D49] hover:bg-white' : 'bg-[#071D49] text-white hover:bg-[#0B2A66]'}`}
                 >
                   Inscribirme <ArrowRight size={16} />
@@ -515,8 +511,6 @@ export default function LandingPAES() {
           <motion.div {...fadeUp(0.15)} className="w-full max-w-md">
             <a
               href={WA_LINK}
-              target="_blank"
-              rel="noopener noreferrer"
               className={`${BTN} w-full py-5 bg-[#D7E400] text-[#071D49] hover:bg-white`}
               style={{ boxShadow: '0 20px 50px rgba(215, 228, 0, 0.2)' }}
             >

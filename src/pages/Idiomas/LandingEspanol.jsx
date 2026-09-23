@@ -48,7 +48,7 @@ const plan = {
   enrollment: 'gratis',
   priceMonthly: '$14.990',
   features: ['Modismos y chilenismos', 'Práctica de entrevistas de trabajo', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'],
-  link: 'https://forms.gle/H86nFAQ2DJ8CCQ7y6',
+  link: '/inscripcion?programa=espanol',
 };
 
 export default function LandingEspanol() {

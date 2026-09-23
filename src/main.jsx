@@ -6,6 +6,7 @@ import { HelmetProvider } from "react-helmet-async"; // SEO
 
 // Tus estilos globales
 import "./index.css";
+import "./styles/dark.generated.css";
 
 // Tu aplicación principal
 import App from "./App.jsx";

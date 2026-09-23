@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Instagram, Youtube } from 'lucide-react';
 import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.webp';
 import { BECAS_FORM_URL } from '../data/paes';
+import ThemeToggle from './ThemeToggle';
 
 const SOCIAL = [
   { name: 'Instagram', href: 'https://instagram.com/institutolael', Icon: Instagram },
@@ -163,6 +164,7 @@ export default function Footer() {
           <p className="text-xs text-white/50 tracking-wide">
             © {year} Instituto Lael SpA · Santiago, Chile
           </p>
+          <ThemeToggle className="mt-2" />
         </div>
 
       </div>

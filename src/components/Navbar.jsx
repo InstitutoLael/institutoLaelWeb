@@ -7,6 +7,7 @@ import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.webp';
 import { NAVIGATION } from '../data/navigation';
 import UrgencyBanner from './UrgencyBanner';
 import ProgramasDropdown from './ProgramasDropdown';
+import ThemeToggle from './ThemeToggle';
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -308,6 +309,7 @@ export default function Navbar() {
                 >
                   Escribir por WhatsApp
                 </a>
+                <ThemeToggle className="w-full justify-center" />
               </div>
             </motion.div>
           </div>

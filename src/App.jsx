@@ -27,6 +27,7 @@ const Empresas = lazy(() => import("./pages/Empresas"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Inscripcion = lazy(() => import("./pages/Inscripcion"));
 const Verano = lazy(() => import("./pages/Verano"));
+const Privacidad = lazy(() => import("./pages/Privacidad"));
 
 
 export default function App() {
@@ -62,6 +63,7 @@ export default function App() {
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/inscripcion" element={<Inscripcion />} />
             <Route path="/verano" element={<Verano />} />
+            <Route path="/privacidad" element={<Privacidad />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           </Suspense>

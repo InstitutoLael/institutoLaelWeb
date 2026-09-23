@@ -24,11 +24,6 @@ export default function EmpresasForm() {
       return;
     }
 
-    try {
-      const key = `lael_empresa_${Date.now()}`;
-      localStorage.setItem(key, JSON.stringify({ ...form, ts: new Date().toISOString() }));
-    } catch (_) {}
-
     const subject = encodeURIComponent(`Cotización Empresa: ${form.empresa} - ${form.programa}`);
     const body = encodeURIComponent(
 `Nombre: ${form.nombre}

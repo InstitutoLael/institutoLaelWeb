@@ -10,8 +10,6 @@ import "./index.css";
 // Tu aplicación principal
 import App from "./App.jsx";
 
-// Tu contexto del Carrito
-import { CartProvider } from "./context/CartContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -19,11 +17,7 @@ createRoot(document.getElementById("root")).render(
     <HelmetProvider>
       {/* 2. Capa de Navegación */}
       <BrowserRouter>
-        {/* 3. Capa de Datos (Carrito Global) */}
-        <CartProvider>
-          {/* 4. Tu App Visual */}
-          <App />
-        </CartProvider>
+        <App />
       </BrowserRouter>
     </HelmetProvider>
   </React.StrictMode>

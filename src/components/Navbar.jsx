@@ -17,7 +17,7 @@ export default function Navbar() {
   const [bannerHeight, setBannerHeight] = useState(0);
 
   // Páginas con fondo claro (Navbar fondo blanco/sólido siempre)
-  const isLightPage = ['/nosotros', '/contacto', '/transparencia', '/preguntas', '/diagnostico', '/casos-reales', '/sistema'].includes(location.pathname);
+  const isLightPage = ['/nosotros', '/contacto', '/transparencia', '/preguntas', '/diagnostico', '/casos-reales', '/sistema', '/privacidad'].includes(location.pathname);
 
   // Scroll detection
   useEffect(() => {

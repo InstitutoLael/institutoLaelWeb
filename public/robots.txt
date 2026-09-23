@@ -3,6 +3,5 @@ Allow: /
 
 Disallow: /resultado-diagnostico
 Disallow: /inscripcion
-Disallow: /los-olivos/
 
 Sitemap: https://institutolael.cl/sitemap.xml

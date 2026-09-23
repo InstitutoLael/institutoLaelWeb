@@ -111,7 +111,7 @@ export default function Transparencia() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
              {[
                 { icon: Scale, title: "Lo que pagas", desc: "Pagas tu mensualidad y nada más. No hay cobros escondidos y el material no se cobra aparte." },
-                { icon: Eye, title: "Tus datos", desc: "Tus datos son tuyos. Los usamos solo para tus clases y para contactarte, y puedes pedirnos que los borremos." },
+                { icon: Eye, title: "Tus datos", desc: "Tus datos son tuyos. Los usamos solo para tus clases y para contactarte, y puedes pedirnos que los borremos. El detalle está en nuestra política de privacidad (institutolael.cl/privacidad)." },
                 { icon: Lock, title: "Quiénes somos", desc: "Instituto Lael SpA es una empresa constituida bajo las leyes chilenas, con domicilio en Santiago de Chile." }
              ].map((item, i) => (
                 <motion.div key={i} {...fadeUp(i * 0.1)} className="p-8 rounded-[32px] border border-[#071D49]/10 bg-white hover:border-[#D7E400]/40 transition-all duration-300">

@@ -31,6 +31,7 @@ const LINKS_INSTITUTO = [
 
 const LINKS_LEGAL = [
   { name: 'Transparencia', path: '/transparencia' },
+  { name: 'Política de privacidad', path: '/privacidad' },
 ];
 
 export default function Footer() {

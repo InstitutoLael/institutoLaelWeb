@@ -1,33 +1,33 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import PageTransition from "./components/PageTransition";
 import FloatingWhatsApp from "./components/FloatingWhatsApp";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Pages
 import Home from "./pages/Home";
-import PAES from "./pages/PAES";
-import MetodoLael from "./pages/MetodoLael";
-import Idiomas from "./pages/Idiomas";
-import LandingEspanol from "./pages/Idiomas/LandingEspanol";
-import LSCh from "./pages/LSCh";
-import Nosotros from "./pages/Nosotros";
-import Contacto from "./pages/Contacto";
-import NivelacionAdultos from "./pages/Nivelacion/NivelacionAdultos";
-import SistemaLael from "./pages/SistemaLael";
-import DiagnosticPage from "./pages/DiagnosticPage";
-import ResultDashboard from "./pages/ResultDashboard";
-import Preguntas from "./pages/Preguntas";
-import Transparencia from "./pages/Transparencia";
-import CasosReales from "./pages/CasosReales";
-import Empresas from "./pages/Empresas";
-import NotFound from "./pages/NotFound";
-import Inscripcion from "./pages/Inscripcion";
-import Verano from "./pages/Verano";
+const PAES = lazy(() => import("./pages/PAES"));
+const MetodoLael = lazy(() => import("./pages/MetodoLael"));
+const Idiomas = lazy(() => import("./pages/Idiomas"));
+const LandingEspanol = lazy(() => import("./pages/Idiomas/LandingEspanol"));
+const LSCh = lazy(() => import("./pages/LSCh"));
+const Nosotros = lazy(() => import("./pages/Nosotros"));
+const Contacto = lazy(() => import("./pages/Contacto"));
+const NivelacionAdultos = lazy(() => import("./pages/Nivelacion/NivelacionAdultos"));
+const SistemaLael = lazy(() => import("./pages/SistemaLael"));
+const DiagnosticPage = lazy(() => import("./pages/DiagnosticPage"));
+const ResultDashboard = lazy(() => import("./pages/ResultDashboard"));
+const Preguntas = lazy(() => import("./pages/Preguntas"));
+const Transparencia = lazy(() => import("./pages/Transparencia"));
+const CasosReales = lazy(() => import("./pages/CasosReales"));
+const Empresas = lazy(() => import("./pages/Empresas"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const Inscripcion = lazy(() => import("./pages/Inscripcion"));
+const Verano = lazy(() => import("./pages/Verano"));
 
-import ScrollToTop from "./components/ScrollToTop";
 
 export default function App() {
   return (
@@ -40,6 +40,7 @@ export default function App() {
 
       <main className="flex-grow pt-20">
         <PageTransition>
+          <Suspense fallback={<div className="min-h-[60vh]" />}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/preuniversitario" element={<PAES />} />
@@ -63,6 +64,7 @@ export default function App() {
             <Route path="/verano" element={<Verano />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </Suspense>
         </PageTransition>
       </main>
 

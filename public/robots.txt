@@ -1,21 +1,8 @@
 User-agent: *
 Allow: /
-Allow: /paes
-Allow: /idiomas
-Allow: /lsch
-Allow: /inscripcion
-Allow: /nosotros
-Allow: /contacto
-Allow: /preguntas
-Allow: /transparencia
 
-Disallow: /empresas
-Disallow: /adultos
-Disallow: /homeschool
-Disallow: /orientacion
-Disallow: /admin
-Disallow: /diagnostico
 Disallow: /resultado-diagnostico
-Disallow: /arcade
+Disallow: /inscripcion
+Disallow: /los-olivos/
 
 Sitemap: https://institutolael.cl/sitemap.xml

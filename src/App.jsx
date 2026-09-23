@@ -25,6 +25,7 @@ import CasosReales from "./pages/CasosReales";
 import Empresas from "./pages/Empresas";
 import NotFound from "./pages/NotFound";
 import Inscripcion from "./pages/Inscripcion";
+import Verano from "./pages/Verano";
 
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -59,6 +60,7 @@ export default function App() {
             <Route path="/nosotros" element={<Nosotros />} />
             <Route path="/contacto" element={<Contacto />} />
             <Route path="/inscripcion" element={<Inscripcion />} />
+            <Route path="/verano" element={<Verano />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </PageTransition>

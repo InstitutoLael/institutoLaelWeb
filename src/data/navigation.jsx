@@ -9,6 +9,7 @@ export const NAVIGATION = {
     main: [
         { name: "Inicio", path: "/" },
         { name: "PAES", path: "/paes", badge: "BECAS" },
+        { name: "Verano", path: "/verano", badge: "NUEVO" },
         { name: "Idiomas", path: "/idiomas" },
         { name: "LSCh", path: "/lsch" },
         { name: "Nosotros", path: "/nosotros" },

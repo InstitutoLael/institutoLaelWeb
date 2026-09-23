@@ -15,6 +15,9 @@ import {
   Volume2
 } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { TESTIMONIALS } from '../../data/testimonials';
+
+const LSCH_TESTIMONIALS = TESTIMONIALS.filter((t) => t.area === 'lsch');
 import lschRealidad from '../../assets/img/Home/mundo_lsch_bg_1777943626827.webp';
 import CertificateSection from '../../components/CertificateSection';
 import { LANDING_SLIDES, LANDING_LEVELS } from '../../data/lsch';
@@ -303,9 +306,12 @@ export default function LandingLSCh() {
         <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
           <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-8">Lo que dicen los alumnos</motion.p>
           
+          <div className="w-full max-w-2xl space-y-6">
+          {LSCH_TESTIMONIALS.map((t, idx) => (
           <motion.div 
-            {...fadeUp(0.15)}
-            className="w-full max-w-2xl bg-white/[0.03] border border-white/15 rounded-[40px] p-8 sm:p-12 relative"
+            key={t.id}
+            {...fadeUp(0.15 + idx * 0.1)}
+            className="w-full bg-white/[0.03] border border-white/15 rounded-[40px] p-8 sm:p-12 relative"
           >
             {/* Stars */}
             <div className="flex justify-center gap-1 mb-8">
@@ -315,19 +321,21 @@ export default function LandingLSCh() {
             </div>
 
             <p className="font-display text-xl sm:text-2xl italic font-medium text-white leading-relaxed mb-8">
-              "El curso es excelente. Aprendí cultura sorda con una pedagogía muy paciente y didáctica."
+              "{t.quote}"
             </p>
 
             <div className="flex items-center justify-center gap-4">
               <div className="w-12 h-12 rounded-full bg-[#D7E400] text-[#071D49] font-display font-black text-sm flex items-center justify-center shadow-lg">
-                DA
+                {t.initials}
               </div>
               <div className="text-left">
-                <p className="text-white text-sm font-bold">Daniela R.</p>
-                <p className="text-white/45 text-[10px] uppercase tracking-wider">Alumna LSCh</p>
+                <p className="text-white text-sm font-bold">{t.name}</p>
+                <p className="text-white/45 text-[10px] uppercase tracking-wider">{t.program}</p>
               </div>
             </div>
           </motion.div>
+          ))}
+          </div>
 
           {/* Simple Contact query link */}
           <motion.div {...fadeUp(0.3)} className="mt-12">

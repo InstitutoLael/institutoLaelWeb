@@ -7,7 +7,7 @@
     "dev": "node scripts/gen-dark-css.cjs && vite",
     "prebuild": "node scripts/gen-dark-css.cjs",
     "build": "vite build",
-    "postbuild": "cp dist/index.html dist/404.html",
+    "postbuild": "cp dist/index.html dist/404.html && node scripts/route-html.cjs",
     "preview": "vite preview"
   },
   "devDependencies": {

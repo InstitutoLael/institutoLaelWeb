@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, Mail, Instagram, Clock, Send, CheckCircle } from 'lucide-react';
+import { MessageSquare, Mail, Instagram, Youtube, Clock, Send, CheckCircle } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { CONTACT_INFO } from '../data/contact';
 
@@ -19,13 +19,6 @@ const fadeUp = (delay = 0) => ({
   viewport: { once: true },
   transition: { duration: 0.8, delay, ease }
 });
-
-// TikTok SVG Icon (no está en Lucide)
-const TikTokIcon = ({ size = 24 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.89a8.27 8.27 0 0 0 4.83 1.55V7.01a4.85 4.85 0 0 1-1.06-.32z"/>
-  </svg>
-);
 
 export default function Contacto() {
   const [formData, setFormData] = useState({
@@ -120,17 +113,17 @@ export default function Contacto() {
                 </a>
 
                 <a
-                  href={CONTACT_INFO.tiktok.url}
+                  href={CONTACT_INFO.youtube.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-6 group hover:translate-x-1 transition-transform"
                 >
                   <div className="w-12 h-12 rounded-xl bg-white border border-[#071D49]/10 flex items-center justify-center text-[#071D49] group-hover:bg-[#D7E400]/20 group-hover:border-[#D7E400]/40 transition-all">
-                    <TikTokIcon size={20} />
+                    <Youtube size={20} />
                   </div>
                   <div>
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">TikTok</p>
-                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.tiktok.user}</p>
+                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">YouTube</p>
+                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.youtube.user}</p>
                   </div>
                 </a>
 

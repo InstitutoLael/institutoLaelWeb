@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Quote, Sparkles } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import diegoAvatar from '../assets/img/Home/paes_mentor_strategy_1777948898105.webp';
+import diegoAvatar from '../assets/img/Equipo/diego-chaparro.webp';
 import SignificadoLael from '../components/SignificadoLael';
 import { HERO, HISTORY, PILLARS, TEAM, TIMELINE, CLOSING_QUOTE } from '../data/nosotros';
 

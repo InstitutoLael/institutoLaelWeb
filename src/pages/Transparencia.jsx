@@ -110,7 +110,7 @@ export default function Transparencia() {
           {/* ── 3. PILARES LEGALES & PRIVACIDAD ───────────────────────────── */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
              {[
-                { icon: Scale, title: "Sin letra chica", desc: "No hay renovaciones automáticas sorpresa ni cláusulas de permanencia. Te quedas porque te sirve, no porque te obligamos." },
+                { icon: Scale, title: "Sin letra chica", desc: "Pagas tu mensualidad y nada más: sin cobros escondidos ni cargos por material. La idea es acompañarte hasta el final." },
                 { icon: Eye, title: "Tus datos", desc: "Tus datos son tuyos. Los usamos solo para tus clases y para contactarte, y puedes pedirnos que los borremos." },
                 { icon: Lock, title: "Quiénes somos", desc: "Instituto Lael SpA es una empresa constituida bajo las leyes chilenas, con domicilio en Santiago de Chile." }
              ].map((item, i) => (

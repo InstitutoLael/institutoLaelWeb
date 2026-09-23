@@ -165,7 +165,7 @@ export default function LandingIdiomas() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-[10px] font-bold text-[#071D49] uppercase tracking-widest px-2.5 py-1 rounded-full bg-[#D7E400]/30">
-                    Matrícula $9.990
+                    Matrícula gratis
                   </span>
                   <span className="text-[10px] font-bold text-white uppercase tracking-widest px-2.5 py-1 rounded-full bg-[#071D49]">
                     ✨ Trimestral: $11.990/mes
@@ -296,7 +296,7 @@ export default function LandingIdiomas() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-[10px] font-bold text-[#071D49] uppercase tracking-widest px-2.5 py-1 rounded-full bg-[#D7E400]/30">
-                    Matrícula $9.990
+                    Matrícula gratis
                   </span>
                   <span className="text-[10px] font-bold text-white uppercase tracking-widest px-2.5 py-1 rounded-full bg-[#071D49]">
                     ✨ Trimestral: $11.990/mes

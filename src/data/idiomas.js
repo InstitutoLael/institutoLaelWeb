@@ -28,7 +28,7 @@ export const LANDING_PLANS = [
     flag: '🇺🇸',
     priceMonthly: '$14.990',
     priceQuarterly: '$11.990',
-    enrollment: '$9.990',
+    enrollment: 'gratis',
     features: ['Clases en vivo con mucha conversación', 'Preparación para IELTS/TOEFL', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'],
     link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6",
     comingSoon: false,
@@ -38,14 +38,14 @@ export const LANDING_PLANS = [
     flag: '🇨🇱',
     priceMonthly: '$14.990',
     priceQuarterly: '$11.990',
-    enrollment: '$9.990',
+    enrollment: 'gratis',
     features: ['Modismos y chilenismos', 'Práctica de entrevistas de trabajo', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'],
     link: "https://forms.gle/H86nFAQ2DJ8CCQ7y6",
     comingSoon: false,
   }
 ];
 
-export const ENROLLMENT_FEE = 9990;
+export const ENROLLMENT_FEE = 0;
 export const ACADEMIC_MONTHS = 9;
 
 export const clp = (n) =>

@@ -1,6 +1,7 @@
 // src/data/paes.js
 // === Sistema de Alto Rendimiento PAES Lael ===
 import { Video, BookOpen, Award, Heart, Users } from "lucide-react";
+import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.webp";
 
 /* ──────────────────────────────────────────────────────────────────────────
    0. CONTENIDO DE LA PÁGINA /paes (LandingPAES.jsx)
@@ -9,7 +10,7 @@ import { Video, BookOpen, Award, Heart, Users } from "lucide-react";
 export const LANDING_FEATURES = [
   { title: "Clases en vivo", desc: "Clases interactivas vía Google Meet en tiempo real. Docentes reales que responden tus dudas en el acto.", icon: Video },
   { title: "Material de estudio", desc: "Guías de teoría y ejercicios para descargar, y la grabación de cada clase para repasar durante la semana.", icon: BookOpen },
-  { title: "Ensayos PAES", desc: "Simulacros periódicos cronometrados para habituarte a la presión del examen y medir tu puntaje real.", icon: Award },
+  { title: "Ensayos PAES", desc: "Ensayos propios, hechos por nuestros profes con el formato y el tiempo de la PAES, una vez al mes.", icon: Award },
   { title: "Acompañamiento", desc: "Apoyo y mentoría constante de un equipo que se preocupa por tu bienestar y desarrollo integral.", icon: Heart },
   { title: "Comunidad activa", desc: "Un grupo dinámico con tus compañeros para resolver dudas grupales, compartir tips y motivarse día a día.", icon: Users }
 ];
@@ -25,7 +26,7 @@ export const LANDING_SUBJECTS = [
 ];
 
 export const LANDING_TEACHERS = [
-  { name: "Diego Chaparro", subject: "Matemática M1 + M2", bio: "Fundador de Instituto Lael. Enseña matemáticas con la misma exigencia con la que dirige el instituto: sin atajos, pero sin dejar a nadie atrás.", img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=071D49&color=D7E400&size=200&bold=true" },
+  { name: "Diego Chaparro", subject: "Matemática M1 + M2", bio: "Fundador de Instituto Lael. Enseña matemáticas con la misma exigencia con la que dirige el instituto: sin atajos, pero sin dejar a nadie atrás.", img: diegoPhoto },
   { name: "Martín", subject: "Biología + Química", bio: "Convierte biología y química en algo que se entiende, no que se memoriza. Cercano y directo, sin vueltas.", img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=071D49&color=D7E400&size=200&bold=true" },
   { name: "Kathy", subject: "Matemática M2", bio: "Matemática superior y HomeSchool. Le importa que entiendas el porqué, no solo el cómo.", img: "https://ui-avatars.com/api/?name=Kathy+M2&background=071D49&color=D7E400&size=200&bold=true" }
 ];
@@ -37,16 +38,16 @@ export const LANDING_STEPS = [
 ];
 
 export const LANDING_FAQS = [
-  { q: "¿Cuánto cuesta? ¿Hay costos ocultos?", a: "La matrícula es gratis. Cada ramo tiene su propio valor desde $10.000/mes, y si tomas 4 o más, nunca pagas sobre $34.990 - sin letra chica ni cobros extra por material. Si aun así no puedes cubrirlo, puedes postular a una beca: la revisamos caso a caso." },
+  { q: "¿Cuánto cuesta? ¿Hay costos ocultos?", a: "La matrícula es gratis. Cada ramo tiene su propio valor desde $10.000/mes, y si tomas 4 o más, nunca pagas sobre $34.990 - sin letra chica ni cobros extra por material. Si aun así no puedes cubrirlo, puedes postular a una beca parcial: la revisamos caso a caso." },
   { q: "¿Qué necesito para participar en las clases?", a: "Solo requieres un dispositivo (computador, tablet o celular) con conexión a internet y una cuenta de Google para conectarte a las sesiones a través de Google Meet." },
   { q: "¿Cuántas clases tengo a la semana?", a: "Dos clases en vivo de una hora por cada ramo, en horario vespertino. Así alcanzamos a ver todo el temario antes de la prueba y dejamos las últimas semanas para un intensivo aparte." },
   { q: "¿Qué pasa si me pierdo una clase?", a: "Todas las clases se graban y cada semana compartimos las grabaciones con quienes tienen su mensualidad al día. Y si una clase no se puede hacer, la reagendamos: estás pagando por ella." },
-  { q: "¿Puedo entrar al programa en cualquier momento?", a: "Sí, puedes unirte en cualquier punto del año. Sin embargo, te recomendamos hacerlo cuanto antes debido a que los cupos en nuestras aulas en vivo son limitados por motivos de capacidad virtual." },
+  { q: "¿Puedo entrar al programa en cualquier momento?", a: "Sí, puedes unirte durante el año. Eso sí, cada curso tiene máximo 20 alumnos para que las clases sean personalizadas, así que conviene asegurar tu cupo pronto." },
   { q: "¿Cómo me inscribo?", a: "Haz clic en el botón INSCRIBIRME y llenarás un formulario breve. También puedes escribirnos por WhatsApp." },
   { q: "Soy menor de edad, ¿puedo inscribirme?", a: "Sí. En el formulario de inscripción te pedimos también los datos de tu apoderado, para mantenerlo al tanto." },
-  { q: "¿En qué horario son las clases?", a: "Las clases son en horario vespertino. Los horarios exactos se comunican al momento de inscribirse." },
+  { q: "¿En qué horario son las clases?", a: "Desde las 18:00, de lunes a viernes. Dejamos un día de la semana libre para hacer clases recuperativas. El horario exacto de cada ramo te lo enviamos al inscribirte." },
   { q: "¿Hay algo antes de marzo?", a: "Sí. En el verano haremos cursos cortos para partir con ventaja. Síguenos en Instagram o escríbenos por WhatsApp y te avisamos cuando abran." },
-  { q: "¿Sirve si voy a rendir PAES en noviembre?", a: "Sí. El programa comienza en marzo de 2027 y está diseñado para acompañarte con meses de anticipación, no solo el tramo final antes del examen." }
+  { q: "¿Sirve si voy a rendir PAES en noviembre?", a: "Sí. Partimos la primera semana de marzo de 2027 para acompañarte con meses de anticipación. Y entre un mes y un mes y medio antes de la prueba hacemos un intensivo aparte, para repasar todo." }
 ];
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -141,4 +142,4 @@ export const REFERRAL = {
   desc: `Por cada amigo que se inscriba y pague su primer mes, tu siguiente mensualidad baja un ${REFERRAL_DISCOUNT}%. Con ${REFERRAL_MAX_FRIENDS} amigos, ese mes no pagas.`,
 };
 
-export const PAES_PLAN_INCLUDES = "Todos los planes: matrícula gratis, clases en vivo por Google Meet en horario vespertino, grabaciones para repasar, guías descargables y ensayo mensual.";
+export const PAES_PLAN_INCLUDES = "Máximo 20 alumnos por curso. Todos los planes: matrícula gratis, clases en vivo por Google Meet en horario vespertino, grabaciones para repasar, guías descargables y ensayo mensual.";

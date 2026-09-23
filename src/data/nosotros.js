@@ -1,4 +1,5 @@
 import { Heart, Star, Users, Shield } from "lucide-react";
+import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.webp";
 
 export const HERO = {
   eyebrow: "FUNDADO EN SANTIAGO DE CHILE · 2021",
@@ -51,7 +52,7 @@ export const TEAM = [
     role: "Fundador & Director",
     subject: "Matemáticas (Colegio & Preu)",
     bio: "Fundador de Instituto Lael. Enseña matemáticas con la misma exigencia con la que dirige el instituto: sin atajos, pero sin dejar a nadie atrás.",
-    img: "https://ui-avatars.com/api/?name=Diego+Chaparro&background=071D49&color=D7E400&size=200&bold=true",
+    img: diegoPhoto,
     confirmed: true
   },
   {

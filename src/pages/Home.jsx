@@ -502,13 +502,15 @@ export default function Home() {
                 >
                   {/* Left: Avatar */}
                   <div
-                    className="w-16 h-16 rounded-full flex-shrink-0 flex items-center justify-center text-xl font-black shadow-md font-display"
+                    className="w-16 h-16 rounded-full flex-shrink-0 flex items-center justify-center text-xl font-black shadow-md font-display overflow-hidden"
                     style={{
                       backgroundColor: isPlaceholder ? '#e5e7eb' : BLUE,
                       color: isPlaceholder ? '#9ca3af' : YELLOW,
                     }}
                   >
-                    {isPlaceholder ? '?' : t.initials}
+                    {t.photo ? (
+                      <img src={t.photo} alt={`Foto de ${t.name}`} className="w-full h-full object-cover" />
+                    ) : isPlaceholder ? '?' : t.initials}
                   </div>
 
                   {/* Right: Info */}

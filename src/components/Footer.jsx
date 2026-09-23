@@ -1,24 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Instagram } from 'lucide-react';
+import { Instagram, Youtube } from 'lucide-react';
 import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.png';
 import { BECAS_FORM_URL } from '../data/paes';
 
-// TikTok SVG icon (no está en Lucide)
-const TikTokIcon = ({ size = 16 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.89a8.27 8.27 0 0 0 4.83 1.55V7.01a4.85 4.85 0 0 1-1.06-.32z"/>
-  </svg>
-);
-
 const SOCIAL = [
   { name: 'Instagram', href: 'https://instagram.com/institutolael', Icon: Instagram },
-  { name: 'TikTok', href: 'https://tiktok.com/@institutolael', Icon: TikTokIcon },
+  { name: 'YouTube', href: 'https://www.youtube.com/@Laelinstituto', Icon: Youtube },
 ];
 
 const LINKS_PROGRAMAS = [
   { name: 'PAES', path: '/paes' },
   { name: 'Idiomas (Inglés)', path: '/idiomas' },
+  { name: 'Español para extranjeros', path: '/espanol' },
+  { name: 'Nivelación adultos', path: '/adultos' },
   { name: 'LSCh (Señas)', path: '/lsch' },
   { name: 'Empresas', path: '/empresas' },
 ];

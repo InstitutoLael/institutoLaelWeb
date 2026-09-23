@@ -13,6 +13,7 @@ import {
   Sparkles,
   CheckCircle2
 } from 'lucide-react';
+import inoLogo from '../../assets/img/Partners/INO.png';
 import studentImg from '../../assets/img/Home/hero_student_lael_1780734180709.webp';
 import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS, PAES_PLANS, PAES_PLAN_INCLUDES, PAES_FORM_URL, BECAS_FORM_URL, REFERRAL } from '../../data/paes';
 
@@ -58,7 +59,7 @@ export default function LandingPAES() {
           <div className="lg:col-span-7 flex flex-col text-left">
             <motion.div {...fadeUp(0)} className="mb-4 flex flex-wrap items-center gap-3">
               <span className="bg-[#D7E400] text-[#071D49] text-xs font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full shadow-md animate-pulse">
-                Desde $10.000/mes - Comenzamos Marzo 2027
+                Desde $10.000/mes - Partimos en marzo 2027
               </span>
             </motion.div>
 
@@ -89,8 +90,8 @@ export default function LandingPAES() {
                 <p className="text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1">Clases en Vivo</p>
               </div>
               <div>
-                <p className="text-[#D7E400] font-display font-extrabold text-lg sm:text-xl uppercase">Limitados</p>
-                <p className="text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1">Cupos Disponibles</p>
+                <p className="text-[#D7E400] font-display font-extrabold text-lg sm:text-xl uppercase">20 máx.</p>
+                <p className="text-white/40 text-[10px] sm:text-xs font-bold uppercase tracking-wider mt-1">Alumnos por curso</p>
               </div>
             </motion.div>
 
@@ -335,9 +336,9 @@ export default function LandingPAES() {
             {PAES_PLAN_INCLUDES}{' '}
             ¿No te alcanza?{' '}
             <a href={BECAS_FORM_URL} target="_blank" rel="noopener noreferrer" className="text-[#071D49] font-bold underline underline-offset-4 hover:text-[#0B2A66]">
-              Postula a una beca
+              Postula a una beca parcial
             </a>
-            , la revisamos caso a caso.
+            , la revisamos caso a caso. Parte de lo que pagan los alumnos financia esas becas.
           </motion.p>
 
           <motion.div {...fadeUp(0.25)} className="mt-10 max-w-2xl mx-auto rounded-[24px] border-2 border-dashed border-[#071D49]/15 bg-white p-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
@@ -347,6 +348,14 @@ export default function LandingPAES() {
             <div>
               <p className="text-[#071D49] font-display font-extrabold uppercase tracking-tight">{REFERRAL.title}</p>
               <p className="text-[#8D8D8D] text-sm leading-relaxed">{REFERRAL.desc}</p>
+            </div>
+          </motion.div>
+
+          <motion.div {...fadeUp(0.3)} className="mt-4 max-w-2xl mx-auto rounded-[24px] border border-[#071D49]/10 bg-white p-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+            <img src={inoLogo} alt="Instituto Nacional de Ortodoncia (INO)" loading="lazy" className="h-10 w-auto flex-shrink-0" />
+            <div>
+              <p className="text-[#071D49] font-display font-extrabold uppercase tracking-tight">Beneficio para alumnos</p>
+              <p className="text-[#8D8D8D] text-sm leading-relaxed">Por ser alumno de Lael tienes descuento en el Instituto Nacional de Ortodoncia (INO).</p>
             </div>
           </motion.div>
         </div>

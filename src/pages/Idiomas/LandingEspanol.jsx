@@ -40,8 +40,8 @@ export default function LandingEspanol() {
 
   const reasons = [
     {
-      title: "Profesores chilenos",
-      desc: "Aprende con docentes chilenos que enseñan español como segunda lengua y te corrigen en el momento.",
+      title: "Profe chileno",
+      desc: "Clases con Diego Chaparro, fundador de Lael, que enseña español como segunda lengua y te corrige en el momento.",
       icon: <GraduationCap className="w-6 h-6 text-[#071D49]" />
     },
     {
@@ -160,7 +160,7 @@ export default function LandingEspanol() {
                 </div>
                 <div className="flex flex-col gap-1">
                   <span className="text-[10px] font-bold text-[#071D49] uppercase tracking-widest px-2.5 py-1 rounded-full bg-[#D7E400]/30">
-                    Matrícula $9.990
+                    Matrícula gratis
                   </span>
                   <span className="text-[10px] font-bold text-white uppercase tracking-widest px-2.5 py-1 rounded-full bg-[#071D49]">
                     ✨ Trimestral: $11.990/mes
@@ -291,7 +291,7 @@ export default function LandingEspanol() {
             <div className="flex justify-between items-center mb-6">
               <span className="text-4xl" role="img" aria-label="Chile">🇨🇱</span>
               <span className="bg-[#D7E400] text-[#071D49] text-[10px] font-black uppercase px-2.5 py-1 rounded">
-                Matrícula $9.990
+                Matrícula gratis
               </span>
             </div>
             <h3 className="text-white font-display font-extrabold text-xl uppercase tracking-tight mb-4">

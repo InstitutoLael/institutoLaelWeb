@@ -12,9 +12,9 @@ export const CONTACT_INFO = {
         user: "@institutolael",
         url: "https://instagram.com/institutolael"
     },
-    tiktok: {
-        user: "@institutolael",
-        url: "https://tiktok.com/@institutolael"
+    youtube: {
+        user: "@Laelinstituto",
+        url: "https://www.youtube.com/@Laelinstituto"
     },
     schedule: {
         week: "Escríbenos cuando quieras",

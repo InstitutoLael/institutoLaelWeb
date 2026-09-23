@@ -1,5 +1,6 @@
 import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.webp';
 import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.webp';
+import diegoPhoto from '../assets/img/Equipo/diego-chaparro-avatar.webp';
 import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.webp';
 
 const YELLOW = '#D7E400';
@@ -21,11 +22,11 @@ export const WORLDS = [
   { id: 'ingles', label: 'INGLÉS', title: 'Habla con', accent: 'seguridad.', desc: 'Clases en vivo por Google Meet. Fluidez real sin atajos. Plan Trimestral: $11.990/mes.', bg: idiomasBg, cta: 'Ver programa', route: '/idiomas', active: true, price: '$14.990/mes' },
   { id: 'lsch', label: 'LSCh', title: 'Inclusión', accent: 'para todos.', desc: 'Lengua de Señas Chilena con una persona de la comunidad Sorda. Estamos preparando el curso.', bg: lschBg, cta: 'Próximamente', route: '/lsch', active: false, price: null },
   { id: 'coreano', label: 'COREANO', title: 'Prepárate para', accent: 'el TOPIK.', desc: 'Clases en vivo con docente nativa. Estamos armando la planificación completa antes de abrir cupos.', bg: idiomasBg, cta: 'Próximamente', route: '/coreano', active: false, price: null },
-  { id: 'adultos', label: 'NIVELACIÓN', title: 'Tu segunda', accent: 'oportunidad.', desc: 'Termina tus estudios con un programa flexible. Próximamente.', bg: adultosBg, cta: 'Próximamente', route: '/adultos', active: false, price: null },
+  { id: 'adultos', label: 'NIVELACIÓN', title: 'Tu segunda', accent: 'oportunidad.', desc: 'Termina tu enseñanza media siendo adulto, online y a tu ritmo.', bg: adultosBg, cta: 'Ver programa', route: '/adultos', active: true, price: null },
 ];
 
 export const TEACHERS = [
-  { id: 'diego', name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática (Colegios & Preu)', initials: 'DC', color: YELLOW },
+  { id: 'diego', photo: diegoPhoto, name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática (Colegios & Preu)', initials: 'DC', color: YELLOW },
   { id: 'martin', name: 'Martín', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'MA', color: YELLOW },
   { id: 'kathy', name: 'Kathy', role: 'Profe de HomeSchool', subject: 'Matemática M2 & HomeSchool', initials: 'KA', color: YELLOW },
   { id: 'monserrat', name: 'Monserrat González', role: 'Profe de Inglés', subject: 'Inglés', initials: 'MG', color: YELLOW },

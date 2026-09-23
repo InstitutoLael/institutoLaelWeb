@@ -22,7 +22,7 @@ export const WORLDS = [
   { id: 'ingles', label: 'INGLÉS', title: 'Habla con', accent: 'seguridad.', desc: 'Clases en vivo por Google Meet. Fluidez real sin atajos. Plan Trimestral: $11.990/mes.', bg: idiomasBg, cta: 'Ver programa', route: '/idiomas', active: true, price: '$14.990/mes' },
   { id: 'lsch', label: 'LSCh', title: 'Inclusión', accent: 'para todos.', desc: 'Lengua de Señas Chilena con una persona de la comunidad Sorda. Estamos preparando el curso.', bg: lschBg, cta: 'Próximamente', route: '/lsch', active: false, price: null },
   { id: 'coreano', label: 'COREANO', title: 'Prepárate para', accent: 'el TOPIK.', desc: 'Clases en vivo con docente nativa. Estamos armando la planificación completa antes de abrir cupos.', bg: idiomasBg, cta: 'Próximamente', route: '/coreano', active: false, price: null },
-  { id: 'adultos', label: 'NIVELACIÓN', title: 'Tu segunda', accent: 'oportunidad.', desc: 'Termina tu enseñanza media siendo adulto, online y a tu ritmo.', bg: adultosBg, cta: 'Ver programa', route: '/adultos', active: true, price: null },
+  { id: 'adultos', label: 'NIVELACIÓN', title: 'Tu segunda', accent: 'oportunidad.', desc: 'Termina la básica o la media con los exámenes libres. Para mayores de 18, online y a tu ritmo.', bg: adultosBg, cta: 'Ver programa', route: '/adultos', active: true, price: 'Gratis' },
 ];
 
 export const TEACHERS = [

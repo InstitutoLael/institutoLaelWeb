@@ -1,120 +1,54 @@
 // src/data/empresas.js
+// === Lael Empresas: capacitación para equipos ===
+// Todo se cotiza a medida (online o presencial). Lo que pagan las empresas
+// ayuda a sostener la nivelación gratuita para adultos.
+import { Sparkles, Languages, GraduationCap, BookOpenCheck, HandHeart } from 'lucide-react';
 
-// === Lael Corporate: Soluciones B2B ===
-// Estrategia: Market Entry (Precios competitivos para generar tracción rápida)
-
-/**
- * CONTENIDO REAL DE LA PÁGINA /empresas (pages/Empresas/index.jsx)
- * Más simple que el cotizador de abajo, que todavía no está conectado.
- */
-export const LANDING_SERVICES = [
+export const EMPRESAS_SERVICES = [
   {
-    id: 'paes',
-    title: 'PAES Institucional',
-    desc: 'Preparación PAES para colegios y liceos, con clases en vivo, ensayos y seguimiento del avance de cada curso.',
-    tags: ['Resultados de ensayos por curso', 'Docentes por asignatura', 'Reportes por alumno'],
+    id: 'ia',
+    icon: Sparkles,
+    title: 'Talleres de IA para el trabajo',
+    desc: 'Tu equipo aprende a usar herramientas de inteligencia artificial en tareas reales: redactar, resumir, ordenar datos, preparar presentaciones y responder clientes.',
+    tags: ['Práctico, con casos de tu empresa', 'Desde un taller de 2 horas', 'Online o presencial'],
   },
   {
-    id: 'idiomas',
-    title: 'Idiomas Corporativos',
-    desc: 'Clases de inglés, coreano o español para equipos que trabajan con clientes o colegas de otros países.',
-    tags: ['Grupos reducidos', 'Horario flexible', 'Certificación institucional'],
+    id: 'ingles',
+    icon: Languages,
+    title: 'Inglés para equipos',
+    desc: 'Clases en vivo para equipos que atienden clientes, proveedores o colegas de otros países. Por niveles y con foco en conversación.',
+    tags: ['Grupos por nivel', 'Horario a convenir', 'Informe de asistencia'],
+  },
+  {
+    id: 'nivelacion',
+    icon: BookOpenCheck,
+    title: 'Nivelación de estudios para trabajadores',
+    desc: 'Preparamos a tus trabajadores para terminar la enseñanza básica o media con los exámenes libres del Mineduc. Un beneficio que cambia vidas.',
+    tags: ['Mayores de 18', 'Básica y media', 'Te ayudamos con la inscripción'],
+  },
+  {
+    id: 'hijos',
+    icon: GraduationCap,
+    title: 'Preu PAES para hijos de trabajadores',
+    desc: 'Un beneficio concreto para las familias de tu equipo: preparación PAES en vivo para sus hijos, con precio preferente por convenio.',
+    tags: ['Beneficio para las familias', 'Precio por convenio', 'Clases en vivo'],
   },
   {
     id: 'lsch',
-    title: 'Lengua de Señas (LSCh)',
-    desc: 'Curso de Lengua de Señas Chilena para equipos que trabajan o atienden a personas Sordas, con contexto de la Ley 21.015.',
-    tags: ['Contexto Ley 21.015', 'Instructora Sorda nativa', 'Certificado por nivel'],
+    icon: HandHeart,
+    title: 'Lengua de Señas Chilena (próximamente)',
+    desc: 'Para equipos que trabajan con personas Sordas o las atienden. Lo dictará una persona de la comunidad Sorda.',
+    tags: ['Ley 21.015 de inclusión laboral', 'Próximamente'],
+    soon: true,
   },
 ];
 
-/**
- * 📊 LÍNEAS DE SERVICIO
- * Configuración centralizada de precios y lógica de cobro.
- * * - type: "hourly" -> Se cobra por hora/persona (Idiomas, Talleres)
- * - type: "flat"   -> Se cobra fijo por mes/persona (Preu, Software)
- */
-export const SERVICE_LINES = [
-  {
-    id: "ingles",
-    label: "Inglés Corporativo",
-    type: "hourly",
-    // Bajamos de 12.000 a 6.500 la hora base para penetración agresiva.
-    publicPphOnline: 6500,
-    publicPphOnsite: 9500,
-    defaultHoursMonth: 8, // 2 veces por semana estándar
-    brandColor: "#6366f1", // Indigo
-    icon: "🌍",
-    desc: "Clases de inglés para equipos de trabajo."
-  },
-  {
-    id: "lsch",
-    label: "Lengua de Señas (Ley 21.015)",
-    type: "hourly",
-    // Precio gancho para cumplimiento normativo rápido.
-    publicPphOnline: 7500,
-    publicPphOnsite: 10500,
-    defaultHoursMonth: 8,
-    brandColor: "#14b8a6", // Teal
-    icon: "🤟",
-    desc: "Señas básicas y cultura Sorda para tu equipo."
-  },
-  {
-    id: "soft",
-    label: "Liderazgo & Habilidades",
-    type: "hourly",
-    // Talleres prácticos de alto valor percibido.
-    publicPphOnline: 8000,
-    publicPphOnsite: 12000,
-    defaultHoursMonth: 4, // 1 taller intensivo al mes
-    brandColor: "#f59e0b", // Amber
-    icon: "⚡",
-    desc: "Talleres de comunicación y trabajo en equipo."
-  },
-  {
-    id: "beneficio-hijos",
-    label: "Beneficio Hijos (Preu PAES)",
-    type: "flat", // <--- Lógica de cobro mensual fijo
-    // ESTO ES ORO: Vender cupos masivos a empresas.
-    flatPriceMonth: 35000, // Precio "Mayorista" (En web público vale +80k)
-    brandColor: "#ec4899", // Pink
-    icon: "🎓",
-    desc: "Preu PAES para los hijos de tus colaboradores."
-  },
-  {
-    id: "coaching",
-    label: "Coaching Ejecutivo 1:1",
-    type: "hourly",
-    // Servicio Premium (High Ticket)
-    publicPphOnline: 25000,
-    publicPphOnsite: 35000,
-    defaultHoursMonth: 4, // 1 sesión semanal
-    brandColor: "#ef4444", // Red
-    icon: "🎯",
-    desc: "Sesiones individuales para jefaturas."
-  },
+export const EMPRESAS_STEPS = [
+  { num: '01', title: 'Conversamos', desc: 'Nos cuentas qué necesita tu equipo, cuántas personas son y en qué horario pueden.' },
+  { num: '02', title: 'Propuesta a medida', desc: 'Te enviamos una propuesta con contenidos, duración y precio. Sin compromiso.' },
+  { num: '03', title: 'Clases', desc: 'Online por Google Meet o presencial en tu empresa. Las clases online quedan grabadas.' },
+  { num: '04', title: 'Seguimiento', desc: 'Te enviamos la asistencia y el avance del grupo, para que veas en qué se usó tu inversión.' },
 ];
 
-/**
- * 📦 PACKS "GANCHO" (Low Cost / High Impact)
- * Diseñados para reducir la fricción de entrada.
- */
-/**
- * 💰 REGLAS DE DESCUENTO POR VOLUMEN
- */
-// --- UTILS ---
-
-// Formateador de moneda CLP
-export const clp = (amount) =>
-  new Intl.NumberFormat("es-CL", {
-    style: "currency",
-    currency: "CLP",
-    maximumFractionDigits: 0,
-  }).format(amount || 0);
-
-
-
-/**
- * 🧮 MOTOR DE CÁLCULO DE PRESUPUESTO
- * Esta función es el cerebro del cotizador.
- */
+// Opciones del formulario de cotización.
+export const EMPRESAS_FORM_OPTIONS = [...EMPRESAS_SERVICES.filter((s) => !s.soon).map((s) => s.title), 'Otro'];

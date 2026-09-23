@@ -1,43 +1,58 @@
 // src/data/nivelacion.js
-// === Mundo Adultos: Escuela de Sueños ===
+// === Nivelación de estudios para adultos (exámenes libres, mayores de 18) ===
+// Fuente de los datos oficiales: Mineduc / epja.mineduc.cl / ChileAtiende
+// (cartilla "Exámenes de validación de estudios - Mayores de 18 años", 2026).
+// Revisar cada año: las fechas de inscripción y examen cambian.
 
-export const ADULT_CONTENT = {
-  hero: {
-    title: "El colegio no es la meta.",
-    subtitle: "Es el inicio de tu nueva vida.",
-    description: "No es solo sacarte un papel. Es terminar algo que quedó pendiente, a tu ritmo, sin que nadie te mire en menos por volver a intentarlo."
-  },
-  problem: {
-    title: "Tu sueño no tiene fecha de vencimiento.",
-    description: "Si dejaste de estudiar, no fue por falta de ganas. Fue porque la vida se puso en medio. Trabajo, familia, miedos... El sistema tradicional te falló a ti, no tú al sistema.",
-    solution: "En Lael Adultos terminas la media a tu ritmo, con profes que te acompañan."
-  },
-  system: {
-    title: "Cómo lo hacemos",
-    features: [
-      { id: 1, title: "Respeto a tu tiempo", desc: "Sabemos que eres adulto. Organizamos el estudio pensando en tu trabajo y tu familia." },
-      { id: 2, title: "Foco en lo que sigue", desc: "No perdemos tiempo en contenido que no vas a usar. Vamos directo a lo que necesitas para tu próximo paso." },
-      { id: 3, title: "Profes que entienden tu realidad", desc: "Saben lo que cuesta volver a estudiar siendo adulto, con trabajo y familia encima." },
-      { id: 4, title: "Licencia real, sin atajos", desc: "Te acompañamos hasta que tengas tu licencia en la mano. Sin atajos y sin promesas vacías." }
-    ]
-  },
-  process: [
-    { step: "01", label: "Qué quieres lograr", desc: "La licencia es el punto de partida, no la meta final. Hablamos de qué sigue después." },
-    { step: "02", label: "Un plan concreto", desc: "Armamos un plan realista para llegar a tu meta, según el tiempo que tienes." },
-    { step: "03", label: "Clases que se sostienen", desc: "Contenido que sirve para la vida real, no solo para pasar un examen." },
-    { step: "04", label: "Licencia en mano", desc: "Rindes tus exámenes y sales con tu licencia para lo que sigue." }
-  ],
-  target: {
-    forYou: [
-      "Si sientes que el tren ya pasó (Spoiler: No ha pasado)",
-      "Si quieres demostrarte a ti mismo que sí puedes",
-      "Si necesitas la licencia para ese ascenso o nueva carrera"
-    ],
-    outcome: [
-      "Licencia de Enseñanza Media legal y reconocida",
-      "Más confianza en lo que eres capaz de hacer",
-      "La puerta abierta a becas y educación superior"
-    ]
-  },
-  message: "“Nunca es tarde para ser lo que podrías haber sido.”"
+export const ADULT_HERO = {
+  eyebrow: 'Nivelación de estudios · Mayores de 18',
+  title: 'Termina el colegio.',
+  accent: 'Nunca es tarde.',
+  desc: 'Te preparamos para rendir los exámenes libres del Mineduc y sacar tu enseñanza básica o media. Clases online en vivo, a tu ritmo y gratis.',
 };
+
+export const ADULT_FREE_NOTE = 'La nivelación para adultos es gratis. La sostenemos con lo que aportan nuestros otros programas y las empresas, porque creemos que terminar el colegio no debería depender del bolsillo.';
+
+// Niveles que se pueden validar (Mineduc, mayores de 18)
+export const ADULT_LEVELS = [
+  {
+    id: 'basica',
+    title: 'Enseñanza básica',
+    equiv: 'Nivel Básico 1, 2 y 3 (1° a 8° básico)',
+    subjects: ['Lenguaje', 'Matemática', 'Ciencias Naturales (desde 5° básico)', 'Estudios Sociales (desde 5° básico)'],
+  },
+  {
+    id: 'media1',
+    title: 'Primer Nivel Medio',
+    equiv: 'Equivale a 1° y 2° medio',
+    subjects: ['Lengua Castellana', 'Matemática', 'Ciencias Naturales', 'Estudios Sociales', 'Inglés'],
+  },
+  {
+    id: 'media2',
+    title: 'Segundo Nivel Medio',
+    equiv: 'Equivale a 3° y 4° medio · te da la Licencia de Enseñanza Media',
+    subjects: ['Lengua Castellana', 'Matemática', 'Ciencias Naturales', 'Estudios Sociales', 'Inglés'],
+  },
+];
+
+// Un ciclo por semestre = dos oportunidades de rendir al año
+export const ADULT_CYCLES = [
+  { title: 'Ciclo 1', when: 'Marzo a mayo', exam: 'Rindes en junio (según calendario Mineduc)', note: 'Si quieres entrar a la educación superior, este es el período recomendado por el Mineduc para validar 3° y 4° medio.' },
+  { title: 'Ciclo 2', when: 'Julio a septiembre', exam: 'Rindes en octubre (según calendario Mineduc)', note: 'Segunda oportunidad del año, para seguir con el siguiente nivel o volver a rendir.' },
+];
+
+export const ADULT_STEPS = [
+  { num: '01', title: 'Nos escribes', desc: 'Vemos juntos hasta qué curso llegaste y qué nivel te toca rendir.' },
+  { num: '02', title: 'Te inscribes en el Mineduc', desc: 'La inscripción es personal y gratuita en ayudamineduc.cl. Te explicamos paso a paso qué documentos necesitas.' },
+  { num: '03', title: 'Clases en vivo', desc: 'Estudias con nosotros por Google Meet los temarios oficiales de cada asignatura. Las clases quedan grabadas.' },
+  { num: '04', title: 'Rindes y apruebas', desc: 'Das los exámenes en el colegio que te asigna el Mineduc. Con nota 4,0 o más en todo, apruebas el nivel.' },
+];
+
+export const ADULT_FAQS = [
+  { q: '¿Cuánto cuesta?', a: 'Nada. La preparación en Lael es gratis y la inscripción en el Mineduc también.' },
+  { q: '¿Quién puede participar?', a: 'Personas de 18 años o más que no estén matriculadas en un colegio o programa de educación de adultos al momento de inscribirse.' },
+  { q: '¿Validar para seguir estudiando o para trabajar?', a: 'El Mineduc tiene dos procesos. El de "continuidad de estudios" te da la licencia y te permite seguir a la educación superior. El de "fines laborales" solo sirve para el trabajo y no da la Licencia de Enseñanza Media. Nosotros te preparamos para el de continuidad de estudios.' },
+  { q: '¿Qué necesito para inscribirme en el Mineduc?', a: 'Tu cédula de identidad vigente y tu último certificado de estudios. Si eres extranjero, primero debes hacer el enrolamiento presencial en Ayuda Mineduc; te orientamos en eso.' },
+  { q: '¿Cómo se aprueba?', a: 'Hay una prueba por cada asignatura del nivel. Apruebas con nota 4,0 o más en todas. En media, si repruebas una igual puedes pasar con promedio 4,5 o más (5,0 si la reprobada es Lenguaje o Matemática).' },
+  { q: '¿Y si no apruebo?', a: 'Te puedes volver a inscribir en el siguiente período. Con nosotros sigues en el ciclo siguiente sin costo.' },
+];

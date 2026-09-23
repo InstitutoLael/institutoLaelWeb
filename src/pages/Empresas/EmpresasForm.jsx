@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { EMPRESAS_FORM_OPTIONS } from '../../data/empresas';
 
 const ease = [0.16, 1, 0.3, 1];
 const INITIAL = { nombre: '', empresa: '', tamano: '', email: '', programa: '', mensaje: '' };
 const TAMAÑOS = ['1 - 10 empleados', '11 - 50 empleados', '51 - 200 empleados', 'Más de 200 empleados'];
-const PROGRAMAS = ['PAES Institucional', 'Idiomas Corporativos', 'LSCh - Ley 21.015', 'Otro'];
+const PROGRAMAS = EMPRESAS_FORM_OPTIONS;
 
 export default function EmpresasForm() {
   const [form, setForm] = useState(INITIAL);

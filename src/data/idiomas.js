@@ -4,7 +4,7 @@
    1. CONFIGURACIÓN DE INVERSIÓN
    ────────────────────────────────────────────────────────────────────────── */
 
-import { GraduationCap, Bookmark, Award, Users } from 'lucide-react';
+import { ClaseEnVivo, Ruta, Certificado, Grupo } from '../components/icons/LaelIcons';
 
 /* ──────────────────────────────────────────────────────────────────────────
    CONTENIDO DE LA PÁGINA /idiomas (LandingIdiomas.jsx)
@@ -16,10 +16,10 @@ export const LANDING_SELECTOR = [
 ];
 
 export const LANDING_REASONS = [
-  { title: "Profesores en vivo", desc: "Clases en vivo con un docente que te escucha, te corrige en el momento y responde tus dudas.", icon: GraduationCap },
-  { title: "Progresión por niveles", desc: "Niveles basados en el Marco Común Europeo (MCER), con lo que vas a aprender en cada etapa definido desde el inicio.", icon: Bookmark },
-  { title: "Certificación Lael", desc: "Al aprobar cada nivel recibes un certificado del Instituto Lael que indica el nivel alcanzado.", icon: Award },
-  { title: "Comunidad de práctica", desc: "Sesiones de conversación con otros alumnos, para que se te suelte la lengua antes de tener que usarlo afuera.", icon: Users }
+  { title: "Profesores en vivo", desc: "Clases en vivo con un docente que te escucha, te corrige en el momento y responde tus dudas.", icon: ClaseEnVivo },
+  { title: "Progresión por niveles", desc: "Niveles basados en el Marco Común Europeo (MCER), con lo que vas a aprender en cada etapa definido desde el inicio.", icon: Ruta },
+  { title: "Certificación Lael", desc: "Al aprobar cada nivel recibes un certificado del Instituto Lael que indica el nivel alcanzado.", icon: Certificado },
+  { title: "Comunidad de práctica", desc: "Sesiones de conversación con otros alumnos, para que se te suelte la lengua antes de tener que usarlo afuera.", icon: Grupo }
 ];
 
 export const LANDING_PLANS = [

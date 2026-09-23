@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { CheckCircle2, XCircle, ShieldCheck, AlertTriangle, Scale, Eye, FileText, Lock } from 'lucide-react';
+import { CheckCircle2, XCircle, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Pago, Escudo, Empresa, Mensaje } from '../components/icons/LaelIcons';
 
 const BLUE = '#071D49';
 
@@ -28,9 +29,9 @@ const DONT = [
 ];
 
 const PILLARS = [
-  { icon: Scale, title: "Lo que pagas", desc: "Pagas tu mensualidad y nada más. No hay cobros escondidos y el material no se cobra aparte." },
-  { icon: Eye, title: "Tus datos", desc: "Tus datos son tuyos. Los usamos solo para tus clases y para contactarte, y puedes pedirnos que los borremos. El detalle está en nuestra política de privacidad (institutolael.cl/privacidad)." },
-  { icon: Lock, title: "Quiénes somos", desc: "Instituto Lael SpA es una empresa constituida bajo las leyes chilenas, con domicilio en Santiago de Chile." }
+  { icon: Pago, title: "Lo que pagas", desc: "Pagas tu mensualidad y nada más. No hay cobros escondidos y el material no se cobra aparte." },
+  { icon: Escudo, title: "Tus datos", desc: "Tus datos son tuyos. Los usamos solo para tus clases y para contactarte, y puedes pedirnos que los borremos. El detalle está en nuestra política de privacidad (institutolael.cl/privacidad)." },
+  { icon: Empresa, title: "Quiénes somos", desc: "Instituto Lael SpA es una empresa constituida bajo las leyes chilenas, con domicilio en Santiago de Chile." }
 ];
 
 function ListCard({ tone, icon: Icon, ItemIcon, title, items, delay }) {
@@ -102,7 +103,7 @@ export default function Transparencia() {
             {PILLARS.map((item, i) => (
               <motion.div key={item.title} {...fadeUp(i * 0.08)} className="p-6 sm:p-8 rounded-[28px] border border-[#071D49]/5 bg-[#F4F4F4]">
                 <div className="w-11 h-11 rounded-xl bg-[#071D49] flex items-center justify-center mb-5">
-                  <item.icon className="text-[#D7E400]" size={20} />
+                  <item.icon className="text-white" size={22} />
                 </div>
                 <h3 className="text-[#071D49] font-display font-extrabold text-base uppercase tracking-tight mb-3">{item.title}</h3>
                 <p className="text-[#071D49]/70 text-sm sm:text-base leading-relaxed break-words">{item.desc}</p>
@@ -115,7 +116,7 @@ export default function Transparencia() {
       {/* ── 4. DUDAS Y RECLAMOS ──────────────────────────────────────── */}
       <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28 text-white text-center" style={{ backgroundColor: BLUE }}>
         <motion.div {...fadeUp(0)} className="max-w-3xl mx-auto">
-          <FileText className="text-[#D7E400] mx-auto mb-6" size={40} />
+          <Mensaje className="text-white mx-auto mb-6" size={44} />
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 uppercase tracking-tight">Dudas y reclamos</h2>
           <p className="text-white/75 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
             Si tienes dudas sobre pagos, términos del servicio o reembolsos, escríbele a la dirección del instituto o háblanos por WhatsApp.

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { Copy, Check, MessageCircle, Gift } from 'lucide-react';
+import { Copy, Check, MessageCircle } from 'lucide-react';
+import { Regalo } from '../../components/icons/LaelIcons';
 import { BLUE, YELLOW, fadeUp, waLink, Btn, PageHero, SectionHead, Faq, CtaBand } from './shared';
 import { REFERIDO_HERO, REFERIDO_STEPS, REFERIDO_FAQS, REFERIDO_MENSAJE, REFERIDO_SHARE_URL, REFERIDO_MES_GRATIS } from '../../data/trae-un-amigo';
 
@@ -77,7 +78,7 @@ export default function TraeUnAmigo() {
               ))}
             </div>
             <p className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight">
-              <Gift size={26} className="inline -mt-1 mr-2" style={{ color: YELLOW }} aria-hidden="true" />
+              <Regalo size={28} className="inline -mt-1 mr-2" />
               {REFERIDO_MES_GRATIS} amigos = <span style={{ color: YELLOW }}>un mes gratis</span>
             </p>
             <p className="text-white/75 text-sm leading-relaxed mt-4 max-w-xl mx-auto">

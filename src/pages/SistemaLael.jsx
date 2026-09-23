@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { ClipboardCheck, ListChecks, Video, Timer, Laptop, Wifi, UserCircle, ArrowRight, MessageCircle } from 'lucide-react';
+import { ArrowRight, MessageCircle } from 'lucide-react';
+import { Diagnostico, Lista, ClaseEnVivo, Reloj, Dispositivo, Conexion, Cuenta } from '../components/icons/LaelIcons';
 import { PAES_FORM_URL } from '../data/paes';
 
 const BLUE = '#071D49';
@@ -19,31 +20,31 @@ const fadeUp = (delay = 0) => ({
 
 const STEPS = [
   {
-    icon: ClipboardCheck,
+    icon: Diagnostico,
     title: 'Nos cuentas dónde estás',
     desc: 'Haz el diagnóstico gratis o escríbenos por WhatsApp. Con eso sabemos qué te cuesta y qué necesitas.',
   },
   {
-    icon: ListChecks,
+    icon: Lista,
     title: 'Eliges tus ramos',
     desc: 'La matrícula es gratis y pagas solo por los ramos que tomas. Si el costo es un problema, puedes postular a una beca.',
   },
   {
-    icon: Video,
+    icon: ClaseEnVivo,
     title: 'Vas a clases en vivo',
     desc: 'Dos clases de una hora a la semana por ramo, por Google Meet, desde las 18:00. Cada semana recibes las grabaciones para repasar.',
   },
   {
-    icon: Timer,
+    icon: Reloj,
     title: 'Practicas y revisamos',
     desc: 'Cada mes haces un ensayo con el mismo tiempo que da la PAES. Vemos tus resultados y ajustamos en qué poner el foco.',
   },
 ];
 
 const REQUIREMENTS = [
-  { icon: Laptop, text: 'Un computador, tablet o celular' },
-  { icon: Wifi, text: 'Conexión a internet' },
-  { icon: UserCircle, text: 'Una cuenta de Google para entrar a Meet' },
+  { icon: Dispositivo, text: 'Un computador, tablet o celular' },
+  { icon: Conexion, text: 'Conexión a internet' },
+  { icon: Cuenta, text: 'Una cuenta de Google para entrar a Meet' },
 ];
 
 export default function SistemaLael() {
@@ -86,7 +87,7 @@ export default function SistemaLael() {
                 {i + 1}
               </span>
               <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center mb-5" style={{ backgroundColor: BLUE }}>
-                <step.icon size={24} style={{ color: YELLOW }} />
+                <step.icon size={26} className="text-white" />
               </div>
               <h2 className="font-display text-lg font-extrabold uppercase tracking-tight mb-3">{step.title}</h2>
               <p className="text-[#071D49]/70 text-sm sm:text-base leading-relaxed">{step.desc}</p>
@@ -104,7 +105,7 @@ export default function SistemaLael() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
             {REQUIREMENTS.map((r, i) => (
               <motion.div key={r.text} {...fadeUp(i * 0.1)} className="rounded-[24px] p-5 sm:p-6 bg-white/5 border border-white/10 flex sm:flex-col items-center gap-4 text-left sm:text-center">
-                <r.icon size={28} style={{ color: YELLOW }} />
+                <r.icon size={30} className="text-white flex-shrink-0" />
                 <p className="text-white/85 text-sm sm:text-base font-semibold">{r.text}</p>
               </motion.div>
             ))}

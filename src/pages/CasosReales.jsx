@@ -2,7 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { Star, Building2, MessageCircle, ArrowRight } from 'lucide-react';
+import { Star, MessageCircle, ArrowRight } from 'lucide-react';
+import { Empresa } from '../components/icons/LaelIcons';
 import { TESTIMONIALS, COMPANY_TESTIMONIALS, SHARE_STORY_URL } from '../data/testimonials';
 
 const BLUE = '#071D49';
@@ -99,7 +100,7 @@ export default function CasosReales() {
                 className="rounded-[28px] p-6 sm:p-8 bg-white/5 border border-white/10"
               >
                 <div className="flex items-center gap-3 mb-6">
-                  <Building2 size={20} style={{ color: YELLOW }} />
+                  <Empresa size={22} className="text-white" />
                   <div>
                     <p className="font-bold font-display uppercase tracking-tight">{c.name}</p>
                     <p className="text-xs uppercase tracking-wider text-white/60">{c.program}</p>

@@ -1,9 +1,9 @@
 import React from 'react';
-import { GraduationCap, BookOpen, Home, Sparkles } from 'lucide-react';
+import { Graduacion, Guia, Familia, Paloma } from '../icons/LaelIcons';
 
-const ICONS = { PAES: GraduationCap, Adultos: BookOpen, Homeschool: Home, Lael: Sparkles };
+const ICONS = { PAES: Graduacion, Adultos: Guia, Homeschool: Familia, Lael: Paloma };
 
 export default function CategoryIcon({ category, ...props }) {
-  const Icon = ICONS[category] || Sparkles;
+  const Icon = ICONS[category] || Paloma;
   return <Icon aria-hidden="true" {...props} />;
 }

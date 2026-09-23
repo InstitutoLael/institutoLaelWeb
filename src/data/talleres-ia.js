@@ -1,6 +1,6 @@
 // src/data/talleres-ia.js
 // === Talleres de IA para estudiantes y familias homeschool · página /talleres-ia ===
-import { Brain, CalendarCheck, Palette, ShieldCheck } from 'lucide-react';
+import { IA, Calendario, Crear, Escudo } from '../components/icons/LaelIcons';
 
 // Precio propuesto, confirmar con Diego: $19.990 por taller de 4 clases.
 export const TALLERES_IA_PRICE = '$19.990';
@@ -27,10 +27,10 @@ export const TALLERES_IA = {
     title: 'Herramientas que ya existen, bien usadas',
     chips: ['ChatGPT', 'Gemini', 'Claude', 'Canva'],
     items: [
-      { icon: Brain, title: 'Estudiar con IA', desc: 'Pedirle que te explique algo de otra forma, que te haga preguntas de práctica y que te corrija.' },
-      { icon: CalendarCheck, title: 'Organizarte', desc: 'Armar un plan de estudio para la semana o para una prueba, y cumplirlo.' },
-      { icon: Palette, title: 'Crear con Canva', desc: 'Presentaciones e infografías hechas por ti, que se vean bien y digan lo que quieres decir.' },
-      { icon: ShieldCheck, title: 'Con criterio', desc: 'Cuándo usarla y cuándo no, cómo revisar lo que te responde y cómo cuidar tus datos.' },
+      { icon: IA, title: 'Estudiar con IA', desc: 'Pedirle que te explique algo de otra forma, que te haga preguntas de práctica y que te corrija.' },
+      { icon: Calendario, title: 'Organizarte', desc: 'Armar un plan de estudio para la semana o para una prueba, y cumplirlo.' },
+      { icon: Crear, title: 'Crear con Canva', desc: 'Presentaciones e infografías hechas por ti, que se vean bien y digan lo que quieres decir.' },
+      { icon: Escudo, title: 'Con criterio', desc: 'Cuándo usarla y cuándo no, cómo revisar lo que te responde y cómo cuidar tus datos.' },
     ],
   },
   audience: {

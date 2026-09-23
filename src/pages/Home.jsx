@@ -2,7 +2,8 @@ import React from 'react';
 import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowRight, Users, Heart, Target, Star, ChevronRight } from 'lucide-react';
+import { ArrowRight, Star, ChevronRight } from 'lucide-react';
+import { ClaseEnVivo, Grupo, Grabacion } from '../components/icons/LaelIcons';
 import SignificadoLael from '../components/SignificadoLael';
 import HeroCarousel from '../components/HeroCarousel';
 import NoticiasDestacadas from '../components/NoticiasDestacadas';
@@ -173,9 +174,9 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 max-w-4xl mx-auto mb-10">
             {[
-              { icon: Users, text: 'Clases en vivo por Google Meet.' },
-              { icon: Target, text: 'Máximo 20 alumnos por curso.' },
-              { icon: Heart, text: 'Si faltas, cada semana te compartimos las grabaciones.' },
+              { icon: ClaseEnVivo, text: 'Clases en vivo por Google Meet.' },
+              { icon: Grupo, text: 'Máximo 20 alumnos por curso.' },
+              { icon: Grabacion, text: 'Si faltas, cada semana te compartimos las grabaciones.' },
             ].map((item, idx) => (
               <motion.div
                 key={idx}
@@ -183,7 +184,7 @@ export default function Home() {
                 className="flex md:flex-col items-center gap-4 p-4 md:p-6 rounded-[24px] bg-[#F4F4F4] border border-[#071D49]/5 text-left md:text-center"
               >
                 <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-[#071D49] flex-shrink-0 flex items-center justify-center">
-                  <item.icon className="text-[#D7E400]" size={22} />
+                  <item.icon className="text-white" size={24} />
                 </div>
                 <p className="text-sm sm:text-base font-semibold text-[#071D49] leading-snug md:max-w-[220px]">
                   {item.text}

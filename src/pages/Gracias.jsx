@@ -2,7 +2,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { MessageCircle, Instagram, Youtube, Calculator, Gift, ArrowRight } from 'lucide-react';
+import { MessageCircle, Instagram, Youtube, ArrowRight } from 'lucide-react';
+import { Calculadora, Regalo } from '../components/icons/LaelIcons';
 import { whatsappUrl } from '../lib/backend';
 import { REFERRAL } from '../data/paes';
 
@@ -81,7 +82,7 @@ export default function Gracias() {
 
           <div className="rounded-[28px] p-6 sm:p-8 text-white" style={{ backgroundColor: BLUE }}>
             <div className="flex items-center gap-3 mb-3">
-              <Gift size={22} style={{ color: YELLOW }} />
+              <Regalo size={24} className="text-white flex-shrink-0" />
               <h2 className="font-display text-xl font-extrabold uppercase tracking-tight">{REFERRAL.title}</h2>
             </div>
             <p className="text-white/80 leading-relaxed mb-5">{REFERRAL.desc}</p>
@@ -93,7 +94,7 @@ export default function Gracias() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Link to="/calculadora" className="bg-white rounded-[24px] p-5 border border-[#071D49]/5 shadow-card flex items-center gap-3 min-h-[72px] font-semibold">
-              <Calculator size={22} /> Calcula tu puntaje <ArrowRight size={16} className="ml-auto" />
+              <Calculadora size={22} /> Calcula tu puntaje <ArrowRight size={16} className="ml-auto" />
             </Link>
             <a href="https://instagram.com/institutolael" target="_blank" rel="noopener noreferrer" className="bg-white rounded-[24px] p-5 border border-[#071D49]/5 shadow-card flex items-center gap-3 min-h-[72px] font-semibold">
               <Instagram size={22} /> Síguenos <ArrowRight size={16} className="ml-auto" />

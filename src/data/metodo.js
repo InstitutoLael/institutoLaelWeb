@@ -1,4 +1,4 @@
-import { Target, Compass, Users, LineChart } from "lucide-react";
+import { Diagnostico, Ruta, Acompanamiento, Resultados } from '../components/icons/LaelIcons';
 
 export const metodoData = {
   hero: {
@@ -10,25 +10,25 @@ export const metodoData = {
       id: "diagnostico",
       title: "Sabemos dónde estás parado",
       description: "No arrancamos a ciegas. Vemos qué manejas y qué se te escapa, antes de armar cualquier plan.",
-      icon: Target,
+      icon: Diagnostico,
     },
     {
       id: "estrategia",
       title: "Un plan hecho para ti",
       description: "Nada de guías iguales para todos. Priorizamos lo que a ti te va a subir el puntaje, no lo que se ve bien en un temario.",
-      icon: Compass,
+      icon: Ruta,
     },
     {
       id: "acompanamiento",
       title: "No estás solo en esto",
       description: "Tu profe revisa cómo vas y ajusta el plan si hace falta. Te avisa si te estás quedando atrás, antes de que sea tarde.",
-      icon: Users,
+      icon: Acompanamiento,
     },
     {
       id: "evaluacion",
       title: "Practicas con el reloj encima",
       description: "Un ensayo PAES cada mes, con el mismo tiempo de la prueba, para que el día de la prueba no sea la primera vez que corres contra el reloj.",
-      icon: LineChart,
+      icon: Resultados,
     }
   ]
 };

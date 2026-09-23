@@ -1,6 +1,6 @@
 // src/data/reforzamiento.js
 // === Reforzamiento escolar (7° básico a 2° medio) · página /reforzamiento ===
-import { Video, Users, PlayCircle, BookOpen } from 'lucide-react';
+import { ClaseEnVivo, Grupo, Grabacion, Guia } from '../components/icons/LaelIcons';
 
 // Precio propuesto, confirmar con Diego: $12.000/mes por asignatura,
 // 1 clase semanal de 1 hora.
@@ -29,10 +29,10 @@ export const REFORZAMIENTO = {
     desc: 'Eliges la asignatura que te está costando. Puedes tomar una o varias.',
     chips: ['Matemática', 'Lenguaje', 'Ciencias', 'Inglés'],
     items: [
-      { icon: Video, title: 'Clase en vivo', desc: 'Una clase de una hora a la semana por asignatura, por Google Meet. Si algo no se entiende, preguntas ahí mismo.' },
-      { icon: Users, title: 'Grupos pequeños', desc: 'Pocos alumnos por curso, así el profe sabe cómo vas y nadie se queda mirando desde atrás.' },
-      { icon: PlayCircle, title: 'Grabaciones', desc: 'Cada semana compartimos la grabación de la clase para que repases antes de una prueba.' },
-      { icon: BookOpen, title: 'Ejercicios', desc: 'Material para practicar entre una clase y otra, con los contenidos que estás viendo en el colegio.' },
+      { icon: ClaseEnVivo, title: 'Clase en vivo', desc: 'Una clase de una hora a la semana por asignatura, por Google Meet. Si algo no se entiende, preguntas ahí mismo.' },
+      { icon: Grupo, title: 'Grupos pequeños', desc: 'Pocos alumnos por curso, así el profe sabe cómo vas y nadie se queda mirando desde atrás.' },
+      { icon: Grabacion, title: 'Grabaciones', desc: 'Cada semana compartimos la grabación de la clase para que repases antes de una prueba.' },
+      { icon: Guia, title: 'Ejercicios', desc: 'Material para practicar entre una clase y otra, con los contenidos que estás viendo en el colegio.' },
     ],
   },
   audience: {

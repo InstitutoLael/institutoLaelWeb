@@ -2,40 +2,40 @@
 // === Lael Empresas: capacitación para equipos ===
 // Todo se cotiza a medida (online o presencial). Lo que pagan las empresas
 // ayuda a sostener la nivelación gratuita para adultos.
-import { Sparkles, Languages, GraduationCap, BookOpenCheck, HandHeart } from 'lucide-react';
+import { IA, Idioma, Guia, Graduacion, Senas } from '../components/icons/LaelIcons';
 
 export const EMPRESAS_SERVICES = [
   {
     id: 'ia',
-    icon: Sparkles,
+    icon: IA,
     title: 'Talleres de IA para el trabajo',
     desc: 'Tu equipo aprende a usar ChatGPT, Gemini, Claude, Canva y la IA de Google Workspace en su trabajo diario: redactar, resumir, ordenar datos, preparar presentaciones y responder clientes.',
     tags: ['Práctico, con casos de tu empresa', 'Desde un taller de 2 horas', 'Online o presencial en Santiago'],
   },
   {
     id: 'ingles',
-    icon: Languages,
+    icon: Idioma,
     title: 'Inglés para equipos',
     desc: 'Clases en vivo para equipos que atienden clientes, proveedores o colegas de otros países. Por niveles y con foco en conversación.',
     tags: ['Grupos por nivel', 'Horario a convenir', 'Informe de asistencia'],
   },
   {
     id: 'nivelacion',
-    icon: BookOpenCheck,
+    icon: Guia,
     title: 'Nivelación de estudios para trabajadores',
     desc: 'Preparamos a tus trabajadores para terminar la enseñanza básica o media con los exámenes libres del Mineduc. Para muchos es algo que tenían pendiente hace años.',
     tags: ['Mayores de 18', 'Básica y media', 'Te ayudamos con la inscripción'],
   },
   {
     id: 'hijos',
-    icon: GraduationCap,
+    icon: Graduacion,
     title: 'Preu PAES para hijos de trabajadores',
     desc: 'Preparación PAES en vivo para los hijos de tus trabajadores, con precio preferente por convenio. Es un beneficio que toda la familia aprovecha.',
     tags: ['Beneficio para las familias', 'Precio por convenio', 'Clases en vivo'],
   },
   {
     id: 'lsch',
-    icon: HandHeart,
+    icon: Senas,
     title: 'Lengua de Señas Chilena (próximamente)',
     desc: 'Para equipos que trabajan con personas Sordas o las atienden. Lo dictará una persona de la comunidad Sorda.',
     tags: ['Ley 21.015 de inclusión laboral', 'Próximamente'],

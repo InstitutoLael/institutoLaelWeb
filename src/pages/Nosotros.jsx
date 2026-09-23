@@ -140,8 +140,8 @@ export default function Nosotros() {
                 {...fadeUp(i * 0.05)}
                 className="flex gap-4 sm:gap-5 items-start text-left bg-white rounded-[28px] p-6 sm:p-8 border border-[#071D49]/5 shadow-card"
               >
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#071D49] text-[#D7E400] flex items-center justify-center flex-shrink-0">
-                  <v.icon size={24} />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#071D49] text-white flex items-center justify-center flex-shrink-0">
+                  <v.icon size={26} />
                 </div>
                 <div>
                   <h3 className="text-lg sm:text-xl font-black mb-1.5 text-[#071D49] tracking-wide font-display uppercase">{v.title}</h3>

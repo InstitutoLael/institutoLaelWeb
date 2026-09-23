@@ -7,10 +7,10 @@ import {
   ChevronDown,
   ChevronRight,
   MessageCircle,
-  UsersRound,
   ArrowRight,
   CheckCircle2
 } from 'lucide-react';
+import { Amigo, Mensaje } from '../../components/icons/LaelIcons';
 import inoLogo from '../../assets/img/Partners/INO.png';
 import studentImg from '../../assets/img/Home/hero_student_lael_1780734180709.webp';
 import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS, PAES_PLANS, PAES_PLAN_INCLUDES, PAES_FORM_URL, BECAS_FORM_URL, REFERRAL } from '../../data/paes';
@@ -192,7 +192,7 @@ export default function LandingPAES() {
                 className="p-5 sm:p-6 rounded-[24px] bg-[#F4F4F4] border border-[#071D49]/5 flex sm:flex-col gap-4 sm:gap-0"
               >
                 <div className="w-12 h-12 bg-[#071D49] rounded-2xl flex items-center justify-center sm:mb-5 flex-shrink-0">
-                  <feature.icon className="w-5 h-5 text-[#D7E400]" />
+                  <feature.icon size={24} className="text-white" />
                 </div>
                 <div>
                   <h3 className="text-[#071D49] text-base sm:text-lg font-bold mb-1.5 sm:mb-2 font-display uppercase tracking-tight">{feature.title}</h3>
@@ -265,7 +265,7 @@ export default function LandingPAES() {
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-4xl mx-auto">
             <motion.div {...fadeUp(0.1)} className="rounded-[24px] border-2 border-dashed border-[#071D49]/15 bg-white p-5 flex items-start gap-4">
               <div className="w-11 h-11 rounded-full bg-[#D7E400] text-[#071D49] flex items-center justify-center flex-shrink-0">
-                <UsersRound size={20} />
+                <Amigo size={22} accent="#FFFFFF" />
               </div>
               <div>
                 <p className="text-[#071D49] font-display font-extrabold uppercase tracking-tight">{REFERRAL.title}</p>
@@ -322,7 +322,7 @@ export default function LandingPAES() {
                   className="rounded-2xl p-5 border border-dashed border-white/20 flex items-start gap-4"
                 >
                   <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[#D7E400] flex-shrink-0">
-                    <UsersRound size={18} />
+                    <Mensaje size={20} className="text-white" />
                   </div>
                   <div className="text-left">
                     <h4 className="text-white font-display font-bold text-sm uppercase">Dudas y orientación</h4>

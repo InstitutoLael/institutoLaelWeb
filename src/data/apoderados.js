@@ -2,7 +2,7 @@
 // === Preu para apoderados (charla gratis) · página /apoderados ===
 // Las fechas se anuncian por Instagram y WhatsApp: no poner fechas aquí
 // hasta que estén confirmadas.
-import { GraduationCap, HeartHandshake, Wallet, Smile } from 'lucide-react';
+import { Graduacion, Acompanamiento, Beca, Corazon } from '../components/icons/LaelIcons';
 
 export const APODERADOS = {
   id: 'apoderados',
@@ -25,10 +25,10 @@ export const APODERADOS = {
     eyebrow: 'De qué hablamos',
     title: 'Lo que nos preguntan las familias',
     items: [
-      { icon: GraduationCap, title: 'Cómo funciona la PAES', desc: 'Pruebas obligatorias y electivas, puntajes, ponderaciones y las fechas importantes del proceso de admisión.' },
-      { icon: HeartHandshake, title: 'Cómo apoyar a tu hijo', desc: 'Rutinas de estudio en casa, cómo hablar de los resultados y cuándo conviene pedir ayuda.' },
-      { icon: Wallet, title: 'Becas y beneficios', desc: 'Gratuidad, becas del Estado, el FUAS y las becas parciales que damos en Lael.' },
-      { icon: Smile, title: 'Apoyo emocional', desc: 'El cansancio, la ansiedad y los días antes de la prueba. Cómo acompañar sin sumar presión.' },
+      { icon: Graduacion, title: 'Cómo funciona la PAES', desc: 'Pruebas obligatorias y electivas, puntajes, ponderaciones y las fechas importantes del proceso de admisión.' },
+      { icon: Acompanamiento, title: 'Cómo apoyar a tu hijo', desc: 'Rutinas de estudio en casa, cómo hablar de los resultados y cuándo conviene pedir ayuda.' },
+      { icon: Beca, title: 'Becas y beneficios', desc: 'Gratuidad, becas del Estado, el FUAS y las becas parciales que damos en Lael.' },
+      { icon: Corazon, title: 'Apoyo emocional', desc: 'El cansancio, la ansiedad y los días antes de la prueba. Cómo acompañar sin sumar presión.' },
     ],
   },
   audience: {

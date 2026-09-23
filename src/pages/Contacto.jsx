@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MessageSquare, Mail, Instagram, Youtube, Clock, Send, CheckCircle } from 'lucide-react';
+import { Instagram, Youtube, Send, CheckCircle } from 'lucide-react';
+import { Mensaje, Correo, Reloj } from '../components/icons/LaelIcons';
 import { Helmet } from 'react-helmet-async';
 import { CONTACT_INFO } from '../data/contact';
 
@@ -18,11 +19,11 @@ const FIELD =
 const LABEL = 'block text-sm font-bold text-[#071D49] mb-2';
 
 const METHODS = [
-  { icon: MessageSquare, label: CONTACT_INFO.whatsapp.label, value: CONTACT_INFO.whatsapp.number, href: CONTACT_INFO.whatsapp.url, external: true },
-  { icon: Mail, label: CONTACT_INFO.email.label, value: CONTACT_INFO.email.address, href: `mailto:${CONTACT_INFO.email.address}` },
+  { icon: Mensaje, label: CONTACT_INFO.whatsapp.label, value: CONTACT_INFO.whatsapp.number, href: CONTACT_INFO.whatsapp.url, external: true },
+  { icon: Correo, label: CONTACT_INFO.email.label, value: CONTACT_INFO.email.address, href: `mailto:${CONTACT_INFO.email.address}` },
   { icon: Instagram, label: 'Instagram', value: CONTACT_INFO.instagram.user, href: CONTACT_INFO.instagram.url, external: true },
   { icon: Youtube, label: 'YouTube', value: CONTACT_INFO.youtube.user, href: CONTACT_INFO.youtube.url, external: true },
-  { icon: Clock, label: CONTACT_INFO.schedule.label, value: CONTACT_INFO.schedule.week },
+  { icon: Reloj, label: CONTACT_INFO.schedule.label, value: CONTACT_INFO.schedule.week },
 ];
 
 export default function Contacto() {
@@ -71,8 +72,8 @@ export default function Contacto() {
                 {METHODS.map((m) => {
                   const inner = (
                     <>
-                      <span className="w-12 h-12 rounded-xl bg-[#071D49] flex items-center justify-center text-[#D7E400] flex-shrink-0">
-                        <m.icon size={20} />
+                      <span className="w-12 h-12 rounded-xl bg-[#071D49] flex items-center justify-center text-white flex-shrink-0">
+                        <m.icon size={22} />
                       </span>
                       <span className="min-w-0">
                         <span className="block text-xs font-bold uppercase tracking-wider text-[#071D49]/70 mb-0.5">{m.label}</span>

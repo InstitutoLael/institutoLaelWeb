@@ -39,7 +39,7 @@ export default function Alumnos() {
               >
                 <div className="flex items-center justify-between mb-5">
                   <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ backgroundColor: BLUE }}>
-                    <c.icon size={22} style={{ color: YELLOW }} aria-hidden="true" />
+                    <c.icon size={24} className="text-white" />
                   </div>
                   {c.soon && (
                     <span className="text-[10px] font-black uppercase tracking-[0.15em] px-3 py-1 rounded-full" style={{ backgroundColor: YELLOW, color: BLUE }}>

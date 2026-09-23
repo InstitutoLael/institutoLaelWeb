@@ -1,6 +1,6 @@
 // src/data/paes.js
 // === Sistema de Alto Rendimiento PAES Lael ===
-import { Video, BookOpen, Award, Heart, Users } from "lucide-react";
+import { ClaseEnVivo, Guia, Ensayo, Acompanamiento, Grupo } from '../components/icons/LaelIcons';
 import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.webp";
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -8,11 +8,11 @@ import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.webp";
    ────────────────────────────────────────────────────────────────────────── */
 
 export const LANDING_FEATURES = [
-  { title: "Clases en vivo", desc: "Dos clases a la semana por ramo, por Google Meet. Si no entiendes algo, le preguntas al profe ahí mismo.", icon: Video },
-  { title: "Material de estudio", desc: "Guías de teoría y ejercicios para descargar, y la grabación de cada clase para repasar durante la semana.", icon: BookOpen },
-  { title: "Ensayos PAES", desc: "Ensayos propios, hechos por nuestros profes con el formato y el tiempo de la PAES, una vez al mes.", icon: Award },
-  { title: "Acompañamiento", desc: "Si te estás quedando atrás o andas bajoneado, lo conversamos. Nos importa cómo estás, además de tu puntaje.", icon: Heart },
-  { title: "Comunidad activa", desc: "Un grupo con tus compañeros de curso para preguntar dudas, pasarse datos y darse ánimo cuando cuesta.", icon: Users }
+  { title: "Clases en vivo", desc: "Dos clases a la semana por ramo, por Google Meet. Si no entiendes algo, le preguntas al profe ahí mismo.", icon: ClaseEnVivo },
+  { title: "Material de estudio", desc: "Guías de teoría y ejercicios para descargar, y la grabación de cada clase para repasar durante la semana.", icon: Guia },
+  { title: "Ensayos PAES", desc: "Ensayos propios, hechos por nuestros profes con el formato y el tiempo de la PAES, una vez al mes.", icon: Ensayo },
+  { title: "Acompañamiento", desc: "Si te estás quedando atrás o andas bajoneado, lo conversamos. Nos importa cómo estás, además de tu puntaje.", icon: Acompanamiento },
+  { title: "Comunidad activa", desc: "Un grupo con tus compañeros de curso para preguntar dudas, pasarse datos y darse ánimo cuando cuesta.", icon: Grupo }
 ];
 
 export const LANDING_SUBJECTS = [

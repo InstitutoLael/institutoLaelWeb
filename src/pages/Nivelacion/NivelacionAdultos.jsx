@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import WordReveal from '../../components/ui/WordReveal';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { ArrowRight, MessageCircle, ChevronDown, CalendarDays, Heart } from 'lucide-react';
+import { ArrowRight, MessageCircle, ChevronDown } from 'lucide-react';
+import { Calendario, Corazon } from '../../components/icons/LaelIcons';
 import adultosImg from '../../assets/img/Home/mundo_adultos_bg_1777944001677.webp';
 import { ADULT_HERO, ADULT_FREE_NOTE, ADULT_LEVELS, ADULT_CYCLES, ADULT_STEPS, ADULT_FAQS, ADULT_PAES_PACK } from '../../data/nivelacion';
 
@@ -110,7 +111,7 @@ export default function NivelacionAdultos() {
             {ADULT_CYCLES.map((c, i) => (
               <motion.div key={c.title} {...fadeUp(i * 0.1)} className="rounded-[28px] p-6 sm:p-8 bg-white/5 border border-white/10">
                 <div className="flex items-center gap-3 mb-4">
-                  <CalendarDays size={22} style={{ color: YELLOW }} />
+                  <Calendario size={24} className="text-white flex-shrink-0" />
                   <h3 className="font-display text-xl font-extrabold uppercase">{c.title}</h3>
                 </div>
                 <p className="text-white font-semibold">{c.when} · <span style={{ color: YELLOW }}>{c.exam}</span></p>
@@ -141,7 +142,7 @@ export default function NivelacionAdultos() {
           </div>
           <motion.div {...fadeUp(0.2)} className="mt-12 max-w-2xl mx-auto rounded-[24px] border-2 border-dashed border-[#071D49]/15 p-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
             <div className="w-12 h-12 rounded-full bg-[#D7E400] flex items-center justify-center flex-shrink-0">
-              <Heart size={20} style={{ color: BLUE }} />
+              <Corazon size={24} accent="#FFFFFF" style={{ color: BLUE }} />
             </div>
             <p className="text-[#071D49]/80 text-sm leading-relaxed">{ADULT_FREE_NOTE}</p>
           </motion.div>

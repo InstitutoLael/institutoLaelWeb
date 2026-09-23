@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Award, Check, ShieldCheck, Share2, Download } from 'lucide-react';
+import { Award, Share2, Download } from 'lucide-react';
+import { Certificado, Escudo, Documento } from './icons/LaelIcons';
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
@@ -54,9 +55,9 @@ export default function CertificateSection({ defaultLevel = "B2", defaultLanguag
           {/* Benefits List */}
           <div className="space-y-4 max-w-xl">
             {[
-              { title: "Niveles del MCER", desc: "Usamos los niveles del Marco Común Europeo, que se reconocen en muchos países.", icon: <ShieldCheck size={18} className="text-[#D7E400]" aria-hidden="true" /> },
-              { title: "Con código de verificación", desc: "Cada certificado trae un código para que quien lo reciba pueda comprobar que es auténtico.", icon: <Check size={18} className="text-[#D7E400]" aria-hidden="true" /> },
-              { title: "Para LinkedIn y tu CV", desc: "Lo puedes agregar a tu perfil de LinkedIn o adjuntarlo cuando postules a un trabajo.", icon: <Share2 size={18} className="text-[#D7E400]" aria-hidden="true" /> },
+              { title: "Niveles del MCER", desc: "Usamos los niveles del Marco Común Europeo, que se reconocen en muchos países.", icon: <Certificado size={20} className="text-white" /> },
+              { title: "Con código de verificación", desc: "Cada certificado trae un código para que quien lo reciba pueda comprobar que es auténtico.", icon: <Escudo size={20} className="text-white" /> },
+              { title: "Para LinkedIn y tu CV", desc: "Lo puedes agregar a tu perfil de LinkedIn o adjuntarlo cuando postules a un trabajo.", icon: <Documento size={20} className="text-white" /> },
             ].map((benefit, i) => (
               <motion.div key={benefit.title} {...fadeUp(0.3 + i * 0.05)} className="flex items-start gap-4">
                 <div className="w-9 h-9 rounded-xl bg-[#071D49] flex items-center justify-center flex-shrink-0 mt-0.5">

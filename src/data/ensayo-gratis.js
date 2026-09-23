@@ -1,7 +1,7 @@
 // src/data/ensayo-gratis.js
 // === Ensayo PAES gratis (dos veces al año) · página /ensayo-gratis ===
 // Las fechas se anuncian por Instagram y WhatsApp.
-import { FileText, BarChart3, MessageSquare } from 'lucide-react';
+import { Ensayo, Resultados, Mensaje } from '../components/icons/LaelIcons';
 
 export const ENSAYO_GRATIS = {
   id: 'ensayo-gratis',
@@ -24,9 +24,9 @@ export const ENSAYO_GRATIS = {
     eyebrow: 'Qué incluye',
     title: 'Un ensayo que te dice algo',
     items: [
-      { icon: FileText, title: 'Formato PAES', desc: 'Preguntas hechas por nuestros profes según los temarios oficiales del DEMRE, con el tiempo que da la prueba.' },
-      { icon: BarChart3, title: 'Tus resultados', desc: 'Te enviamos cuántas respuestas tuviste buenas y un puntaje de referencia para ubicarte.' },
-      { icon: MessageSquare, title: 'Comentarios', desc: 'Te decimos en qué temas te conviene poner más energía de aquí a la PAES.' },
+      { icon: Ensayo, title: 'Formato PAES', desc: 'Preguntas hechas por nuestros profes según los temarios oficiales del DEMRE, con el tiempo que da la prueba.' },
+      { icon: Resultados, title: 'Tus resultados', desc: 'Te enviamos cuántas respuestas tuviste buenas y un puntaje de referencia para ubicarte.' },
+      { icon: Mensaje, title: 'Comentarios', desc: 'Te decimos en qué temas te conviene poner más energía de aquí a la PAES.' },
     ],
   },
   audience: {

@@ -1,7 +1,7 @@
 // src/data/orientacion.js
 // === Orientación vocacional · página /orientacion ===
 // No nombrar a la persona especialista en la web.
-import { ClipboardList, MessageSquare, Map } from 'lucide-react';
+import { Diagnostico, Mensaje, Ruta } from '../components/icons/LaelIcons';
 
 // Precio propuesto, confirmar con Diego: $15.000 por sesión de 60 minutos.
 // Gratis para alumnos del Plan Completo del preu PAES.
@@ -28,9 +28,9 @@ export const ORIENTACION = {
     eyebrow: 'Qué incluye',
     title: 'Una hora solo para ti',
     items: [
-      { icon: ClipboardList, title: 'Test vocacional', desc: 'Respondes un test de intereses y habilidades. En la sesión lo revisamos juntos y vemos qué dice de ti.' },
-      { icon: MessageSquare, title: 'Conversación', desc: 'Hablamos de lo que te gusta, de lo que te preocupa y de lo que esperas de tu futuro. Sin apuro y sin juzgar.' },
-      { icon: Map, title: 'Tu plan', desc: 'Sales con carreras para mirar, qué pruebas PAES te conviene rendir y los próximos pasos para postular.' },
+      { icon: Diagnostico, title: 'Test vocacional', desc: 'Respondes un test de intereses y habilidades. En la sesión lo revisamos juntos y vemos qué dice de ti.' },
+      { icon: Mensaje, title: 'Conversación', desc: 'Hablamos de lo que te gusta, de lo que te preocupa y de lo que esperas de tu futuro. Sin apuro y sin juzgar.' },
+      { icon: Ruta, title: 'Tu plan', desc: 'Sales con carreras para mirar, qué pruebas PAES te conviene rendir y los próximos pasos para postular.' },
     ],
   },
   audience: {

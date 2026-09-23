@@ -188,7 +188,7 @@ export function ReasonsSection({ reasons, gray }) {
               className={`p-6 sm:p-8 rounded-[28px] border border-[#071D49]/5 ${gray ? 'bg-white shadow-card' : 'bg-[#F4F4F4]'}`}
             >
               <div className="w-12 h-12 rounded-2xl bg-[#071D49] flex items-center justify-center mb-5">
-                <reason.icon className="w-6 h-6 text-[#D7E400]" aria-hidden="true" />
+                <reason.icon size={26} className="text-white" />
               </div>
               <h3 className="text-[#071D49] font-display font-extrabold text-base uppercase tracking-tight mb-2">{reason.title}</h3>
               <p className="text-[#071D49]/70 text-sm leading-relaxed">{reason.desc}</p>

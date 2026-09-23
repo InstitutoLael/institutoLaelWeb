@@ -50,7 +50,7 @@ export default function Preguntas() {
               <motion.div key={cat.category} {...fadeUp(0)} className="space-y-5">
                 <div className="flex items-center gap-4">
                   <div className="w-11 h-11 rounded-xl bg-[#071D49] flex items-center justify-center flex-shrink-0">
-                    <cat.icon size={20} className="text-[#D7E400]" />
+                    <cat.icon size={22} className="text-white" />
                   </div>
                   <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight text-[#071D49]">{cat.category}</h2>
                 </div>

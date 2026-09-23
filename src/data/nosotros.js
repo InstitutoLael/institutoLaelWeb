@@ -1,4 +1,4 @@
-import { Heart, Star, Users, Shield } from "lucide-react";
+import { Corazon, Beca, Grupo, Escudo } from '../components/icons/LaelIcons';
 import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.webp";
 
 export const HERO = {
@@ -33,10 +33,10 @@ export const HISTORY = {
 };
 
 export const PILLARS = [
-  { icon: Heart, title: "FE ACTIVA", desc: "Creemos en Cristo y eso se nota en lo cotidiano: en cómo tratamos a cada alumno y en una palabra de aliento al final de la clase." },
-  { icon: Star, title: "ACCESIBLE", desc: "La matrícula es gratis y hay becas para quien lo necesite. Que el dinero no sea lo que te deja afuera." },
-  { icon: Users, title: "INCLUSIÓN", desc: "Adultos que vuelven a estudiar, alumnos de educación diferencial, gente que quiere aprender señas. Aquí hay espacio para todos." },
-  { icon: Shield, title: "BIEN HECHO", desc: "Que sea barato no significa que lo hagamos a la rápida. Las clases se preparan con tiempo y cada profe está pendiente de cómo vas." }
+  { icon: Corazon, title: "FE ACTIVA", desc: "Creemos en Cristo y eso se nota en lo cotidiano: en cómo tratamos a cada alumno y en una palabra de aliento al final de la clase." },
+  { icon: Beca, title: "ACCESIBLE", desc: "La matrícula es gratis y hay becas para quien lo necesite. Que el dinero no sea lo que te deja afuera." },
+  { icon: Grupo, title: "INCLUSIÓN", desc: "Adultos que vuelven a estudiar, alumnos de educación diferencial, gente que quiere aprender señas. Aquí hay espacio para todos." },
+  { icon: Escudo, title: "BIEN HECHO", desc: "Que sea barato no significa que lo hagamos a la rápida. Las clases se preparan con tiempo y cada profe está pendiente de cómo vas." }
 ];
 
 export const TIMELINE = [

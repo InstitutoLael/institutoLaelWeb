@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getDiagnosticResult } from '../data/diagnostic';
 import { Helmet } from 'react-helmet-async';
-import { BarChart3, Zap, MessageCircle, Video } from 'lucide-react';
+import { BarChart3, MessageCircle } from 'lucide-react';
+import { Diagnostico, ClaseEnVivo } from '../components/icons/LaelIcons';
 import { trackEvent } from '../utils/analytics';
 import { trackFunnelEvent } from '../utils/funnel';
 
@@ -85,8 +86,8 @@ export default function ResultDashboard() {
           {/* Lo que vemos */}
           <motion.div {...fadeUp(0.1)} className="lg:col-span-2 p-6 sm:p-8 bg-white rounded-[28px] border border-[#071D49]/5 shadow-card">
             <h2 className="font-display text-xl sm:text-2xl font-extrabold uppercase tracking-tight mb-5 flex items-center gap-3">
-              <span className="w-10 h-10 rounded-xl bg-[#071D49] text-[#D7E400] flex items-center justify-center flex-shrink-0">
-                <Zap size={20} />
+              <span className="w-10 h-10 rounded-xl bg-[#071D49] text-white flex items-center justify-center flex-shrink-0">
+                <Diagnostico size={22} />
               </span>
               Lo que vemos
             </h2>
@@ -183,7 +184,7 @@ export default function ResultDashboard() {
           </div>
           <div className="min-h-[200px] sm:aspect-video rounded-[24px] py-8 flex flex-col items-center justify-center text-center px-6 gap-4" style={{ backgroundColor: '#071D49' }}>
             <span className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center">
-              <Video size={26} className="text-[#D7E400]" />
+              <ClaseEnVivo size={28} className="text-white" />
             </span>
             <p className="text-white/75 font-semibold text-base">Clases en vivo por Google Meet</p>
           </div>

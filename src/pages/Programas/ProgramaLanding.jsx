@@ -41,7 +41,7 @@ export default function ProgramaLanding({ data }) {
             {includes.items.map((item, i) => (
               <motion.div key={item.title} {...fadeUp(i * 0.08)} className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#071D49]/5 shadow-card flex flex-col">
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" style={{ backgroundColor: BLUE }}>
-                  <item.icon size={24} style={{ color: YELLOW }} aria-hidden="true" />
+                  <item.icon size={26} className="text-white" />
                 </div>
                 <h3 className="font-display text-lg font-extrabold uppercase tracking-tight mb-3">{item.title}</h3>
                 <p className="text-[#071D49]/70 text-sm leading-relaxed">{item.desc}</p>

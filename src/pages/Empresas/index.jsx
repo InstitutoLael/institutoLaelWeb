@@ -1,7 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { ArrowRight, Building2, MessageCircle, Check } from 'lucide-react';
+import { ArrowRight, MessageCircle, Check } from 'lucide-react';
+import { Empresa } from '../../components/icons/LaelIcons';
 import EmpresasForm from './EmpresasForm';
 import empresasImg from '../../assets/img/Home/mundo_empresas_bg_1777944168670.webp';
 import { EMPRESAS_SERVICES, EMPRESAS_STEPS } from '../../data/empresas';
@@ -71,7 +72,7 @@ export default function Empresas() {
                 className={`rounded-[28px] p-6 sm:p-8 border flex flex-col ${s.soon ? 'bg-transparent border-dashed border-[#071D49]/20' : 'bg-white border-[#071D49]/5 shadow-card'}`}
               >
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6" style={{ backgroundColor: BLUE }}>
-                  <s.icon size={24} style={{ color: YELLOW }} aria-hidden="true" />
+                  <s.icon size={26} className="text-white" />
                 </div>
                 <h3 className="font-display text-lg font-extrabold uppercase tracking-tight mb-3">{s.title}</h3>
                 <p className="text-[#071D49]/70 text-sm leading-relaxed mb-6 flex-grow">{s.desc}</p>
@@ -122,7 +123,7 @@ export default function Empresas() {
             {COMPANY_TESTIMONIALS.map((c, i) => (
               <motion.div key={c.id} {...fadeUp(i * 0.1)} className="rounded-[28px] p-6 sm:p-8 bg-white/5 border border-white/10">
                 <div className="flex items-center gap-3 mb-6">
-                  <Building2 size={20} style={{ color: YELLOW }} />
+                  <Empresa size={22} className="text-white" />
                   <div>
                     <p className="font-bold font-display uppercase tracking-tight">{c.name}</p>
                     <p className="text-xs uppercase tracking-wider text-white/60">{c.program}</p>

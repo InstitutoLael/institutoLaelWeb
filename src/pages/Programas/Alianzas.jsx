@@ -29,7 +29,7 @@ export default function Alianzas() {
               <motion.div key={t.id} {...fadeUp(i * 0.08)} className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#071D49]/5 shadow-card flex flex-col">
                 <div className="flex items-center gap-4 mb-5">
                   <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: BLUE }}>
-                    <t.icon size={24} style={{ color: YELLOW }} aria-hidden="true" />
+                    <t.icon size={26} className="text-white" />
                   </div>
                   <h3 className="font-display text-xl sm:text-2xl font-extrabold uppercase tracking-tight">{t.title}</h3>
                 </div>

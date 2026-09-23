@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
-import { Loader2, Heart, ArrowRight } from 'lucide-react';
+import { Loader2, ArrowRight } from 'lucide-react';
+import { Corazon } from '../components/icons/LaelIcons';
 import { sendForm, backendReady, whatsappUrl } from '../lib/backend';
 
 const BLUE = '#071D49';
@@ -50,7 +51,7 @@ export default function Testimonio() {
       <section className="px-4 sm:px-6 py-10 sm:py-14">
         {estado === 'ok' ? (
           <div className="max-w-2xl mx-auto bg-white rounded-[28px] p-8 text-center border border-[#071D49]/5 shadow-card">
-            <Heart size={36} className="mx-auto mb-4" style={{ color: BLUE }} />
+            <Corazon size={40} className="mx-auto mb-4" style={{ color: BLUE }} />
             <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight mb-3">¡Gracias de corazón!</h2>
             <p className="text-[#071D49]/75 mb-6">Lo vamos a leer con calma. Si nos diste permiso, pronto lo verás en el sitio.</p>
             <Link to="/casos-reales" className="inline-flex items-center gap-2 font-bold underline">Ver otras historias <ArrowRight size={16} /></Link>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { Target, X, Radio, CalendarCheck } from 'lucide-react';
+import { X } from 'lucide-react';
+import { Diagnostico, ClaseEnVivo, Calendario } from '../components/icons/LaelIcons';
 import CTASection from '../components/CTASection';
 
 const ease = [0.16, 1, 0.3, 1];
@@ -124,7 +125,7 @@ export default function MetodoLael() {
             </div>
           </motion.div>
           <motion.div {...fadeUp(0.1)} className="hidden lg:flex relative w-full max-w-[440px] justify-self-center h-[420px] rounded-[32px] bg-[#071D49] items-center justify-center shadow-lael" aria-hidden="true">
-            <Target size={140} className="text-[#D7E400]/30" />
+            <Diagnostico size={140} strokeWidth={1.5} className="text-white/25" />
           </motion.div>
         </div>
       </section>
@@ -135,11 +136,11 @@ export default function MetodoLael() {
           <motion.h2 {...fadeUp()} className={`${H2} mb-10`}>En corto, <br /> esto es lo que hay.</motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-left">
             {[
-              { icon: Radio, t: 'En vivo', d: 'Clases por Google Meet desde las 18:00, con un profe al que le puedes preguntar.' },
-              { icon: CalendarCheck, t: 'Mensual', d: 'Un ensayo PAES cada mes para medir cómo vas y qué te falta.' },
+              { icon: ClaseEnVivo, t: 'En vivo', d: 'Clases por Google Meet desde las 18:00, con un profe al que le puedes preguntar.' },
+              { icon: Calendario, t: 'Mensual', d: 'Un ensayo PAES cada mes para medir cómo vas y qué te falta.' },
             ].map((c, i) => (
               <motion.div key={c.t} {...fadeUp(i * 0.06)} className="p-6 sm:p-8 bg-white/5 rounded-[28px] border border-white/10">
-                <c.icon size={26} className="text-[#D7E400] mb-4" aria-hidden="true" />
+                <c.icon size={28} className="text-white mb-4" />
                 <p className="font-display text-[#D7E400] font-extrabold text-2xl sm:text-3xl uppercase mb-2">{c.t}</p>
                 <p className="text-white/75 text-sm sm:text-base leading-relaxed">{c.d}</p>
               </motion.div>

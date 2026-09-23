@@ -2,7 +2,7 @@
 // === Alianzas / Sé parte · página /alianzas ===
 // No mostrar el logo del DEMRE ni sugerir una alianza con el DEMRE: solo se
 // puede decir que seguimos sus temarios oficiales.
-import { School, Church, Building2, Megaphone } from 'lucide-react';
+import { Escuela, Iglesia, Empresa, Megafono } from '../components/icons/LaelIcons';
 import inoLogo from '../assets/img/Partners/INO.webp';
 import olivosLogo from '../assets/img/Partners/LosOlivos.webp';
 import mercadoPagoLogo from '../assets/img/Partners/MercadoPago.webp';
@@ -22,7 +22,7 @@ export const ALIANZAS_HERO = {
 export const ALIANZAS_TIPOS = [
   {
     id: 'colegios',
-    icon: School,
+    icon: Escuela,
     title: 'Colegios',
     desc: 'Para que tus estudiantes lleguen mejor preparados a la PAES y a la educación media.',
     items: [
@@ -34,7 +34,7 @@ export const ALIANZAS_TIPOS = [
   },
   {
     id: 'iglesias',
-    icon: Church,
+    icon: Iglesia,
     title: 'Iglesias y comunidades',
     desc: 'Para que los jóvenes y adultos de tu comunidad tengan dónde estudiar, aunque el dinero no alcance.',
     items: [
@@ -45,7 +45,7 @@ export const ALIANZAS_TIPOS = [
   },
   {
     id: 'empresas',
-    icon: Building2,
+    icon: Empresa,
     title: 'Empresas',
     desc: 'Capacitación para tus equipos en IA e inglés, nivelación de estudios para trabajadores y preu para sus hijos.',
     items: [
@@ -56,7 +56,7 @@ export const ALIANZAS_TIPOS = [
   },
   {
     id: 'partners',
-    icon: Megaphone,
+    icon: Megafono,
     title: 'Sé partner',
     desc: 'Para cuentas, creadores y organizaciones que quieren colaborar con nosotros.',
     items: [

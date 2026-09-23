@@ -102,29 +102,29 @@ const fadeUp = (delay = 0) => ({
 
 export default function Privacidad() {
   return (
-    <div className="w-full bg-[#F4F4F4] text-[#071D49] font-sans">
+    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
         <title>Política de Privacidad | Instituto Lael</title>
         <meta name="description" content="Qué datos personales pide Instituto Lael, para qué los usa, con quién los comparte y cómo puedes ejercer tus derechos." />
       </Helmet>
 
-      <section className="px-6 pt-32 pb-12">
+      <section className="px-5 sm:px-6 pt-28 sm:pt-32 pb-10 sm:pb-12">
         <div className="max-w-3xl mx-auto">
-          <motion.p {...fadeUp(0)} className="text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Tus datos</motion.p>
-          <motion.h1 {...fadeUp(0.1)} className="font-display text-4xl sm:text-5xl font-extrabold uppercase tracking-[-0.03em] mb-6">
+          <motion.p {...fadeUp(0)} className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] mb-5"><span className="w-4 h-1 rounded-full bg-[#D7E400]" aria-hidden="true" />Tus datos</motion.p>
+          <motion.h1 {...fadeUp(0.1)} className="font-display text-4xl sm:text-5xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6">
             Política de privacidad
           </motion.h1>
-          <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] leading-relaxed">
+          <motion.p {...fadeUp(0.2)} className="text-[#071D49]/70 text-base sm:text-lg leading-relaxed">
             Te contamos en simple qué datos te pedimos, para qué y qué puedes hacer con ellos. Última actualización: {UPDATED}.
           </motion.p>
         </div>
       </section>
 
-      <section className="px-6 pb-28">
-        <div className="max-w-3xl mx-auto bg-white rounded-[32px] p-8 sm:p-12 border border-[#071D49]/5 space-y-10">
+      <section className="px-5 sm:px-6 pb-16 sm:pb-20 lg:pb-28">
+        <div className="max-w-3xl mx-auto bg-white rounded-[28px] p-6 sm:p-12 border border-[#071D49]/5 shadow-card space-y-10">
           {SECTIONS.map((s) => (
             <div key={s.title}>
-              <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight mb-4">{s.title}</h2>
+              <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight mb-4 break-words">{s.title}</h2>
               {s.body?.map((p) => (
                 <p key={p} className="text-[#071D49]/80 leading-relaxed mb-3">{p}</p>
               ))}

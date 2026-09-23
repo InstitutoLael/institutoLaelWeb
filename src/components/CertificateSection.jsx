@@ -4,45 +4,46 @@ import { Award, Check, ShieldCheck, Share2, Download } from 'lucide-react';
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 40 },
+  initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.9, delay, ease },
+  transition: { duration: 0.6, delay, ease },
 });
 
-export default function CertificateSection({ defaultLevel = "B2", defaultLanguage = "Inglés en Vivo" }) {
+export default function CertificateSection({ defaultLevel = "B2", defaultLanguage = "Inglés en Vivo", gray = false }) {
   const [selectedLevel, setSelectedLevel] = useState(defaultLevel);
   const levels = ["A1", "A2", "B1", "B2"];
 
   return (
-    <section className="py-28 px-6 bg-white flex flex-col items-center border-t border-[#071D49]/5">
-      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+    <section className={`px-5 sm:px-6 py-16 sm:py-20 lg:py-28 ${gray ? "bg-[#F4F4F4]" : "bg-white"}`}>
+      <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         
         {/* Left Column: Info */}
         <div className="lg:col-span-6 flex flex-col text-left">
-          <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 mb-6 bg-[#D7E400]/20 text-[#071D49] px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase w-fit">
-            <Award size={12} className="text-[#071D49]" />
+          <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 mb-5 bg-[#D7E400] text-[#071D49] px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase w-fit">
+            <Award size={12} className="text-[#071D49]" aria-hidden="true" />
             <span>CERTIFICACIÓN DE NIVEL</span>
           </motion.div>
 
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase mb-6 leading-[1.05]">
+          <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase mb-5 leading-[1.05]">
             Un certificado por cada nivel
           </motion.h2>
 
-          <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-base sm:text-lg mb-8 leading-relaxed max-w-xl">
+          <motion.p {...fadeUp(0.2)} className="text-[#071D49]/70 text-base sm:text-lg mb-6 leading-relaxed max-w-xl">
             Cada vez que apruebas un nivel te entregamos un certificado de Instituto Lael que dice qué nivel alcanzaste, según el Marco Común Europeo (MCER). Te sirve para el CV o para mostrarlo en la pega.
           </motion.p>
 
           {/* Level Selector Buttons */}
-          <motion.div {...fadeUp(0.25)} className="flex gap-2 mb-8">
+          <motion.div {...fadeUp(0.25)} className="flex gap-2 mb-8" role="group" aria-label="Ver certificado por nivel">
             {levels.map((lvl) => (
               <button
                 key={lvl}
                 onClick={() => setSelectedLevel(lvl)}
+                aria-pressed={selectedLevel === lvl}
                 className={`w-12 h-12 rounded-xl font-bold transition-all duration-300 ${
                   selectedLevel === lvl
                     ? 'bg-[#071D49] text-white shadow-lg'
-                    : 'bg-[#F4F4F4] text-[#071D49] hover:bg-[#071D49]/10'
+                    : `${gray ? 'bg-white' : 'bg-[#F4F4F4]'} text-[#071D49] border border-[#071D49]/10 hover:bg-[#071D49]/10`
                 }`}
               >
                 {lvl}
@@ -51,19 +52,19 @@ export default function CertificateSection({ defaultLevel = "B2", defaultLanguag
           </motion.div>
 
           {/* Benefits List */}
-          <div className="space-y-4 mb-8 max-w-xl">
+          <div className="space-y-4 max-w-xl">
             {[
-              { title: "Niveles del MCER", desc: "Usamos los niveles del Marco Común Europeo, que se reconocen en muchos países.", icon: <ShieldCheck size={18} className="text-[#071D49]" /> },
-              { title: "Con código de verificación", desc: "Cada certificado trae un código para que quien lo reciba pueda comprobar que es auténtico.", icon: <Check size={18} className="text-[#071D49]" /> },
-              { title: "Para LinkedIn y tu CV", desc: "Lo puedes agregar a tu perfil de LinkedIn o adjuntarlo cuando postules a un trabajo.", icon: <Share2 size={18} className="text-[#071D49]" /> },
+              { title: "Niveles del MCER", desc: "Usamos los niveles del Marco Común Europeo, que se reconocen en muchos países.", icon: <ShieldCheck size={18} className="text-[#D7E400]" aria-hidden="true" /> },
+              { title: "Con código de verificación", desc: "Cada certificado trae un código para que quien lo reciba pueda comprobar que es auténtico.", icon: <Check size={18} className="text-[#D7E400]" aria-hidden="true" /> },
+              { title: "Para LinkedIn y tu CV", desc: "Lo puedes agregar a tu perfil de LinkedIn o adjuntarlo cuando postules a un trabajo.", icon: <Share2 size={18} className="text-[#D7E400]" aria-hidden="true" /> },
             ].map((benefit, i) => (
               <motion.div key={benefit.title} {...fadeUp(0.3 + i * 0.05)} className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-lg bg-[#F4F4F4] flex items-center justify-center flex-shrink-0 mt-0.5">
+                <div className="w-9 h-9 rounded-xl bg-[#071D49] flex items-center justify-center flex-shrink-0 mt-0.5">
                   {benefit.icon}
                 </div>
                 <div>
-                  <h4 className="text-[#071D49] font-bold text-sm uppercase tracking-wide">{benefit.title}</h4>
-                  <p className="text-[#8D8D8D] text-xs mt-1 leading-relaxed">{benefit.desc}</p>
+                  <h3 className="text-[#071D49] font-display font-extrabold text-sm uppercase tracking-tight">{benefit.title}</h3>
+                  <p className="text-[#071D49]/70 text-sm mt-1 leading-relaxed">{benefit.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -79,7 +80,7 @@ export default function CertificateSection({ defaultLevel = "B2", defaultLanguag
           className="lg:col-span-6 flex flex-col items-center justify-center"
         >
           {/* Mockup Frame */}
-          <div className="w-full max-w-[500px] aspect-[1.414/1] bg-[#FCFAF2] border-[12px] border-[#071D49] p-6 shadow-2xl relative flex flex-col justify-between overflow-hidden rounded-md text-left font-serif select-none select-none border-t border-b border-l border-r border-[#071D49]">
+          <div aria-hidden="true" className="w-full max-w-[500px] min-h-[260px] sm:min-h-0 sm:aspect-[1.414/1] bg-[#FCFAF2] border-[12px] border-[#071D49] p-6 shadow-2xl relative flex flex-col justify-between overflow-hidden rounded-md text-left font-serif select-none">
             {/* Delicate inner border */}
             <div className="absolute inset-2 border border-[#C6A66B]/50 pointer-events-none" />
             {/* Decorative corners */}
@@ -137,12 +138,12 @@ export default function CertificateSection({ defaultLevel = "B2", defaultLanguag
             </div>
           </div>
           
-          <div className="flex gap-4 mt-6 text-[#8D8D8D] text-xs">
-            <span className="flex items-center gap-1.5 bg-[#F4F4F4] px-3 py-1.5 rounded-full border border-black/5">
+          <div className="flex flex-wrap justify-center gap-3 mt-6 text-[#071D49]/70 text-xs font-semibold">
+            <span className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[#071D49]/10">
               <Download size={14} />
               PDF Descargable
             </span>
-            <span className="flex items-center gap-1.5 bg-[#F4F4F4] px-3 py-1.5 rounded-full border border-black/5">
+            <span className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-full border border-[#071D49]/10">
               <Share2 size={14} />
               Compartir en LinkedIn
             </span>

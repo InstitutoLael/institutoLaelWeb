@@ -9,7 +9,7 @@ export default function PAES() {
   }, []);
 
   return (
-    <main className="bg-lael-primary min-h-screen">
+    <main className="bg-[#F4F4F4] min-h-screen">
       <Helmet>
         <title>PAES 2027 - Instituto Lael | Clases en vivo, matrícula gratis</title>
         <meta name="description" content="Preuniversitario PAES online. Clases en vivo por Google Meet, grabaciones para repasar y ensayo mensual. Matrícula gratis, desde $10.000/mes por ramo y becas disponibles." />

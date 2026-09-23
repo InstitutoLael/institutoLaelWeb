@@ -1,34 +1,32 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Button from './ui/Button';
+import { Link } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 
-export default function CTASection({ title, subtitle, btnText = "Postula ahora", btnLink = "/postulacion" }) {
+// Bloque de cierre claro: tarjeta navy sobre fondo gris (mismo estilo que /calculadora).
+export default function CTASection({ title, subtitle, btnText = "Postula ahora", btnLink = "/diagnostico" }) {
   return (
-    <section className="py-32 bg-lael-primary relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-t from-lael-secondary to-lael-primary z-0" />
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-1/2 bg-lael-accent/10 blur-[100px] z-0 pointer-events-none" />
-
-      <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="border border-white/5 bg-white/[0.01] backdrop-blur-md rounded-3xl p-12 md:p-20 shadow-cinematic-shadow relative overflow-hidden"
+    <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28 bg-[#F4F4F4]">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-60px' }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="max-w-3xl mx-auto rounded-[32px] bg-[#071D49] text-white text-center p-8 sm:p-12 lg:p-16 shadow-lael"
+      >
+        <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight leading-[1.05] mb-4">
+          {title || "¿Partimos?"}
+        </h2>
+        <p className="text-white/75 text-base sm:text-lg leading-relaxed mb-8 max-w-xl mx-auto">
+          {subtitle || "Escríbenos y vemos juntos por dónde empezar."}
+        </p>
+        <Link
+          to={btnLink}
+          className="min-h-[48px] w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all duration-300 active:scale-95"
         >
-          {/* Subtle inner top glow */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-lael-accent/30 to-transparent" />
-
-          <h2 className="text-4xl md:text-6xl font-display font-bold mb-6 text-lael-light">{title || "¿Partimos?"}</h2>
-          <p className="text-xl text-lael-muted mb-10 max-w-2xl mx-auto">
-            {subtitle || "Escríbenos y vemos juntos por dónde empezar."}
-          </p>
-          
-          <Button size="lg" variant="primary" to={btnLink} className="w-full sm:w-auto">
-            {btnText}
-          </Button>
-        </motion.div>
-      </div>
+          {btnText} <ArrowRight size={16} />
+        </Link>
+      </motion.div>
     </section>
   );
 }

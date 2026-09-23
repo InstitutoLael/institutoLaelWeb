@@ -119,6 +119,5 @@
   h1 {
     font-family: var(--font-title);
     font-weight: 800;
-    color: var(--text-primary);
   }
 }

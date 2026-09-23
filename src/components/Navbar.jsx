@@ -81,12 +81,12 @@ export default function Navbar() {
               className="h-8 lg:h-10 w-auto transition-transform group-hover:scale-105"
             />
           </Link>
-          <div className="w-px h-4 bg-white/20 hidden lg:block" />
-          <Link to="/" className="hidden lg:flex items-center gap-2 text-[8px] uppercase tracking-[0.3em] text-white/40 font-bold hover:text-[#D7E400] transition-colors">
+          <div className={`w-px h-4 hidden lg:block ${isLightPage ? "bg-[#071D49]/20" : "bg-white/20"}`} />
+          <Link to="/" className={`hidden lg:flex items-center gap-2 text-xs uppercase tracking-[0.1em] font-bold ${isLightPage ? "text-[#071D49]/70 hover:text-[#071D49]" : "text-white/70 hover:text-white"}`}>
             Salir del modo foco
           </Link>
         </div>
-        <Link to="/" className="lg:hidden pointer-events-auto w-10 h-10 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center text-white">
+        <Link to="/" aria-label="Salir del diagnóstico" className={`lg:hidden pointer-events-auto w-11 h-11 rounded-xl flex items-center justify-center backdrop-blur-md ${isLightPage ? "bg-[#071D49]/5 text-[#071D49] border border-[#071D49]/10" : "bg-white/10 text-white"}`}>
           <X size={20} />
         </Link>
       </header>

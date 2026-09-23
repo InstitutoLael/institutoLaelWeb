@@ -4,21 +4,26 @@ import { MessageSquare, Mail, Instagram, Youtube, Clock, Send, CheckCircle } fro
 import { Helmet } from 'react-helmet-async';
 import { CONTACT_INFO } from '../data/contact';
 
-// Brand Design Tokens
-const BLUE = '#071D49';
-const YELLOW = '#D7E400';
-const WHITE = '#FFFFFF';
-const LIGHT_GRAY = '#F4F4F4';
-const MUTED = '#8D8D8D';
-
 const ease = [0.16, 1, 0.3, 1];
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 30 },
+  initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true },
-  transition: { duration: 0.8, delay, ease }
+  transition: { duration: 0.6, delay, ease }
 });
+
+const FIELD =
+  'w-full min-h-[52px] bg-[#F4F4F4] border border-[#071D49]/15 rounded-2xl px-4 sm:px-5 py-3 text-base text-[#071D49] placeholder:text-[#071D49]/40 transition-colors hover:border-[#071D49]/30 focus:bg-white focus:border-[#071D49] focus:outline-none focus:ring-4 focus:ring-[#071D49]/10';
+const LABEL = 'block text-sm font-bold text-[#071D49] mb-2';
+
+const METHODS = [
+  { icon: MessageSquare, label: CONTACT_INFO.whatsapp.label, value: CONTACT_INFO.whatsapp.number, href: CONTACT_INFO.whatsapp.url, external: true },
+  { icon: Mail, label: CONTACT_INFO.email.label, value: CONTACT_INFO.email.address, href: `mailto:${CONTACT_INFO.email.address}` },
+  { icon: Instagram, label: 'Instagram', value: CONTACT_INFO.instagram.user, href: CONTACT_INFO.instagram.url, external: true },
+  { icon: Youtube, label: 'YouTube', value: CONTACT_INFO.youtube.user, href: CONTACT_INFO.youtube.url, external: true },
+  { icon: Clock, label: CONTACT_INFO.schedule.label, value: CONTACT_INFO.schedule.week },
+];
 
 export default function Contacto() {
   const [formData, setFormData] = useState({
@@ -39,149 +44,110 @@ export default function Contacto() {
   };
 
   return (
-    <div className="w-full text-[#071D49] overflow-hidden pt-20" style={{ backgroundColor: LIGHT_GRAY }}>
+    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
         <title>Contacto | Instituto Lael</title>
         <meta name="description" content="Escríbenos directamente por WhatsApp +56 9 6462 6568 o a contacto@institutolael.cl. Santiago, Chile. Educación 100% online." />
       </Helmet>
 
-      <section className="py-24 px-6 min-h-[85vh] flex items-center">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-            
+      <section className="px-5 sm:px-6 pt-28 sm:pt-32 pb-16 sm:pb-20 lg:pb-28">
+        <div className="max-w-6xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+
             {/* Left Col: Info */}
-            <motion.div {...fadeUp(0)} className="lg:col-span-5 space-y-12 text-left">
+            <motion.div {...fadeUp(0)} className="lg:col-span-5 space-y-10 text-left">
               <div>
-                <motion.h1 
-                  initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
-                  animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
-                  transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-                  className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold mb-8 uppercase tracking-tight"
-                  style={{ color: BLUE }}
-                >
+                <h1 className="text-4xl sm:text-5xl lg:text-[2.6rem] xl:text-5xl font-display font-extrabold mb-6 uppercase tracking-[-0.03em] leading-[1.05]">
                   Estamos a un <br />
-                  <span className="italic font-normal text-[#D7E400] capitalize">mensaje de distancia.</span>
-                </motion.h1>
-                <p className="text-[#8D8D8D] text-sm sm:text-base leading-relaxed max-w-md">
+                  <span className="bg-[#071D49] text-[#D7E400] px-2 box-decoration-clone">mensaje de distancia.</span>
+                </h1>
+                <p className="text-[#071D49]/70 text-base sm:text-lg leading-relaxed max-w-md">
                   Da lo mismo si eres alumno, apoderado o quieres saber cómo inscribirte. Escríbenos por WhatsApp o correo y te respondemos.
                 </p>
               </div>
 
               {/* Contact Methods */}
-              <div className="space-y-6">
-                <a
-                  href={CONTACT_INFO.whatsapp.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-6 group hover:translate-x-1 transition-transform"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-white border border-[#071D49]/10 flex items-center justify-center text-[#071D49] group-hover:bg-[#D7E400]/20 group-hover:border-[#D7E400]/40 transition-all">
-                    <MessageSquare size={20} />
-                  </div>
-                  <div>
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">{CONTACT_INFO.whatsapp.label}</p>
-                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.whatsapp.number}</p>
-                  </div>
-                </a>
-
-                <a
-                  href={`mailto:${CONTACT_INFO.email.address}`}
-                  className="flex items-center gap-6 group hover:translate-x-1 transition-transform"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-white border border-[#071D49]/10 flex items-center justify-center text-[#071D49] group-hover:bg-[#D7E400]/20 group-hover:border-[#D7E400]/40 transition-all">
-                    <Mail size={20} />
-                  </div>
-                  <div>
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">{CONTACT_INFO.email.label}</p>
-                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.email.address}</p>
-                  </div>
-                </a>
-
-                <a
-                  href={CONTACT_INFO.instagram.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-6 group hover:translate-x-1 transition-transform"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-white border border-[#071D49]/10 flex items-center justify-center text-[#071D49] group-hover:bg-[#D7E400]/20 group-hover:border-[#D7E400]/40 transition-all">
-                    <Instagram size={20} />
-                  </div>
-                  <div>
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">Instagram</p>
-                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.instagram.user}</p>
-                  </div>
-                </a>
-
-                <a
-                  href={CONTACT_INFO.youtube.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-6 group hover:translate-x-1 transition-transform"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-white border border-[#071D49]/10 flex items-center justify-center text-[#071D49] group-hover:bg-[#D7E400]/20 group-hover:border-[#D7E400]/40 transition-all">
-                    <Youtube size={20} />
-                  </div>
-                  <div>
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">YouTube</p>
-                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.youtube.user}</p>
-                  </div>
-                </a>
-
-                <div className="flex items-center gap-6">
-                  <div className="w-12 h-12 rounded-xl bg-white border border-[#071D49]/10 flex items-center justify-center text-[#071D49]">
-                    <Clock size={20} />
-                  </div>
-                  <div>
-                    <p className="text-[9px] tracking-[0.2em] uppercase font-bold text-[#8D8D8D] mb-0.5">{CONTACT_INFO.schedule.label}</p>
-                    <p className="text-base font-bold text-[#071D49]">{CONTACT_INFO.schedule.week}</p>
-                  </div>
-                </div>
-              </div>
+              <ul className="space-y-3">
+                {METHODS.map((m) => {
+                  const inner = (
+                    <>
+                      <span className="w-12 h-12 rounded-xl bg-[#071D49] flex items-center justify-center text-[#D7E400] flex-shrink-0">
+                        <m.icon size={20} />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-xs font-bold uppercase tracking-wider text-[#071D49]/70 mb-0.5">{m.label}</span>
+                        <span className="block text-base font-bold text-[#071D49] break-words">{m.value}</span>
+                      </span>
+                    </>
+                  );
+                  const base = 'flex items-center gap-4 p-3 pr-4 rounded-2xl bg-white border border-[#071D49]/5';
+                  return (
+                    <li key={m.label}>
+                      {m.href ? (
+                        <a
+                          href={m.href}
+                          {...(m.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                          className={`${base} hover:border-[#071D49]/25 hover:shadow-card focus:outline-none focus-visible:ring-4 focus-visible:ring-[#071D49]/15 transition-all`}
+                        >
+                          {inner}
+                        </a>
+                      ) : (
+                        <div className={base}>{inner}</div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
             </motion.div>
 
             {/* Right Col: Form */}
-            <motion.div {...fadeUp(0.2)} className="lg:col-span-7 bg-white p-8 sm:p-12 rounded-[40px] border border-[#071D49]/10 shadow-card">
+            <motion.div {...fadeUp(0.1)} className="lg:col-span-7 bg-white p-6 sm:p-10 rounded-[28px] border border-[#071D49]/5 shadow-card">
               {submitted ? (
                 <div className="text-center py-12">
-                   <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <CheckCircle size={32} />
-                   </div>
-                   <h3 className="text-2xl font-display font-extrabold text-[#071D49] mb-4">¡Ya casi!</h3>
-                   <p className="text-[#8D8D8D] text-sm leading-relaxed max-w-sm mx-auto">
-                     Se abrió tu correo con la consulta lista. Solo falta que la envíes y te responderemos pronto.
-                   </p>
+                  <div className="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle size={32} />
+                  </div>
+                  <h3 className="text-2xl font-display font-extrabold text-[#071D49] mb-4">¡Ya casi!</h3>
+                  <p className="text-[#071D49]/70 text-base leading-relaxed max-w-sm mx-auto">
+                    Se abrió tu correo con la consulta lista. Solo falta que la envíes y te responderemos pronto.
+                  </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6 text-left">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-[9px] uppercase tracking-[0.25em] font-extrabold text-[#071D49] ml-1">Nombre Completo</label>
-                      <input 
+                <form onSubmit={handleSubmit} className="space-y-5 text-left">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                      <label htmlFor="contacto-nombre" className={LABEL}>Nombre Completo</label>
+                      <input
+                        id="contacto-nombre"
                         type="text"
                         required
+                        autoComplete="name"
                         placeholder="Tu nombre"
-                        className="w-full bg-[#F4F4F4] border border-[#071D49]/10 rounded-2xl px-6 py-4 focus:bg-white focus:border-[#D7E400] focus:ring-0 transition-all text-[#071D49] text-sm placeholder:text-[#8D8D8D]/40 outline-none"
+                        className={FIELD}
                         value={formData.nombre}
                         onChange={(e) => setFormData({...formData, nombre: e.target.value})}
                       />
                     </div>
-                    <div className="space-y-2">
-                      <label className="text-[9px] uppercase tracking-[0.25em] font-extrabold text-[#071D49] ml-1">Tu correo</label>
-                      <input 
+                    <div>
+                      <label htmlFor="contacto-email" className={LABEL}>Tu correo</label>
+                      <input
+                        id="contacto-email"
                         type="email"
                         required
+                        autoComplete="email"
                         placeholder="ejemplo@email.com"
-                        className="w-full bg-[#F4F4F4] border border-[#071D49]/10 rounded-2xl px-6 py-4 focus:bg-white focus:border-[#D7E400] focus:ring-0 transition-all text-[#071D49] text-sm placeholder:text-[#8D8D8D]/40 outline-none"
+                        className={FIELD}
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                       />
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-[9px] uppercase tracking-[0.25em] font-extrabold text-[#071D49] ml-1">Programa de Interés</label>
-                    <select 
-                      className="w-full bg-[#F4F4F4] border border-[#071D49]/10 rounded-2xl px-6 py-4 focus:bg-white focus:border-[#D7E400] focus:ring-0 transition-all text-[#071D49] text-sm outline-none cursor-pointer"
+                  <div>
+                    <label htmlFor="contacto-programa" className={LABEL}>Programa de Interés</label>
+                    <select
+                      id="contacto-programa"
+                      className={`${FIELD} pr-10 cursor-pointer`}
                       value={formData.programa}
                       onChange={(e) => setFormData({...formData, programa: e.target.value})}
                     >
@@ -192,27 +158,26 @@ export default function Contacto() {
                     </select>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-[9px] uppercase tracking-[0.25em] font-extrabold text-[#071D49] ml-1">Tu Mensaje</label>
-                    <textarea 
+                  <div>
+                    <label htmlFor="contacto-mensaje" className={LABEL}>Tu Mensaje</label>
+                    <textarea
+                      id="contacto-mensaje"
                       rows="5"
                       required
                       placeholder="Cuéntanos cómo podemos ayudarte..."
-                      className="w-full bg-[#F4F4F4] border border-[#071D49]/10 rounded-2xl px-6 py-4 focus:bg-white focus:border-[#D7E400] focus:ring-0 transition-all text-[#071D49] text-sm placeholder:text-[#8D8D8D]/40 outline-none resize-none"
+                      className={`${FIELD} resize-none`}
                       value={formData.mensaje}
                       onChange={(e) => setFormData({...formData, mensaje: e.target.value})}
                     ></textarea>
                   </div>
 
-                  <motion.button 
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
-                    type="submit" 
-                    className="w-full bg-[#071D49] hover:bg-[#D7E400] text-white hover:text-[#071D49] py-5 rounded-2xl font-display font-extrabold uppercase tracking-[0.3em] text-[10px] flex items-center justify-center gap-3 transition-colors duration-300 shadow-md outline-none"
+                  <button
+                    type="submit"
+                    className="w-full min-h-[56px] bg-[#071D49] hover:bg-[#0B2A66] text-white rounded-2xl font-display font-extrabold uppercase tracking-wider text-sm flex items-center justify-center gap-3 transition-colors active:scale-[0.99] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#071D49]/25"
                   >
                     <span>Enviar consulta</span>
-                    <Send size={14} />
-                  </motion.button>
+                    <Send size={16} className="text-[#D7E400]" />
+                  </button>
                 </form>
               )}
             </motion.div>

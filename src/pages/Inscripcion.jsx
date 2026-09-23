@@ -15,44 +15,32 @@ const ease = [0.16, 1, 0.3, 1];
 
 export default function Inscripcion() {
   return (
-    <main className="min-h-screen" style={{ backgroundColor: GRAY }}>
+    <main className="w-full min-h-screen overflow-x-clip font-sans text-[#071D49]" style={{ backgroundColor: GRAY }}>
       <Helmet>
         <title>Inscripción - Instituto Lael | Formulario de Matrícula</title>
         <meta name="description" content="Inscríbete en Instituto Lael: preu PAES, inglés, español o nivelación para adultos. Llenas el formulario y listo, la matrícula es gratis." />
       </Helmet>
 
       {/* ── HEADER SECTION ──────────────────────────────────────────── */}
-      <section
-        className="relative overflow-hidden"
-        style={{ backgroundColor: BLUE }}
-      >
-        {/* Subtle grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.5) 1px, transparent 0)`,
-            backgroundSize: '32px 32px',
-          }}
-        />
-
-        <div className="max-w-4xl mx-auto px-6 py-16 md:py-20 relative z-10 text-center">
+      <section className="relative -mt-20 text-white" style={{ backgroundColor: BLUE }}>
+        <div className="max-w-3xl mx-auto px-5 sm:px-6 pt-36 sm:pt-40 pb-14 sm:pb-16 relative z-10 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease }}
           >
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 px-4 py-2 rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/10 px-4 py-2 rounded-full mb-6">
               <FileText size={14} className="text-[#D7E400]" />
               <span className="text-white/80 text-xs font-bold uppercase tracking-[0.2em]">
                 Formulario de inscripción
               </span>
             </div>
 
-            <h1 className="font-['Montserrat'] font-black text-3xl md:text-5xl text-white leading-tight mb-4">
+            <h1 className="text-white font-display font-extrabold uppercase tracking-tight text-4xl sm:text-5xl lg:text-6xl leading-[1.05] mb-5">
               Inscríbete en{' '}
               <span style={{ color: YELLOW }}>Instituto Lael</span>
             </h1>
-            <p className="text-white/60 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
+            <p className="text-white/75 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
               Llena el formulario de abajo para inscribirte. La matrícula es gratis.
               Si tienes dudas, escríbenos directamente por WhatsApp.
             </p>
@@ -65,6 +53,7 @@ export default function Inscripcion() {
           className="w-full block"
           preserveAspectRatio="none"
           style={{ marginBottom: '-1px' }}
+          aria-hidden="true"
         >
           <path
             d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z"
@@ -74,15 +63,15 @@ export default function Inscripcion() {
       </section>
 
       {/* ── FORM SECTION ────────────────────────────────────────────── */}
-      <section className="max-w-4xl mx-auto px-4 md:px-6 -mt-4 pb-16">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 -mt-4 pb-16 sm:pb-20">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease }}
-          className="bg-white rounded-3xl shadow-xl overflow-hidden border border-black/[0.04]"
+          transition={{ duration: 0.6, delay: 0.15, ease }}
+          className="bg-white rounded-[28px] shadow-card overflow-hidden border border-[#071D49]/5"
         >
           {/* Form container */}
-          <div className="p-2 md:p-4">
+          <div className="p-2 sm:p-4">
             <iframe
               src={FORM_URL}
               width="100%"
@@ -93,24 +82,20 @@ export default function Inscripcion() {
               title="Formulario de Inscripción Instituto Lael"
               className="rounded-2xl w-full"
               style={{ minHeight: '800px', maxHeight: '1200px' }}
-              loading="lazy"
             >
               Cargando formulario…
             </iframe>
           </div>
 
           {/* Fallback bar */}
-          <div
-            className="px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-black/[0.05]"
-            style={{ backgroundColor: '#FAFAFA' }}
-          >
-            <p className="text-sm text-gray-500 text-center sm:text-left">
+          <div className="px-5 sm:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#071D49]/5 bg-[#F4F4F4]/60">
+            <p className="text-sm sm:text-base text-[#071D49]/70 text-center sm:text-left">
               ¿Problemas con el formulario?{' '}
               <a
                 href={FORM_DIRECT}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="underline text-lael-primary font-semibold hover:text-lael-accent transition-colors"
+                className="underline underline-offset-4 text-[#071D49] font-bold hover:text-[#0B2A66] transition-colors"
               >
                 Ábrelo en otra pestaña
               </a>
@@ -120,30 +105,24 @@ export default function Inscripcion() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all duration-300 hover:scale-105 active:scale-95"
-              style={{ backgroundColor: '#25D366', color: 'white' }}
+              className="w-full sm:w-auto min-h-[48px] inline-flex items-center justify-center gap-2 px-6 rounded-2xl bg-[#D7E400] text-[#071D49] hover:bg-[#071D49] hover:text-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-colors active:scale-95"
             >
-              <MessageCircle size={16} />
+              <MessageCircle size={18} />
               Escríbenos por WhatsApp
             </a>
           </div>
         </motion.div>
 
         {/* Back link */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="text-center mt-8"
-        >
+        <div className="text-center mt-8">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-lael-primary transition-colors font-medium"
+            className="inline-flex items-center gap-2 min-h-[44px] px-3 text-sm font-semibold text-[#071D49]/70 hover:text-[#071D49] transition-colors"
           >
             <ArrowLeft size={16} />
             Volver al inicio
           </Link>
-        </motion.div>
+        </div>
       </section>
     </main>
   );

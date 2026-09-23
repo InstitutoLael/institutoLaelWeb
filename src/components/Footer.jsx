@@ -65,7 +65,7 @@ export default function Footer() {
             {/* Email */}
             <a
               href="mailto:contacto@institutolael.cl"
-              className="text-white/40 text-xs hover:text-white transition-colors tracking-wide"
+              className="text-white/70 text-sm hover:text-white transition-colors"
             >
               contacto@institutolael.cl
             </a>
@@ -89,10 +89,10 @@ export default function Footer() {
 
           {/* Programas */}
           <div>
-            <h4 className="text-[10px] tracking-[0.25em] uppercase text-white/40 mb-6 font-bold">Programas</h4>
+            <h4 className="text-xs tracking-[0.15em] uppercase text-white/60 mb-5 font-bold">Programas</h4>
             <nav className="flex flex-col gap-4">
               {LINKS_PROGRAMAS.map(l => (
-                <Link key={l.path} to={l.path} className="text-sm text-white/60 hover:text-white transition-colors">
+                <Link key={l.path} to={l.path} className="text-sm text-white/75 hover:text-white transition-colors">
                   {l.name}
                 </Link>
               ))}
@@ -101,15 +101,15 @@ export default function Footer() {
 
           {/* Instituto */}
           <div>
-            <h4 className="text-[10px] tracking-[0.25em] uppercase text-white/40 mb-6 font-bold">Instituto</h4>
+            <h4 className="text-xs tracking-[0.15em] uppercase text-white/60 mb-5 font-bold">Instituto</h4>
             <nav className="flex flex-col gap-4">
               {LINKS_INSTITUTO.map(l => (
                 l.external ? (
-                  <a key={l.path} href={l.path} target="_blank" rel="noopener noreferrer" className="text-sm text-white/60 hover:text-white transition-colors">
+                  <a key={l.path} href={l.path} target="_blank" rel="noopener noreferrer" className="text-sm text-white/75 hover:text-white transition-colors">
                     {l.name}
                   </a>
                 ) : (
-                  <Link key={l.path} to={l.path} className="text-sm text-white/60 hover:text-white transition-colors">
+                  <Link key={l.path} to={l.path} className="text-sm text-white/75 hover:text-white transition-colors">
                     {l.name}
                   </Link>
                 )
@@ -119,10 +119,10 @@ export default function Footer() {
 
           {/* Legal */}
           <div>
-            <h4 className="text-[10px] tracking-[0.25em] uppercase text-white/40 mb-6 font-bold">Legal</h4>
+            <h4 className="text-xs tracking-[0.15em] uppercase text-white/60 mb-5 font-bold">Legal</h4>
             <nav className="flex flex-col gap-4">
               {LINKS_LEGAL.map(l => (
-                <Link key={l.path} to={l.path} className="text-sm text-white/60 hover:text-white transition-colors">
+                <Link key={l.path} to={l.path} className="text-sm text-white/75 hover:text-white transition-colors">
                   {l.name}
                 </Link>
               ))}
@@ -133,12 +133,12 @@ export default function Footer() {
         {/* CTA rápido */}
         <div className="mb-12 p-8 rounded-3xl border border-white/10 bg-white/[0.03] flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
-            <p className="text-[10px] tracking-[0.3em] uppercase text-[#D7E400] font-bold mb-1">PAES 2027</p>
+            <p className="text-xs tracking-[0.15em] uppercase text-[#D7E400] font-bold mb-1">PAES 2027</p>
             <p className="text-white font-bold text-lg">Empieza a prepararte. Matrícula gratis.</p>
           </div>
           <Link
             to="/paes"
-            className="flex-shrink-0 px-8 py-4 rounded-xl text-[11px] tracking-[0.2em] uppercase font-bold transition-all hover:opacity-90 active:scale-95"
+            className="flex-shrink-0 px-8 py-4 rounded-xl text-sm tracking-wider uppercase font-bold transition-all hover:opacity-90 active:scale-95"
             style={{ backgroundColor: '#D7E400', color: '#071D49' }}
           >
             Inscribirme Ahora
@@ -147,10 +147,10 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-10 flex flex-col items-center gap-3 text-center">
-          <p className="text-[11px] text-white/30 italic tracking-[0.15em] uppercase font-bold">
+          <p className="text-xs text-white/50 italic tracking-[0.1em] uppercase font-bold">
             Lucas 4:18
           </p>
-          <p className="text-[10px] text-white/20 tracking-widest">
+          <p className="text-xs text-white/50 tracking-wide">
             © {year} Instituto Lael SpA · Santiago, Chile
           </p>
         </div>

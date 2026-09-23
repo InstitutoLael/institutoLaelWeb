@@ -2,7 +2,29 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import laelLogo from '../assets/img/Logos/lael-nuevo-logo.webp';
 
-export default function SignificadoLael() {
+const fade = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' },
+  transition: { duration: 0.6 },
+};
+
+function Callout({ label, text, align }) {
+  // align: 'right' (left column on desktop) | 'left' (right column on desktop)
+  const lg = align === 'right' ? 'lg:text-right lg:items-end' : 'lg:text-left lg:items-start';
+  return (
+    <div className={`flex flex-col items-center text-center ${lg}`}>
+      <p className="inline-flex items-center gap-2 font-display text-xs font-black uppercase tracking-[0.15em] text-[#071D49] mb-1">
+        <span aria-hidden="true" className="inline-block w-2 h-2 rounded-full bg-[#D7E400] ring-1 ring-[#071D49]/20" />
+        {label}
+      </p>
+      <p className="text-[#071D49]/70 font-semibold text-sm leading-snug">{text}</p>
+    </div>
+  );
+}
+
+// showVerse: la página Nosotros ya cierra con Lucas 4:18, así que allí se oculta.
+export default function SignificadoLael({ showVerse = true }) {
   const [activeTab, setActiveTab] = useState(0);
 
   const sections = [
@@ -25,79 +47,57 @@ export default function SignificadoLael() {
   ];
 
   return (
-    <section className="w-full py-28 bg-white flex flex-col items-center px-6 border-t border-lael-bd">
+    <section className="w-full py-16 sm:py-20 lg:py-28 bg-white flex flex-col items-center px-5 sm:px-6 border-t border-lael-bd">
       <div className="w-full max-w-5xl text-center">
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-lael-accent text-[10px] tracking-[0.4em] uppercase mb-4 font-bold"
+        <motion.p
+          {...fade}
+          className="inline-flex items-center gap-2 font-display text-[#071D49] text-xs tracking-[0.2em] uppercase mb-4 font-bold"
         >
+          <span aria-hidden="true" className="inline-block w-5 h-1.5 rounded-full bg-[#D7E400]" />
           Por qué nos llamamos así
         </motion.p>
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="font-display text-4xl lg:text-5xl text-lael-primary font-black mb-16 leading-tight"
+        <motion.h2
+          {...fade}
+          className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#071D49] font-black mb-10 sm:mb-12 leading-[1.05] tracking-tight"
         >
-          LO QUE HAY DETRÁS <br/><span className="text-lael-primary/70">DE NUESTRO LOGO</span>
+          LO QUE HAY DETRÁS <br/><span className="text-[#071D49]/70">DE NUESTRO LOGO</span>
         </motion.h2>
 
-        {/* Logo and Callouts Diagram */}
-        <div className="relative flex flex-col lg:flex-row items-center justify-between gap-12 w-full max-w-4xl mx-auto mb-20">
-          
-          {/* Left Callouts (Desktop) */}
-          <div className="flex flex-col gap-8 lg:w-1/3 text-center lg:text-right">
-            <div className="group cursor-pointer">
-              <p className="text-xs font-black uppercase tracking-wider text-lael-accent mb-1">La paloma</p>
-              <p className="text-lael-primary font-bold text-sm">Espíritu Santo</p>
-              <div className="h-0.5 w-12 bg-lael-accent/50 ml-auto mr-auto lg:mr-0 mt-2 transition-all group-hover:w-20" />
-            </div>
-            <div className="group cursor-pointer">
-              <p className="text-xs font-black uppercase tracking-wider text-lael-accent mb-1">El infinito</p>
-              <p className="text-lael-primary font-bold text-sm">Nunca se deja de aprender</p>
-              <div className="h-0.5 w-12 bg-lael-accent/50 ml-auto mr-auto lg:mr-0 mt-2 transition-all group-hover:w-20" />
-            </div>
+        {/* Logo + callouts: logo first on mobile, callouts in a 2x2 grid */}
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12 w-full max-w-4xl mx-auto mb-10 sm:mb-12">
+          <div className="order-2 lg:order-1 grid grid-cols-2 gap-6 w-full lg:flex lg:flex-col lg:gap-10 lg:w-1/3">
+            <Callout label="La paloma" text="Espíritu Santo" align="right" />
+            <Callout label="El infinito" text="Nunca se deja de aprender" align="right" />
           </div>
 
-          {/* Center Logo */}
-          <div className="relative flex justify-center items-center p-8 bg-lael-secondary/40 rounded-[40px] border border-lael-primary/5 lg:w-1/3 max-w-[320px] shadow-card aspect-square">
-            <img 
-              src={laelLogo} 
-              alt="Logo Instituto Lael" 
-              className="w-full max-w-[240px] h-auto object-contain"
+          <div className="order-1 lg:order-2 relative flex justify-center items-center p-6 sm:p-8 bg-[#F4F4F4] rounded-[28px] border border-[#071D49]/5 w-full max-w-[240px] sm:max-w-[300px] lg:w-1/3 shadow-card aspect-square">
+            <img
+              src={laelLogo}
+              alt="Logo Instituto Lael"
+              loading="lazy"
+              className="w-full max-w-[220px] h-auto object-contain"
             />
           </div>
 
-          {/* Right Callouts (Desktop) */}
-          <div className="flex flex-col gap-8 lg:w-1/3 text-center lg:text-left">
-            <div className="group cursor-pointer">
-              <p className="text-xs font-black uppercase tracking-wider text-lael-accent mb-1">La "E" dorada</p>
-              <p className="text-lael-primary font-bold text-sm">EL: nombre de Dios</p>
-              <div className="h-0.5 w-12 bg-lael-accent/50 mr-auto ml-auto lg:ml-0 mt-2 transition-all group-hover:w-20" />
-            </div>
-            <div className="group cursor-pointer">
-              <p className="text-xs font-black uppercase tracking-wider text-lael-accent mb-1 text-right lg:text-left">El subtítulo</p>
-              <p className="text-lael-primary font-bold text-sm">Instituto: aprendemos en comunidad</p>
-              <div className="h-0.5 w-12 bg-lael-accent/50 mr-auto ml-auto lg:ml-0 mt-2 transition-all group-hover:w-20" />
-            </div>
+          <div className="order-3 grid grid-cols-2 gap-6 w-full lg:flex lg:flex-col lg:gap-10 lg:w-1/3">
+            <Callout label='La "E" dorada' text="EL: nombre de Dios" align="left" />
+            <Callout label="El subtítulo" text="Instituto: aprendemos en comunidad" align="left" />
           </div>
-
         </div>
 
-        {/* Tabs/Accordion for text details */}
-        <div className="max-w-3xl mx-auto mb-20 bg-lael-secondary/30 rounded-3xl p-6 border border-lael-primary/5">
-          {/* Tab buttons */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8 border-b border-lael-primary/10 pb-4">
+        {/* Tabs */}
+        <div className="max-w-3xl mx-auto bg-[#F4F4F4] rounded-[28px] p-4 sm:p-6 border border-[#071D49]/5">
+          <div role="tablist" className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4 sm:mb-6 border-b border-[#071D49]/10 pb-4">
             {sections.map((sec, idx) => (
               <button
                 key={idx}
+                role="tab"
+                aria-selected={activeTab === idx}
                 onClick={() => setActiveTab(idx)}
-                className={`py-3 px-4 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
-                  activeTab === idx 
-                    ? 'bg-lael-primary text-white shadow-md' 
-                    : 'text-lael-primary/60 hover:bg-lael-primary/5'
+                className={`min-h-[44px] py-2.5 px-3 rounded-xl font-display text-xs font-bold uppercase tracking-wider transition-all ${
+                  activeTab === idx
+                    ? 'bg-[#071D49] text-white shadow-md'
+                    : 'text-[#071D49]/70 hover:bg-[#071D49]/5'
                 }`}
               >
                 {sec.title}
@@ -105,16 +105,15 @@ export default function SignificadoLael() {
             ))}
           </div>
 
-          {/* Tab Content */}
-          <div className="min-h-[120px] flex items-center justify-center px-4">
+          <div className="min-h-[140px] sm:min-h-[110px] flex items-center justify-center px-2 sm:px-4">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeTab}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.25 }}
-                className="text-lael-primary text-lg leading-relaxed max-w-2xl font-medium"
+                className="text-[#071D49] text-base sm:text-lg leading-relaxed max-w-2xl font-medium"
               >
                 {sections[activeTab].content}
               </motion.div>
@@ -122,21 +121,19 @@ export default function SignificadoLael() {
           </div>
         </div>
 
-        {/* Versicle Lucas 4:18 at the end */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="max-w-2xl mx-auto p-8 border-t border-lael-primary/10"
-        >
-          <p className="text-lael-primary/70 font-medium italic text-base leading-relaxed mb-4">
-            "El Espíritu del Señor está sobre mí, por cuanto me ha ungido para dar buenas nuevas a los pobres; me ha enviado a sanar a los quebrantados de corazón; a pregonar libertad a los cautivos, y vista a los ciegos; a poner en libertad a los oprimidos..."
-          </p>
-          <p className="text-lael-accent font-black tracking-widest text-[11px] uppercase">
-            Lucas 4:18
-          </p>
-        </motion.div>
-
+        {showVerse && (
+          <motion.div
+            {...fade}
+            className="max-w-2xl mx-auto mt-10 sm:mt-12 pt-8 border-t border-[#071D49]/10"
+          >
+            <p className="text-[#071D49]/70 font-medium italic text-base leading-relaxed mb-3">
+              "El Espíritu del Señor está sobre mí, por cuanto me ha ungido para dar buenas nuevas a los pobres; me ha enviado a sanar a los quebrantados de corazón; a pregonar libertad a los cautivos, y vista a los ciegos; a poner en libertad a los oprimidos..."
+            </p>
+            <p className="font-display text-[#071D49] font-black tracking-[0.2em] text-xs uppercase">
+              Lucas 4:18
+            </p>
+          </motion.div>
+        )}
       </div>
     </section>
   );

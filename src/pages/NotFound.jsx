@@ -1,71 +1,65 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, Compass, Map } from "lucide-react";
+import { Home, Compass } from "lucide-react";
+
+const fade = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] },
+});
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-lael-primary relative overflow-hidden text-lael-light font-sans">
-      
-      {/* Background Elements */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-lael-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="relative z-10 text-center px-6 max-w-2xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8 relative inline-block"
-        >
-          <h1 className="text-[120px] md:text-[200px] font-display font-black leading-none text-lael-accent/20 tracking-tighter select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0">
-            404
-          </h1>
-          <h1 className="text-[80px] md:text-[120px] font-display font-black leading-none text-lael-light relative z-10 tracking-tighter">
-            404
-          </h1>
-        </motion.div>
-
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-2xl md:text-3xl font-display font-bold mb-6 text-lael-light"
-        >
-          Esta página no existe.
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-lael-muted text-lg mb-10 max-w-lg mx-auto leading-relaxed"
-        >
-          Puede que el enlace esté mal escrito o que la página se haya movido. Vuelve al inicio o revisa el preu PAES.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="flex flex-col md:flex-row items-center justify-center gap-4"
-        >
-          <Link
-            to="/"
-            className="group w-full md:w-auto px-8 py-4 bg-lael-accent text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:-translate-y-1 transition-all shadow-[0_4px_20px_rgba(196,151,62,0.3)] uppercase tracking-[0.15em] text-xs"
+    <div className="w-full overflow-x-clip font-sans">
+      <section
+        className="relative -mt-20 min-h-[85vh] flex items-center justify-center px-5 sm:px-6 pt-36 sm:pt-40 pb-20 sm:pb-28 text-white"
+        style={{ backgroundColor: "#071D49" }}
+      >
+        <div className="text-center max-w-2xl mx-auto">
+          <motion.h1
+            {...fade(0)}
+            className="font-display font-black text-[6.5rem] sm:text-[9rem] lg:text-[11rem] leading-none tracking-tighter text-[#D7E400] mb-6"
           >
-            <Home size={18} />
-            Volver al Inicio
-          </Link>
-          
-          <Link
-            to="/paes"
-            className="group w-full md:w-auto px-8 py-4 bg-lael-secondary border border-lael-bd text-lael-light font-bold rounded-xl flex items-center justify-center gap-2 hover:border-lael-accent transition-colors uppercase tracking-[0.15em] text-xs hover:-translate-y-1"
+            404
+          </motion.h1>
+
+          <motion.h2
+            {...fade(0.1)}
+            className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold uppercase tracking-tight mb-5"
           >
-            <Compass size={18} className="text-lael-accent group-hover:rotate-45 transition-transform" />
-            Ver PAES
-          </Link>
-        </motion.div>
-      </div>
+            Esta página no existe.
+          </motion.h2>
+
+          <motion.p
+            {...fade(0.2)}
+            className="text-white/75 text-base sm:text-lg mb-10 max-w-lg mx-auto leading-relaxed"
+          >
+            Puede que el enlace esté mal escrito o que la página se haya movido. Vuelve al inicio o revisa el preu PAES.
+          </motion.p>
+
+          <motion.div
+            {...fade(0.3)}
+            className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4"
+          >
+            <Link
+              to="/"
+              className="w-full sm:w-auto min-h-[52px] px-8 bg-[#D7E400] text-[#071D49] hover:bg-white rounded-2xl flex items-center justify-center gap-2 font-display font-extrabold uppercase tracking-wider text-xs sm:text-sm transition-colors active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-[#D7E400]/50"
+            >
+              <Home size={18} />
+              Volver al Inicio
+            </Link>
+
+            <Link
+              to="/paes"
+              className="w-full sm:w-auto min-h-[52px] px-8 border-2 border-white/30 text-white hover:border-white hover:bg-white/5 rounded-2xl flex items-center justify-center gap-2 font-display font-extrabold uppercase tracking-wider text-xs sm:text-sm transition-colors active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-white/30"
+            >
+              <Compass size={18} className="text-[#D7E400]" />
+              Ver PAES
+            </Link>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }

@@ -93,14 +93,14 @@ export default function FloatingWhatsApp() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] flex flex-col items-end">
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="mb-4 w-72 bg-[#F8F5F0] rounded-3xl shadow-2xl border border-lael-bd overflow-hidden"
+            className="mb-4 w-72 bg-[#F4F4F4] rounded-3xl shadow-2xl border border-[#071D49]/10 overflow-hidden"
           >
             <div className="bg-[#25D366] p-6 text-white">
               <p className="font-display text-xl font-bold">Equipo Lael</p>
@@ -111,13 +111,13 @@ export default function FloatingWhatsApp() {
                 <button
                   key={opt.id}
                   onClick={() => handleOption(opt)}
-                  className="w-full p-4 bg-white hover:bg-lael-accent/5 border border-transparent hover:border-lael-accent/20 rounded-2xl text-left flex items-center justify-between group transition-all"
+                  className="w-full p-4 min-h-[52px] bg-white hover:bg-white border border-transparent hover:border-[#071D49]/20 rounded-2xl text-left flex items-center justify-between group transition-all"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-lael-accent">{opt.icon}</span>
-                    <span className="text-lael-muted text-[10px] font-bold uppercase tracking-wider">{opt.label}</span>
+                    <span className="text-[#071D49]">{opt.icon}</span>
+                    <span className="text-[#071D49] text-sm font-semibold">{opt.label}</span>
                   </div>
-                  <ChevronRight size={14} className="text-lael-accent/40 group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight size={14} className="text-[#071D49]/40 group-hover:translate-x-1 transition-transform" />
                 </button>
               ))}
             </div>
@@ -136,7 +136,7 @@ export default function FloatingWhatsApp() {
           repeatDelay: 4,
           ease: "easeInOut"
         } : {}}
-        className={`w-16 h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ${
+        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-500 ${
           isOpen ? 'bg-lael-primary text-lael-light rotate-90' : 'bg-[#25D366] text-white'
         }`}
         whileHover={{ scale: 1.05 }}

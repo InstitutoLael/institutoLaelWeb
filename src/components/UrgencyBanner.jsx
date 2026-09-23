@@ -33,7 +33,7 @@ export default function UrgencyBanner() {
         >
           <div className="py-2 px-6 flex items-center justify-center gap-4 text-center relative pr-12">
             <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#071D49] animate-pulse flex-shrink-0" />
-            <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.12em] leading-tight" style={{ color: '#071D49' }}>
+            <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.06em] leading-tight" style={{ color: '#071D49' }}>
               Verano Lael: cursos en enero, algunos gratis.{' '}
               <Link to="/verano" onClick={closeBanner} className="underline underline-offset-2">Ver cursos</Link>
               <span className="hidden sm:inline opacity-70"> · En marzo partimos de lleno</span>

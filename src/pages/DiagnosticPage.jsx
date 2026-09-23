@@ -4,17 +4,13 @@ import DiagnosticFlow from '../components/Diagnostic/DiagnosticFlow';
 
 export default function DiagnosticPage() {
   return (
-    <main className="bg-lael-primary min-h-screen">
+    <main className="w-full bg-[#F4F4F4] text-[#071D49] min-h-screen overflow-x-clip font-sans">
       <Helmet>
         <title>Diagnóstico | Instituto Lael</title>
         <meta name="description" content="Responde unas preguntas rápidas y te decimos por dónde partir: preu PAES, nivelación de estudios, idiomas o cursos para empresas." />
       </Helmet>
-      
-      <section className="relative pt-20 overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-lael-accent/[0.02] rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[40vw] h-[40vw] bg-lael-rust/[0.02] rounded-full blur-[100px] pointer-events-none" />
-        
+
+      <section className="relative">
         <DiagnosticFlow />
       </section>
     </main>

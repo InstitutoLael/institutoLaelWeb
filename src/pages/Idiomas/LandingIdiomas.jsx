@@ -1,482 +1,333 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import {
-  Globe,
-  MessageSquare,
-  Heart,
-  ChevronRight,
-  Zap,
-  Instagram,
-  Check,
-  CheckCircle2
-} from 'lucide-react';
+import { ChevronRight, Zap, Instagram, Check } from 'lucide-react';
 import languagesBg from '../../assets/img/Home/idiomas_execution_bg_1777948997295.webp';
 import igPost1 from '../../assets/img/Home/media_ig_post_1780732980390.webp';
 import igPost2 from '../../assets/img/Home/media_ig_post_1780733562637.webp';
 import CertificateSection from '../../components/CertificateSection';
 import { LANDING_SELECTOR, LANDING_REASONS, LANDING_PLANS } from '../../data/idiomas';
 
-// Visual Brand Colors
 const BLUE = '#071D49';
-const YELLOW = '#D7E400';
-const WHITE = '#FFFFFF';
-const LIGHT_GRAY = '#F4F4F4';
-const MUTED = '#8D8D8D';
+const FORM_URL = 'https://forms.gle/H86nFAQ2DJ8CCQ7y6';
 
 const ease = [0.16, 1, 0.3, 1];
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 40 },
+export const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.9, delay, ease },
+  transition: { duration: 0.6, delay, ease },
 });
 
-export default function LandingIdiomas() {
-  const WA_BASE = "https://wa.me/56964626568?text=";
-  const waLink = (message) => `${WA_BASE}${encodeURIComponent(message)}`;
+// Estilos compartidos por las páginas de programas (Idiomas / Español)
+export const SECTION = 'px-5 sm:px-6 py-16 sm:py-20 lg:py-28';
+export const EYEBROW_LIGHT = 'text-xs font-bold uppercase tracking-[0.2em] text-[#071D49]';
+export const EYEBROW_DARK = 'text-xs font-bold uppercase tracking-[0.2em] text-[#D7E400]';
+export const H2 = 'font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-[-0.03em] uppercase leading-[1.05]';
+export const BTN_PRIMARY = 'inline-flex items-center justify-center gap-2 min-h-[48px] bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all active:scale-95';
+export const BTN_NAVY = 'inline-flex items-center justify-center gap-2 min-h-[48px] bg-[#071D49] text-white hover:bg-[#0B2A66] font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all active:scale-95';
 
+/* Hero azul común: eyebrow + H1 + párrafo + acciones */
+export function ProgramHero({ eyebrow, heading, desc, bg, children }) {
+  return (
+    <section className="relative -mt-20 pt-36 sm:pt-40 pb-20 sm:pb-28 px-5 sm:px-6 text-white overflow-hidden" style={{ backgroundColor: BLUE }}>
+      <div className="absolute inset-0 opacity-20 mix-blend-luminosity">
+        <img src={bg} alt="" className="w-full h-full object-cover grayscale" />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/60 to-[#071D49]" />
+      <div className="relative z-10 max-w-5xl mx-auto text-center">
+        <motion.p {...fadeUp(0)} className={`${EYEBROW_DARK} mb-6`}>{eyebrow}</motion.p>
+        <motion.h1 {...fadeUp(0.1)} className="font-display text-white text-4xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6 sm:mb-8">
+          {heading}
+        </motion.h1>
+        <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+          {desc}
+        </motion.p>
+        <motion.div {...fadeUp(0.3)}>{children}</motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* Barra de niveles A1 → B2 */
+export function LevelPath({ title, levels, className = '' }) {
+  return (
+    <div className={`rounded-[24px] p-5 sm:p-6 border border-[#071D49]/5 ${className}`}>
+      <p className={`${EYEBROW_LIGHT} mb-4`}>{title}</p>
+      <div className="flex items-start justify-between">
+        {levels.map(([code, label], i) => (
+          <React.Fragment key={code}>
+            <div className="flex flex-col items-center min-w-0">
+              <div className="w-10 h-10 rounded-full bg-[#071D49] text-white flex items-center justify-center text-xs font-extrabold">
+                {code}
+              </div>
+              <span className="text-xs font-semibold text-[#071D49]/70 mt-1.5 whitespace-nowrap">{label}</span>
+            </div>
+            {i < levels.length - 1 && <div className="flex-grow h-0.5 bg-[#071D49]/15 mx-2 mt-5" />}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* Bloque de programa: texto + precio + mockup de Instagram */
+export function ProgramBlock({ id, gray, badge, title, teacher, desc, levelsTitle, levels, ig }) {
+  return (
+    <section id={id} className={`${SECTION} scroll-mt-20 ${gray ? 'bg-[#F4F4F4]' : 'bg-white'}`}>
+      <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+        <div className="lg:col-span-7 flex flex-col text-left">
+          <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 mb-5 bg-[#071D49] text-[#D7E400] px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase w-fit">
+            <Zap size={12} aria-hidden="true" />
+            <span>{badge}</span>
+          </motion.div>
+
+          <motion.h2 {...fadeUp(0.1)} className={`${H2} text-[#071D49] mb-5`}>{title}</motion.h2>
+
+          {teacher && (
+            <motion.div {...fadeUp(0.15)} className="flex items-center gap-3 mb-5 bg-[#071D49]/5 border border-[#071D49]/10 rounded-2xl p-3 w-fit">
+              <div className="w-10 h-10 rounded-full bg-[#071D49] text-[#D7E400] font-display font-black text-xs flex items-center justify-center flex-shrink-0">
+                {teacher.initials}
+              </div>
+              <div className="text-left">
+                <p className="text-[#071D49] text-sm font-bold">{teacher.name}</p>
+                <p className="text-[#071D49]/70 text-xs font-semibold">{teacher.role}</p>
+              </div>
+            </motion.div>
+          )}
+
+          <motion.p {...fadeUp(0.2)} className="text-[#071D49]/70 text-base sm:text-lg mb-6 leading-relaxed max-w-xl">{desc}</motion.p>
+
+          <motion.div {...fadeUp(0.25)} className="max-w-xl mb-6">
+            <LevelPath title={levelsTitle} levels={levels} className={gray ? 'bg-white' : 'bg-[#F4F4F4]'} />
+          </motion.div>
+
+          <motion.div {...fadeUp(0.3)} className="flex flex-wrap items-center gap-x-4 gap-y-3 mb-8">
+            <div>
+              <span className="text-[#071D49] font-display font-extrabold text-4xl sm:text-5xl tracking-tight">$14.990</span>
+              <span className="text-[#071D49]/70 text-sm font-bold uppercase tracking-wider ml-1">/mes</span>
+            </div>
+            <div className="flex flex-col items-start gap-1.5">
+              <span className="text-[11px] font-bold text-[#071D49] uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#D7E400]">
+                Matrícula gratis
+              </span>
+              <span className="text-[11px] font-bold text-white uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#071D49]">
+                ✨ Trimestral: $11.990/mes
+              </span>
+            </div>
+          </motion.div>
+
+          <motion.div {...fadeUp(0.35)}>
+            <a href={FORM_URL} target="_blank" rel="noopener noreferrer" className={`${BTN_NAVY} w-full sm:w-auto px-10`}>
+              <span>INSCRIBIRME AHORA</span>
+              <ChevronRight size={16} aria-hidden="true" />
+            </a>
+          </motion.div>
+        </div>
+
+        <motion.div {...fadeUp(0.15)} className="lg:col-span-5 flex justify-center">
+          <InstagramCard {...ig} />
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function InstagramCard({ img, tag, caption, ago }) {
+  return (
+    <div className="w-full max-w-[340px] lg:max-w-[380px] bg-white rounded-[28px] border border-[#071D49]/5 shadow-card overflow-hidden flex flex-col">
+      <div className="p-4 border-b border-[#071D49]/5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-[#D7E400] to-[#071D49] flex items-center justify-center text-[10px] font-black text-white" aria-hidden="true">
+            LAEL
+          </div>
+          <div>
+            <p className="text-[#071D49] text-sm font-bold tracking-tight">institutolael</p>
+            <p className="text-[#071D49]/70 text-xs">Santiago, Chile</p>
+          </div>
+        </div>
+        <Instagram size={18} className="text-[#071D49]/50" aria-hidden="true" />
+      </div>
+      <div className="w-full aspect-square overflow-hidden bg-[#071D49]/5">
+        <img src={img} alt="Instituto Lael Instagram Post" loading="lazy" className="w-full h-full object-cover" />
+      </div>
+      <div className="p-5">
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-[10px] text-[#071D49] font-black uppercase tracking-wider bg-[#D7E400] px-2 py-0.5 rounded">{tag}</span>
+          <p className="text-xs font-bold text-[#071D49]">Destacado de la semana</p>
+        </div>
+        <p className="text-sm text-[#071D49]/70 leading-relaxed">
+          <span className="font-bold text-[#071D49] mr-2">institutolael</span>
+          {caption}
+        </p>
+        <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-xs text-[#071D49]/60">
+          <span>{ago}</span>
+          <a href={FORM_URL} target="_blank" rel="noopener noreferrer" className="text-[#071D49] font-bold hover:underline py-2">
+            Ver detalles en chat →
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Tarjetas "¿Por qué aprender con Lael?" */
+export function ReasonsSection({ reasons, gray }) {
+  return (
+    <section className={`${SECTION} ${gray ? 'bg-[#F4F4F4]' : 'bg-white'}`}>
+      <div className="max-w-6xl mx-auto w-full">
+        <div className="text-center mb-10 sm:mb-16">
+          <motion.p {...fadeUp(0)} className={`${EYEBROW_LIGHT} mb-4`}>Cómo trabajamos</motion.p>
+          <motion.h2 {...fadeUp(0.1)} className={`${H2} text-[#071D49]`}>¿POR QUÉ APRENDER CON LAEL?</motion.h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {reasons.map((reason, i) => (
+            <motion.div
+              key={reason.title}
+              {...fadeUp(i * 0.08)}
+              className={`p-6 sm:p-8 rounded-[28px] border border-[#071D49]/5 ${gray ? 'bg-white shadow-card' : 'bg-[#F4F4F4]'}`}
+            >
+              <div className="w-12 h-12 rounded-2xl bg-[#071D49] flex items-center justify-center mb-5">
+                <reason.icon className="w-6 h-6 text-[#D7E400]" aria-hidden="true" />
+              </div>
+              <h3 className="text-[#071D49] font-display font-extrabold text-base uppercase tracking-tight mb-2">{reason.title}</h3>
+              <p className="text-[#071D49]/70 text-sm leading-relaxed">{reason.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* Tarjeta de precio sobre fondo azul */
+export function PriceCard({ plan, delay = 0, note }) {
+  return (
+    <motion.div
+      {...fadeUp(delay)}
+      className="rounded-[28px] p-6 sm:p-8 border border-white/10 bg-white/5 flex flex-col justify-between text-left"
+    >
+      <div>
+        <div className="flex justify-between items-center mb-5">
+          <span className="text-3xl text-white" role="img" aria-label={plan.name}>{plan.flag}</span>
+          <span className="bg-[#D7E400] text-[#071D49] text-[11px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full">
+            Matrícula {plan.enrollment}
+          </span>
+        </div>
+        <h3 className="text-white font-display font-extrabold text-xl uppercase tracking-tight mb-3">{plan.name}</h3>
+        <div className="mb-6">
+          <div className="flex items-baseline gap-1 mb-1">
+            <span className="text-[#D7E400] font-display font-black text-4xl">{plan.priceMonthly}</span>
+            <span className="text-white/75 text-sm font-bold">/mes</span>
+          </div>
+          <p className="text-white/75 text-xs font-semibold leading-relaxed">{note}</p>
+        </div>
+        <ul className="space-y-3 mb-8">
+          {plan.features.map((feat) => (
+            <li key={feat} className="flex items-start gap-2 text-sm text-white/75">
+              <Check size={16} className="text-[#D7E400] flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <span>{feat}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <a href={plan.link} target="_blank" rel="noopener noreferrer" className={`${BTN_PRIMARY} w-full`}>
+        Inscribirme
+      </a>
+    </motion.div>
+  );
+}
+
+export default function LandingIdiomas() {
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const selectorLanguages = LANDING_SELECTOR;
-  const reasons = LANDING_REASONS;
-
   return (
-    <div className="w-full bg-[#F4F4F4] overflow-x-clip font-sans">
+    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
         <title>Instituto Lael | Programas de Idiomas - Chile</title>
         <meta name="description" content="Cursos online de Inglés y Español para Expats con clases en vivo. Hablas y practicas desde la primera clase." />
       </Helmet>
-      
-      {/* ── 1. HERO IDIOMAS ────────────────────────────────────────── */}
-      <section className="relative -mt-20 min-h-[90vh] lg:min-h-screen flex items-center justify-center pt-44 pb-24 px-6 overflow-hidden" style={{ backgroundColor: BLUE }}>
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/50 via-[#071D49]/80 to-[#071D49] z-10" />
-          <div 
-            className="w-full h-full bg-cover bg-center opacity-30 mix-blend-luminosity grayscale" 
-            style={{ backgroundImage: `url(${languagesBg})` }} 
-          />
+
+      {/* ── 1. HERO ─────────────────────────────────────────────────── */}
+      <ProgramHero
+        bg={languagesBg}
+        eyebrow="INGLÉS EN LAEL · HABLAR SIN MIEDO"
+        heading={<>Habla inglés <br /> sin <span className="text-[#D7E400]">miedo.</span></>}
+        desc="Casi todos entendemos más de lo que nos atrevemos a decir. Con Monse hablas desde la primera clase, te equivocas tranquilo y vas ganando confianza."
+      >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full max-w-2xl mx-auto">
+          {LANDING_SELECTOR.map((lang) => (
+            <button
+              key={lang.id}
+              onClick={() => scrollToSection(lang.id)}
+              className="group min-h-[48px] p-4 sm:p-5 rounded-[24px] bg-white/5 border border-white/15 hover:border-[#D7E400] hover:bg-white/10 transition-all duration-300 text-left flex items-center gap-4 cursor-pointer active:scale-[0.98]"
+            >
+              <span className="text-3xl flex-shrink-0" role="img" aria-label={lang.label}>{lang.flag}</span>
+              <span className="flex-1 min-w-0">
+                <span className="block text-white font-display font-extrabold text-base uppercase tracking-tight group-hover:text-[#D7E400] transition-colors">{lang.label}</span>
+                <span className="block text-white/60 text-xs font-bold uppercase tracking-wider mt-0.5">{lang.tag}</span>
+              </span>
+              <ChevronRight size={18} className="text-white/60 group-hover:text-[#D7E400] group-hover:translate-x-1 transition-all flex-shrink-0" aria-hidden="true" />
+            </button>
+          ))}
         </div>
+      </ProgramHero>
 
-        <div className="relative z-20 max-w-5xl mx-auto text-center flex flex-col items-center">
-          <motion.div {...fadeUp(0)} className="mb-6">
-            <span className="text-[#D7E400] text-xs font-bold tracking-[0.3em] uppercase bg-white/5 border border-white/10 px-4 py-2 rounded-full">
-              INGLÉS EN LAEL · HABLAR SIN MIEDO
-            </span>
-          </motion.div>
+      {/* ── 2. INGLÉS ───────────────────────────────────────────────── */}
+      <ProgramBlock
+        id="ingles"
+        badge="PROGRAMA PRINCIPAL"
+        title="Inglés en Vivo"
+        teacher={{ initials: 'MG', name: 'Docente principal: Monserrat González', role: 'Profesora de inglés' }}
+        desc="Para que te puedas defender en una entrevista, en una reunión de pega o viajando. En cada clase practicas conversaciones parecidas a las que vas a tener afuera."
+        levelsTitle="Tus niveles de inglés"
+        levels={[['A1', 'Nivel 1'], ['A2', 'Nivel 2'], ['B1', 'Nivel 3'], ['B2', 'Fluidez']]}
+        ig={{ img: igPost1, tag: 'Recomendado', caption: 'Si entiendes inglés pero te bloqueas al hablar, esto es para ti. Clases online y en vivo.', ago: 'hace 2 días' }}
+      />
 
-          <motion.h1 
-            initial={{ clipPath: 'inset(0 100% 0 0)', opacity: 1 }}
-            animate={{ clipPath: 'inset(0 0% 0 0)', opacity: 1 }}
-            transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
-            className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-[-0.03em] leading-[1.05] uppercase mb-8 max-w-4xl"
-          >
-            Habla inglés <br />
-            sin <span className="text-[#D7E400] italic font-normal">miedo.</span>
-          </motion.h1>
+      {/* ── 3. ESPAÑOL PARA EXTRANJEROS ─────────────────────────────── */}
+      <ProgramBlock
+        id="espanol"
+        gray
+        badge="ESPAÑOL EN CHILE"
+        title="Español para Extranjeros"
+        desc="Es para ti si vives en Chile o trabajas con un equipo chileno. En clase practicamos reuniones de pega, conversaciones del día a día, modismos y cómo se trabaja acá."
+        levelsTitle="Tus niveles de español"
+        levels={[['A1', 'Nivel 1'], ['A2', 'Nivel 2'], ['B1', 'Intermedio']]}
+        ig={{ img: igPost2, tag: 'Español', caption: '¿Te perdiste con un "cachai" o un "al tiro"? Te lo explicamos. Clases en vivo, con harta conversación.', ago: 'hace 1 día' }}
+      />
 
-          <motion.p {...fadeUp(0.25)} className="text-white/70 text-base sm:text-lg md:text-xl max-w-2xl mb-16 leading-relaxed">
-            Casi todos entendemos más de lo que nos atrevemos a decir. Con Monse hablas desde la primera clase, te equivocas tranquilo y vas ganando confianza.
-          </motion.p>
+      {/* ── 4. ¿POR QUÉ APRENDER CON LAEL? ──────────────────────────── */}
+      <ReasonsSection reasons={LANDING_REASONS} />
 
-          {/* Visual Selector Cards */}
-          <motion.div {...fadeUp(0.4)} className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
-            {selectorLanguages.map((lang, i) => (
-              <button
-                key={lang.id}
-                onClick={() => scrollToSection(lang.id)}
-                className="group p-6 rounded-[24px] bg-white/5 border border-white/10 hover:border-[#D7E400] hover:bg-[#D7E400]/10 transition-all duration-300 text-left flex flex-col justify-between items-start cursor-pointer active:scale-95"
-              >
-                <div className="flex justify-between items-center w-full">
-                  <span className="text-3xl" role="img" aria-label={lang.label}>{lang.flag}</span>
-                  <ChevronRight size={16} className="text-white/30 group-hover:text-[#D7E400] group-hover:translate-x-1 transition-all" />
-                </div>
-                <div className="mt-8">
-                  <p className="text-white font-display font-bold text-base uppercase tracking-tight group-hover:text-[#D7E400] transition-colors">{lang.label}</p>
-                  <p className="text-white/40 text-[9px] font-bold uppercase tracking-wider mt-1">{lang.tag}</p>
-                </div>
-              </button>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+      {/* ── 5. CERTIFICADOS POR NIVEL ───────────────────────────────── */}
+      <CertificateSection defaultLevel="B2" defaultLanguage="Inglés en Vivo" gray />
 
-      {/* ── 2. INGLÉS - PROGRAMA PRINCIPAL ──────────────────────────── */}
-      <section id="ingles" className="py-28 px-6 bg-white flex flex-col items-center border-b border-[#071D49]/5">
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          {/* Text and info */}
-          <div className="lg:col-span-7 flex flex-col text-left">
-            <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 mb-6 bg-[#071D49] text-[#D7E400] px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase w-fit">
-              <Zap size={12} />
-              <span>PROGRAMA PRINCIPAL</span>
-            </motion.div>
+      {/* ── 6. PRECIOS ──────────────────────────────────────────────── */}
+      <section className={`${SECTION} text-center`} style={{ backgroundColor: BLUE }}>
+        <div className="max-w-6xl mx-auto w-full">
+          <motion.p {...fadeUp(0)} className={`${EYEBROW_DARK} mb-4`}>Mismo precio para ambos</motion.p>
+          <motion.h2 {...fadeUp(0.1)} className={`${H2} text-white mb-10 sm:mb-14`}>PRECIOS</motion.h2>
 
-            <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase mb-6 leading-[1.05]">
-              Inglés en Vivo
-            </motion.h2>
-
-            <motion.div {...fadeUp(0.15)} className="flex items-center gap-3 mb-6 bg-[#071D49]/5 border border-[#071D49]/10 rounded-2xl p-3 w-fit">
-              <div className="w-8 h-8 rounded-full bg-[#071D49] text-[#D7E400] font-display font-black text-xs flex items-center justify-center shadow-md">
-                MG
-              </div>
-              <div className="text-left">
-                <p className="text-[#071D49] text-xs font-bold">Docente principal: Monserrat González</p>
-                <p className="text-[#8D8D8D] text-[9px] font-bold uppercase tracking-wider">Profesora de inglés</p>
-              </div>
-            </motion.div>
-
-            <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg mb-8 leading-relaxed max-w-xl">
-              Para que te puedas defender en una entrevista, en una reunión de pega o viajando. En cada clase practicas conversaciones parecidas a las que vas a tener afuera.
-            </motion.p>
-
-            {/* Path visualization */}
-            <motion.div {...fadeUp(0.3)} className="bg-[#F4F4F4] rounded-[24px] p-6 mb-8 max-w-xl border border-[#071D49]/5">
-              <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Tus niveles de inglés</p>
-              <div className="flex items-center justify-between">
-                {['A1', 'A2', 'B1', 'B2'].map((level, i, arr) => (
-                  <React.Fragment key={level}>
-                    <div className="flex flex-col items-center">
-                      <div className="w-10 h-10 rounded-full bg-[#071D49] text-white flex items-center justify-center text-xs font-extrabold shadow-md">
-                        {level}
-                      </div>
-                      <span className="text-[9px] font-bold text-[#8D8D8D] uppercase tracking-wider mt-1.5">
-                        {level === 'B2' ? 'Fluidez' : `Nivel ${i+1}`}
-                      </span>
-                    </div>
-                    {i < arr.length - 1 && (
-                      <div className="flex-grow h-0.5 bg-[#071D49]/15 mx-2" />
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Price badge & Button */}
-            <motion.div {...fadeUp(0.35)} className="mb-10">
-              <div className="flex flex-wrap items-center gap-4 mb-4">
-                <div>
-                  <span className="text-[#071D49] font-display font-extrabold text-4xl sm:text-5xl tracking-tight">$14.990</span>
-                  <span className="text-[#8D8D8D] text-sm font-bold uppercase tracking-widest ml-1">/mes</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-[10px] font-bold text-[#071D49] uppercase tracking-widest px-2.5 py-1 rounded-full bg-[#D7E400]/30">
-                    Matrícula gratis
-                  </span>
-                  <span className="text-[10px] font-bold text-white uppercase tracking-widest px-2.5 py-1 rounded-full bg-[#071D49]">
-                    ✨ Trimestral: $11.990/mes
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div {...fadeUp(0.4)} className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
-              <a
-                href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#071D49] text-white hover:bg-[#D7E400] hover:text-[#071D49] text-center transition-all duration-300 font-display font-extrabold text-xs uppercase tracking-widest px-10 py-5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 shadow-lg"
-              >
-                <span>INSCRIBIRME AHORA</span>
-                <ChevronRight size={16} />
-              </a>
-            </motion.div>
-          </div>
-
-          {/* Instagram Mockup Column */}
-          <motion.div 
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease }}
-            className="lg:col-span-5 flex justify-center"
-          >
-            {/* Visual Hero Instagram post mockup */}
-            <div className="w-full max-w-[380px] bg-white rounded-[32px] border border-black/5 shadow-lael overflow-hidden flex flex-col">
-              {/* IG Header */}
-              <div className="p-4 border-b border-[#071D49]/5 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#D7E400] to-[#071D49] p-0.5 flex items-center justify-center text-[8px] font-black text-white">
-                    LAEL
-                  </div>
-                  <div>
-                    <p className="text-[#071D49] text-xs font-bold tracking-tight">institutolael</p>
-                    <p className="text-[#8D8D8D] text-[9px]">Santiago, Chile</p>
-                  </div>
-                </div>
-                <Instagram size={18} className="text-[#071D49]/40" />
-              </div>
-              
-              {/* IG Image */}
-              <div className="w-full aspect-square overflow-hidden bg-[#071D49]/5">
-                <img 
-                  src={igPost1} 
-                  alt="Instituto Lael Instagram Post" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* IG Footer/Actions */}
-              <div className="p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-[10px] text-[#071D49] font-black uppercase tracking-wider bg-[#D7E400] px-2 py-0.5 rounded">Recomendado</span>
-                  <p className="text-[11px] font-bold text-[#071D49]">Destacado de la semana</p>
-                </div>
-                <p className="text-xs text-[#8D8D8D] leading-relaxed">
-                  <span className="font-bold text-[#071D49] mr-2">institutolael</span>
-                  Si entiendes inglés pero te bloqueas al hablar, esto es para ti. Clases online y en vivo.
-                </p>
-                <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-[10px] text-black/45 uppercase tracking-wider">
-                  <span>hace 2 días</span>
-                  <a 
-                    href="https://forms.gle/H86nFAQ2DJ8CCQ7y6" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="text-[#071D49] font-bold hover:underline"
-                  >
-                    Ver detalles en chat →
-                  </a>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 3. ESPAÑOL PARA EXTANJEROS - PROGRAMA DE INMERSIÓN ────────── */}
-      <section id="espanol" className="py-28 px-6 bg-[#F4F4F4] flex flex-col items-center border-b border-[#071D49]/5">
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          {/* Text and info */}
-          <div className="lg:col-span-7 flex flex-col text-left">
-            <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 mb-6 bg-[#071D49] text-[#D7E400] px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase w-fit">
-              <Zap size={12} />
-              <span>ESPAÑOL EN CHILE</span>
-            </motion.div>
-
-            <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase mb-6 leading-[1.05]">
-              Español para Extranjeros
-            </motion.h2>
-
-            <motion.p {...fadeUp(0.2)} className="text-[#8D8D8D] text-lg mb-8 leading-relaxed max-w-xl">
-              Es para ti si vives en Chile o trabajas con un equipo chileno. En clase practicamos reuniones de pega, conversaciones del día a día, modismos y cómo se trabaja acá.
-            </motion.p>
-
-            {/* Path visualization */}
-            <motion.div {...fadeUp(0.3)} className="bg-white rounded-[24px] p-6 mb-8 max-w-xl border border-[#071D49]/5">
-              <p className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Tus niveles de español</p>
-              <div className="flex items-center justify-between">
-                {['A1', 'A2', 'B1'].map((level, i, arr) => (
-                  <React.Fragment key={level}>
-                    <div className="flex flex-col items-center">
-                      <div className="w-10 h-10 rounded-full bg-[#071D49] text-white flex items-center justify-center text-xs font-extrabold shadow-md">
-                        {level}
-                      </div>
-                      <span className="text-[9px] font-bold text-[#8D8D8D] uppercase tracking-wider mt-1.5">
-                        {level === 'B1' ? 'Intermedio' : `Nivel ${i+1}`}
-                      </span>
-                    </div>
-                    {i < arr.length - 1 && (
-                      <div className="flex-grow h-0.5 bg-[#071D49]/15 mx-4" />
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-            </motion.div>
-
-            {/* Price badge & Button */}
-            <motion.div {...fadeUp(0.35)} className="mb-10">
-              <div className="flex flex-wrap items-center gap-4 mb-4">
-                <div>
-                  <span className="text-[#071D49] font-display font-extrabold text-4xl sm:text-5xl tracking-tight">$14.990</span>
-                  <span className="text-[#8D8D8D] text-sm font-bold uppercase tracking-widest ml-1">/mes</span>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <span className="text-[10px] font-bold text-[#071D49] uppercase tracking-widest px-2.5 py-1 rounded-full bg-[#D7E400]/30">
-                    Matrícula gratis
-                  </span>
-                  <span className="text-[10px] font-bold text-white uppercase tracking-widest px-2.5 py-1 rounded-full bg-[#071D49]">
-                    ✨ Trimestral: $11.990/mes
-                  </span>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div {...fadeUp(0.4)} className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
-              <a
-                href="https://forms.gle/H86nFAQ2DJ8CCQ7y6"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#071D49] text-white hover:bg-[#D7E400] hover:text-[#071D49] text-center transition-all duration-300 font-display font-extrabold text-xs uppercase tracking-widest px-10 py-5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 shadow-lg"
-              >
-                <span>INSCRIBIRME AHORA</span>
-                <ChevronRight size={16} />
-              </a>
-            </motion.div>
-          </div>
-
-          {/* Instagram Mockup Column */}
-          <motion.div 
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease }}
-            className="lg:col-span-5 flex justify-center"
-          >
-            {/* Visual Hero Instagram post mockup */}
-            <div className="w-full max-w-[380px] bg-white rounded-[32px] border border-black/5 shadow-lael overflow-hidden flex flex-col">
-              {/* IG Header */}
-              <div className="p-4 border-b border-[#071D49]/5 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#D7E400] to-[#071D49] p-0.5 flex items-center justify-center text-[8px] font-black text-white">
-                    LAEL
-                  </div>
-                  <div>
-                    <p className="text-[#071D49] text-xs font-bold tracking-tight">institutolael</p>
-                    <p className="text-[#8D8D8D] text-[9px]">Santiago, Chile</p>
-                  </div>
-                </div>
-                <Instagram size={18} className="text-[#071D49]/40" />
-              </div>
-              
-              {/* IG Image */}
-              <div className="w-full aspect-square overflow-hidden bg-[#071D49]/5">
-                <img 
-                  src={igPost2} 
-                  alt="Instituto Lael Instagram Post" 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-
-              {/* IG Footer/Actions */}
-              <div className="p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-[10px] text-[#071D49] font-black uppercase tracking-wider bg-[#D7E400] px-2 py-0.5 rounded">Español</span>
-                  <p className="text-[11px] font-bold text-[#071D49]">Destacado de la semana</p>
-                </div>
-                <p className="text-xs text-[#8D8D8D] leading-relaxed">
-                  <span className="font-bold text-[#071D49] mr-2">institutolael</span>
-                  ¿Te perdiste con un "cachai" o un "al tiro"? Te lo explicamos. Clases en vivo, con harta conversación.
-                </p>
-                <div className="mt-4 pt-3 border-t border-[#071D49]/5 flex justify-between items-center text-[10px] text-black/45 uppercase tracking-wider">
-                  <span>hace 1 día</span>
-                  <a 
-                    href="https://forms.gle/H86nFAQ2DJ8CCQ7y6" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="text-[#071D49] font-bold hover:underline"
-                  >
-                    Ver detalles en chat →
-                  </a>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 5. ¿POR QUÉ APRENDER UN IDIOMA CON LAEL? ───────────────── */}
-      <section className="py-28 px-6 bg-white flex flex-col items-center">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Cómo trabajamos</motion.p>
-            <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
-              ¿POR QUÉ APRENDER CON LAEL?
-            </motion.h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {reasons.map((reason, i) => (
-              <motion.div 
-                key={reason.title} 
-                {...fadeUp(i * 0.08)}
-                className="p-8 rounded-[32px] border border-[#071D49]/10 hover:border-[#D7E400]/40 hover:bg-[#F4F4F4]/20 transition-all duration-300"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-[#071D49]/5 flex items-center justify-center mb-6">
-                  <reason.icon className="w-6 h-6 text-[#071D49]" />
-                </div>
-                <h3 className="text-[#071D49] font-display font-bold text-base uppercase tracking-tight mb-3">
-                  {reason.title}
-                </h3>
-                <p className="text-[#8D8D8D] text-xs sm:text-sm leading-relaxed">
-                  {reason.desc}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 4. CERTIFICADOS POR NIVEL ─────────────────────────────── */}
-      <CertificateSection defaultLevel="B2" defaultLanguage="Inglés en Vivo" />
-
-      {/* ── 5. CTA + PRICING (COMPARATIVA REDISEÑADA A 2 COLUMNAS) ───── */}
-      <section className="relative py-28 px-6 bg-[#071D49] text-center overflow-hidden flex flex-col items-center">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02),transparent)] pointer-events-none" />
-        
-        <div className="relative z-10 max-w-6xl mx-auto w-full text-center">
-          <motion.p {...fadeUp(0)} className="text-[#D7E400] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Mismo precio para ambos</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-white font-extrabold tracking-[-0.03em] uppercase mb-16">
-            PRECIOS
-          </motion.h2>
-
-          {/* Pricing Comparison Cards (2 activos) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl mx-auto mb-12">
-            {LANDING_PLANS.map((row, idx) => (
-              <motion.div
-                key={idx}
-                {...fadeUp(idx * 0.1)}
-                className="rounded-[32px] p-8 border flex flex-col justify-between shadow-2xl transition-all duration-300 text-left relative overflow-hidden border-white/10 bg-[#0a265b] hover:border-[#D7E400]/40"
-              >
-                <div>
-                  <div className="flex justify-between items-center mb-6">
-                    <span className="text-3xl" role="img" aria-label={row.name}>{row.flag}</span>
-                    <span className="bg-[#D7E400] text-[#071D49] text-[9px] font-black uppercase px-2.5 py-1 rounded">
-                      Matrícula {row.enrollment}
-                    </span>
-                  </div>
-                  <h3 className="text-white font-display font-extrabold text-xl uppercase tracking-tight mb-4">
-                    {row.name}
-                  </h3>
-                  <div className="mb-8">
-                    <div className="flex items-baseline gap-1 mb-1">
-                      <span className="text-[#D7E400] font-display font-black text-4xl">{row.priceMonthly}</span>
-                      <span className="text-white/60 text-xs font-bold">/mes</span>
-                    </div>
-                    <p className="text-white/50 text-[10px] font-bold uppercase tracking-wider">
-                      ✨ Trimestral: {row.priceQuarterly}/mes (ahorra pagando 3 meses)
-                    </p>
-                  </div>
-                  <ul className="space-y-3 mb-8">
-                    {row.features.map((feat, fIdx) => (
-                      <li key={fIdx} className="flex items-center gap-2 text-xs text-white/70">
-                        <Check size={14} className="text-[#D7E400] flex-shrink-0" />
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <a
-                  href={row.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full bg-[#D7E400] hover:bg-white text-[#071D49] font-display font-extrabold text-xs uppercase tracking-widest py-4 rounded-xl text-center transition-all duration-300 active:scale-95 shadow-md block"
-                >
-                  Inscribirme
-                </a>
-              </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full max-w-3xl mx-auto mb-10">
+            {LANDING_PLANS.map((plan, idx) => (
+              <PriceCard
+                key={plan.name}
+                plan={plan}
+                delay={idx * 0.1}
+                note={`✨ Trimestral: ${plan.priceQuarterly}/mes (ahorra pagando 3 meses)`}
+              />
             ))}
           </div>
 
-          <motion.div {...fadeUp(0.35)} className="text-white/45 text-xs">
+          <motion.p {...fadeUp(0.2)} className="text-white/60 text-sm max-w-xl mx-auto leading-relaxed">
             Todos los cursos son online y en vivo, con un docente. Pregúntanos por el precio de clases 1 a 1.
-          </motion.div>
+          </motion.p>
         </div>
       </section>
-
     </div>
   );
 }

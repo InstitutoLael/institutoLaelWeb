@@ -100,26 +100,26 @@ export default function Calculadora() {
       </Helmet>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative -mt-20 pt-36 pb-16 px-6 text-white" style={{ backgroundColor: BLUE }}>
+      <section className="relative -mt-20 pt-36 pb-14 sm:pb-16 px-5 sm:px-6 text-white" style={{ backgroundColor: BLUE }}>
         <div className="max-w-4xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-[0.2em]" style={{ backgroundColor: YELLOW, color: BLUE }}>
             <Calculator size={14} /> Gratis
           </motion.div>
-          <h1 className="font-display text-4xl sm:text-6xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6">
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05] mb-5 text-white">
             ¿Te alcanza para <br /> <span style={{ color: YELLOW }}>la carrera que quieres?</span>
           </h1>
-          <p className="text-white/75 text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
             Pon tus puntajes, busca la carrera y te mostramos tu puntaje ponderado al tiro. Más de 2.000 carreras de 47 universidades.
           </p>
         </div>
       </section>
 
-      <section className="px-4 sm:px-6 py-12">
+      <section className="px-4 sm:px-6 py-10 sm:py-12">
         <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6 items-start">
           {/* ── PUNTAJES ──────────────────────────────────────────── */}
-          <div className="bg-white rounded-[28px] p-6 border border-[#071D49]/5 shadow-card lg:sticky lg:top-28">
+          <div className="bg-white rounded-[28px] p-5 sm:p-6 border border-[#071D49]/5 shadow-card lg:sticky lg:top-28">
             <h2 className="font-display text-lg font-extrabold uppercase tracking-tight mb-1">1. Tus puntajes</h2>
-            <p className="text-sm text-[#071D49]/60 mb-5">De 100 a 1.000. Si no has dado la PAES, prueba con puntajes de ensayo.</p>
+            <p className="text-sm text-[#071D49]/70 mb-4 leading-relaxed">De 100 a 1.000. Si no has dado la PAES, prueba con puntajes de ensayo.</p>
             <div className="grid grid-cols-2 gap-3">
               {FIELDS.map((f) => (
                 <label key={f.key} className="block">
@@ -129,19 +129,19 @@ export default function Calculadora() {
                     value={scores[f.key] || ''}
                     onChange={(e) => setScore(f.key, e.target.value)}
                     placeholder={f.hint}
-                    className="w-full rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] px-3 py-2.5 text-base font-semibold focus:outline-none focus:ring-2 focus:ring-[#071D49] placeholder:text-[#071D49]/35 placeholder:font-normal placeholder:text-sm"
+                    className="w-full rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] px-3 py-3 min-h-[48px] text-base font-semibold focus:outline-none focus:ring-2 focus:ring-[#071D49] placeholder:text-[#071D49]/45 placeholder:font-normal placeholder:text-sm"
                   />
                 </label>
               ))}
             </div>
-            <button onClick={() => setScores({})} className="mt-4 text-xs font-semibold underline text-[#071D49]/60 hover:text-[#071D49]">
+            <button onClick={() => setScores({})} className="mt-2 min-h-[44px] text-sm font-semibold underline underline-offset-4 text-[#071D49]/70 hover:text-[#071D49]">
               Borrar puntajes
             </button>
           </div>
 
           {/* ── BUSCADOR Y RESULTADOS ─────────────────────────────── */}
           <div>
-            <div className="bg-white rounded-[28px] p-6 border border-[#071D49]/5 shadow-card mb-4">
+            <div className="bg-white rounded-[28px] p-5 sm:p-6 border border-[#071D49]/5 shadow-card mb-4">
               <h2 className="font-display text-lg font-extrabold uppercase tracking-tight mb-4">2. Busca la carrera</h2>
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
@@ -150,13 +150,13 @@ export default function Calculadora() {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Ej: medicina, derecho, ingeniería"
-                    className="w-full rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] pl-10 pr-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#071D49]"
+                    className="w-full rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] pl-10 pr-3 py-3 min-h-[48px] text-base focus:outline-none focus:ring-2 focus:ring-[#071D49]"
                   />
                 </div>
                 <select
                   value={uni}
                   onChange={(e) => setUni(e.target.value)}
-                  className="sm:w-64 rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#071D49]"
+                  className="sm:w-64 min-h-[48px] rounded-xl border border-[#071D49]/15 bg-[#F4F4F4] px-3 py-3 text-base sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#071D49]"
                 >
                   <option value="">Todas las universidades</option>
                   {universities.map((u) => <option key={u} value={u}>{u}</option>)}
@@ -164,9 +164,9 @@ export default function Calculadora() {
               </div>
             </div>
 
-            {!data && <p className="text-center text-sm text-[#071D49]/60 py-10">Cargando carreras…</p>}
+            {!data && <p className="text-center text-sm text-[#071D49]/70 py-10">Cargando carreras…</p>}
             {data && results.length === 0 && (
-              <p className="text-center text-sm text-[#071D49]/60 py-10">
+              <p className="text-center text-sm text-[#071D49]/70 py-10">
                 Escribe al menos 3 letras del nombre de la carrera, o elige una universidad.
               </p>
             )}
@@ -178,40 +178,46 @@ export default function Calculadora() {
                 const passesClM1 = c.clm1 == null || c.minClM1 == null || c.clm1 >= c.minClM1;
                 const ok = r.value != null && passesMin && passesClM1;
                 return (
-                  <div key={c.key} className="bg-white rounded-[20px] p-5 border border-[#071D49]/5 flex flex-col sm:flex-row sm:items-center gap-4">
-                    <div className="flex-1 min-w-0">
-                      <p className="font-display font-extrabold leading-tight">{c.n}</p>
-                      <p className="text-sm text-[#071D49]/60">{c.u} · {c.s}</p>
-                      <p className="text-xs text-[#071D49]/50 mt-2">
-                        {Object.entries(c.w).filter(([k, v]) => typeof v === 'number' && v > 0).map(([k, v]) => `${k === 'hc' ? 'Hist. o Cs.' : k === 'esp' ? 'Prueba especial' : LABEL[k]} ${v}%`).join(' · ')}
-                        {c.min != null && ` · Mínimo ponderado ${c.min}`}
-                        {c.minClM1 != null && ` · Promedio C.Lectora y M1 mínimo ${c.minClM1}`}
-                        {c.vac != null && ` · ${c.vac} vacantes`}
-                      </p>
+                  <div key={c.key} className="bg-white rounded-[20px] p-4 sm:p-5 border border-[#071D49]/5 shadow-card">
+                    <div className="flex items-start gap-3 sm:gap-4">
+                      <div className="flex-1 min-w-0">
+                        <p className="font-display font-extrabold leading-tight">{c.n}</p>
+                        <p className="text-sm text-[#071D49]/70 mt-0.5">{c.u} · {c.s}</p>
+                      </div>
+                      {r.value != null && (
+                        <div className="text-right flex-shrink-0">
+                          <p className="font-display text-2xl sm:text-3xl font-black leading-none tabular-nums">{r.value.toLocaleString('es-CL')}</p>
+                        </div>
+                      )}
                     </div>
-                    <div className="sm:w-44 sm:text-right flex-shrink-0">
+
+                    <div className="mt-3">
+                      {r.value != null && (
+                        <p className={`text-xs font-bold inline-flex items-center gap-1 px-2.5 py-1 rounded-full ${ok ? 'bg-emerald-50 text-emerald-800' : 'bg-rose-50 text-rose-800'}`}>
+                          {ok ? <Check size={14} /> : <X size={14} />}
+                          {ok ? 'Puedes postular' : !passesClM1 ? 'No llegas al promedio mínimo' : 'Bajo el mínimo para postular'}
+                        </p>
+                      )}
                       {r.special && (
-                        <p className="text-xs text-[#071D49]/60 flex sm:justify-end items-center gap-1"><AlertCircle size={14} /> Pide prueba especial de la universidad</p>
+                        <p className="text-xs font-semibold inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#F4F4F4] text-[#071D49]/80"><AlertCircle size={14} className="flex-shrink-0" /> Pide prueba especial de la universidad</p>
                       )}
                       {r.missing && (
-                        <p className="text-xs text-[#071D49]/60">Te falta: {r.missing.map((m) => LABEL[m]).join(', ')}</p>
-                      )}
-                      {r.value != null && (
-                        <>
-                          <p className="font-display text-3xl font-black">{r.value.toLocaleString('es-CL')}</p>
-                          <p className={`text-xs font-bold inline-flex items-center gap-1 ${ok ? 'text-emerald-700' : 'text-rose-700'}`}>
-                            {ok ? <Check size={14} /> : <X size={14} />}
-                            {ok ? 'Puedes postular' : !passesClM1 ? 'No llegas al promedio mínimo' : 'Bajo el mínimo para postular'}
-                          </p>
-                        </>
+                        <p className="text-xs font-semibold inline-flex px-2.5 py-1 rounded-xl bg-[#F4F4F4] text-[#071D49]/80">Te falta: {r.missing.map((m) => LABEL[m]).join(', ')}</p>
                       )}
                     </div>
+
+                    <p className="text-xs text-[#071D49]/70 leading-relaxed mt-3 pt-3 border-t border-[#071D49]/5">
+                      {Object.entries(c.w).filter(([k, v]) => typeof v === 'number' && v > 0).map(([k, v]) => `${k === 'hc' ? 'Hist. o Cs.' : k === 'esp' ? 'Prueba especial' : LABEL[k]} ${v}%`).join(' · ')}
+                      {c.min != null && ` · Mínimo ponderado ${c.min}`}
+                      {c.minClM1 != null && ` · Promedio C.Lectora y M1 mínimo ${c.minClM1}`}
+                      {c.vac != null && ` · ${c.vac} vacantes`}
+                    </p>
                   </div>
                 );
               })}
             </div>
 
-            <p className="text-xs text-[#071D49]/50 mt-6 leading-relaxed">
+            <p className="text-xs text-[#071D49]/70 mt-6 leading-relaxed">
               Ponderaciones oficiales del DEMRE, Proceso de Admisión {data?.proceso || 2026}. Las del proceso 2027 las publica el DEMRE a fines de septiembre y las actualizaremos. Cumplir los mínimos no asegura el ingreso: depende del puntaje de corte de cada año. Confirma siempre en demre.cl y en la universidad.
             </p>
           </div>
@@ -219,13 +225,13 @@ export default function Calculadora() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────── */}
-      <section className="px-6 pb-24">
-        <div className="max-w-3xl mx-auto rounded-[32px] p-10 text-center text-white" style={{ backgroundColor: BLUE }}>
+      <section className="px-5 sm:px-6 pb-16 sm:pb-20 lg:pb-28">
+        <div className="max-w-3xl mx-auto rounded-[32px] p-8 sm:p-10 text-center text-white" style={{ backgroundColor: BLUE }}>
           <h2 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight mb-4">¿Te faltan puntos?</h2>
           <p className="text-white/75 mb-8 max-w-xl mx-auto">
             En el preu de Lael tomas solo los ramos que necesitas subir, desde $10.000 al mes, con matrícula gratis y becas.
           </p>
-          <Link to="/paes" className="inline-flex items-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs uppercase tracking-widest px-8 py-4 rounded-2xl transition-all">
+          <Link to="/paes" className="min-h-[48px] w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all">
             Ver el preu PAES <ArrowRight size={16} />
           </Link>
         </div>

@@ -37,7 +37,9 @@ const fadeUp = (delay = 0) => ({
 export default function LandingLSCh() {
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const WA_LINK_TRIMESTRAL = "https://forms.gle/H86nFAQ2DJ8CCQ7y6";
+  // Curso en pausa hasta confirmar al instructor/a (de la comunidad Sorda).
+  // Cuando abra, cambiar este link de vuelta al formulario de inscripción.
+  const WA_LINK_TRIMESTRAL = "https://wa.me/56964626568?text=Hola!%20Quiero%20que%20me%20avisen%20cuando%20abra%20el%20curso%20de%20Lengua%20de%20Se%C3%B1as%20Chilena.";
   const WA_GENERAL = "https://wa.me/56964626568?text=Hola!%20Tengo%20consultas%20sobre%20el%20curso%20de%20Lengua%20de%20Señas%20Chilena%20(LSCh).";
 
   const slides = LANDING_SLIDES;
@@ -71,7 +73,7 @@ export default function LandingLSCh() {
           <div className="lg:col-span-6 flex flex-col text-left">
             <motion.div {...fadeUp(0)} className="inline-flex w-fit items-center gap-2 mb-6 bg-[#D7E400] text-[#071D49] px-4 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase">
               <VolumeX size={14} className="animate-pulse" />
-              <span>LENGUA DE SEÑAS CHILENA</span>
+              <span>LENGUA DE SEÑAS CHILENA · PRÓXIMAMENTE</span>
             </motion.div>
 
             <motion.h1 
@@ -85,7 +87,7 @@ export default function LandingLSCh() {
             </motion.h1>
 
             <motion.p {...fadeUp(0.25)} className="text-white/70 text-lg mb-10 leading-relaxed max-w-md">
-              Aprende con instructores Sordos, que tienen la LSCh como lengua propia. Además de señas, conoces la cultura de la comunidad Sorda.
+              Estamos preparando el nuevo curso. Lo dictará una persona Sorda, de la comunidad, con la LSCh como lengua propia. Escríbenos y te avisamos apenas abramos cupos.
             </motion.p>
 
             {/* Quick badges */}
@@ -103,7 +105,7 @@ export default function LandingLSCh() {
                 rel="noopener noreferrer"
                 className="bg-[#D7E400] text-[#071D49] hover:bg-white text-center transition-all duration-300 font-display font-extrabold text-xs uppercase tracking-widest px-10 py-5 rounded-2xl flex items-center justify-center gap-3 active:scale-95 shadow-xl hover:-translate-y-0.5"
               >
-                <span>INSCRIBIRME AHORA</span>
+                <span>AVÍSAME CUANDO ABRA</span>
                 <ChevronRight size={16} />
               </a>
               <a 
@@ -247,7 +249,7 @@ export default function LandingLSCh() {
       <section className="py-28 px-6 bg-white flex flex-col items-center border-t border-[#071D49]/5">
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center mb-20">
-            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Precio</motion.p>
+            <motion.p {...fadeUp(0)} className="text-[#071D49] text-[10px] font-bold uppercase tracking-[0.4em] mb-4">Precio al abrir</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-5xl text-[#071D49] font-extrabold tracking-[-0.03em] uppercase">
               Un solo plan, sin letra chica
             </motion.h2>
@@ -284,7 +286,7 @@ export default function LandingLSCh() {
                 rel="noopener noreferrer"
                 className="w-full py-4.5 bg-[#D7E400] hover:bg-white text-[#071D49] rounded-2xl text-[10px] font-bold uppercase tracking-[0.25em] flex items-center justify-center transition-all duration-300 active:scale-95 shadow-md"
               >
-                Inscribirme
+                Avísame cuando abra
               </a>
             </motion.div>
           </div>

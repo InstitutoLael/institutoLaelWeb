@@ -14,7 +14,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import studentImg from '../../assets/img/Home/hero_student_lael_1780734180709.webp';
-import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS, PAES_PLANS, PAES_PLAN_INCLUDES, PAES_FORM_URL, BECAS_FORM_URL } from '../../data/paes';
+import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS, PAES_PLANS, PAES_PLAN_INCLUDES, PAES_FORM_URL, BECAS_FORM_URL, REFERRAL } from '../../data/paes';
 
 // Design System Tokens (Local references matching tailwind.config.js / index.css)
 const BLUE = '#071D49';
@@ -339,6 +339,16 @@ export default function LandingPAES() {
             </a>
             , la revisamos caso a caso.
           </motion.p>
+
+          <motion.div {...fadeUp(0.25)} className="mt-10 max-w-2xl mx-auto rounded-[24px] border-2 border-dashed border-[#071D49]/15 bg-white p-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+            <div className="w-12 h-12 rounded-full bg-[#D7E400] text-[#071D49] flex items-center justify-center flex-shrink-0">
+              <UsersRound size={20} />
+            </div>
+            <div>
+              <p className="text-[#071D49] font-display font-extrabold uppercase tracking-tight">{REFERRAL.title}</p>
+              <p className="text-[#8D8D8D] text-sm leading-relaxed">{REFERRAL.desc}</p>
+            </div>
+          </motion.div>
         </div>
       </section>
 

@@ -6,8 +6,8 @@ export default function LSCh() {
   return (
     <main className="bg-lael-primary min-h-screen">
       <Helmet>
-        <title>Lengua de Señas Chilena - Instituto Lael</title>
-        <meta name="description" content="Curso online de Lengua de Señas Chilena (LSCh) en vivo. Aprende señas y cultura Sorda por niveles, con certificado al aprobar. Instituto Lael." />
+        <title>Lengua de Señas Chilena (próximamente) - Instituto Lael</title>
+        <meta name="description" content="Próximamente: curso online de Lengua de Señas Chilena (LSCh) en vivo, dictado por una persona de la comunidad Sorda. Escríbenos y te avisamos cuando abra. Instituto Lael." />
       </Helmet>
       <LandingLSCh />
     </main>

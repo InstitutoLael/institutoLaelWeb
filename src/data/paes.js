@@ -45,6 +45,7 @@ export const LANDING_FAQS = [
   { q: "¿Cómo me inscribo?", a: "Haz clic en el botón INSCRIBIRME y llenarás un formulario breve. También puedes escribirnos por WhatsApp." },
   { q: "Soy menor de edad, ¿puedo inscribirme?", a: "Sí. En el formulario de inscripción te pedimos también los datos de tu apoderado, para mantenerlo al tanto." },
   { q: "¿En qué horario son las clases?", a: "Las clases son en horario vespertino. Los horarios exactos se comunican al momento de inscribirse." },
+  { q: "¿Hay algo antes de marzo?", a: "Sí. En el verano haremos cursos cortos para partir con ventaja. Síguenos en Instagram o escríbenos por WhatsApp y te avisamos cuando abran." },
   { q: "¿Sirve si voy a rendir PAES en noviembre?", a: "Sí. El programa comienza en marzo de 2027 y está diseñado para acompañarte con meses de anticipación, no solo el tramo final antes del examen." }
 ];
 
@@ -129,5 +130,15 @@ export const PAES_PLANS = [
     featured: true,
   },
 ];
+
+// "Trae un amigo": el descuento lo absorbe el instituto, nunca el profe
+// (igual que el Plan Completo).
+export const REFERRAL_DISCOUNT = 20; // % por amigo, en la siguiente mensualidad
+export const REFERRAL_MAX_FRIENDS = 100 / REFERRAL_DISCOUNT; // 5 amigos = mes gratis
+
+export const REFERRAL = {
+  title: "Trae un amigo",
+  desc: `Por cada amigo que se inscriba y pague su primer mes, tu siguiente mensualidad baja un ${REFERRAL_DISCOUNT}%. Con ${REFERRAL_MAX_FRIENDS} amigos, ese mes no pagas.`,
+};
 
 export const PAES_PLAN_INCLUDES = "Todos los planes: matrícula gratis, clases en vivo por Google Meet en horario vespertino, grabaciones para repasar, guías descargables y ensayo mensual.";

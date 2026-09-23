@@ -28,7 +28,7 @@ export const HISTORY = {
       rest: "Después sumamos Inglés, Coreano y Lengua de Señas Chilena. La regla siguió siendo la misma: si alguien quiere aprender y se compromete, buscamos la forma de que pueda."
     }
   ],
-  closingQuote: "Desde 2021 han pasado más de 1000 alumnos por Lael. En 2026 decidimos parar, ordenar la casa y empezar de nuevo. No es el fin del camino: el propósito sigue vigente."
+  closingQuote: "Desde 2021 han pasado más de 1000 alumnos por Lael. En marzo de 2027 empieza una nueva temporada, con el mismo propósito: ayudar a quienes lo necesitan."
 };
 
 export const PILLARS = [
@@ -42,7 +42,7 @@ export const TIMELINE = [
   { year: "2021", title: "El inicio", desc: "Nace como preuniversitario PAES gratuito. Diego lo arma desde cero." },
   { year: "2022", title: "600 alumnos", desc: "Llegamos a 600 alumnos a la vez y sumamos Inglés y Coreano." },
   { year: "2023-25", title: "Inclusión", desc: "Incorporamos Lengua de Señas Chilena y cultura Sorda." },
-  { year: "2026", title: "Nuevo comienzo", desc: "Más de 1000 alumnos después, paramos, ordenamos y volvemos con más orden y el mismo propósito." }
+  { year: "2027", title: "Nueva temporada", desc: "Más de 1000 alumnos después, arrancamos en marzo con más ramos, más orden y el mismo propósito." }
 ];
 
 export const TEAM = [

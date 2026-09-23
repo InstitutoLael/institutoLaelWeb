@@ -41,7 +41,6 @@ export const TESTIMONIALS = [
     name: 'Victoria',
     program: 'Inglés · 2023',
     quote: 'Me inscribí con una gran expectativa y la verdad fue muy motivador para seguir esforzándome en aprender. La profe era muy simpática y muy dinámica en sus clases.',
-    memory: 'La Nachita tenía mucha paciencia para explicar y era muy dinámica para hacer la clase.',
     rating: 5,
     initials: 'V',
     featured: true,

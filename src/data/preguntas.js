@@ -6,7 +6,8 @@ export const FAQ_DATA = [
     icon: DollarSign,
     items: [
       { q: "¿Cuánto cuesta el preu PAES en Lael?", a: "Pagas por ramo: $12.000 al mes por cada obligatoria (M1 y Competencia Lectora) y $10.000 al mes por cada electiva. Si tomas 4 ramos o más, pagas el Plan Completo de $34.990 al mes. Y si no te alcanza, puedes postular a una beca. No queremos que la plata sea la razón por la que alguien se queda fuera." },
-      { q: "¿Hay algún costo oculto o matrícula?", a: "No. La matrícula es gratis y solo pagas los ramos que tomas. No hay cobros extra por materiales." }
+      { q: "¿Hay algún costo oculto o matrícula?", a: "No. La matrícula es gratis y solo pagas los ramos que tomas. No hay cobros extra por materiales." },
+      { q: "¿Hay descuento si traigo a un amigo?", a: "Sí. Por cada amigo que se inscriba y pague su primer mes, tu siguiente mensualidad baja un 20%. Con 5 amigos, ese mes no pagas." }
     ]
   },
   {

@@ -30,6 +30,7 @@ const SECTIONS = [
     list: [
       'Inscribirte, organizar tus clases y darte acceso a Google Meet, Classroom y las grabaciones.',
       'Contactarte a ti o a tu apoderado sobre clases, pagos y avisos importantes.',
+      'Avisarte de nuevos cursos, becas y fechas de inscripción, si nos diste tu contacto. Puedes pedir que no te escribamos más en cualquier momento.',
       'Evaluar postulaciones a becas.',
       'Publicar testimonios, solo si nos diste permiso y de la forma que elegiste (nombre completo o iniciales).',
       'Mejorar el sitio con estadísticas generales de visitas.',
@@ -61,7 +62,8 @@ const SECTIONS = [
   {
     title: '7. Cuánto tiempo los guardamos',
     body: [
-      'Mientras seas alumno y hasta 2 años después de terminar, por si vuelves o necesitas un certificado. Las grabaciones de clases se guardan durante el año académico. Los registros de pago se guardan por el plazo que exige la ley tributaria. Si no te inscribes, borramos tus datos de contacto dentro de 1 año.',
+      'Mientras seas alumno y hasta 4 años después de terminar, por si vuelves (por ejemplo, si partiste en primero medio y vuelves para la PAES) o necesitas un certificado. Las grabaciones de clases se guardan durante el año académico. Los registros de pago se guardan por el plazo que exige la ley tributaria.',
+      'Si nos escribiste pero no te inscribiste, guardamos tu contacto para avisarte de nuevos cursos, becas o fechas de inscripción. Si no quieres que te escribamos más, basta con decírnoslo por WhatsApp o correo y te sacamos de la lista o borramos tus datos, como prefieras.',
     ],
   },
   {

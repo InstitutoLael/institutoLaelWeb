@@ -1,9 +1,0 @@
-name = "instituto-lael-web"
-main = "src/worker.js"   # <--- ESTO ES LO QUE CONECTA TU ARCHIVO NUEVO
-compatibility_date = "2024-01-01"
-
-# Configuración de la base de datos (D1)
-[[d1_databases]]
-binding = "DB"
-database_name = "lael_inscripciones"
-database_id = "c3a83b23-7dcb-4dfb-b1c5-27e0bda4458e"

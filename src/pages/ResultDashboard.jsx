@@ -151,7 +151,7 @@ export default function ResultDashboard() {
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${attr.score}%` }}
-                        transition={{ duration: 1, delay: 0.4, ease }}
+                        transition={{ duration: 0.6, delay: 0.4, ease }}
                         className="h-full bg-[#071D49] rounded-full"
                       />
                     </div>

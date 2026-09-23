@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import WordReveal from '../../components/ui/WordReveal';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, MessageCircle, ChevronDown, CalendarDays, Heart } from 'lucide-react';
 import adultosImg from '../../assets/img/Home/mundo_adultos_bg_1777944001677.webp';
@@ -37,9 +38,14 @@ export default function NivelacionAdultos() {
           <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-6" style={{ color: YELLOW }}>
             {ADULT_HERO.eyebrow}
           </motion.p>
-          <motion.h1 {...fadeUp(0.1)} className="font-display text-white text-4xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6 sm:mb-8">
-            {ADULT_HERO.title} <br /> <span style={{ color: YELLOW }}>{ADULT_HERO.accent}</span>
-          </motion.h1>
+          <WordReveal
+            className="font-display text-white text-4xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6 sm:mb-8"
+            delay={0.1}
+            segments={[
+              { text: ADULT_HERO.title, breakAfter: true },
+              { text: ADULT_HERO.accent, style: { color: YELLOW } },
+            ]}
+          />
           <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
             {ADULT_HERO.desc}
           </motion.p>

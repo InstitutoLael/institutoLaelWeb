@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowRight, Users, Heart, Target, Star, ChevronRight } from 'lucide-react';
 import SignificadoLael from '../components/SignificadoLael';
+import WordReveal from '../components/ui/WordReveal';
 import { OBLIGATORIAS, ELECTIVAS, WORLDS, TEACHERS, METRICS, TESTIMONIALS } from '../data/home';
 import { SHARE_STORY_URL } from '../data/testimonials';
 
@@ -96,16 +97,14 @@ export default function Home() {
             </span>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease }}
+          <WordReveal
             className="text-white font-display font-black uppercase leading-[0.95] tracking-tight mb-6 sm:mb-8 text-[2rem] min-[380px]:text-4xl sm:text-6xl lg:text-7xl xl:text-[5.25rem]"
-          >
-            Tu sueño <br className="hidden sm:block" />
-            no tiene fecha <br className="hidden sm:block" />
-            <span style={{ color: YELLOW }}>de vencimiento.</span>
-          </motion.h1>
+            segments={[
+              { text: 'Tu sueño', breakAfter: 'sm' },
+              { text: 'no tiene fecha', breakAfter: 'sm' },
+              { text: 'de vencimiento.', style: { color: YELLOW } },
+            ]}
+          />
 
           <motion.p
             {...fadeUp(0.15)}

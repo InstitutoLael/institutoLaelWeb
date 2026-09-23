@@ -136,14 +136,25 @@ export default function Navbar() {
                   }`
                 }
               >
-                <span className="flex items-center gap-2">
-                  {item.name}
-                  {item.badge && (
-                    <span className="bg-lael-accent text-lael-primary text-[10px] tracking-normal font-bold uppercase px-1.5 py-0.5 rounded">
-                      {item.badge}
+                {({ isActive }) => (
+                  <>
+                    <span className="flex items-center gap-2">
+                      {item.name}
+                      {item.badge && (
+                        <span className="bg-lael-accent text-lael-primary text-[10px] tracking-normal font-bold uppercase px-1.5 py-0.5 rounded">
+                          {item.badge}
+                        </span>
+                      )}
                     </span>
-                  )}
-                </span>
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-active-indicator"
+                        className={`absolute left-0 right-0 -bottom-0.5 h-[3px] rounded-full ${isNavSolid ? "bg-lael-primary" : "bg-lael-accent"}`}
+                        transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                      />
+                    )}
+                  </>
+                )}
               </NavLink>
             ))}
           </nav>

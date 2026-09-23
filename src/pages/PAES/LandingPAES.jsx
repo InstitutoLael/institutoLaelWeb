@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import WordReveal from '../../components/ui/WordReveal';
 import {
   Video,
   ChevronDown,
@@ -99,17 +100,15 @@ export default function LandingPAES() {
               </span>
             </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease }}
+            <WordReveal
               className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white font-black leading-[1.05] max-w-2xl mb-6 uppercase"
-            >
-              CREAMOS EL PREU <br className="hidden sm:inline" />
-              QUE NOS HABRÍA <br className="hidden sm:inline" />
-              GUSTADO TENER. <br />
-              <span className="text-[#D7E400] font-bold">NADIE SE QUEDA AFUERA.</span>
-            </motion.h1>
+              segments={[
+                { text: 'CREAMOS EL PREU', breakAfter: 'sm' },
+                { text: 'QUE NOS HABRÍA', breakAfter: 'sm' },
+                { text: 'GUSTADO TENER.', breakAfter: true },
+                { text: 'NADIE SE QUEDA AFUERA.', className: 'text-[#D7E400] font-bold' },
+              ]}
+            />
 
             <motion.p {...fadeUp(0.15)} className="text-white/75 text-base sm:text-lg max-w-lg mb-8 leading-relaxed">
               Cursos de máximo 20, clases en vivo que después puedes volver a ver y un profe al que le puedes preguntar todo. Pagas solo los ramos que tomas, desde $10.000 al mes. Y si no te alcanza, postulas a una beca.

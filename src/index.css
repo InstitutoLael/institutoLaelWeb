@@ -121,3 +121,30 @@
     font-weight: 800;
   }
 }
+
+/* ── Microinteracciones ───────────────────────────────────────────────
+   Solo en dispositivos con mouse y si la persona no pidió reducir el
+   movimiento. Los botones suben un poco y las flechas avanzan. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  a[class*="rounded-2xl"][class*="uppercase"],
+  button[class*="rounded-2xl"][class*="uppercase"],
+  a[class*="rounded-xl"][class*="uppercase"] {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  a[class*="rounded-2xl"][class*="uppercase"]:hover,
+  button[class*="rounded-2xl"][class*="uppercase"]:hover,
+  a[class*="rounded-xl"][class*="uppercase"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -10px rgba(7, 29, 73, 0.45);
+  }
+  a .lucide-arrow-right,
+  button .lucide-arrow-right,
+  a .lucide-chevron-right {
+    transition: transform 0.2s ease;
+  }
+  a:hover .lucide-arrow-right,
+  button:hover .lucide-arrow-right,
+  a:hover .lucide-chevron-right {
+    transform: translateX(3px);
+  }
+}

@@ -1,7 +1,7 @@
 // Conexión con la planilla de Google de Lael (Google Apps Script).
 // Ver google-apps-script/INSTRUCCIONES.md. Mientras BACKEND_URL esté vacío,
 // los formularios usan WhatsApp como respaldo y los cupos no se muestran.
-export const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbxxqeDP-EFwL0SOiTXZoo34anHyHkGlKf-5AuIQFUp_FTumN2Az4N-SmDOn2MM4FF7c/exec';
+export const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbxqCjg89BZbFA46ohCMaYr9khZmip4ligyq8CIjyCV32uz9fXPM928CYo8qgSD0FCg1PA/exec';
 
 export const WHATSAPP_NUMBER = '56964626568';
 export const whatsappUrl = (text) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;

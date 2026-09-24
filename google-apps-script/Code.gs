@@ -177,8 +177,12 @@ function guardarInscripcion_(d) {
   const tipo = limpiar_(d.tipo, 30) || 'inscripcion';
   const nombre = limpiar_(d.nombre, 80);
   const correo = limpiar_(d.correo, 120).toLowerCase();
-  const telefono = limpiar_(d.telefono, 20);
-  if (!nombre || !correoValido_(correo) || !telefonoValido_(telefono)) return json_({ ok: false, error: 'datos_invalidos' });
+  // El teléfono se valida tal como lo escribió la persona (ej. "+56 9 1234 5678")
+  // y recién después se protege para la planilla, que antepone ' a lo que
+  // empieza con "+" para que no se lea como fórmula.
+  const telefonoOriginal = String(d.telefono == null ? '' : d.telefono).trim().slice(0, 20);
+  const telefono = limpiar_(telefonoOriginal, 21);
+  if (!nombre || !correoValido_(correo) || !telefonoValido_(telefonoOriginal)) return json_({ ok: false, error: 'datos_invalidos' });
   if (d.acepta_privacidad !== true) return json_({ ok: false, error: 'falta_consentimiento' });
 
   const fila = [

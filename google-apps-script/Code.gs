@@ -197,7 +197,9 @@ function guardarInscripcion_(d) {
   const esPrueba = tipo === 'clase-prueba';
   avisarAlInstituto_(
     `${esPrueba ? 'Clase de prueba' : 'Nueva inscripción'}: ${nombre} · ${limpiar_(d.programa, 60)}`,
-    `Nombre: ${nombre}\nCorreo: ${correo}\nTeléfono: ${telefono}\nPrograma: ${d.programa}\nDetalle: ${d.detalle || '-'}\n` +
+    `Nombre: ${nombre}\nCorreo: ${correo}\nTeléfono: ${telefonoOriginal}\n` +
+    `Escríbele por WhatsApp: https://wa.me/${telefonoOriginal.replace(/\D/g, '').replace(/^9(\d{8})$/, '569$1')}\n` +
+    `Programa: ${d.programa}\nDetalle: ${d.detalle || '-'}\n` +
     `Quiere beca: ${d.quiere_beca ? 'Sí' : 'No'}\nViene de parte de: ${d.referido || '-'}\nComentario: ${d.comentario || '-'}\n\n` +
     `Revísalo en la planilla: ${SpreadsheetApp.getActiveSpreadsheet().getUrl()}`
   );

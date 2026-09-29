@@ -22,7 +22,7 @@ export default function Ingles() {
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
         <title>Inglés online en vivo: hablar sin miedo | Instituto Lael</title>
-        <meta name="description" content="Clases de inglés online y en vivo por Google Meet, del A1 al B2. $14.990 al mes o $11.990 pagando el trimestre. Matrícula gratis. Haz el test de nivel gratis." />
+        <meta name="description" content="Clases de inglés online y en vivo por Google Meet, del A1 al B2. $19.990 al mes o $16.990 pagando el trimestre. Matrícula gratis. Haz el test de nivel gratis." />
       </Helmet>
 
       <PageHero eyebrow="Inglés · Hablar sin miedo" title="Habla inglés" accent="sin miedo." size="lg">

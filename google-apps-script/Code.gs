@@ -691,5 +691,5 @@ function json_(obj) {
 function probarCorreo() {
   const d = { quiere_beca: true, edad: '17', apoderado_nombre: 'Apoderado de prueba', apoderado_telefono: '+56 9 1111 1111', como_conocio: 'Instagram' };
   correoConfirmacion_('inscripcion', { nombre: 'Diego Prueba', correo: CONFIG.AVISOS_A, programa: 'Preu PAES 2027', espera: [], d });
-  avisarNuevo_('inscripcion', { nombre: 'Diego Prueba', correo: CONFIG.AVISOS_A, telefonoOriginal: '+56 9 6462 6568', programa: 'Preu PAES 2027', detalle: 'paes-m1, paes-cl · $24.000/mes', espera: [], d });
+  avisarNuevo_('inscripcion', { nombre: 'Diego Prueba', correo: CONFIG.AVISOS_A, telefonoOriginal: '+56 9 6462 6568', programa: 'Preu PAES 2027', detalle: 'paes-m1, paes-cl · $28.000/mes', espera: [], d });
 }

@@ -237,7 +237,7 @@ export default function LandingLSCh() {
             <motion.div {...fadeUp(0.1)} className="p-6 sm:p-10 rounded-[28px] bg-[#071D49] border border-[#D7E400]/60 shadow-lael flex flex-col">
               <p className={`${EYEBROW_DARK} mb-4`}>Plan Único</p>
               <div className="flex items-baseline gap-1.5 mb-2">
-                <span className="text-4xl sm:text-5xl font-display font-extrabold text-white">$19.990</span>
+                <span className="text-4xl sm:text-5xl font-display font-extrabold text-white">$24.990</span>
                 <span className="text-white/75 text-sm font-bold uppercase tracking-wider">/mes</span>
               </div>
               <p className="text-white/75 text-xs font-bold uppercase tracking-wider mb-6">Matrícula gratis</p>

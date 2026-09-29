@@ -3,9 +3,9 @@
 // No nombrar a la persona especialista en la web.
 import { Diagnostico, Mensaje, Ruta } from '../components/icons/LaelIcons';
 
-// Precio propuesto, confirmar con Diego: $15.000 por sesión de 60 minutos.
+// Precio 2027: $20.000 por sesión de 60 minutos.
 // Gratis para alumnos del Plan Completo del preu PAES.
-export const ORIENTACION_PRICE = '$15.000';
+export const ORIENTACION_PRICE = '$20.000';
 
 export const ORIENTACION = {
   id: 'orientacion',

@@ -100,7 +100,7 @@ export function ProgramBlock({ id, gray, badge, title, teacher, desc, levelsTitl
 
           <motion.div {...fadeUp(0.3)} className="flex flex-wrap items-center gap-x-4 gap-y-3 mb-8">
             <div>
-              <span className="text-[#071D49] font-display font-extrabold text-4xl sm:text-5xl tracking-tight">$14.990</span>
+              <span className="text-[#071D49] font-display font-extrabold text-4xl sm:text-5xl tracking-tight">$19.990</span>
               <span className="text-[#071D49]/70 text-sm font-bold uppercase tracking-wider ml-1">/mes</span>
             </div>
             <div className="flex flex-col items-start gap-1.5">
@@ -108,7 +108,7 @@ export function ProgramBlock({ id, gray, badge, title, teacher, desc, levelsTitl
                 Matrícula gratis
               </span>
               <span className="text-[11px] font-bold text-white uppercase tracking-wider px-2.5 py-1 rounded-full bg-[#071D49]">
-                ✨ Trimestral: $11.990/mes
+                ✨ Trimestral: $16.990/mes
               </span>
             </div>
           </motion.div>

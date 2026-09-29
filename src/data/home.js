@@ -19,7 +19,7 @@ export const ELECTIVAS = [
 ];
 
 export const WORLDS = [
-  { id: 'ingles', label: 'INGLÉS', title: 'Habla inglés', accent: 'sin miedo.', desc: 'Clases en vivo por Google Meet para perderle el miedo a hablar. Plan Trimestral: $11.990/mes.', bg: idiomasBg, cta: 'Ver programa', route: '/idiomas', active: true, price: '$14.990/mes' },
+  { id: 'ingles', label: 'INGLÉS', title: 'Habla inglés', accent: 'sin miedo.', desc: 'Clases en vivo por Google Meet para perderle el miedo a hablar. Plan Trimestral: $16.990/mes.', bg: idiomasBg, cta: 'Ver programa', route: '/idiomas', active: true, price: '$19.990/mes' },
   { id: 'lsch', label: 'LSCh', title: 'Las manos también', accent: 'tienen voz.', desc: 'Lengua de Señas Chilena con una persona de la comunidad Sorda. Estamos preparando el curso.', bg: lschBg, cta: 'Próximamente', route: '/lsch', active: false, price: null },
   { id: 'coreano', label: 'COREANO', title: 'Prepárate para', accent: 'el TOPIK.', desc: 'Clases en vivo con docente nativa. Estamos armando la planificación completa antes de abrir cupos.', bg: idiomasBg, cta: 'Próximamente', route: '/coreano', active: false, price: null },
   { id: 'adultos', label: 'ESCUELA DE SUEÑOS', title: 'Termina', accent: 'el colegio.', desc: 'Termina la básica o la media con los exámenes libres. Para mayores de 18, online y con clases de noche.', bg: adultosBg, cta: 'Ver programa', route: '/adultos', active: true, price: 'Gratis' },

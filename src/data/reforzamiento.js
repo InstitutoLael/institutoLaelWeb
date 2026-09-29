@@ -3,14 +3,14 @@
 // Son 1 a 1: un profe y un alumno. Precio por clase de 1 hora, o pack de 4.
 import { ClaseEnVivo, Grupo, Grabacion, Guia } from '../components/icons/LaelIcons';
 
-export const REFORZAMIENTO_PRICE = '$10.000';
-export const REFORZAMIENTO_PACK = '$36.000'; // 4 clases al mes
+export const REFORZAMIENTO_PRICE = '$14.000';
+export const REFORZAMIENTO_PACK = '$50.000'; // 4 clases al mes
 
 export const REFORZAMIENTO = {
   id: 'reforzamiento',
   seo: {
     title: 'Clases particulares online, 7° básico a 4° medio | Instituto Lael',
-    description: 'Clases particulares 1 a 1 en vivo de Matemática, Lenguaje, Ciencias, Historia, Inglés y ramos PAES, de 7° básico a 4° medio. Desde $9.000 la hora. También para homeschool.',
+    description: 'Clases particulares 1 a 1 en vivo de Matemática, Lenguaje, Ciencias, Historia, Inglés y ramos PAES, de 7° básico a 4° medio. Desde $12.500 la hora. También para homeschool.',
   },
   hero: {
     eyebrow: 'Clases particulares · 7° básico a 4° medio',
@@ -60,7 +60,7 @@ export const REFORZAMIENTO = {
     title: 'Pagas por clase',
     amount: REFORZAMIENTO_PRICE,
     period: 'la clase de 1 hora',
-    note: `O toma 4 clases al mes por ${REFORZAMIENTO_PACK} (te sale a $9.000 cada una). Si el costo es un problema, puedes postular a una beca parcial.`,
+    note: `O toma 4 clases al mes por ${REFORZAMIENTO_PACK} (te sale a $12.500 cada una). Si el costo es un problema, puedes postular a una beca parcial.`,
     features: [
       'Clase 1 a 1 en vivo de 1 hora',
       'Grabación de cada clase',

@@ -23,7 +23,7 @@ export const COLORES = {
 };
 
 export const PROGRAMAS_CATALOGO = [
-  { id: 'paes', name: 'Preu PAES', path: '/paes', tag: 'Desde $10.000/mes', inscripcion: '/inscripcion?programa=paes' },
+  { id: 'paes', name: 'Preu PAES', path: '/paes', tag: 'Desde $12.000/mes', inscripcion: '/inscripcion?programa=paes' },
   { id: 'reforzamiento', name: 'Clases particulares', path: '/reforzamiento', tag: '1 a 1 · 7° básico a 4° medio', inscripcion: '/inscripcion?programa=reforzamiento' },
   { id: 'verano', name: 'Verano Lael', path: '/verano', tag: 'Cursos de enero', inscripcion: '/inscripcion?programa=verano' },
   { id: 'talleres-ia', name: 'Talleres de IA', path: '/talleres-ia', tag: 'Para estudiantes', inscripcion: '/inscripcion?programa=talleres-ia' },

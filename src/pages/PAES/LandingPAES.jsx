@@ -93,7 +93,7 @@ export default function LandingPAES() {
           <div className="lg:col-span-7 flex flex-col text-left">
             <motion.div {...fadeUp(0)} className="mb-5 flex flex-wrap items-center gap-3">
               <span className="bg-[#D7E400] text-[#071D49] text-xs font-black uppercase tracking-wider px-4 py-2 rounded-full">
-                Desde $10.000/mes · Partimos en marzo 2027
+                Desde $12.000/mes · Partimos en marzo 2027
               </span>
               <span className="lg:hidden inline-flex items-center gap-2 text-white/75 text-xs font-semibold">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
@@ -112,7 +112,7 @@ export default function LandingPAES() {
             />
 
             <motion.p {...fadeUp(0.15)} className="text-white/75 text-base sm:text-lg max-w-lg mb-8 leading-relaxed">
-              Cursos de máximo 20, clases en vivo que después puedes volver a ver y un profe al que le puedes preguntar todo. Pagas solo los ramos que tomas, desde $10.000 al mes. Y si no te alcanza, postulas a una beca.
+              Cursos de máximo 20, clases en vivo que después puedes volver a ver y un profe al que le puedes preguntar todo. Pagas solo los ramos que tomas, desde $12.000 al mes. Y si no te alcanza, postulas a una beca.
             </motion.p>
 
             <motion.div {...fadeUp(0.2)} className="grid grid-cols-3 gap-3 sm:gap-4 border-y border-white/10 py-5 mb-8 max-w-xl">

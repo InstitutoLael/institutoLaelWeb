@@ -38,7 +38,7 @@ export const LANDING_STEPS = [
 ];
 
 export const LANDING_FAQS = [
-  { q: "¿Cuánto cuesta? ¿Hay costos ocultos?", a: "La matrícula es gratis. Cada ramo tiene su propio valor desde $10.000/mes, y si tomas 4 o más, nunca pagas sobre $34.990. El material no se cobra aparte. Pagando el semestre o el año por adelantado pagas menos, y si tienes un hermano en Lael, también. Si aun así no te alcanza, puedes postular a una beca parcial: la revisamos caso a caso." },
+  { q: "¿Cuánto cuesta? ¿Hay costos ocultos?", a: "La matrícula es gratis. Cada ramo tiene su propio valor desde $12.000/mes, y si tomas 4 o más, nunca pagas sobre $41.990. El material no se cobra aparte. Pagando el semestre o el año por adelantado pagas menos, y si tienes un hermano en Lael, también. Si aun así no te alcanza, puedes postular a una beca parcial: la revisamos caso a caso." },
   { q: "¿Qué necesito para participar en las clases?", a: "Un computador, tablet o celular con internet, y una cuenta de Google para entrar a Google Meet. Nada más." },
   { q: "¿Cuántas clases tengo a la semana?", a: "Dos clases en vivo de una hora por cada ramo, desde las 18:00. Así alcanzamos a ver todo el temario antes de la prueba y dejamos las últimas semanas para un intensivo aparte." },
   { q: "¿Qué pasa si me pierdo una clase?", a: "Todas las clases se graban y cada semana compartimos las grabaciones con quienes tienen su mensualidad al día. Y si una clase no se puede hacer, la reagendamos: estás pagando por ella." },
@@ -72,9 +72,9 @@ export const clp = (n) =>
 // asignatura o toma el Plan Completo. Si el pack hace que el alumno pague
 // menos que la suma de sus ramos, la diferencia la absorbe el instituto -
 // nunca el profe.
-export const OBLIGATORIA_PRICE = 12000;
-export const ELECTIVA_PRICE = 10000;
-export const PACK_PRICE = 34990;
+export const OBLIGATORIA_PRICE = 14000;
+export const ELECTIVA_PRICE = 12000;
+export const PACK_PRICE = 41990;
 export const PACK_MIN_SUBJECTS = 4;
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -186,8 +186,8 @@ export const INTENSIVO = {
   cierreInscripcion: '2026-11-02',
   fechas: 'Del 13 de octubre al 27 de noviembre',
   semanas: 7,
-  precioRamo: 19990,
-  precioPack: 44990,
+  precioRamo: 24990,
+  precioPack: 59990,
   packDesde: 3,
   incluye: [
     '2 clases en vivo a la semana por prueba, enfocadas en lo que más se repite',

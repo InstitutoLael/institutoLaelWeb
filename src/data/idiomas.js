@@ -26,8 +26,8 @@ export const LANDING_PLANS = [
   {
     name: 'Inglés en Vivo',
     flag: '🇺🇸',
-    priceMonthly: '$14.990',
-    priceQuarterly: '$11.990',
+    priceMonthly: '$19.990',
+    priceQuarterly: '$16.990',
     enrollment: 'gratis',
     features: ['Clases en vivo con mucha conversación', 'Preparación para IELTS/TOEFL', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'],
     link: "/inscripcion?programa=ingles",
@@ -36,8 +36,8 @@ export const LANDING_PLANS = [
   {
     name: 'Español para Expats',
     flag: '🇨🇱',
-    priceMonthly: '$14.990',
-    priceQuarterly: '$11.990',
+    priceMonthly: '$19.990',
+    priceQuarterly: '$16.990',
     enrollment: 'gratis',
     features: ['Modismos y chilenismos', 'Práctica de entrevistas de trabajo', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'],
     link: "/inscripcion?programa=ingles",
@@ -55,8 +55,8 @@ export const clp = (n) =>
     maximumFractionDigits: 0,
   });
 
-export const PRICE_MONTHLY = 14990;
-export const PRICE_QUARTERLY = 11990; // precio por mes al pagar trimestral
+export const PRICE_MONTHLY = 19990;
+export const PRICE_QUARTERLY = 16990; // precio por mes al pagar trimestral
 
 /* ──────────────────────────────────────────────────────────────────────────
    2. PROGRAMAS DE INMERSIÓN

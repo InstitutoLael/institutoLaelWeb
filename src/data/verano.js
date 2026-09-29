@@ -14,8 +14,8 @@ export const VERANO_COURSES = [
     when: 'Del 4 al 29 de enero',
     desc: 'Llega a marzo con la base lista. Repasamos lo más importante de M1 y Competencia Lectora para que el año del preu no parta cuesta arriba.',
     details: ['M1 y Competencia Lectora', '2 clases de 1 hora a la semana por ramo', 'Por Google Meet, con grabaciones', 'Si sigues en el preu, tu primer mes de marzo sale a mitad de precio'],
-    price: '$15.000 por ramo',
-    priceNote: 'o $25.000 los dos ramos, por todo el curso',
+    price: '$18.000 por ramo',
+    priceNote: 'o $30.000 los dos ramos, por todo el curso',
     featured: true,
   },
   {
@@ -35,7 +35,7 @@ export const VERANO_COURSES = [
     when: '4 semanas en enero',
     desc: 'Un mes para soltarte a conversar en inglés con Monse. Ideal si entiendes harto pero te cuesta hablar.',
     details: ['2 clases a la semana', 'Conversación desde el primer día', 'Por Google Meet'],
-    price: '$19.990',
+    price: '$24.990',
     priceNote: 'por todo el curso',
   },
   {

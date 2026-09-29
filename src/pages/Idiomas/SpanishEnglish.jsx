@@ -35,7 +35,7 @@ export default function SpanishEnglish() {
     <div lang="en" className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
         <title>Spanish classes in Chile, online and live | Instituto Lael</title>
-        <meta name="description" content="Online Spanish classes for foreigners living in Chile or working with Chilean teams. Live on Google Meet, Chilean slang included. CLP $14,990 per month, no enrollment fee." />
+        <meta name="description" content="Online Spanish classes for foreigners living in Chile or working with Chilean teams. Live on Google Meet, Chilean slang included. CLP $19,990 per month, no enrollment fee." />
         <link rel="alternate" hrefLang="es" href="https://www.institutolael.cl/espanol" />
         <link rel="alternate" hrefLang="en" href="https://www.institutolael.cl/en/spanish" />
       </Helmet>
@@ -85,8 +85,8 @@ export default function SpanishEnglish() {
       <section className={`${SECTION} relative bg-[#071D49] text-white overflow-hidden`}>
         <BrandArcs />
         <div className="relative max-w-3xl mx-auto text-center">
-          <SectionTitle eyebrow="No enrollment fee" title="CLP $14,990" accent="a month." dark />
-          <p className="text-white/75 mt-3 mb-8">Or CLP $11,990 a month if you pay three months at a time.</p>
+          <SectionTitle eyebrow="No enrollment fee" title="CLP $19,990" accent="a month." dark />
+          <p className="text-white/75 mt-3 mb-8">Or CLP $16,990 a month if you pay three months at a time.</p>
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-left max-w-2xl mx-auto mb-10">
             {INCLUDES.map((t) => <li key={t} className="flex gap-2 text-white/85 text-sm"><Check size={16} className="text-programa flex-shrink-0 mt-0.5" aria-hidden="true" /> {t}</li>)}
           </ul>

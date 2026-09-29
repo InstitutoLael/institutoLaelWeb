@@ -23,12 +23,12 @@ const REGLAS = [
 ];
 
 const DESCUENTOS = [
-  { t: 'Plan Completo PAES', d: 'Con 4 ramos o más, nunca pagas sobre $34.990 al mes, y la orientación vocacional va incluida.', to: '/paes' },
+  { t: 'Plan Completo PAES', d: 'Con 4 ramos o más, nunca pagas sobre $41.990 al mes, y la orientación vocacional va incluida.', to: '/paes' },
   { t: 'Pago por adelantado', d: `Pagando el semestre ahorras un ${DESCUENTO_SEMESTRE}%. Pagando el año, un ${DESCUENTO_ANIO}%.`, to: '/paes#planes' },
   { t: 'Hermanos', d: `Desde el segundo hermano en Lael, cada uno paga un ${DESCUENTO_HERMANOS}% menos.`, to: '/paes#planes' },
   { t: 'Vienes del verano', d: 'Si hiciste el Arranque PAES en enero, tu primer mes de marzo sale a mitad de precio.', to: '/verano' },
   { t: 'Trae un amigo', d: 'Por cada amigo que se inscribe y paga, tu siguiente mes baja un 20%.', to: '/trae-un-amigo' },
-  { t: 'Inglés trimestral', d: 'Pagando el trimestre, el mes te sale $11.990 en vez de $14.990.', to: '/idiomas' },
+  { t: 'Inglés trimestral', d: 'Pagando el trimestre, el mes te sale $16.990 en vez de $19.990.', to: '/idiomas' },
   { t: 'Becas parciales', d: 'Si el costo es un problema, postula. Lo revisamos caso a caso.', to: '/becas' },
   { t: 'Escuela de Sueños', d: 'Terminar el colegio con nosotros es gratis, para mayores de 18.', to: '/adultos' },
 ];

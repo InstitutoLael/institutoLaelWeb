@@ -301,7 +301,7 @@ export default function Calculadora() {
         <div className="max-w-3xl mx-auto rounded-[32px] p-8 sm:p-10 text-center text-white" style={{ backgroundColor: BLUE }}>
           <h2 className="font-display text-2xl sm:text-3xl font-extrabold uppercase tracking-tight mb-4">¿Te faltan puntos?</h2>
           <p className="text-white/75 mb-8 max-w-xl mx-auto">
-            En el preu de Lael tomas solo los ramos que necesitas subir, desde $10.000 al mes, con matrícula gratis y becas.
+            En el preu de Lael tomas solo los ramos que necesitas subir, desde $12.000 al mes, con matrícula gratis y becas.
           </p>
           <Link to="/paes" className="min-h-[48px] w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all">
             Ver el preu PAES <ArrowRight size={16} />

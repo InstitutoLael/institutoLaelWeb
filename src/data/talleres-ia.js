@@ -2,8 +2,8 @@
 // === Talleres de IA para estudiantes y familias homeschool · página /talleres-ia ===
 import { IA, Calendario, Crear, Escudo } from '../components/icons/LaelIcons';
 
-// Precio propuesto, confirmar con Diego: $19.990 por taller de 4 clases.
-export const TALLERES_IA_PRICE = '$19.990';
+// Precio 2027: $24.990 por taller de 4 clases.
+export const TALLERES_IA_PRICE = '$24.990';
 
 export const TALLERES_IA = {
   id: 'talleres-ia',

@@ -47,7 +47,7 @@ const plan = {
   name: 'Español para Extranjeros',
   flag: '🇨🇱',
   enrollment: 'gratis',
-  priceMonthly: '$14.990',
+  priceMonthly: '$19.990',
   features: ['Modismos y chilenismos', 'Práctica de entrevistas de trabajo', 'Material de estudio incluido', 'Dudas por WhatsApp en horario hábil'],
   link: '/inscripcion?programa=espanol',
 };
@@ -104,7 +104,7 @@ export default function LandingEspanol() {
           <motion.p {...fadeUp(0)} className={`${EYEBROW_DARK} mb-4`}>Precio</motion.p>
           <motion.h2 {...fadeUp(0.1)} className={`${H2} text-white mb-10 sm:mb-14`}>Cuánto <span className="accent-serif text-programa">cuesta</span></motion.h2>
           <div className="max-w-md mx-auto">
-            <PriceCard plan={plan} note="✨ Trimestral: $11.990/mes (ahorra pagando 3 meses juntos)" />
+            <PriceCard plan={plan} note="✨ Trimestral: $16.990/mes (ahorra pagando 3 meses juntos)" />
           </div>
         </div>
       </section>

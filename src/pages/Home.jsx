@@ -79,7 +79,7 @@ export default function Home() {
     <div className="overflow-x-clip">
       <Helmet>
         <title>Instituto Lael - Preuniversitario PAES 2027 | Santiago, Chile</title>
-        <meta name="description" content="Tu sueño no tiene fecha de vencimiento. Preuniversitario PAES online desde $10.000/mes por ramo, inglés y nivelación de estudios gratis para adultos. Matrícula gratis y becas. Instituto Lael, Chile." />
+        <meta name="description" content="Tu sueño no tiene fecha de vencimiento. Preuniversitario PAES online desde $12.000/mes por ramo, inglés y nivelación de estudios gratis para adultos. Matrícula gratis y becas. Instituto Lael, Chile." />
       </Helmet>
 
       {/* ══ 1. PORTADA ══════════════════════════════════════════════════ */}
@@ -246,7 +246,7 @@ export default function Home() {
           </div>
           <PlanesPaes />
           <p className="text-center text-sm text-[#071D49]/70 mt-8 max-w-2xl mx-auto">
-            ¿Otro programa? Inglés desde $11.990 al mes y la Escuela de Sueños es gratis. Si el costo es un problema, <Link to="/becas" className="underline font-semibold">postula a una beca</Link>.
+            ¿Otro programa? Inglés desde $16.990 al mes y la Escuela de Sueños es gratis. Si el costo es un problema, <Link to="/becas" className="underline font-semibold">postula a una beca</Link>.
           </p>
         </div>
       </section>

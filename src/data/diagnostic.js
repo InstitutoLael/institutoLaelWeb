@@ -112,7 +112,7 @@ export const getDiagnosticResult = (answers) => {
     profile.stats = [
       { label: "Clases", value: "En vivo" },
       { label: "Ensayos PAES", value: "Mensuales" },
-      { label: "Costo Mensual", value: "Desde $10.000" }
+      { label: "Costo Mensual", value: "Desde $12.000" }
     ];
 
     return profile;

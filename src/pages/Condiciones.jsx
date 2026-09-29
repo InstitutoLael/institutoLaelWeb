@@ -22,6 +22,8 @@ const SECCIONES = [
     p: [
       'La mensualidad se paga por adelantado, antes de que termine cada mes, para las clases del mes siguiente. Se paga el programa y no cada clase: el valor es el mismo aunque un mes faltes a alguna.',
       'Si te atrasas, el acceso a clases, material y grabaciones se pausa hasta que te pongas al día.',
+      'Si pagaste el semestre o el año por adelantado y te retiras, te devolvemos los meses completos que no alcanzaste a usar, al mismo valor con descuento que pagaste por ellos.',
+      'Los descuentos por pago adelantado, hermanos y verano no se suman entre sí: se aplica el que más te convenga. "Trae un amigo" y las becas van aparte.',
     ],
     link: { to: '/como-pagar', label: 'Cómo pagar paso a paso' },
   },

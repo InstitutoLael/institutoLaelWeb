@@ -44,7 +44,7 @@ const CONTEXTOS = [
     { id: 'verano', label: 'Cursos de verano', icon: 'paes', msg: 'Hola! Quiero información de los cursos de Verano Lael.' },
   ] },
   { match: ['/reforzamiento'], opciones: [
-    { id: 'reforzamiento', label: 'Reforzamiento escolar', icon: 'paes', msg: 'Hola! Me interesa el reforzamiento escolar.' },
+    { id: 'reforzamiento', label: 'Clases particulares', icon: 'paes', msg: 'Hola! Me interesan las clases particulares.' },
   ] },
   { match: ['/orientacion'], opciones: [
     { id: 'orientacion', label: 'Orientación vocacional', icon: 'ayuda', msg: 'Hola! Quiero agendar una orientación vocacional.' },

@@ -13,7 +13,7 @@ export const VERANO_COURSES = [
     name: 'Arranque PAES',
     when: 'Del 4 al 29 de enero',
     desc: 'Llega a marzo con la base lista. Repasamos lo más importante de M1 y Competencia Lectora para que el año del preu no parta cuesta arriba.',
-    details: ['M1 y Competencia Lectora', '2 clases de 1 hora a la semana por ramo', 'Por Google Meet, con grabaciones'],
+    details: ['M1 y Competencia Lectora', '2 clases de 1 hora a la semana por ramo', 'Por Google Meet, con grabaciones', 'Si sigues en el preu, tu primer mes de marzo sale a mitad de precio'],
     price: '$15.000 por ramo',
     priceNote: 'o $25.000 los dos ramos, por todo el curso',
     featured: true,

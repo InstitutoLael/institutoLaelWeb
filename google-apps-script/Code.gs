@@ -90,24 +90,31 @@ function instalar() {
   asegurarHoja_(ss, HOJAS.ENCUESTAS, COLUMNAS_ENCUESTA);
 
   const cursos = asegurarHoja_(ss, HOJAS.CURSOS, ['Código del curso', 'Nombre', 'Cupo máximo', 'Inscritos (automático)', 'Mostrar en el sitio (SI/NO)']);
-  if (cursos.getLastRow() === 1) {
-    [
-      ['paes-m1', 'PAES · Matemática M1', 20],
-      ['paes-cl', 'PAES · Competencia Lectora', 20],
-      ['paes-m2', 'PAES · Matemática M2', 20],
-      ['paes-bio', 'PAES · Biología', 20],
-      ['paes-qui', 'PAES · Química', 20],
-      ['paes-fis', 'PAES · Física', 20],
-      ['paes-his', 'PAES · Historia', 20],
-      ['ingles', 'Inglés', 20],
-      ['adultos', 'Escuela de Sueños', 30],
-    ].forEach((e, i) => {
-      const fila = i + 2;
-      cursos.getRange(fila, 1, 1, 3).setValues([e]);
-      cursos.getRange(fila, 4).setFormula(formulaInscritos_(fila));
-      cursos.getRange(fila, 5).setValue('SI');
-    });
-  }
+  // Agrega los cursos que falten (no toca los que ya están ni sus cupos)
+  const yaEstan = cursos.getLastRow() > 1 ? cursos.getRange(2, 1, cursos.getLastRow() - 1, 1).getValues().map((r) => String(r[0]).trim()) : [];
+  [
+    ['paes-m1', 'PAES · Matemática M1', 20],
+    ['paes-cl', 'PAES · Competencia Lectora', 20],
+    ['paes-m2', 'PAES · Matemática M2', 20],
+    ['paes-bio', 'PAES · Biología', 20],
+    ['paes-qui', 'PAES · Química', 20],
+    ['paes-fis', 'PAES · Física', 20],
+    ['paes-his', 'PAES · Historia', 20],
+    ['ingles', 'Inglés', 20],
+    ['adultos', 'Escuela de Sueños', 30],
+    ['int-m1', 'Intensivo · Matemática M1', 20],
+    ['int-cl', 'Intensivo · Competencia Lectora', 20],
+    ['int-m2', 'Intensivo · Matemática M2', 20],
+    ['int-bio', 'Intensivo · Biología', 20],
+    ['int-qui', 'Intensivo · Química', 20],
+    ['int-fis', 'Intensivo · Física', 20],
+    ['int-his', 'Intensivo · Historia', 20],
+  ].filter((e) => yaEstan.indexOf(e[0]) < 0).forEach((e) => {
+    const fila = cursos.getLastRow() + 1;
+    cursos.getRange(fila, 1, 1, 3).setValues([e]);
+    cursos.getRange(fila, 4).setFormula(formulaInscritos_(fila));
+    cursos.getRange(fila, 5).setValue('SI');
+  });
 
   const conf = asegurarHoja_(ss, HOJAS.CONFIGURACION, ['Qué es', 'Valor (puedes editarlo)']);
   const claves = conf.getLastRow() > 1 ? conf.getRange(2, 1, conf.getLastRow() - 1, 1).getValues().map((r) => r[0]) : [];

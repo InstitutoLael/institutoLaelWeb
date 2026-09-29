@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import WordReveal from '../../components/ui/WordReveal';
 import NoticiasDestacadas from '../../components/NoticiasDestacadas';
-import PlanesPaes from '../../components/PlanesPaes';
+import PlanesPaes, { DescuentosPaes } from '../../components/PlanesPaes';
+import IntensivoPaes from '../../components/IntensivoPaes';
 import { PaesEsteAnio } from '../../components/PaesCountdown';
 import BrandArcs from '../../components/ui/BrandArcs';
 import {
@@ -12,10 +13,10 @@ import {
   MessageCircle,
   ArrowRight,
 } from 'lucide-react';
-import { Amigo, Mensaje } from '../../components/icons/LaelIcons';
+import { Mensaje } from '../../components/icons/LaelIcons';
 import inoLogo from '../../assets/img/Partners/INO.png';
 import studentImg from '../../assets/img/Home/hero_student_lael_1780734180709.webp';
-import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS, PAES_PLAN_INCLUDES, PAES_FORM_URL, BECAS_FORM_URL, REFERRAL } from '../../data/paes';
+import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS, PAES_PLAN_INCLUDES, PAES_FORM_URL, BECAS_FORM_URL, intensivoAbierto } from '../../data/paes';
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
@@ -173,7 +174,7 @@ export default function LandingPAES() {
         </div>
       </section>
 
-      <PaesEsteAnio />
+      {intensivoAbierto() ? <IntensivoPaes /> : <PaesEsteAnio />}
 
       {/* ── 2. ¿QUÉ INCLUYE EL PROGRAMA? ─────────────────────────────── */}
       <section id="estructura" className={`${SECTION} bg-white`}>
@@ -229,17 +230,12 @@ export default function LandingPAES() {
             , la revisamos caso a caso. Parte de lo que pagan los alumnos financia esas becas.
           </motion.p>
 
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-4xl mx-auto">
-            <motion.div {...fadeUp(0.1)} className="rounded-[24px] border-2 border-dashed border-[#071D49]/15 bg-white p-5 flex items-start gap-4">
-              <div className="w-11 h-11 rounded-full bg-[#D7E400] text-[#071D49] flex items-center justify-center flex-shrink-0">
-                <Amigo size={22} accent="#FFFFFF" />
-              </div>
-              <div>
-                <p className="text-[#071D49] font-display font-extrabold uppercase tracking-tight">{REFERRAL.title}</p>
-                <p className="text-[#071D49]/70 text-sm leading-relaxed mt-1">{REFERRAL.desc}</p>
-              </div>
-            </motion.div>
+          <div className="mt-12 max-w-4xl mx-auto">
+            <h3 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight text-center mb-6">Formas de <span className="accent-serif">pagar menos</span></h3>
+            <DescuentosPaes />
+          </div>
 
+          <div className="mt-4 max-w-4xl mx-auto">
             <motion.div {...fadeUp(0.15)} className="rounded-[24px] border border-[#071D49]/5 bg-white p-5 flex items-start gap-4">
               <img src={inoLogo} alt="Instituto Nacional de Ortodoncia (INO)" loading="lazy" className="h-10 w-auto flex-shrink-0 mt-0.5" />
               <div>

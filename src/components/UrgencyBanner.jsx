@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
+import { intensivoAbierto, INTENSIVO, clp } from '../data/paes';
 
 // Aviso superior. Solo información verdadera: nada de cupos o cuentas
 // regresivas inventadas.
@@ -34,9 +35,18 @@ export default function UrgencyBanner() {
           <div className="py-2 px-6 flex items-center justify-center gap-4 text-center relative pr-12">
             <span className="hidden sm:block w-1.5 h-1.5 rounded-full bg-[#071D49] animate-pulse [animation-iteration-count:2] flex-shrink-0" aria-hidden="true" />
             <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.06em] leading-tight" style={{ color: '#071D49' }}>
-              Verano Lael: cursos en enero, algunos gratis.{' '}
-              <Link to="/verano" onClick={closeBanner} className="underline underline-offset-2">Ver cursos</Link>
-              <span className="hidden sm:inline opacity-80"> · En marzo partimos de lleno</span>
+              {intensivoAbierto() ? (
+                <>
+                  {INTENSIVO.nombre}: {INTENSIVO.semanas} semanas antes de la prueba, desde {clp(INTENSIVO.precioRamo)}.{' '}
+                  <Link to="/paes#intensivo" onClick={closeBanner} className="underline underline-offset-2">Ver intensivo</Link>
+                </>
+              ) : (
+                <>
+                  Verano Lael: cursos en enero, algunos gratis.{' '}
+                  <Link to="/verano" onClick={closeBanner} className="underline underline-offset-2">Ver cursos</Link>
+                  <span className="hidden sm:inline opacity-80"> · En marzo partimos de lleno</span>
+                </>
+              )}
             </p>
             <button
               type="button"

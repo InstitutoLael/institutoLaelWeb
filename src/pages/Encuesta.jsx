@@ -8,7 +8,7 @@ import { sendForm, backendReady } from '../lib/backend';
 
 // Encuesta de mitad de semestre. La planilla la manda sola por correo a los
 // alumnos (ver tareasDiarias() en Code.gs). Se puede responder sin nombre.
-const PROGRAMAS = ['Preu PAES', 'Inglés', 'Español para extranjeros', 'Escuela de Sueños', 'Reforzamiento escolar', 'Otro'];
+const PROGRAMAS = ['Preu PAES', 'Inglés', 'Español para extranjeros', 'Escuela de Sueños', 'Clases particulares', 'Otro'];
 const NOTAS = [1, 2, 3, 4, 5, 6, 7];
 
 export default function Encuesta() {

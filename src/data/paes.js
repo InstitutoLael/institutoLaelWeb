@@ -38,7 +38,7 @@ export const LANDING_STEPS = [
 ];
 
 export const LANDING_FAQS = [
-  { q: "¿Cuánto cuesta? ¿Hay costos ocultos?", a: "La matrícula es gratis. Cada ramo tiene su propio valor desde $10.000/mes, y si tomas 4 o más, nunca pagas sobre $34.990. El material no se cobra aparte. Si aun así no te alcanza, puedes postular a una beca parcial: la revisamos caso a caso." },
+  { q: "¿Cuánto cuesta? ¿Hay costos ocultos?", a: "La matrícula es gratis. Cada ramo tiene su propio valor desde $10.000/mes, y si tomas 4 o más, nunca pagas sobre $34.990. El material no se cobra aparte. Pagando el semestre o el año por adelantado pagas menos, y si tienes un hermano en Lael, también. Si aun así no te alcanza, puedes postular a una beca parcial: la revisamos caso a caso." },
   { q: "¿Qué necesito para participar en las clases?", a: "Un computador, tablet o celular con internet, y una cuenta de Google para entrar a Google Meet. Nada más." },
   { q: "¿Cuántas clases tengo a la semana?", a: "Dos clases en vivo de una hora por cada ramo, desde las 18:00. Así alcanzamos a ver todo el temario antes de la prueba y dejamos las últimas semanas para un intensivo aparte." },
   { q: "¿Qué pasa si me pierdo una clase?", a: "Todas las clases se graban y cada semana compartimos las grabaciones con quienes tienen su mensualidad al día. Y si una clase no se puede hacer, la reagendamos: estás pagando por ella." },
@@ -127,6 +127,7 @@ export const PAES_PLANS = [
       `Desde ${PACK_MIN_SUBJECTS} ramos pagas ${clp(PACK_PRICE)}, aunque los tomes todos`,
       `3 ramos ya cuestan ${clp(TRES_RAMOS_TOTAL)}: el cuarto sale casi gratis`,
       "Clases, grabaciones y ensayos de todos tus ramos",
+      "Orientación vocacional 1 a 1 incluida",
     ],
     featured: true,
   },
@@ -141,5 +142,60 @@ export const REFERRAL = {
   title: "Trae un amigo",
   desc: `Por cada amigo que se inscriba y pague su primer mes, tu siguiente mensualidad baja un ${REFERRAL_DISCOUNT}%. Con ${REFERRAL_MAX_FRIENDS} amigos, ese mes no pagas.`,
 };
+
+/* ──────────────────────────────────────────────────────────────────────────
+   5. FORMAS DE PAGAR MENOS (preu regular, marzo a noviembre)
+   Igual que el Plan Completo, los descuentos los absorbe el instituto.
+   ────────────────────────────────────────────────────────────────────────── */
+export const MESES_PREU = 9; // marzo a noviembre
+export const DESCUENTO_SEMESTRE = 10; // %
+export const DESCUENTO_ANIO = 15; // %
+export const DESCUENTO_HERMANOS = 20; // % desde el segundo hermano
+export const conDescuento = (monto, pct) => Math.floor((monto * (100 - pct)) / 100 / 10) * 10;
+
+export const DESCUENTOS = [
+  {
+    id: 'adelantado',
+    title: 'Paga por adelantado',
+    desc: `Pagando el semestre completo ahorras un ${DESCUENTO_SEMESTRE}%, y pagando el año, un ${DESCUENTO_ANIO}%. Con el Plan Completo, el año queda en ${clp(conDescuento(PACK_PRICE * MESES_PREU, DESCUENTO_ANIO))} en vez de ${clp(PACK_PRICE * MESES_PREU)}.`,
+  },
+  {
+    id: 'hermanos',
+    title: 'Hermanos',
+    desc: `Si dos o más hermanos estudian en Lael, desde el segundo cada uno paga un ${DESCUENTO_HERMANOS}% menos en su mensualidad.`,
+  },
+  {
+    id: 'verano',
+    title: 'Vienes del verano',
+    desc: 'Si hiciste el Arranque PAES en enero, tu primer mes de marzo sale a mitad de precio.',
+  },
+  { id: 'amigo', title: REFERRAL.title, desc: REFERRAL.desc },
+];
+
+export const DESCUENTOS_NOTA = 'Pago adelantado, hermanos y verano no se suman entre sí: te aplicamos el que más te convenga. "Trae un amigo" y las becas van aparte.';
+
+/* ──────────────────────────────────────────────────────────────────────────
+   6. INTENSIVO PAES: las últimas semanas antes de la prueba
+   Se muestra solo mientras está abierta la inscripción (cierreInscripcion).
+   Para una edición nueva, cambia las fechas y listo.
+   ────────────────────────────────────────────────────────────────────────── */
+export const INTENSIVO = {
+  nombre: 'Intensivo PAES',
+  inicio: '2026-10-13',
+  fin: '2026-11-27',
+  cierreInscripcion: '2026-11-02',
+  fechas: 'Del 13 de octubre al 27 de noviembre',
+  semanas: 7,
+  precioRamo: 19990,
+  precioPack: 44990,
+  packDesde: 3,
+  incluye: [
+    '2 clases en vivo a la semana por prueba, enfocadas en lo que más se repite',
+    '3 ensayos completos con el tiempo de la PAES, corregidos',
+    'Grabaciones de todas las clases',
+    'Puedes pagarlo en 2 cuotas, en octubre y noviembre',
+  ],
+};
+export const intensivoAbierto = (hoy = new Date()) => hoy < new Date(`${INTENSIVO.cierreInscripcion}T23:59:59-03:00`);
 
 export const PAES_PLAN_INCLUDES = "Máximo 20 alumnos por curso. Todos los planes: matrícula gratis, clases en vivo por Google Meet desde las 18:00, grabaciones para repasar, guías descargables y ensayo mensual.";

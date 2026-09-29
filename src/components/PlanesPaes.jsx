@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
-import { PAES_PLANS, PAES_FORM_URL } from '../data/paes';
+import { PAES_PLANS, PAES_FORM_URL, DESCUENTOS, DESCUENTOS_NOTA } from '../data/paes';
 
 // Planes del preu PAES. En computador se ven los tres lado a lado; en
 // celular, con pestañas arriba, para comparar sin bajar tarjeta por tarjeta.
@@ -83,5 +83,25 @@ export default function PlanesPaes() {
         ))}
       </div>
     </>
+  );
+}
+
+// Formas de pagar menos. Va debajo de los planes en /paes y en /como-pagar.
+export function DescuentosPaes({ className = '' }) {
+  return (
+    <div className={className}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        {DESCUENTOS.map((d, i) => (
+          <div key={d.id} className="rounded-[24px] bg-white border border-[#071D49]/5 shadow-card p-5 sm:p-6 flex gap-4">
+            <span className="w-9 h-9 rounded-full bg-[#D7E400] text-[#071D49] font-display font-extrabold text-sm flex items-center justify-center flex-shrink-0" aria-hidden="true">{i + 1}</span>
+            <div>
+              <h3 className="font-display font-extrabold tracking-tight text-[#071D49] mb-1">{d.title}</h3>
+              <p className="text-sm text-[#071D49]/70 leading-relaxed">{d.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="text-xs text-[#071D49]/60 mt-4 text-center">{DESCUENTOS_NOTA}</p>
+    </div>
   );
 }

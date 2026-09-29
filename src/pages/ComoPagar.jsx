@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Mail, CalendarClock, Landmark, Receipt, BadgePercent } from 'lucide-react';
 import PageHero, { SectionTitle, fadeUp, SECTION, BTN_YELLOW } from '../components/ui/PageHero';
 import { whatsappUrl } from '../lib/backend';
+import { DESCUENTO_SEMESTRE, DESCUENTO_ANIO, DESCUENTO_HERMANOS, DESCUENTOS_NOTA } from '../data/paes';
 
 // Cómo se paga en Lael. El número de cuenta NO se publica aquí: llega por
 // correo a quien se inscribe (así nadie lo copia para estafar).
@@ -15,17 +16,21 @@ const PASOS = [
 ];
 
 const REGLAS = [
-  { t: 'Se paga por adelantado', d: 'La mensualidad se paga antes de que termine cada mes, para las clases del mes siguiente.' },
+  { t: 'Se paga por adelantado', d: `La mensualidad se paga antes de que termine cada mes, para las clases del mes siguiente. Si prefieres, pagas el semestre (${DESCUENTO_SEMESTRE}% menos) o el año (${DESCUENTO_ANIO}% menos) de una vez.` },
   { t: 'Pagas el programa, no la clase', d: 'El valor es el mismo si un mes vas a todas las clases o faltas a alguna. Para eso están las grabaciones.' },
   { t: 'Si te atrasas', d: 'El acceso a clases y grabaciones se pausa hasta que te pongas al día. Si estás complicado, escríbenos antes: casi siempre hay una solución.' },
   { t: 'Si una clase no se hace', d: 'La reprogramamos. Estás pagando por ella.' },
 ];
 
 const DESCUENTOS = [
-  { t: 'Plan Completo PAES', d: 'Con 4 ramos o más, nunca pagas sobre $34.990 al mes.', to: '/paes' },
+  { t: 'Plan Completo PAES', d: 'Con 4 ramos o más, nunca pagas sobre $34.990 al mes, y la orientación vocacional va incluida.', to: '/paes' },
+  { t: 'Pago por adelantado', d: `Pagando el semestre ahorras un ${DESCUENTO_SEMESTRE}%. Pagando el año, un ${DESCUENTO_ANIO}%.`, to: '/paes#planes' },
+  { t: 'Hermanos', d: `Desde el segundo hermano en Lael, cada uno paga un ${DESCUENTO_HERMANOS}% menos.`, to: '/paes#planes' },
+  { t: 'Vienes del verano', d: 'Si hiciste el Arranque PAES en enero, tu primer mes de marzo sale a mitad de precio.', to: '/verano' },
   { t: 'Trae un amigo', d: 'Por cada amigo que se inscribe y paga, tu siguiente mes baja un 20%.', to: '/trae-un-amigo' },
   { t: 'Inglés trimestral', d: 'Pagando el trimestre, el mes te sale $11.990 en vez de $14.990.', to: '/idiomas' },
   { t: 'Becas parciales', d: 'Si el costo es un problema, postula. Lo revisamos caso a caso.', to: '/becas' },
+  { t: 'Escuela de Sueños', d: 'Terminar el colegio con nosotros es gratis, para mayores de 18.', to: '/adultos' },
 ];
 
 export default function ComoPagar() {
@@ -93,6 +98,7 @@ export default function ComoPagar() {
               </Link>
             ))}
           </div>
+          <p className="mt-5 text-sm text-[#071D49]/70">{DESCUENTOS_NOTA}</p>
           <div className="mt-10 flex flex-col sm:flex-row gap-3 items-center justify-center">
             <a href="/inscripcion" className={BTN_YELLOW}>Inscribirme <ArrowRight size={16} /></a>
             <a href={whatsappUrl('Hola, tengo una duda sobre los pagos en Lael')} target="_blank" rel="noopener noreferrer" className="min-h-[44px] inline-flex items-center font-semibold underline">Tengo una duda sobre pagos</a>

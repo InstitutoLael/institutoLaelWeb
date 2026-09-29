@@ -5,11 +5,15 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Check, ArrowRight, Loader2, ShieldCheck, MessageCircle } from 'lucide-react';
 import {
   PROGRAMAS, PAES_RAMOS, NIVELES_ADULTOS, ASIGNATURAS_REFORZAMIENTO, PRUEBA_OPCIONES, VERANO_OPCIONES,
-  COMO_CONOCIO, programaPorId, precioPaes, clp,
+  COMO_CONOCIO, programaPorId, precioPaes, clp, INTENSIVO_RAMOS, precioIntensivo, FORMAS_PAGO,
 } from '../data/inscripcion';
 import { sendForm, backendReady, whatsappUrl } from '../lib/backend';
 import useCupos from '../lib/useCupos';
 import { trackEvent } from '../utils/analytics';
+import { MESES_PREU, conDescuento } from '../data/paes';
+
+// El preu y el intensivo usan los mismos ramos con distinto código de curso
+const prefijo = (id) => (id === 'intensivo' ? 'int-' : 'paes-');
 
 const BLUE = '#071D49';
 const YELLOW = '#D7E400';
@@ -62,7 +66,8 @@ export default function Inscripcion() {
   const started = useRef(Date.now());
 
   const [programaId, setProgramaId] = useState(() => (PROGRAMAS.some((p) => p.id === params.get('programa')) ? params.get('programa') : 'paes'));
-  const [ramos, setRamos] = useState(() => (params.get('ramos') || '').split(',').filter(Boolean).map((r) => (r.startsWith('paes-') ? r : `paes-${r}`)));
+  const [ramos, setRamos] = useState(() => (params.get('ramos') || '').split(',').filter(Boolean).map((r) => prefijo(params.get('programa')) + r.replace(/^(paes|int)-/, '')));
+  const [extras, setExtras] = useState({ pago: 'mensual', hermano: false, verano: false });
   const [opcion, setOpcion] = useState('');
   const [form, setForm] = useState(() => {
     // Viene del test de nivel de inglés o de un plan: lo dejamos anotado
@@ -84,7 +89,14 @@ export default function Inscripcion() {
   const ramosEspera = ramos.filter((r) => quedan(r) === 0);
   const ramosCupo = ramos.filter((r) => quedan(r) !== 0);
   const cursoLleno = Boolean(programa.cupo) && quedan(programa.cupo) === 0;
-  const precio = useMemo(() => precioPaes(ramosCupo), [ramosCupo.join()]); // eslint-disable-line react-hooks/exhaustive-deps
+  const esIntensivo = programa.id === 'intensivo';
+  const listaRamos = esIntensivo ? INTENSIVO_RAMOS : PAES_RAMOS;
+  const precio = useMemo(() => (esIntensivo ? precioIntensivo : precioPaes)(ramosCupo), [esIntensivo, ramosCupo.join()]); // eslint-disable-line react-hooks/exhaustive-deps
+  const formaPago = FORMAS_PAGO.find((p) => p.id === extras.pago) || FORMAS_PAGO[0];
+  const cambiarPrograma = (id) => {
+    setProgramaId(id);
+    setRamos((rs) => rs.map((r) => prefijo(id) + r.replace(/^(paes|int)-/, '')));
+  };
   const esMenor = Number(form.edad) > 0 && Number(form.edad) < 18;
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
 
@@ -93,8 +105,10 @@ export default function Inscripcion() {
   const detalle = () => {
     if (programa.eleccion === 'ramos') {
       if (!ramosCupo.length) return `${ramosEspera.join(', ')} (lista de espera)`;
-      const nombres = PAES_RAMOS.filter((r) => ramosCupo.includes(r.cupo)).map((r) => r.nombre).join(', ');
-      return `${ramosCupo.join(', ')} (${nombres}) · ${clp(precio.total)}/mes${precio.completo ? ' Plan Completo' : ''}`;
+      const nombres = listaRamos.filter((r) => ramosCupo.includes(r.cupo)).map((r) => r.nombre).join(', ');
+      if (esIntensivo) return `${ramosCupo.join(', ')} (${nombres}) · ${clp(precio.total)} todo el intensivo${precio.completo ? ' (pack)' : ''}`;
+      const notas = [formaPago.id !== 'mensual' && `Pago: ${formaPago.nombre}`, extras.hermano && 'Tiene hermano en Lael', extras.verano && 'Hizo el Arranque PAES'].filter(Boolean);
+      return `${ramosCupo.join(', ')} (${nombres}) · ${clp(precio.total)}/mes${precio.completo ? ' Plan Completo' : ''}${notas.length ? ` · ${notas.join(' · ')}` : ''}`;
     }
     if (programa.eleccion === 'verano') {
       const v = VERANO_OPCIONES.find((o) => o.cupo === opcion);
@@ -199,7 +213,7 @@ export default function Inscripcion() {
             <legend className="sr-only">Qué quieres</legend>
             <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight mb-5">1. ¿Qué quieres?</h2>
             <Field label="Programa" htmlFor="programa">
-              <select id="programa" value={programaId} onChange={(e) => setProgramaId(e.target.value)} className={INPUT}>
+              <select id="programa" value={programaId} onChange={(e) => cambiarPrograma(e.target.value)} className={INPUT}>
                 {PROGRAMAS.map((p) => <option key={p.id} value={p.id}>{p.nombre}</option>)}
               </select>
             </Field>
@@ -210,7 +224,7 @@ export default function Inscripcion() {
               <div className="mt-6">
                 <p className={LABEL}>Elige tus ramos</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {PAES_RAMOS.map((r) => {
+                  {listaRamos.map((r) => {
                     const q = quedan(r.cupo);
                     const lleno = q === 0;
                     const activo = ramos.includes(r.cupo);
@@ -235,12 +249,35 @@ export default function Inscripcion() {
                 {ramosCupo.length > 0 && (
                   <div className="mt-4 rounded-2xl p-4 flex items-center justify-between gap-4" style={{ backgroundColor: BLUE }}>
                     <div className="text-white">
-                      <p className="text-xs uppercase tracking-wider text-white/70 font-bold">{precio.completo ? 'Plan Completo' : `${precio.cantidad} ramo${precio.cantidad > 1 ? 's' : ''}`}</p>
-                      {precio.completo && <p className="text-xs text-white/70">Ahorras {clp(precio.suma - precio.total)} al mes</p>}
+                      <p className="text-xs uppercase tracking-wider text-white/70 font-bold">{precio.completo ? (esIntensivo ? 'Pack intensivo' : 'Plan Completo') : `${precio.cantidad} ${esIntensivo ? 'prueba' : 'ramo'}${precio.cantidad > 1 ? 's' : ''}`}</p>
+                      {precio.completo && <p className="text-xs text-white/70">Ahorras {clp(precio.suma - precio.total)}{esIntensivo ? '' : ' al mes'}</p>}
+                      {!esIntensivo && formaPago.pct && <p className="text-xs text-white/70">Pagando {formaPago.id === 'anio' ? `el año: ${clp(conDescuento(precio.total * MESES_PREU, formaPago.pct))} en total` : `por semestre: ${clp(conDescuento(precio.total, formaPago.pct))} al mes`}</p>}
                     </div>
-                    <p className="font-display text-2xl sm:text-3xl font-black" style={{ color: YELLOW }}>{clp(precio.total)}<span className="text-sm text-white/70 font-semibold">/mes</span></p>
+                    <p className="font-display text-2xl sm:text-3xl font-black text-right" style={{ color: YELLOW }}>{clp(precio.total)}<span className="block sm:inline text-sm text-white/70 font-semibold">{esIntensivo ? ' en total' : '/mes'}</span></p>
                   </div>
                 )}
+              </div>
+            )}
+
+            {programa.id === 'paes' && (
+              <div className="mt-6">
+                <p className={LABEL}>¿Cómo prefieres pagar?</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {FORMAS_PAGO.map((p) => (
+                    <Chip key={p.id} active={extras.pago === p.id} onClick={() => setExtras((x) => ({ ...x, pago: p.id }))}>{p.nombre}</Chip>
+                  ))}
+                </div>
+                <div className="mt-3 space-y-1">
+                  <label className="flex items-start gap-3 cursor-pointer min-h-[44px]">
+                    <input type="checkbox" className="mt-1 w-5 h-5 rounded border-[#071D49]/30 text-[#071D49] focus:ring-[#071D49]" checked={extras.hermano} onChange={(e) => setExtras((x) => ({ ...x, hermano: e.target.checked }))} />
+                    <span className="text-sm">Tengo un hermano o hermana que también estudia en Lael.</span>
+                  </label>
+                  <label className="flex items-start gap-3 cursor-pointer min-h-[44px]">
+                    <input type="checkbox" className="mt-1 w-5 h-5 rounded border-[#071D49]/30 text-[#071D49] focus:ring-[#071D49]" checked={extras.verano} onChange={(e) => setExtras((x) => ({ ...x, verano: e.target.checked }))} />
+                    <span className="text-sm">Hice el Arranque PAES en el verano.</span>
+                  </label>
+                </div>
+                <p className="text-xs text-[#071D49]/60 mt-2">Te confirmamos el descuento cuando te escribamos. No se suman entre sí: aplicamos el que más te convenga.</p>
               </div>
             )}
 

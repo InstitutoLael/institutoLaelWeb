@@ -486,7 +486,7 @@ export const NOTICIAS = [
       {
         type: 'cta',
         title: 'Apoyo para las asignaturas que más cuestan',
-        text: 'En Lael hacemos clases online en vivo. Revisa nuestro reforzamiento escolar y los talleres para acompañar a tus hijos durante el año.',
+        text: 'En Lael hacemos clases online en vivo. Revisa nuestras clases particulares y los talleres para acompañar a tus hijos durante el año.',
         to: '/reforzamiento',
         label: 'Ver reforzamiento',
         secondary: { to: '/talleres-ia', label: 'Ver talleres' },

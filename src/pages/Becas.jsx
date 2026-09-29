@@ -2,13 +2,14 @@ import React, { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Loader2, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Loader2, ShieldCheck, Mail } from 'lucide-react';
+import BrandArcs from '../components/ui/BrandArcs';
 import PageHero, { SectionTitle, fadeUp, SECTION } from '../components/ui/PageHero';
 import { INPUT, LABEL, TEL_RE, MAIL_RE, Honeypot, CheckAnimado, ErrorMsg } from '../components/ui/FormBits';
 import { sendForm, backendReady, whatsappUrl } from '../lib/backend';
 import { trackEvent } from '../utils/analytics';
 
-const PROGRAMAS = ['Preu PAES', 'Inglés', 'Reforzamiento escolar', 'Otro'];
+const PROGRAMAS = ['Preu PAES', 'Intensivo PAES', 'Inglés', 'Clases particulares', 'Otro'];
 const PAGO = ['Nada por ahora', 'Hasta $5.000 al mes', 'Entre $5.000 y $10.000 al mes', 'Entre $10.000 y $20.000 al mes', 'Más de $20.000 al mes'];
 
 const COMO = [
@@ -23,6 +24,10 @@ const FAQ = [
   { q: '¿Tengo que mandar documentos?', a: 'No para postular. Si necesitamos saber algo más, te escribimos.' },
   { q: '¿La Escuela de Sueños tiene beca?', a: 'No la necesita: la nivelación para adultos es gratis para todos.' },
 ];
+
+// Apadrinar: una persona o empresa aporta cada mes y con eso se cubre parte
+// de una beca. Por ahora se coordina por WhatsApp o correo.
+const APORTES = ['$10.000 al mes', '$20.000 al mes', 'Lo que puedas'];
 
 const EMPTY = { nombre: '', correo: '', telefono: '', edad: '', programa: PROGRAMAS[0], puede_pagar: '', motivo: '', acepta_privacidad: false, sitio_web: '' };
 
@@ -67,7 +72,7 @@ export default function Becas() {
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
         <title>Becas | Instituto Lael</title>
-        <meta name="description" content="Postula a una beca parcial en Instituto Lael para el preu PAES, inglés o reforzamiento. Sin papeleo: nos cuentas tu situación y te respondemos." />
+        <meta name="description" content="Postula a una beca parcial en Instituto Lael para el preu PAES, inglés o clases particulares. También puedes apadrinar una beca. Sin papeleo: nos cuentas tu situación y te respondemos." />
       </Helmet>
 
       <PageHero eyebrow="Becas 2027" title="Que la plata no sea" accent="lo que te frene.">
@@ -139,6 +144,37 @@ export default function Becas() {
               </details>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section id="apadrina" className={`${SECTION} relative overflow-hidden bg-[#071D49] text-white`}>
+        <BrandArcs />
+        <div className="relative max-w-3xl mx-auto text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#D7E400] mb-3">¿Quieres ayudar?</p>
+          <h2 className="font-display text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.05] mb-5">
+            Apadrina <span className="accent-serif text-[#D7E400]">una beca.</span>
+          </h2>
+          <p className="text-white/80 text-base sm:text-lg leading-relaxed mb-8">
+            Con un aporte mensual cubres parte de la beca de un estudiante que no podría pagar el preu. Todo lo que aportas va a becas, y cada semestre te contamos a cuántos alumnos ayudó, sin dar sus nombres.
+          </p>
+          <div className="flex flex-wrap justify-center gap-2 mb-8">
+            {APORTES.map((a) => <span key={a} className="rounded-full border border-white/20 px-4 py-2 text-sm font-semibold">{a}</span>)}
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <a
+              href={whatsappUrl('Hola! Me gustaría apadrinar una beca en Lael. ¿Cómo lo hago?')}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => trackEvent('apadrinar_click', { via: 'whatsapp' })}
+              className="min-h-[52px] inline-flex items-center justify-center gap-2 rounded-2xl bg-[#D7E400] text-[#071D49] hover:bg-white px-7 font-display font-extrabold text-sm uppercase tracking-wider transition-colors"
+            >
+              Quiero apadrinar <ArrowRight size={16} />
+            </a>
+            <a href="mailto:director@institutolael.cl?subject=Apadrinar%20una%20beca" className="min-h-[44px] inline-flex items-center gap-2 font-semibold underline underline-offset-4 text-white/85 hover:text-white">
+              <Mail size={16} /> director@institutolael.cl
+            </a>
+          </div>
+          <p className="text-xs text-white/60 mt-6">Instituto Lael es una SpA, así que el aporte no descuenta impuestos. Si eres empresa, también puedes hacerlo como convenio: <Link to="/empresas" className="underline">mira aquí</Link>.</p>
         </div>
       </section>
     </div>

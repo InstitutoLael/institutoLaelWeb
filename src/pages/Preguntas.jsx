@@ -29,7 +29,7 @@ const GRUPOS = [
   { id: 'paes', title: 'Preu PAES', items: LANDING_FAQS, link: '/paes' },
   { id: 'pagos', title: 'Pagos, becas y retiro', items: PAGOS_FAQS, link: '/como-pagar' },
   { id: 'adultos', title: 'Escuela de Sueños', items: ADULT_FAQS, link: '/adultos' },
-  { id: 'reforzamiento', title: 'Reforzamiento escolar', items: REFORZAMIENTO.faqs, link: '/reforzamiento' },
+  { id: 'reforzamiento', title: 'Clases particulares', items: REFORZAMIENTO.faqs, link: '/reforzamiento' },
   { id: 'talleres', title: 'Talleres de IA', items: TALLERES_IA.faqs, link: '/talleres-ia' },
   { id: 'orientacion', title: 'Orientación vocacional', items: ORIENTACION.faqs, link: '/orientacion' },
   { id: 'apoderados', title: 'Apoderados', items: APODERADOS.faqs, link: '/apoderados' },

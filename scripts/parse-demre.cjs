@@ -3,17 +3,17 @@
  * parse-demre.cjs
  * ----------------------------------------------------------------------------
  * Parser de la publicación oficial DEMRE "Oferta Definitiva de Carreras,
- * Vacantes y Ponderaciones - Proceso de Admisión 2026" (PDF, 47 universidades).
+ * Vacantes y Ponderaciones - Proceso de Admisión 2026, 2027..." (PDF, 47 universidades).
  *
  * USO
- *   node scripts/parse-demre.cjs <oferta2026.pdf>
+ *   PROCESO=2027 node scripts/parse-demre.cjs <oferta2027.pdf>
  *
  * Requiere pdftotext de POPPLER (no el de xpdf) porque usa `-bbox` (coordenadas
  * de cada palabra) y `-raw`. Si el pdftotext del PATH no es poppler, indicar la
  * ruta con la variable de entorno PDFTOTEXT=/ruta/a/poppler/pdftotext.exe
  *
  * SALIDAS
- *   src/data/carreras-2026.json      dataset compacto para la calculadora
+ *   src/data/carreras-<PROCESO>.json  dataset compacto para la calculadora
  *   scripts/parse-demre-report.txt   totales, filas descartadas y spot-check
  *
  * CÓMO FUNCIONA
@@ -52,7 +52,7 @@
  *
  * FORMATO DEL JSON (claves cortas para que pese poco)
  *   {
- *     proceso: 2026, fuente: "...", generado: "YYYY-MM-DD",
+ *     proceso: 2027, fuente: "...", generado: "YYYY-MM-DD",
  *     claves: { ...descripción de cada clave... },
  *     universidades: [ { u: "NOMBRE UNIVERSIDAD", c: [ carrera, ... ] } ]
  *   }
@@ -82,13 +82,15 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const OUT_JSON = path.join(ROOT, 'src', 'data', 'carreras-2026.json');
+// Año del proceso: PROCESO=2028 node scripts/parse-demre.cjs oferta2028.pdf
+const PROCESO = Number(process.env.PROCESO || 2027);
+const OUT_JSON = path.join(ROOT, 'src', 'data', `carreras-${PROCESO}.json`);
 const OUT_REPORT = path.join(__dirname, 'parse-demre-report.txt');
-const FUENTE = 'DEMRE, Oferta Definitiva de Carreras, Vacantes y Ponderaciones, Proceso de Admisión 2026';
+const FUENTE = 'DEMRE, Oferta Definitiva de Carreras, Vacantes y Ponderaciones, Proceso de Admisión ' + PROCESO;
 
 const pdf = process.argv[2];
 if (!pdf || !fs.existsSync(pdf)) {
-  console.error('Uso: node scripts/parse-demre.cjs <oferta2026.pdf>');
+  console.error('Uso: node scripts/parse-demre.cjs <oferta.pdf>');
   process.exit(1);
 }
 const PDFTOTEXT = process.env.PDFTOTEXT || 'pdftotext';
@@ -366,6 +368,8 @@ for (const pg of pages) {
 // ---------------------------------------------------------------- spot-check
 // Valores transcritos A MANO desde el PDF (páginas renderizadas), no desde el
 // parser. Formato: [id, página, nem, rank, cl, m1, m2, his, cie, hc, esp, min, minClM1, vac]
+// Valores transcritos del PDF 2026. Con el PDF 2027 salen 10 diferencias: se
+// revisaron el 2026-09-29 contra el PDF nuevo y son cambios reales de ese año.
 const SPOT = [
   // id,   pág, universidad, nem, rank, cl, m1, m2, his, cie, hc, esp, min,  minClM1, vac, carrera
   [12039, 16, 'PUC', 20, 20, 10, 25, 10, 0, 15, 0, 0, null, 485, 650, 'Ingeniería'],
@@ -427,7 +431,7 @@ const universidades = toc.slice().sort((a, b) => a.idx - b.idx).map((t) => ({
   c: kept.get(t.name).map(({ _raw, _full, ...rest }) => rest),
 }));
 const json = {
-  proceso: 2026,
+  proceso: PROCESO,
   fuente: FUENTE,
   generado: new Date().toISOString().slice(0, 10),
   claves: {

@@ -138,7 +138,7 @@ export const NOTICIAS = [
       'Qué pruebas son obligatorias, cuáles son electivas, cómo se usan el NEM y el Ranking y cómo se calcula el puntaje con que postulas.',
     category: 'PAES',
     date: '2026-09-23',
-    updated: '2026-09-23',
+    updated: '2026-09-29',
     readingMinutes: 7,
     featured: false,
     sources: [
@@ -147,7 +147,7 @@ export const NOTICIAS = [
       { label: 'DEMRE: Escala de puntajes', url: 'https://demre.cl/paes/factores-seleccion/nueva-escala-puntajes' },
       { label: 'DEMRE: Puntaje Ranking', url: 'https://demre.cl/paes/factores-seleccion/puntaje-ranking' },
       { label: 'DEMRE: Criterios de habilitación para postular (pedagogías)', url: 'https://demre.cl/paes/postulacion/como-postulo-a-una-universidad/criterios-habilitacion-postulacion' },
-      { label: 'DEMRE: Oferta definitiva de carreras, vacantes y ponderaciones, Proceso 2026', url: 'https://demre.cl/publicaciones/2026/2026-25-09-25-oferta-carreras-vacantes-ponderaciones-p2026' },
+      { label: 'DEMRE: Oferta definitiva de carreras, vacantes y ponderaciones, Proceso 2027', url: 'https://demre.cl/publicaciones/2027/2027-26-09-24-oferta-carreras-vacantes-ponderaciones-p2027' },
     ],
     body: [
       {
@@ -190,7 +190,7 @@ export const NOTICIAS = [
       { type: 'h2', text: 'Las ponderaciones' },
       {
         type: 'p',
-        text: 'Cada universidad decide cuánto pesa cada factor en cada carrera. Esos porcentajes se llaman ponderaciones y siempre suman 100%. Los publica el DEMRE en la oferta definitiva de carreras, vacantes y ponderaciones. Para la Admisión 2027 sale el jueves 24 de septiembre de 2026.',
+        text: 'Cada universidad decide cuánto pesa cada factor en cada carrera. Esos porcentajes se llaman ponderaciones y siempre suman 100%. Los publica el DEMRE en la oferta definitiva de carreras, vacantes y ponderaciones. Las de la Admisión 2027 salieron el jueves 24 de septiembre de 2026.',
       },
       { type: 'h2', text: 'Cómo se calcula tu puntaje ponderado' },
       {
@@ -217,7 +217,7 @@ export const NOTICIAS = [
       {
         type: 'list',
         items: [
-          'Cada universidad fija un mínimo para postular. En la oferta del proceso 2026, la mayoría de las carreras pedía un promedio de al menos 458 puntos entre Lectora y M1, y varias universidades pedían 485 o más.',
+          'Cada universidad fija un mínimo para postular. En la oferta del proceso 2027, la mayoría de las carreras pide un promedio de al menos 458 puntos entre Lectora y M1, y varias universidades piden 485 o más.',
           'Las pedagogías tienen requisitos propios. Por ejemplo, un promedio de 528 puntos entre Lectora y M1, o estar en el 20% de mejores notas de tu colegio, entre otras vías.',
           'Cumplir el mínimo te deja postular, pero no asegura el cupo: quedas o no según cuántos postulan y con qué puntajes.',
         ],
@@ -502,12 +502,12 @@ export const NOTICIAS = [
       'En tres pasos sabes con qué puntaje postularías a cada carrera y si cumples los mínimos. Sirve también con los puntajes de tus ensayos.',
     category: 'PAES',
     date: '2026-09-23',
-    updated: '2026-09-23',
+    updated: '2026-09-29',
     readingMinutes: 3,
     featured: false,
     sources: [
       { label: 'DEMRE: Factores de selección y cálculo del puntaje ponderado', url: 'https://demre.cl/paes/factores-seleccion/' },
-      { label: 'DEMRE: Oferta definitiva de carreras, vacantes y ponderaciones, Proceso 2026', url: 'https://demre.cl/publicaciones/2026/2026-25-09-25-oferta-carreras-vacantes-ponderaciones-p2026' },
+      { label: 'DEMRE: Oferta definitiva de carreras, vacantes y ponderaciones, Proceso 2027', url: 'https://demre.cl/publicaciones/2027/2027-26-09-24-oferta-carreras-vacantes-ponderaciones-p2027' },
       { label: 'DEMRE: Calendario del Proceso de Admisión 2027', url: 'https://demre.cl/calendario/calendario-proceso-2027' },
     ],
     body: [
@@ -541,7 +541,7 @@ export const NOTICIAS = [
       },
       {
         type: 'p',
-        text: 'Hoy la calculadora usa las ponderaciones oficiales del proceso 2026. El DEMRE publica las de la Admisión 2027 el 24 de septiembre de 2026 y las cargaremos apenas estén disponibles. Si quieres entender de dónde sale cada número, lee [cómo funciona la PAES](/noticias/como-funciona-la-paes).',
+        text: 'La calculadora ya usa las ponderaciones oficiales de la Admisión 2027, que el DEMRE publicó el 24 de septiembre de 2026. Si quieres entender de dónde sale cada número, lee [cómo funciona la PAES](/noticias/como-funciona-la-paes).',
       },
       {
         type: 'cta',

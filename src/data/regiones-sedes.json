@@ -1,5 +1,5 @@
 {
- "nota": "Sede/campus (campo s de carreras-2026.json) -> región. Clave: \"UNIVERSIDAD|sede\". Revisado a mano; ver scripts/check-regiones.cjs.",
+ "nota": "Sede/campus (campo s de carreras-2027.json) -> región. Clave: \"UNIVERSIDAD|sede\". Revisado a mano; ver scripts/check-regiones.cjs.",
  "regiones": {
   "AP": "Arica y Parinacota",
   "TA": "Tarapacá",
@@ -152,6 +152,10 @@
   "UNIVERSIDAD TECNOLÓGICA METROPOLITANA|Campus Central": "RM",
   "UNIVERSIDAD TECNOLÓGICA METROPOLITANA|Campus Ñuñoa": "RM",
   "UNIVERSIDAD TECNOLÓGICA METROPOLITANA|Campus Providencia": "RM",
-  "UNIVERSIDAD VIÑA DEL MAR|Viña del Mar": "VA"
+  "UNIVERSIDAD VIÑA DEL MAR|Viña del Mar": "VA",
+  "PONTIFICIA UNIVERSIDAD CATÓLICA DE VALPARAÍSO|Quilpué": "VA",
+  "UNIVERSIDAD DEL BÍO-BÍO|Chillan": "NB",
+  "UNIVERSIDAD SAN SEBASTIÁN|Santiago Campus Ciudad Universitaria": "RM",
+  "UNIVERSIDAD SAN SEBASTIÁN|Santiago Campus Bellavista": "RM"
  }
 }

@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /*
  * check-regiones.cjs
- * Verifica que cada sede de src/data/carreras-2026.json tenga región en
+ * Verifica que cada sede de src/data/carreras-2027.json tenga región en
  * src/data/regiones-sedes.json (mapa escrito a mano: "UNIVERSIDAD|sede" -> código
- * de región). Correr cada vez que se regenere carreras-2026.json:
+ * de región). Correr cada vez que se regenere carreras-2027.json:
  *
  *   node scripts/check-regiones.cjs
  *
@@ -12,7 +12,7 @@
  */
 const path = require('path');
 const root = path.join(__dirname, '..');
-const data = require(path.join(root, 'src/data/carreras-2026.json'));
+const data = require(path.join(root, 'src/data/carreras-2027.json'));
 const map = require(path.join(root, 'src/data/regiones-sedes.json'));
 
 let missing = 0, bad = 0, careers = 0;

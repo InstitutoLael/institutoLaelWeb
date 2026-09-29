@@ -10,7 +10,7 @@ import ComparePanel from '../components/calculadora/ComparePanel';
 import { computeScore, clM1, titleCase, norm, loadFavs, saveFavs, MAX_FAVS } from '../components/calculadora/utils';
 
 // Datos (todos se cargan con import() para que la página pese poco):
-//  - carreras-2026.json: DEMRE, Oferta Definitiva de Carreras, Vacantes y
+//  - carreras-2027.json: DEMRE, Oferta Definitiva de Carreras, Vacantes y
 //    Ponderaciones (scripts/parse-demre.cjs a partir del PDF oficial).
 //  - cortes-2026.json: puntajes de corte publicados por cada universidad
 //    (scripts/fetch-cortes.cjs; ver scripts/fetch-cortes-report.txt).
@@ -52,7 +52,7 @@ export default function Calculadora() {
   const nemRef = useRef(null);
 
   useEffect(() => {
-    import('../data/carreras-2026.json').then((m) => setData(m.default || m));
+    import('../data/carreras-2027.json').then((m) => setData(m.default || m));
     import('../data/cortes-2026.json').then((m) => setCortes(m.default || m)).catch(() => setCortes({ d: {} }));
     import('../data/regiones-sedes.json').then((m) => setRegiones(m.default || m)).catch(() => {});
   }, []);
@@ -269,7 +269,7 @@ export default function Calculadora() {
 
             <div className="text-xs text-[#071D49]/70 mt-6 leading-relaxed space-y-2">
               <p>
-                Ponderaciones oficiales del DEMRE, Proceso de Admisión {data?.proceso || 2026}. Las del proceso 2027 las publica el DEMRE a fines de septiembre y las actualizaremos. Cumplir los mínimos no asegura el ingreso: depende del puntaje de corte de cada año. Confirma siempre en demre.cl y en la universidad.
+                Ponderaciones oficiales del DEMRE, Proceso de Admisión {data?.proceso || 2027}, publicadas el 24 de septiembre de 2026. Cumplir los mínimos no asegura el ingreso: depende del puntaje de corte de cada año. Confirma siempre en demre.cl y en la universidad.
               </p>
               <p>
                 Puntajes de corte: proceso {cutoffYear}, tal como los publica cada universidad en su sitio oficial (algunas informan el último seleccionado y otras el último matriculado). Cambian cada año y son solo una referencia. Si una carrera no muestra corte es porque su universidad no lo publicó en una fuente oficial que pudimos revisar.

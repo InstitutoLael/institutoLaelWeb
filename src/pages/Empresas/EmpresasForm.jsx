@@ -78,7 +78,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
 
             <div>
               <label htmlFor="emp-nombre" className={LABEL}>Nombre del encargado *</label>
-              <input id="emp-nombre" type="text" name="nombre" required autoComplete="name" value={form.nombre} onChange={handleChange} placeholder="Ej. Camila Rojas" className={INPUT} />
+              <input id="emp-nombre" type="text" name="nombre" required autoComplete="name" value={form.nombre} onChange={handleChange} placeholder="Ej. María Rojas" className={INPUT} />
             </div>
 
             <div>

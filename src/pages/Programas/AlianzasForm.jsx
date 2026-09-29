@@ -86,7 +86,7 @@ ${form.mensaje || '(Sin mensaje adicional)'}`
 
             <div>
               <label htmlFor="al-nombre" className={LABEL}>Tu nombre *</label>
-              <input id="al-nombre" name="nombre" type="text" autoComplete="name" value={form.nombre} onChange={handleChange} placeholder="Ej. Camila Rojas" className={INPUT} />
+              <input id="al-nombre" name="nombre" type="text" autoComplete="name" value={form.nombre} onChange={handleChange} placeholder="Ej. María Rojas" className={INPUT} />
             </div>
             <div>
               <label htmlFor="al-institucion" className={LABEL}>Institución *</label>

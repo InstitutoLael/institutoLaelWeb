@@ -53,7 +53,7 @@ export default function HeroCarousel({ slides, titleClassName }) {
           aria-roledescription="diapositiva"
           aria-label={`${i + 1} de ${slides.length}: ${s.badge}`}
         >
-          <span className="inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.2em] px-4 py-2 rounded-full mb-6" style={{ backgroundColor: YELLOW, color: '#071D49' }}>
+          <span className="inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.2em] px-4 py-2 rounded-full mb-6" style={{ backgroundColor: s.color || YELLOW, color: '#071D49' }}>
             <span className="w-1.5 h-1.5 rounded-full bg-current" aria-hidden="true" />
             {s.badge}
           </span>
@@ -82,7 +82,7 @@ export default function HeroCarousel({ slides, titleClassName }) {
             aria-current={n === i}
             className="h-11 flex items-center px-1"
           >
-            <span className={`block h-1.5 rounded-full transition-all duration-300 ${n === i ? 'w-10 bg-[#D7E400]' : 'w-5 bg-white/30 hover:bg-white/60'}`}>
+            <span className={`block h-1.5 rounded-full transition-all duration-300 ${n === i ? 'w-10' : 'w-5 bg-white/30 hover:bg-white/60'}`} style={n === i ? { backgroundColor: sl.color || YELLOW } : undefined}>
               {n === i && auto && (
                 <motion.span key={`${sl.id}-${i}`} className="block h-full rounded-full bg-white/60 origin-left" initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={{ duration: INTERVALO / 1000, ease: 'linear' }} />
               )}

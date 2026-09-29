@@ -29,6 +29,7 @@ export default {
         sans:    ['Inter', 'system-ui', 'sans-serif'],
         display: ['Montserrat', 'system-ui', 'sans-serif'],
         body:    ['Inter', 'system-ui', 'sans-serif'],
+        serif:   ['"Instrument Serif"', 'Georgia', 'serif'],
       },
       boxShadow: {
         glow:    "0 0 20px rgba(215,228,0,0.15)",

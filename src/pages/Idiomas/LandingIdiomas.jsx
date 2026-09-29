@@ -1,28 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
 import { ChevronRight, Zap, Instagram, Check } from 'lucide-react';
-import languagesBg from '../../assets/img/Home/idiomas_execution_bg_1777948997295.webp';
-import igPost1 from '../../assets/img/Home/media_ig_post_1780732980390.webp';
-import igPost2 from '../../assets/img/Home/media_ig_post_1780733562637.webp';
-import CertificateSection from '../../components/CertificateSection';
-import { LANDING_SELECTOR, LANDING_REASONS, LANDING_PLANS } from '../../data/idiomas';
+import BrandArcs from '../../components/ui/BrandArcs';
 
 const BLUE = '#071D49';
 const FORM_URL = '/inscripcion?programa=ingles';
 
 const ease = [0.16, 1, 0.3, 1];
 export const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 14 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.6, delay, ease },
+  transition: { duration: 0.5, delay, ease },
 });
 
 // Estilos compartidos por las páginas de programas (Idiomas / Español)
 export const SECTION = 'px-5 sm:px-6 py-16 sm:py-20 lg:py-28';
 export const EYEBROW_LIGHT = 'text-xs font-bold uppercase tracking-[0.2em] text-[#071D49]';
-export const EYEBROW_DARK = 'text-xs font-bold uppercase tracking-[0.2em] text-[#D7E400]';
+export const EYEBROW_DARK = 'text-xs font-bold uppercase tracking-[0.2em] text-programa';
 export const H2 = 'font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-[-0.03em] uppercase leading-[1.05]';
 export const BTN_PRIMARY = 'inline-flex items-center justify-center gap-2 min-h-[48px] bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all active:scale-95';
 export const BTN_NAVY = 'inline-flex items-center justify-center gap-2 min-h-[48px] bg-[#071D49] text-white hover:bg-[#0B2A66] font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all active:scale-95';
@@ -35,9 +30,10 @@ export function ProgramHero({ eyebrow, heading, desc, bg, children }) {
         <img src={bg} alt="" className="w-full h-full object-cover grayscale" />
       </div>
       <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/60 to-[#071D49]" />
+      <BrandArcs />
       <div className="relative z-10 max-w-5xl mx-auto text-center">
         <motion.p {...fadeUp(0)} className={`${EYEBROW_DARK} mb-6`}>{eyebrow}</motion.p>
-        <motion.h1 {...fadeUp(0.1)} className="font-display text-white text-4xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6 sm:mb-8">
+        <motion.h1 {...fadeUp(0.1)} className="font-display text-white text-[2.5rem] sm:text-6xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.02] mb-6 sm:mb-8">
           {heading}
         </motion.h1>
         <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
@@ -71,7 +67,7 @@ export function LevelPath({ title, levels, className = '' }) {
   );
 }
 
-/* Bloque de programa: texto + precio + mockup de Instagram */
+/* Bloque de programa: texto + precio + mockup de Instagram (lo usa Español) */
 export function ProgramBlock({ id, gray, badge, title, teacher, desc, levelsTitle, levels, ig }) {
   return (
     <section id={id} className={`${SECTION} scroll-mt-20 ${gray ? 'bg-[#F4F4F4]' : 'bg-white'}`}>
@@ -178,7 +174,7 @@ export function ReasonsSection({ reasons, gray }) {
       <div className="max-w-6xl mx-auto w-full">
         <div className="text-center mb-10 sm:mb-16">
           <motion.p {...fadeUp(0)} className={`${EYEBROW_LIGHT} mb-4`}>Cómo trabajamos</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className={`${H2} text-[#071D49]`}>¿POR QUÉ APRENDER CON LAEL?</motion.h2>
+          <motion.h2 {...fadeUp(0.1)} className={`${H2} text-[#071D49]`}>¿Por qué aprender <span className="accent-serif">con Lael?</span></motion.h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {reasons.map((reason, i) => (
@@ -235,99 +231,5 @@ export function PriceCard({ plan, delay = 0, note }) {
         Inscribirme
       </a>
     </motion.div>
-  );
-}
-
-export default function LandingIdiomas() {
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  return (
-    <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
-      <Helmet>
-        <title>Instituto Lael | Programas de Idiomas - Chile</title>
-        <meta name="description" content="Cursos online de Inglés y Español para Expats con clases en vivo. Hablas y practicas desde la primera clase." />
-      </Helmet>
-
-      {/* ── 1. HERO ─────────────────────────────────────────────────── */}
-      <ProgramHero
-        bg={languagesBg}
-        eyebrow="INGLÉS EN LAEL · HABLAR SIN MIEDO"
-        heading={<>Habla inglés <br /> sin <span className="text-[#D7E400]">miedo.</span></>}
-        desc="Casi todos entendemos más de lo que nos atrevemos a decir. Con Monse hablas desde la primera clase, te equivocas tranquilo y vas ganando confianza."
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full max-w-2xl mx-auto">
-          {LANDING_SELECTOR.map((lang) => (
-            <button
-              key={lang.id}
-              onClick={() => scrollToSection(lang.id)}
-              className="group min-h-[48px] p-4 sm:p-5 rounded-[24px] bg-white/5 border border-white/15 hover:border-[#D7E400] hover:bg-white/10 transition-all duration-300 text-left flex items-center gap-4 cursor-pointer active:scale-[0.98]"
-            >
-              <span className="text-3xl flex-shrink-0" role="img" aria-label={lang.label}>{lang.flag}</span>
-              <span className="flex-1 min-w-0">
-                <span className="block text-white font-display font-extrabold text-base uppercase tracking-tight group-hover:text-[#D7E400] transition-colors">{lang.label}</span>
-                <span className="block text-white/60 text-xs font-bold uppercase tracking-wider mt-0.5">{lang.tag}</span>
-              </span>
-              <ChevronRight size={18} className="text-white/60 group-hover:text-[#D7E400] group-hover:translate-x-1 transition-all flex-shrink-0" aria-hidden="true" />
-            </button>
-          ))}
-        </div>
-      </ProgramHero>
-
-      {/* ── 2. INGLÉS ───────────────────────────────────────────────── */}
-      <ProgramBlock
-        id="ingles"
-        badge="PROGRAMA PRINCIPAL"
-        title="Inglés en Vivo"
-        teacher={{ initials: 'MG', name: 'Docente principal: Monserrat González', role: 'Profesora de inglés' }}
-        desc="Para que te puedas defender en una entrevista, en una reunión de pega o viajando. En cada clase practicas conversaciones parecidas a las que vas a tener afuera."
-        levelsTitle="Tus niveles de inglés"
-        levels={[['A1', 'Nivel 1'], ['A2', 'Nivel 2'], ['B1', 'Nivel 3'], ['B2', 'Fluidez']]}
-        ig={{ img: igPost1, tag: 'Recomendado', caption: 'Si entiendes inglés pero te bloqueas al hablar, esto es para ti. Clases online y en vivo.', ago: 'hace 2 días' }}
-      />
-
-      {/* ── 3. ESPAÑOL PARA EXTRANJEROS ─────────────────────────────── */}
-      <ProgramBlock
-        id="espanol"
-        gray
-        badge="ESPAÑOL EN CHILE"
-        title="Español para Extranjeros"
-        desc="Es para ti si vives en Chile o trabajas con un equipo chileno. En clase practicamos reuniones de pega, conversaciones del día a día, modismos y cómo se trabaja acá."
-        levelsTitle="Tus niveles de español"
-        levels={[['A1', 'Nivel 1'], ['A2', 'Nivel 2'], ['B1', 'Intermedio']]}
-        ig={{ img: igPost2, tag: 'Español', caption: '¿Te perdiste con un "cachai" o un "al tiro"? Te lo explicamos. Clases en vivo, con harta conversación.', ago: 'hace 1 día' }}
-      />
-
-      {/* ── 4. ¿POR QUÉ APRENDER CON LAEL? ──────────────────────────── */}
-      <ReasonsSection reasons={LANDING_REASONS} />
-
-      {/* ── 5. CERTIFICADOS POR NIVEL ───────────────────────────────── */}
-      <CertificateSection defaultLevel="B2" defaultLanguage="Inglés en Vivo" gray />
-
-      {/* ── 6. PRECIOS ──────────────────────────────────────────────── */}
-      <section className={`${SECTION} text-center`} style={{ backgroundColor: BLUE }}>
-        <div className="max-w-6xl mx-auto w-full">
-          <motion.p {...fadeUp(0)} className={`${EYEBROW_DARK} mb-4`}>Mismo precio para ambos</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className={`${H2} text-white mb-10 sm:mb-14`}>PRECIOS</motion.h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full max-w-3xl mx-auto mb-10">
-            {LANDING_PLANS.map((plan, idx) => (
-              <PriceCard
-                key={plan.name}
-                plan={plan}
-                delay={idx * 0.1}
-                note={`✨ Trimestral: ${plan.priceQuarterly}/mes (ahorra pagando 3 meses)`}
-              />
-            ))}
-          </div>
-
-          <motion.p {...fadeUp(0.2)} className="text-white/60 text-sm max-w-xl mx-auto leading-relaxed">
-            Todos los cursos son online y en vivo, con un docente. Pregúntanos por el precio de clases 1 a 1.
-          </motion.p>
-        </div>
-      </section>
-    </div>
   );
 }

@@ -12,10 +12,10 @@ const BLUE = '#071D49';
 const ease = [0.16, 1, 0.3, 1];
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 14 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.6, delay, ease },
+  transition: { duration: 0.5, delay, ease },
 });
 
 // Eyebrow on light backgrounds: navy text + small yellow bar.
@@ -159,7 +159,7 @@ export default function Nosotros() {
           <div className="text-center mb-10 sm:mb-14">
             <motion.div {...fadeUp(0)}><Eyebrow>Quiénes hacen las clases</Eyebrow></motion.div>
             <motion.h2 {...fadeUp(0.05)} className="font-display text-3xl sm:text-4xl lg:text-5xl text-[#071D49] font-extrabold tracking-tight uppercase">
-              LOS PROFES
+              Los <span className="accent-serif">profes.</span>
             </motion.h2>
           </div>
 

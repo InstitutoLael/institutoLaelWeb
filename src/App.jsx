@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { MotionConfig } from "framer-motion";
 import Navbar from "./components/Navbar";
@@ -10,6 +10,8 @@ import ScrollToTop from "./components/ScrollToTop";
 import AnalyticsTracker from "./components/AnalyticsTracker";
 import CookieNotice from "./components/CookieNotice";
 import ExitIntent from "./components/ExitIntent";
+import MobileProgramBar from "./components/MobileProgramBar";
+import { colorDeRuta } from "./data/catalogo";
 
 // Pages
 import Home from "./pages/Home";
@@ -21,7 +23,6 @@ const LSCh = lazy(() => import("./pages/LSCh"));
 const Nosotros = lazy(() => import("./pages/Nosotros"));
 const Contacto = lazy(() => import("./pages/Contacto"));
 const NivelacionAdultos = lazy(() => import("./pages/Nivelacion/NivelacionAdultos"));
-const SistemaLael = lazy(() => import("./pages/SistemaLael"));
 const DiagnosticPage = lazy(() => import("./pages/DiagnosticPage"));
 const ResultDashboard = lazy(() => import("./pages/ResultDashboard"));
 const Preguntas = lazy(() => import("./pages/Preguntas"));
@@ -39,7 +40,16 @@ const Calculadora = lazy(() => import("./pages/Calculadora"));
 const extraRoutes = Object.values(import.meta.glob("./routes/*.jsx", { eager: true })).flatMap((m) => m.routes || []);
 
 
+// Cada página de programa pinta sus detalles con su color (ver catalogo.js)
+function useColorPrograma(pathname) {
+  React.useEffect(() => {
+    document.documentElement.style.setProperty("--programa", colorDeRuta(pathname) || "#D7E400");
+  }, [pathname]);
+}
+
 export default function App() {
+  const { pathname } = useLocation();
+  useColorPrograma(pathname);
   return (
     <MotionConfig reducedMotion="user">
     <div className="flex flex-col min-h-screen relative z-10">
@@ -58,7 +68,7 @@ export default function App() {
       <Navbar />
 
       <main id="contenido" tabIndex={-1} className="flex-grow pt-20">
-        <PageTransition>
+        <PageTransition key={pathname}>
           <Suspense fallback={<div className="min-h-[60vh]" />}>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -70,7 +80,7 @@ export default function App() {
             <Route path="/espanol-para-extranjeros" element={<LandingEspanol />} />
             <Route path="/lsch" element={<LSCh />} />
             <Route path="/adultos" element={<NivelacionAdultos />} />
-            <Route path="/sistema" element={<SistemaLael />} />
+            <Route path="/sistema" element={<MetodoLael />} />
             <Route path="/preguntas" element={<Preguntas />} />
             <Route path="/transparencia" element={<Transparencia />} />
             <Route path="/casos-reales" element={<CasosReales />} />
@@ -91,6 +101,7 @@ export default function App() {
       </main>
 
       <FloatingWhatsApp />
+      <MobileProgramBar />
       <ExitIntent />
       <CookieNotice />
       <Footer />

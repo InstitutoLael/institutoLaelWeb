@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import BrandArcs from '../components/ui/BrandArcs';
 import { Link } from 'react-router-dom';
 import { Search, ArrowRight, Calculator, Star, ArrowDown } from 'lucide-react';
 import CareerCard from '../components/calculadora/CareerCard';
@@ -129,16 +130,21 @@ export default function Calculadora() {
       </Helmet>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative -mt-20 pt-36 pb-14 sm:pb-16 px-5 sm:px-6 text-white" style={{ backgroundColor: BLUE }}>
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="relative -mt-20 pt-36 pb-14 sm:pb-16 px-5 sm:px-6 text-white overflow-hidden" style={{ backgroundColor: BLUE }}>
+        <BrandArcs />
+        <div className="relative max-w-4xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-[0.2em]" style={{ backgroundColor: YELLOW, color: BLUE }}>
             <Calculator size={14} /> Gratis
           </motion.div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05] mb-5 text-white">
-            ¿Te alcanza para <br /> <span style={{ color: YELLOW }}>la carrera que quieres?</span>
+            ¿Te alcanza para <br /> <span className="accent-serif text-programa">la carrera que quieres?</span>
           </h1>
           <p className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
             Pon tus puntajes, busca la carrera y te mostramos tu puntaje ponderado al tiro. Más de 2.000 carreras de 47 universidades.
+          </p>
+          <p className="mt-5 text-sm text-white/70 flex flex-wrap justify-center gap-x-5 gap-y-1">
+            <Link to="/glosario-paes" className="underline underline-offset-4 hover:text-white min-h-[32px] inline-flex items-center">¿Qué es el NEM o el ranking?</Link>
+            <Link to="/calendario-admision" className="underline underline-offset-4 hover:text-white min-h-[32px] inline-flex items-center">Fechas de la Admisión 2027</Link>
           </p>
         </div>
       </section>

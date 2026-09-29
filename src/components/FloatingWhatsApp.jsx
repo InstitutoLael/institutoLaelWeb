@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import { trackEvent } from '../utils/analytics';
 import { trackFunnelEvent } from '../utils/funnel';
+import { useProgramBar } from './MobileProgramBar';
 
 const ICONOS = {
   paes: <Target size={18} />,
@@ -75,6 +76,8 @@ export default function FloatingWhatsApp() {
   const location = useLocation();
 
   const isContactPage = location.pathname === '/contacto';
+  // En celular, las páginas de programa usan la barra fija de abajo
+  const conBarra = Boolean(useProgramBar());
   const btnRef = useRef(null);
 
   // Escape cierra el menú y devuelve el foco al botón.
@@ -109,7 +112,7 @@ export default function FloatingWhatsApp() {
   };
 
   return (
-    <aside aria-label="WhatsApp" className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] flex flex-col items-end">
+    <aside aria-label="WhatsApp" className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[100] flex-col items-end ${conBarra ? 'hidden sm:flex' : 'flex'}`}>
       <AnimatePresence>
         {isOpen && (
           <motion.div

@@ -87,7 +87,7 @@ export const PACK_MIN_SUBJECTS = 4;
    ────────────────────────────────────────────────────────────────────────── */
 
 export const PAES_FORM_URL = "/inscripcion?programa=paes";
-export const BECAS_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSehVHEaZpQaQpSDKzHarHhPfgVzEPqyl5Q--Wa5r5KJFQwh9g/viewform";
+export const BECAS_FORM_URL = "/becas";
 
 const OBLIGATORIAS_TOTAL = OBLIGATORIA_PRICE * 2;
 const TRES_RAMOS_TOTAL = OBLIGATORIAS_TOTAL + ELECTIVA_PRICE;

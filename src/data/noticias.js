@@ -16,6 +16,7 @@
 //    - date: fecha de publicación en formato 'AAAA-MM-DD'. Ejemplo: '2026-10-05'.
 //    - updated: fecha de la última revisión, mismo formato.
 //    - readingMinutes: minutos aproximados de lectura (un número, sin comillas).
+//    - author: (opcional) quién la escribió, por ejemplo 'Diego Chaparro'. Si no lo pones, dice "Equipo Lael".
 //    - featured: true si quieres que salga destacada arriba en /noticias (solo una a la vez).
 //    - sources: (opcional) la lista de fuentes oficiales, con su nombre y link.
 //    - body: el contenido, como una lista de bloques. Los tipos de bloque son:

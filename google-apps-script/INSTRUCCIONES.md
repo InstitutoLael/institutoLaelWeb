@@ -46,3 +46,24 @@ Después de editar, ve a **Implementar → Administrar implementaciones → ✏�
 - No compartas la planilla con nadie que no deba verla (botón **Compartir**).
 - La URL `/exec` no es secreta: solo sirve para enviar formularios, no para leer datos.
 - El código bloquea robots (campo trampa y límite de envíos) y evita que alguien meta fórmulas en la planilla.
+
+---
+
+# Actualización de septiembre de 2026 (5 minutos)
+
+Esta versión agrega correos con el diseño de Lael, becas, lista de espera, encuesta de mitad de semestre, recordatorio de clase de prueba y la hoja **Resumen** con gráficos.
+
+1. En la planilla: **Extensiones → Apps Script**.
+2. Borra todo el código, pega el `Code.gs` nuevo y guarda (disquete).
+3. En la lista de funciones elige **instalar** y aprieta **Ejecutar**. Google va a pedir un permiso nuevo (para la tarea diaria): acéptalo igual que la primera vez.
+4. **Implementar → Administrar implementaciones → ✏️ Editar → Versión: Nueva versión → Implementar.** La URL no cambia.
+5. Abre la hoja nueva **Configuración** y, en "Datos de pago", reemplaza `ESCRIBE AQUÍ EL NÚMERO` por el número de tu cuenta. Ese texto le llega a quien se inscribe. (No va en el código porque el código es público en GitHub.)
+6. Para ver cómo quedaron los correos: elige **probarCorreo** y aprieta **Ejecutar**. Te llegan dos ejemplos.
+
+## Lo nuevo, en simple
+- **Resumen:** la primera hoja. Números y gráficos que se actualizan solos. No escribas en ella.
+- **Lista de espera:** si un curso se llena, el formulario igual acepta a la persona y la anota como `lista-espera`. Cuando se libera un cupo, a las 9 de la mañana te llega un correo con quiénes están esperando.
+- **Becas:** las postulaciones llegan a **Inscripciones** con tipo `beca`.
+- **Clase de prueba:** cuando acuerdes la fecha con alguien, escríbela en la columna **Fecha clase de prueba**. El día anterior le llega un recordatorio solo.
+- **Encuesta:** en las fechas de la hoja **Configuración** (15 de mayo y 1 de octubre) se manda sola a quienes están en estado **Confirmado** o **Pagó**. Las respuestas quedan en la hoja **Encuestas** y te avisamos si alguien pone nota 4 o menos.
+- **Colores:** la columna Estado se pinta sola (amarillo = Nuevo, verde = Pagó...).

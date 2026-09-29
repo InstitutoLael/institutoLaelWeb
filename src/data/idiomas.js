@@ -84,3 +84,29 @@ export const COMPARISON_DATA = [
 /* ──────────────────────────────────────────────────────────────────────────
    7. FAQS TÁCTICAS
    ────────────────────────────────────────────────────────────────────────── */
+
+/* ──────────────────────────────────────────────────────────────────────────
+   8. NIVELES DE INGLÉS (según la planificación anual de Lael)
+   ────────────────────────────────────────────────────────────────────────── */
+export const INGLES_NIVELES = [
+  { code: 'A1', name: 'Empiezas', desc: 'Presente simple y continuo, rutinas, objetos y lugares. Te presentas y hablas de tu día.' },
+  { code: 'A2', name: 'Te defiendes', desc: 'Pasado, futuro con will y going to, comparaciones. Compras, pides en un restaurante y cuentas lo que hiciste.' },
+  { code: 'B1', name: 'Conversas', desc: 'Pasado perfecto, condicionales, lo que dijo otra persona y expresiones que se usan de verdad.' },
+  { code: 'B2', name: 'Te desenvuelves', desc: 'Voz pasiva, dar tu opinión y argumentar, noticias y distintos acentos. Estrategias para exámenes tipo TOEFL o IELTS.' },
+];
+
+export const INGLES_PARA_QUIEN = [
+  { t: 'Entiendes, pero te bloqueas', d: 'Lees y escuchas bastante, pero cuando te toca hablar no sale nada. Es lo más común, y se arregla hablando.' },
+  { t: 'Lo necesitas para la pega', d: 'Una entrevista, reuniones con gente de afuera o un ascenso que pide inglés.' },
+  { t: 'Quieres viajar o irte a estudiar', d: 'Moverte tranquilo afuera o prepararte para un examen internacional.' },
+  { t: 'Partes de cero', d: 'Nunca aprendiste o se te olvidó todo. Empiezas en A1, sin vergüenza.' },
+];
+
+export const INGLES_FAQS = [
+  { q: '¿Y si nunca he hablado inglés?', a: 'Partes en el nivel A1. Nadie te va a pedir que hables perfecto: la idea es que te equivoques tranquilo y vayas ganando confianza.' },
+  { q: '¿Cómo sé en qué nivel estoy?', a: 'Haz el test de nivel gratis de 10 preguntas. Toma tres minutos y te dice desde dónde partir. En la primera clase lo confirmamos.' },
+  { q: '¿Las clases se graban?', a: 'Sí. Cada semana compartimos las grabaciones con quienes tienen su mensualidad al día.' },
+  { q: '¿Me dan un certificado?', a: 'Sí, al cerrar cada nivel recibes un certificado de Instituto Lael con el nivel alcanzado. Es un certificado de Lael, no un examen internacional.' },
+  { q: '¿Me preparan para el TOEFL o el IELTS?', a: 'En el nivel B2 vemos estrategias para ese tipo de exámenes. Si necesitas una preparación específica para una fecha, escríbenos y lo conversamos.' },
+  { q: '¿Hay clases individuales?', a: 'Pregúntanos por WhatsApp por el valor de las clases 1 a 1.' },
+];

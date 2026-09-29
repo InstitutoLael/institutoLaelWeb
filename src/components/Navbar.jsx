@@ -8,27 +8,19 @@ import { NAVIGATION } from '../data/navigation';
 import UrgencyBanner from './UrgencyBanner';
 import ProgramasDropdown from './ProgramasDropdown';
 import ThemeToggle from './ThemeToggle';
+import { AUDIENCIAS, HERRAMIENTAS } from '../data/catalogo';
 
 const ease = [0.16, 1, 0.3, 1];
 
-// Menú de celular: programas con su precio, herramientas e instituto.
+// Menú de celular: programas por "para quién", herramientas e instituto.
 const MOBILE_MENU = [
-  { title: 'Programas', grid: true, items: [
-    { name: 'Preu PAES', path: '/paes', tag: 'Desde $10.000', highlight: true },
-    { name: 'Escuela de Sueños', path: '/adultos', tag: 'Gratis', highlight: true },
-    { name: 'Inglés', path: '/idiomas', tag: '$14.990/mes' },
-    { name: 'Verano Lael', path: '/verano', tag: 'Enero' },
-    { name: 'Reforzamiento', path: '/reforzamiento', tag: '7° a 2° medio' },
-    { name: 'Empresas', path: '/empresas', tag: 'Cotiza' },
-  ] },
-  { title: 'Herramientas gratis', items: [
-    { name: 'Calculadora de puntaje', path: '/calculadora', tag: '2.000+ carreras' },
-    { name: 'Diagnóstico', path: '/diagnostico', tag: '2 minutos' },
-    { name: 'Noticias y guías', path: '/noticias' },
-  ] },
+  ...AUDIENCIAS.map((a) => ({ title: `Para ${a.title.toLowerCase()}`, grid: true, items: a.items })),
+  { title: 'Herramientas gratis', items: HERRAMIENTAS },
   { title: 'Instituto', grid: true, items: [
     { name: 'Nosotros', path: '/nosotros' },
+    { name: 'Así se estudia', path: '/metodo' },
     { name: 'Casos reales', path: '/casos-reales' },
+    { name: 'Noticias', path: '/noticias' },
     { name: 'Preguntas', path: '/preguntas' },
     { name: 'Contacto', path: '/contacto' },
   ] },
@@ -44,7 +36,7 @@ export default function Navbar() {
   const drawerRef = useRef(null);
 
   // Páginas con fondo claro (Navbar fondo blanco/sólido siempre)
-  const isLightPage = ['/nosotros', '/contacto', '/transparencia', '/preguntas', '/diagnostico', '/casos-reales', '/sistema', '/privacidad', '/iconos'].includes(location.pathname);
+  const isLightPage = ['/nosotros', '/contacto', '/transparencia', '/diagnostico', '/casos-reales', '/privacidad', '/iconos'].includes(location.pathname);
 
   // Scroll detection
   useEffect(() => {
@@ -322,9 +314,9 @@ export default function Navbar() {
                         >
                           {({ isActive }) => (
                             <>
-                              <span className="font-bold text-[15px] leading-tight">{it.name}</span>
+                              <span className="font-bold text-[15px] leading-tight flex items-center gap-2">{it.color && <span aria-hidden="true" className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: it.color }} />}{it.name}</span>
                               {it.tag && (
-                                <span className={`text-xs font-semibold ${isActive ? 'text-lael-primary/80' : it.highlight ? 'text-lael-accent' : 'text-white/60'}`}>{it.tag}</span>
+                                <span className={`text-xs font-semibold ${isActive ? 'text-lael-primary/80' : 'text-white/60'}`}>{it.tag}</span>
                               )}
                             </>
                           )}

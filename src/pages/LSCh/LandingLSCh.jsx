@@ -4,6 +4,8 @@ import { CheckCircle2, ChevronRight, MessageSquare, Star, Pause, Play } from 'lu
 import { TESTIMONIALS } from '../../data/testimonials';
 import lschRealidad from '../../assets/img/Home/mundo_lsch_bg_1777943626827.webp';
 import CertificateSection from '../../components/CertificateSection';
+import AvisameForm from '../../components/AvisameForm';
+import BrandArcs from '../../components/ui/BrandArcs';
 import { LANDING_SLIDES, LANDING_LEVELS } from '../../data/lsch';
 import {
   fadeUp,
@@ -27,8 +29,7 @@ export default function LandingLSCh() {
   const auto = !pausado && !hover && !reduce;
 
   // Curso en pausa hasta confirmar al instructor/a (de la comunidad Sorda).
-  // Cuando abra, cambiar este link de vuelta al formulario de inscripción.
-  const WA_LINK_TRIMESTRAL = "https://wa.me/56964626568?text=Hola!%20Quiero%20que%20me%20avisen%20cuando%20abra%20el%20curso%20de%20Lengua%20de%20Se%C3%B1as%20Chilena.";
+  // Mientras, los botones llevan a la lista de espera (#avisame).
   const WA_GENERAL = "https://wa.me/56964626568?text=Hola!%20Tengo%20consultas%20sobre%20el%20curso%20de%20Lengua%20de%20Señas%20Chilena%20(LSCh).";
 
   const slides = LANDING_SLIDES;
@@ -54,24 +55,25 @@ export default function LandingLSCh() {
           <img src={lschRealidad} alt="" className="w-full h-full object-cover grayscale" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/60 to-[#071D49]" />
+        <BrandArcs />
 
         <div className="relative z-10 max-w-5xl mx-auto text-center">
           {/* "Próximamente" bien visible desde el primer vistazo */}
           <motion.div {...fadeUp(0)} className="flex flex-col items-center gap-3 mb-6">
-            <span className="inline-flex items-center gap-2 bg-[#D7E400] text-[#071D49] px-4 py-2 rounded-full font-display text-sm font-extrabold uppercase tracking-wider">
+            <span className="inline-flex items-center gap-2 bg-programa text-[#071D49] px-4 py-2 rounded-full font-display text-sm font-extrabold uppercase tracking-wider">
               <span className="w-2 h-2 rounded-full bg-[#071D49]" aria-hidden="true" />
               PRÓXIMAMENTE
             </span>
             <span className={EYEBROW_DARK}>LENGUA DE SEÑAS CHILENA</span>
           </motion.div>
 
-          <motion.h1 {...fadeUp(0.1)} className="font-display text-white text-4xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6 sm:mb-8">
+          <motion.h1 {...fadeUp(0.1)} className="font-display text-white text-[2.5rem] sm:text-6xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.02] mb-6 sm:mb-8">
             Las manos <br />
-            también <span className="text-[#D7E400]">tienen voz.</span>
+            también <span className="accent-serif text-programa">tienen voz.</span>
           </motion.h1>
 
           <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
-            Estamos preparando el nuevo curso. Lo dictará una persona Sorda, de la comunidad, con la LSCh como lengua propia. Escríbenos y te avisamos apenas abramos cupos.
+            Estamos preparando el nuevo curso. Lo dictará una persona Sorda, de la comunidad, con la LSCh como lengua propia. Anótate en la lista y te avisamos apenas abramos cupos.
           </motion.p>
 
           {/* Quick badges */}
@@ -82,7 +84,7 @@ export default function LandingLSCh() {
           </motion.div>
 
           <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href={WA_LINK_TRIMESTRAL} target="_blank" rel="noopener noreferrer" className={BTN_PRIMARY}>
+            <a href="#avisame" className={BTN_PRIMARY}>
               <span>AVÍSAME CUANDO ABRA</span>
               <ChevronRight size={16} aria-hidden="true" />
             </a>
@@ -94,6 +96,15 @@ export default function LandingLSCh() {
             </a>
           </motion.div>
         </div>
+      </section>
+
+      {/* ── LISTA DE ESPERA ─────────────────────────────────────────── */}
+      <section className="px-5 sm:px-6 py-14 sm:py-16 bg-white">
+        <AvisameForm
+          programa="Lengua de Señas Chilena"
+          texto="Sin compromiso. Te escribimos cuando abra el curso."
+          extra={{ label: '¿Para qué lo quieres?', options: ['Tengo un familiar o amigo Sordo', 'Para mi trabajo (salud, educación, atención)', 'Para mi iglesia o comunidad', 'Por interés personal', 'Para mi empresa'] }}
+        />
       </section>
 
       {/* ── 2. NIVELES A1 / A2 / B1 ─────────────────────────────────── */}
@@ -245,7 +256,7 @@ export default function LandingLSCh() {
                 ))}
               </ul>
 
-              <a href={WA_LINK_TRIMESTRAL} target="_blank" rel="noopener noreferrer" className={`${BTN_PRIMARY} w-full`}>
+              <a href="#avisame" className={`${BTN_PRIMARY} w-full`}>
                 Avísame cuando abra
               </a>
             </motion.div>

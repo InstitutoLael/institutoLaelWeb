@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import WordReveal from '../../components/ui/WordReveal';
+import BrandArcs from '../../components/ui/BrandArcs';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { ArrowRight, MessageCircle, ChevronDown } from 'lucide-react';
@@ -14,11 +15,43 @@ const WHATSAPP_URL = 'https://wa.me/56964626568?text=Hola,%20quiero%20terminar%2
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 14 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.6, delay, ease },
+  transition: { duration: 0.5, delay, ease },
 });
+
+// Pasos 01 → 04 unidos por una línea que se dibuja al llegar a la sección:
+// el camino desde que nos escribes hasta que apruebas. Horizontal en
+// computador, vertical en celular.
+function CaminoPasos({ pasos }) {
+  const linea = { initial: { scale: 0 }, whileInView: { scale: 1 }, viewport: { once: true, margin: '-120px' }, transition: { duration: 1.4, ease } };
+  return (
+    <div className="relative">
+      <motion.div aria-hidden="true" {...linea} className="hidden lg:block absolute top-7 left-[12.5%] right-[12.5%] h-[3px] rounded-full bg-programa origin-left" />
+      <motion.div aria-hidden="true" {...linea} className="lg:hidden absolute top-7 bottom-7 left-7 w-[3px] rounded-full bg-programa origin-top" />
+      <ol className="relative grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-6">
+        {pasos.map((step, i) => (
+          <li key={step.num} className="flex lg:flex-col lg:items-center gap-5 lg:gap-0 lg:text-center">
+            <motion.span
+              initial={{ scale: 0.4, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true, margin: '-120px' }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20, delay: 0.25 + i * 0.3 }}
+              className="relative z-10 w-14 h-14 rounded-full bg-[#071D49] text-programa font-display font-extrabold text-lg flex items-center justify-center flex-shrink-0 ring-8 ring-white lg:mb-6"
+            >
+              {step.num}
+            </motion.span>
+            <motion.div {...fadeUp(0.3 + i * 0.3)} className="pt-2 lg:pt-0">
+              <h3 className="font-display text-lg font-extrabold tracking-tight mb-2">{step.title}</h3>
+              <p className="text-[#071D49]/70 text-sm leading-relaxed">{step.desc}</p>
+            </motion.div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
 
 export default function NivelacionAdultos() {
   const [openFaq, setOpenFaq] = useState(null);
@@ -36,23 +69,24 @@ export default function NivelacionAdultos() {
           <img src={adultosImg} alt="" className="w-full h-full object-cover" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/60 to-[#071D49]" />
+        <BrandArcs />
         <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-6" style={{ color: YELLOW }}>
+          <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-6 text-programa">
             {ADULT_HERO.eyebrow}
           </motion.p>
           <WordReveal
-            className="font-display text-white text-4xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6 sm:mb-8"
+            className="font-display text-white text-[2.5rem] sm:text-6xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.02] mb-6 sm:mb-8"
             delay={0.1}
             segments={[
               { text: ADULT_HERO.title, breakAfter: true },
-              { text: ADULT_HERO.accent, style: { color: YELLOW } },
+              { text: ADULT_HERO.accent, className: 'accent-serif text-programa' },
             ]}
           />
           <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
             {ADULT_HERO.desc}
           </motion.p>
           <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[48px] px-8 py-4 rounded-2xl transition-all active:scale-95">
+            <a href="/inscripcion?programa=adultos" className="inline-flex items-center justify-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[48px] px-8 py-4 rounded-2xl transition-all active:scale-95">
               Quiero terminar mis estudios <ArrowRight size={16} />
             </a>
             <a href="#niveles" className="inline-flex items-center justify-center gap-2 border border-white/25 hover:border-white text-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[48px] px-8 py-4 rounded-2xl transition-all active:scale-95">
@@ -62,7 +96,7 @@ export default function NivelacionAdultos() {
           <motion.div {...fadeUp(0.4)} className="grid grid-cols-3 gap-4 border-t border-white/10 pt-8 mt-14 max-w-xl mx-auto">
             {[['Gratis', 'Preparación'], ['20:00', 'Clases en la noche'], ['+18', 'Años']].map(([v, l]) => (
               <div key={l}>
-                <p className="font-display font-extrabold text-xl uppercase" style={{ color: YELLOW }}>{v}</p>
+                <p className="font-display font-extrabold text-xl text-programa">{v}</p>
                 <p className="text-white/60 text-xs font-bold uppercase tracking-wider mt-1">{l}</p>
               </div>
             ))}
@@ -76,7 +110,7 @@ export default function NivelacionAdultos() {
           <div className="text-center mb-10 sm:mb-16">
             <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-4">Básica y media</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-[-0.03em]">
-              ¿Qué nivel te toca?
+              ¿Qué nivel <span className="accent-serif">te toca?</span>
             </motion.h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -102,9 +136,9 @@ export default function NivelacionAdultos() {
       <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28 text-white" style={{ backgroundColor: BLUE }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10 sm:mb-14">
-            <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-4" style={{ color: YELLOW }}>Un ciclo por semestre</motion.p>
+            <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-4 text-programa">Un ciclo por semestre</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight">
-              Dos oportunidades al año
+              Dos oportunidades <span className="accent-serif text-programa">al año.</span>
             </motion.h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -114,7 +148,7 @@ export default function NivelacionAdultos() {
                   <Calendario size={24} className="text-white flex-shrink-0" />
                   <h3 className="font-display text-xl font-extrabold uppercase">{c.title}</h3>
                 </div>
-                <p className="text-white font-semibold">{c.when} · <span style={{ color: YELLOW }}>{c.exam}</span></p>
+                <p className="text-white font-semibold">{c.when} · <span className="text-programa">{c.exam}</span></p>
                 <p className="text-white/75 text-sm leading-relaxed mt-3">{c.note}</p>
               </motion.div>
             ))}
@@ -128,18 +162,10 @@ export default function NivelacionAdultos() {
           <div className="text-center mb-10 sm:mb-16">
             <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-4">Paso a paso</motion.p>
             <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-[-0.03em]">
-              Cómo funciona
+              Cómo <span className="accent-serif">funciona.</span>
             </motion.h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {ADULT_STEPS.map((step, i) => (
-              <motion.div key={step.num} {...fadeUp(i * 0.1)} className="rounded-[28px] p-6 sm:p-8 bg-[#F4F4F4]">
-                <p className="font-display text-4xl font-black mb-4" style={{ color: BLUE }}>{step.num}</p>
-                <h3 className="font-display text-lg font-extrabold uppercase tracking-tight mb-3">{step.title}</h3>
-                <p className="text-[#071D49]/70 text-sm leading-relaxed">{step.desc}</p>
-              </motion.div>
-            ))}
-          </div>
+          <CaminoPasos pasos={ADULT_STEPS} />
           <motion.div {...fadeUp(0.2)} className="mt-12 max-w-2xl mx-auto rounded-[24px] border-2 border-dashed border-[#071D49]/15 p-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
             <div className="w-12 h-12 rounded-full bg-[#D7E400] flex items-center justify-center flex-shrink-0">
               <Corazon size={24} accent="#FFFFFF" style={{ color: BLUE }} />
@@ -191,7 +217,7 @@ export default function NivelacionAdultos() {
       <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28">
         <div className="max-w-3xl mx-auto">
           <motion.h2 {...fadeUp(0)} className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-center mb-12">
-            Preguntas frecuentes
+            Preguntas <span className="accent-serif">frecuentes.</span>
           </motion.h2>
           <div className="space-y-4">
             {ADULT_FAQS.map((faq, idx) => (
@@ -200,7 +226,7 @@ export default function NivelacionAdultos() {
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                   className="w-full flex items-center justify-between p-5 sm:p-6 text-left min-h-[56px]"
                 >
-                  <span className="font-bold font-display uppercase tracking-tight pr-4 sm:pr-6">{faq.q}</span>
+                  <span className="font-bold font-display tracking-tight pr-4 sm:pr-6">{faq.q}</span>
                   <ChevronDown size={18} className={`flex-shrink-0 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
                 </button>
                 <AnimatePresence initial={false}>
@@ -225,7 +251,7 @@ export default function NivelacionAdultos() {
       {/* ── CTA ──────────────────────────────────────────────────────── */}
       <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28 text-center text-white" style={{ backgroundColor: BLUE }}>
         <motion.h2 {...fadeUp(0)} className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight mb-6">
-          Nunca es tarde para ser <br /> <span style={{ color: YELLOW }}>lo que podrías haber sido.</span>
+          Nunca es tarde para ser <br /> <span className="accent-serif text-programa">lo que podrías haber sido.</span>
         </motion.h2>
         <motion.p {...fadeUp(0.1)} className="text-white/75 text-base sm:text-lg max-w-xl mx-auto mb-10">
           Escríbenos y vemos juntos por dónde partir.

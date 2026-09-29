@@ -3,5 +3,6 @@ Allow: /
 
 Disallow: /resultado-diagnostico
 Disallow: /gracias
+Disallow: /encuesta
 
 Sitemap: https://www.institutolael.cl/sitemap.xml

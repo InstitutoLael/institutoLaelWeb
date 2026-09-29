@@ -10,9 +10,9 @@ import CategoryIcon from '../../components/noticias/CategoryIcon';
 const SITE = 'https://www.institutolael.cl';
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 14 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] },
+  transition: { duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] },
 });
 
 export default function NoticiasIndex() {

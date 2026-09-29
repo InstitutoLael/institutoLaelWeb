@@ -1,6 +1,47 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { animate, motion, useReducedMotion } from 'framer-motion';
 import { Check, X, AlertCircle, Star, Share2 } from 'lucide-react';
 import { LABEL, fmt, weightsText, shareText, shareResult } from './utils';
+
+/** El puntaje sube (o baja) hasta su nuevo valor cuando cambian tus notas. */
+function CountUp({ value, digits = 1 }) {
+  const reduce = useReducedMotion();
+  const [shown, setShown] = useState(value);
+  const prev = useRef(value);
+  useEffect(() => {
+    if (reduce || prev.current == null) { setShown(value); prev.current = value; return undefined; }
+    const ctrl = animate(prev.current, value, { duration: 0.6, ease: [0.16, 1, 0.3, 1], onUpdate: setShown });
+    prev.current = value;
+    return () => ctrl.stop();
+  }, [value, reduce]);
+  return <>{fmt(shown, digits)}</>;
+}
+
+/** Barra: qué tan cerca estás del puntaje de corte (la marca es el corte). */
+function CutoffBar({ score, cutoff }) {
+  if (score == null || cutoff == null) return null;
+  // Escala desde 100 puntos bajo el corte hasta 60 sobre él
+  const min = cutoff - 100;
+  const max = cutoff + 60;
+  const pct = (v) => Math.max(0, Math.min(100, ((v - min) / (max - min)) * 100));
+  const ok = score >= cutoff;
+  return (
+    <div className="mt-3" aria-hidden="true">
+      <div className="relative h-2.5 rounded-full bg-[#071D49]/10 overflow-hidden">
+        <motion.div
+          className={`absolute inset-y-0 left-0 rounded-full ${ok ? "bg-emerald-500" : "bg-[#071D49]"}`}
+          initial={{ width: 0 }}
+          animate={{ width: `${pct(score)}%` }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        />
+      </div>
+      <div className="relative h-4">
+        <span className="absolute -top-3.5 w-0.5 h-4 bg-[#071D49]" style={{ left: `${pct(cutoff)}%` }} />
+        <span className="absolute top-0.5 text-[10px] font-bold uppercase tracking-wider -translate-x-1/2" style={{ left: `${pct(cutoff)}%` }}>corte</span>
+      </div>
+    </div>
+  );
+}
 
 /** Diferencia entre el puntaje del alumno y el corte, en palabras. */
 export function CutoffDelta({ score, cutoff, compact = false }) {
@@ -71,7 +112,7 @@ export default function CareerCard({ c, cutoff, cutoffLabel, cutoffYear, region,
         </div>
         {r.value != null && (
           <div className="text-right flex-shrink-0">
-            <p className="font-display text-2xl sm:text-3xl font-black leading-none tabular-nums">{fmt(r.value, 1)}</p>
+            <p className="font-display text-2xl sm:text-3xl font-black leading-none tabular-nums"><CountUp value={r.value} /></p>
             <p className="text-[11px] font-semibold text-[#071D49]/70 mt-1">tu ponderado</p>
           </div>
         )}
@@ -119,6 +160,7 @@ export default function CareerCard({ c, cutoff, cutoffLabel, cutoffYear, region,
               {r.value != null && (
                 <div className="mt-2">
                   <CutoffDelta score={r.value} cutoff={cutoff} />
+                  <CutoffBar score={r.value} cutoff={cutoff} />
                 </div>
               )}
               <p className="text-xs text-[#071D49]/70 mt-2 leading-snug">Referencia del proceso {cutoffYear}. El corte cambia cada año.</p>

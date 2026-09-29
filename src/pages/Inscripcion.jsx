@@ -64,7 +64,13 @@ export default function Inscripcion() {
   const [programaId, setProgramaId] = useState(() => (PROGRAMAS.some((p) => p.id === params.get('programa')) ? params.get('programa') : 'paes'));
   const [ramos, setRamos] = useState(() => (params.get('ramos') || '').split(',').filter(Boolean).map((r) => (r.startsWith('paes-') ? r : `paes-${r}`)));
   const [opcion, setOpcion] = useState('');
-  const [form, setForm] = useState(() => ({ ...EMPTY, referido: params.get('amigo') || '' }));
+  const [form, setForm] = useState(() => {
+    // Viene del test de nivel de inglés o de un plan: lo dejamos anotado
+    const notas = [];
+    if (/^(A1|A2|B1|B2)$/.test(params.get('nivel') || '')) notas.push(`Mi test de nivel de inglés dio ${params.get('nivel')}.`);
+    if (params.get('plan') === 'trimestral') notas.push('Quiero el plan trimestral.');
+    return { ...EMPTY, referido: params.get('amigo') || '', comentario: notas.join(' ') };
+  });
   const [estado, setEstado] = useState('idle'); // idle | enviando | error
   const [error, setError] = useState('');
   const [errorCampo, setErrorCampo] = useState('');
@@ -73,18 +79,22 @@ export default function Inscripcion() {
   const inv = (id) => (errorCampo === id ? { 'aria-invalid': true, 'aria-describedby': 'form-error' } : {});
 
   const programa = programaPorId(programaId);
-  const precio = useMemo(() => precioPaes(ramos), [ramos]);
+  const quedan = (codigo) => (cupos && cupos[codigo] ? cupos[codigo].quedan : null);
+  // Ramos sin cupo: la persona igual los puede elegir y queda en lista de espera
+  const ramosEspera = ramos.filter((r) => quedan(r) === 0);
+  const ramosCupo = ramos.filter((r) => quedan(r) !== 0);
+  const cursoLleno = Boolean(programa.cupo) && quedan(programa.cupo) === 0;
+  const precio = useMemo(() => precioPaes(ramosCupo), [ramosCupo.join()]); // eslint-disable-line react-hooks/exhaustive-deps
   const esMenor = Number(form.edad) > 0 && Number(form.edad) < 18;
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
 
   useEffect(() => { setOpcion(''); }, [programaId]);
 
-  const quedan = (codigo) => (cupos && cupos[codigo] ? cupos[codigo].quedan : null);
-
   const detalle = () => {
     if (programa.eleccion === 'ramos') {
-      const nombres = PAES_RAMOS.filter((r) => ramos.includes(r.cupo)).map((r) => r.nombre).join(', ');
-      return `${ramos.join(', ')} (${nombres}) · ${clp(precio.total)}/mes${precio.completo ? ' Plan Completo' : ''}`;
+      if (!ramosCupo.length) return `${ramosEspera.join(', ')} (lista de espera)`;
+      const nombres = PAES_RAMOS.filter((r) => ramosCupo.includes(r.cupo)).map((r) => r.nombre).join(', ');
+      return `${ramosCupo.join(', ')} (${nombres}) · ${clp(precio.total)}/mes${precio.completo ? ' Plan Completo' : ''}`;
     }
     if (programa.eleccion === 'verano') {
       const v = VERANO_OPCIONES.find((o) => o.cupo === opcion);
@@ -119,7 +129,9 @@ export default function Inscripcion() {
     setEstado('enviando');
     const payload = {
       ...form,
-      tipo: programa.tipo,
+      tipo: cursoLleno || (programa.eleccion === 'ramos' && ramos.length && !ramosCupo.length) ? 'lista-espera' : programa.tipo,
+      cursos: programa.eleccion === 'ramos' ? ramosCupo : programa.cupo ? [programa.cupo] : [],
+      lista_espera: programa.eleccion === 'ramos' ? ramosEspera : cursoLleno ? [programa.cupo] : [],
       programa: programa.nombre,
       detalle: detalle(),
       origen: typeof document !== 'undefined' ? document.referrer || 'directo' : '',
@@ -130,7 +142,7 @@ export default function Inscripcion() {
     if (backendReady()) {
       try {
         await sendForm(payload);
-        navigate(`/gracias?programa=${programa.id}`, { state: { nombre: form.nombre.split(' ')[0], programa: programa.nombre, tipo: programa.tipo } });
+        navigate(`/gracias?programa=${programa.id}`, { state: { nombre: form.nombre.split(' ')[0], programa: programa.nombre, tipo: payload.tipo } });
         return;
       } catch (err) {
         if (err.message === 'demasiados_envios') {
@@ -150,7 +162,7 @@ export default function Inscripcion() {
       `${form.quiere_beca ? 'Me interesa postular a beca.\n' : ''}${form.referido ? `Vengo de parte de: ${form.referido}\n` : ''}` +
       `${form.comentario ? `Comentario: ${form.comentario}` : ''}`;
     window.open(whatsappUrl(texto), '_blank', 'noopener');
-    navigate(`/gracias?programa=${programa.id}`, { state: { nombre: form.nombre.split(' ')[0], programa: programa.nombre, tipo: programa.tipo, viaWhatsapp: true } });
+    navigate(`/gracias?programa=${programa.id}`, { state: { nombre: form.nombre.split(' ')[0], programa: programa.nombre, tipo: payload.tipo, viaWhatsapp: true } });
   };
 
   return (
@@ -192,6 +204,7 @@ export default function Inscripcion() {
               </select>
             </Field>
             {programa.nota && <p className="text-sm text-[#071D49]/70 mt-3">{programa.nota}</p>}
+            {cursoLleno && <p className="text-sm mt-3 rounded-xl bg-[#F4F4F4] px-4 py-3">Este curso está lleno por ahora. Si te inscribes, quedas en la <strong>lista de espera</strong> y te avisamos apenas se libere un cupo.</p>}
 
             {programa.eleccion === 'ramos' && (
               <div className="mt-6">
@@ -202,19 +215,24 @@ export default function Inscripcion() {
                     const lleno = q === 0;
                     const activo = ramos.includes(r.cupo);
                     return (
-                      <Chip key={r.cupo} active={activo} disabled={lleno && !activo} onClick={() => setRamos((rs) => (rs.includes(r.cupo) ? rs.filter((x) => x !== r.cupo) : [...rs, r.cupo]))}>
+                      <Chip key={r.cupo} active={activo} onClick={() => setRamos((rs) => (rs.includes(r.cupo) ? rs.filter((x) => x !== r.cupo) : [...rs, r.cupo]))}>
                         <span className="flex-1">
                           {r.nombre}
                           <span className={`block text-xs font-normal ${activo ? 'text-white/70' : 'text-[#071D49]/70'}`}>
                             {r.obligatoria ? 'Obligatoria' : 'Electiva'}
-                            {q != null && (lleno ? ' · Sin cupos' : ` · Quedan ${q} cupos`)}
+                            {q != null && (lleno ? ' · Lleno: lista de espera' : ` · Quedan ${q} cupos`)}
                           </span>
                         </span>
                       </Chip>
                     );
                   })}
                 </div>
-                {ramos.length > 0 && (
+                {ramosEspera.length > 0 && (
+                  <p className="mt-4 text-sm rounded-xl bg-[#F4F4F4] px-4 py-3">
+                    {ramosEspera.length === 1 ? 'Uno de tus ramos está lleno' : 'Algunos de tus ramos están llenos'}: te anotamos en la <strong>lista de espera</strong> y te avisamos apenas se libere un cupo. No se cobra hasta que entres.
+                  </p>
+                )}
+                {ramosCupo.length > 0 && (
                   <div className="mt-4 rounded-2xl p-4 flex items-center justify-between gap-4" style={{ backgroundColor: BLUE }}>
                     <div className="text-white">
                       <p className="text-xs uppercase tracking-wider text-white/70 font-bold">{precio.completo ? 'Plan Completo' : `${precio.cantidad} ramo${precio.cantidad > 1 ? 's' : ''}`}</p>
@@ -311,7 +329,7 @@ export default function Inscripcion() {
             {error && <p id="form-error" role="alert" className="text-sm font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-xl px-4 py-3">{error}</p>}
 
             <button type="submit" disabled={estado === 'enviando'} className="w-full min-h-[56px] rounded-2xl bg-[#D7E400] text-[#071D49] font-display font-extrabold text-sm uppercase tracking-wider inline-flex items-center justify-center gap-2 disabled:opacity-70">
-              {estado === 'enviando' ? <><Loader2 size={18} className="animate-spin" /> Enviando…</> : <>{programa.tipo === 'clase-prueba' ? 'Pedir mi clase de prueba' : programa.tipo === 'aviso' ? 'Avísenme cuando abra' : 'Asegurar mi cupo'} <ArrowRight size={18} /></>}
+              {estado === 'enviando' ? <><Loader2 size={18} className="animate-spin" /> Enviando…</> : <>{programa.tipo === 'clase-prueba' ? 'Pedir mi clase de prueba' : programa.tipo === 'aviso' ? 'Avísenme cuando abra' : cursoLleno ? 'Anotarme en la lista de espera' : 'Asegurar mi cupo'} <ArrowRight size={18} /></>}
             </button>
             <p className="text-xs text-[#071D49]/70 flex items-center gap-1.5 justify-center"><ShieldCheck size={14} /> Tus datos solo los ve el equipo de Lael.</p>
           </div>

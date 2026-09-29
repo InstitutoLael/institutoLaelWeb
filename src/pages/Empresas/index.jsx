@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
+import BrandArcs from '../../components/ui/BrandArcs';
 import { ArrowRight, MessageCircle, Check } from 'lucide-react';
 import { Empresa } from '../../components/icons/LaelIcons';
 import EmpresasForm from './EmpresasForm';
@@ -14,10 +15,10 @@ const WHATSAPP_URL = 'https://wa.me/56964626568?text=Hola,%20quiero%20cotizar%20
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 14 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.6, delay, ease },
+  transition: { duration: 0.5, delay, ease },
 });
 
 export default function Empresas() {
@@ -34,12 +35,13 @@ export default function Empresas() {
           <img src={empresasImg} alt="" className="w-full h-full object-cover" />
         </div>
         <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/70 to-[#071D49]" />
+        <BrandArcs />
         <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-6" style={{ color: YELLOW }}>
+          <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-6 text-programa">
             Lael Empresas · Crecer juntos
           </motion.p>
           <motion.h1 {...fadeUp(0.1)} className="font-display text-white text-4xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6 sm:mb-8">
-            Capacitación que <br /> <span style={{ color: YELLOW }}>tu equipo sí usa.</span>
+            Capacitación que <br /> <span className="accent-serif text-programa">tu equipo sí usa.</span>
           </motion.h1>
           <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
             Talleres de inteligencia artificial, inglés y nivelación de estudios para tus trabajadores. Online, o presencial en Santiago. Nos cuentas qué necesitas y armamos la propuesta.

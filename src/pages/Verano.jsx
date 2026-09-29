@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import BrandArcs from '../components/ui/BrandArcs';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Sun, Check, ArrowRight, CalendarDays } from 'lucide-react';
@@ -10,10 +11,10 @@ const YELLOW = '#D7E400';
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 14 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.6, delay, ease },
+  transition: { duration: 0.5, delay, ease },
 });
 
 export default function Verano() {
@@ -26,13 +27,13 @@ export default function Verano() {
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="relative -mt-20 pt-32 sm:pt-40 pb-16 sm:pb-20 lg:pb-24 px-5 sm:px-6 text-white overflow-hidden" style={{ backgroundColor: BLUE }}>
-        <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-[140px] opacity-30" style={{ backgroundColor: YELLOW }} />
+        <BrandArcs />
         <div className="relative z-10 max-w-4xl mx-auto text-center">
           <motion.div {...fadeUp(0)} className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full font-display text-xs font-bold uppercase tracking-[0.2em]" style={{ backgroundColor: YELLOW, color: BLUE }}>
             <Sun size={14} /> Verano Lael 2027
           </motion.div>
           <motion.h1 {...fadeUp(0.1)} className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05] mb-6 text-white">
-            Que marzo no te <br className="hidden sm:block" /> <span style={{ color: YELLOW }}>pille desprevenido.</span>
+            Que marzo no te <br className="hidden sm:block" /> <span className="accent-serif text-programa">pille desprevenido.</span>
           </motion.h1>
           <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
             En enero hacemos cursos cortos para partir el año con ventaja. Algunos son gratis. Todos son online, por Google Meet, y puedes combinarlos con tus vacaciones.

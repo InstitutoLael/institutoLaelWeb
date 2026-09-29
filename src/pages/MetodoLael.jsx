@@ -1,160 +1,167 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { X } from 'lucide-react';
-import { Diagnostico, ClaseEnVivo, Calendario } from '../components/icons/LaelIcons';
-import CTASection from '../components/CTASection';
+import { ArrowRight, Check, MessageCircle, Video, BookOpen, PlayCircle, ClipboardCheck, Coffee, Flame } from 'lucide-react';
+import { Diagnostico, Lista, ClaseEnVivo, Reloj, Dispositivo, Conexion, Cuenta } from '../components/icons/LaelIcons';
+import PageHero, { SectionTitle, fadeUp, SECTION, BTN_YELLOW, BTN_BLUE } from '../components/ui/PageHero';
+import BrandArcs from '../components/ui/BrandArcs';
+import { whatsappUrl } from '../lib/backend';
 
-const ease = [0.16, 1, 0.3, 1];
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.6, delay, ease }
-});
+// Una sola página para "cómo funciona", "cómo enseñamos" y "cómo es una
+// clase" (antes eran /sistema y /metodo por separado). /sistema y
+// /como-es-una-clase muestran esta misma página.
 
-const SECTION = 'px-5 sm:px-6 py-16 sm:py-20 lg:py-28';
-const H2 = 'font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight';
-const EYEBROW = 'text-xs font-bold uppercase tracking-[0.2em] mb-3';
-
-const NO_FUNCIONA = [
-  "Clases donde solo escuchas y nunca practicas.",
-  "Ensayos que nadie revisa contigo.",
-  "Memorizar sin entender para qué sirve.",
-  "Estudiar horas seguidas, sin pausas ni orden."
+const PASOS = [
+  { icon: Diagnostico, t: 'Nos cuentas dónde estás', d: 'Haz el diagnóstico gratis o escríbenos por WhatsApp. Con eso sabemos qué te cuesta y qué necesitas.' },
+  { icon: Lista, t: 'Eliges tus ramos', d: 'La matrícula es gratis y pagas solo los ramos que tomas. Si el costo es un problema, postula a una beca.' },
+  { icon: ClaseEnVivo, t: 'Vas a clases en vivo', d: 'Por Google Meet, desde las 18:00, en cursos de máximo 20 personas.' },
+  { icon: Reloj, t: 'Practicas y revisamos', d: 'Cada mes haces un ensayo con el tiempo de la PAES y vemos juntos qué ajustar.' },
 ];
 
-const SI_HACEMOS = [
-  { t: "Repaso Espaciado", d: "Volvemos a los temas cada cierto tiempo para que no se te olviden." },
-  { t: "Práctica Activa", d: "En clase te toca resolver ejercicios. La materia se queda cuando la haces tú." },
-  { t: "Seguimiento", d: "Con el ensayo de cada mes vemos en qué preguntas fallas y dónde se te va el tiempo." }
+// Una semana cualquiera en Lael
+const SEMANA = [
+  { icon: Video, t: 'Clase en vivo por Meet', d: 'Dos clases de una hora a la semana por ramo. Entras con tu cuenta de Google y con la cámara prendida: así el profe ve cuando algo no se entendió.' },
+  { icon: BookOpen, t: 'Material en Classroom', d: 'Guías, ejercicios y avisos quedan ordenados por ramo en Google Classroom. No se pierde nada en un chat.' },
+  { icon: PlayCircle, t: 'La grabación, esa misma semana', d: 'Si faltaste o quieres repasar, cada semana te compartimos las grabaciones de tus clases.' },
+  { icon: MessageCircle, t: 'Dudas por escrito', d: 'Si algo no te quedó claro, le escribes a tu profe. Nadie te va a mirar raro por preguntar lo mismo dos veces.' },
 ];
 
-const COMO_PARTES = [
-  { t: "Paso 1: Ver dónde estás", d: "Un primer diagnóstico para saber qué te cuesta más." },
-  { t: "Paso 2: Armar tu plan", d: "Ordenamos qué ramos y temas priorizar según tu tiempo." },
-  { t: "Paso 3: Practicar", d: "Clases en vivo por Google Meet desde las 18:00 y un ensayo PAES cada mes." }
+// Cómo se ve el año del preu
+const ANIO = [
+  { mes: 'Marzo', t: 'Ensayo diagnóstico', d: 'La primera semana haces un ensayo para saber desde dónde partes. La segunda lo revisamos contigo.', icon: ClipboardCheck },
+  { mes: 'Abril a octubre', t: 'Materia y un ensayo al mes', d: 'Avanzamos por todos los contenidos de la PAES. Cada mes, un ensayo hecho por nosotros para medir cómo vas.', icon: BookOpen },
+  { mes: 'Mayo, julio y septiembre', t: 'Semanas de descanso', d: 'Hay una semana de receso en mayo, las vacaciones de invierno y Fiestas Patrias. Descansar también es parte del plan.', icon: Coffee },
+  { mes: 'Antes de la PAES', t: 'Intensivo', d: 'Terminada la materia, repasamos lo que más cuesta y practicamos con el reloj encima.', icon: Flame },
+];
+
+const METODO = [
+  { t: 'Repaso espaciado', d: 'Volvemos a los temas cada cierto tiempo para que no se te olviden.' },
+  { t: 'Práctica activa', d: 'En clase te toca resolver ejercicios. La materia se queda cuando la haces tú.' },
+  { t: 'Seguimiento', d: 'Con el ensayo de cada mes vemos en qué preguntas fallas y dónde se te va el tiempo.' },
+];
+
+const NECESITAS = [
+  { icon: Dispositivo, t: 'Un computador, tablet o celular' },
+  { icon: Conexion, t: 'Conexión a internet' },
+  { icon: Cuenta, t: 'Una cuenta de Google' },
 ];
 
 export default function MetodoLael() {
   return (
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
-        <title>Cómo enseñamos | Instituto Lael</title>
-        <meta name="description" content="Así trabajamos en Lael: clases en vivo por Google Meet, un ensayo PAES cada mes y un profe que sigue tu avance." />
+        <title>Así se estudia en Lael | Instituto Lael</title>
+        <meta name="description" content="Cómo funciona Lael paso a paso: clases en vivo por Google Meet, material en Classroom, grabaciones cada semana, un ensayo PAES al mes y un profe que sigue tu avance." />
       </Helmet>
 
-      {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative -mt-20 pt-36 sm:pt-44 pb-16 sm:pb-20 px-5 sm:px-6 bg-[#071D49] text-white">
-        <div className="max-w-3xl mx-auto text-center">
-          <motion.p {...fadeUp()} className={`${EYEBROW} text-[#D7E400]`}>Cómo trabajamos</motion.p>
-          <motion.h1 {...fadeUp(0.05)} className="font-display text-4xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-tight leading-[1.05] mb-6 text-white">
-            Nuestra forma <br />
-            <span className="text-[#D7E400]">de enseñar</span>
-          </motion.h1>
-          <motion.p {...fadeUp(0.1)} className="text-white/75 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
-            Explicamos hasta que se entienda, con paciencia y sin apuro. Después tienes la grabación para repasar y, cada mes, un ensayo para ver cómo vas.
-          </motion.p>
-        </div>
-      </section>
+      <PageHero eyebrow="Cómo funciona" title="Así se estudia" accent="en Lael.">
+        Desde que nos escribes hasta el día de la PAES, contado simple. Explicamos hasta que se entienda, con paciencia y sin apuro.
+      </PageHero>
 
-      {/* ── 1. LO QUE NO FUNCIONA ────────────────────────────────────── */}
+      {/* ── PASOS ───────────────────────────────────────────────────── */}
       <section className={`${SECTION} bg-white`}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
-          <motion.div {...fadeUp()}>
-            <h2 className={`${H2} mb-5`}>Lo que no funciona.</h2>
-            <p className="text-[#071D49]/70 text-base sm:text-lg leading-relaxed mb-6">
-              Mucha gente cree que para mejorar necesita "más materia". Se inscribe en cursos con cientos de videos y termina <strong className="text-[#071D49]">saturada</strong>, sin saber por dónde seguir.
-            </p>
-            <ul className="space-y-3">
-              {NO_FUNCIONA.map((t) => (
-                <li key={t} className="flex items-start gap-3 text-[#071D49]/80 text-sm sm:text-base leading-snug">
-                  <span className="w-6 h-6 rounded-full bg-rose-50 text-rose-700 flex items-center justify-center flex-shrink-0" aria-hidden="true">
-                    <X size={14} strokeWidth={3} />
-                  </span>
-                  {t}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-          <motion.div {...fadeUp(0.1)} className="p-6 sm:p-10 bg-[#071D49] rounded-[28px] shadow-lael">
-            <p className={`${EYEBROW} text-[#D7E400]`}>Lo que pasa:</p>
-            <p className="font-display text-xl sm:text-2xl font-bold text-white leading-snug">"Estudias 8 horas, el puntaje no se mueve y terminas agotado."</p>
-          </motion.div>
+        <div className="max-w-6xl mx-auto">
+          <SectionTitle eyebrow="Paso a paso" title="Cómo" accent="partes." className="text-center mb-10 sm:mb-14" />
+          <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            {PASOS.map((p, i) => (
+              <motion.li key={p.t} {...fadeUp(i * 0.05)} className="relative bg-[#F4F4F4] rounded-[28px] p-6 sm:p-7 border border-[#071D49]/5 overflow-hidden">
+                <span className="absolute right-5 top-2 font-serif italic text-7xl text-[#071D49]/[0.07] select-none" aria-hidden="true">{i + 1}</span>
+                <div className="w-12 h-12 rounded-2xl bg-[#071D49] flex items-center justify-center mb-5"><p.icon size={24} className="text-white" /></div>
+                <h3 className="font-display text-lg font-extrabold tracking-tight mb-2">{p.t}</h3>
+                <p className="text-[#071D49]/70 text-sm sm:text-base leading-relaxed">{p.d}</p>
+              </motion.li>
+            ))}
+          </ol>
         </div>
       </section>
 
-      {/* ── 2. LO QUE SÍ FUNCIONA ────────────────────────────────────── */}
-      <section className={SECTION}>
+      {/* ── UNA SEMANA ──────────────────────────────────────────────── */}
+      <section id="clase" className={SECTION}>
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+          <div className="lg:col-span-2 lg:sticky lg:top-28">
+            <SectionTitle eyebrow="Una semana en Lael" title="Así es" accent="una clase." />
+            <motion.p {...fadeUp(0.08)} className="text-[#071D49]/70 text-base sm:text-lg leading-relaxed mt-5">
+              Si nunca has estudiado online, es normal tener dudas. Esto es lo que pasa en una semana cualquiera.
+            </motion.p>
+            <motion.div {...fadeUp(0.12)} className="mt-6">
+              <Link to="/inscripcion?programa=clase-prueba" className={BTN_BLUE}>Pedir una clase de prueba <ArrowRight size={16} /></Link>
+            </motion.div>
+          </div>
+          <ul className="lg:col-span-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {SEMANA.map((s, i) => (
+              <motion.li key={s.t} {...fadeUp(i * 0.05)} className="bg-white rounded-[24px] p-6 border border-[#071D49]/5 shadow-card">
+                <s.icon size={26} className="mb-4" aria-hidden="true" />
+                <h3 className="font-display font-extrabold text-base sm:text-lg mb-2">{s.t}</h3>
+                <p className="text-[#071D49]/70 text-sm leading-relaxed">{s.d}</p>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ── EL AÑO ──────────────────────────────────────────────────── */}
+      <section className={`${SECTION} relative bg-[#071D49] text-white overflow-hidden`}>
+        <BrandArcs variant="side" />
+        <div className="relative max-w-4xl mx-auto">
+          <SectionTitle eyebrow="El año del preu" title="De marzo" accent="a la PAES." dark className="text-center mb-10 sm:mb-14" />
+          <ol className="relative border-l-2 border-white/15 ml-3 sm:ml-6 space-y-8">
+            {ANIO.map((a, i) => (
+              <motion.li key={a.t} {...fadeUp(i * 0.06)} className="pl-8 sm:pl-10 relative">
+                <span className="absolute -left-[17px] top-0 w-8 h-8 rounded-full bg-[#071D49] border-2 border-programa flex items-center justify-center">
+                  <a.icon size={15} className="text-programa" aria-hidden="true" />
+                </span>
+                <p className="text-xs font-bold uppercase tracking-[0.15em] text-programa mb-1">{a.mes}</p>
+                <h3 className="font-display text-xl font-extrabold mb-1.5">{a.t}</h3>
+                <p className="text-white/75 leading-relaxed">{a.d}</p>
+              </motion.li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ── MÉTODO ──────────────────────────────────────────────────── */}
+      <section className={`${SECTION} bg-white`}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10 sm:mb-14">
-            <motion.h2 {...fadeUp()} className={`${H2} mb-4`}>Lo que sí hacemos.</motion.h2>
-            <motion.p {...fadeUp(0.05)} className="text-[#071D49]/70 text-base sm:text-lg leading-relaxed max-w-xl mx-auto">Estudiar más horas sirve poco si nadie te muestra en qué te estás equivocando.</motion.p>
+            <SectionTitle eyebrow="Cómo enseñamos" title="Estudiar más horas" accent="sirve poco." />
+            <motion.p {...fadeUp(0.08)} className="text-[#071D49]/70 text-base sm:text-lg leading-relaxed max-w-xl mx-auto mt-4">
+              Sirve más saber en qué te estás equivocando. Por eso trabajamos así:
+            </motion.p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            {SI_HACEMOS.map((item, i) => (
-              <motion.div key={item.t} {...fadeUp(i * 0.06)} className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#071D49]/5 shadow-card">
-                <div className="w-12 h-12 rounded-2xl bg-[#071D49] text-[#D7E400] font-display font-extrabold text-base flex items-center justify-center mb-5">0{i + 1}</div>
-                <h3 className="font-display text-lg font-extrabold uppercase tracking-tight mb-2">{item.t}</h3>
-                <p className="text-[#071D49]/70 text-sm sm:text-base leading-relaxed">{item.d}</p>
+            {METODO.map((m, i) => (
+              <motion.div key={m.t} {...fadeUp(i * 0.05)} className="rounded-[28px] p-6 sm:p-8 bg-[#F4F4F4] border border-[#071D49]/5">
+                <p className="font-serif italic text-4xl text-[#071D49]/40 mb-3">0{i + 1}</p>
+                <h3 className="font-display text-lg font-extrabold mb-2">{m.t}</h3>
+                <p className="text-[#071D49]/70 text-sm sm:text-base leading-relaxed">{m.d}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── 3. CÓMO PARTES ───────────────────────────────────────────── */}
-      <section className={`${SECTION} bg-white`}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          <motion.div {...fadeUp()}>
-            <p className={`${EYEBROW} inline-flex items-center gap-2`}>
-              <span className="w-2 h-2 rounded-full bg-[#D7E400] ring-2 ring-[#071D49]/10" aria-hidden="true" />
-              Paso a paso
-            </p>
-            <h2 className={`${H2} mb-8`}>Cómo partes.</h2>
-            <div className="space-y-4">
-              {COMO_PARTES.map((f, i) => (
-                <div key={f.t} className="flex gap-4 bg-[#F4F4F4] rounded-[24px] p-5 border border-[#071D49]/5">
-                  <div className="w-11 h-11 bg-[#D7E400] text-[#071D49] flex items-center justify-center rounded-2xl font-display font-extrabold flex-shrink-0">{i + 1}</div>
-                  <div>
-                    <h3 className="font-display font-extrabold text-base sm:text-lg mb-1">{f.t}</h3>
-                    <p className="text-[#071D49]/70 text-sm sm:text-base leading-relaxed">{f.d}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-          <motion.div {...fadeUp(0.1)} className="hidden lg:flex relative w-full max-w-[440px] justify-self-center h-[420px] rounded-[32px] bg-[#071D49] items-center justify-center shadow-lael" aria-hidden="true">
-            <Diagnostico size={140} strokeWidth={1.5} className="text-white/25" />
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── 4. EN CORTO ──────────────────────────────────────────────── */}
-      <section className={`${SECTION} bg-[#071D49] text-white`}>
+      {/* ── LO QUE NECESITAS + CTA ──────────────────────────────────── */}
+      <section className={SECTION}>
         <div className="max-w-4xl mx-auto text-center">
-          <motion.h2 {...fadeUp()} className={`${H2} mb-10`}>En corto, <br /> esto es lo que hay.</motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 text-left">
-            {[
-              { icon: ClaseEnVivo, t: 'En vivo', d: 'Clases por Google Meet desde las 18:00, con un profe al que le puedes preguntar.' },
-              { icon: Calendario, t: 'Mensual', d: 'Un ensayo PAES cada mes para medir cómo vas y qué te falta.' },
-            ].map((c, i) => (
-              <motion.div key={c.t} {...fadeUp(i * 0.06)} className="p-6 sm:p-8 bg-white/5 rounded-[28px] border border-white/10">
-                <c.icon size={28} className="text-white mb-4" />
-                <p className="font-display text-[#D7E400] font-extrabold text-2xl sm:text-3xl uppercase mb-2">{c.t}</p>
-                <p className="text-white/75 text-sm sm:text-base leading-relaxed">{c.d}</p>
-              </motion.div>
+          <SectionTitle title="Lo único" accent="que necesitas." />
+          <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5 mt-8 mb-12 text-left sm:text-center">
+            {NECESITAS.map((r) => (
+              <li key={r.t} className="rounded-[24px] p-5 bg-white border border-[#071D49]/5 shadow-card flex sm:flex-col items-center gap-4">
+                <r.icon size={28} className="flex-shrink-0" />
+                <span className="text-sm sm:text-base font-semibold">{r.t}</span>
+              </li>
             ))}
+          </ul>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a href="/inscripcion?programa=paes" className={BTN_YELLOW}>Inscribirme gratis <ArrowRight size={16} /></a>
+            <Link to="/diagnostico" className={BTN_BLUE}>Hacer el diagnóstico</Link>
           </div>
+          <a href={whatsappUrl('Hola, quiero saber cómo funciona Instituto Lael')} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-6 min-h-[44px] text-sm font-semibold text-[#071D49]/75 hover:text-[#071D49] hover:underline">
+            <Check size={16} /> ¿Dudas? Escríbenos por WhatsApp
+          </a>
         </div>
       </section>
-
-      <CTASection
-        title="Parte por saber dónde estás."
-        subtitle="Haz el diagnóstico gratis y te decimos por dónde empezar."
-        btnText="Hacer el diagnóstico"
-        btnLink="/diagnostico"
-      />
     </div>
   );
 }

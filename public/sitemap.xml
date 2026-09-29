@@ -46,11 +46,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.institutolael.cl/sistema</loc>
-    <lastmod>2026-09-23</lastmod>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://www.institutolael.cl/metodo</loc>
     <lastmod>2026-09-23</lastmod>
     <priority>0.6</priority>
@@ -169,5 +164,40 @@
     <loc>https://www.institutolael.cl/testimonio</loc>
     <lastmod>2026-09-23</lastmod>
     <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.institutolael.cl/becas</loc>
+    <lastmod>2026-09-29</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.institutolael.cl/como-pagar</loc>
+    <lastmod>2026-09-29</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.institutolael.cl/condiciones</loc>
+    <lastmod>2026-09-29</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.institutolael.cl/calendario-admision</loc>
+    <lastmod>2026-09-29</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.institutolael.cl/glosario-paes</loc>
+    <lastmod>2026-09-29</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.institutolael.cl/idiomas/test</loc>
+    <lastmod>2026-09-29</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.institutolael.cl/en/spanish</loc>
+    <lastmod>2026-09-29</lastmod>
+    <priority>0.6</priority>
   </url>
 </urlset>

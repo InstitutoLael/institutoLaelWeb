@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import { Link } from 'react-router-dom';
 import { Users, ChevronRight, Award, GraduationCap, Bookmark } from 'lucide-react';
 import languagesBg from '../../assets/img/Home/idiomas_execution_bg_1777948997295.webp';
 import igPost2 from '../../assets/img/Home/media_ig_post_1780733562637.webp';
@@ -57,13 +58,15 @@ export default function LandingEspanol() {
       <Helmet>
         <title>Español para Extranjeros | Instituto Lael - Chile</title>
         <meta name="description" content="Curso online de español para extranjeros que viven en Chile o trabajan con equipos chilenos. Clases en vivo, modismos y español para el trabajo." />
+        <link rel="alternate" hrefLang="es" href="https://www.institutolael.cl/espanol" />
+        <link rel="alternate" hrefLang="en" href="https://www.institutolael.cl/en/spanish" />
       </Helmet>
 
       {/* ── 1. HERO ─────────────────────────────────────────────────── */}
       <ProgramHero
         bg={languagesBg}
         eyebrow="ESPAÑOL PARA EXTRANJEROS"
-        heading={<>Chile también <br /> es tu <span className="text-[#D7E400]">casa.</span></>}
+        heading={<>Chile también <br /> es tu <span className="accent-serif text-programa">casa.</span></>}
         desc="Llegaste a un país donde el español suena distinto. Te enseñamos a entender los chilenismos, a moverte en el trabajo y a conversar tranquilo con tus vecinos y amigos."
       >
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -75,6 +78,7 @@ export default function LandingEspanol() {
             <ChevronRight size={16} aria-hidden="true" />
           </button>
         </div>
+        <p className="mt-6 text-sm"><Link to="/en/spanish" lang="en" hrefLang="en" className="underline underline-offset-4 text-white/80 hover:text-white">Read this page in English</Link></p>
       </ProgramHero>
 
       {/* ── 2. DETALLES DEL PROGRAMA ────────────────────────────────── */}
@@ -98,7 +102,7 @@ export default function LandingEspanol() {
       <section className={`${SECTION} text-center`} style={{ backgroundColor: BLUE }}>
         <div className="max-w-6xl mx-auto w-full">
           <motion.p {...fadeUp(0)} className={`${EYEBROW_DARK} mb-4`}>Precio</motion.p>
-          <motion.h2 {...fadeUp(0.1)} className={`${H2} text-white mb-10 sm:mb-14`}>CUÁNTO CUESTA</motion.h2>
+          <motion.h2 {...fadeUp(0.1)} className={`${H2} text-white mb-10 sm:mb-14`}>Cuánto <span className="accent-serif text-programa">cuesta</span></motion.h2>
           <div className="max-w-md mx-auto">
             <PriceCard plan={plan} note="✨ Trimestral: $11.990/mes (ahorra pagando 3 meses juntos)" />
           </div>

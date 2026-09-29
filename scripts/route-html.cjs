@@ -25,13 +25,21 @@ const PAGES = {
   '/inscripcion': 'src/pages/Inscripcion.jsx',
   '/adultos': 'src/pages/Nivelacion/NivelacionAdultos.jsx',
   '/empresas': 'src/pages/Empresas/index.jsx',
-  '/idiomas': 'src/pages/Idiomas/index.jsx',
+  '/idiomas': 'src/pages/Idiomas/Ingles.jsx',
+  '/idiomas/test': 'src/pages/Idiomas/TestNivel.jsx',
+  '/en/spanish': 'src/pages/Idiomas/SpanishEnglish.jsx',
+  '/becas': 'src/pages/Becas.jsx',
+  '/como-pagar': 'src/pages/ComoPagar.jsx',
+  '/condiciones': 'src/pages/Condiciones.jsx',
+  '/calendario-admision': 'src/pages/CalendarioAdmision.jsx',
+  '/glosario-paes': 'src/pages/GlosarioPaes.jsx',
+  '/como-es-una-clase': 'src/pages/MetodoLael.jsx',
   '/espanol': 'src/pages/Idiomas/LandingEspanol.jsx',
   '/lsch': 'src/pages/LSCh/index.jsx',
   '/verano': 'src/pages/Verano.jsx',
   '/nosotros': 'src/pages/Nosotros.jsx',
   '/casos-reales': 'src/pages/CasosReales.jsx',
-  '/sistema': 'src/pages/SistemaLael.jsx',
+  '/sistema': 'src/pages/MetodoLael.jsx',
   '/metodo': 'src/pages/MetodoLael.jsx',
   '/preguntas': 'src/pages/Preguntas.jsx',
   '/contacto': 'src/pages/Contacto.jsx',
@@ -48,6 +56,16 @@ const PAGES = {
   '/alianzas': 'src/pages/Programas/Alianzas.jsx',
   '/trae-un-amigo': 'src/pages/Programas/TraeUnAmigo.jsx',
   '/alumnos': 'src/pages/Programas/Alumnos.jsx',
+};
+
+// Imagen para compartir de cada página (public/meta/og/<nombre>.png)
+const OG = {
+  '/paes': 'paes', '/adultos': 'adultos', '/idiomas': 'idiomas', '/idiomas/test': 'test-ingles',
+  '/espanol': 'espanol', '/en/spanish': 'en-spanish', '/lsch': 'lsch', '/verano': 'verano',
+  '/empresas': 'empresas', '/calculadora': 'calculadora', '/calendario-admision': 'calendario',
+  '/glosario-paes': 'glosario', '/becas': 'becas', '/metodo': 'metodo', '/sistema': 'metodo',
+  '/como-es-una-clase': 'metodo', '/preguntas': 'preguntas', '/reforzamiento': 'reforzamiento',
+  '/inscripcion': 'inscripcion',
 };
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -81,6 +99,11 @@ function renderHtml(base, route, { title, description }) {
   set(/(<meta property="og:description" content=")[^"]*(")/, esc(description));
   set(/(<meta name="twitter:title" content=")[^"]*(")/, esc(title));
   set(/(<meta name="twitter:description" content=")[^"]*(")/, esc(description));
+  const img = OG[route] ? `${SITE}/meta/og/${OG[route]}.png` : (route.startsWith('/noticias/') && /paes|puntaje|admision/.test(route) ? `${SITE}/meta/og/calendario.png` : null);
+  if (img) {
+    set(/(<meta property="og:image" content=")[^"]*(")/, img);
+    set(/(<meta name="twitter:image" content=")[^"]*(")/, img);
+  }
   html = html.replace('</head>', `  <link rel="canonical" href="${url}" />\n  </head>`);
   return html;
 }

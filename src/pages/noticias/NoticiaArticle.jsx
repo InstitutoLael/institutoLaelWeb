@@ -2,18 +2,20 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { Link, useParams } from 'react-router-dom';
-import { ChevronRight, Clock, RefreshCw, CalendarDays, ExternalLink, ArrowLeft } from 'lucide-react';
+import { ChevronRight, Clock, RefreshCw, CalendarDays, ExternalLink, ArrowLeft, PenLine } from 'lucide-react';
 import { getNoticia, getRelatedNoticias, formatFecha } from '../../data/noticias';
 import NoticiaBody from '../../components/noticias/NoticiaBody';
 import NoticiaCard from '../../components/noticias/NoticiaCard';
 import CategoryIcon from '../../components/noticias/CategoryIcon';
+import ShareBar from '../../components/noticias/ShareBar';
+import BrandArcs from '../../components/ui/BrandArcs';
 
 const SITE = 'https://www.institutolael.cl';
 
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 14 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.16, 1, 0.3, 1] },
+  transition: { duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] },
 });
 
 function NoEncontrada() {
@@ -59,7 +61,7 @@ export default function NoticiaArticle() {
         mainEntityOfPage: { '@type': 'WebPage', '@id': url },
         url,
         image: `${SITE}/meta/og-lael.png`,
-        author: { '@type': 'Organization', name: 'Instituto Lael', url: `${SITE}/` },
+        author: post.author ? { '@type': 'Person', name: post.author } : { '@type': 'Organization', name: 'Instituto Lael', url: `${SITE}/` },
         publisher: {
           '@type': 'Organization',
           name: 'Instituto Lael',
@@ -93,8 +95,9 @@ export default function NoticiaArticle() {
       </Helmet>
 
       {/* Encabezado */}
-      <header className="relative -mt-20 pt-36 sm:pt-40 pb-12 sm:pb-16 px-5 sm:px-6 bg-[#071D49] text-white">
-        <div className="max-w-3xl mx-auto">
+      <header className="relative -mt-20 pt-36 sm:pt-40 pb-12 sm:pb-16 px-5 sm:px-6 bg-[#071D49] text-white overflow-hidden">
+        <BrandArcs />
+        <div className="relative max-w-3xl mx-auto">
           <motion.nav {...fadeUp(0)} aria-label="Ruta de navegación" className="mb-6">
             <ol className="flex flex-wrap items-center gap-1 text-sm text-white/75">
               <li><Link to="/" className="hover:text-white underline-offset-4 hover:underline py-2 inline-block">Inicio</Link></li>
@@ -119,6 +122,10 @@ export default function NoticiaArticle() {
 
           <motion.ul {...fadeUp(0.2)} className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-white/75">
             <li className="inline-flex items-center gap-1.5">
+              <PenLine className="w-4 h-4" aria-hidden="true" />
+              {post.author || 'Equipo Lael'}
+            </li>
+            <li className="inline-flex items-center gap-1.5">
               <CalendarDays className="w-4 h-4" aria-hidden="true" />
               <time dateTime={post.date}>{formatFecha(post.date)}</time>
             </li>
@@ -131,6 +138,7 @@ export default function NoticiaArticle() {
               Última actualización: <time dateTime={post.updated || post.date}>{formatFecha(post.updated || post.date)}</time>
             </li>
           </motion.ul>
+          <motion.div {...fadeUp(0.25)} className="mt-6"><ShareBar title={post.title} url={url} dark /></motion.div>
         </div>
       </header>
 
@@ -141,6 +149,8 @@ export default function NoticiaArticle() {
           className="max-w-3xl mx-auto bg-white rounded-[28px] p-6 sm:p-10 lg:p-12 border border-[#071D49]/5 shadow-card"
         >
           <NoticiaBody blocks={post.body} />
+
+          <div className="mt-10 pt-6 border-t border-[#071D49]/10"><p className="text-sm text-[#071D49]/70 mb-3">¿Le sirve a alguien que conoces?</p><ShareBar title={post.title} url={url} /></div>
 
           {post.sources?.length > 0 && (
             <footer className="mt-10 pt-8 border-t border-[#071D49]/10">

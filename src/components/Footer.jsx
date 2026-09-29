@@ -1,172 +1,122 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Instagram, Youtube } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Instagram, Youtube, Mail, MessageCircle, ArrowRight } from 'lucide-react';
 import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.webp';
-import { BECAS_FORM_URL } from '../data/paes';
 import ThemeToggle from './ThemeToggle';
+import BrandArcs from './ui/BrandArcs';
+import { AUDIENCIAS, HERRAMIENTAS } from '../data/catalogo';
+import { whatsappUrl } from '../lib/backend';
 
 const SOCIAL = [
   { name: 'Instagram', href: 'https://instagram.com/institutolael', Icon: Instagram },
   { name: 'YouTube', href: 'https://www.youtube.com/@Laelinstituto', Icon: Youtube },
 ];
 
-const LINKS_PROGRAMAS = [
-  { name: 'PAES', path: '/paes' },
-  { name: 'Verano Lael', path: '/verano' },
-  { name: 'Calculadora de puntaje', path: '/calculadora' },
-  { name: 'Idiomas (Inglés)', path: '/idiomas' },
-  { name: 'Español para extranjeros', path: '/espanol' },
-  { name: 'Nivelación adultos', path: '/adultos' },
-  { name: 'LSCh (Señas)', path: '/lsch' },
-  { name: 'Reforzamiento escolar', path: '/reforzamiento' },
-  { name: 'Talleres de IA', path: '/talleres-ia' },
-  { name: 'Orientación vocacional', path: '/orientacion' },
-  { name: 'Ensayo PAES gratis', path: '/ensayo-gratis' },
-  { name: 'Empresas', path: '/empresas' },
+const porId = (id) => AUDIENCIAS.find((a) => a.id === id);
+
+// Cuatro columnas de enlaces, ordenadas por lo que la persona busca
+const COLUMNAS = [
+  { title: 'Programas', links: [...porId('estudiantes').items, ...porId('adultos').items, ...porId('empresas').items].map((p) => ({ name: p.name, path: p.path, color: p.color })) },
+  { title: 'Apoderados y alumnos', links: [
+    ...porId('apoderados').items.map((p) => ({ name: p.name, path: p.path })),
+    { name: 'Alumnos Lael', path: '/alumnos' },
+    { name: 'Trae un amigo', path: '/trae-un-amigo' },
+    { name: 'Deja tu testimonio', path: '/testimonio' },
+  ] },
+  { title: 'Herramientas gratis', links: HERRAMIENTAS.map((h) => ({ name: h.name, path: h.path })) },
+  { title: 'Instituto', links: [
+    { name: 'Nosotros', path: '/nosotros' },
+    { name: 'Así se estudia en Lael', path: '/metodo' },
+    { name: 'Casos reales', path: '/casos-reales' },
+    { name: 'Noticias y guías', path: '/noticias' },
+    { name: 'Preguntas frecuentes', path: '/preguntas' },
+    { name: 'Contacto', path: '/contacto' },
+  ] },
 ];
 
-const LINKS_INSTITUTO = [
-  { name: 'Sobre Nosotros', path: '/nosotros' },
-  { name: 'Cómo funciona', path: '/sistema' },
-  { name: 'Nuestro método', path: '/metodo' },
-  { name: 'Casos reales', path: '/casos-reales' },
-  { name: 'Noticias y guías', path: '/noticias' },
-  { name: 'Alumnos Lael', path: '/alumnos' },
-  { name: 'Trae un amigo', path: '/trae-un-amigo' },
-  { name: 'Charla para apoderados', path: '/apoderados' },
-  { name: 'Alianzas', path: '/alianzas' },
-  { name: 'Deja tu testimonio', path: '/testimonio' },
-  { name: 'Contacto', path: '/contacto' },
-  { name: 'Preguntas Frecuentes', path: '/preguntas' },
-  { name: 'Postula a una Beca', path: BECAS_FORM_URL, external: true },
-];
-
-const LINKS_LEGAL = [
-  { name: 'Transparencia', path: '/transparencia' },
+const LEGAL = [
+  { name: 'Condiciones y reglamento', path: '/condiciones' },
   { name: 'Política de privacidad', path: '/privacidad' },
+  { name: 'Transparencia', path: '/transparencia' },
 ];
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  // La portada ya termina con su propio llamado a inscribirse
+  const esInicio = useLocation().pathname === '/';
 
   return (
-    <footer style={{ backgroundColor: '#071D49' }} className="pt-20 pb-10 border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-6">
+    <footer className="relative bg-[#071D49] text-white overflow-hidden">
+      <BrandArcs variant="side" color="#D7E400" />
+      <div className="relative max-w-7xl mx-auto px-6 pt-16 sm:pt-20 pb-10">
 
-        {/* Top grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
-
-          {/* Marca - ocupa 2 columnas */}
-          <div className="flex flex-col gap-6 lg:col-span-2">
-            <Link to="/" aria-label="Instituto Lael, ir al inicio">
-              <img
-                src={logoBlanco}
-                alt=""
-                loading="lazy"
-                className="h-10 w-auto opacity-90 hover:opacity-100 transition-opacity"
-              />
-            </Link>
-
-            {/* Tagline oficial */}
-            <p className="text-white/60 text-sm leading-relaxed max-w-xs">
-              Acompañamos tu camino.<br />
-              Impulsamos tu futuro.
+        {/* Llamado a la acción */}
+        {!esInicio && <div className="mb-14 flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-12 border-b border-white/10">
+          <div>
+            <p className="text-xs tracking-[0.18em] uppercase text-[#D7E400] font-bold mb-3">Nueva temporada · Marzo 2027</p>
+            <p className="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-[1.05] tracking-tight max-w-2xl">
+              Tu sueño no tiene <span className="accent-serif text-[#D7E400]">fecha de vencimiento.</span>
             </p>
-
-            {/* Email */}
-            <a
-              href="mailto:contacto@institutolael.cl"
-              className="text-white/70 text-sm hover:text-white transition-colors"
-            >
-              contacto@institutolael.cl
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+            <a href="/inscripcion" className="inline-flex items-center justify-center gap-2 min-h-[52px] px-7 rounded-2xl bg-[#D7E400] text-[#071D49] font-display font-extrabold text-sm uppercase tracking-wider">
+              Inscribirme <ArrowRight size={16} />
             </a>
+            <a href={whatsappUrl('Hola! Tengo una consulta sobre Instituto Lael')} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 min-h-[52px] px-7 rounded-2xl border border-white/25 hover:bg-white/10 font-bold text-sm">
+              <MessageCircle size={16} /> WhatsApp
+            </a>
+          </div>
+        </div>}
 
-            {/* Social */}
-            <div className="flex gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-10 mb-14">
+          {/* Marca */}
+          <div className="col-span-2 md:col-span-3 lg:col-span-2 flex flex-col gap-5 lg:pr-8">
+            <Link to="/" aria-label="Instituto Lael, ir al inicio" className="w-fit">
+              <img src={logoBlanco} alt="" loading="lazy" className="h-10 w-auto" />
+            </Link>
+            <p className="text-white/65 text-sm leading-relaxed max-w-xs">
+              Instituto online desde 2021. Preu PAES, idiomas, nivelación gratis para adultos y capacitación para empresas.
+            </p>
+            <a href="mailto:contacto@institutolael.cl" className="inline-flex items-center gap-2 text-white/75 text-sm hover:text-white w-fit min-h-[32px]">
+              <Mail size={15} /> contacto@institutolael.cl
+            </a>
+            <div className="flex gap-2">
               {SOCIAL.map(({ name, href, Icon }) => (
-                <a
-                  key={name}
-                  href={href}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`${name} (se abre en otra pestaña)`}
-                  className="w-11 h-11 flex items-center justify-center rounded-lg bg-white/5 border border-white/10 text-white/75 hover:text-white hover:bg-white/10 hover:border-white/20 transition-all duration-300"
-                >
-                  <Icon size={16} />
+                <a key={name} href={href} target="_blank" rel="noreferrer" aria-label={`${name} (se abre en otra pestaña)`} className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-white/75 hover:text-white hover:bg-white/10 transition-colors">
+                  <Icon size={17} />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Programas */}
-          <div>
-            <h2 id="footer-programas" className="text-xs tracking-[0.15em] uppercase text-white/70 mb-5 font-bold">Programas</h2>
-            <nav aria-labelledby="footer-programas" className="flex flex-col gap-4">
-              {LINKS_PROGRAMAS.map(l => (
-                <Link key={l.path} to={l.path} className="text-sm text-white/75 hover:text-white transition-colors">
-                  {l.name}
-                </Link>
-              ))}
+          {COLUMNAS.map((col, ci) => (
+            <nav key={col.title} aria-labelledby={`footer-col-${ci}`}>
+              <h2 id={`footer-col-${ci}`} className="text-[11px] tracking-[0.16em] uppercase text-white/55 mb-4 font-bold">{col.title}</h2>
+              <ul className="space-y-2.5">
+                {col.links.map((l) => (
+                  <li key={l.path}>
+                    <Link to={l.path} className="group inline-flex items-center gap-2 text-sm text-white/75 hover:text-white transition-colors min-h-[28px]">
+                      {l.color && <span aria-hidden="true" className="w-1.5 h-1.5 rounded-full flex-shrink-0 opacity-80 group-hover:opacity-100" style={{ backgroundColor: l.color }} />}
+                      {l.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </nav>
-          </div>
-
-          {/* Instituto */}
-          <div>
-            <h2 id="footer-instituto" className="text-xs tracking-[0.15em] uppercase text-white/70 mb-5 font-bold">Instituto</h2>
-            <nav aria-labelledby="footer-instituto" className="flex flex-col gap-4">
-              {LINKS_INSTITUTO.map(l => (
-                l.external ? (
-                  <a key={l.path} href={l.path} target="_blank" rel="noopener noreferrer" className="text-sm text-white/75 hover:text-white transition-colors">
-                    {l.name}
-                  </a>
-                ) : (
-                  <Link key={l.path} to={l.path} className="text-sm text-white/75 hover:text-white transition-colors">
-                    {l.name}
-                  </Link>
-                )
-              ))}
-            </nav>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h2 id="footer-legal" className="text-xs tracking-[0.15em] uppercase text-white/70 mb-5 font-bold">Legal</h2>
-            <nav aria-labelledby="footer-legal" className="flex flex-col gap-4">
-              {LINKS_LEGAL.map(l => (
-                <Link key={l.path} to={l.path} className="text-sm text-white/75 hover:text-white transition-colors">
-                  {l.name}
-                </Link>
-              ))}
-            </nav>
-          </div>
+          ))}
         </div>
 
-        {/* CTA rápido */}
-        <div className="mb-12 p-8 rounded-3xl border border-white/10 bg-white/[0.03] flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div>
-            <p className="text-xs tracking-[0.15em] uppercase text-[#D7E400] font-bold mb-1">PAES 2027</p>
-            <p className="text-white font-bold text-lg">Empieza a prepararte. Matrícula gratis.</p>
+        {/* Barra inferior */}
+        <div className="pt-8 border-t border-white/10 flex flex-col lg:flex-row gap-5 lg:items-center justify-between text-xs text-white/60">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <p>© {year} Instituto Lael SpA · RUT 78.084.019-6 · Santiago, Chile</p>
+            <p className="italic tracking-[0.1em] uppercase font-bold">Lucas 4:18</p>
           </div>
-          <Link
-            to="/paes"
-            className="flex-shrink-0 px-8 py-4 rounded-xl text-sm tracking-wider uppercase font-bold transition-all hover:opacity-90 active:scale-95"
-            style={{ backgroundColor: '#D7E400', color: '#071D49' }}
-          >
-            Inscribirme Ahora
-          </Link>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            {LEGAL.map((l) => <Link key={l.path} to={l.path} className="hover:text-white min-h-[32px] inline-flex items-center">{l.name}</Link>)}
+            <ThemeToggle />
+          </div>
         </div>
-
-        {/* Bottom bar */}
-        <div className="border-t border-white/10 pt-10 flex flex-col items-center gap-3 text-center">
-          <p className="text-xs text-white/60 italic tracking-[0.1em] uppercase font-bold">
-            Lucas 4:18
-          </p>
-          <p className="text-xs text-white/60 tracking-wide">
-            © {year} Instituto Lael SpA · Santiago, Chile
-          </p>
-          <ThemeToggle className="mt-2" />
-        </div>
-
       </div>
     </footer>
   );

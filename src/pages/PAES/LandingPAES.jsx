@@ -2,30 +2,32 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import WordReveal from '../../components/ui/WordReveal';
 import NoticiasDestacadas from '../../components/NoticiasDestacadas';
+import PlanesPaes from '../../components/PlanesPaes';
+import { PaesEsteAnio } from '../../components/PaesCountdown';
+import BrandArcs from '../../components/ui/BrandArcs';
 import {
   Video,
   ChevronDown,
   ChevronRight,
   MessageCircle,
   ArrowRight,
-  CheckCircle2
 } from 'lucide-react';
 import { Amigo, Mensaje } from '../../components/icons/LaelIcons';
 import inoLogo from '../../assets/img/Partners/INO.png';
 import studentImg from '../../assets/img/Home/hero_student_lael_1780734180709.webp';
-import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS, PAES_PLANS, PAES_PLAN_INCLUDES, PAES_FORM_URL, BECAS_FORM_URL, REFERRAL } from '../../data/paes';
+import { LANDING_FEATURES, LANDING_SUBJECTS, LANDING_TEACHERS, LANDING_STEPS, LANDING_FAQS, PAES_PLAN_INCLUDES, PAES_FORM_URL, BECAS_FORM_URL, REFERRAL } from '../../data/paes';
 
 const ease = [0.16, 1, 0.3, 1];
 const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 14 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.6, delay, ease },
+  transition: { duration: 0.5, delay, ease },
 });
 
 // Clases compartidas (tokens del spec)
 const SECTION = 'py-16 sm:py-20 lg:py-28 px-5 sm:px-6';
-const H2 = 'font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight uppercase';
+const H2 = 'font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-[1.05]';
 const EYEBROW = 'text-xs font-bold uppercase tracking-[0.2em] mb-3';
 const BTN = 'min-h-[48px] inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all duration-300 active:scale-95';
 
@@ -84,10 +86,7 @@ export default function LandingPAES() {
 
       {/* ── 1. HERO ──────────────────────────────────────────────────── */}
       <section className="relative -mt-20 pt-32 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 lg:min-h-screen lg:flex lg:items-center px-5 sm:px-6 overflow-hidden bg-[#071D49]">
-        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none" aria-hidden="true">
-          <div className="absolute -top-40 -left-40 w-96 h-96 bg-white rounded-full filter blur-[150px]" />
-          <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-[#D7E400] rounded-full filter blur-[150px]" />
-        </div>
+        <BrandArcs />
 
         <div className="relative z-10 max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-7 flex flex-col text-left">
@@ -102,12 +101,12 @@ export default function LandingPAES() {
             </motion.div>
 
             <WordReveal
-              className="font-display text-4xl sm:text-5xl lg:text-6xl tracking-tight text-white font-black leading-[1.05] max-w-2xl mb-6 uppercase"
+              className="font-display text-[2.5rem] sm:text-5xl lg:text-6xl tracking-tight text-white font-extrabold leading-[1.02] max-w-2xl mb-6"
               segments={[
-                { text: 'CREAMOS EL PREU', breakAfter: 'sm' },
-                { text: 'QUE NOS HABRÍA', breakAfter: 'sm' },
-                { text: 'GUSTADO TENER.', breakAfter: true },
-                { text: 'NADIE SE QUEDA AFUERA.', className: 'text-[#D7E400] font-bold' },
+                { text: 'Creamos el preu', breakAfter: 'sm' },
+                { text: 'que nos habría', breakAfter: 'sm' },
+                { text: 'gustado tener.', breakAfter: true },
+                { text: 'Nadie se queda afuera.', className: 'accent-serif text-programa' },
               ]}
             />
 
@@ -174,13 +173,15 @@ export default function LandingPAES() {
         </div>
       </section>
 
+      <PaesEsteAnio />
+
       {/* ── 2. ¿QUÉ INCLUYE EL PROGRAMA? ─────────────────────────────── */}
       <section id="estructura" className={`${SECTION} bg-white`}>
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center mb-10 sm:mb-14">
             <EyebrowLight>Lo que recibes</EyebrowLight>
             <motion.h2 {...fadeUp(0.05)} className={H2}>
-              ¿QUÉ INCLUYE EL PROGRAMA?
+              ¿Qué incluye <span className="accent-serif">el preu?</span>
             </motion.h2>
           </div>
 
@@ -210,53 +211,19 @@ export default function LandingPAES() {
           <div className="text-center mb-10 sm:mb-14">
             <EyebrowLight>Matrícula gratis</EyebrowLight>
             <motion.h2 {...fadeUp(0.05)} className={H2}>
-              PLANES Y PRECIOS
+              Planes <span className="accent-serif">y precios.</span>
             </motion.h2>
             <motion.p {...fadeUp(0.1)} className="text-[#071D49]/70 text-base sm:text-lg max-w-xl mx-auto mt-4 leading-relaxed">
               Pagas solo por los ramos que tomas. Desde el cuarto ramo, el precio deja de subir.
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 items-stretch">
-            {PAES_PLANS.map((plan, i) => (
-              <motion.div
-                key={plan.id}
-                {...fadeUp(i * 0.06)}
-                className={`relative rounded-[28px] p-6 sm:p-8 flex flex-col border ${plan.featured ? 'order-first md:order-none bg-[#071D49] border-[#071D49] text-white shadow-lael md:-translate-y-3 mt-3 md:mt-0' : 'bg-white border-[#071D49]/5 text-[#071D49] shadow-card'}`}
-              >
-                {plan.featured && (
-                  <span className="absolute -top-3.5 left-6 sm:left-8 bg-[#D7E400] text-[#071D49] text-[11px] font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-md">
-                    Más conveniente
-                  </span>
-                )}
-                <h3 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight mb-1">{plan.name}</h3>
-                <p className={`text-sm leading-relaxed mb-4 ${plan.featured ? 'text-white/75' : 'text-[#071D49]/70'}`}>{plan.desc}</p>
-                <p className={`mb-5 pb-5 border-b ${plan.featured ? 'border-white/10' : 'border-[#071D49]/10'}`}>
-                  <span className={`font-display text-[2rem] sm:text-4xl md:text-3xl font-black leading-none ${plan.featured ? 'text-[#D7E400]' : ''}`}>{plan.priceLabel}</span>
-                  <span className={`text-sm font-semibold ml-1 ${plan.featured ? 'text-white/75' : 'text-[#071D49]/70'}`}>{plan.period}</span>
-                </p>
-                <ul className="space-y-2.5 mb-6 flex-grow">
-                  {plan.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm leading-snug">
-                      <CheckCircle2 size={18} className={`flex-shrink-0 ${plan.featured ? 'text-[#D7E400]' : 'text-[#071D49]'}`} />
-                      <span className={plan.featured ? 'text-white/85' : 'text-[#071D49]/80'}>{f}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href={WA_LINK}
-                  className={`${BTN} w-full ${plan.featured ? 'bg-[#D7E400] text-[#071D49] hover:bg-white' : 'bg-[#071D49] text-white hover:bg-[#0B2A66]'}`}
-                >
-                  Inscribirme <ArrowRight size={16} />
-                </a>
-              </motion.div>
-            ))}
-          </div>
+          <PlanesPaes />
 
           <motion.p {...fadeUp(0.1)} className="text-center text-[#071D49]/70 text-sm sm:text-base mt-8 sm:mt-10 max-w-2xl mx-auto leading-relaxed">
             {PAES_PLAN_INCLUDES}{' '}
             ¿No te alcanza?{' '}
-            <a href={BECAS_FORM_URL} target="_blank" rel="noopener noreferrer" className="text-[#071D49] font-bold underline underline-offset-4 hover:text-[#0B2A66]">
+            <a href={BECAS_FORM_URL} className="text-[#071D49] font-bold underline underline-offset-4 hover:text-[#0B2A66]">
               Postula a una beca parcial
             </a>
             , la revisamos caso a caso. Parte de lo que pagan los alumnos financia esas becas.
@@ -290,7 +257,7 @@ export default function LandingPAES() {
           <div className="text-center mb-10 sm:mb-14">
             <motion.p {...fadeUp(0)} className={`${EYEBROW} text-[#D7E400]`}>Elige tus ramos</motion.p>
             <motion.h2 {...fadeUp(0.05)} className={`${H2} text-white`}>
-              ASIGNATURAS
+              Tus <span className="accent-serif text-programa">ramos.</span>
             </motion.h2>
           </div>
 
@@ -341,7 +308,7 @@ export default function LandingPAES() {
           <div className="text-center mb-10 sm:mb-14">
             <EyebrowLight>Quiénes te hacen clases</EyebrowLight>
             <motion.h2 {...fadeUp(0.05)} className={H2}>
-              TUS PROFES
+              Tus <span className="accent-serif">profes.</span>
             </motion.h2>
           </div>
 
@@ -384,7 +351,7 @@ export default function LandingPAES() {
           <div className="text-center mb-10 sm:mb-14">
             <EyebrowLight>Así de simple</EyebrowLight>
             <motion.h2 {...fadeUp(0.05)} className={H2}>
-              ¿CÓMO FUNCIONA?
+              ¿Cómo <span className="accent-serif">funciona?</span>
             </motion.h2>
           </div>
 
@@ -418,8 +385,8 @@ export default function LandingPAES() {
           <motion.div {...fadeUp(0)} className="w-14 h-14 bg-red-600 rounded-2xl flex items-center justify-center mb-5">
             <Video className="w-7 h-7 text-white" />
           </motion.div>
-          <motion.h3 {...fadeUp(0.05)} className="font-display text-2xl sm:text-4xl font-extrabold uppercase tracking-tight mb-4">
-            Mira nuestras clases grabadas en YouTube
+          <motion.h3 {...fadeUp(0.05)} className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight mb-4">
+            Mira cómo explicamos, <span className="accent-serif">gratis en YouTube.</span>
           </motion.h3>
           <motion.p {...fadeUp(0.1)} className="text-white/75 text-base leading-relaxed max-w-2xl mb-7">
             Antes de inscribirte, mira cómo explicamos matemática y ciencias. En el canal subimos ensayos resueltos, explicaciones cortas de materia y consejos para el día de la prueba. Es gratis.
@@ -443,7 +410,7 @@ export default function LandingPAES() {
           <div className="text-center mb-10 sm:mb-14">
             <EyebrowLight>Lo que más nos preguntan</EyebrowLight>
             <motion.h2 {...fadeUp(0.05)} className={H2}>
-              PREGUNTAS FRECUENTES
+              Preguntas <span className="accent-serif">frecuentes.</span>
             </motion.h2>
           </div>
 
@@ -503,9 +470,9 @@ export default function LandingPAES() {
 
           <motion.h2
             {...fadeUp(0.05)}
-            className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[0.95] mb-5 uppercase"
+            className="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[0.95] mb-5"
           >
-            RESERVA <br /> TU CUPO.
+            Reserva <br /> <span className="accent-serif text-programa">tu cupo.</span>
           </motion.h2>
 
           <motion.p {...fadeUp(0.1)} className="text-white/75 text-base sm:text-lg max-w-lg mb-8 leading-relaxed">

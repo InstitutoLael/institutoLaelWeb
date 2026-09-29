@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import WordReveal from '../../components/ui/WordReveal';
+import BrandArcs from '../../components/ui/BrandArcs';
 
 // Piezas compartidas por las páginas de programas nuevos (/reforzamiento,
 // /orientacion, /apoderados, /ensayo-gratis, /talleres-ia, /alianzas,
@@ -17,10 +18,10 @@ export const inscripcionLink = (programa) => `/inscripcion?programa=${programa}`
 
 const ease = [0.16, 1, 0.3, 1];
 export const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
+  initial: { opacity: 0, y: 14 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.6, delay, ease },
+  transition: { duration: 0.5, delay, ease },
 });
 
 const BTN = 'inline-flex items-center justify-center gap-2 w-full sm:w-auto min-h-[48px] font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all active:scale-95 text-center';
@@ -43,17 +44,17 @@ export function Btn({ href, variant = 'yellow', children, className = '', ...res
 export function PageHero({ eyebrow, title, accent, desc, stats, children }) {
   return (
     <section className="relative -mt-20 pt-36 sm:pt-40 pb-16 sm:pb-24 px-5 sm:px-6 text-white overflow-hidden" style={{ backgroundColor: BLUE }}>
-      <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-[140px] opacity-25" style={{ backgroundColor: YELLOW }} aria-hidden="true" />
+      <BrandArcs />
       <div className="relative z-10 max-w-5xl mx-auto text-center">
-        <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-6" style={{ color: YELLOW }}>
+        <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-6 text-programa">
           {eyebrow}
         </motion.p>
         <WordReveal
-          className="font-display text-white text-4xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6 sm:mb-8"
+          className="font-display text-white text-[2.4rem] sm:text-6xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.02] mb-6 sm:mb-8"
           delay={0.1}
           segments={[
             { text: title, breakAfter: 'sm' },
-            { text: accent, style: { color: YELLOW } },
+            { text: accent, className: 'accent-serif text-programa' },
           ]}
         />
         <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
@@ -68,7 +69,7 @@ export function PageHero({ eyebrow, title, accent, desc, stats, children }) {
           <motion.div {...fadeUp(0.4)} className="grid grid-cols-3 gap-3 sm:gap-4 border-t border-white/10 pt-8 mt-12 sm:mt-14 max-w-xl mx-auto">
             {stats.map(([v, l]) => (
               <div key={l}>
-                <p className="font-display font-extrabold text-lg sm:text-xl uppercase" style={{ color: YELLOW }}>{v}</p>
+                <p className="font-display font-extrabold text-lg sm:text-xl text-programa">{v}</p>
                 <p className="text-white/60 text-xs font-bold uppercase tracking-wider mt-1">{l}</p>
               </div>
             ))}

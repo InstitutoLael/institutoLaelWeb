@@ -122,6 +122,42 @@
   }
 }
 
+/* ── Tipografía 2027 ──────────────────────────────────────────────────
+   Los títulos grandes ya no van en MAYÚSCULAS: se leen más cercanos. La
+   palabra que importa va en cursiva elegante (Instrument Serif) con la
+   clase .accent-serif. Las etiquetas chicas (h3, eyebrows) siguen igual. */
+h1.uppercase, h2.uppercase {
+  text-transform: none;
+  letter-spacing: -0.025em;
+}
+h1.font-black, h2.font-black { font-weight: 800; }
+
+.accent-serif {
+  font-family: "Instrument Serif", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.01em;
+  /* La serif se ve más chica que Montserrat al mismo tamaño */
+  font-size: 1.12em;
+  line-height: 0.9;
+}
+
+/* Color del programa: cada página de programa define --programa
+   (ver src/data/catalogo.js). Por defecto es el amarillo de la marca. */
+:root { --programa: #D7E400; }
+.text-programa { color: var(--programa); }
+.bg-programa { background-color: var(--programa); }
+.border-programa { border-color: var(--programa); }
+
+/* Línea que se dibuja sola (pasos de Escuela de Sueños, check de envío) */
+@keyframes lael-draw { to { stroke-dashoffset: 0; } }
+.draw-path {
+  stroke-dasharray: var(--len, 1000);
+  stroke-dashoffset: var(--len, 1000);
+  animation: lael-draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
 /* ── Microinteracciones ───────────────────────────────────────────────
    Solo en dispositivos con mouse y si la persona no pidió reducir el
    movimiento. Los botones suben un poco y las flechas avanzan. */

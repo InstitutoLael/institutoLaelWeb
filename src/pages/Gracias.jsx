@@ -16,6 +16,11 @@ const PASOS = {
     'Te escribimos por WhatsApp para confirmar horarios y resolver dudas.',
     'Antes de empezar te mandamos el link de las clases y los datos de pago.',
   ],
+  'lista-espera': [
+    'Quedaste en la lista de espera. No se cobra nada mientras esperas.',
+    'Apenas se libere un cupo te escribimos por WhatsApp y correo, en orden de llegada.',
+    'Si prefieres, te ofrecemos otro horario o ramo mientras tanto.',
+  ],
   'clase-prueba': [
     'Te escribimos por WhatsApp para elegir el día y la hora de tu clase de prueba.',
     'Entras a la clase en vivo por Google Meet, sin compromiso.',
@@ -56,7 +61,7 @@ export default function Gracias() {
           {nombre ? `¡Listo, ${nombre}!` : '¡Listo!'}
         </h1>
         <p className="text-white/75 text-lg max-w-xl mx-auto">
-          {tipo === 'clase-prueba' ? 'Recibimos tu solicitud de clase de prueba.' : tipo === 'aviso' ? 'Te avisaremos apenas abramos.' : tipo === 'registro' ? 'Quedaste registrado.' : 'Tu cupo quedó reservado.'}
+          {tipo === 'clase-prueba' ? 'Recibimos tu solicitud de clase de prueba.' : tipo === 'aviso' ? 'Te avisaremos apenas abramos.' : tipo === 'registro' ? 'Quedaste registrado.' : tipo === 'lista-espera' ? 'Quedaste en la lista de espera.' : 'Tu cupo quedó reservado.'}
         </p>
         {state?.viaWhatsapp && (
           <a href={whatsappUrl(`Hola! Acabo de inscribirme en ${state?.programa || 'Instituto Lael'}.`)} target="_blank" rel="noopener noreferrer"
@@ -78,6 +83,7 @@ export default function Gracias() {
                 </li>
               ))}
             </ol>
+            {tipo === 'inscripcion' && <p className="mt-5 text-sm text-[#071D49]/70">¿Dudas con el pago? Mira <Link to="/como-pagar" className="underline font-semibold">cómo pagar</Link> y las <Link to="/condiciones" className="underline font-semibold">condiciones</Link>.</p>}
           </div>
 
           <div className="rounded-[28px] p-6 sm:p-8 text-white" style={{ backgroundColor: BLUE }}>

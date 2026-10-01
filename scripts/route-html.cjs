@@ -56,6 +56,7 @@ const PAGES = {
   '/alianzas': 'src/pages/Programas/Alianzas.jsx',
   '/trae-un-amigo': 'src/pages/Programas/TraeUnAmigo.jsx',
   '/alumnos': 'src/pages/Programas/Alumnos.jsx',
+  '/marca': 'src/pages/Marca.jsx',
 };
 
 // Imagen para compartir de cada página (public/meta/og/<nombre>.png)

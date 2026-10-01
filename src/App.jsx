@@ -11,6 +11,10 @@ import AnalyticsTracker from "./components/AnalyticsTracker";
 import CookieNotice from "./components/CookieNotice";
 import ExitIntent from "./components/ExitIntent";
 import MobileProgramBar from "./components/MobileProgramBar";
+import SmoothScroll from "./components/experience/SmoothScroll";
+import Preloader from "./components/experience/Preloader";
+import RouteCurtain from "./components/experience/RouteCurtain";
+import Cursor from "./components/experience/Cursor";
 import { colorDeRuta } from "./data/catalogo";
 
 // Pages
@@ -60,6 +64,10 @@ export default function App() {
       >
         Saltar al contenido
       </a>
+      <SmoothScroll />
+      <Preloader />
+      <RouteCurtain />
+      <Cursor />
       <ScrollToTop />
       <AnalyticsTracker />
       <Toaster position="top-right" reverseOrder={false} toastOptions={{

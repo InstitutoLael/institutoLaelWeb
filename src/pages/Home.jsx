@@ -2,68 +2,23 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowRight, Star, ChevronRight } from 'lucide-react';
-import { ClaseEnVivo, Grupo, Grabacion, Graduacion, Escuela, Familia, Empresa } from '../components/icons/LaelIcons';
-import HeroCarousel from '../components/HeroCarousel';
+import { ArrowRight, Plus } from 'lucide-react';
+import { ClaseEnVivo, Grupo, Grabacion } from '../components/icons/LaelIcons';
+import HomeHero from '../components/home/HomeHero';
+import ProgramStack from '../components/home/ProgramStack';
 import PlanesPaes from '../components/PlanesPaes';
-import BrandArcs from '../components/ui/BrandArcs';
-import { fadeUp, SectionTitle } from '../components/ui/PageHero';
+import Marquee from '../components/ui/Marquee';
+import ScrollWords from '../components/ui/ScrollWords';
+import CountUp from '../components/ui/CountUp';
+import Magnetic from '../components/experience/Magnetic';
+import { fadeUp } from '../components/ui/PageHero';
 import { TEACHERS, TESTIMONIALS } from '../data/home';
 import { LANDING_FAQS } from '../data/paes';
-import { AUDIENCIAS, COLORES } from '../data/catalogo';
 import heroImg from '../assets/img/Home/hero_student_lael_1780734180709.webp';
 
-// Orden de la portada (de arriba a abajo): portada rotativa → elige tu
-// camino → cómo son las clases → profes → testimonios → precios →
-// preguntas → inscríbete. Lo demás vive en su propia página.
-const BLUE = '#071D49';
-const YELLOW = '#D7E400';
-const FORM_URL = '/inscripcion?programa=paes';
-
-// Portada rotativa: cada lámina es un programa, con su color.
-const HERO_SLIDES = [
-  {
-    id: 'paes',
-    badge: 'PAES 2027',
-    color: COLORES.paes,
-    title: [
-      { text: 'Tu sueño', breakAfter: 'sm' },
-      { text: 'no tiene fecha', breakAfter: 'sm' },
-      { text: 'de vencimiento.', className: 'accent-serif', style: { color: COLORES.paes } },
-    ],
-    text: 'Da lo mismo si vas en cuarto medio, si la PAES te fue mal la primera vez o si dejaste el colegio hace años. Te ayudamos a llegar. Matrícula gratis y becas para quien las necesite.',
-    cta: { label: 'Inscribirme gratis', href: FORM_URL },
-    more: { label: 'Conocer el preu', href: '/paes' },
-  },
-  {
-    id: 'adultos',
-    badge: 'Escuela de Sueños',
-    color: COLORES.adultos,
-    title: [
-      { text: 'El colegio', breakAfter: 'sm' },
-      { text: 'no es la meta.', breakAfter: true },
-      { text: 'Es el inicio de tu nueva vida.', className: 'accent-serif', style: { color: COLORES.adultos } },
-    ],
-    text: 'Si eres mayor de 18, te preparamos gratis para los exámenes libres del Mineduc. Clases online en la noche, a tu ritmo.',
-    cta: { label: 'Quiero terminar el colegio', href: '/inscripcion?programa=adultos' },
-    more: { label: 'Cómo funciona', href: '/adultos' },
-  },
-  {
-    id: 'ingles',
-    badge: 'Inglés · Hablar sin miedo',
-    color: COLORES.ingles,
-    title: [
-      { text: 'Habla inglés', breakAfter: true },
-      { text: 'sin miedo.', className: 'accent-serif', style: { color: COLORES.ingles } },
-    ],
-    text: 'Casi todos entendemos más de lo que nos atrevemos a decir. Clases en vivo donde hablas desde el primer día.',
-    cta: { label: 'Inscribirme', href: '/inscripcion?programa=ingles' },
-    more: { label: 'Hacer el test de nivel', href: '/idiomas/test' },
-  },
-];
-
-const ICONO_AUDIENCIA = { estudiantes: Graduacion, adultos: Escuela, apoderados: Familia, empresas: Empresa };
-
+// Orden de la portada (de arriba a abajo): portada con la onda y la paloma →
+// cinta → manifiesto → los tres caminos + índice → números → profes →
+// testimonios → precios → preguntas → inscríbete.
 const PREGUNTAS_HOME = [
   LANDING_FAQS[0],
   LANDING_FAQS[3],
@@ -71,8 +26,31 @@ const PREGUNTAS_HOME = [
   { q: '¿Hay becas?', a: 'Sí, becas parciales para quien las necesite. Postulas en tres minutos y revisamos cada caso con calma.' },
 ];
 
-const SECTION = 'py-16 sm:py-20 lg:py-24 px-5 sm:px-6';
-const BTN = 'inline-flex items-center justify-center gap-2 min-h-[48px] px-8 py-4 rounded-2xl font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-all active:scale-95';
+const WRAP = 'max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-12';
+
+// Etiqueta de sección numerada, estilo editorial: (02) — Cómo trabajamos
+function Etiqueta({ n, children, dark = false, className = '' }) {
+  return (
+    <motion.p {...fadeUp()} className={`flex items-center gap-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] ${dark ? 'text-white/70' : 'text-[#071D49]/75'} ${className}`}>
+      <span className={dark ? 'text-[#D7E400]' : 'text-[#071D49]'}>({n})</span>
+      <span aria-hidden="true" className={`w-8 h-px ${dark ? 'bg-white/30' : 'bg-[#071D49]/30'}`} />
+      {children}
+    </motion.p>
+  );
+}
+
+const FORMA = [
+  { icon: ClaseEnVivo, t: 'Clases en vivo por Google Meet', d: 'Con un profe al que le puedes preguntar todo, desde las 18:00.' },
+  { icon: Grupo, t: 'Máximo 20 por curso', d: 'Para que nadie pase desapercibido.' },
+  { icon: Grabacion, t: 'Grabaciones cada semana', d: 'Si faltaste o quieres repasar, la clase te espera.' },
+];
+
+const NUMEROS = [
+  { to: 1000, prefix: '+', t: 'alumnos han pasado por Lael desde 2021' },
+  { to: 20, t: 'personas como máximo en cada curso' },
+  { to: 7, t: 'ramos PAES, cada uno por separado' },
+  { to: 0, prefix: '$', t: 'cuesta la matrícula. Siempre.' },
+];
 
 export default function Home() {
   return (
@@ -83,204 +61,228 @@ export default function Home() {
       </Helmet>
 
       {/* ══ 1. PORTADA ══════════════════════════════════════════════════ */}
-      <section className="-mt-20 min-h-[100svh] relative flex flex-col justify-center items-center px-5 sm:px-6 pt-32 pb-16 lg:pt-40 lg:pb-20 text-center overflow-hidden" style={{ backgroundColor: BLUE }}>
-        <div className="absolute inset-0 z-0 opacity-15 mix-blend-luminosity">
-          <img src={heroImg} alt="" className="w-full h-full object-cover object-center" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#071D49] via-[#071D49]/80 to-[#071D49]" />
-        </div>
-        <BrandArcs className="z-0" />
+      <HomeHero />
 
-        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center">
-          <HeroCarousel
-            titleClassName="text-white font-display font-extrabold leading-[0.98] tracking-[-0.03em] mb-6 sm:mb-8 text-[2.4rem] min-[380px]:text-[2.7rem] sm:text-6xl lg:text-7xl xl:text-[5.4rem]"
-            slides={HERO_SLIDES}
+      {/* ══ 2. CINTA ════════════════════════════════════════════════════ */}
+      <div className="relative z-10 -mt-6 sm:-mt-8 -rotate-[1.5deg] scale-[1.02] bg-[#D7E400] text-[#071D49] py-4 sm:py-5 shadow-[0_20px_50px_-20px_rgba(7,29,73,0.6)]" data-keep-light>
+        <Marquee
+          items={['Preu PAES 2027', 'Escuela de Sueños', 'Inglés sin miedo', 'Español para extranjeros', 'Clases particulares', 'Matrícula gratis', 'Becas']}
+          itemClassName="font-display font-extrabold uppercase tracking-tight text-2xl sm:text-4xl lg:text-5xl"
+        />
+      </div>
+
+      {/* ══ 3. MANIFIESTO ═══════════════════════════════════════════════ */}
+      <section className="bg-white pt-24 sm:pt-32 lg:pt-40 pb-20 sm:pb-28">
+        <div className={WRAP}>
+          <Etiqueta n="01">Cómo trabajamos</Etiqueta>
+          <ScrollWords
+            as="h2"
+            className="mt-8 font-display font-extrabold tracking-[-0.035em] leading-[1.02] text-[#071D49] text-[2rem] sm:text-5xl lg:text-[4.6rem] max-w-[22ch] lg:max-w-[24ch]"
+            parts={[
+              { text: 'No eres' },
+              { text: 'un puntaje.', className: 'accent-serif' },
+              { text: 'Aquí nadie compite contra nadie. Los cursos son chicos' },
+              { node: <span className="inline-block align-middle w-[1.7em] h-[0.95em] rounded-full overflow-hidden -mt-[0.15em]"><img src={heroImg} alt="" className="w-full h-full object-cover" loading="lazy" /></span> },
+              { text: 'y tu profe sabe cómo te llamas.' },
+            ]}
           />
-          <motion.dl {...fadeUp(0.35)} className="mt-10 sm:mt-14 w-full max-w-3xl grid grid-cols-2 sm:grid-cols-4 gap-px rounded-2xl overflow-hidden border border-white/10 bg-white/10">
-            {[
-              { label: 'Alumnos desde 2021', value: '+1.000' },
-              { label: 'Becas', value: 'Disponibles', accent: true },
-              { label: 'Online', value: '100%' },
-              { label: 'Matrícula', value: 'Gratis', accent: true },
-            ].map((item) => (
-              <div key={item.label} className="bg-[#071D49] px-3 py-4 flex flex-col-reverse">
-                <dt className="text-white/60 text-xs uppercase tracking-[0.15em] font-bold mt-1.5">{item.label}</dt>
-                <dd className={`font-display font-extrabold text-lg sm:text-xl leading-none ${item.accent ? 'text-[#D7E400]' : 'text-white'}`}>{item.value}</dd>
-              </div>
-            ))}
-          </motion.dl>
-        </div>
-      </section>
-
-      {/* ══ 2. ELIGE TU CAMINO ══════════════════════════════════════════ */}
-      <section className={`${SECTION} bg-white`}>
-        <div className="max-w-6xl mx-auto">
-          <SectionTitle eyebrow="Programas" title="¿Qué estás" accent="buscando?" className="text-center mb-10 sm:mb-14" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-            {AUDIENCIAS.map((a, i) => {
-              const Icono = ICONO_AUDIENCIA[a.id];
-              return (
-                <motion.div key={a.id} {...fadeUp(i * 0.05)} className="rounded-[28px] bg-[#F4F4F4] border border-[#071D49]/5 p-5 sm:p-7">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-2xl bg-[#071D49] flex items-center justify-center flex-shrink-0"><Icono size={24} className="text-white" /></div>
-                    <div>
-                      <h3 className="font-display font-extrabold text-xl leading-tight">Para <span className="accent-serif">{a.title.toLowerCase()}</span></h3>
-                      <p className="text-sm text-[#071D49]/65">{a.desc}</p>
-                    </div>
-                  </div>
-                  <ul className="divide-y divide-[#071D49]/10">
-                    {a.items.map((p) => (
-                      <li key={p.path}>
-                        <Link to={p.path} className="group flex items-center gap-3 py-3 min-h-[52px]">
-                          <span aria-hidden="true" className="w-2.5 h-2.5 rounded-full flex-shrink-0 ring-2 ring-[#071D49]/10" style={{ backgroundColor: p.color }} />
-                          <span className="flex-1 min-w-0">
-                            <span className="font-bold text-[#071D49]">{p.name}</span>
-                            <span className="text-sm text-[#071D49]/60"> · {p.tag}</span>
-                          </span>
-                          <ChevronRight size={18} className="text-[#071D49]/40 group-hover:text-[#071D49] transition-colors flex-shrink-0" aria-hidden="true" />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ 3. CÓMO SON LAS CLASES ══════════════════════════════════════ */}
-      <section className={`${SECTION} bg-[#F4F4F4]`}>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          <div>
-            <SectionTitle eyebrow="Cómo trabajamos" title="No eres" accent="un puntaje." />
-            <motion.div {...fadeUp(0.08)} className="space-y-4 mt-6 text-base sm:text-lg leading-relaxed text-[#071D49]/75">
-              <p>Aquí nadie compite contra nadie. Los cursos son chicos, tu profe sabe cómo te llamas y se da cuenta cuando te estás quedando atrás.</p>
-              <p>Hay quien viene saliendo de cuarto medio y quien lleva años sin abrir un cuaderno. A todos los recibimos igual.</p>
-            </motion.div>
-            <motion.div {...fadeUp(0.12)} className="mt-6">
-              <Link to="/metodo" className="inline-flex items-center gap-2 min-h-[44px] font-display text-sm font-bold uppercase tracking-wider text-[#071D49]">
-                Así se estudia en Lael <ChevronRight size={16} />
-              </Link>
-            </motion.div>
-          </div>
-          <ul className="grid gap-3">
-            {[
-              { icon: ClaseEnVivo, t: 'Clases en vivo por Google Meet', d: 'Con un profe al que le puedes preguntar todo, desde las 18:00.' },
-              { icon: Grupo, t: 'Máximo 20 por curso', d: 'Para que nadie pase desapercibido.' },
-              { icon: Grabacion, t: 'Grabaciones cada semana', d: 'Si faltaste o quieres repasar, la clase te espera.' },
-            ].map((item, idx) => (
-              <motion.li key={item.t} {...fadeUp(idx * 0.05)} className="flex items-center gap-4 p-5 rounded-[24px] bg-white border border-[#071D49]/5 shadow-card">
-                <div className="w-12 h-12 rounded-full bg-[#071D49] flex-shrink-0 flex items-center justify-center"><item.icon className="text-white" size={24} /></div>
+          <div className="mt-16 sm:mt-24 grid md:grid-cols-3 gap-px bg-[#071D49]/10 border-y border-[#071D49]/10">
+            {FORMA.map((f, i) => (
+              <motion.div key={f.t} {...fadeUp(i * 0.08)} className="bg-white py-8 md:px-8 first:md:pl-0 flex flex-col gap-6">
+                <div className="flex items-center justify-between">
+                  <span className="font-display font-bold text-xs tracking-[0.2em] text-[#071D49]/70">0{i + 1}</span>
+                  <f.icon size={30} className="text-[#071D49]" />
+                </div>
                 <div>
-                  <p className="font-display font-extrabold text-[#071D49]">{item.t}</p>
-                  <p className="text-sm text-[#071D49]/65">{item.d}</p>
-                </div>
-              </motion.li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* ══ 4. PROFES ═══════════════════════════════════════════════════ */}
-      <section className={`${SECTION} bg-white`}>
-        <div className="max-w-5xl mx-auto">
-          <SectionTitle eyebrow="Los profes" title="Estos son" accent="tus profes." className="text-center mb-10" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            {TEACHERS.map((t, i) => (
-              <motion.div key={t.id} {...fadeUp(i * 0.04)} className="rounded-[24px] p-5 flex items-center gap-4 bg-[#F4F4F4] border border-[#071D49]/5">
-                <div className="w-14 h-14 rounded-full flex-shrink-0 flex items-center justify-center text-lg font-extrabold font-display overflow-hidden bg-[#071D49] text-[#D7E400]">
-                  {t.photo ? <img src={t.photo} alt={`Foto de ${t.name}`} loading="lazy" className="w-full h-full object-cover" /> : t.initials}
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-display font-bold text-[#071D49]">{t.name}</h3>
-                    {t.id === 'diego' && <span className="text-[10px] font-black uppercase tracking-wider bg-[#D7E400] text-[#071D49] px-2 py-0.5 rounded-full">Fundador</span>}
-                  </div>
-                  <p className="text-sm text-[#071D49]/70">{t.subject}</p>
+                  <h3 className="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-[#071D49]">{f.t}</h3>
+                  <p className="mt-2 text-[#071D49]/70 leading-relaxed">{f.d}</p>
                 </div>
               </motion.div>
             ))}
           </div>
+          <motion.div {...fadeUp()} className="mt-8">
+            <Link to="/metodo" className="group inline-flex items-center gap-3 min-h-[44px] font-display text-sm font-extrabold uppercase tracking-wider text-[#071D49]">
+              <span className="w-10 h-10 rounded-full bg-[#071D49] text-white flex items-center justify-center group-hover:bg-[#D7E400] group-hover:text-[#071D49] transition-colors"><ArrowRight size={16} /></span>
+              Así se estudia en Lael
+            </Link>
+          </motion.div>
         </div>
       </section>
 
-      {/* ══ 5. TESTIMONIOS ══════════════════════════════════════════════ */}
-      <section className={`${SECTION} relative overflow-hidden`} style={{ backgroundColor: BLUE }}>
-        <BrandArcs variant="side" />
-        <div className="relative max-w-5xl mx-auto">
-          <SectionTitle eyebrow="Lo que cuentan los alumnos" title="En sus" accent="palabras." dark className="text-center mb-10 sm:mb-12" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            {TESTIMONIALS.map((t, i) => (
-              <motion.figure key={t.id} {...fadeUp(i * 0.05)} className="rounded-[28px] p-6 sm:p-8 bg-white/[0.06] border border-white/10 text-white">
-                <div className="flex gap-1 mb-5" role="img" aria-label={`${t.rating} de 5 estrellas`}>
-                  {Array(t.rating).fill(0).map((_, k) => <Star key={k} size={16} fill={YELLOW} color={YELLOW} />)}
+      {/* ══ 4. LOS CAMINOS ══════════════════════════════════════════════ */}
+      <section id="caminos" className="bg-[#F4F4F4] pt-20 sm:pt-28 pb-16 sm:pb-24 scroll-mt-20">
+        <div className={WRAP}>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10 sm:mb-14">
+            <div>
+              <Etiqueta n="02">Programas</Etiqueta>
+              <motion.h2 {...fadeUp(0.05)} className="mt-6 font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[#071D49] display-lg">
+                Tres caminos, <span className="accent-serif">un mismo sueño.</span>
+              </motion.h2>
+            </div>
+            <motion.p {...fadeUp(0.1)} className="max-w-sm text-[#071D49]/70 leading-relaxed">
+              Para quien va a dar la PAES, para quien quiere terminar el colegio y para quien quiere hablar inglés. Y si no sabes cuál es el tuyo, está el índice al final.
+            </motion.p>
+          </div>
+          <ProgramStack />
+        </div>
+      </section>
+
+      {/* ══ 5. NÚMEROS ══════════════════════════════════════════════════ */}
+      <section className="grain bg-[#071D49] text-white py-20 sm:py-28">
+        <div className={WRAP}>
+          <Etiqueta n="03" dark>Lael en números</Etiqueta>
+          <dl className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 border-t border-white/15">
+            {NUMEROS.map((x, i) => (
+              <motion.div key={x.t} {...fadeUp(i * 0.08)} className="py-8 sm:py-10 lg:pr-8 border-b lg:border-b-0 lg:border-r last:border-r-0 border-white/15 lg:pl-8 first:lg:pl-0 flex flex-col-reverse gap-4">
+                <dt className="text-white/65 leading-snug max-w-[16rem]">{x.t}</dt>
+                <dd className={`font-display font-extrabold tracking-[-0.05em] leading-none text-7xl sm:text-8xl ${i === 3 ? 'text-[#D7E400]' : ''}`}>
+                  <CountUp to={x.to} prefix={x.prefix} />
+                </dd>
+              </motion.div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* ══ 6. PROFES ═══════════════════════════════════════════════════ */}
+      <section className="bg-white py-20 sm:py-28 lg:py-32">
+        <div className={WRAP}>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+            <div>
+              <Etiqueta n="04">Los profes</Etiqueta>
+              <motion.h2 {...fadeUp(0.05)} className="mt-6 font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[#071D49] display-lg">
+                Estos son <span className="accent-serif">tus profes.</span>
+              </motion.h2>
+            </div>
+            <motion.p {...fadeUp(0.1)} className="max-w-sm text-[#071D49]/70 leading-relaxed">
+              Personas que saben tu nombre, te responden y se dan cuenta cuando algo no está saliendo.
+            </motion.p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+            {TEACHERS.map((t, i) => (
+              <motion.figure key={t.id} {...fadeUp(i * 0.06)} className="group">
+                <div className="relative aspect-[3/4] rounded-[24px] sm:rounded-[32px] overflow-hidden bg-[#071D49]" data-keep-light>
+                  {t.photo ? (
+                    <img src={t.photo} alt={`Foto de ${t.name}`} loading="lazy" className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-105" />
+                  ) : (
+                    <div className="grain absolute inset-0 flex items-center justify-center">
+                      <span aria-hidden="true" className="font-serif italic text-[#D7E400] text-[5rem] sm:text-[8rem] leading-none transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:scale-110 group-hover:-rotate-6">{t.initials}</span>
+                    </div>
+                  )}
+                  {t.id === 'diego' && <span className="absolute top-3 left-3 text-[10px] font-black uppercase tracking-wider bg-[#D7E400] text-[#071D49] px-2.5 py-1 rounded-full">Fundador</span>}
                 </div>
-                <blockquote className="font-serif text-2xl sm:text-[1.7rem] leading-snug mb-6">“{t.quote}”</blockquote>
-                <figcaption className="flex items-center gap-3">
-                  <span className="w-11 h-11 rounded-full flex items-center justify-center font-extrabold text-sm font-display bg-[#D7E400] text-[#071D49]">{t.initials}</span>
-                  <span>
-                    <span className="block font-bold text-sm">{t.name}</span>
-                    <span className="block text-xs uppercase tracking-wider text-white/60">{t.program}</span>
-                  </span>
+                <figcaption className="mt-4">
+                  <p className="font-display font-extrabold text-lg sm:text-xl tracking-tight text-[#071D49]">{t.name}</p>
+                  <p className="text-sm text-[#071D49]/65">{t.subject}</p>
                 </figcaption>
               </motion.figure>
             ))}
           </div>
-          <div className="mt-8 flex flex-col sm:flex-row gap-2 sm:gap-8 justify-center items-center">
-            <Link to="/casos-reales" className="inline-flex items-center gap-2 min-h-[44px] text-sm font-bold uppercase tracking-wider text-white">Ver todas las historias <ArrowRight size={16} /></Link>
+        </div>
+      </section>
+
+      {/* ══ 7. TESTIMONIOS ══════════════════════════════════════════════ */}
+      <section className="grain bg-[#071D49] text-white py-20 sm:py-28 lg:py-32 overflow-hidden">
+        <div className={WRAP}>
+          <Etiqueta n="05" dark>Lo que cuentan los alumnos</Etiqueta>
+          <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-14">
+            {TESTIMONIALS.map((t, i) => (
+              <motion.figure key={t.id} {...fadeUp(i * 0.08)} className={`relative pt-10 ${i % 2 ? 'lg:mt-24' : ''}`}>
+                <span aria-hidden="true" className="absolute -top-14 -left-1 font-serif italic text-[#D7E400] text-[7rem] leading-none">“</span>
+                <blockquote className="relative font-serif text-[1.6rem] sm:text-[2.1rem] leading-[1.18]">{t.quote}</blockquote>
+                <figcaption className="mt-8 flex items-center gap-4 pt-6 border-t border-white/15">
+                  <span className="w-12 h-12 rounded-full flex items-center justify-center font-extrabold text-sm font-display bg-[#D7E400] text-[#071D49]">{t.initials}</span>
+                  <span>
+                    <span className="block font-bold">{t.name}</span>
+                    <span className="block text-xs uppercase tracking-[0.15em] text-white/60">{t.program}</span>
+                  </span>
+                  <span className="ml-auto text-[#D7E400] text-sm tracking-[0.3em]" role="img" aria-label={`${t.rating} de 5 estrellas`}>{'★'.repeat(t.rating)}</span>
+                </figcaption>
+              </motion.figure>
+            ))}
+          </div>
+          <div className="mt-16 flex flex-col sm:flex-row gap-3 sm:gap-8 sm:items-center">
+            <Link to="/casos-reales" className="group inline-flex items-center gap-3 min-h-[44px] font-display text-sm font-extrabold uppercase tracking-wider text-white">
+              <span className="w-10 h-10 rounded-full bg-[#D7E400] text-[#071D49] flex items-center justify-center group-hover:bg-white transition-colors"><ArrowRight size={16} /></span>
+              Ver todas las historias
+            </Link>
             <Link to="/testimonio" className="inline-flex items-center min-h-[44px] text-sm font-semibold text-white/75 hover:text-white underline underline-offset-4">¿Estudiaste con nosotros? Cuéntanos</Link>
           </div>
         </div>
       </section>
 
-      {/* ══ 6. PRECIOS ══════════════════════════════════════════════════ */}
-      <section className={`${SECTION} bg-[#F4F4F4]`}>
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <SectionTitle eyebrow="Preu PAES 2027 · Matrícula gratis" title="Pagas solo" accent="lo que tomas." />
-            <motion.ul {...fadeUp(0.08)} className="flex flex-wrap justify-center gap-2 mt-6" aria-label="Ramos disponibles">
+      {/* ══ 8. PRECIOS ══════════════════════════════════════════════════ */}
+      <section className="bg-[#F4F4F4] py-20 sm:py-28">
+        <div className={WRAP}>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+            <div>
+              <Etiqueta n="06">Preu PAES 2027 · Matrícula gratis</Etiqueta>
+              <motion.h2 {...fadeUp(0.05)} className="mt-6 font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[#071D49] display-lg">
+                Pagas solo <span className="accent-serif">lo que tomas.</span>
+              </motion.h2>
+            </div>
+            <motion.ul {...fadeUp(0.08)} className="flex flex-wrap gap-2 lg:max-w-md lg:justify-end" aria-label="Ramos disponibles">
               {['M1', 'Lectora', 'M2', 'Biología', 'Química', 'Física', 'Historia'].map((r, i) => (
-                <li key={r} className={`px-3 py-1.5 rounded-full text-xs font-bold ${i < 2 ? 'bg-[#D7E400] text-[#071D49]' : 'bg-white border border-[#071D49]/10'}`}>{r}</li>
+                <li key={r} className={`px-4 py-2 rounded-full text-sm font-bold ${i < 2 ? 'bg-[#D7E400] text-[#071D49]' : 'bg-white border border-[#071D49]/10'}`}>{r}</li>
               ))}
             </motion.ul>
           </div>
-          <PlanesPaes />
-          <p className="text-center text-sm text-[#071D49]/70 mt-8 max-w-2xl mx-auto">
+          <div className="max-w-6xl mx-auto">
+            <PlanesPaes />
+          </div>
+          <p className="text-center text-sm text-[#071D49]/70 mt-10 max-w-2xl mx-auto">
             ¿Otro programa? Inglés desde $16.990 al mes y la Escuela de Sueños es gratis. Si el costo es un problema, <Link to="/becas" className="underline font-semibold">postula a una beca</Link>.
           </p>
         </div>
       </section>
 
-      {/* ══ 7. PREGUNTAS ════════════════════════════════════════════════ */}
-      <section className={`${SECTION} bg-white`}>
-        <div className="max-w-3xl mx-auto">
-          <SectionTitle eyebrow="Lo que más nos preguntan" title="Antes de" accent="inscribirte." className="text-center mb-8" />
-          <div className="space-y-3">
-            {PREGUNTAS_HOME.map((q) => (
-              <details key={q.q} className="group rounded-2xl bg-[#F4F4F4] border border-[#071D49]/5 p-5 open:bg-white open:shadow-card">
-                <summary className="font-display font-bold cursor-pointer list-none flex justify-between gap-4 text-[#071D49]">{q.q}<span aria-hidden="true" className="transition-transform group-open:rotate-45 text-xl leading-none">+</span></summary>
-                <p className="mt-3 text-[#071D49]/75 leading-relaxed">{q.a}</p>
+      {/* ══ 9. PREGUNTAS ════════════════════════════════════════════════ */}
+      <section className="bg-white py-20 sm:py-28">
+        <div className={`${WRAP} grid lg:grid-cols-12 gap-10`}>
+          <div className="lg:col-span-5">
+            <div className="lg:sticky lg:top-32">
+              <Etiqueta n="07">Lo que más nos preguntan</Etiqueta>
+              <motion.h2 {...fadeUp(0.05)} className="mt-6 font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[#071D49] display-lg">
+                Antes de <span className="accent-serif">inscribirte.</span>
+              </motion.h2>
+              <Link to="/preguntas" className="mt-8 inline-flex items-center gap-2 min-h-[44px] font-bold underline underline-offset-4 text-[#071D49]">Ver todas las preguntas</Link>
+            </div>
+          </div>
+          <div className="lg:col-span-7 border-t border-[#071D49]/15">
+            {PREGUNTAS_HOME.map((q, i) => (
+              <details key={q.q} className="group border-b border-[#071D49]/15">
+                <summary className="cursor-pointer list-none flex items-center gap-5 py-6 sm:py-7 font-display font-extrabold text-lg sm:text-2xl tracking-tight text-[#071D49]">
+                  <span className="text-xs font-bold tracking-[0.2em] text-[#071D49]/70 w-6">0{i + 1}</span>
+                  <span className="flex-1">{q.q}</span>
+                  <span aria-hidden="true" className="w-10 h-10 rounded-full border border-[#071D49]/20 flex items-center justify-center flex-shrink-0 transition-all duration-300 group-open:rotate-45 group-open:bg-[#D7E400] group-open:border-[#D7E400] group-open:text-[#071D49]"><Plus size={18} /></span>
+                </summary>
+                <p className="pb-7 pl-11 pr-14 text-base sm:text-lg text-[#071D49]/75 leading-relaxed">{q.a}</p>
               </details>
             ))}
           </div>
-          <p className="text-center mt-6"><Link to="/preguntas" className="inline-flex items-center gap-2 min-h-[44px] font-bold underline underline-offset-4 text-[#071D49]">Ver todas las preguntas</Link></p>
         </div>
       </section>
 
-      {/* ══ 8. INSCRÍBETE ═══════════════════════════════════════════════ */}
-      <section className={`${SECTION} relative overflow-hidden`} style={{ backgroundColor: BLUE }}>
-        <BrandArcs />
-        <div className="relative max-w-4xl mx-auto text-center">
-          <motion.p {...fadeUp()} className="text-xs font-bold uppercase tracking-[0.2em] text-[#D7E400] mb-4">¿Te animas?</motion.p>
-          <motion.h2 {...fadeUp(0.05)} className="font-display font-extrabold tracking-tight leading-[1.02] text-white mb-8 sm:mb-10 text-4xl sm:text-5xl lg:text-6xl">
-            Inscríbete. <br /><span className="accent-serif text-[#D7E400]">La matrícula es gratis.</span>
-          </motion.h2>
-          <motion.div {...fadeUp(0.1)} className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a href="/inscripcion" className={`${BTN} sm:px-12 sm:py-5 bg-[#D7E400] text-[#071D49] hover:bg-white`} style={{ boxShadow: `0 20px 60px ${YELLOW}40` }}>
-              Inscribirme ahora <ArrowRight size={18} />
-            </a>
-            <Link to="/inscripcion?programa=clase-prueba" className={`${BTN} text-white border-2 border-white/30 hover:bg-white/10`}>Pedir clase de prueba</Link>
-          </motion.div>
+      {/* ══ 10. INSCRÍBETE ══════════════════════════════════════════════ */}
+      <section className="grain bg-[#071D49] text-white pt-24 sm:pt-32 pb-20 overflow-hidden">
+        <div className={`${WRAP} relative`}>
+          <Etiqueta n="08" dark>¿Te animas?</Etiqueta>
+          <div className="mt-8 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+            <motion.h2 {...fadeUp(0.05)} className="font-display font-extrabold display-xl">
+              Inscríbete.<br />
+              <span className="accent-serif text-[#D7E400]">La matrícula es gratis.</span>
+            </motion.h2>
+            <Magnetic strength={0.4} className="self-start lg:self-end flex-shrink-0">
+              <a href="/inscripcion" data-cursor="Vamos" className="group w-40 h-40 sm:w-52 sm:h-52 rounded-full bg-[#D7E400] text-[#071D49] flex flex-col items-center justify-center gap-2 font-display font-extrabold uppercase tracking-wider text-sm sm:text-base hover:bg-white transition-colors">
+                <ArrowRight size={28} className="-rotate-45 transition-transform duration-500 group-hover:rotate-0" />
+                Inscribirme
+              </a>
+            </Magnetic>
+          </div>
+          <div className="mt-12 pt-6 border-t border-white/15 flex flex-col sm:flex-row gap-3 sm:gap-8">
+            <Link to="/inscripcion?programa=clase-prueba" className="inline-flex items-center min-h-[44px] font-bold text-white/80 hover:text-white underline underline-offset-4">Pedir una clase de prueba</Link>
+            <Link to="/becas" className="inline-flex items-center min-h-[44px] font-bold text-white/80 hover:text-white underline underline-offset-4">Postular a una beca</Link>
+          </div>
         </div>
       </section>
     </div>

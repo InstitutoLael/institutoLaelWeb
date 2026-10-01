@@ -21,6 +21,9 @@ export default function ScrollToTop() {
       return () => clearInterval(id);
     }
     // Cada vez que cambia la ruta, sube el scroll a 0,0 (Arriba a la izquierda)
+    // (con el desplazamiento suave activo, se le avisa para que no siga
+    // animando hacia donde iba en la página anterior)
+    if (window.__lenis) window.__lenis.scrollTo(0, { immediate: true, force: true });
     window.scrollTo(0, 0);
     // Accesibilidad: al cambiar de página, el foco pasa al contenido principal
     // (así el teclado y los lectores de pantalla parten desde la página nueva).

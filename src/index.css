@@ -22,7 +22,7 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     font-family: var(--font-body);
     background-color: var(--bg-primary);
     color: var(--text-primary);
@@ -209,3 +209,106 @@ main:focus { outline: none; }
     scroll-behavior: auto !important;
   }
 }
+
+/* ══ Experiencia 2027 ═════════════════════════════════════════════════
+   Piezas globales del rediseño: grano, logo que se dibuja, cursor,
+   cinta de texto y contorno de letras. */
+
+/* Grano de papel sobre los fondos azules: les da textura (se usa con la
+   clase .grain en el contenedor, que debe tener position). */
+.grain { isolation: isolate; }
+.grain:not(.absolute):not(.fixed):not(.sticky) { position: relative; }
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.grain > * { z-index: 2; }
+.grain > :not(.absolute):not(.fixed):not(.sticky) { position: relative; }
+
+/* Trazos del logo que se dibujan (usar con pathLength="1") */
+@keyframes lael-draw-kf { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.lael-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: lael-draw-kf 0.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+@keyframes lael-dove-kf {
+  from { opacity: 0; transform: translate(-14px, 14px) rotate(-12deg); }
+  to   { opacity: 1; transform: none; }
+}
+.lael-dove-in {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 20% 90%;
+  animation: lael-dove-kf 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Cursor que acompaña al mouse (ver Cursor.jsx) */
+.lael-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1200;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+.lael-cursor > span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 9999px;
+  border: 1.5px solid #D7E400;
+  mix-blend-mode: difference;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: 800 11px/1 Montserrat, sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #071D49;
+  transition: width .35s cubic-bezier(.16,1,.3,1), height .35s cubic-bezier(.16,1,.3,1), margin .35s cubic-bezier(.16,1,.3,1), background-color .25s, opacity .25s, border-color .25s;
+}
+.lael-cursor.is-on > span { opacity: 1; }
+.lael-cursor.is-link > span { width: 64px; height: 64px; margin: -32px 0 0 -32px; background: rgba(215, 228, 0, 0.18); }
+.lael-cursor.has-label > span { width: 92px; height: 92px; margin: -46px 0 0 -46px; background: #D7E400; border-color: #D7E400; mix-blend-mode: normal; }
+.lael-cursor.is-down > span { transform: scale(0.85); }
+
+/* Cinta de texto que corre sola */
+@keyframes lael-marquee { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
+.lael-marquee { animation: lael-marquee 38s linear infinite; will-change: transform; }
+.lael-marquee-rev { animation-direction: reverse; }
+@media (hover: hover) { .lael-marquee-wrap:hover .lael-marquee { animation-play-state: paused; } }
+
+/* Letras solo con contorno */
+.text-outline { color: transparent; -webkit-text-stroke: 1.5px currentColor; }
+.text-outline-lima { color: transparent; -webkit-text-stroke: 1.5px #D7E400; }
+
+/* Tipografía gigante que se ajusta al ancho */
+.display-xl { font-size: clamp(2.7rem, 8.6vw, 10rem); line-height: 0.88; letter-spacing: -0.045em; }
+.display-lg { font-size: clamp(2.6rem, 7vw, 7rem); line-height: 0.92; letter-spacing: -0.04em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lael-draw { stroke-dashoffset: 0; }
+  .lael-dove-in { opacity: 1; transform: none; }
+  .lael-marquee { animation: none; }
+}
+
+/* Logo vectorial: en modo oscuro, el que va sobre fondo claro pasa a blanco */
+html.dark .logo-adapt { --logo-ink: #FFFFFF; --logo-acc: #D7E400; }
+
+/* Portadas internas alineadas a la izquierda: los botones que venían
+   centrados (justify-center) se alinean con el texto. */
+.page-hero-body:not(.is-center) .justify-center { justify-content: flex-start; }
+.page-hero-body:not(.is-center) .mx-auto { margin-left: 0; }
+.page-hero-body:not(.is-center) .text-center { text-align: left; }

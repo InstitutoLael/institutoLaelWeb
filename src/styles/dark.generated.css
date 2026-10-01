@@ -34,6 +34,7 @@ html.dark [class~="border-rose-600/10"]:not([data-keep-light]):not([data-keep-li
 html.dark [class~="bg-[#071D49]/10"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.12000000000000001) !important; }
 html.dark [class~="bg-[#071D49]/15"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
 html.dark [class~="bg-[#071D49]/20"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
+html.dark [class~="bg-[#071D49]/30"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
 html.dark [class~="bg-[#071D49]/5"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.07) !important; }
 html.dark [class~="bg-[#071D49]/60"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
 html.dark [class~="bg-[#071D49]/95"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
@@ -61,6 +62,7 @@ html.dark [class~="focus:ring-[#071D49]"]:not([data-keep-light]):not([data-keep-
 html.dark [class~="focus:ring-[#071D49]/10"]:not([data-keep-light]):not([data-keep-light] *):focus { --tw-ring-color: rgba(232, 236, 245, 0.30000000000000004) !important; }
 html.dark [class~="focus:ring-[#071D49]/30"]:not([data-keep-light]):not([data-keep-light] *):focus { --tw-ring-color: rgba(232, 236, 245, 0.5) !important; }
 html.dark [class~="focus:text-[#071D49]"]:not([data-keep-light]):not([data-keep-light] *):not([class~="bg-[#D7E400]"]):not([class~="bg-[#D7E400]"] *):not([class~="bg-lael-accent"]):not([class~="bg-lael-accent"] *):not([style*="background-color: rgb(215, 228, 0)"]):not([style*="background-color: rgb(215, 228, 0)"] *):focus { color: rgba(232, 236, 245, 1) !important; }
+html.dark .group:hover [class~="group-hover:bg-white"]:not([data-keep-light]):not([data-keep-light] *) { background-color: #0C1834 !important; }
 html.dark .group:hover [class~="group-hover:text-[#071D49]"]:not([data-keep-light]):not([data-keep-light] *):not([class~="bg-[#D7E400]"]):not([class~="bg-[#D7E400]"] *):not([class~="bg-lael-accent"]):not([class~="bg-lael-accent"] *):not([style*="background-color: rgb(215, 228, 0)"]):not([style*="background-color: rgb(215, 228, 0)"] *) { color: rgba(232, 236, 245, 1) !important; }
 html.dark [class~="hover:bg-[#071D49]/10"]:not([data-keep-light]):not([data-keep-light] *):hover { background-color: rgba(255, 255, 255, 0.12000000000000001) !important; }
 html.dark [class~="hover:bg-[#071D49]/5"]:not([data-keep-light]):not([data-keep-light] *):hover { background-color: rgba(255, 255, 255, 0.07) !important; }

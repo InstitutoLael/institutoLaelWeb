@@ -101,7 +101,7 @@ export function DescuentosPaes({ className = '' }) {
           </div>
         ))}
       </div>
-      <p className="text-xs text-[#071D49]/60 mt-4 text-center">{DESCUENTOS_NOTA}</p>
+      <p className="text-xs text-[#071D49]/75 mt-4 text-center">{DESCUENTOS_NOTA}</p>
     </div>
   );
 }

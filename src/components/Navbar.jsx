@@ -2,8 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Plus } from 'lucide-react';
-import logoColor from '../assets/img/Logos/lael-nuevo-logo.webp';
-import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.webp';
+import LaelLogo from './ui/LaelLogo';
 import { NAVIGATION } from '../data/navigation';
 import UrgencyBanner from './UrgencyBanner';
 import ProgramasDropdown from './ProgramasDropdown';
@@ -118,18 +117,13 @@ export default function Navbar() {
 
   // Determinar si mostrar logo claro u oscuro
   const isNavSolid = scrolled || mobileOpen || isLightPage;
-  const activeLogo = isNavSolid ? logoColor : logoBlanco;
 
   if (isFocusPage) {
     return (
       <header className="fixed left-0 top-0 w-full z-[100] p-4 lg:p-8 flex justify-between items-center pointer-events-none transition-all duration-500">
         <div className="flex items-center gap-4 pointer-events-auto">
           <Link to="/" className="group">
-            <img
-              src={isLightPage ? logoColor : logoBlanco}
-              alt="Instituto Lael"
-              className="h-8 lg:h-10 w-auto transition-transform group-hover:scale-105"
-            />
+            <LaelLogo variant={isLightPage ? 'marino' : 'blanco'} className={`h-8 lg:h-10 w-auto transition-transform group-hover:scale-105 ${isLightPage ? 'logo-adapt' : ''}`} />
           </Link>
           <div className={`w-px h-4 hidden lg:block ${isLightPage ? "bg-[#071D49]/20" : "bg-white/20"}`} />
           <Link to="/" className={`hidden lg:flex items-center gap-2 text-xs uppercase tracking-[0.1em] font-bold ${isLightPage ? "text-[#071D49]/70 hover:text-[#071D49]" : "text-white/70 hover:text-white"}`}>
@@ -159,12 +153,9 @@ export default function Navbar() {
 
           {/* ── LOGO ─────────────────────────────────────────────────── */}
           <Link to="/" className="z-[110] relative group flex items-center gap-3">
-            <img
-              src={activeLogo}
-              alt="Instituto Lael"
-              className={`w-auto object-contain transition-all duration-500 group-hover:scale-105 ${
-                isNavSolid ? 'h-9 xl:h-10' : 'h-10 xl:h-12'
-              }`}
+            <LaelLogo
+              variant={isNavSolid ? 'marino' : 'blanco'}
+              className={`w-auto transition-all duration-500 group-hover:scale-105 ${isNavSolid ? 'h-9 xl:h-10 logo-adapt' : 'h-10 xl:h-12'}`}
             />
           </Link>
 
@@ -283,7 +274,7 @@ export default function Navbar() {
               {/* Header inside Drawer */}
               <div className="flex items-center justify-between mb-8 relative z-10">
                 <Link to="/" onClick={() => setMobileOpen(false)}>
-                  <img src={logoBlanco} alt="Instituto Lael, ir al inicio" className="h-10 w-auto" />
+                  <LaelLogo variant="blanco" title="Instituto Lael, ir al inicio" className="h-10 w-auto" />
                 </Link>
                 <button
                   type="button"

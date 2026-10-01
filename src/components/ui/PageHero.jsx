@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import BrandArcs from './BrandArcs';
+import WordReveal from './WordReveal';
+import { Paloma } from './LaelLogo';
 
 // Portada estándar de las páginas: fondo azul, arcos de la marca, etiqueta
 // en el color del programa y título con una palabra en cursiva elegante.
@@ -15,32 +16,39 @@ export const fadeUp = (delay = 0) => ({
   transition: { duration: 0.5, delay, ease },
 });
 
-export default function PageHero({ eyebrow, title, accent, children, align = 'center', size = 'md' }) {
+// Onda de la marca que cruza la portada y termina en la paloma
+// (va solo por la mitad derecha, para no cruzar el texto)
+const ONDA_HERO = 'M760 640 C 880 560 900 430 1030 430 C 1160 430 1190 530 1280 480 C 1325 455 1340 395 1336 330';
+
+export default function PageHero({ eyebrow, title, accent, children, align = 'left', size = 'md' }) {
   const sizes = {
-    md: 'text-[2.35rem] leading-[1.02] sm:text-5xl lg:text-6xl',
-    lg: 'text-[2.6rem] leading-[1] sm:text-6xl lg:text-7xl',
+    md: 'text-[2.6rem] sm:text-6xl lg:text-7xl xl:text-[5.5rem]',
+    lg: 'text-[2.9rem] sm:text-7xl lg:text-8xl xl:text-[7rem]',
   };
+  const centro = align === 'center';
   return (
-    <section className="relative -mt-20 pt-36 sm:pt-44 pb-16 sm:pb-20 px-5 sm:px-6 bg-[#071D49] text-white overflow-hidden">
-      <BrandArcs />
-      <div className={`relative max-w-3xl mx-auto ${align === 'center' ? 'text-center' : ''}`}>
+    <section className="grain relative -mt-20 bg-[#071D49] text-white overflow-hidden">
+      <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" viewBox="0 0 1440 600" preserveAspectRatio="xMaxYMax slice">
+        <path d={ONDA_HERO} pathLength="1" className="lael-draw" style={{ animationDuration: '1.8s', animationDelay: '0.3s' }} fill="none" stroke="var(--programa)" strokeWidth="2" strokeLinecap="round" />
+        <path d="M1140 -40 C 1170 80 1260 120 1370 92" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="24" strokeLinecap="round" />
+        <g transform="translate(1336 330) scale(1.7) translate(-229 -48)">
+          <Paloma fill="var(--programa)" className="lael-dove-in" style={{ animationDelay: '1.7s' }} />
+        </g>
+      </svg>
+      <div className={`relative max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-12 pt-32 sm:pt-40 lg:pt-44 pb-14 sm:pb-20 ${centro ? 'text-center' : ''}`}>
         {eyebrow && (
-          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] mb-5 text-programa">
-            <span className="w-1.5 h-1.5 rounded-full bg-programa" aria-hidden="true" />
+          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className={`flex items-center gap-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] mb-6 sm:mb-8 text-white/60 ${centro ? 'justify-center' : ''}`}>
+            <span className="text-programa">Lael</span>
+            <span className="w-8 h-px bg-white/30" aria-hidden="true" />
             {eyebrow}
           </motion.p>
         )}
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.05, ease }}
-          className={`font-display font-extrabold tracking-tight text-white mb-6 ${sizes[size]}`}
-        >
-          {title}
-          {accent && <> <span className="accent-serif text-programa">{accent}</span></>}
-        </motion.h1>
+        <WordReveal
+          className={`font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-white mb-8 max-w-[16ch] ${centro ? 'mx-auto' : ''} ${sizes[size]}`}
+          segments={[{ text: title }, ...(accent ? [{ text: accent, className: 'accent-serif text-programa' }] : [])]}
+        />
         {children && (
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }} className="text-white/75 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.35, ease }} className={`page-hero-body text-white/75 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl ${centro ? 'mx-auto is-center' : ''}`}>
             {children}
           </motion.div>
         )}

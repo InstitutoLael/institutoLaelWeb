@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Instagram, Youtube, Mail, MessageCircle, ArrowRight } from 'lucide-react';
-import logoBlanco from '../assets/img/Logos/lael-nuevo-logo-blanco.webp';
+import LaelLogo from './ui/LaelLogo';
 import ThemeToggle from './ThemeToggle';
-import BrandArcs from './ui/BrandArcs';
 import { AUDIENCIAS, HERRAMIENTAS } from '../data/catalogo';
 import { whatsappUrl } from '../lib/backend';
 
@@ -46,8 +45,7 @@ export default function Footer() {
   const esInicio = useLocation().pathname === '/';
 
   return (
-    <footer className="relative bg-[#071D49] text-white overflow-hidden">
-      <BrandArcs variant="side" color="#D7E400" />
+    <footer className="grain relative bg-[#071D49] text-white overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-6 pt-16 sm:pt-20 pb-10">
 
         {/* Llamado a la acción */}
@@ -72,7 +70,7 @@ export default function Footer() {
           {/* Marca */}
           <div className="col-span-2 md:col-span-3 lg:col-span-2 flex flex-col gap-5 lg:pr-8">
             <Link to="/" aria-label="Instituto Lael, ir al inicio" className="w-fit">
-              <img src={logoBlanco} alt="" loading="lazy" className="h-10 w-auto" />
+              <LaelLogo variant="blanco" title="" className="h-10 w-auto" />
             </Link>
             <p className="text-white/65 text-sm leading-relaxed max-w-xs">
               Instituto online desde 2021. Preu PAES, idiomas, nivelación gratis para adultos y capacitación para empresas.
@@ -114,9 +112,15 @@ export default function Footer() {
           </div>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             {LEGAL.map((l) => <Link key={l.path} to={l.path} className="hover:text-white min-h-[32px] inline-flex items-center">{l.name}</Link>)}
+            <Link to="/marca" className="hover:text-white min-h-[32px] inline-flex items-center">Marca</Link>
             <ThemeToggle />
           </div>
         </div>
+      </div>
+
+      {/* Firma: el logo a todo lo ancho, asomándose desde el borde de abajo */}
+      <div aria-hidden="true" className="relative max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-12 h-[clamp(110px,21vw,330px)] overflow-hidden">
+        <LaelLogo variant="blanco" tagline={false} title="" className="w-full h-auto" />
       </div>
     </footer>
   );

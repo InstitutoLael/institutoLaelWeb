@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import WordReveal from '../ui/WordReveal';
 import Magnetic from '../experience/Magnetic';
@@ -80,7 +79,7 @@ export default function HomeHero({ modo: modoProp }) {
         <motion.div style={{ y: tituloY }} className="flex-1 flex flex-col justify-center py-8 sm:py-10">
           <motion.p initial={ini({ opacity: 0, y: 10 })} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="mb-6 sm:mb-8 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-[#D7E400]">
             <span className="w-8 h-px bg-[#D7E400]" aria-hidden="true" />
-            Preu PAES · Inglés · Escuela de Sueños
+            Instituto online · Desde 2021
           </motion.p>
           <div className="relative">
           {/* La onda pasa bajo "de vencimiento" y sube hasta la paloma */}
@@ -107,17 +106,17 @@ export default function HomeHero({ modo: modoProp }) {
         <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-6 items-end">
           <motion.div initial={ini({ y: 16 })} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease }} className="xl:col-span-5">
             <p className="text-white/75 text-base sm:text-lg leading-relaxed max-w-md mb-7">
-              Da lo mismo si vas en cuarto medio, si la PAES te fue mal la primera vez o si dejaste el colegio hace años. Te ayudamos a llegar.
+              Preu PAES, inglés y nivelación de estudios en vivo. Da lo mismo si vas en cuarto medio o si dejaste el colegio hace años: te ayudamos a llegar.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Magnetic>
-                <a href="/inscripcion?programa=paes" data-cursor="Vamos" className={`${BTN} w-full sm:w-auto bg-[#D7E400] text-[#071D49] hover:bg-white`}>
+                <a href="/inscripcion" data-cursor="Vamos" className={`${BTN} w-full sm:w-auto bg-[#D7E400] text-[#071D49] hover:bg-white`}>
                   Inscribirme gratis <ArrowRight size={16} />
                 </a>
               </Magnetic>
-              <Link to="/paes" className={`${BTN} text-white border border-white/30 hover:bg-white hover:text-[#071D49]`}>
-                Conocer el preu
-              </Link>
+              <a href="#caminos" className={`${BTN} text-white border border-white/30 hover:bg-white hover:text-[#071D49]`}>
+                Ver programas
+              </a>
             </div>
           </motion.div>
 

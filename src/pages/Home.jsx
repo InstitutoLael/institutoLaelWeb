@@ -7,7 +7,6 @@ import { ClaseEnVivo, Grupo, Grabacion } from '../components/icons/LaelIcons';
 import HomeHero from '../components/home/HomeHero';
 import ProgramStack from '../components/home/ProgramStack';
 import Herramientas from '../components/home/Herramientas';
-import PlanesPaes from '../components/PlanesPaes';
 import Marquee from '../components/ui/Marquee';
 import ScrollWords from '../components/ui/ScrollWords';
 import CountUp from '../components/ui/CountUp';
@@ -15,19 +14,25 @@ import Magnetic from '../components/experience/Magnetic';
 import { fadeUp } from '../components/ui/PageHero';
 import { TEACHERS, TESTIMONIALS } from '../data/home';
 import { LANDING_FAQS } from '../data/paes';
+import { PROGRAMAS_CATALOGO } from '../data/catalogo';
+import PreciosInstituto from '../components/home/PreciosInstituto';
 import heroImg from '../assets/img/Home/hero_student_lael_1780734180709.webp';
 
 // Orden de la portada (de arriba a abajo): portada con la onda y la paloma →
 // cinta → manifiesto → los tres caminos + índice → números → profes →
 // testimonios → precios → preguntas → inscríbete.
+// Preguntas de instituto (no de un solo programa): cada programa tiene las
+// suyas en su página.
 const PREGUNTAS_HOME = [
-  LANDING_FAQS[0],
-  LANDING_FAQS[3],
-  { q: '¿Cómo son las clases?', a: 'En vivo por Google Meet, con la cámara prendida y en cursos de máximo 20 personas. El material queda en Classroom y cada semana te compartimos las grabaciones.' },
+  { q: '¿Cuánto cuesta estudiar en Lael?', a: 'La matrícula es gratis en todos los programas. Cada uno tiene su valor: el preu PAES se paga por ramo, inglés y español tienen una mensualidad, y la Escuela de Sueños es gratis. Los precios están todos arriba, sin letra chica.' },
+  { q: '¿Cómo son las clases?', a: 'En vivo por Google Meet, con un profe al que le puedes preguntar todo y en cursos chicos. El material queda en Google Classroom y las clases se graban para que puedas repasar.' },
+  { q: '¿Qué necesito para participar?', a: LANDING_FAQS[1].a },
   { q: '¿Hay becas?', a: 'Sí, becas parciales para quien las necesite. Postulas en tres minutos y revisamos cada caso con calma.' },
+  { q: 'No sé qué programa es para mí', a: 'Escríbenos por WhatsApp y te orientamos. También puedes mirar el índice de programas más arriba: están ordenados por para quién es cada uno.' },
 ];
 
 const WRAP = 'max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-12';
+const PROGRAMAS_ACTIVOS = PROGRAMAS_CATALOGO.filter((p) => p.tag !== 'Próximamente').length;
 
 // Cada sección bajo la portada va en su propio bloque: así, al adoptar la
 // página pre-dibujada, el celular la activa por partes y no se traba.
@@ -53,7 +58,7 @@ const FORMA = [
 const NUMEROS = [
   { to: 1000, prefix: '+', t: 'alumnos han pasado por Lael desde 2021' },
   { to: 20, t: 'personas como máximo en cada curso' },
-  { to: 7, t: 'ramos PAES, cada uno por separado' },
+  { to: PROGRAMAS_ACTIVOS, t: 'programas: para estudiantes, adultos y empresas' },
   { to: 0, prefix: '$', t: 'cuesta la matrícula. Siempre.' },
 ];
 
@@ -61,8 +66,8 @@ export default function Home() {
   return (
     <div className="overflow-x-clip">
       <Helmet>
-        <title>Instituto Lael - Preuniversitario PAES 2027 | Santiago, Chile</title>
-        <meta name="description" content="Tu sueño no tiene fecha de vencimiento. Preuniversitario PAES online desde $12.000/mes por ramo, inglés y nivelación de estudios gratis para adultos. Matrícula gratis y becas. Instituto Lael, Chile." />
+        <title>Instituto Lael | Preu PAES, inglés y nivelación de estudios online</title>
+        <meta name="description" content="Tu sueño no tiene fecha de vencimiento. Instituto online desde 2021: preu PAES, inglés, español, clases particulares, nivelación de estudios gratis para adultos y capacitación para empresas. Matrícula gratis y becas." />
       </Helmet>
 
       {/* ══ 1. PORTADA ══════════════════════════════════════════════════ */}
@@ -251,26 +256,21 @@ export default function Home() {
       <Parte>
       {/* ══ 8. PRECIOS ══════════════════════════════════════════════════ */}
       <section className="bg-[#F4F4F4] py-20 sm:py-28">
-        <div className={WRAP}>
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
-            <div>
-              <Etiqueta n="07">Preu PAES 2027 · Matrícula gratis</Etiqueta>
-              <motion.h2 {...fadeUp(0.05)} className="mt-6 font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[#071D49] display-lg">
-                Pagas solo <span className="accent-serif">lo que tomas.</span>
+        <div className={`${WRAP} grid lg:grid-cols-12 gap-10`}>
+          <div className="lg:col-span-4">
+            <div className="lg:sticky lg:top-32">
+              <Etiqueta n="07">Precios · Matrícula gratis</Etiqueta>
+              <motion.h2 {...fadeUp(0.05)} className="mt-6 font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[#071D49] text-5xl sm:text-6xl xl:text-7xl">
+                Claros, <span className="accent-serif">sin letra chica.</span>
               </motion.h2>
+              <motion.p {...fadeUp(0.1)} className="mt-6 max-w-sm text-[#071D49]/70 leading-relaxed">
+                La matrícula es gratis en todo. Y si el costo es un problema, <Link to="/becas" className="underline font-semibold text-[#071D49]">postula a una beca</Link>: la revisamos caso a caso.
+              </motion.p>
             </div>
-            <motion.ul {...fadeUp(0.08)} className="flex flex-wrap gap-2 lg:max-w-md lg:justify-end" aria-label="Ramos disponibles">
-              {['M1', 'Lectora', 'M2', 'Biología', 'Química', 'Física', 'Historia'].map((r, i) => (
-                <li key={r} className={`px-4 py-2 rounded-full text-sm font-bold ${i < 2 ? 'bg-[#D7E400] text-[#071D49]' : 'bg-white border border-[#071D49]/10'}`}>{r}</li>
-              ))}
-            </motion.ul>
           </div>
-          <div className="max-w-6xl mx-auto">
-            <PlanesPaes />
+          <div className="lg:col-span-8">
+            <PreciosInstituto />
           </div>
-          <p className="text-center text-sm text-[#071D49]/70 mt-10 max-w-2xl mx-auto">
-            ¿Otro programa? Inglés desde $16.990 al mes y la Escuela de Sueños es gratis. Si el costo es un problema, <Link to="/becas" className="underline font-semibold">postula a una beca</Link>.
-          </p>
         </div>
       </section>
 

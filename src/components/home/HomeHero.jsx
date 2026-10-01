@@ -37,7 +37,18 @@ const DATOS = [
   { n: '$0', t: 'matrícula', lima: true },
 ];
 
-export default function HomeHero() {
+// modo 'css': se dibuja en el HTML antes de que cargue el JavaScript (ver
+// src/entry-shell.jsx). Cuando React llega y encuentra esa portada ya puesta,
+// la toma sin repetir la entrada (modo 'quieto'), así no parpadea.
+export function tomarPortadaPredibujada() {
+  if (typeof window === 'undefined' || !window.__laelShell) return undefined;
+  window.__laelShell = false;
+  return 'quieto';
+}
+
+export default function HomeHero({ modo: modoProp }) {
+  const [modo] = useState(() => modoProp || tomarPortadaPredibujada());
+  const ini = (v) => (modo ? false : v);
   const ref = useRef(null);
   const lineaRef = useRef(null);
   const tam = useTamano(lineaRef);
@@ -65,14 +76,14 @@ export default function HomeHero() {
 
       <div className="relative flex-1 flex flex-col w-full max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 sm:pt-36 pb-12 sm:pb-16">
         {/* Fila de datos editorial */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="hidden md:grid grid-cols-3 gap-6 text-[11px] font-bold uppercase tracking-[0.22em] text-white/55 border-t border-white/15 pt-4">
+        <motion.div initial={ini({ opacity: 0 })} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.2 }} className="hidden md:grid grid-cols-3 gap-6 text-[11px] font-bold uppercase tracking-[0.22em] text-white/55 border-t border-white/15 pt-4">
           <p>Instituto Lael — Santiago, Chile</p>
           <p className="text-center">En vivo por Google Meet</p>
           <p className="text-right">Nueva temporada · <span className="text-[#D7E400]">Marzo 2027</span></p>
         </motion.div>
 
         <motion.div style={{ y: tituloY }} className="flex-1 flex flex-col justify-center py-8 sm:py-10">
-          <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="mb-6 sm:mb-8 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-[#D7E400]">
+          <motion.p initial={ini({ opacity: 0, y: 10 })} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} className="mb-6 sm:mb-8 inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.22em] text-[#D7E400]">
             <span className="w-8 h-px bg-[#D7E400]" aria-hidden="true" />
             Preu PAES · Inglés · Escuela de Sueños
           </motion.p>
@@ -88,6 +99,7 @@ export default function HomeHero() {
             className="relative font-display font-extrabold display-xl text-white"
             delay={0.15}
             stagger={0.07}
+            modo={modo === 'css' ? 'css' : modo ? 'quieto' : undefined}
             segments={[
               { text: 'Tu sueño', className: 'block' },
               { text: 'no tiene fecha', className: 'block lg:pl-[11%]' },
@@ -98,7 +110,7 @@ export default function HomeHero() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-end">
-          <motion.div initial={{ y: 16 }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease }} className="lg:col-span-5">
+          <motion.div initial={ini({ y: 16 })} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease }} className="lg:col-span-5">
             <p className="text-white/75 text-base sm:text-lg leading-relaxed max-w-md mb-7">
               Da lo mismo si vas en cuarto medio, si la PAES te fue mal la primera vez o si dejaste el colegio hace años. Te ayudamos a llegar.
             </p>
@@ -114,7 +126,7 @@ export default function HomeHero() {
             </div>
           </motion.div>
 
-          <motion.dl initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }} className="lg:col-span-6 lg:col-start-7 grid grid-cols-3 border-t border-white/15">
+          <motion.dl initial={ini({ opacity: 0 })} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }} className="lg:col-span-6 lg:col-start-7 grid grid-cols-3 border-t border-white/15">
             {DATOS.map((d) => (
               <div key={d.t} className="pt-4 pr-3 flex flex-col-reverse">
                 <dt className="text-[11px] sm:text-xs uppercase tracking-[0.14em] font-bold text-white/55 mt-1">{d.t}</dt>

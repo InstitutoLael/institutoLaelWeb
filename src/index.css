@@ -325,3 +325,9 @@ html.dark .logo-adapt { --logo-ink: #FFFFFF; --logo-acc: #D7E400; }
 @media (prefers-reduced-motion: reduce) {
   .lael-404-dove { animation: none; transform: translate(80vw, 20vh); }
 }
+
+/* Palabras que suben (versión CSS de WordReveal, para la portada que llega
+   pre-dibujada en el HTML antes del JavaScript) */
+@keyframes lael-rise-kf { from { transform: translateY(105%); } to { transform: none; } }
+.lael-rise { transform: translateY(105%); animation: lael-rise-kf 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+@media (prefers-reduced-motion: reduce) { .lael-rise { transform: none; animation: none; } }

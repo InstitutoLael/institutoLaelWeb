@@ -33,10 +33,10 @@ export default function CookieNotice() {
   if (!visible) return null;
 
   return (
-    <div role="region" aria-label="Aviso de cookies" className="fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-md z-[150] bg-white text-[#071D49] rounded-2xl shadow-2xl border border-[#071D49]/10 p-5">
-      <p className="text-sm leading-relaxed mb-4">
-        Usamos cookies de Google Analytics solo para saber cuántas personas visitan el sitio y qué páginas sirven más. Nada de publicidad.{' '}
-        <Link to="/privacidad" className="underline font-semibold">Lee cómo cuidamos tus datos</Link>
+    <div role="region" aria-label="Aviso de cookies" className="fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-sm z-[150] bg-white text-[#071D49] rounded-2xl shadow-2xl border border-[#071D49]/10 p-4">
+      <p className="text-sm leading-snug mb-3">
+        Usamos Google Analytics solo para contar visitas. Nada de publicidad.{' '}
+        <Link to="/privacidad" className="underline font-semibold">Tus datos</Link>
       </p>
       <div className="flex gap-2">
         <button type="button" onClick={() => decide('si')} className="flex-1 min-h-[44px] rounded-xl bg-[#071D49] text-white text-sm font-bold">Aceptar</button>

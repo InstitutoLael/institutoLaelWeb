@@ -12,7 +12,12 @@ import "./styles/dark.generated.css";
 import App from "./App.jsx";
 
 
-createRoot(document.getElementById("root")).render(
+// La portada (/) llega pre-dibujada en el HTML (data-shell). Se avisa a
+// HomeHero para que la tome sin repetir la animación de entrada.
+const rootEl = document.getElementById("root");
+window.__laelShell = rootEl.hasAttribute("data-shell") && window.location.pathname === "/";
+
+createRoot(rootEl).render(
   <React.StrictMode>
     {/* 1. Capa de SEO */}
     <HelmetProvider>

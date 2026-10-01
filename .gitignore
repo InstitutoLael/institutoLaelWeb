@@ -80,3 +80,4 @@ node_modules/
 .idea/
 .wrangler/
 supabase/.temp/
+.shell

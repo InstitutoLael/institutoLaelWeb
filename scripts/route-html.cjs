@@ -66,7 +66,7 @@ const OG = {
   '/empresas': 'empresas', '/calculadora': 'calculadora', '/calendario-admision': 'calendario',
   '/glosario-paes': 'glosario', '/becas': 'becas', '/metodo': 'metodo', '/sistema': 'metodo',
   '/como-es-una-clase': 'metodo', '/preguntas': 'preguntas', '/reforzamiento': 'reforzamiento',
-  '/inscripcion': 'inscripcion',
+  '/inscripcion': 'inscripcion', '/nosotros': 'nosotros', '/marca': 'marca',
 };
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

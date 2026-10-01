@@ -153,11 +153,13 @@ export default function Nosotros() {
                   {...fadeUp(i * 0.05)}
                   className={`rounded-[28px] p-6 border transition-all duration-300 flex flex-col items-center text-center ${isPlaceholder ? 'bg-[#F4F4F4]/50 border-dashed border-[#071D49]/20' : 'bg-[#F4F4F4] border-[#071D49]/5 hover:shadow-card'}`}
                 >
-                  <div className="w-20 h-20 rounded-full overflow-hidden border border-[#071D49]/10 shadow-md mb-4 flex items-center justify-center bg-[#071D49]/5 relative">
+                  <div className="w-20 h-20 rounded-full overflow-hidden shadow-md mb-4 flex items-center justify-center bg-[#071D49] relative" data-keep-light>
                     {isPlaceholder ? (
-                      <span className="text-3xl text-[#071D49]/70 font-bold">?</span>
-                    ) : (
+                      <span className="text-3xl text-white/70 font-bold">?</span>
+                    ) : t.img ? (
                       <img src={t.img} alt={`Foto de ${t.name}`} loading="lazy" className="w-full h-full object-cover" />
+                    ) : (
+                      <span aria-hidden="true" className="font-serif italic text-[#D7E400] text-4xl leading-none">{t.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}</span>
                     )}
                   </div>
 

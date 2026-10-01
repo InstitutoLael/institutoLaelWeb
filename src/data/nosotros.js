@@ -60,7 +60,7 @@ export const TEAM = [
     role: "Profesora de Inglés",
     subject: "Inglés Avanzado & Preparación",
     bio: "En sus clases se habla inglés desde el primer día. La gramática la vas aprendiendo mientras conversas.",
-    img: "https://ui-avatars.com/api/?name=Monserrat+Gonzalez&background=071D49&color=D7E400&size=200&bold=true",
+    img: null,
     confirmed: true
   },
   {
@@ -68,7 +68,7 @@ export const TEAM = [
     role: "Profe de Ciencias",
     subject: "Biología + Química",
     bio: "Hace biología y química. Explica directo y con calma, para que entiendas la materia en vez de aprenderla de memoria.",
-    img: "https://ui-avatars.com/api/?name=Martin+Ciencias&background=071D49&color=D7E400&size=200&bold=true",
+    img: null,
     confirmed: true
   },
   {
@@ -76,7 +76,7 @@ export const TEAM = [
     role: "Profe de HomeSchool",
     subject: "Matemática M2 & HomeSchool",
     bio: "Hace M2 y trabaja con alumnos de HomeSchool. Antes de pasar a la fórmula, se asegura de que entiendas de dónde sale.",
-    img: "https://ui-avatars.com/api/?name=Kathy+M2&background=071D49&color=D7E400&size=200&bold=true",
+    img: null,
     confirmed: true
   },
   {
@@ -84,7 +84,7 @@ export const TEAM = [
     role: "Profe de Lenguaje",
     subject: "Competencia Lectora",
     bio: "Estamos buscando profe de Competencia Lectora. Apenas esté confirmado, lo presentamos acá.",
-    img: "https://ui-avatars.com/api/?name=Proximamente+CL&background=F4F4F4&color=8D8D8D&size=200&bold=true",
+    img: null,
     confirmed: false
   },
   {
@@ -92,7 +92,7 @@ export const TEAM = [
     role: "Profe de Ciencias / Historia",
     subject: "Física + Historia",
     bio: "Estamos buscando profes para Física e Historia. Apenas estén confirmados, los presentamos acá.",
-    img: "https://ui-avatars.com/api/?name=Proximamente+Electivos&background=F4F4F4&color=8D8D8D&size=200&bold=true",
+    img: null,
     confirmed: false
   }
 ];

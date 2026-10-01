@@ -11,7 +11,17 @@ import { AUDIENCIAS, HERRAMIENTAS } from '../data/catalogo';
 
 const ease = [0.16, 1, 0.3, 1];
 
-// Menú de celular: programas por "para quién", herramientas e instituto.
+// Menú de celular: enlaces principales en grande y programas por "para quién".
+const MENU_GRANDE = [
+  { name: 'Inicio', path: '/' },
+  { name: 'Preu PAES', path: '/paes' },
+  { name: 'Calculadora', path: '/calculadora' },
+  { name: 'Nosotros', path: '/nosotros' },
+  { name: 'Alumnos', path: '/alumnos' },
+  { name: 'Noticias', path: '/noticias' },
+  { name: 'Contacto', path: '/contacto' },
+];
+
 const MOBILE_MENU = [
   ...AUDIENCIAS.map((a) => ({ title: `Para ${a.title.toLowerCase()}`, grid: true, items: a.items })),
   { title: 'Herramientas gratis', items: HERRAMIENTAS },
@@ -244,35 +254,26 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* ── MOBILE DRAWER ─────────────────────────────────────────── */}
+      {/* ── MENÚ DE CELULAR Y TABLET ───────────────────────────────── */}
+      {/* Pantalla completa: se abre como cortina desde arriba, con los
+          enlaces principales en letra grande y los programas por color. */}
       <AnimatePresence>
         {mobileOpen && (
-          <div className="fixed inset-0 z-[200]">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileOpen(false)}
-              aria-hidden="true"
-              className="absolute inset-0 bg-lael-primary/90 backdrop-blur-lg"
-            />
-
-            {/* Drawer Content */}
-            <motion.div
-              ref={drawerRef}
-              id="menu-movil"
-              role="dialog"
-              aria-modal="true"
-              aria-label="Menú"
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-0 top-0 bottom-0 w-[92%] max-w-md bg-lael-primary rounded-r-[32px] shadow-2xl flex flex-col px-6 sm:px-8 pt-6 pb-4 overflow-y-auto"
-            >
-              {/* Header inside Drawer */}
-              <div className="flex items-center justify-between mb-8 relative z-10">
+          <motion.div
+            ref={drawerRef}
+            id="menu-movil"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Menú"
+            initial={{ clipPath: 'inset(0% 0% 100% 0%)' }}
+            animate={{ clipPath: 'inset(0% 0% 0% 0%)' }}
+            exit={{ clipPath: 'inset(0% 0% 100% 0%)' }}
+            transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+            data-lenis-prevent
+            className="grain fixed inset-0 z-[200] bg-lael-primary text-white overflow-y-auto overscroll-contain"
+          >
+            <div className="min-h-full max-w-5xl mx-auto px-5 sm:px-10 pt-5 pb-8 flex flex-col">
+              <div className="flex items-center justify-between mb-10 sm:mb-14">
                 <Link to="/" onClick={() => setMobileOpen(false)}>
                   <LaelLogo variant="blanco" title="Instituto Lael, ir al inicio" className="h-10 w-auto" />
                 </Link>
@@ -280,50 +281,60 @@ export default function Navbar() {
                   type="button"
                   onClick={() => setMobileOpen(false)}
                   aria-label="Cerrar menú"
-                  className="w-11 h-11 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20"
+                  className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white hover:text-lael-primary transition-colors"
                 >
                   <X size={20} />
                 </button>
               </div>
 
-              {/* Secciones del menú */}
-              <nav aria-label="Menú principal" className="relative z-10 flex-1 space-y-7">
-                {MOBILE_MENU.map((sec, si) => (
-                  <motion.div key={sec.title} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 + si * 0.06 }}>
-                    <h2 className="text-xs font-bold uppercase tracking-[0.15em] text-white/70 mb-2 px-1">{sec.title}</h2>
-                    <div className={sec.grid ? 'grid grid-cols-2 gap-2' : 'space-y-1'}>
-                      {sec.items.map((it) => (
-                        <NavLink
-                          key={it.path}
-                          to={it.path}
-                          onClick={() => setMobileOpen(false)}
-                          className={({ isActive }) =>
-                            `flex gap-3 rounded-2xl transition-colors min-h-[52px] ${sec.grid ? 'flex-col items-start justify-center p-3' : 'items-center justify-between px-4 py-3'} ${
-                              isActive ? 'bg-lael-accent text-lael-primary' : 'bg-white/[0.06] text-white hover:bg-white/10'
-                            }`
-                          }
-                        >
-                          {({ isActive }) => (
-                            <>
-                              <span className="font-bold text-[15px] leading-tight flex items-center gap-2">{it.color && <span aria-hidden="true" className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: it.color }} />}{it.name}</span>
-                              {it.tag && (
-                                <span className={`text-xs font-semibold ${isActive ? 'text-lael-primary/80' : 'text-white/60'}`}>{it.tag}</span>
-                              )}
-                            </>
-                          )}
-                        </NavLink>
-                      ))}
+              <nav aria-label="Menú principal" className="flex-1 grid gap-12 md:grid-cols-2 md:gap-10">
+                {/* Enlaces principales en grande */}
+                <ul>
+                  {MENU_GRANDE.map((it, i) => (
+                    <motion.li key={it.path} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 + i * 0.05, duration: 0.6, ease }} className="border-b border-white/10">
+                      <NavLink
+                        to={it.path}
+                        end={it.path === '/'}
+                        onClick={() => setMobileOpen(false)}
+                        className={({ isActive }) => `group flex items-baseline gap-4 py-3 min-h-[56px] font-display font-extrabold tracking-[-0.03em] text-[2.1rem] sm:text-5xl leading-none transition-colors ${isActive ? 'text-lael-accent' : 'text-white hover:text-lael-accent'}`}
+                      >
+                        <span className="text-[11px] font-bold tracking-[0.2em] text-white/60 w-6">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="transition-transform duration-300 group-hover:translate-x-2">{it.name}</span>
+                      </NavLink>
+                    </motion.li>
+                  ))}
+                </ul>
+
+                {/* Programas por "para quién" */}
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.45, duration: 0.5 }} className="space-y-7">
+                  {MOBILE_MENU.filter((sec) => sec.title !== 'Instituto').map((sec) => (
+                    <div key={sec.title}>
+                      <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/70 mb-2">{sec.title}</h2>
+                      <ul className="flex flex-wrap gap-2">
+                        {sec.items.map((it) => (
+                          <li key={it.path}>
+                            <NavLink
+                              to={it.path}
+                              onClick={() => setMobileOpen(false)}
+                              className={({ isActive }) => `inline-flex items-center gap-2 min-h-[44px] px-4 rounded-full text-sm font-bold border transition-colors ${isActive ? 'bg-lael-accent text-lael-primary border-lael-accent' : 'border-white/20 text-white hover:bg-white hover:text-lael-primary'}`}
+                            >
+                              {it.color && <span aria-hidden="true" className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: it.color }} />}
+                              {it.name}
+                            </NavLink>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
-                  </motion.div>
-                ))}
+                  ))}
+                </motion.div>
               </nav>
 
-              {/* Acciones fijas */}
-              <div className="sticky bottom-0 -mx-6 sm:-mx-8 px-6 sm:px-8 pt-5 pb-2 mt-8 bg-lael-primary border-t border-white/10 relative z-10 space-y-3">
+              {/* Acciones */}
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.5 }} className="mt-12 pt-6 border-t border-white/15 grid sm:grid-cols-3 gap-3">
                 <a
                   href="/inscripcion"
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full bg-lael-accent text-lael-primary min-h-[56px] rounded-2xl text-sm tracking-wider uppercase font-display font-extrabold shadow-xl active:scale-95 transition-all"
+                  className="flex items-center justify-center gap-2 bg-lael-accent text-lael-primary min-h-[56px] rounded-full text-sm tracking-wider uppercase font-display font-extrabold"
                 >
                   Inscribirme gratis
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
@@ -332,14 +343,14 @@ export default function Navbar() {
                   href="https://wa.me/56964626568?text=Hola!%20Tengo%20una%20consulta%20sobre%20Instituto%20Lael"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 w-full min-h-[48px] rounded-2xl text-sm font-bold text-white border border-white/20"
+                  className="flex items-center justify-center gap-2 min-h-[56px] rounded-full text-sm font-bold text-white border border-white/25 hover:bg-white/10"
                 >
                   Escribir por WhatsApp
                 </a>
-                <ThemeToggle className="w-full justify-center" />
-              </div>
-            </motion.div>
-          </div>
+                <ThemeToggle className="w-full justify-center min-h-[56px] rounded-full" />
+              </motion.div>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

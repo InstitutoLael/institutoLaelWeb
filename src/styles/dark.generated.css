@@ -35,12 +35,12 @@ html.dark [class~="bg-[#071D49]/10"]:not([data-keep-light]):not([data-keep-light
 html.dark [class~="bg-[#071D49]/15"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
 html.dark [class~="bg-[#071D49]/20"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
 html.dark [class~="bg-[#071D49]/30"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
+html.dark [class~="bg-[#071D49]/40"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
 html.dark [class~="bg-[#071D49]/5"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.07) !important; }
 html.dark [class~="bg-[#071D49]/60"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
 html.dark [class~="bg-[#071D49]/95"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
 html.dark [class~="bg-[#F4F4F4]"]:not([data-keep-light]):not([data-keep-light] *) { background-color: #040A1A !important; }
 html.dark [class~="bg-[#F4F4F4]/50"]:not([data-keep-light]):not([data-keep-light] *) { background-color: #040A1A !important; }
-html.dark [class~="bg-lael-primary/90"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(255, 255, 255, 0.14) !important; }
 html.dark [class~="bg-white"]:not([data-keep-light]):not([data-keep-light] *) { background-color: #0C1834 !important; }
 html.dark [class~="bg-white/95"]:not([data-keep-light]):not([data-keep-light] *) { background-color: rgba(4, 10, 26, 0.95) !important; }
 html.dark [class~="border-[#071D49]"]:not([data-keep-light]):not([data-keep-light] *) { border-color: rgba(255, 255, 255, 0.45) !important; }
@@ -96,4 +96,3 @@ html.dark [class~="text-[#071D49]/[0.07]"]:not([data-keep-light]):not([data-keep
 html.dark [class~="text-lael-muted"]:not([data-keep-light]):not([data-keep-light] *) { color: #A7B0C4 !important; }
 html.dark [class~="text-lael-primary"]:not([data-keep-light]):not([data-keep-light] *):not([class~="bg-[#D7E400]"]):not([class~="bg-[#D7E400]"] *):not([class~="bg-lael-accent"]):not([class~="bg-lael-accent"] *):not([style*="background-color: rgb(215, 228, 0)"]):not([style*="background-color: rgb(215, 228, 0)"] *) { color: rgba(232, 236, 245, 1) !important; }
 html.dark [class~="text-lael-primary/75"]:not([data-keep-light]):not([data-keep-light] *):not([class~="bg-[#D7E400]"]):not([class~="bg-[#D7E400]"] *):not([class~="bg-lael-accent"]):not([class~="bg-lael-accent"] *):not([style*="background-color: rgb(215, 228, 0)"]):not([style*="background-color: rgb(215, 228, 0)"] *) { color: rgba(232, 236, 245, 0.83) !important; }
-html.dark [class~="text-lael-primary/80"]:not([data-keep-light]):not([data-keep-light] *):not([class~="bg-[#D7E400]"]):not([class~="bg-[#D7E400]"] *):not([class~="bg-lael-accent"]):not([class~="bg-lael-accent"] *):not([style*="background-color: rgb(215, 228, 0)"]):not([style*="background-color: rgb(215, 228, 0)"] *) { color: rgba(232, 236, 245, 0.88) !important; }

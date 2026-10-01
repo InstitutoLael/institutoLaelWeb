@@ -12,7 +12,7 @@ import inglesImg from '../../assets/img/Home/idiomas_execution_bg_1777948997295.
 // computador): cada una queda pegada arriba y la siguiente la cubre, mientras
 // la anterior se achica un poco. En celular van una debajo de la otra.
 // La última tarjeta es el índice completo por "para quién".
-const BTN = 'inline-flex items-center justify-center gap-2 min-h-[52px] px-7 rounded-full font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-colors';
+const BTN = 'inline-flex items-center justify-center gap-2 whitespace-nowrap min-h-[52px] px-6 lg:px-7 rounded-full font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-colors';
 
 const CAMINOS = [
   {
@@ -61,12 +61,12 @@ function Tarjeta({ c, i, total, progress }) {
         data-keep-light
         className="group origin-top rounded-[32px] lg:rounded-[44px] text-[#071D49] overflow-hidden grid lg:grid-cols-12 lg:h-[78vh] shadow-[0_-20px_60px_-30px_rgba(7,29,73,0.5)]"
       >
-        <div className="lg:col-span-7 p-6 sm:p-10 lg:p-14 flex flex-col">
+        <div className="lg:col-span-7 p-6 sm:p-10 xl:p-14 flex flex-col">
           <div className="flex items-center justify-between font-display font-bold text-xs uppercase tracking-[0.2em]">
             <span>{c.n} / 0{total}</span>
             <span>{c.nombre}</span>
           </div>
-          <h3 className="mt-10 lg:mt-auto font-display font-extrabold tracking-[-0.035em] leading-[0.95] text-[2.5rem] sm:text-6xl xl:text-7xl">
+          <h3 className="mt-10 lg:mt-auto font-display font-extrabold tracking-[-0.035em] leading-[0.95] text-[2.5rem] sm:text-6xl lg:text-[3.4rem] xl:text-7xl">
             {c.lema.split('. ').length > 1 ? (
               <>{c.lema.split('. ')[0]}. <span className="accent-serif block">{c.lema.split('. ')[1]}</span></>
             ) : (
@@ -74,7 +74,7 @@ function Tarjeta({ c, i, total, progress }) {
             )}
           </h3>
           <p className="mt-6 text-base sm:text-lg leading-relaxed max-w-xl text-[#071D49]/80">{c.texto}</p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-3">
+          <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap gap-3">
             <a href={c.cta.href} className={`${BTN} bg-[#071D49] text-white hover:bg-white hover:text-[#071D49]`}>
               {c.cta.label} <ArrowRight size={16} />
             </a>

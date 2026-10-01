@@ -256,8 +256,12 @@ export default function LandingPAES() {
                   {...fadeUp(i * 0.06)}
                   className="rounded-[28px] p-5 sm:p-8 border border-[#071D49]/5 bg-[#F4F4F4] flex md:flex-col items-start md:items-center gap-4 md:gap-0 text-left md:text-center"
                 >
-                  <div className="w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden border border-[#071D49]/15 md:mb-5 flex-shrink-0 bg-[#071D49]/5">
-                    <img src={t.img} alt={`Foto de ${t.name}`} loading="lazy" className="w-full h-full object-cover" />
+                  <div className="w-16 h-16 md:w-24 md:h-24 rounded-full overflow-hidden md:mb-5 flex-shrink-0 bg-[#071D49] flex items-center justify-center" data-keep-light>
+                    {t.img ? (
+                      <img src={t.img} alt={`Foto de ${t.name}`} loading="lazy" className="w-full h-full object-cover" />
+                    ) : (
+                      <span aria-hidden="true" className="font-serif italic text-[#D7E400] text-3xl md:text-5xl leading-none">{t.name.slice(0, 2).toUpperCase()}</span>
+                    )}
                   </div>
                   <div className="flex flex-col items-start md:items-center min-w-0">
                     <div className="flex items-center gap-2 flex-wrap md:justify-center mb-1.5">

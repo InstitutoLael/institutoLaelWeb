@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import SitePageHero from '../../components/ui/PageHero';
 
 // Piezas compartidas por las páginas de programas nuevos (/reforzamiento,
@@ -23,7 +23,7 @@ export const fadeUp = (delay = 0) => ({
   transition: { duration: 0.5, delay, ease },
 });
 
-const BTN = 'inline-flex items-center justify-center gap-2 w-full sm:w-auto min-h-[48px] font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all active:scale-95 text-center';
+const BTN = 'inline-flex items-center justify-center gap-2 w-full sm:w-auto min-h-[52px] font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-full transition-colors active:scale-95 text-center';
 export const BTN_STYLES = {
   yellow: `${BTN} bg-[#D7E400] text-[#071D49] hover:bg-white`,
   yellowOnLight: `${BTN} bg-[#D7E400] text-[#071D49] hover:bg-[#071D49] hover:text-white`,
@@ -49,15 +49,16 @@ export function SectionHead({ eyebrow, title, desc, dark = false }) {
   return (
     <div className="text-center mb-10 sm:mb-14 max-w-3xl mx-auto">
       {eyebrow && (
-        <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-4" style={dark ? { color: YELLOW } : undefined}>
+        <motion.p {...fadeUp(0)} className={`flex items-center justify-center gap-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] mb-5 ${dark ? 'text-white/70' : 'text-[#071D49]/75'}`}>
+          <span aria-hidden="true" className={`w-8 h-px ${dark ? 'bg-programa' : 'bg-[#071D49]/40'}`} />
           {eyebrow}
         </motion.p>
       )}
-      <motion.h2 {...fadeUp(0.1)} className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05]">
+      <motion.h2 {...fadeUp(0.1)} className="font-display text-[2.2rem] sm:text-5xl lg:text-6xl font-extrabold tracking-[-0.04em] leading-[0.98]">
         {title}
       </motion.h2>
       {desc && (
-        <motion.p {...fadeUp(0.15)} className={`mt-5 text-base sm:text-lg leading-relaxed ${dark ? 'text-white/75' : 'text-[#071D49]/70'}`}>
+        <motion.p {...fadeUp(0.15)} className={`mt-6 text-base sm:text-lg leading-relaxed ${dark ? 'text-white/75' : 'text-[#071D49]/70'}`}>
           {desc}
         </motion.p>
       )}
@@ -65,29 +66,35 @@ export function SectionHead({ eyebrow, title, desc, dark = false }) {
   );
 }
 
+// Preguntas frecuentes: título a la izquierda (fijo al bajar en computador)
+// y las preguntas como filas que se abren.
 export function Faq({ items, title = 'Preguntas frecuentes' }) {
   const [open, setOpen] = useState(null);
   return (
-    <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28">
-      <div className="max-w-3xl mx-auto">
-        <motion.h2 {...fadeUp(0)} className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight text-center mb-10 sm:mb-12">
-          {title}
-        </motion.h2>
-        <div className="space-y-4">
+    <section className="px-5 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-28">
+      <div className="max-w-[1600px] mx-auto grid lg:grid-cols-12 gap-10">
+        <div className="lg:col-span-5">
+          <motion.h2 {...fadeUp(0)} className="lg:sticky lg:top-32 font-display text-[2.2rem] sm:text-5xl lg:text-6xl font-extrabold tracking-[-0.04em] leading-[0.98]">
+            {title}
+          </motion.h2>
+        </div>
+        <div className="lg:col-span-7 border-t border-[#071D49]/15">
           {items.map((faq, idx) => (
-            <div key={faq.q} className="border border-[#071D49]/10 rounded-[24px] overflow-hidden bg-white">
+            <div key={faq.q} className="border-b border-[#071D49]/15">
               <button
+                type="button"
                 onClick={() => setOpen(open === idx ? null : idx)}
                 aria-expanded={open === idx}
-                className="w-full flex items-center justify-between p-5 sm:p-6 text-left min-h-[56px]"
+                className="w-full flex items-center gap-4 sm:gap-5 py-6 text-left min-h-[56px]"
               >
-                <span className="font-bold font-display uppercase tracking-tight pr-4 sm:pr-6">{faq.q}</span>
-                <ChevronDown size={18} className={`flex-shrink-0 transition-transform ${open === idx ? 'rotate-180' : ''}`} aria-hidden="true" />
+                <span className="text-xs font-bold tracking-[0.2em] text-[#071D49]/70 w-6 flex-shrink-0">{String(idx + 1).padStart(2, '0')}</span>
+                <span className="flex-1 font-display font-extrabold text-lg sm:text-xl tracking-tight">{faq.q}</span>
+                <span aria-hidden="true" className={`w-10 h-10 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300 ${open === idx ? 'rotate-45 bg-[#D7E400] border-[#D7E400] text-[#071D49]' : 'border-[#071D49]/20'}`}><Plus size={18} /></span>
               </button>
               <AnimatePresence initial={false}>
                 {open === idx && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease }}>
-                    <p className="px-5 sm:px-6 pb-6 text-[#071D49]/70 leading-relaxed">{faq.a}</p>
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease }} className="overflow-hidden">
+                    <p className="pl-10 sm:pl-11 pr-14 pb-7 text-base sm:text-lg text-[#071D49]/75 leading-relaxed">{faq.a}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -101,18 +108,20 @@ export function Faq({ items, title = 'Preguntas frecuentes' }) {
 
 export function CtaBand({ title, accent, desc, children }) {
   return (
-    <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28 text-center text-white" style={{ backgroundColor: BLUE }}>
-      <motion.h2 {...fadeUp(0)} className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase tracking-tight leading-[1.05] mb-6 max-w-4xl mx-auto">
-        {title} <br className="hidden sm:block" /> <span style={{ color: YELLOW }}>{accent}</span>
-      </motion.h2>
-      {desc && (
-        <motion.p {...fadeUp(0.1)} className="text-white/75 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-          {desc}
-        </motion.p>
-      )}
-      <motion.div {...fadeUp(0.2)} className="flex flex-col sm:flex-row gap-4 justify-center max-w-xl mx-auto">
-        {children}
-      </motion.div>
+    <section className="grain px-5 sm:px-8 lg:px-12 py-20 sm:py-28 text-white" style={{ backgroundColor: BLUE }}>
+      <div className="max-w-[1600px] mx-auto">
+        <motion.h2 {...fadeUp(0)} className="font-display font-extrabold tracking-[-0.045em] leading-[0.92] mb-8 max-w-5xl text-[2.6rem] sm:text-6xl lg:text-7xl xl:text-8xl">
+          {title} <span className="accent-serif text-programa">{accent}</span>
+        </motion.h2>
+        {desc && (
+          <motion.p {...fadeUp(0.1)} className="text-white/75 text-base sm:text-lg max-w-xl mb-10 leading-relaxed">
+            {desc}
+          </motion.p>
+        )}
+        <motion.div {...fadeUp(0.2)} className="flex flex-col sm:flex-row gap-3 max-w-2xl">
+          {children}
+        </motion.div>
+      </div>
     </section>
   );
 }

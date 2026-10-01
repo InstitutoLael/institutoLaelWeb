@@ -101,18 +101,20 @@ export default function PageHero({ eyebrow, title, accent, heading, children, de
   );
 }
 
-// Título de sección con palabra destacada
+// Título de sección con palabra destacada. Etiqueta editorial (Lael — tema)
+// y título grande con la palabra que importa en cursiva.
 export function SectionTitle({ eyebrow, title, accent, dark = false, className = '', as: Tag = 'h2' }) {
+  const centro = className.includes('text-center');
   return (
     <div className={className}>
       {eyebrow && (
-        <motion.p {...fadeUp()} className={`inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] mb-3 ${dark ? 'text-programa' : 'text-[#071D49]'}`}>
-          <span aria-hidden="true" className={`inline-block w-5 h-1.5 rounded-full ${dark ? 'bg-programa' : 'bg-[#D7E400]'}`} />
+        <motion.p {...fadeUp()} className={`flex items-center gap-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] mb-5 ${centro ? 'justify-center' : ''} ${dark ? 'text-white/70' : 'text-[#071D49]/75'}`}>
+          <span aria-hidden="true" className={`w-8 h-px ${dark ? 'bg-programa' : 'bg-[#071D49]/40'}`} />
           {eyebrow}
         </motion.p>
       )}
       <motion.div {...fadeUp(0.04)}>
-        <Tag className={`font-display font-extrabold tracking-tight text-3xl sm:text-4xl lg:text-5xl leading-[1.05] ${dark ? 'text-white' : 'text-[#071D49]'}`}>
+        <Tag className={`font-display font-extrabold tracking-[-0.04em] text-[2.2rem] sm:text-5xl lg:text-6xl leading-[0.98] ${dark ? 'text-white' : 'text-[#071D49]'}`}>
           {title}{accent && <> <span className={`accent-serif ${dark ? 'text-programa' : ''}`}>{accent}</span></>}
         </Tag>
       </motion.div>

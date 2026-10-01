@@ -85,7 +85,7 @@ export default function Becas() {
           <ol className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {COMO.map((c, i) => (
               <motion.li key={c.t} {...fadeUp(i * 0.05)} className="rounded-[24px] p-6 bg-[#F4F4F4] border border-[#071D49]/5">
-                <p className="font-serif italic text-4xl text-[#071D49]/40 mb-2">{i + 1}</p>
+                <p className="font-serif italic text-4xl text-[#071D49]/60 mb-2">{i + 1}</p>
                 <h3 className="font-display font-extrabold text-lg mb-1.5">{c.t}</h3>
                 <p className="text-[#071D49]/70 text-sm leading-relaxed">{c.d}</p>
               </motion.li>

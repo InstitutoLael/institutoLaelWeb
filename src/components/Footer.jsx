@@ -119,7 +119,7 @@ export default function Footer() {
       </div>
 
       {/* Firma: el logo a todo lo ancho, asomándose desde el borde de abajo */}
-      <div aria-hidden="true" className="relative max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-12 h-[clamp(110px,21vw,330px)] overflow-hidden">
+      <div aria-hidden="true" className="relative max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-12 h-[clamp(130px,33vw,520px)] overflow-hidden">
         <LaelLogo variant="blanco" tagline={false} title="" className="w-full h-auto" />
       </div>
     </footer>

@@ -11,7 +11,7 @@ import heroImg from '../../assets/img/Home/hero_student_lael_1780734180709.webp'
 // Concepto: la onda del logo es el camino; la paloma, tu sueño. La línea se
 // dibuja al cargar, termina en la paloma, y al bajar la paloma despega.
 const ease = [0.16, 1, 0.3, 1];
-const BTN = 'inline-flex items-center justify-center gap-2 min-h-[52px] px-8 rounded-full font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-colors';
+const BTN = 'inline-flex items-center justify-center gap-2 whitespace-nowrap min-h-[52px] px-8 rounded-full font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-colors';
 // La onda se arma en píxeles según el tamaño real del título: así el trazo
 // es parejo a cualquier ancho. Puntos en % del área (x, y).
 const PUNTOS = [[0, 97], [14, 97, 18, 88, 27, 88], [37, 88, 38, 100, 50, 100], [64, 100, 70, 92, 80, 96], [90, 100, 96, 92, 97.5, 70], [98.5, 50, 98, 22, 96.5, 6]];
@@ -109,8 +109,8 @@ export default function HomeHero({ modo: modoProp }) {
           </div>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-end">
-          <motion.div initial={ini({ y: 16 })} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease }} className="lg:col-span-5">
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 xl:gap-6 items-end">
+          <motion.div initial={ini({ y: 16 })} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease }} className="xl:col-span-5">
             <p className="text-white/75 text-base sm:text-lg leading-relaxed max-w-md mb-7">
               Da lo mismo si vas en cuarto medio, si la PAES te fue mal la primera vez o si dejaste el colegio hace años. Te ayudamos a llegar.
             </p>
@@ -126,7 +126,7 @@ export default function HomeHero({ modo: modoProp }) {
             </div>
           </motion.div>
 
-          <motion.dl initial={ini({ opacity: 0 })} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }} className="lg:col-span-6 lg:col-start-7 grid grid-cols-3 border-t border-white/15">
+          <motion.dl initial={ini({ opacity: 0 })} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.9 }} className="xl:col-span-6 xl:col-start-7 grid grid-cols-3 border-t border-white/15 max-w-2xl xl:max-w-none">
             {DATOS.map((d) => (
               <div key={d.t} className="pt-4 pr-3 flex flex-col-reverse">
                 <dt className="text-[11px] sm:text-xs uppercase tracking-[0.14em] font-bold text-white/55 mt-1">{d.t}</dt>

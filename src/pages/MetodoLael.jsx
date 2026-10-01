@@ -132,7 +132,7 @@ export default function MetodoLael() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             {METODO.map((m, i) => (
               <motion.div key={m.t} {...fadeUp(i * 0.05)} className="rounded-[28px] p-6 sm:p-8 bg-[#F4F4F4] border border-[#071D49]/5">
-                <p className="font-serif italic text-4xl text-[#071D49]/40 mb-3">0{i + 1}</p>
+                <p className="font-serif italic text-4xl text-[#071D49]/60 mb-3">0{i + 1}</p>
                 <h3 className="font-display text-lg font-extrabold mb-2">{m.t}</h3>
                 <p className="text-[#071D49]/70 text-sm sm:text-base leading-relaxed">{m.d}</p>
               </motion.div>

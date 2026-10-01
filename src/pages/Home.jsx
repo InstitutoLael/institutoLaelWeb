@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -28,6 +28,10 @@ const PREGUNTAS_HOME = [
 ];
 
 const WRAP = 'max-w-[1600px] mx-auto px-5 sm:px-8 lg:px-12';
+
+// Cada sección bajo la portada va en su propio bloque: así, al adoptar la
+// página pre-dibujada, el celular la activa por partes y no se traba.
+const Parte = ({ children }) => <Suspense fallback={null}>{children}</Suspense>;
 
 // Etiqueta de sección numerada, estilo editorial: (02) — Cómo trabajamos
 function Etiqueta({ n, children, dark = false, className = '' }) {
@@ -64,6 +68,7 @@ export default function Home() {
       {/* ══ 1. PORTADA ══════════════════════════════════════════════════ */}
       <HomeHero />
 
+      <Parte>
       {/* ══ 2. CINTA ════════════════════════════════════════════════════ */}
       <div className="relative z-10 -mt-6 sm:-mt-8 -rotate-[1.5deg] scale-[1.02] bg-[#D7E400] text-[#071D49] py-4 sm:py-5 shadow-[0_20px_50px_-20px_rgba(7,29,73,0.6)]" data-keep-light>
         <Marquee
@@ -72,6 +77,8 @@ export default function Home() {
         />
       </div>
 
+      </Parte>
+      <Parte>
       {/* ══ 3. MANIFIESTO ═══════════════════════════════════════════════ */}
       <section className="bg-white pt-24 sm:pt-32 lg:pt-40 pb-20 sm:pb-28">
         <div className={WRAP}>
@@ -110,6 +117,8 @@ export default function Home() {
         </div>
       </section>
 
+      </Parte>
+      <Parte>
       {/* ══ 4. LOS CAMINOS ══════════════════════════════════════════════ */}
       <section id="caminos" className="bg-[#F4F4F4] pt-20 sm:pt-28 pb-16 sm:pb-24 scroll-mt-20">
         <div className={WRAP}>
@@ -128,6 +137,8 @@ export default function Home() {
         </div>
       </section>
 
+      </Parte>
+      <Parte>
       {/* ══ 5. NÚMEROS ══════════════════════════════════════════════════ */}
       <section className="grain bg-[#071D49] text-white py-20 sm:py-28">
         <div className={WRAP}>
@@ -145,6 +156,8 @@ export default function Home() {
         </div>
       </section>
 
+      </Parte>
+      <Parte>
       {/* ══ 5b. HERRAMIENTAS GRATIS ═════════════════════════════════════ */}
       <section className="bg-white pt-20 sm:pt-28 lg:pt-32">
         <div className={WRAP}>
@@ -163,6 +176,8 @@ export default function Home() {
         </div>
       </section>
 
+      </Parte>
+      <Parte>
       {/* ══ 6. PROFES ═══════════════════════════════════════════════════ */}
       <section className="bg-white py-20 sm:py-28 lg:py-32">
         <div className={WRAP}>
@@ -200,6 +215,8 @@ export default function Home() {
         </div>
       </section>
 
+      </Parte>
+      <Parte>
       {/* ══ 7. TESTIMONIOS ══════════════════════════════════════════════ */}
       <section className="grain bg-[#071D49] text-white py-20 sm:py-28 lg:py-32 overflow-hidden">
         <div className={WRAP}>
@@ -230,6 +247,8 @@ export default function Home() {
         </div>
       </section>
 
+      </Parte>
+      <Parte>
       {/* ══ 8. PRECIOS ══════════════════════════════════════════════════ */}
       <section className="bg-[#F4F4F4] py-20 sm:py-28">
         <div className={WRAP}>
@@ -255,6 +274,8 @@ export default function Home() {
         </div>
       </section>
 
+      </Parte>
+      <Parte>
       {/* ══ 9. PREGUNTAS ════════════════════════════════════════════════ */}
       <section className="bg-white py-20 sm:py-28">
         <div className={`${WRAP} grid lg:grid-cols-12 gap-10`}>
@@ -282,6 +303,8 @@ export default function Home() {
         </div>
       </section>
 
+      </Parte>
+      <Parte>
       {/* ══ 10. INSCRÍBETE ══════════════════════════════════════════════ */}
       <section className="grain bg-[#071D49] text-white pt-24 sm:pt-32 pb-20 overflow-hidden">
         <div className={`${WRAP} relative`}>
@@ -304,6 +327,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      </Parte>
     </div>
   );
 }

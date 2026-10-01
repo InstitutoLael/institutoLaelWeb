@@ -124,5 +124,10 @@ ${rules.join('\n')}
 `;
 
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
-fs.writeFileSync(OUT, css);
+// Selectores de clase (.text-\[\#071D49\]) en vez de atributo
+// ([class~="…"]): el navegador indexa las clases, así que revisar estas
+// reglas es mucho más rápido (se notaba en celulares al cargar la Home).
+const escClase = (c) => '.' + c.replace(/([^a-zA-Z0-9_-])/g, '\\$1');
+const cssRapido = css.replace(/\[class~="([^"]+)"\]/g, (_, c) => escClase(c));
+fs.writeFileSync(OUT, cssRapido);
 console.log(`dark.generated.css: ${rules.length} reglas a partir de ${tokens.size} clases`);

@@ -15,17 +15,22 @@ export default function Cursor() {
     if (!mq.matches) return undefined;
     setActivo(true);
     const el = ref.current;
-    let x = -100, y = -100, cx = x, cy = y, raf;
+    let x = -100, y = -100, cx = x, cy = y, raf = 0;
 
+    // El ciclo corre solo mientras el anillo se está moviendo; cuando alcanza
+    // al mouse, se detiene (no gasta batería con el mouse quieto).
     const loop = () => {
       cx += (x - cx) * 0.2;
       cy += (y - cy) * 0.2;
       if (el) el.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
-      raf = requestAnimationFrame(loop);
+      raf = Math.abs(x - cx) + Math.abs(y - cy) > 0.3 ? requestAnimationFrame(loop) : 0;
     };
-    raf = requestAnimationFrame(loop);
 
-    const move = (e) => { x = e.clientX; y = e.clientY; el && el.classList.add('is-on'); };
+    const move = (e) => {
+      x = e.clientX; y = e.clientY;
+      if (el) el.classList.add('is-on');
+      if (!raf) raf = requestAnimationFrame(loop);
+    };
     const over = (e) => {
       if (!el) return;
       const t = e.target.closest && e.target.closest(INTERACTIVO);

@@ -40,7 +40,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
-  const [bannerHeight, setBannerHeight] = useState(0);
   const burgerRef = useRef(null);
   const drawerRef = useRef(null);
 
@@ -54,21 +53,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Measure banner height
-  useEffect(() => {
-    const measure = () => {
-      const banner = document.querySelector('.lael-urgency-banner');
-      setBannerHeight(banner ? banner.offsetHeight : 0);
-    };
-    measure();
-    const observer = new MutationObserver(measure);
-    observer.observe(document.body, { childList: true, subtree: true });
-    window.addEventListener('resize', measure);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', measure);
-    };
-  }, []);
 
   // Body scroll lock
   useEffect(() => {

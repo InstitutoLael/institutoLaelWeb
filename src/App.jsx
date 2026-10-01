@@ -112,7 +112,7 @@ export default function App() {
       <MobileProgramBar />
       <ExitIntent />
       <CookieNotice />
-      <Footer />
+      <Suspense fallback={null}><Footer /></Suspense>
     </div>
     </MotionConfig>
   );

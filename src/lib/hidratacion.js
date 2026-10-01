@@ -11,3 +11,12 @@ export const enServidor = typeof window === 'undefined';
 export function primeraPintura() {
   return enServidor || !!window.__laelShell;
 }
+
+// "Ahora" para lo que depende de la fecha (cuenta regresiva, intensivo…):
+// en la primera pintura se usa la hora en que se pre-dibujó la página, así
+// el resultado es idéntico; después, la hora real.
+export function ahora() {
+  if (enServidor && globalThis.__laelShellT) return globalThis.__laelShellT;
+  if (!enServidor && window.__laelShell && window.__laelShellT) return window.__laelShellT;
+  return Date.now();
+}

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PAES_INICIO } from '../data/admision';
+import { ahora } from '../lib/hidratacion';
 
 // Cuenta regresiva a la PAES regular. Se actualiza cada minuto (no cada
 // segundo: no queremos que la página se sienta ansiosa). Cuando la prueba
 // ya pasó, no se muestra.
 function restante() {
-  const ms = new Date(PAES_INICIO).getTime() - Date.now();
+  const ms = new Date(PAES_INICIO).getTime() - ahora();
   if (ms <= 0) return null;
   const min = Math.floor(ms / 60000);
   return { dias: Math.floor(min / 1440), horas: Math.floor((min % 1440) / 60), minutos: min % 60 };
@@ -15,6 +16,7 @@ function restante() {
 export default function PaesCountdown({ dark = true, compact = false, className = '' }) {
   const [r, setR] = useState(restante);
   useEffect(() => {
+    setR(restante()); // corrige a la hora real si la página venía pre-dibujada
     const id = setInterval(() => setR(restante()), 60000);
     return () => clearInterval(id);
   }, []);

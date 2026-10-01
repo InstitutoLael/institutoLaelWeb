@@ -19,6 +19,8 @@ export default defineConfig({
   // formato antiguo (CommonJS) y se empaquetan para que Node las pueda usar.
   ssr: { noExternal: ['react-helmet-async', 'react-hot-toast'] },
   build: {
+    // Para saber qué archivo de código usa cada página pre-dibujada (shell.cjs)
+    manifest: true,
     minify: 'terser',
     terserOptions: {
       compress: {

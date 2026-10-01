@@ -15,7 +15,10 @@ import App from "./App.jsx";
 // La portada (/) llega pre-dibujada en el HTML (data-shell): React la
 // "hidrata" (adopta ese HTML) en vez de dibujarla de nuevo. Ver src/lib/hidratacion.js.
 const rootEl = document.getElementById("root");
-window.__laelShell = rootEl.hasAttribute("data-shell") && window.location.pathname === "/";
+const rutaShell = rootEl.getAttribute("data-shell");
+const rutaActual = window.location.pathname.replace(/\/+$/, "") || "/";
+window.__laelShell = rutaShell != null && rutaShell === rutaActual;
+window.__laelShellT = Number(rootEl.getAttribute("data-shell-t")) || 0;
 
 const app = (
   <React.StrictMode>

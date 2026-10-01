@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import WordReveal from './WordReveal';
 import { Paloma } from './LaelLogo';
+import { primeraPintura } from '../../lib/hidratacion';
 
 // Portada estándar de las páginas: fondo azul, arcos de la marca, etiqueta
 // en el color del programa y título con una palabra en cursiva elegante.
@@ -35,36 +36,39 @@ export default function PageHero({ eyebrow, title, accent, heading, children, de
     lg: 'text-[2.9rem] sm:text-7xl lg:text-8xl xl:text-[7rem]',
   };
   const centro = align === 'center' && !aside;
+  // En una página pre-dibujada, la entrada va en CSS (igual que en el HTML)
+  const [modo] = React.useState(() => (primeraPintura() ? 'css' : undefined));
+  const ini = (v) => (modo ? false : v);
   const tituloCls = `font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-white mb-8 ${aside ? 'max-w-[14ch]' : 'max-w-[16ch]'} ${centro ? 'mx-auto' : ''} ${aside ? 'text-[2.6rem] sm:text-6xl lg:text-7xl' : sizes[size]}`;
   const cuerpo = (
     <>
       {eyebrow && (
-        <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className={`flex items-center gap-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] mb-6 sm:mb-8 text-white/70 ${centro ? 'justify-center' : ''}`}>
+        <motion.p initial={ini({ opacity: 0, y: 10 })} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className={`flex items-center gap-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] mb-6 sm:mb-8 text-white/70 ${centro ? 'justify-center' : ''}`}>
           <span className="text-programa">Lael</span>
           <span className="w-8 h-px bg-white/30" aria-hidden="true" />
           {eyebrow}
         </motion.p>
       )}
       {heading ? (
-        <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1, ease }} className={`${tituloCls} [&_br]:hidden`}>
+        <motion.h1 initial={ini({ opacity: 0, y: 24 })} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1, ease }} className={`${tituloCls} [&_br]:hidden`}>
           {heading}
         </motion.h1>
       ) : (
-        <WordReveal className={tituloCls} segments={[{ text: title }, ...(accent ? [{ text: accent, className: 'accent-serif text-programa' }] : [])]} />
+        <WordReveal className={tituloCls} modo={modo} segments={[{ text: title }, ...(accent ? [{ text: accent, className: 'accent-serif text-programa' }] : [])]} />
       )}
       {(children || desc) && (
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.35, ease }} className={`page-hero-body text-white/75 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl ${centro ? 'mx-auto is-center' : ''}`}>
+        <motion.div initial={ini({ opacity: 0, y: 12 })} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.35, ease }} className={`page-hero-body text-white/75 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl ${centro ? 'mx-auto is-center' : ''}`}>
           {desc && <p>{desc}</p>}
           {children}
         </motion.div>
       )}
       {actions && (
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.45, ease }} className={`mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 ${centro ? 'justify-center' : ''}`}>
+        <motion.div initial={ini({ opacity: 0, y: 12 })} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.45, ease }} className={`mt-8 sm:mt-10 flex flex-col sm:flex-row gap-3 ${centro ? 'justify-center' : ''}`}>
           {actions}
         </motion.div>
       )}
       {stats && (
-        <motion.dl initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.6 }} className={`mt-12 sm:mt-16 grid grid-cols-3 gap-4 border-t border-white/15 pt-5 max-w-2xl ${centro ? 'mx-auto' : ''}`}>
+        <motion.dl initial={ini({ opacity: 0 })} animate={{ opacity: 1 }} transition={{ duration: 0.8, delay: 0.6 }} className={`mt-12 sm:mt-16 grid grid-cols-3 gap-4 border-t border-white/15 pt-5 max-w-2xl ${centro ? 'mx-auto' : ''}`}>
           {stats.map(([v, l]) => (
             <div key={l} className="flex flex-col-reverse">
               <dt className="text-white/65 text-[11px] sm:text-xs font-bold uppercase tracking-[0.14em] mt-1.5">{l}</dt>
@@ -91,7 +95,7 @@ export default function PageHero({ eyebrow, title, accent, heading, children, de
         {aside ? (
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-10 items-end">
             <div className="lg:col-span-7">{cuerpo}</div>
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.3, ease }} className="lg:col-span-5">
+            <motion.div initial={ini({ opacity: 0, y: 30 })} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, delay: 0.3, ease }} className="lg:col-span-5">
               {aside}
             </motion.div>
           </div>

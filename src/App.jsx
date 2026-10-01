@@ -43,6 +43,14 @@ const Calculadora = lazy(() => import("./pages/Calculadora"));
 const extraRoutes = Object.values(import.meta.glob("./routes/*.jsx", { eager: true })).flatMap((m) => m.routes || []);
 
 
+// Marca el fin de la primera pintura (la que adopta la página pre-dibujada).
+// Va dentro del mismo Suspense que las páginas: su efecto corre recién cuando
+// la página, aunque se cargue aparte (lazy), terminó de activarse.
+function FinPrimeraPintura() {
+  React.useEffect(() => { window.__laelShell = false; }, []);
+  return null;
+}
+
 // Cada página de programa pinta sus detalles con su color (ver catalogo.js)
 function useColorPrograma(pathname) {
   React.useEffect(() => {
@@ -53,8 +61,7 @@ function useColorPrograma(pathname) {
 export default function App() {
   const { pathname } = useLocation();
   useColorPrograma(pathname);
-  // Terminó la primera pintura (la que adopta la portada pre-dibujada)
-  React.useEffect(() => { window.__laelShell = false; }, []);
+
   return (
     <MotionConfig reducedMotion="user">
     <div className="flex flex-col min-h-screen relative z-10">
@@ -104,6 +111,7 @@ export default function App() {
             {extraRoutes.map((r) => <Route key={r.path} path={r.path} element={r.element} />)}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <FinPrimeraPintura />
           </Suspense>
         </PageTransition>
       </main>

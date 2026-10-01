@@ -1,3 +1,4 @@
+import { ahora } from '../lib/hidratacion';
 // src/data/paes.js
 // === Sistema de Alto Rendimiento PAES Lael ===
 import { ClaseEnVivo, Guia, Ensayo, Acompanamiento, Grupo } from '../components/icons/LaelIcons';
@@ -196,6 +197,6 @@ export const INTENSIVO = {
     'Puedes pagarlo en 2 cuotas, en octubre y noviembre',
   ],
 };
-export const intensivoAbierto = (hoy = new Date()) => hoy < new Date(`${INTENSIVO.cierreInscripcion}T23:59:59-03:00`);
+export const intensivoAbierto = (hoy = new Date(ahora())) => hoy < new Date(`${INTENSIVO.cierreInscripcion}T23:59:59-03:00`);
 
 export const PAES_PLAN_INCLUDES = "Máximo 20 alumnos por curso. Todos los planes: matrícula gratis, clases en vivo por Google Meet desde las 18:00, grabaciones para repasar, guías descargables y ensayo mensual.";

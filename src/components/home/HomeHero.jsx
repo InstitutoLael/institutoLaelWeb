@@ -98,7 +98,7 @@ export default function HomeHero() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 items-end">
-          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.7, ease }} className="lg:col-span-5">
+          <motion.div initial={{ y: 16 }} animate={{ y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease }} className="lg:col-span-5">
             <p className="text-white/75 text-base sm:text-lg leading-relaxed max-w-md mb-7">
               Da lo mismo si vas en cuarto medio, si la PAES te fue mal la primera vez o si dejaste el colegio hace años. Te ayudamos a llegar.
             </p>

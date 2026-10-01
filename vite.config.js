@@ -2,8 +2,18 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
+// Cloudflare tiene "Rocket Loader", que retrasa los scripts y frena la
+// primera pintura. Con data-cfasync="false" los deja tal cual.
+const sinRocketLoader = {
+  name: 'sin-rocket-loader',
+  enforce: 'post',
+  transformIndexHtml(html) {
+    return html.replace(/<script(?![^>]*data-cfasync)/g, '<script data-cfasync="false"');
+  },
+};
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), sinRocketLoader],
   base: "/",
   build: {
     minify: 'terser',

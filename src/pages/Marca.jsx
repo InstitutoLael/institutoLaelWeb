@@ -5,6 +5,7 @@ import { Download, RotateCcw, Check } from 'lucide-react';
 import PageHero, { fadeUp } from '../components/ui/PageHero';
 import LaelLogo, { logoSvgString } from '../components/ui/LaelLogo';
 import { COLORES } from '../data/catalogo';
+import SignificadoLael from '../components/SignificadoLael';
 
 // Página de marca: el logo redibujado, sus variantes de color (una por
 // programa), la paleta y la tipografía. Cada variante se descarga en SVG.
@@ -105,8 +106,8 @@ export default function Marca() {
         <meta name="description" content="El logo de Instituto Lael redibujado en vector, con sus variantes de color por programa, la paleta y la tipografía. Descarga cada versión en SVG." />
       </Helmet>
 
-      <PageHero eyebrow="Identidad" title="Una onda" accent="y una paloma.">
-        <p>La onda es el camino: sube, baja y vuelve a subir. La paloma es tu sueño, que despega cuando el camino termina. Todo lo demás en esta página sale de esas dos ideas.</p>
+      <PageHero eyebrow="Identidad" title="Un infinito" accent="y una paloma.">
+        <p>Las letras de LAEL forman un infinito, porque nunca se termina de aprender. La E dorada es EL, Dios en hebreo, al centro de todo. Y la paloma es el nuevo comienzo. Todo lo demás en esta página sale de ahí.</p>
       </PageHero>
 
       {/* El logo */}
@@ -129,6 +130,8 @@ export default function Marca() {
           </div>
         </div>
       </section>
+
+      <SignificadoLael showVerse={false} />
 
       {/* Variantes */}
       <section className="bg-[#F4F4F4] py-20 sm:py-28">

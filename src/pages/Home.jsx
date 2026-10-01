@@ -6,6 +6,7 @@ import { ArrowRight, Plus } from 'lucide-react';
 import { ClaseEnVivo, Grupo, Grabacion } from '../components/icons/LaelIcons';
 import HomeHero from '../components/home/HomeHero';
 import ProgramStack from '../components/home/ProgramStack';
+import Herramientas from '../components/home/Herramientas';
 import PlanesPaes from '../components/PlanesPaes';
 import Marquee from '../components/ui/Marquee';
 import ScrollWords from '../components/ui/ScrollWords';
@@ -144,12 +145,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ══ 5b. HERRAMIENTAS GRATIS ═════════════════════════════════════ */}
+      <section className="bg-white pt-20 sm:pt-28 lg:pt-32">
+        <div className={WRAP}>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
+            <div>
+              <Etiqueta n="04">Herramientas gratis</Etiqueta>
+              <motion.h2 {...fadeUp(0.05)} className="mt-6 font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[#071D49] display-lg">
+                Gratis, para que <span className="accent-serif">decidas mejor.</span>
+              </motion.h2>
+            </div>
+            <motion.p {...fadeUp(0.1)} className="max-w-sm text-[#071D49]/70 leading-relaxed">
+              No tienes que inscribirte para usarlas. La calculadora usa las ponderaciones oficiales del DEMRE y el calendario, sus fechas.
+            </motion.p>
+          </div>
+          <Herramientas />
+        </div>
+      </section>
+
       {/* ══ 6. PROFES ═══════════════════════════════════════════════════ */}
       <section className="bg-white py-20 sm:py-28 lg:py-32">
         <div className={WRAP}>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
             <div>
-              <Etiqueta n="04">Los profes</Etiqueta>
+              <Etiqueta n="05">Los profes</Etiqueta>
               <motion.h2 {...fadeUp(0.05)} className="mt-6 font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[#071D49] display-lg">
                 Estos son <span className="accent-serif">tus profes.</span>
               </motion.h2>
@@ -184,7 +203,7 @@ export default function Home() {
       {/* ══ 7. TESTIMONIOS ══════════════════════════════════════════════ */}
       <section className="grain bg-[#071D49] text-white py-20 sm:py-28 lg:py-32 overflow-hidden">
         <div className={WRAP}>
-          <Etiqueta n="05" dark>Lo que cuentan los alumnos</Etiqueta>
+          <Etiqueta n="06" dark>Lo que cuentan los alumnos</Etiqueta>
           <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-14">
             {TESTIMONIALS.map((t, i) => (
               <motion.figure key={t.id} {...fadeUp(i * 0.08)} className={`relative pt-10 ${i % 2 ? 'lg:mt-24' : ''}`}>
@@ -216,7 +235,7 @@ export default function Home() {
         <div className={WRAP}>
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-12">
             <div>
-              <Etiqueta n="06">Preu PAES 2027 · Matrícula gratis</Etiqueta>
+              <Etiqueta n="07">Preu PAES 2027 · Matrícula gratis</Etiqueta>
               <motion.h2 {...fadeUp(0.05)} className="mt-6 font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[#071D49] display-lg">
                 Pagas solo <span className="accent-serif">lo que tomas.</span>
               </motion.h2>
@@ -241,7 +260,7 @@ export default function Home() {
         <div className={`${WRAP} grid lg:grid-cols-12 gap-10`}>
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-32">
-              <Etiqueta n="07">Lo que más nos preguntan</Etiqueta>
+              <Etiqueta n="08">Lo que más nos preguntan</Etiqueta>
               <motion.h2 {...fadeUp(0.05)} className="mt-6 font-display font-extrabold tracking-[-0.04em] leading-[0.95] text-[#071D49] display-lg">
                 Antes de <span className="accent-serif">inscribirte.</span>
               </motion.h2>
@@ -266,7 +285,7 @@ export default function Home() {
       {/* ══ 10. INSCRÍBETE ══════════════════════════════════════════════ */}
       <section className="grain bg-[#071D49] text-white pt-24 sm:pt-32 pb-20 overflow-hidden">
         <div className={`${WRAP} relative`}>
-          <Etiqueta n="08" dark>¿Te animas?</Etiqueta>
+          <Etiqueta n="09" dark>¿Te animas?</Etiqueta>
           <div className="mt-8 flex flex-col lg:flex-row lg:items-end justify-between gap-10">
             <motion.h2 {...fadeUp(0.05)} className="font-display font-extrabold display-xl">
               Inscríbete.<br />

@@ -11,7 +11,10 @@ function isDark() {
 }
 
 export default function ThemeToggle({ className = '' }) {
-  const [dark, setDark] = useState(isDark);
+  // Parte en claro y se corrige al montar: el primer dibujo tiene que ser
+  // igual al HTML pre-dibujado de la portada.
+  const [dark, setDark] = useState(false);
+  useEffect(() => { setDark(isDark()); }, []);
 
   useEffect(() => {
     const mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');

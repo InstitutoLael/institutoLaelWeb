@@ -12,7 +12,6 @@ import CookieNotice from "./components/CookieNotice";
 import ExitIntent from "./components/ExitIntent";
 import MobileProgramBar from "./components/MobileProgramBar";
 import SmoothScroll from "./components/experience/SmoothScroll";
-import Preloader from "./components/experience/Preloader";
 import RouteCurtain from "./components/experience/RouteCurtain";
 import Cursor from "./components/experience/Cursor";
 import { colorDeRuta } from "./data/catalogo";
@@ -54,6 +53,8 @@ function useColorPrograma(pathname) {
 export default function App() {
   const { pathname } = useLocation();
   useColorPrograma(pathname);
+  // Terminó la primera pintura (la que adopta la portada pre-dibujada)
+  React.useEffect(() => { window.__laelShell = false; }, []);
   return (
     <MotionConfig reducedMotion="user">
     <div className="flex flex-col min-h-screen relative z-10">
@@ -65,7 +66,6 @@ export default function App() {
         Saltar al contenido
       </a>
       <SmoothScroll />
-      <Preloader />
       <RouteCurtain />
       <Cursor />
       <ScrollToTop />

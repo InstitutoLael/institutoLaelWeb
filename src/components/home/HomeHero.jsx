@@ -5,6 +5,7 @@ import { ArrowRight } from 'lucide-react';
 import WordReveal from '../ui/WordReveal';
 import Magnetic from '../experience/Magnetic';
 import { Paloma } from '../ui/LaelLogo';
+import { primeraPintura } from '../../lib/hidratacion';
 import heroImg from '../../assets/img/Home/hero_student_lael_1780734180709.webp';
 
 // Portada de la Home.
@@ -37,17 +38,11 @@ const DATOS = [
   { n: '$0', t: 'matrícula', lima: true },
 ];
 
-// modo 'css': se dibuja en el HTML antes de que cargue el JavaScript (ver
-// src/entry-shell.jsx). Cuando React llega y encuentra esa portada ya puesta,
-// la toma sin repetir la entrada (modo 'quieto'), así no parpadea.
-export function tomarPortadaPredibujada() {
-  if (typeof window === 'undefined' || !window.__laelShell) return undefined;
-  window.__laelShell = false;
-  return 'quieto';
-}
-
+// modo 'css': la entrada del título va en CSS. Es el modo del HTML
+// pre-dibujado (src/entry-shell.jsx) y de la primera pintura en el navegador,
+// que adopta ese HTML tal cual (ver src/lib/hidratacion.js).
 export default function HomeHero({ modo: modoProp }) {
-  const [modo] = useState(() => modoProp || tomarPortadaPredibujada());
+  const [modo] = useState(() => modoProp || (primeraPintura() ? 'css' : undefined));
   const ini = (v) => (modo ? false : v);
   const ref = useRef(null);
   const lineaRef = useRef(null);

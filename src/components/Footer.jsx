@@ -107,7 +107,7 @@ export default function Footer() {
         {/* Barra inferior */}
         <div className="pt-8 border-t border-white/10 flex flex-col lg:flex-row gap-5 lg:items-center justify-between text-xs text-white/60">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-            <p>© {year} Instituto Lael SpA · RUT 78.084.019-6 · Santiago, Chile</p>
+            <p suppressHydrationWarning>© {year} Instituto Lael SpA · RUT 78.084.019-6 · Santiago, Chile</p>
             <p className="italic tracking-[0.1em] uppercase font-bold">Lucas 4:18</p>
           </div>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">

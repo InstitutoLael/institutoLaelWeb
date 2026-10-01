@@ -15,6 +15,9 @@ const sinRocketLoader = {
 export default defineConfig({
   plugins: [react(), sinRocketLoader],
   base: "/",
+  // Pre-dibujado de la Home (src/entry-shell.jsx): estas librerías vienen en
+  // formato antiguo (CommonJS) y se empaquetan para que Node las pueda usar.
+  ssr: { noExternal: ['react-helmet-async', 'react-hot-toast'] },
   build: {
     minify: 'terser',
     terserOptions: {

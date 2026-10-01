@@ -12,6 +12,15 @@
         try { t = localStorage.getItem("lael_theme"); } catch (e) {}
         var dark = t ? t === "dark" : window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
         if (dark) document.documentElement.classList.add("dark");
+        // Intro (primera visita, solo computador): se muestra desde el primer
+        // cuadro, con CSS, sin esperar el JavaScript. Ver #intro más abajo.
+        try {
+          if (!sessionStorage.getItem("lael_intro") && !navigator.webdriver &&
+              window.matchMedia("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)").matches) {
+            document.documentElement.classList.add("con-intro");
+            sessionStorage.setItem("lael_intro", "1");
+          }
+        } catch (e) {}
       })();
     </script>
 
@@ -105,13 +114,19 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Lael" />
 
-    <!-- Tipografía: Montserrat (títulos) + Inter (texto) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Sin bloquear la primera pintura: se cargan en paralelo y se aplican al llegar -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600;1,700&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600;1,700&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600;1,700&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" /></noscript>
+    <!-- Tipografía: Montserrat (títulos), Inter (texto) e Instrument Serif
+         (la palabra en cursiva). Alojadas en el sitio y precargadas, así el
+         texto se dibuja de una vez con su letra final, sin saltos. -->
+    <link rel="preload" href="/fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/instrument-serif-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <style>
+      @font-face { font-family: "Montserrat"; font-style: normal; font-weight: 400 900; font-display: swap; src: url(/fonts/montserrat-latin.woff2) format("woff2"); }
+      @font-face { font-family: "Montserrat"; font-style: italic; font-weight: 600 700; font-display: swap; src: url(/fonts/montserrat-italic-latin.woff2) format("woff2"); }
+      @font-face { font-family: "Inter"; font-style: normal; font-weight: 400 600; font-display: swap; src: url(/fonts/inter-latin.woff2) format("woff2"); }
+      @font-face { font-family: "Instrument Serif"; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/instrument-serif-latin.woff2) format("woff2"); }
+      @font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; font-display: swap; src: url(/fonts/instrument-serif-italic-latin.woff2) format("woff2"); }
+    </style>
 
     <style>
       html,
@@ -121,7 +136,7 @@
         padding: 0;
         min-height: 100%;
         width: 100%;
-        font-family: "DM Sans", sans-serif;
+        font-family: "Inter", system-ui, sans-serif;
         overflow-x: hidden;
         color: #F8F5F0;
       }
@@ -134,6 +149,23 @@
   </head>
 
   <body>
+    <!-- Intro de la primera visita (ver el script del <head> y #intro en index.css) -->
+    <div id="intro" class="grain" aria-hidden="true" onclick="this.remove()">
+      <div class="intro-logo"><svg viewBox="0 0 290 160"><path d="M6.5 48 V98 C6.5 115 16 125.5 28.5 125.5 C42 125.5 52 114 59 98 C68 77 81 51 101 51 C121 51 135 77 148 98 C158 114 166 122.5 182 122.5 H229" pathLength="1" class="lael-draw" style="animation-delay:0.00s" fill="none" stroke="#fff" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M78 96 C88 96 93 99 100 107 C107 116 112 123 121 123 C131 123 140 118 149 111" pathLength="1" class="lael-draw" style="animation-delay:0.12s" fill="none" stroke="#fff" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M166 95 C165 68 176 49 204 48 H229" pathLength="1" class="lael-draw" style="animation-delay:0.24s" fill="none" stroke="#D7E400" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M165 80 H213" pathLength="1" class="lael-draw" style="animation-delay:0.36s" fill="none" stroke="#D7E400" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M246 47.5 V105 C246 117 252 123.5 264 123.5 H286" pathLength="1" class="lael-draw" style="animation-delay:0.48s" fill="none" stroke="#fff" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round"/><g class="lael-dove-in" style="animation-delay:.75s"><path d="M229 48 C233 44 236 41 238 37 C236 36 231 37 228 39 C231 34 236 31 241 30 C245 27 250 23 254 20 C257 19 259 20 260 21 L264 22 L259 24 C256 31 249 37 241 39 C237 42 233 45 229 48Z" fill="#D7E400"/><path d="M244 29 C236 27 230 21 228 13 C227 8 227 4 228 1 C232 10 238 16 248 23 Z" fill="#D7E400"/><path d="M248 23 C245 17 243 11 244 4 C247 11 250 16 253 20 Z" fill="#D7E400"/></g><text x="146.5" y="157" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-weight="600" font-size="14.5" letter-spacing="9.6" fill="#D7E400">INSTITUTO LAEL</text></svg></div>
+      <div class="intro-pie">
+        <p class="intro-lema">Tu sueño no tiene <em>fecha de vencimiento</em></p>
+        <p class="intro-num"><span></span><b>%</b></p>
+      </div>
+    </div>
+    <script data-cfasync="false">
+      (function () {
+        var el = document.getElementById("intro");
+        if (!el || !document.documentElement.classList.contains("con-intro")) { if (el) el.remove(); return; }
+        var fuera = function () { if (el) el.remove(); el = null; window.removeEventListener("keydown", fuera); };
+        window.addEventListener("keydown", fuera);
+        setTimeout(fuera, 3200);
+      })();
+    </script>
     <div id="root"></div>
     <noscript>Necesitas activar JavaScript para ver Instituto Lael.</noscript>
     <script type="module" data-cfasync="false" src="/src/main.jsx"></script>

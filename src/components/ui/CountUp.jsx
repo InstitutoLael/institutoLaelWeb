@@ -8,7 +8,8 @@ export default function CountUp({ to, prefix = '', suffix = '', duration = 1.6, 
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-15% 0px' });
   const reduce = useReducedMotion();
-  const [n, setN] = useState(reduce ? to : 0);
+  const [n, setN] = useState(0);
+  useEffect(() => { if (reduce) setN(to); }, [reduce, to]);
 
   useEffect(() => {
     if (!inView || reduce) return undefined;

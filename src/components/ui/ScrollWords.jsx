@@ -45,7 +45,7 @@ export default function ScrollWords({ parts, as: Tag = 'p', className = '' }) {
         const content = it.node || it.w;
         return (
           <React.Fragment key={`${i}-${dim}`}>
-            {reduce ? <span className={it.className}>{content}</span> : <Word progress={scrollYProgress} range={range} dim={dim} className={it.className}>{content}</Word>}
+            <Word progress={scrollYProgress} range={range} dim={dim} className={it.className}>{content}</Word>
             {i < n - 1 && ' '}
           </React.Fragment>
         );

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { primeraPintura } from '../lib/hidratacion';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
@@ -7,14 +8,16 @@ import { intensivoAbierto, INTENSIVO, clp } from '../data/paes';
 // Aviso superior. Solo información verdadera: nada de cupos o cuentas
 // regresivas inventadas.
 export default function UrgencyBanner() {
-  const [isVisible, setIsVisible] = useState(false);
-
+  // Se decide antes de la primera pintura: si apareciera después, empujaría
+  // el menú hacia abajo (un "salto" que Google penaliza).
+  // (con portada pre-dibujada se parte visible, igual que el HTML, y si la
+  // persona ya lo había cerrado se esconde enseguida)
+  const [isVisible, setIsVisible] = useState(() => {
+    if (primeraPintura()) return true;
+    try { return !sessionStorage.getItem('lael_banner_hidden'); } catch (_) { return true; }
+  });
   useEffect(() => {
-    try {
-      if (!sessionStorage.getItem('lael_banner_hidden')) setIsVisible(true);
-    } catch (_) {
-      setIsVisible(true);
-    }
+    try { if (sessionStorage.getItem('lael_banner_hidden')) setIsVisible(false); } catch (_) {}
   }, []);
 
   const closeBanner = () => {
@@ -23,7 +26,7 @@ export default function UrgencyBanner() {
   };
 
   return (
-    <AnimatePresence>
+    <AnimatePresence initial={false}>
       {isVisible && (
         <motion.div
           initial={{ height: 0, opacity: 0 }}

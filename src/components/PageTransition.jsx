@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { primeraPintura } from "../lib/hidratacion";
 
 // Transición entre páginas: solo un fundido corto. Sin escala ni
 // desplazamiento, para que el texto nunca se vea borroso.
@@ -8,7 +9,7 @@ let usado = false;
 
 const PageTransition = ({ children }) => {
   const [sinFundido] = React.useState(() => {
-    const v = !usado && typeof window !== "undefined" && !!window.__laelShell;
+    const v = !usado && primeraPintura();
     usado = true;
     return v;
   });

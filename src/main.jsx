@@ -1,6 +1,6 @@
 // src/main.jsx
 import React from "react";
-import { createRoot } from "react-dom/client";
+import { createRoot, hydrateRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async"; // SEO
 
@@ -12,12 +12,12 @@ import "./styles/dark.generated.css";
 import App from "./App.jsx";
 
 
-// La portada (/) llega pre-dibujada en el HTML (data-shell). Se avisa a
-// HomeHero para que la tome sin repetir la animación de entrada.
+// La portada (/) llega pre-dibujada en el HTML (data-shell): React la
+// "hidrata" (adopta ese HTML) en vez de dibujarla de nuevo. Ver src/lib/hidratacion.js.
 const rootEl = document.getElementById("root");
 window.__laelShell = rootEl.hasAttribute("data-shell") && window.location.pathname === "/";
 
-createRoot(rootEl).render(
+const app = (
   <React.StrictMode>
     {/* 1. Capa de SEO */}
     <HelmetProvider>
@@ -28,3 +28,6 @@ createRoot(rootEl).render(
     </HelmetProvider>
   </React.StrictMode>
 );
+
+if (window.__laelShell) hydrateRoot(rootEl, app);
+else createRoot(rootEl).render(app);

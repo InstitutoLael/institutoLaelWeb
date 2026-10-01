@@ -359,3 +359,26 @@ html.dark ::-webkit-scrollbar-thumb { background: #D7E400; border-color: #040A1A
 
 /* Selección de texto en lima con tinta azul (también sobre fondos azules) */
 ::selection { background: #D7E400; color: #071D49; }
+
+/* ── Intro de la primera visita ───────────────────────────────────────
+   Vive en index.html (no en React) para aparecer desde el primer cuadro.
+   El logo se dibuja, el contador llega a 100 y la cortina sube. */
+@property --intro-n { syntax: "<integer>"; initial-value: 0; inherits: false; }
+#intro { display: none; }
+html.con-intro #intro {
+  position: fixed; inset: 0; z-index: 1100;
+  display: flex; align-items: center; justify-content: center;
+  background: #071D49; color: #fff; cursor: pointer;
+  animation: intro-sube 0.85s cubic-bezier(0.76, 0, 0.24, 1) 1.9s forwards;
+}
+#intro .intro-logo { width: min(62vw, 340px); animation: intro-logo-sale 0.6s cubic-bezier(0.76, 0, 0.24, 1) 1.9s forwards; }
+#intro .intro-pie { position: absolute; left: 2.5rem; right: 2.5rem; bottom: 2rem; display: flex; align-items: flex-end; justify-content: space-between; font-family: Montserrat, sans-serif; }
+#intro .intro-lema { margin: 0; max-width: 14rem; font-size: 11px; line-height: 1.6; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+#intro .intro-lema em { font-family: "Instrument Serif", Georgia, serif; font-size: 1rem; letter-spacing: 0; text-transform: none; color: #D7E400; }
+#intro .intro-num { margin: 0; font-weight: 800; font-size: clamp(3rem, 10vw, 7rem); line-height: 1; letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
+#intro .intro-num b { color: #D7E400; font-weight: 800; }
+#intro .intro-num span { counter-reset: n var(--intro-n); animation: intro-cuenta 1.7s cubic-bezier(0.33, 1, 0.68, 1) forwards; }
+#intro .intro-num span::before { content: counter(n); }
+@keyframes intro-cuenta { to { --intro-n: 100; } }
+@keyframes intro-sube { to { clip-path: inset(0 0 100% 0); visibility: hidden; pointer-events: none; } }
+@keyframes intro-logo-sale { to { transform: translateY(-60px); opacity: 0; } }

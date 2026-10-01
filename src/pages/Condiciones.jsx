@@ -126,7 +126,7 @@ export default function Condiciones() {
                 {s.link && <Link to={s.link.to} className="inline-block mt-4 font-bold underline underline-offset-4">{s.link.label} →</Link>}
               </article>
             ))}
-            <p className="text-sm text-[#071D49]/60 px-2">
+            <p className="text-sm text-[#071D49]/75 px-2">
               Actualizado en {ACTUALIZADO}. Este resumen no reemplaza el compromiso que firmas al inscribirte: si hay diferencias, vale lo firmado. Tus datos se cuidan según la <Link to="/privacidad" className="underline">política de privacidad</Link>.
             </p>
           </div>

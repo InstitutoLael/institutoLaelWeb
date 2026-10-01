@@ -57,7 +57,7 @@ export default function TestNivel() {
         <div className="max-w-xl mx-auto">
           {!fin && (
             <div className="mb-6" aria-hidden="true">
-              <div className="flex justify-between text-xs font-bold uppercase tracking-wider text-[#071D49]/60 mb-2">
+              <div className="flex justify-between text-xs font-bold uppercase tracking-wider text-[#071D49]/75 mb-2">
                 <span>Pregunta {i + 1} de {PREGUNTAS.length}</span>
                 <span>{Math.round((i / PREGUNTAS.length) * 100)}%</span>
               </div>
@@ -71,7 +71,7 @@ export default function TestNivel() {
             {!fin ? (
               <motion.fieldset key={i} initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -24 }} transition={{ duration: 0.22 }} className="bg-white rounded-[28px] p-6 sm:p-8 border border-[#071D49]/5 shadow-card">
                 <legend className="sr-only">Pregunta {i + 1} de {PREGUNTAS.length}</legend>
-                <p className="text-sm text-[#071D49]/60 mb-2">Completa la frase:</p>
+                <p className="text-sm text-[#071D49]/75 mb-2">Completa la frase:</p>
                 <p lang="en" className="font-display text-xl sm:text-2xl font-bold mb-6 leading-snug">{PREGUNTAS[i].q}</p>
                 <div className="grid gap-3">
                   {PREGUNTAS[i].o.map((op, k) => (

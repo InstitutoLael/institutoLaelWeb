@@ -335,3 +335,21 @@ html.dark .logo-adapt { --logo-ink: #FFFFFF; --logo-acc: #D7E400; }
 @keyframes lael-rise-kf { from { transform: translateY(105%); } to { transform: none; } }
 .lael-rise { transform: translateY(105%); animation: lael-rise-kf 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 @media (prefers-reduced-motion: reduce) { .lael-rise { transform: none; animation: none; } }
+
+/* ── Detalles de terminación ──────────────────────────────────────────
+   Títulos con líneas equilibradas y párrafos sin una palabra sola al
+   final; barra de desplazamiento con los colores de la marca. */
+h1, h2, h3, blockquote { text-wrap: balance; }
+p, li, dd, figcaption { text-wrap: pretty; }
+
+html { scrollbar-width: thin; scrollbar-color: #071D49 #F4F4F4; }
+html.dark { scrollbar-color: #D7E400 #040A1A; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #F4F4F4; }
+::-webkit-scrollbar-thumb { background: #071D49; border-radius: 9999px; border: 2px solid #F4F4F4; }
+::-webkit-scrollbar-thumb:hover { background: #0B2A66; }
+html.dark ::-webkit-scrollbar-track { background: #040A1A; }
+html.dark ::-webkit-scrollbar-thumb { background: #D7E400; border-color: #040A1A; }
+
+/* Selección de texto en lima con tinta azul (también sobre fondos azules) */
+::selection { background: #D7E400; color: #071D49; }

@@ -76,9 +76,9 @@ export default function Ingles() {
       <section className={`${SECTION} bg-white`}>
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8 items-center">
           <div className="md:col-span-2 flex justify-center">
-            <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-[36px] bg-[#071D49] flex items-center justify-center relative overflow-hidden">
+            <div className="grain w-40 h-48 sm:w-52 sm:h-64 rounded-[36px] bg-[#071D49] flex items-center justify-center relative overflow-hidden" data-keep-light>
               <BrandArcs variant="side" />
-              <span className="relative font-display font-extrabold text-5xl text-programa">MG</span>
+              <span aria-hidden="true" className="relative font-serif italic text-7xl sm:text-8xl leading-none text-programa">MG</span>
             </div>
           </div>
           <div className="md:col-span-3">

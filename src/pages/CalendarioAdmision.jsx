@@ -55,7 +55,7 @@ export default function CalendarioAdmision() {
               );
             })}
           </ol>
-          <p className="text-sm text-[#071D49]/60 mt-6 flex items-center gap-1.5">
+          <p className="text-sm text-[#071D49]/75 mt-6 flex items-center gap-1.5">
             Fuente: Mineduc y DEMRE. Confirma siempre en
             <a href={FUENTE_ADMISION.url} target="_blank" rel="noopener noreferrer" className="underline inline-flex items-center gap-1">{FUENTE_ADMISION.label} <ExternalLink size={12} /></a>
           </p>

@@ -3,12 +3,15 @@ import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import PageHero from '../../components/ui/PageHero';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Clock } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Clock } from 'lucide-react';
 import { CATEGORIES, getAllNoticias, formatFecha } from '../../data/noticias';
-import NoticiaCard from '../../components/noticias/NoticiaCard';
 import CategoryIcon from '../../components/noticias/CategoryIcon';
 
 const SITE = 'https://www.institutolael.cl';
+
+// Color de cada categoría (el de su programa)
+const CAT_COLOR = { PAES: '#D7E400', Adultos: '#FF9F7A', Homeschool: '#F7A8D0', Lael: '#7CC6FF' };
+const colorDe = (c) => CAT_COLOR[c] || '#D7E400';
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 14 },
@@ -67,48 +70,79 @@ export default function NoticiasIndex() {
           </motion.div>
       </PageHero>
 
-      <section className="px-5 sm:px-6 pt-10 sm:pt-14 pb-16 sm:pb-20 lg:pb-28">
-        <div className="max-w-6xl mx-auto">
-          {/* Destacada */}
+      <section className="px-5 sm:px-8 lg:px-12 pt-12 sm:pt-16 pb-20 sm:pb-28">
+        <div className="max-w-[1400px] mx-auto">
+          {/* Destacada: portada de revista */}
           {showFeatured && (
-            <motion.div {...fadeUp(0.35)} className="mb-8 sm:mb-10">
+            <motion.div {...fadeUp(0.2)} className="mb-14 sm:mb-20">
               <Link
                 to={`/noticias/${featured.slug}`}
-                className="group grid md:grid-cols-[2fr_3fr] rounded-[28px] bg-white overflow-hidden border border-[#071D49]/5 shadow-card transition-shadow hover:shadow-lael focus:outline-none focus-visible:ring-2 focus-visible:ring-[#071D49] focus-visible:ring-offset-2"
+                data-cursor="Leer"
+                className="group grain relative grid lg:grid-cols-12 rounded-[32px] lg:rounded-[44px] bg-[#071D49] text-white overflow-hidden"
+                data-keep-light
               >
-                <div className="relative bg-[#D7E400] min-h-[140px] md:min-h-full flex items-end p-6 sm:p-8 overflow-hidden">
-                  <CategoryIcon category={featured.category} className="absolute -right-6 -top-6 w-44 h-44 md:w-64 md:h-64 text-[#071D49]/10" strokeWidth={1.25} />
-                  <span className="relative inline-flex items-center gap-2 bg-[#071D49] text-white text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full">
-                    <CategoryIcon category={featured.category} className="w-3.5 h-3.5 text-[#D7E400]" strokeWidth={2.5} />
-                    Destacado · {featured.category}
-                  </span>
-                </div>
-                <div className="p-6 sm:p-10">
-                  <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-[1.1] mb-4 text-[#071D49]">
+                <div className="lg:col-span-8 p-7 sm:p-10 lg:p-14 flex flex-col">
+                  <p className="flex items-center gap-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] text-white/70">
+                    <span style={{ color: colorDe(featured.category) }}>Destacado</span>
+                    <span aria-hidden="true" className="w-8 h-px bg-white/30" />
+                    {featured.category}
+                  </p>
+                  <h2 className="mt-8 font-display font-extrabold tracking-[-0.04em] leading-[0.98] text-3xl sm:text-5xl lg:text-6xl max-w-[18ch]">
                     {featured.title}
                   </h2>
-                  <p className="text-[#071D49]/70 text-base sm:text-lg leading-relaxed mb-6">{featured.excerpt}</p>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
-                    <span className="inline-flex items-center gap-2 text-sm text-[#071D49]/70">
+                  <p className="mt-6 text-white/75 text-base sm:text-lg leading-relaxed max-w-2xl">{featured.excerpt}</p>
+                  <div className="mt-10 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
+                    <span className="inline-flex items-center justify-center gap-2 min-h-[52px] w-full sm:w-auto bg-[#D7E400] text-[#071D49] group-hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-7 rounded-full transition-colors">
+                      Leer la guía <ArrowRight className="w-4 h-4" aria-hidden="true" />
+                    </span>
+                    <span className="inline-flex items-center gap-2 text-sm text-white/70">
                       <Clock className="w-4 h-4" aria-hidden="true" />
                       {featured.readingMinutes} min de lectura · {formatFecha(featured.date)}
                     </span>
-                    <span className="inline-flex items-center justify-center gap-2 min-h-[48px] w-full sm:w-auto bg-[#071D49] text-white group-hover:bg-[#0B2A66] font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-6 rounded-2xl transition-colors">
-                      Leer la guía <ArrowRight className="w-4 h-4" aria-hidden="true" />
-                    </span>
                   </div>
+                </div>
+                <div aria-hidden="true" className="hidden lg:flex lg:col-span-4 items-center justify-center relative">
+                  <CategoryIcon category={featured.category} className="w-64 h-64 transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:rotate-6 group-hover:scale-105" style={{ color: colorDe(featured.category) }} strokeWidth={1} />
                 </div>
               </Link>
             </motion.div>
           )}
 
-          {/* Tarjetas */}
+          {/* Índice editorial */}
           {list.length > 0 ? (
-            <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {list.map((post) => (
-                <NoticiaCard key={post.slug} post={post} />
+            <ol className="border-t border-[#071D49]/15">
+              {list.map((post, i) => (
+                <motion.li
+                  key={post.slug}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.5, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }}
+                  className="border-b border-[#071D49]/15"
+                >
+                  <Link to={`/noticias/${post.slug}`} className="group relative grid grid-cols-[2.5rem_1fr_auto] lg:grid-cols-[3.5rem_10rem_1fr_12rem_3rem] items-start lg:items-center gap-x-4 lg:gap-x-6 gap-y-2 py-7 sm:py-9 overflow-hidden">
+                    <span aria-hidden="true" className="absolute inset-0 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(.16,1,.3,1)] opacity-20" style={{ backgroundColor: colorDe(post.category) }} />
+                    <span className="relative font-display font-bold text-xs tracking-[0.2em] text-[#071D49]/70 pt-1 lg:pt-0">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="relative hidden lg:inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em]">
+                      <span aria-hidden="true" className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: colorDe(post.category) }} />
+                      {post.category}
+                    </span>
+                    <span className="relative min-w-0">
+                      <span className="lg:hidden inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.18em] mb-2">
+                        <span aria-hidden="true" className="w-2 h-2 rounded-full" style={{ backgroundColor: colorDe(post.category) }} />
+                        {post.category}
+                      </span>
+                      <span className="block font-display font-extrabold text-xl sm:text-3xl tracking-tight leading-tight text-[#071D49]">{post.title}</span>
+                      <span className="block mt-2 text-sm sm:text-base text-[#071D49]/70 leading-relaxed max-w-2xl line-clamp-2">{post.excerpt}</span>
+                    </span>
+                    <span className="relative hidden lg:block text-sm text-[#071D49]/70">
+                      {post.readingMinutes} min · {formatFecha(post.date)}
+                    </span>
+                    <ArrowUpRight size={22} aria-hidden="true" className="relative text-[#071D49] justify-self-end transition-transform duration-500 group-hover:rotate-45" />
+                  </Link>
+                </motion.li>
               ))}
-            </div>
+            </ol>
           ) : (
             <p className="text-center text-[#071D49]/70 py-12">Pronto publicaremos guías sobre este tema.</p>
           )}

@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
 import NoticiasDestacadas from '../../components/NoticiasDestacadas';
 import PlanesPaes, { DescuentosPaes } from '../../components/PlanesPaes';
 import IntensivoPaes from '../../components/IntensivoPaes';
 import { PaesEsteAnio } from '../../components/PaesCountdown';
 import PageHero from '../../components/ui/PageHero';
+import { Faq } from '../Programas/shared';
 import Duotone from '../../components/ui/Duotone';
 import Magnetic from '../../components/experience/Magnetic';
 import {
   Video,
-  ChevronDown,
   ChevronRight,
   MessageCircle,
   ArrowRight,
@@ -72,7 +72,6 @@ function SubjectCard({ subj, i, obligatoria }) {
 }
 
 export default function LandingPAES() {
-  const [openFaq, setOpenFaq] = useState(null);
 
   const WA_LINK = PAES_FORM_URL;
   const WHATSAPP_LINK = "https://wa.me/56964626568?text=Hola,%20tengo%20dudas%20sobre%20el%20preu%20PAES";
@@ -344,56 +343,9 @@ export default function LandingPAES() {
       </section>
 
       {/* ── 8. FAQ ───────────────────────────────────────────────────── */}
-      <section className={`${SECTION} bg-white`}>
-        <div className="max-w-3xl mx-auto w-full">
-          <div className="text-center mb-10 sm:mb-14">
-            <EyebrowLight>Lo que más nos preguntan</EyebrowLight>
-            <motion.h2 {...fadeUp(0.05)} className={H2}>
-              Preguntas <span className="accent-serif">frecuentes.</span>
-            </motion.h2>
-          </div>
-
-          <div className="space-y-3">
-            {faqs.map((faq, idx) => {
-              const open = openFaq === idx;
-              return (
-                <div
-                  key={idx}
-                  className={`rounded-[20px] overflow-hidden border transition-colors ${open ? 'bg-white border-[#071D49]/15 shadow-card' : 'bg-[#F4F4F4] border-[#071D49]/5'}`}
-                >
-                  <button
-                    onClick={() => setOpenFaq(open ? null : idx)}
-                    aria-expanded={open}
-                    className="w-full min-h-[56px] flex items-center justify-between gap-4 px-5 py-4 sm:px-6 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#071D49] rounded-[20px]"
-                  >
-                    <span className="text-[#071D49] font-bold text-base font-display leading-snug">
-                      {faq.q}
-                    </span>
-                    <span className={`w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0 transition-transform duration-300 ${open ? 'rotate-180 bg-[#071D49] border-[#071D49] text-white' : 'border-[#071D49]/15 text-[#071D49]'}`}>
-                      <ChevronDown size={16} />
-                    </span>
-                  </button>
-
-                  <AnimatePresence initial={false}>
-                    {open && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease }}
-                      >
-                        <div className="px-5 pb-5 sm:px-6 text-[#071D49]/75 text-sm sm:text-base leading-relaxed">
-                          {faq.a}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <div className="bg-white">
+        <Faq items={faqs} title={<>Preguntas <span className="accent-serif">frecuentes.</span></>} />
+      </div>
 
       {/* ── 8.5 GUÍAS PAES ───────────────────────────────────────────── */}
       <NoticiasDestacadas category="PAES" title="Guías para tu PAES" />

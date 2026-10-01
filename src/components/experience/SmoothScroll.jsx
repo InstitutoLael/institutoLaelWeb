@@ -10,7 +10,9 @@ import 'lenis/dist/lenis.css';
 // overflow: hidden en <html>), Lenis se detiene solo.
 export default function SmoothScroll() {
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    // Solo con mouse: en pantallas táctiles el scroll nativo ya es suave y así
+    // el celular no gasta batería en un ciclo de animación permanente.
+    if (!window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) return undefined;
     const lenis = new Lenis({ duration: 1.15, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), allowNestedScroll: true });
     window.__lenis = lenis;
 

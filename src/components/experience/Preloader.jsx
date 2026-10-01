@@ -4,13 +4,15 @@ import LaelLogo from '../ui/LaelLogo';
 
 // Intro de la primera visita: el logo se dibuja solo, la paloma aparece, el
 // contador llega a 100 y la cortina azul sube. Una vez por sesión, se salta
-// con un clic o una tecla, y no aparece si la persona pidió menos movimiento.
+// con un clic o una tecla. No aparece en celulares ni si la persona pidió
+// menos movimiento.
 const DURACION = 1700;
 const ease = [0.76, 0, 0.24, 1];
 
 function debeMostrarse() {
   try {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+    // Solo en computador: en el celular lo primero es ver el contenido rápido.
+    if (!window.matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) return false;
     if (navigator.webdriver) return false;
     return !sessionStorage.getItem('lael_intro');
   } catch (_) {

@@ -95,8 +95,8 @@ html.dark [style*="color: rgb(7, 29, 73)"]${KEEP}:not([style*="background-color:
 html.dark [style*="background-color: rgb(244, 244, 244)"]${KEEP} { background-color: ${PAGE} !important; }
 html.dark [style*="background-color: rgb(255, 255, 255)"]${KEEP} { background-color: ${CARD} !important; }
 /* Botones azules sobre tarjetas oscuras: un poco más claros para que se vean */
-html.dark a[class~="bg-[#071D49]"], html.dark button[class~="bg-[#071D49]"] { background-color: #1E3A7A !important; }
-html.dark a[class~="bg-[#071D49]"]:hover, html.dark button[class~="bg-[#071D49]"]:hover { background-color: #27498F !important; }
+html.dark a[class~="bg-[#071D49]"]:not([data-keep-light]):not([data-keep-light] *), html.dark button[class~="bg-[#071D49]"]:not([data-keep-light]):not([data-keep-light] *) { background-color: #1E3A7A !important; }
+html.dark a[class~="bg-[#071D49]"]:not([data-keep-light]):not([data-keep-light] *):hover, html.dark button[class~="bg-[#071D49]"]:not([data-keep-light]):not([data-keep-light] *):hover { background-color: #27498F !important; }
 /* Sombras más sutiles */
 html.dark .shadow-card, html.dark [class*="shadow-"] { --tw-shadow-color: rgba(0, 0, 0, 0.45); }
 /* Logo del menú (versión azul) en blanco */

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Instagram, Youtube, Mail, MessageCircle, ArrowRight } from 'lucide-react';
 import LaelLogo from './ui/LaelLogo';
@@ -41,6 +41,10 @@ const LEGAL = [
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  // El correo se escribe recién en el navegador: Cloudflare "esconde" los
+  // correos que encuentra en el HTML, y eso descalza el inicio pre-dibujado.
+  const [correo, setCorreo] = useState(null);
+  useEffect(() => { setCorreo(['contacto', 'institutolael.cl'].join('@')); }, []);
   // La portada ya termina con su propio llamado a inscribirse
   const esInicio = useLocation().pathname === '/';
 
@@ -75,8 +79,8 @@ export default function Footer() {
             <p className="text-white/65 text-sm leading-relaxed max-w-xs">
               Instituto online desde 2021. Preu PAES, idiomas, nivelación gratis para adultos y capacitación para empresas.
             </p>
-            <a href="mailto:contacto@institutolael.cl" className="inline-flex items-center gap-2 text-white/75 text-sm hover:text-white w-fit min-h-[32px]">
-              <Mail size={15} /> contacto@institutolael.cl
+            <a href={correo ? `mailto:${correo}` : '/contacto'} className="inline-flex items-center gap-2 text-white/75 text-sm hover:text-white w-fit min-h-[32px]">
+              <Mail size={15} /> {correo || 'Escríbenos un correo'}
             </a>
             <div className="flex gap-2">
               {SOCIAL.map(({ name, href, Icon }) => (

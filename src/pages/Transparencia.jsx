@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import PageHero from '../components/ui/PageHero';
 import { CheckCircle2, XCircle, ShieldCheck, AlertTriangle } from 'lucide-react';
 import { Pago, Escudo, Empresa, Mensaje } from '../components/icons/LaelIcons';
 
@@ -71,24 +72,9 @@ export default function Transparencia() {
       </Helmet>
 
       {/* ── 1. HERO ───────────────────────────────────────────────────── */}
-      <section className="px-5 sm:px-6 pt-28 sm:pt-32 pb-16 sm:pb-20 text-center bg-[#F4F4F4]">
-        <div className="max-w-3xl mx-auto">
-          <motion.p {...fadeUp(0)} className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] mb-5">
-            <span className="w-4 h-1 rounded-full bg-[#D7E400]" aria-hidden="true" />
-            Transparencia
-          </motion.p>
-          <motion.h1
-            {...fadeUp(0.1)}
-            className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-8"
-          >
-            Hablemos <br />
-            <span className="bg-[#071D49] text-[#D7E400] px-3">claro.</span>
-          </motion.h1>
-          <motion.p {...fadeUp(0.2)} className="text-[#071D49]/70 text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto italic font-medium">
-            "Preferimos decirte la verdad antes que prometerte algo que no podemos cumplir."
-          </motion.p>
-        </div>
-      </section>
+      <PageHero eyebrow="Transparencia" title="Hablemos" accent="claro.">
+        <p className="font-serif italic text-2xl sm:text-3xl text-white/85">“Preferimos decirte la verdad antes que prometerte algo que no podemos cumplir.”</p>
+      </PageHero>
 
       {/* ── 2. LO QUE SÍ / LO QUE NO ─────────────────────────────────── */}
       <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28 bg-white">

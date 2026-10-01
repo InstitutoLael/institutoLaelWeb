@@ -50,14 +50,14 @@ export default function Gracias() {
         <meta name="robots" content="noindex" />
       </Helmet>
 
-      <section className="relative -mt-20 pt-40 pb-16 px-5 sm:px-6 text-white text-center" style={{ backgroundColor: BLUE }}>
+      <section className="grain relative -mt-20 pt-40 pb-20 px-5 sm:px-6 text-white text-center" style={{ backgroundColor: BLUE }}>
         <motion.div initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 260, damping: 18 }}
           className="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center" style={{ backgroundColor: YELLOW }}>
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <motion.path d="M5 12.5l4.5 4.5L19 7.5" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.3, duration: 0.5 }} />
           </svg>
         </motion.div>
-        <h1 className="font-display text-4xl sm:text-5xl font-extrabold uppercase tracking-tight leading-[1.05] mb-4 text-white">
+        <h1 className="font-display text-5xl sm:text-7xl font-extrabold tracking-[-0.04em] leading-[0.95] mb-6 text-white">
           {nombre ? `¡Listo, ${nombre}!` : '¡Listo!'}
         </h1>
         <p className="text-white/75 text-lg max-w-xl mx-auto">

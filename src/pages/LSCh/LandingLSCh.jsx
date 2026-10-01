@@ -5,7 +5,8 @@ import { TESTIMONIALS } from '../../data/testimonials';
 import lschRealidad from '../../assets/img/Home/mundo_lsch_bg_1777943626827.webp';
 import CertificateSection from '../../components/CertificateSection';
 import AvisameForm from '../../components/AvisameForm';
-import BrandArcs from '../../components/ui/BrandArcs';
+import PageHero from '../../components/ui/PageHero';
+import Duotone from '../../components/ui/Duotone';
 import { LANDING_SLIDES, LANDING_LEVELS } from '../../data/lsch';
 import {
   fadeUp,
@@ -50,53 +51,21 @@ export default function LandingLSCh() {
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
 
       {/* ── 1. HERO ─────────────────────────────────────────────────── */}
-      <section className="relative -mt-20 pt-36 sm:pt-40 pb-20 sm:pb-28 px-5 sm:px-6 text-white overflow-hidden" style={{ backgroundColor: BLUE }}>
-        <div className="absolute inset-0 opacity-20 mix-blend-luminosity">
-          <img src={lschRealidad} alt="" className="w-full h-full object-cover grayscale" />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/60 to-[#071D49]" />
-        <BrandArcs />
-
-        <div className="relative z-10 max-w-5xl mx-auto text-center">
-          {/* "Próximamente" bien visible desde el primer vistazo */}
-          <motion.div {...fadeUp(0)} className="flex flex-col items-center gap-3 mb-6">
-            <span className="inline-flex items-center gap-2 bg-programa text-[#071D49] px-4 py-2 rounded-full font-display text-sm font-extrabold uppercase tracking-wider">
-              <span className="w-2 h-2 rounded-full bg-[#071D49]" aria-hidden="true" />
-              PRÓXIMAMENTE
-            </span>
-            <span className={EYEBROW_DARK}>LENGUA DE SEÑAS CHILENA</span>
-          </motion.div>
-
-          <motion.h1 {...fadeUp(0.1)} className="font-display text-white text-[2.5rem] sm:text-6xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.02] mb-6 sm:mb-8">
-            Las manos <br />
-            también <span className="accent-serif text-programa">tienen voz.</span>
-          </motion.h1>
-
-          <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-8">
-            Estamos preparando el nuevo curso. Lo dictará una persona Sorda, de la comunidad, con la LSCh como lengua propia. Anótate en la lista y te avisamos apenas abramos cupos.
-          </motion.p>
-
-          {/* Quick badges */}
-          <motion.div {...fadeUp(0.25)} className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10 text-white/75 text-xs font-bold uppercase tracking-wider">
-            <span className="bg-white/5 border border-white/15 px-4 py-2 rounded-full">Comunidad Sorda</span>
-            <span className="bg-white/5 border border-white/15 px-4 py-2 rounded-full">Online y en vivo</span>
-            <span className="bg-white/5 border border-white/15 px-4 py-2 rounded-full">Ley 21.015</span>
-          </motion.div>
-
-          <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#avisame" className={BTN_PRIMARY}>
-              <span>AVÍSAME CUANDO ABRA</span>
-              <ChevronRight size={16} aria-hidden="true" />
-            </a>
-            <a
-              href="#programa"
-              className="inline-flex items-center justify-center min-h-[48px] border border-white/25 hover:border-white text-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider px-8 py-4 rounded-2xl transition-all active:scale-95"
-            >
-              Ver Programa
-            </a>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Lengua de Señas Chilena · Próximamente"
+        title="Las manos también"
+        accent="tienen voz."
+        desc="Estamos preparando el nuevo curso. Lo dictará una persona Sorda, de la comunidad, con la LSCh como lengua propia. Anótate en la lista y te avisamos apenas abramos cupos."
+        actions={<>
+          <a href="#avisame" className="inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[52px] px-8 rounded-full transition-colors bg-programa text-[#071D49] hover:bg-white">Avísame cuando abra <ChevronRight size={16} aria-hidden="true" /></a>
+          <a href="#programa" className="inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[52px] px-8 rounded-full transition-colors border border-white/30 text-white hover:bg-white hover:text-[#071D49]">Ver programa</a>
+        </>}
+        aside={<Duotone src={lschRealidad} color="#6EDDB0" loading="eager" className="group hidden lg:block aspect-[4/5] rounded-[40px]" />}
+      >
+        <ul className="mt-6 flex flex-wrap gap-2 text-white/80 text-xs font-bold uppercase tracking-wider">
+          {['Comunidad Sorda', 'Online y en vivo', 'Ley 21.015'].map((t) => <li key={t} className="border border-white/20 px-4 py-2 rounded-full">{t}</li>)}
+        </ul>
+      </PageHero>
 
       {/* ── LISTA DE ESPERA ─────────────────────────────────────────── */}
       <section className="px-5 sm:px-6 py-14 sm:py-16 bg-white">

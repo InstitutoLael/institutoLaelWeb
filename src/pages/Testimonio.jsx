@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import PageHero from '../components/ui/PageHero';
 import { Link } from 'react-router-dom';
 import { Loader2, ArrowRight } from 'lucide-react';
 import { Corazon } from '../components/icons/LaelIcons';
@@ -45,11 +46,9 @@ export default function Testimonio() {
         <title>Deja tu testimonio | Instituto Lael</title>
         <meta name="description" content="¿Estudiaste en Instituto Lael? Cuéntanos cómo te fue. Tu historia puede ayudar a alguien que todavía no se atreve a empezar." />
       </Helmet>
-      <section className="relative -mt-20 pt-36 pb-14 px-5 sm:px-6 text-white text-center" style={{ backgroundColor: BLUE }}>
-        <p className="text-xs font-bold uppercase tracking-[0.2em] mb-4" style={{ color: YELLOW }}>Ex alumnos</p>
-        <h1 className="font-display text-4xl sm:text-5xl font-extrabold uppercase tracking-tight leading-[1.05] mb-4 text-white">Cuéntanos cómo te fue</h1>
-        <p className="text-white/75 text-lg max-w-xl mx-auto">Tu historia puede ayudar a alguien que todavía no se atreve a empezar.</p>
-      </section>
+      <PageHero eyebrow="Ex alumnos" title="Cuéntanos" accent="cómo te fue.">
+        <p>Tu historia puede ayudar a alguien que todavía no se atreve a empezar.</p>
+      </PageHero>
 
       <section className="px-4 sm:px-6 py-10 sm:py-14">
         {estado === 'ok' ? (

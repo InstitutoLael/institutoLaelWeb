@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import WordReveal from '../../components/ui/WordReveal';
 import NoticiasDestacadas from '../../components/NoticiasDestacadas';
 import PlanesPaes, { DescuentosPaes } from '../../components/PlanesPaes';
 import IntensivoPaes from '../../components/IntensivoPaes';
 import { PaesEsteAnio } from '../../components/PaesCountdown';
-import BrandArcs from '../../components/ui/BrandArcs';
+import PageHero from '../../components/ui/PageHero';
+import Duotone from '../../components/ui/Duotone';
+import Magnetic from '../../components/experience/Magnetic';
 import {
   Video,
   ChevronDown,
@@ -86,93 +87,31 @@ export default function LandingPAES() {
     <div className="w-full bg-[#F4F4F4] overflow-x-clip font-sans text-[#071D49]">
 
       {/* ── 1. HERO ──────────────────────────────────────────────────── */}
-      <section className="relative -mt-20 pt-32 sm:pt-36 lg:pt-40 pb-16 sm:pb-20 lg:min-h-screen lg:flex lg:items-center px-5 sm:px-6 overflow-hidden bg-[#071D49]">
-        <BrandArcs />
-
-        <div className="relative z-10 max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7 flex flex-col text-left">
-            <motion.div {...fadeUp(0)} className="mb-5 flex flex-wrap items-center gap-3">
-              <span className="bg-[#D7E400] text-[#071D49] text-xs font-black uppercase tracking-wider px-4 py-2 rounded-full">
-                Desde $12.000/mes · Partimos en marzo 2027
-              </span>
-              <span className="lg:hidden inline-flex items-center gap-2 text-white/75 text-xs font-semibold">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true" />
-                Inscripciones abiertas · Ciclo 2027
-              </span>
-            </motion.div>
-
-            <WordReveal
-              className="font-display text-[2.5rem] sm:text-5xl lg:text-6xl tracking-tight text-white font-extrabold leading-[1.02] max-w-2xl mb-6"
-              segments={[
-                { text: 'Creamos el preu', breakAfter: 'sm' },
-                { text: 'que nos habría', breakAfter: 'sm' },
-                { text: 'gustado tener.', breakAfter: true },
-                { text: 'Nadie se queda afuera.', className: 'accent-serif text-programa' },
-              ]}
-            />
-
-            <motion.p {...fadeUp(0.15)} className="text-white/75 text-base sm:text-lg max-w-lg mb-8 leading-relaxed">
-              Cursos de máximo 20, clases en vivo que después puedes volver a ver y un profe al que le puedes preguntar todo. Pagas solo los ramos que tomas, desde $12.000 al mes. Y si no te alcanza, postulas a una beca.
-            </motion.p>
-
-            <motion.div {...fadeUp(0.2)} className="grid grid-cols-3 gap-3 sm:gap-4 border-y border-white/10 py-5 mb-8 max-w-xl">
-              <div>
-                <p className="text-[#D7E400] font-display font-extrabold text-base sm:text-xl uppercase">Marzo</p>
-                <p className="text-white/60 text-xs font-semibold mt-1 leading-snug">Inicio de Clases</p>
-              </div>
-              <div>
-                <p className="text-white font-display font-extrabold text-base sm:text-xl uppercase">100% Online</p>
-                <p className="text-white/60 text-xs font-semibold mt-1 leading-snug">Clases en Vivo</p>
-              </div>
-              <div>
-                <p className="text-[#D7E400] font-display font-extrabold text-base sm:text-xl uppercase">20 máx.</p>
-                <p className="text-white/60 text-xs font-semibold mt-1 leading-snug">Alumnos por curso</p>
-              </div>
-            </motion.div>
-
-            <motion.div {...fadeUp(0.25)} className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <a
-                href={WA_LINK}
-                className={`${BTN} bg-[#D7E400] text-[#071D49] hover:bg-white group shadow-xl`}
-              >
-                <span>INSCRIBIRME GRATIS</span>
-                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </a>
-              <a
-                href="https://www.youtube.com/@Laelinstituto/videos"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${BTN} border border-white/30 text-white hover:bg-white/10`}
-              >
-                <Video size={16} />
-                <span>CLASES EN YOUTUBE</span>
-              </a>
-            </motion.div>
+      <PageHero
+        eyebrow="Preu PAES 2027 · Desde $12.000/mes"
+        title="Creamos el preu que nos habría gustado tener."
+        accent="Nadie se queda afuera."
+        desc="Cursos de máximo 20, clases en vivo que después puedes volver a ver y un profe al que le puedes preguntar todo. Pagas solo los ramos que tomas. Y si no te alcanza, postulas a una beca."
+        stats={[['Marzo', 'Inicio de clases'], ['En vivo', 'Por Google Meet'], ['20 máx.', 'Por curso']]}
+        actions={<>
+          <Magnetic>
+            <a href={WA_LINK} data-cursor="Vamos" className={`${BTN} w-full sm:w-auto bg-[#D7E400] text-[#071D49] hover:bg-white`}>
+              Inscribirme gratis <ArrowRight size={16} />
+            </a>
+          </Magnetic>
+          <a href="https://www.youtube.com/@Laelinstituto/videos" target="_blank" rel="noopener noreferrer" className={`${BTN} border border-white/30 text-white hover:bg-white hover:text-[#071D49]`}>
+            <Video size={16} /> Clases en YouTube
+          </a>
+        </>}
+        aside={
+          <div className="relative hidden lg:block">
+            <Duotone src={studentImg} alt="Estudiante preparando la PAES con Instituto Lael" color="#D7E400" loading="eager" className="group aspect-[4/5] rounded-[40px]" />
+            <p className="absolute -left-6 bottom-10 bg-[#D7E400] text-[#071D49] rounded-full px-5 py-3 font-display font-extrabold text-xs uppercase tracking-wider shadow-xl flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-[#071D49] motion-safe:animate-pulse" aria-hidden="true" /> Inscripciones abiertas · 2027
+            </p>
           </div>
-
-          {/* Foto (solo escritorio: en celular alargaba el hero sin aportar info) */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1, ease }}
-            className="hidden lg:flex lg:col-span-5 relative justify-center items-center"
-          >
-            <div className="absolute inset-0 bg-[#D7E400]/5 rounded-[40px] border border-white/5 -rotate-3 translate-x-2 translate-y-2" aria-hidden="true" />
-            <div className="relative w-full max-w-[450px] aspect-square rounded-[40px] overflow-hidden border border-white/10 shadow-2xl bg-[#092254]">
-              <img
-                src={studentImg}
-                alt="Estudiante Preparando PAES con Instituto Lael"
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#071D49] via-transparent to-transparent opacity-80" />
-              <div className="absolute bottom-6 left-6 right-6 bg-[#071D49]/60 backdrop-blur-md border border-white/10 rounded-2xl p-4 flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-emerald-400" />
-                <p className="text-white text-xs font-semibold tracking-wide">Inscripciones abiertas · Ciclo 2027</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+        }
+      />
 
       {intensivoAbierto() ? <IntensivoPaes /> : <PaesEsteAnio />}
 

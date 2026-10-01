@@ -1,7 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import PageHero from '../../components/ui/PageHero';
+import Duotone from '../../components/ui/Duotone';
 import { motion } from 'framer-motion';
-import BrandArcs from '../../components/ui/BrandArcs';
 import { ArrowRight, MessageCircle, Check } from 'lucide-react';
 import { Empresa } from '../../components/icons/LaelIcons';
 import EmpresasForm from './EmpresasForm';
@@ -30,32 +31,17 @@ export default function Empresas() {
       </Helmet>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative -mt-20 pt-36 sm:pt-40 pb-20 sm:pb-28 px-5 sm:px-6 text-white overflow-hidden" style={{ backgroundColor: BLUE }}>
-        <div className="absolute inset-0 opacity-15 mix-blend-luminosity">
-          <img src={empresasImg} alt="" className="w-full h-full object-cover" />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/70 to-[#071D49]" />
-        <BrandArcs />
-        <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-6 text-programa">
-            Lael Empresas · Crecer juntos
-          </motion.p>
-          <motion.h1 {...fadeUp(0.1)} className="font-display text-white text-4xl sm:text-5xl lg:text-7xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6 sm:mb-8">
-            Capacitación que <br /> <span className="accent-serif text-programa">tu equipo sí usa.</span>
-          </motion.h1>
-          <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-            Talleres de inteligencia artificial, inglés y nivelación de estudios para tus trabajadores. Online, o presencial en Santiago. Nos cuentas qué necesitas y armamos la propuesta.
-          </motion.p>
-          <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#cotizar" className="inline-flex items-center justify-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[48px] px-8 py-4 rounded-2xl transition-all active:scale-95">
-              Pedir una propuesta <ArrowRight size={16} />
-            </a>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 border border-white/25 hover:border-white text-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[48px] px-8 py-4 rounded-2xl transition-all active:scale-95">
-              <MessageCircle size={16} /> Hablar por WhatsApp
-            </a>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Lael Empresas · Crecer juntos"
+        title="Capacitación que"
+        accent="tu equipo sí usa."
+        desc="Talleres de inteligencia artificial, inglés y nivelación de estudios para tus trabajadores. Online, o presencial en Santiago. Nos cuentas qué necesitas y armamos la propuesta."
+        actions={<>
+          <a href="#cotizar" className="inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[52px] px-8 rounded-full transition-colors bg-[#D7E400] text-[#071D49] hover:bg-white">Pedir una propuesta <ArrowRight size={16} /></a>
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[52px] px-8 rounded-full transition-colors border border-white/30 text-white hover:bg-white hover:text-[#071D49]"><MessageCircle size={16} /> Hablar por WhatsApp</a>
+        </>}
+        aside={<Duotone src={empresasImg} color="#C7D2E8" loading="eager" className="group hidden lg:block aspect-[4/5] rounded-[40px]" />}
+      />
 
       {/* ── SERVICIOS ────────────────────────────────────────────────── */}
       <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28">

@@ -1,7 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronRight, Zap, Instagram, Check } from 'lucide-react';
-import BrandArcs from '../../components/ui/BrandArcs';
+import PageHero from '../../components/ui/PageHero';
+import Duotone from '../../components/ui/Duotone';
 
 const BLUE = '#071D49';
 const FORM_URL = '/inscripcion?programa=ingles';
@@ -25,23 +26,14 @@ export const BTN_NAVY = 'inline-flex items-center justify-center gap-2 min-h-[48
 /* Hero azul común: eyebrow + H1 + párrafo + acciones */
 export function ProgramHero({ eyebrow, heading, desc, bg, children }) {
   return (
-    <section className="relative -mt-20 pt-36 sm:pt-40 pb-20 sm:pb-28 px-5 sm:px-6 text-white overflow-hidden" style={{ backgroundColor: BLUE }}>
-      <div className="absolute inset-0 opacity-20 mix-blend-luminosity">
-        <img src={bg} alt="" className="w-full h-full object-cover grayscale" />
-      </div>
-      <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/60 to-[#071D49]" />
-      <BrandArcs />
-      <div className="relative z-10 max-w-5xl mx-auto text-center">
-        <motion.p {...fadeUp(0)} className={`${EYEBROW_DARK} mb-6`}>{eyebrow}</motion.p>
-        <motion.h1 {...fadeUp(0.1)} className="font-display text-white text-[2.5rem] sm:text-6xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.02] mb-6 sm:mb-8">
-          {heading}
-        </motion.h1>
-        <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-          {desc}
-        </motion.p>
-        <motion.div {...fadeUp(0.3)}>{children}</motion.div>
-      </div>
-    </section>
+    <PageHero
+      eyebrow={eyebrow}
+      heading={heading}
+      desc={desc}
+      aside={bg && <Duotone src={bg} color="var(--programa)" loading="eager" className="group hidden lg:block aspect-[4/5] rounded-[40px]" />}
+    >
+      {children && <div className="mt-8">{children}</div>}
+    </PageHero>
   );
 }
 

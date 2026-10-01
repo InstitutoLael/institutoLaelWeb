@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import BrandArcs from '../components/ui/BrandArcs';
+import PageHero from '../components/ui/PageHero';
 import { Link } from 'react-router-dom';
 import { Search, ArrowRight, Calculator, Star, ArrowDown } from 'lucide-react';
 import CareerCard from '../components/calculadora/CareerCard';
@@ -130,29 +130,18 @@ export default function Calculadora() {
       </Helmet>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative -mt-20 pt-36 pb-14 sm:pb-16 px-5 sm:px-6 text-white overflow-hidden" style={{ backgroundColor: BLUE }}>
-        <BrandArcs />
-        <div className="relative max-w-4xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full text-[11px] font-bold uppercase tracking-[0.2em]" style={{ backgroundColor: YELLOW, color: BLUE }}>
-            <Calculator size={14} /> Gratis
-          </motion.div>
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.05] mb-5 text-white">
-            ¿Te alcanza para <br /> <span className="accent-serif text-programa">la carrera que quieres?</span>
-          </h1>
-          <p className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Pon tus puntajes, busca la carrera y te mostramos tu puntaje ponderado al tiro. Más de 2.000 carreras de 47 universidades.
-          </p>
-          <p className="mt-5 text-sm text-white/70 flex flex-wrap justify-center gap-x-5 gap-y-1">
-            <Link to="/glosario-paes" className="underline underline-offset-4 hover:text-white min-h-[32px] inline-flex items-center">¿Qué es el NEM o el ranking?</Link>
-            <Link to="/calendario-admision" className="underline underline-offset-4 hover:text-white min-h-[32px] inline-flex items-center">Fechas de la Admisión 2027</Link>
-          </p>
-        </div>
-      </section>
+      <PageHero eyebrow="Calculadora PAES · Gratis" title="¿Te alcanza para" accent="la carrera que quieres?">
+        <p>Pon tus puntajes, busca la carrera y te mostramos tu puntaje ponderado al tiro. Más de 2.000 carreras de 47 universidades.</p>
+        <p className="mt-5 text-sm text-white/75 flex flex-wrap gap-x-5 gap-y-1">
+          <Link to="/glosario-paes" className="underline underline-offset-4 hover:text-white min-h-[32px] inline-flex items-center">¿Qué es el NEM o el ranking?</Link>
+          <Link to="/calendario-admision" className="underline underline-offset-4 hover:text-white min-h-[32px] inline-flex items-center">Fechas de la Admisión 2027</Link>
+        </p>
+      </PageHero>
 
       <section className="px-4 sm:px-6 py-10 sm:py-12">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-6 items-start">
           {/* ── PUNTAJES ──────────────────────────────────────────── */}
-          <div className="bg-white rounded-[28px] p-5 sm:p-6 border border-[#071D49]/5 shadow-card lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
+          <div className="bg-white rounded-[28px] p-5 sm:p-6 border border-[#071D49]/5 shadow-card lg:sticky lg:top-28 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto" data-lenis-prevent>
             <h2 className="font-display text-lg font-extrabold uppercase tracking-tight mb-1">1. Tus puntajes</h2>
             <p className="text-sm text-[#071D49]/70 mb-4 leading-relaxed">De 100 a 1.000. Si no has dado la PAES, prueba con puntajes de ensayo.</p>
             <div className="grid grid-cols-2 gap-3">

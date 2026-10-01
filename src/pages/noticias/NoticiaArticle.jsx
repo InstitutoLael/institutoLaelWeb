@@ -8,7 +8,6 @@ import NoticiaBody from '../../components/noticias/NoticiaBody';
 import NoticiaCard from '../../components/noticias/NoticiaCard';
 import CategoryIcon from '../../components/noticias/CategoryIcon';
 import ShareBar from '../../components/noticias/ShareBar';
-import BrandArcs from '../../components/ui/BrandArcs';
 
 const SITE = 'https://www.institutolael.cl';
 
@@ -95,8 +94,7 @@ export default function NoticiaArticle() {
       </Helmet>
 
       {/* Encabezado */}
-      <header className="relative -mt-20 pt-36 sm:pt-40 pb-12 sm:pb-16 px-5 sm:px-6 bg-[#071D49] text-white overflow-hidden">
-        <BrandArcs />
+      <header className="grain relative -mt-20 pt-36 sm:pt-40 pb-12 sm:pb-16 px-5 sm:px-6 bg-[#071D49] text-white overflow-hidden">
         <div className="relative max-w-3xl mx-auto">
           <motion.nav {...fadeUp(0)} aria-label="Ruta de navegación" className="mb-6">
             <ol className="flex flex-wrap items-center gap-1 text-sm text-white/75">
@@ -113,7 +111,7 @@ export default function NoticiaArticle() {
             {post.category}
           </motion.span>
 
-          <motion.h1 {...fadeUp(0.1)} className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-[-0.02em] leading-[1.1] mb-5">
+          <motion.h1 {...fadeUp(0.1)} className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-[-0.04em] leading-[1] mb-6">
             {post.title}
           </motion.h1>
           <motion.p {...fadeUp(0.15)} className="text-white/75 text-base sm:text-lg leading-relaxed mb-6">

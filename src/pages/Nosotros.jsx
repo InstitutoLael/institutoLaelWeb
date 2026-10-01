@@ -4,6 +4,8 @@ import { Quote } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import diegoAvatar from '../assets/img/Equipo/diego-chaparro.webp';
 import SignificadoLael from '../components/SignificadoLael';
+import PageHero from '../components/ui/PageHero';
+import Duotone from '../components/ui/Duotone';
 import { HERO, HISTORY, PILLARS, TEAM, TIMELINE, CLOSING_QUOTE } from '../data/nosotros';
 
 // Brand Design Tokens
@@ -40,45 +42,21 @@ export default function Nosotros() {
       </Helmet>
 
       {/* ── 1. HERO ────────────────────────────────────────────────── */}
-      <section className="relative flex flex-col items-center justify-center px-5 sm:px-6 pt-28 sm:pt-32 pb-16 sm:pb-20 lg:min-h-[80vh] bg-[#F4F4F4]">
-        <div className="max-w-6xl w-full relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-          <motion.div {...fadeUp(0)} className="lg:col-span-7 text-left">
-            <Eyebrow className="mb-6">{HERO.eyebrow}</Eyebrow>
-            <h1
-              className="font-display text-4xl sm:text-5xl lg:text-[3.5rem] xl:text-6xl font-extrabold leading-[1.08] mb-6 sm:mb-8 uppercase tracking-tight"
-              style={{ color: BLUE }}
-            >
-              {HERO.title} <br />
-              <span className={`italic ${HIGHLIGHT}`}>{HERO.accent}</span>
-            </h1>
-            <p className="text-[#071D49]/70 text-base sm:text-lg leading-relaxed max-w-xl">
-              {HERO.description}
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1, ease }}
-            className="lg:col-span-5 relative flex justify-center"
-          >
-            <div className="aspect-[4/5] rounded-[28px] overflow-hidden border border-[#071D49]/10 shadow-lael relative w-full max-w-[340px] bg-[#092254]">
-              <img
-                src={diegoAvatar}
-                alt="Diego Chaparro - Fundador"
-                className="w-full h-full object-cover grayscale mix-blend-luminosity hover:grayscale-0 hover:mix-blend-normal transition-all duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#071D49] via-[#071D49]/30 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-8 text-left">
-                <p className="font-display text-[#D7E400] text-xs tracking-[0.2em] uppercase font-bold mb-2">Diego Chaparro</p>
-                <p className="text-white text-xl sm:text-2xl font-display font-extrabold leading-tight uppercase">
-                  "{HERO.founderQuote.line1} <br/> {HERO.founderQuote.line2}"
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        eyebrow={HERO.eyebrow}
+        title={HERO.title}
+        accent={HERO.accent}
+        desc={HERO.description}
+        aside={
+          <figure className="relative max-w-[420px] lg:ml-auto">
+            <Duotone src={diegoAvatar} alt="Diego Chaparro, fundador de Instituto Lael" color="#D7E400" loading="eager" className="group aspect-[4/5] rounded-[40px]" />
+            <figcaption className="relative -mt-24 mx-4 sm:mx-6 rounded-[28px] bg-[#D7E400] text-[#071D49] p-6 shadow-2xl" data-keep-light>
+              <p className="font-serif italic text-2xl sm:text-3xl leading-[1.1]">“{HERO.founderQuote.line1} {HERO.founderQuote.line2}”</p>
+              <p className="mt-3 text-xs font-bold uppercase tracking-[0.2em]">Diego Chaparro · Fundador</p>
+            </figcaption>
+          </figure>
+        }
+      />
 
       {/* ── 2. HISTORIA DETALLADA ─────────────────────────────────── */}
       <section className="py-16 sm:py-20 lg:py-28 px-5 sm:px-6 text-white relative" style={{ backgroundColor: BLUE }}>
@@ -127,7 +105,7 @@ export default function Nosotros() {
             <motion.div {...fadeUp(0)} className="max-w-2xl">
               <Eyebrow>En qué creemos</Eyebrow>
               <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.15] uppercase tracking-tight" style={{ color: BLUE }}>
-                Por qué hacemos <br/> <span className={`italic ${HIGHLIGHT}`}>lo que hacemos.</span>
+                Por qué hacemos <br/> <span className="accent-serif">lo que hacemos.</span>
               </h2>
             </motion.div>
             <p className="text-[#071D49]/70 text-base max-w-sm lg:pb-2">Son cuatro cosas que tratamos de cuidar en cada clase.</p>

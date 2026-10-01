@@ -312,3 +312,16 @@ html.dark .logo-adapt { --logo-ink: #FFFFFF; --logo-acc: #D7E400; }
 .page-hero-body:not(.is-center) .justify-center { justify-content: flex-start; }
 .page-hero-body:not(.is-center) .mx-auto { margin-left: 0; }
 .page-hero-body:not(.is-center) .text-center { text-align: left; }
+
+/* 404: la paloma cruza la pantalla, volando en ondas */
+@keyframes lael-404-fly {
+  0%   { transform: translate(-15vw, 70vh) rotate(-8deg); }
+  25%  { transform: translate(20vw, 45vh) rotate(-14deg); }
+  50%  { transform: translate(50vw, 55vh) rotate(-6deg); }
+  75%  { transform: translate(80vw, 25vh) rotate(-16deg); }
+  100% { transform: translate(115vw, 10vh) rotate(-10deg); }
+}
+.lael-404-dove { left: 0; top: 0; animation: lael-404-fly 9s cubic-bezier(.45,.05,.55,.95) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .lael-404-dove { animation: none; transform: translate(80vw, 20vh); }
+}

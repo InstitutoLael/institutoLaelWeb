@@ -58,9 +58,11 @@ export default function Contacto() {
             {/* Left Col: Info */}
             <motion.div {...fadeUp(0)} className="lg:col-span-5 space-y-10 text-left">
               <div>
-                <h1 className="text-4xl sm:text-5xl lg:text-[2.6rem] xl:text-5xl font-display font-extrabold mb-6 uppercase tracking-[-0.03em] leading-[1.05]">
-                  Estamos a un <br />
-                  <span className="bg-[#071D49] text-[#D7E400] px-2 box-decoration-clone">mensaje de distancia.</span>
+                <p className="flex items-center gap-3 text-[11px] sm:text-xs font-bold uppercase tracking-[0.22em] mb-6 text-[#071D49]/75">
+                  <span className="text-[#071D49]">Lael</span><span className="w-8 h-px bg-[#071D49]/30" aria-hidden="true" />Contacto
+                </p>
+                <h1 className="text-[2.8rem] sm:text-6xl font-display font-extrabold mb-6 tracking-[-0.04em] leading-[0.95]">
+                  Estamos a un <span className="accent-serif">mensaje de distancia.</span>
                 </h1>
                 <p className="text-[#071D49]/70 text-base sm:text-lg leading-relaxed max-w-md">
                   Da lo mismo si eres alumno, apoderado o quieres saber cómo inscribirte. Escríbenos por WhatsApp o correo y te respondemos.

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import PageHero from '../components/ui/PageHero';
 import { motion } from 'framer-motion';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Check, ArrowRight, Loader2, ShieldCheck, MessageCircle } from 'lucide-react';
@@ -186,19 +187,9 @@ export default function Inscripcion() {
         <meta name="description" content="Inscríbete en Instituto Lael: preu PAES, inglés, Escuela de Sueños, verano y más. Matrícula gratis. Asegura tu cupo en 2 minutos." />
       </Helmet>
 
-      <section className="relative -mt-20 pt-36 pb-14 px-5 sm:px-6 text-white" style={{ backgroundColor: BLUE }}>
-        <div className="max-w-3xl mx-auto text-center">
-          <motion.p initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="text-xs font-bold uppercase tracking-[0.2em] mb-4" style={{ color: YELLOW }}>
-            Matrícula gratis
-          </motion.p>
-          <h1 className="font-display text-4xl sm:text-5xl font-extrabold uppercase tracking-tight leading-[1.05] mb-4 text-white">
-            Asegura tu cupo
-          </h1>
-          <p className="text-white/75 text-base sm:text-lg max-w-xl mx-auto">
-            Te toma 2 minutos. Después te escribimos para confirmar horarios. Inscribirte no te compromete a pagar nada todavía.
-          </p>
-        </div>
-      </section>
+      <PageHero eyebrow="Matrícula gratis" title="Asegura" accent="tu cupo.">
+        <p>Te toma 2 minutos. Después te escribimos para confirmar horarios. Inscribirte no te compromete a pagar nada todavía.</p>
+      </PageHero>
 
       <section className="px-4 sm:px-6 py-10 sm:py-14">
         <form onSubmit={onSubmit} noValidate className="max-w-3xl mx-auto space-y-6">

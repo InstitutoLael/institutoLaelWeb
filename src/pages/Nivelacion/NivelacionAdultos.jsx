@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import WordReveal from '../../components/ui/WordReveal';
-import BrandArcs from '../../components/ui/BrandArcs';
 import { Helmet } from 'react-helmet-async';
+import PageHero from '../../components/ui/PageHero';
+import Duotone from '../../components/ui/Duotone';
 import { Link } from 'react-router-dom';
 import { ArrowRight, MessageCircle, ChevronDown } from 'lucide-react';
 import { Calendario, Corazon } from '../../components/icons/LaelIcons';
@@ -64,45 +64,20 @@ export default function NivelacionAdultos() {
       </Helmet>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="relative -mt-20 pt-36 sm:pt-40 pb-20 sm:pb-28 px-5 sm:px-6 text-white overflow-hidden" style={{ backgroundColor: BLUE }}>
-        <div className="absolute inset-0 opacity-20 mix-blend-luminosity">
-          <img src={adultosImg} alt="" className="w-full h-full object-cover" />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#071D49]/60 to-[#071D49]" />
-        <BrandArcs />
-        <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <motion.p {...fadeUp(0)} className="text-xs font-bold uppercase tracking-[0.2em] mb-6 text-programa">
-            {ADULT_HERO.eyebrow}
-          </motion.p>
-          <WordReveal
-            className="font-display text-white text-[2.5rem] sm:text-6xl lg:text-7xl font-extrabold tracking-[-0.03em] leading-[1.02] mb-6 sm:mb-8"
-            delay={0.1}
-            segments={[
-              { text: ADULT_HERO.title, breakAfter: true },
-              { text: ADULT_HERO.accent, className: 'accent-serif text-programa' },
-            ]}
-          />
-          <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-            {ADULT_HERO.desc}
-          </motion.p>
-          <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/inscripcion?programa=adultos" className="inline-flex items-center justify-center gap-2 bg-[#D7E400] text-[#071D49] hover:bg-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[48px] px-8 py-4 rounded-2xl transition-all active:scale-95">
-              Quiero terminar mis estudios <ArrowRight size={16} />
-            </a>
-            <a href="#niveles" className="inline-flex items-center justify-center gap-2 border border-white/25 hover:border-white text-white font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[48px] px-8 py-4 rounded-2xl transition-all active:scale-95">
-              Ver niveles
-            </a>
-          </motion.div>
-          <motion.div {...fadeUp(0.4)} className="grid grid-cols-3 gap-4 border-t border-white/10 pt-8 mt-14 max-w-xl mx-auto">
-            {[['Gratis', 'Preparación'], ['20:00', 'Clases en la noche'], ['+18', 'Años']].map(([v, l]) => (
-              <div key={l}>
-                <p className="font-display font-extrabold text-xl text-programa">{v}</p>
-                <p className="text-white/60 text-xs font-bold uppercase tracking-wider mt-1">{l}</p>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        eyebrow={ADULT_HERO.eyebrow}
+        title={ADULT_HERO.title}
+        accent={ADULT_HERO.accent}
+        desc={ADULT_HERO.desc}
+        stats={[['Gratis', 'Preparación'], ['20:00', 'Clases en la noche'], ['+18', 'Años']]}
+        actions={<>
+          <a href="/inscripcion?programa=adultos" data-cursor="Vamos" className="inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[52px] px-8 rounded-full transition-colors bg-[#D7E400] text-[#071D49] hover:bg-white">
+            Quiero terminar mis estudios <ArrowRight size={16} />
+          </a>
+          <a href="#niveles" className="inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[52px] px-8 rounded-full transition-colors border border-white/30 text-white hover:bg-white hover:text-[#071D49]">Ver niveles</a>
+        </>}
+        aside={<Duotone src={adultosImg} color="#FF9F7A" loading="eager" className="group hidden lg:block aspect-[4/5] rounded-[40px]" />}
+      />
 
       {/* ── NIVELES ──────────────────────────────────────────────────── */}
       <section id="niveles" className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28 scroll-mt-24">

@@ -35,7 +35,7 @@ export default function Navbar() {
   const drawerRef = useRef(null);
 
   // Páginas con fondo claro (Navbar fondo blanco/sólido siempre)
-  const isLightPage = ['/nosotros', '/contacto', '/transparencia', '/diagnostico', '/casos-reales', '/privacidad', '/iconos'].includes(location.pathname);
+  const isLightPage = ['/contacto', '/diagnostico', '/iconos'].includes(location.pathname);
 
   // Scroll detection
   useEffect(() => {

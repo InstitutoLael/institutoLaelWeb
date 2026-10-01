@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import PageHero from '../components/ui/PageHero';
 import { Link } from 'react-router-dom';
 import { Star, MessageCircle, ArrowRight } from 'lucide-react';
 import { Empresa } from '../components/icons/LaelIcons';
@@ -26,23 +27,9 @@ export default function CasosReales() {
       </Helmet>
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
-      <section className="px-5 sm:px-6 pt-28 sm:pt-32 pb-12 sm:pb-16">
-        <div className="max-w-4xl mx-auto text-center">
-          <motion.p {...fadeUp(0)} className="inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.2em] mb-4">
-            <span aria-hidden="true" className="inline-block w-5 h-1.5 rounded-full bg-[#D7E400]" />
-            Testimonios
-          </motion.p>
-          <motion.h1
-            {...fadeUp(0.1)}
-            className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-tight leading-[1.1] mb-6"
-          >
-            Lo que cuentan <br /> <span className="bg-[#071D49] text-[#D7E400] px-3 box-decoration-clone">quienes estudiaron aquí.</span>
-          </motion.h1>
-          <motion.p {...fadeUp(0.2)} className="text-[#071D49]/70 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-            Cada testimonio es de una persona real que nos dio permiso para publicarlo. Preferimos tener pocos y verdaderos que muchos inventados.
-          </motion.p>
-        </div>
-      </section>
+      <PageHero eyebrow="Testimonios" title="Lo que cuentan" accent="quienes estudiaron aquí.">
+        <p>Cada testimonio es de una persona real que nos dio permiso para publicarlo. Preferimos tener pocos y verdaderos que muchos inventados.</p>
+      </PageHero>
 
       {/* ── ALUMNOS ──────────────────────────────────────────────────── */}
       <section className="px-5 sm:px-6 pb-16 sm:pb-20 lg:pb-28">

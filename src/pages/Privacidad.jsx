@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import PageHero from '../components/ui/PageHero';
 
 // Política de privacidad según la Ley 19.628 y la Ley 21.719 (vigente desde
 // el 1 de diciembre de 2026). Si cambia qué datos se piden o con quién se
@@ -110,17 +111,9 @@ export default function Privacidad() {
         <meta name="description" content="Qué datos personales pide Instituto Lael, para qué los usa, con quién los comparte y cómo puedes ejercer tus derechos." />
       </Helmet>
 
-      <section className="px-5 sm:px-6 pt-28 sm:pt-32 pb-10 sm:pb-12">
-        <div className="max-w-3xl mx-auto">
-          <motion.p {...fadeUp(0)} className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] mb-5"><span className="w-4 h-1 rounded-full bg-[#D7E400]" aria-hidden="true" />Tus datos</motion.p>
-          <motion.h1 {...fadeUp(0.1)} className="font-display text-4xl sm:text-5xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-6">
-            Política de privacidad
-          </motion.h1>
-          <motion.p {...fadeUp(0.2)} className="text-[#071D49]/70 text-base sm:text-lg leading-relaxed">
-            Te contamos en simple qué datos te pedimos, para qué y qué puedes hacer con ellos. Última actualización: {UPDATED}.
-          </motion.p>
-        </div>
-      </section>
+      <PageHero eyebrow="Tus datos" title="Política de" accent="privacidad.">
+        <p>Te contamos en simple qué datos te pedimos, para qué y qué puedes hacer con ellos. Última actualización: {UPDATED}.</p>
+      </PageHero>
 
       <section className="px-5 sm:px-6 pb-16 sm:pb-20 lg:pb-28">
         <div className="max-w-3xl mx-auto bg-white rounded-[28px] p-6 sm:p-12 border border-[#071D49]/5 shadow-card space-y-10">

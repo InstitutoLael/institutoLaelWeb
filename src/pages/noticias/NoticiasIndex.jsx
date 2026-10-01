@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import PageHero from '../../components/ui/PageHero';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Clock } from 'lucide-react';
 import { CATEGORIES, getAllNoticias, formatFecha } from '../../data/noticias';
@@ -39,21 +40,10 @@ export default function NoticiasIndex() {
       </Helmet>
 
       {/* Encabezado */}
-      <section className="relative -mt-20 pt-36 sm:pt-40 pb-12 sm:pb-16 px-5 sm:px-6 bg-[#071D49] text-white">
-        <div className="max-w-6xl mx-auto">
-          <motion.p {...fadeUp(0)} className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] mb-5 text-[#D7E400]">
-            <span className="w-4 h-1 rounded-full bg-[#D7E400]" aria-hidden="true" />
-            Noticias y guías
-          </motion.p>
-          <motion.h1 {...fadeUp(0.1)} className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold uppercase tracking-[-0.03em] leading-[1.05] mb-5 max-w-3xl">
-            Lo que necesitas saber, en simple
-          </motion.h1>
-          <motion.p {...fadeUp(0.2)} className="text-white/75 text-base sm:text-lg leading-relaxed max-w-2xl">
-            Fechas de la PAES, exámenes libres y validación de estudios, explicados paso a paso y con las fuentes oficiales a la vista.
-          </motion.p>
-
+      <PageHero eyebrow="Noticias y guías" title="Lo que necesitas saber," accent="en simple.">
+        <p>Fechas de la PAES, exámenes libres y validación de estudios, explicados paso a paso y con las fuentes oficiales a la vista.</p>
           {/* Filtro por categoría */}
-          <motion.div {...fadeUp(0.3)} className="mt-8 -mx-5 px-5 sm:mx-0 sm:px-0 overflow-x-auto">
+          <motion.div {...fadeUp(0.3)} className="mt-8 -mx-5 px-5 text-base sm:mx-0 sm:px-0 overflow-x-auto">
             <div role="group" aria-label="Filtrar por tema" className="flex gap-2 w-max sm:w-auto sm:flex-wrap">
               {cats.map((c) => {
                 const active = c === cat;
@@ -75,8 +65,7 @@ export default function NoticiasIndex() {
               })}
             </div>
           </motion.div>
-        </div>
-      </section>
+      </PageHero>
 
       <section className="px-5 sm:px-6 pt-10 sm:pt-14 pb-16 sm:pb-20 lg:pb-28">
         <div className="max-w-6xl mx-auto">

@@ -1,5 +1,6 @@
 import { Corazon, Beca, Grupo, Escudo } from '../components/icons/LaelIcons';
 import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.webp";
+import barbaraPhoto from "../assets/img/Equipo/barbara-contreras-avatar.jpg";
 
 export const HERO = {
   eyebrow: "FUNDADO EN SANTIAGO DE CHILE · 2021",
@@ -69,6 +70,14 @@ export const TEAM = [
     subject: "Biología + Química",
     bio: "Hace biología y química. Explica directo y con calma, para que entiendas la materia en vez de aprenderla de memoria.",
     img: null,
+    confirmed: true
+  },
+  {
+    name: "Bárbara Contreras",
+    role: "Profe de Ciencias",
+    subject: "Ciencias (Biología o Química)",
+    bio: "Estudió en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender. Me motiva ayudar a los demás a aprender, despertar su curiosidad y demostrar que el conocimiento es aún más valioso cuando se comparte.\"",
+    img: barbaraPhoto,
     confirmed: true
   },
   {

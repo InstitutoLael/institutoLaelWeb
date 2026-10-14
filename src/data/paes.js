@@ -3,6 +3,7 @@ import { ahora } from '../lib/hidratacion';
 // === Sistema de Alto Rendimiento PAES Lael ===
 import { ClaseEnVivo, Guia, Ensayo, Acompanamiento, Grupo } from '../components/icons/LaelIcons';
 import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.webp";
+import barbaraPhoto from "../assets/img/Equipo/barbara-contreras-avatar.jpg";
 
 /* ──────────────────────────────────────────────────────────────────────────
    0. CONTENIDO DE LA PÁGINA /paes (LandingPAES.jsx)
@@ -28,7 +29,8 @@ export const LANDING_SUBJECTS = [
 
 export const LANDING_TEACHERS = [
   { name: "Diego Chaparro", subject: "Matemática M1 + M2", bio: "Fundó Lael en 2021 y hace las clases de matemática. Es exigente, pero si alguien se queda atrás, para y lo vuelve a explicar.", img: diegoPhoto },
-  { name: "Martín", subject: "Biología + Química", bio: "Hace biología y química. Explica directo y con calma, para que entiendas la materia en vez de aprenderla de memoria.", img: null }
+  { name: "Martín", subject: "Biología + Química", bio: "Hace biología y química. Explica directo y con calma, para que entiendas la materia en vez de aprenderla de memoria.", img: null },
+  { name: "Bárbara Contreras", subject: "Ciencias (Biología o Química)", bio: "Estudió en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender.\"", img: barbaraPhoto }
 ];
 
 export const LANDING_STEPS = [

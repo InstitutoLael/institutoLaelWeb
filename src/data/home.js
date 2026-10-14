@@ -1,6 +1,7 @@
 import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.webp';
 import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.webp';
 import diegoPhoto from '../assets/img/Equipo/diego-chaparro-avatar.webp';
+import barbaraPhoto from '../assets/img/Equipo/barbara-contreras-avatar.jpg';
 import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.webp';
 
 const YELLOW = '#D7E400';
@@ -28,6 +29,7 @@ export const WORLDS = [
 export const TEACHERS = [
   { id: 'diego', photo: diegoPhoto, name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática (Colegios & Preu)', initials: 'DC', color: YELLOW },
   { id: 'martin', name: 'Martín', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'MA', color: YELLOW },
+  { id: 'barbara', photo: barbaraPhoto, name: 'Bárbara Contreras', role: 'Profe de Ciencias', subject: 'Biología o Química', initials: 'BC', color: YELLOW },
   { id: 'monserrat', name: 'Monserrat González', role: 'Profe de Inglés', subject: 'Inglés', initials: 'MG', color: YELLOW },
 ];
 

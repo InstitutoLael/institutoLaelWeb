@@ -72,14 +72,6 @@ export const TEAM = [
     confirmed: true
   },
   {
-    name: "Kathy",
-    role: "Profe de HomeSchool",
-    subject: "Matemática M2 & HomeSchool",
-    bio: "Hace M2 y trabaja con alumnos de HomeSchool. Antes de pasar a la fórmula, se asegura de que entiendas de dónde sale.",
-    img: null,
-    confirmed: true
-  },
-  {
     name: "Próximamente CL",
     role: "Profe de Lenguaje",
     subject: "Competencia Lectora",

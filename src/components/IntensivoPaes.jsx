@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
-import { INTENSIVO, intensivoAbierto, clp } from '../data/paes';
+import { INTENSIVO, INTENSIVO_RAMOS_DISPONIBLES, intensivoAbierto, clp } from '../data/paes';
 import PaesCountdown from './PaesCountdown';
 
 // Intensivo de las últimas semanas antes de la PAES. Se oculta solo cuando
@@ -13,12 +13,15 @@ export default function IntensivoPaes() {
     <section id="intensivo" className="scroll-mt-24 px-5 sm:px-6 py-14 sm:py-16 bg-[#071D49] text-white border-t border-white/10">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 items-center">
         <div>
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#D7E400] mb-3">¿Das la PAES este año?</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#D7E400] mb-3">{i.nombre} · {i.lema}</p>
           <h2 className="font-display text-3xl sm:text-5xl font-extrabold tracking-tight leading-[1.05] mb-4">
-            {i.nombre}: <span className="accent-serif text-[#D7E400]">{i.semanas} semanas</span> para llegar mejor.
+            {i.semanas} semanas para dar <span className="accent-serif text-[#D7E400]">tu gran paso.</span>
           </h2>
-          <p className="text-white/75 leading-relaxed mb-6 max-w-xl">
-            {i.fechas}, por Google Meet. Repasamos lo que más se repite en la prueba y practicas con ensayos completos, con el reloj corriendo.
+          <p className="text-white/75 leading-relaxed mb-4 max-w-xl">
+            {i.fechas}, online y en vivo por Google Meet. Repasamos lo que más se repite en la prueba y llegas con un ensayo corregido a la PAES del {i.fechaPaes}.
+          </p>
+          <p className="text-sm text-white/85 mb-5">
+            <span className="font-bold text-[#D7E400]">Ramos:</span> {INTENSIVO_RAMOS_DISPONIBLES.map((r) => r.nombre).join(', ')}.
           </p>
           <ul className="space-y-2.5 mb-7">
             {i.incluye.map((t) => (
@@ -33,17 +36,21 @@ export default function IntensivoPaes() {
 
         <div className="rounded-[28px] bg-white text-[#071D49] p-6 sm:p-8 shadow-lael">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#071D49]/60 mb-4">Precio por todo el intensivo</p>
-          <div className="flex items-baseline justify-between gap-4 pb-4 border-b border-[#071D49]/10">
-            <span className="font-semibold">Una prueba</span>
-            <span className="font-display text-3xl font-extrabold">{clp(i.precioRamo)}</span>
-          </div>
-          <div className="flex items-baseline justify-between gap-4 py-4 border-b border-[#071D49]/10">
-            <span className="font-semibold">{i.packDesde} pruebas o más</span>
-            <span className="font-display text-3xl font-extrabold">{clp(i.precioPack)}</span>
-          </div>
-          <p className="text-sm text-[#071D49]/70 leading-relaxed mt-4 mb-6">
-            Con {i.packDesde} pruebas ya ahorras {clp(i.precioRamo * i.packDesde - i.precioPack)}, y si tomas más, el precio no sube. Inscripción abierta hasta el 2 de noviembre.
-          </p>
+          {i.precios.map((p) => (
+            <div key={p.ramos} className={`flex items-start justify-between gap-4 py-3.5 border-b border-[#071D49]/10 ${p.destacado ? '-mx-3 px-3 rounded-2xl bg-[#D7E400]/40 border-transparent' : ''}`}>
+              <div>
+                <span className="font-semibold">{p.label}</span>
+                {p.badge && <span className="ml-2 inline-block rounded-full bg-[#071D49] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 align-middle">{p.badge}</span>}
+                {p.ahorro && <span className="block text-xs font-semibold text-[#071D49]/70">Ahorras {clp(p.ahorro)}</span>}
+              </div>
+              <div className="text-right">
+                <span className="font-display text-2xl sm:text-3xl font-extrabold">{clp(p.total)}</span>
+                <span className="block text-xs text-[#071D49]/70">Sale a {clp(Math.round(p.total / p.ramos))} por ramo{p.ramos >= 4 ? ' o menos' : ''}</span>
+              </div>
+            </div>
+          ))}
+          <p className="text-sm font-semibold leading-relaxed mt-4">{i.notaPago}</p>
+          <p className="text-xs text-[#071D49]/70 leading-relaxed mt-1 mb-6">Descuentos: {i.descuentos}</p>
           <Link to="/inscripcion?programa=intensivo" className="min-h-[52px] w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#D7E400] text-[#071D49] hover:bg-[#071D49] hover:text-white transition-colors font-display font-extrabold text-sm uppercase tracking-wider">
             Inscribirme al intensivo <ArrowRight size={16} />
           </Link>

@@ -2,7 +2,7 @@
 // Programas del formulario de inscripción (/inscripcion?programa=<id>).
 // Para agregar un programa, suma un objeto a PROGRAMAS. Los códigos de curso
 // (cupo) deben coincidir con la hoja "Cursos" de la planilla de inscripciones.
-import { OBLIGATORIA_PRICE, ELECTIVA_PRICE, PACK_PRICE, PACK_MIN_SUBJECTS, INTENSIVO, DESCUENTO_SEMESTRE, DESCUENTO_ANIO, clp } from './paes';
+import { OBLIGATORIA_PRICE, ELECTIVA_PRICE, PACK_PRICE, PACK_MIN_SUBJECTS, INTENSIVO, INTENSIVO_RAMOS_DISPONIBLES, INTENSIVO_PRECIO_DESDE, precioIntensivoPorCantidad, DESCUENTO_SEMESTRE, DESCUENTO_ANIO, clp } from './paes';
 import { VERANO_COURSES } from './verano';
 
 export const PAES_RAMOS = [
@@ -23,15 +23,15 @@ export function precioPaes(cupos) {
   return { total: completo ? PACK_PRICE : suma, suma, completo, cantidad: ramos.length };
 }
 
-// Intensivo PAES: los mismos ramos con otro código de curso (int-m1, int-cl...)
-export const INTENSIVO_RAMOS = PAES_RAMOS.map((r) => ({ ...r, cupo: r.cupo.replace('paes-', 'int-') }));
+// Intensivo PAES: solo los ramos disponibles de esta edición (int-m1, int-m2...)
+export const INTENSIVO_RAMOS = INTENSIVO_RAMOS_DISPONIBLES;
 
-// Precio del intensivo completo (no es mensual)
+// Precio del intensivo completo (no es mensual), según cuántos ramos elige
 export function precioIntensivo(cupos) {
   const cantidad = INTENSIVO_RAMOS.filter((r) => cupos.includes(r.cupo)).length;
-  const suma = cantidad * INTENSIVO.precioRamo;
-  const completo = cantidad >= INTENSIVO.packDesde && suma > INTENSIVO.precioPack;
-  return { total: completo ? INTENSIVO.precioPack : suma, suma, completo, cantidad };
+  const p = precioIntensivoPorCantidad(cantidad);
+  const total = p ? p.total : 0;
+  return { total, suma: total + (p?.ahorro || 0), completo: Boolean(p?.ahorro), cantidad };
 }
 
 // Cómo quiere pagar el preu regular (queda anotado en el detalle)
@@ -46,7 +46,7 @@ export { clp };
 // tipo: 'inscripcion' (cuenta cupo) | 'clase-prueba' | 'aviso' (próximamente) | 'registro' (charlas y eventos gratis)
 export const PROGRAMAS = [
   { id: 'paes', nombre: 'Preu PAES 2027', tipo: 'inscripcion', eleccion: 'ramos', nota: 'Partimos la primera semana de marzo. Máximo 20 alumnos por curso.' },
-  { id: 'intensivo', nombre: 'Intensivo PAES (octubre y noviembre)', tipo: 'inscripcion', eleccion: 'ramos', nota: `${INTENSIVO.fechas}. ${clp(INTENSIVO.precioRamo)} por prueba, o ${clp(INTENSIVO.precioPack)} desde ${INTENSIVO.packDesde} pruebas, por todo el intensivo.` },
+  { id: 'intensivo', nombre: 'Intensivo PAES · Tu gran Paso (26 oct. al 27 nov.)', tipo: 'inscripcion', eleccion: 'ramos', nota: `${INTENSIVO.fechas}, online en vivo. Desde ${clp(INTENSIVO_PRECIO_DESDE)} por todo el intensivo; mientras más ramos, menos pagas por cada uno. ${INTENSIVO.notaPago}` },
   { id: 'clase-prueba', nombre: 'Clase de prueba gratis', tipo: 'clase-prueba', eleccion: 'prueba', nota: 'Vas a una clase en vivo sin compromiso y después decides.' },
   { id: 'ingles', nombre: 'Inglés · Hablar sin miedo', tipo: 'inscripcion', cupo: 'ingles', nota: '$19.990 al mes, o $16.990 al mes pagando el trimestre. Matrícula gratis.' },
   { id: 'espanol', nombre: 'Español para extranjeros', tipo: 'inscripcion', cupo: 'espanol', nota: 'Clases en vivo con Diego Chaparro.' },

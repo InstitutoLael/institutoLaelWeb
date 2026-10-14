@@ -11,7 +11,7 @@ import {
 import { sendForm, backendReady, whatsappUrl } from '../lib/backend';
 import useCupos from '../lib/useCupos';
 import { trackEvent } from '../utils/analytics';
-import { MESES_PREU, conDescuento } from '../data/paes';
+import { MESES_PREU, conDescuento, INTENSIVO } from '../data/paes';
 
 // El preu y el intensivo usan los mismos ramos con distinto código de curso
 const prefijo = (id) => (id === 'intensivo' ? 'int-' : 'paes-');
@@ -86,12 +86,14 @@ export default function Inscripcion() {
 
   const programa = programaPorId(programaId);
   const quedan = (codigo) => (cupos && cupos[codigo] ? cupos[codigo].quedan : null);
-  // Ramos sin cupo: la persona igual los puede elegir y queda en lista de espera
-  const ramosEspera = ramos.filter((r) => quedan(r) === 0);
-  const ramosCupo = ramos.filter((r) => quedan(r) !== 0);
-  const cursoLleno = Boolean(programa.cupo) && quedan(programa.cupo) === 0;
   const esIntensivo = programa.id === 'intensivo';
   const listaRamos = esIntensivo ? INTENSIVO_RAMOS : PAES_RAMOS;
+  // Solo cuentan los ramos que ofrece el programa (el intensivo no tiene todos)
+  const ramosValidos = ramos.filter((r) => listaRamos.some((x) => x.cupo === r));
+  // Ramos sin cupo: la persona igual los puede elegir y queda en lista de espera
+  const ramosEspera = ramosValidos.filter((r) => quedan(r) === 0);
+  const ramosCupo = ramosValidos.filter((r) => quedan(r) !== 0);
+  const cursoLleno = Boolean(programa.cupo) && quedan(programa.cupo) === 0;
   const precio = useMemo(() => (esIntensivo ? precioIntensivo : precioPaes)(ramosCupo), [esIntensivo, ramosCupo.join()]); // eslint-disable-line react-hooks/exhaustive-deps
   const formaPago = FORMAS_PAGO.find((p) => p.id === extras.pago) || FORMAS_PAGO[0];
   const cambiarPrograma = (id) => {
@@ -107,7 +109,7 @@ export default function Inscripcion() {
     if (programa.eleccion === 'ramos') {
       if (!ramosCupo.length) return `${ramosEspera.join(', ')} (lista de espera)`;
       const nombres = listaRamos.filter((r) => ramosCupo.includes(r.cupo)).map((r) => r.nombre).join(', ');
-      if (esIntensivo) return `${ramosCupo.join(', ')} (${nombres}) · ${clp(precio.total)} todo el intensivo${precio.completo ? ' (pack)' : ''}`;
+      if (esIntensivo) return `${ramosCupo.join(', ')} (${nombres}) · ${clp(precio.total)} todo el intensivo${extras.hermano ? ' · Tiene hermano en Lael' : ''}`;
       const notas = [formaPago.id !== 'mensual' && `Pago: ${formaPago.nombre}`, extras.hermano && 'Tiene hermano en Lael', extras.verano && 'Hizo el Arranque PAES'].filter(Boolean);
       return `${ramosCupo.join(', ')} (${nombres}) · ${clp(precio.total)}/mes${precio.completo ? ' Plan Completo' : ''}${notas.length ? ` · ${notas.join(' · ')}` : ''}`;
     }
@@ -120,7 +122,7 @@ export default function Inscripcion() {
   };
 
   const validar = () => {
-    if (programa.eleccion === 'ramos' && ramos.length === 0) return ['Elige al menos un ramo.', ''];
+    if (programa.eleccion === 'ramos' && ramosValidos.length === 0) return ['Elige al menos un ramo.', ''];
     if (['verano', 'prueba', 'nivel', 'asignatura'].includes(programa.eleccion) && !opcion) return ['Elige una opción en el paso 1.', ''];
     if (form.nombre.trim().length < 3) return ['Escribe tu nombre completo.', 'nombre'];
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.correo.trim())) return ['Revisa tu correo.', 'correo'];
@@ -144,7 +146,7 @@ export default function Inscripcion() {
     setEstado('enviando');
     const payload = {
       ...form,
-      tipo: cursoLleno || (programa.eleccion === 'ramos' && ramos.length && !ramosCupo.length) ? 'lista-espera' : programa.tipo,
+      tipo: cursoLleno || (programa.eleccion === 'ramos' && ramosValidos.length && !ramosCupo.length) ? 'lista-espera' : programa.tipo,
       cursos: programa.eleccion === 'ramos' ? ramosCupo : programa.cupo ? [programa.cupo] : [],
       lista_espera: programa.eleccion === 'ramos' ? ramosEspera : cursoLleno ? [programa.cupo] : [],
       programa: programa.nombre,
@@ -224,7 +226,7 @@ export default function Inscripcion() {
                         <span className="flex-1">
                           {r.nombre}
                           <span className={`block text-xs font-normal ${activo ? 'text-white/70' : 'text-[#071D49]/70'}`}>
-                            {r.obligatoria ? 'Obligatoria' : 'Electiva'}
+                            {esIntensivo ? 'Online en vivo' : r.obligatoria ? 'Obligatoria' : 'Electiva'}
                             {q != null && (lleno ? ' · Lleno: lista de espera' : ` · Quedan ${q} cupos`)}
                           </span>
                         </span>
@@ -240,7 +242,8 @@ export default function Inscripcion() {
                 {ramosCupo.length > 0 && (
                   <div className="mt-4 rounded-2xl p-4 flex items-center justify-between gap-4" style={{ backgroundColor: BLUE }}>
                     <div className="text-white">
-                      <p className="text-xs uppercase tracking-wider text-white/70 font-bold">{precio.completo ? (esIntensivo ? 'Pack intensivo' : 'Plan Completo') : `${precio.cantidad} ${esIntensivo ? 'prueba' : 'ramo'}${precio.cantidad > 1 ? 's' : ''}`}</p>
+                      <p className="text-xs uppercase tracking-wider text-white/70 font-bold">{precio.completo && !esIntensivo ? 'Plan Completo' : `${precio.cantidad} ramo${precio.cantidad > 1 ? 's' : ''}`}</p>
+                      {esIntensivo && precio.cantidad > 1 && <p className="text-xs text-white/70">Sale a {clp(Math.round(precio.total / precio.cantidad))} por ramo</p>}
                       {precio.completo && <p className="text-xs text-white/70">Ahorras {clp(precio.suma - precio.total)}{esIntensivo ? '' : ' al mes'}</p>}
                       {!esIntensivo && formaPago.pct && <p className="text-xs text-white/70">Pagando {formaPago.id === 'anio' ? `el año: ${clp(conDescuento(precio.total * MESES_PREU, formaPago.pct))} en total` : `por semestre: ${clp(conDescuento(precio.total, formaPago.pct))} al mes`}</p>}
                     </div>
@@ -269,6 +272,16 @@ export default function Inscripcion() {
                   </label>
                 </div>
                 <p className="text-xs text-[#071D49]/60 mt-2">Te confirmamos el descuento cuando te escribamos. No se suman entre sí: aplicamos el que más te convenga.</p>
+              </div>
+            )}
+
+            {esIntensivo && (
+              <div className="mt-6">
+                <label className="flex items-start gap-3 cursor-pointer min-h-[44px]">
+                  <input type="checkbox" className="mt-1 w-5 h-5 rounded border-[#071D49]/30 text-[#071D49] focus:ring-[#071D49]" checked={extras.hermano} onChange={(e) => setExtras((x) => ({ ...x, hermano: e.target.checked }))} />
+                  <span className="text-sm">Tengo un hermano o hermana que también se inscribe en Lael.</span>
+                </label>
+                <p className="text-xs text-[#071D49]/60 mt-2">{INTENSIVO.descuentos} {INTENSIVO.notaPago}</p>
               </div>
             )}
 

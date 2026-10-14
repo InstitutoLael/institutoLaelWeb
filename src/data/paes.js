@@ -18,7 +18,7 @@ export const LANDING_FEATURES = [
 
 export const LANDING_SUBJECTS = [
   { code: "M1", name: "Matemática M1", type: "Obligatoria", desc: "Números, álgebra, funciones, geometría y probabilidades. Todo lo que entra en la M1, con mucha ejercitación.", teacher: "Diego Chaparro" },
-  { code: "M2", name: "Matemática M2", type: "Electiva", desc: "Los contenidos más avanzados de matemática. La piden muchas carreras de ingeniería y ciencias.", teacher: "Diego Chaparro & Kathy" },
+  { code: "M2", name: "Matemática M2", type: "Electiva", desc: "Los contenidos más avanzados de matemática. La piden muchas carreras de ingeniería y ciencias.", teacher: "Diego Chaparro" },
   { code: "CL", name: "Competencia Lectora", type: "Obligatoria", desc: "Practicas con textos tipo PAES para entender bien qué te preguntan y descartar alternativas sin perder tiempo.", teacher: null },
   { code: "HIS", name: "Historia y Ciencias Sociales", type: "Electiva", desc: "Historia de Chile y del mundo en el siglo XX y formación ciudadana, con preguntas al estilo de la PAES.", teacher: null },
   { code: "BIO", name: "Ciencias: Biología", type: "Electiva", desc: "Célula, genética, evolución y el resto del temario oficial del DEMRE.", teacher: "Martín" },
@@ -28,8 +28,7 @@ export const LANDING_SUBJECTS = [
 
 export const LANDING_TEACHERS = [
   { name: "Diego Chaparro", subject: "Matemática M1 + M2", bio: "Fundó Lael en 2021 y hace las clases de matemática. Es exigente, pero si alguien se queda atrás, para y lo vuelve a explicar.", img: diegoPhoto },
-  { name: "Martín", subject: "Biología + Química", bio: "Hace biología y química. Explica directo y con calma, para que entiendas la materia en vez de aprenderla de memoria.", img: null },
-  { name: "Kathy", subject: "Matemática M2", bio: "Hace M2 y trabaja con alumnos de HomeSchool. Antes de pasar a la fórmula, se asegura de que entiendas de dónde sale.", img: null }
+  { name: "Martín", subject: "Biología + Química", bio: "Hace biología y química. Explica directo y con calma, para que entiendas la materia en vez de aprenderla de memoria.", img: null }
 ];
 
 export const LANDING_STEPS = [
@@ -182,20 +181,47 @@ export const DESCUENTOS_NOTA = 'Pago adelantado, hermanos y verano no se suman e
    ────────────────────────────────────────────────────────────────────────── */
 export const INTENSIVO = {
   nombre: 'Intensivo PAES',
-  inicio: '2026-10-13',
+  lema: 'Tu gran Paso',
+  inicio: '2026-10-26',
   fin: '2026-11-27',
-  cierreInscripcion: '2026-11-02',
-  fechas: 'Del 13 de octubre al 27 de noviembre',
-  semanas: 7,
-  precioRamo: 24990,
-  precioPack: 59990,
-  packDesde: 3,
-  incluye: [
-    '2 clases en vivo a la semana por prueba, enfocadas en lo que más se repite',
-    '3 ensayos completos con el tiempo de la PAES, corregidos',
-    'Grabaciones de todas las clases',
-    'Puedes pagarlo en 2 cuotas, en octubre y noviembre',
+  cierreInscripcion: '2026-10-25',
+  fechas: 'Del lunes 26 de octubre al viernes 27 de noviembre',
+  fechaPaes: '30 de noviembre, 1 y 2 de diciembre',
+  semanas: 5,
+  // Solo se muestran (y se pueden elegir) los ramos con disponible: true.
+  // cupo = código del curso en la hoja "Cursos" de la planilla.
+  ramos: [
+    { id: 'm1', cupo: 'int-m1', nombre: 'Matemática M1', disponible: true },
+    { id: 'm2', cupo: 'int-m2', nombre: 'Matemática M2', disponible: true },
+    { id: 'biologia', cupo: 'int-bio', nombre: 'Ciencias · Biología', disponible: true },
+    { id: 'quimica', cupo: 'int-qui', nombre: 'Ciencias · Química', disponible: true },
+    { id: 'fisica', cupo: 'int-fis', nombre: 'Ciencias · Física', disponible: false },
+    { id: 'lectora', cupo: 'int-cl', nombre: 'Competencia Lectora', disponible: false },
+    { id: 'historia', cupo: 'int-his', nombre: 'Historia y Cs. Sociales', disponible: false },
   ],
+  // Precio total por todo el intensivo según cuántos ramos elijas (4 o más = último)
+  precios: [
+    { ramos: 1, label: '1 ramo', total: 14990 },
+    { ramos: 2, label: '2 ramos', total: 26990, ahorro: 2990 },
+    { ramos: 3, label: '3 ramos', total: 36990, ahorro: 7980, destacado: true, badge: 'El más elegido' },
+    { ramos: 4, label: '4 ramos o más', total: 44990, ahorro: 14970 },
+  ],
+  descuentos: 'Hermanos 20% o "Trae un amigo" 20%. No son acumulables: máximo un descuento por alumno.',
+  notaPago: 'Pago único antes del 25 de octubre. Sin pago no hay acceso a las clases.',
+  incluye: [
+    'Cada ramo: 1 clase en vivo de 2 horas a la semana por Google Meet (10 horas en total)',
+    'Ensayo final con corrección',
+    'Grabaciones de todas las clases y material',
+    'Grupo de WhatsApp con el profe',
+    'Cursos de máximo 20 alumnos',
+  ],
+};
+export const INTENSIVO_RAMOS_DISPONIBLES = INTENSIVO.ramos.filter((r) => r.disponible);
+export const INTENSIVO_PRECIO_DESDE = INTENSIVO.precios[0].total;
+// Precio total del intensivo según la cantidad de ramos (0 ramos = $0)
+export const precioIntensivoPorCantidad = (n) => {
+  if (n <= 0) return null;
+  return INTENSIVO.precios.reduce((elegido, p) => (n >= p.ramos ? p : elegido), INTENSIVO.precios[0]);
 };
 export const intensivoAbierto = (hoy = new Date(ahora())) => hoy < new Date(`${INTENSIVO.cierreInscripcion}T23:59:59-03:00`);
 

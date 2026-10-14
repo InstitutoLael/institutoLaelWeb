@@ -3,7 +3,7 @@ import { primeraPintura } from '../lib/hidratacion';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
-import { intensivoAbierto, INTENSIVO, clp } from '../data/paes';
+import { intensivoAbierto, INTENSIVO, INTENSIVO_PRECIO_DESDE, clp } from '../data/paes';
 
 // Aviso superior. Solo información verdadera: nada de cupos o cuentas
 // regresivas inventadas.
@@ -40,7 +40,7 @@ export default function UrgencyBanner() {
             <p className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.06em] leading-tight" style={{ color: '#071D49' }}>
               {intensivoAbierto() ? (
                 <>
-                  {INTENSIVO.nombre}: {INTENSIVO.semanas} semanas antes de la prueba, desde {clp(INTENSIVO.precioRamo)}.{' '}
+                  {INTENSIVO.nombre} "{INTENSIVO.lema}": parte el 26 de octubre, desde {clp(INTENSIVO_PRECIO_DESDE)}. Inscripciones hasta el 25.{' '}
                   <Link to="/paes#intensivo" onClick={closeBanner} className="underline underline-offset-2">Ver intensivo</Link>
                 </>
               ) : (

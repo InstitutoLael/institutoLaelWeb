@@ -1,5 +1,6 @@
 import { Corazon, Beca, Grupo, Escudo } from '../components/icons/LaelIcons';
 import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.webp";
+import martinPhoto from "../assets/img/Equipo/martin-vargas-avatar.jpg";
 import barbaraPhoto from "../assets/img/Equipo/barbara-contreras-avatar.jpg";
 
 export const HERO = {
@@ -65,11 +66,11 @@ export const TEAM = [
     confirmed: true
   },
   {
-    name: "Martín",
+    name: "Martín Vargas",
     role: "Profe de Ciencias",
-    subject: "Biología + Química",
-    bio: "Hace biología y química. Explica directo y con calma, para que entiendas la materia en vez de aprenderla de memoria.",
-    img: null,
+    subject: "Biología",
+    bio: "\"Cada célula de tu cuerpo está trabajando en equipo para que hoy cumplas tus metas, no les falles.\"",
+    img: martinPhoto,
     confirmed: true
   },
   {

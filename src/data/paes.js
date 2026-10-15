@@ -3,6 +3,7 @@ import { ahora } from '../lib/hidratacion';
 // === Sistema de Alto Rendimiento PAES Lael ===
 import { ClaseEnVivo, Guia, Ensayo, Acompanamiento, Grupo } from '../components/icons/LaelIcons';
 import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.webp";
+import martinPhoto from "../assets/img/Equipo/martin-vargas-avatar.jpg";
 import barbaraPhoto from "../assets/img/Equipo/barbara-contreras-avatar.jpg";
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -22,14 +23,14 @@ export const LANDING_SUBJECTS = [
   { code: "M2", name: "Matemática M2", type: "Electiva", desc: "Los contenidos más avanzados de matemática. La piden muchas carreras de ingeniería y ciencias.", teacher: "Diego Chaparro" },
   { code: "CL", name: "Competencia Lectora", type: "Obligatoria", desc: "Practicas con textos tipo PAES para entender bien qué te preguntan y descartar alternativas sin perder tiempo.", teacher: null },
   { code: "HIS", name: "Historia y Ciencias Sociales", type: "Electiva", desc: "Historia de Chile y del mundo en el siglo XX y formación ciudadana, con preguntas al estilo de la PAES.", teacher: null },
-  { code: "BIO", name: "Ciencias: Biología", type: "Electiva", desc: "Célula, genética, evolución y el resto del temario oficial del DEMRE.", teacher: "Martín" },
+  { code: "BIO", name: "Ciencias: Biología", type: "Electiva", desc: "Célula, genética, evolución y el resto del temario oficial del DEMRE.", teacher: "Martín Vargas" },
   { code: "FIS", name: "Ciencias: Física", type: "Electiva", desc: "Ondas, mecánica, energía y electricidad, con ejemplos para que entiendas las fórmulas antes de usarlas.", teacher: null },
-  { code: "QUI", name: "Ciencias: Química", type: "Electiva", desc: "Modelo atómico, reacciones, química orgánica y termodinámica, explicadas paso a paso.", teacher: "Martín" }
+  { code: "QUI", name: "Ciencias: Química", type: "Electiva", desc: "Modelo atómico, reacciones, química orgánica y termodinámica, explicadas paso a paso.", teacher: "Bárbara Contreras" }
 ];
 
 export const LANDING_TEACHERS = [
   { name: "Diego Chaparro", subject: "Matemática M1 + M2", bio: "Fundó Lael en 2021 y hace las clases de matemática. Es exigente, pero si alguien se queda atrás, para y lo vuelve a explicar.", img: diegoPhoto },
-  { name: "Martín", subject: "Biología + Química", bio: "Hace biología y química. Explica directo y con calma, para que entiendas la materia en vez de aprenderla de memoria.", img: null },
+  { name: "Martín Vargas", subject: "Biología", bio: "\"Cada célula de tu cuerpo está trabajando en equipo para que hoy cumplas tus metas, no les falles.\"", img: martinPhoto },
   { name: "Bárbara Contreras", subject: "Biología + Química", bio: "Estudió en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender.\"", img: barbaraPhoto }
 ];
 

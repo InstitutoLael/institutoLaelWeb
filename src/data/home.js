@@ -1,6 +1,7 @@
 import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.webp';
 import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.webp';
 import diegoPhoto from '../assets/img/Equipo/diego-chaparro-avatar.webp';
+import martinPhoto from '../assets/img/Equipo/martin-vargas-avatar.jpg';
 import barbaraPhoto from '../assets/img/Equipo/barbara-contreras-avatar.jpg';
 import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.webp';
 
@@ -13,8 +14,8 @@ export const OBLIGATORIAS = [
 
 export const ELECTIVAS = [
   { code: 'M2', name: 'Matemática M2', doc: 'Diego Chaparro' },
-  { code: 'BIO', name: 'Biología', doc: 'Martín' },
-  { code: 'QUI', name: 'Química', doc: 'Martín' },
+  { code: 'BIO', name: 'Biología', doc: 'Martín Vargas' },
+  { code: 'QUI', name: 'Química', doc: 'Bárbara Contreras' },
   { code: 'FIS', name: 'Física', doc: null },
   { code: 'HIS', name: 'Historia', doc: null }
 ];
@@ -28,7 +29,7 @@ export const WORLDS = [
 
 export const TEACHERS = [
   { id: 'diego', photo: diegoPhoto, name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática (Colegios & Preu)', initials: 'DC', color: YELLOW },
-  { id: 'martin', name: 'Martín', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'MA', color: YELLOW },
+  { id: 'martin', photo: martinPhoto, name: 'Martín Vargas', role: 'Profe de Ciencias', subject: 'Biología', initials: 'MA', color: YELLOW },
   { id: 'barbara', photo: barbaraPhoto, name: 'Bárbara Contreras', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'BC', color: YELLOW },
   { id: 'monserrat', name: 'Monserrat González', role: 'Profe de Inglés', subject: 'Inglés', initials: 'MG', color: YELLOW },
 ];

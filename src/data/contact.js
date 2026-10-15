@@ -16,6 +16,11 @@ export const CONTACT_INFO = {
         user: "@Laelinstituto",
         url: "https://www.youtube.com/@Laelinstituto"
     },
+    // Enlace para dejar una reseña en el perfil de Google de Lael
+    googleReview: {
+        label: "Reseña en Google",
+        url: "https://g.page/r/CdaV7i90HUt6EBI/review"
+    },
     schedule: {
         week: "Escríbenos cuando quieras",
         label: "Respondemos por WhatsApp"

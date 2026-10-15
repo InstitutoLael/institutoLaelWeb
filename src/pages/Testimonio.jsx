@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Loader2, ArrowRight } from 'lucide-react';
 import { Corazon } from '../components/icons/LaelIcons';
 import { sendForm, backendReady, whatsappUrl } from '../lib/backend';
+import { CONTACT_INFO } from '../data/contact';
 
 const BLUE = '#071D49';
 const YELLOW = '#D7E400';
@@ -48,6 +49,7 @@ export default function Testimonio() {
       </Helmet>
       <PageHero eyebrow="Ex alumnos" title="Cuéntanos" accent="cómo te fue.">
         <p>Tu historia puede ayudar a alguien que todavía no se atreve a empezar.</p>
+        <p className="mt-3 text-sm">¿Tienes cuenta de Google? También puedes contarlo en una <a href={CONTACT_INFO.googleReview.url} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 font-semibold">reseña en Google</a>.</p>
       </PageHero>
 
       <section className="px-4 sm:px-6 py-10 sm:py-14">
@@ -56,7 +58,11 @@ export default function Testimonio() {
             <Corazon size={40} className="mx-auto mb-4" style={{ color: BLUE }} />
             <h2 className="font-display text-2xl font-extrabold uppercase tracking-tight mb-3">¡Gracias de corazón!</h2>
             <p className="text-[#071D49]/75 mb-6">Lo vamos a leer con calma. Si nos diste permiso, pronto lo verás en el sitio.</p>
-            <Link to="/casos-reales" className="inline-flex items-center gap-2 font-bold underline">Ver otras historias <ArrowRight size={16} /></Link>
+            <p className="text-sm text-[#071D49]/75 mb-6">Si quieres, también puedes dejar tu opinión en Google: ayuda a que otras personas encuentren Lael.</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href={CONTACT_INFO.googleReview.url} target="_blank" rel="noopener noreferrer" className="min-h-[48px] inline-flex items-center justify-center gap-2 rounded-2xl bg-[#D7E400] text-[#071D49] px-6 font-display font-extrabold text-sm uppercase tracking-wider">Opinar en Google <ArrowRight size={16} /></a>
+              <Link to="/casos-reales" className="inline-flex items-center gap-2 font-bold underline">Ver otras historias <ArrowRight size={16} /></Link>
+            </div>
           </div>
         ) : (
           <form onSubmit={onSubmit} noValidate className="max-w-2xl mx-auto bg-white rounded-[28px] p-5 sm:p-8 border border-[#071D49]/5 shadow-card space-y-4">

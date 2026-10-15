@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, MessageCircle } from 'lucide-react';
 import { BLUE, YELLOW, fadeUp, Btn, PageHero, SectionHead } from './shared';
 import { ALUMNOS_HERO, ALUMNOS_CARDS, ALUMNOS_CONTACTO } from '../../data/alumnos';
+import { CONTACT_INFO } from '../../data/contact';
 
 function CardLink({ href, children }) {
   const cls = 'inline-flex items-center gap-2 min-h-[44px] mt-5 font-display font-extrabold text-xs uppercase tracking-wider underline underline-offset-4 decoration-2 decoration-[#D7E400] hover:text-[#0B2A66]';
@@ -82,10 +83,11 @@ export default function Alumnos() {
 
       {/* ── MÁS PARA TI ──────────────────────────────────────────────── */}
       <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {[
             { to: '/orientacion', title: 'Orientación vocacional', desc: 'Si estás en el Plan Completo del preu PAES, tu sesión es gratis.', label: 'Ver orientación' },
             { to: '/calculadora', title: 'Calculadora PAES', desc: 'Calcula tu puntaje ponderado con las ponderaciones oficiales.', label: 'Ir a la calculadora' },
+            { to: CONTACT_INFO.googleReview.url, title: 'Tu opinión en Google', desc: 'Cuéntanos cómo te ha ido, lo bueno y lo que podemos mejorar. Ayuda a que otras personas encuentren Lael.', label: 'Opinar en Google' },
           ].map((r, i) => (
             <motion.div key={r.to} {...fadeUp(i * 0.08)} className="rounded-[28px] p-6 sm:p-8 bg-white border border-[#071D49]/5 shadow-card flex flex-col">
               <h3 className="font-display text-lg font-extrabold uppercase tracking-tight mb-2">{r.title}</h3>

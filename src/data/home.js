@@ -14,8 +14,8 @@ export const OBLIGATORIAS = [
 
 export const ELECTIVAS = [
   { code: 'M2', name: 'Matemática M2', doc: 'Diego Chaparro' },
-  { code: 'BIO', name: 'Biología', doc: 'Martín Vargas' },
-  { code: 'QUI', name: 'Química', doc: 'Bárbara Contreras' },
+  { code: 'BIO', name: 'Biología', doc: 'Martín / Bárbara' },
+  { code: 'QUI', name: 'Química', doc: 'Martín / Bárbara' },
   { code: 'FIS', name: 'Física', doc: null },
   { code: 'HIS', name: 'Historia', doc: null }
 ];
@@ -29,7 +29,7 @@ export const WORLDS = [
 
 export const TEACHERS = [
   { id: 'diego', photo: diegoPhoto, name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática (Colegios & Preu)', initials: 'DC', color: YELLOW },
-  { id: 'martin', photo: martinPhoto, name: 'Martín Vargas', role: 'Profe de Ciencias', subject: 'Biología', initials: 'MA', color: YELLOW },
+  { id: 'martin', photo: martinPhoto, name: 'Martín Vargas', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'MA', color: YELLOW },
   { id: 'barbara', photo: barbaraPhoto, name: 'Bárbara Contreras', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'BC', color: YELLOW },
   { id: 'monserrat', name: 'Monserrat González', role: 'Profe de Inglés', subject: 'Inglés', initials: 'MG', color: YELLOW },
 ];

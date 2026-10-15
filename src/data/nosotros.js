@@ -68,7 +68,7 @@ export const TEAM = [
   {
     name: "Martín Vargas",
     role: "Profe de Ciencias",
-    subject: "Biología",
+    subject: "Biología + Química",
     bio: "\"Cada célula de tu cuerpo está trabajando en equipo para que hoy cumplas tus metas, no les falles.\"",
     img: martinPhoto,
     confirmed: true

@@ -75,7 +75,7 @@ export const TEAM = [
   {
     name: "Bárbara Contreras",
     role: "Profe de Ciencias",
-    subject: "Ciencias (Biología o Química)",
+    subject: "Biología + Química",
     bio: "Estudió en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender. Me motiva ayudar a los demás a aprender, despertar su curiosidad y demostrar que el conocimiento es aún más valioso cuando se comparte.\"",
     img: barbaraPhoto,
     confirmed: true

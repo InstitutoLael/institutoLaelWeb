@@ -30,7 +30,7 @@ export const LANDING_SUBJECTS = [
 export const LANDING_TEACHERS = [
   { name: "Diego Chaparro", subject: "Matemática M1 + M2", bio: "Fundó Lael en 2021 y hace las clases de matemática. Es exigente, pero si alguien se queda atrás, para y lo vuelve a explicar.", img: diegoPhoto },
   { name: "Martín", subject: "Biología + Química", bio: "Hace biología y química. Explica directo y con calma, para que entiendas la materia en vez de aprenderla de memoria.", img: null },
-  { name: "Bárbara Contreras", subject: "Ciencias (Biología o Química)", bio: "Estudió en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender.\"", img: barbaraPhoto }
+  { name: "Bárbara Contreras", subject: "Biología + Química", bio: "Estudió en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender.\"", img: barbaraPhoto }
 ];
 
 export const LANDING_STEPS = [

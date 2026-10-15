@@ -29,7 +29,7 @@ export const WORLDS = [
 export const TEACHERS = [
   { id: 'diego', photo: diegoPhoto, name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática (Colegios & Preu)', initials: 'DC', color: YELLOW },
   { id: 'martin', name: 'Martín', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'MA', color: YELLOW },
-  { id: 'barbara', photo: barbaraPhoto, name: 'Bárbara Contreras', role: 'Profe de Ciencias', subject: 'Biología o Química', initials: 'BC', color: YELLOW },
+  { id: 'barbara', photo: barbaraPhoto, name: 'Bárbara Contreras', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'BC', color: YELLOW },
   { id: 'monserrat', name: 'Monserrat González', role: 'Profe de Inglés', subject: 'Inglés', initials: 'MG', color: YELLOW },
 ];
 

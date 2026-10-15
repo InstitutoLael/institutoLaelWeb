@@ -31,21 +31,23 @@ export default function IntensivoPaesPage() {
       url: `${SITE}/intensivo-paes`,
       inLanguage: 'es-CL',
       provider: { '@type': 'EducationalOrganization', name: 'Instituto Lael', url: `${SITE}/` },
-      offers: {
-        '@type': 'AggregateOffer',
-        priceCurrency: 'CLP',
-        lowPrice: INTENSIVO_PRECIO_DESDE,
-        highPrice: INTENSIVO.precios[INTENSIVO.precios.length - 1].total,
-        offerCount: INTENSIVO.precios.length,
+      offers: INTENSIVO.precios.map((p) => ({
+        '@type': 'Offer',
+        name: `${INTENSIVO.nombre}: ${p.label}`,
         category: 'Paid',
-      },
+        price: p.total,
+        priceCurrency: 'CLP',
+        availability: 'https://schema.org/InStock',
+        validThrough: `${INTENSIVO.cierreInscripcion}T23:59:59-03:00`,
+        url: `${SITE}/inscripcion?programa=intensivo`,
+      })),
       hasCourseInstance: {
         '@type': 'CourseInstance',
         courseMode: 'Online',
         startDate: INTENSIVO.inicio,
         endDate: INTENSIVO.fin,
         location: { '@type': 'VirtualLocation', url: `${SITE}/intensivo-paes` },
-        courseWorkload: 'PT2H semanales por ramo',
+        courseWorkload: 'PT10H', // 10 horas por ramo en todo el intensivo
       },
     },
     {

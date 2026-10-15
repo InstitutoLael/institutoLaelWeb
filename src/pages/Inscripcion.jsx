@@ -155,10 +155,20 @@ export default function Inscripcion() {
       _t: Date.now() - started.current,
     };
     trackEvent('inscripcion_enviada', { programa: programa.id });
+    // Inscripción guardada de verdad: evento estándar de Google ("generate_lead").
+    // En Analytics está marcado como evento clave y Google Ads lo usa como conversión.
+    const marcarInscripcion = (via) => trackEvent('generate_lead', {
+      programa: programa.id,
+      tipo: payload.tipo,
+      via,
+      currency: 'CLP',
+      value: programa.eleccion === 'ramos' ? precio.total : 0,
+    });
 
     if (backendReady()) {
       try {
         await sendForm(payload);
+        marcarInscripcion('planilla');
         navigate(`/gracias?programa=${programa.id}`, { state: { nombre: form.nombre.split(' ')[0], programa: programa.nombre, tipo: payload.tipo } });
         return;
       } catch (err) {
@@ -179,6 +189,7 @@ export default function Inscripcion() {
       `${form.quiere_beca ? 'Me interesa postular a beca.\n' : ''}${form.referido ? `Vengo de parte de: ${form.referido}\n` : ''}` +
       `${form.comentario ? `Comentario: ${form.comentario}` : ''}`;
     window.open(whatsappUrl(texto), '_blank', 'noopener');
+    marcarInscripcion('whatsapp');
     navigate(`/gracias?programa=${programa.id}`, { state: { nombre: form.nombre.split(' ')[0], programa: programa.nombre, tipo: payload.tipo, viaWhatsapp: true } });
   };
 

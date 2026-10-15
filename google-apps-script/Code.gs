@@ -12,8 +12,10 @@
  *    siguiente, manda la encuesta de mitad de semestre en las fechas que
  *    elijas y te avisa si se liberó un cupo con gente en lista de espera.
  *  - Mantiene la hoja "Resumen" con números y gráficos.
- *  - Le entrega al sitio SOLO datos públicos: cupos por curso y testimonios
- *    marcados con "SI".
+ *  - Una vez al día baja las reseñas de tu perfil de Google a la hoja
+ *    "Reseñas Google" (ver conectarGoogle más abajo).
+ *  - Le entrega al sitio SOLO datos públicos: cupos por curso, testimonios
+ *    marcados con "SI" y las reseñas de Google marcadas con "SI".
  *
  *  Seguridad:
  *  - El sitio puede AGREGAR filas, pero nunca LEER datos personales.
@@ -237,6 +239,7 @@ function doGet(e) {
   try {
     if (accion === 'cupos') return json_({ ok: true, cupos: leerCupos_() });
     if (accion === 'testimonios') return json_({ ok: true, testimonios: leerTestimonios_() });
+    if (accion === 'resenas') return json_({ ok: true, resenas: leerResenas_() });
     return json_({ ok: false, error: 'accion_desconocida' });
   } catch (err) {
     registrar_('error_get', String(err));
@@ -501,6 +504,7 @@ function tareasDiarias() {
   try { if (String(conf[CONF_RECORDAR] || 'SI').toUpperCase() === 'SI') recordarClasesDePrueba_(); } catch (err) { registrar_('error_recordatorio', String(err)); }
   try { encuestaMitadDeSemestre_(conf); } catch (err) { registrar_('error_encuesta', String(err)); }
   try { avisarCuposLiberados_(); } catch (err) { registrar_('error_cupos', String(err)); }
+  try { sincronizarResenas(); } catch (err) { registrar_('error_resenas', String(err)); }
 }
 
 // Un día antes de la clase de prueba (columna "Fecha clase de prueba")
@@ -692,4 +696,131 @@ function probarCorreo() {
   const d = { quiere_beca: true, edad: '17', apoderado_nombre: 'Apoderado de prueba', apoderado_telefono: '+56 9 1111 1111', como_conocio: 'Instagram' };
   correoConfirmacion_('inscripcion', { nombre: 'Diego Prueba', correo: CONFIG.AVISOS_A, programa: 'Preu PAES 2027', espera: [], d });
   avisarNuevo_('inscripcion', { nombre: 'Diego Prueba', correo: CONFIG.AVISOS_A, telefonoOriginal: '+56 9 6462 6568', programa: 'Preu PAES 2027', detalle: 'paes-m1, paes-cl · $28.000/mes', espera: [], d });
+}
+
+// ── Reseñas de Google ─────────────────────────────────────────────────────
+// Baja las reseñas del Perfil de Empresa de Lael a la hoja "Reseñas Google"
+// y el sitio muestra las que tengan "SI" en "Mostrar en el sitio". Llegan
+// todas con "SI": las malas también se muestran, que es lo honesto. Si una
+// reseña es spam o tiene datos personales, cámbiala a "NO".
+// Necesita acceso a la API de Perfil de Empresa: ver INSTRUCCIONES.md.
+const RESENAS = {
+  HOJA: 'Reseñas Google',
+  COLUMNAS: ['Fecha', 'Nombre', 'Estrellas', 'Reseña', 'Respuesta de Lael', 'Mostrar en el sitio (SI/NO)', 'ID (no tocar)'],
+  MAX_SITIO: 12, // cuántas reseñas (las más recientes) se mandan al sitio
+};
+const ESTRELLAS_ = { ONE: 1, TWO: 2, THREE: 3, FOUR: 4, FIVE: 5 };
+
+function apiGoogle_(url) {
+  const res = UrlFetchApp.fetch(url, {
+    headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() },
+    muteHttpExceptions: true,
+  });
+  const code = res.getResponseCode();
+  if (code !== 200) throw new Error('API de Google ' + code + ': ' + res.getContentText().slice(0, 300));
+  return JSON.parse(res.getContentText() || '{}');
+}
+
+// Ejecútala UNA vez a mano (cuando Google apruebe el acceso): busca tu
+// perfil de empresa, guarda cuál es y baja las reseñas por primera vez.
+function conectarGoogle() {
+  const props = PropertiesService.getScriptProperties();
+  const cuentas = apiGoogle_('https://mybusinessaccountmanagement.googleapis.com/v1/accounts').accounts || [];
+  for (let i = 0; i < cuentas.length; i++) {
+    const c = cuentas[i];
+    const locs = apiGoogle_('https://mybusinessbusinessinformation.googleapis.com/v1/' + c.name + '/locations?readMask=name,title&pageSize=100').locations || [];
+    locs.forEach((l) => Logger.log('Encontré: ' + l.title + ' (' + c.name + '/' + l.name + ')'));
+    const lael = locs.filter((l) => /lael/i.test(l.title))[0] || locs[0];
+    if (lael) {
+      props.setProperty('GBP_UBICACION', c.name + '/' + lael.name);
+      Logger.log('Conectado con: ' + lael.title);
+      sincronizarResenas();
+      Logger.log('Listo: revisa la hoja "' + RESENAS.HOJA + '".');
+      return;
+    }
+  }
+  Logger.log('No encontré ningún perfil de empresa en esta cuenta. ¿Entraste con la cuenta dueña del perfil?');
+}
+
+// Corre sola todos los días (tareasDiarias). También puedes ejecutarla a mano.
+function sincronizarResenas() {
+  const props = PropertiesService.getScriptProperties();
+  const ruta = props.getProperty('GBP_UBICACION');
+  if (!ruta) return; // todavía no se ejecutó conectarGoogle
+
+  let todas = [];
+  let token = '';
+  let promedio = 0;
+  let total = 0;
+  do {
+    const r = apiGoogle_('https://mybusiness.googleapis.com/v4/' + ruta + '/reviews?pageSize=50' + (token ? '&pageToken=' + encodeURIComponent(token) : ''));
+    todas = todas.concat(r.reviews || []);
+    promedio = r.averageRating || promedio;
+    total = r.totalReviewCount || total;
+    token = r.nextPageToken || '';
+  } while (token && todas.length < 1000);
+
+  const hoja = asegurarHoja_(SpreadsheetApp.getActiveSpreadsheet(), RESENAS.HOJA, RESENAS.COLUMNAS);
+  const n = RESENAS.COLUMNAS.length;
+  // Respeta lo que hayas cambiado a mano en "Mostrar en el sitio"
+  const antes = {};
+  if (hoja.getLastRow() > 1) {
+    hoja.getRange(2, 1, hoja.getLastRow() - 1, n).getValues().forEach((f) => { if (f[6]) antes[String(f[6])] = f[5]; });
+  }
+  const filas = todas
+    .sort((a, b) => String(b.createTime).localeCompare(String(a.createTime)))
+    .map((r) => [
+      new Date(r.createTime),
+      limpiar_((r.reviewer && r.reviewer.displayName) || 'Anónimo', 80),
+      ESTRELLAS_[r.starRating] || 0,
+      limpiar_(textoOriginal_(r.comment), 3000),
+      limpiar_(textoOriginal_(r.reviewReply && r.reviewReply.comment), 3000),
+      antes[r.reviewId] || 'SI',
+      r.reviewId,
+    ]);
+  if (hoja.getLastRow() > 1) hoja.getRange(2, 1, hoja.getLastRow() - 1, n).clearContent();
+  if (filas.length) {
+    hoja.getRange(2, 1, filas.length, n).setValues(filas);
+    hoja.getRange(2, 1, filas.length, 1).setNumberFormat('dd-mm-yyyy');
+    hoja.getRange(2, 6, filas.length, 1).setDataValidation(
+      SpreadsheetApp.newDataValidation().requireValueInList(['SI', 'NO'], true).build());
+  }
+  props.setProperty('GBP_PROMEDIO', String(promedio || 0));
+  props.setProperty('GBP_TOTAL', String(total || todas.length));
+}
+
+// Google agrega traducciones automáticas: "(Translated by Google) ... (Original) ..."
+function textoOriginal_(t) {
+  const s = String(t || '');
+  const i = s.indexOf('(Original)');
+  return (i >= 0 ? s.slice(i + 10) : s.replace(/\(Translated by Google\)[\s\S]*$/, '')).trim();
+}
+
+// "Camila Jara Pérez" → "Camila J." (el nombre ya es público en Google,
+// pero en el sitio mostramos solo nombre e inicial)
+function nombreCorto_(nombre) {
+  const p = String(nombre).replace(/^'/, '').trim().split(/\s+/);
+  return p.length > 1 ? p[0] + ' ' + p[1].charAt(0).toUpperCase() + '.' : p[0];
+}
+
+function leerResenas_() {
+  const props = PropertiesService.getScriptProperties();
+  const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(RESENAS.HOJA);
+  const tz = Session.getScriptTimeZone();
+  const filas = !hoja || hoja.getLastRow() < 2 ? [] : hoja.getRange(2, 1, hoja.getLastRow() - 1, RESENAS.COLUMNAS.length).getValues();
+  const lista = filas
+    .filter((f) => String(f[5]).toUpperCase() === 'SI' && String(f[3]).trim())
+    .slice(0, RESENAS.MAX_SITIO)
+    .map((f) => ({
+      nombre: nombreCorto_(f[1]),
+      estrellas: Number(f[2]) || 0,
+      texto: String(f[3]).replace(/^'/, ''),
+      respuesta: String(f[4]).replace(/^'/, ''),
+      fecha: f[0] instanceof Date ? Utilities.formatDate(f[0], tz, 'yyyy-MM-dd') : '',
+    }));
+  return {
+    promedio: Number(props.getProperty('GBP_PROMEDIO')) || null,
+    total: Number(props.getProperty('GBP_TOTAL')) || filas.length,
+    lista,
+  };
 }

@@ -50,3 +50,10 @@ export async function getTestimonios() {
   const json = await getPublic('testimonios');
   return json ? json.testimonios : [];
 }
+
+// Reseñas del perfil de Google (las baja la planilla una vez al día).
+// Devuelve { promedio, total, lista: [{ nombre, estrellas, texto, respuesta, fecha }] } o null.
+export async function getResenas() {
+  const json = await getPublic('resenas');
+  return json && json.resenas && json.resenas.lista && json.resenas.lista.length ? json.resenas : null;
+}

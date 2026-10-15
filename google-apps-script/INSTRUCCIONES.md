@@ -67,3 +67,41 @@ Esta versión agrega correos con el diseño de Lael, becas, lista de espera, enc
 - **Clase de prueba:** cuando acuerdes la fecha con alguien, escríbela en la columna **Fecha clase de prueba**. El día anterior le llega un recordatorio solo.
 - **Encuesta:** en las fechas de la hoja **Configuración** (15 de mayo y 1 de octubre) se manda sola a quienes están en estado **Confirmado** o **Pagó**. Las respuestas quedan en la hoja **Encuestas** y te avisamos si alguien pone nota 4 o menos.
 - **Colores:** la columna Estado se pinta sola (amarillo = Nuevo, verde = Pagó...).
+
+---
+
+# Reseñas de Google en el sitio (octubre de 2026)
+
+La planilla baja una vez al día las reseñas de tu Perfil de Empresa a la hoja **Reseñas Google**, y el sitio las muestra solas en la portada y en /casos-reales. Mientras no esté conectado, el sitio simplemente no muestra ese bloque.
+
+Google exige que tu planilla tenga **acceso aprobado a la API de Perfil de Empresa**. Es gratis, pero Google lo revisa a mano (puede tardar días o semanas). Hazlo todo con **contacto@institutolael.cl**, que debe ser dueña o administradora del perfil.
+
+## Parte 1: crear el proyecto de Google Cloud (10 minutos, una vez)
+1. Entra a [console.cloud.google.com](https://console.cloud.google.com) y crea un proyecto llamado **Lael Sitio**.
+2. Menú **APIs y servicios → Pantalla de consentimiento de OAuth**: elige **Interno** (si no aparece, elige **Externo** y agrega contacto@institutolael.cl como usuario de prueba). Nombre de la app: `Lael Sitio`. Guarda.
+3. Menú **APIs y servicios → Biblioteca**: busca y **habilita** estas dos:
+   - **My Business Account Management API**
+   - **My Business Business Information API**
+4. En la página de inicio del proyecto, copia el **Número del proyecto** (son solo dígitos).
+
+## Parte 2: pedir el acceso (5 minutos)
+1. Abre el formulario de acceso a la API de Perfil de Empresa: [support.google.com/business/contact/api_default](https://support.google.com/business/contact/api_default).
+2. Elige la solicitud de acceso a la API, pega el **número del proyecto** y explica: *"Mostrar las reseñas de nuestro propio perfil en nuestro sitio web institutolael.cl"*.
+3. Google responde por correo. Cuando te aprueben, en la **Biblioteca** de la Parte 1 habilita también **Google My Business API**.
+
+## Parte 3: conectar la planilla (cuando te aprueben, 5 minutos)
+1. En la planilla: **Extensiones → Apps Script**.
+2. Rueda ⚙️ **Configuración del proyecto**:
+   - Marca **Mostrar el archivo de manifiesto "appsscript.json" en el editor**.
+   - En **Proyecto de Google Cloud Platform (GCP)**, aprieta **Cambiar proyecto**, pega el número del proyecto y confirma.
+3. Vuelve al **Editor**: pega el `Code.gs` nuevo (borrando el anterior) y reemplaza el contenido de `appsscript.json` por el de esta carpeta. Guarda.
+4. Elige la función **conectarGoogle** y aprieta **Ejecutar**. Acepta los permisos (ahora incluye "ver y administrar tu Perfil de Empresa").
+5. Revisa la hoja **Reseñas Google**: deberían estar tus reseñas.
+6. **Implementar → Administrar implementaciones → ✏️ Editar → Versión: Nueva versión → Implementar.** La URL no cambia.
+
+Desde ahí, se actualiza solo todos los días a las 9 de la mañana. Si quieres que una reseña nueva aparezca altiro, ejecuta **sincronizarResenas**.
+
+## En el día a día
+- Todas las reseñas llegan con **SI** en "Mostrar en el sitio", también las malas: mostrarlas es lo honesto y Google lo valora. Cambia a **NO** solo si es spam o tiene datos personales de alguien.
+- El sitio muestra las 12 más recientes que tengan texto (las que son solo estrellas igual cuentan en el promedio). El nombre aparece como "Nombre + inicial".
+- Si respondes una reseña en Google, la respuesta también aparece en el sitio.

@@ -19,7 +19,8 @@ export const CONTACT_INFO = {
     // Enlace para dejar una reseña en el perfil de Google de Lael
     googleReview: {
         label: "Reseña en Google",
-        url: "https://g.page/r/CdaV7i90HUt6EBI/review"
+        url: "https://g.page/r/CdaV7i90HUt6EBI/review",
+        perfil: "https://g.page/r/CdaV7i90HUt6EBI"
     },
     schedule: {
         week: "Escríbenos cuando quieras",

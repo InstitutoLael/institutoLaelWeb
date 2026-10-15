@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { Star, MessageCircle, ArrowRight } from 'lucide-react';
 import { Empresa } from '../components/icons/LaelIcons';
 import { TESTIMONIALS, COMPANY_TESTIMONIALS, SHARE_STORY_URL } from '../data/testimonials';
+import ResenasGoogle from '../components/ResenasGoogle';
 
 const BLUE = '#071D49';
 const YELLOW = '#D7E400';
@@ -69,6 +70,9 @@ export default function CasosReales() {
           ))}
         </div>
       </section>
+
+      {/* ── RESEÑAS DE GOOGLE (aparece solo si hay) ───────────────────── */}
+      <ResenasGoogle className="max-w-5xl mx-auto px-5 sm:px-6 pb-16 sm:pb-20 lg:pb-28" />
 
       {/* ── EMPRESAS ─────────────────────────────────────────────────── */}
       <section className="px-5 sm:px-6 py-16 sm:py-20 lg:py-28 text-white" style={{ backgroundColor: BLUE }}>

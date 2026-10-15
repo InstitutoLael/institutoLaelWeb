@@ -13,6 +13,7 @@ import CountUp from '../components/ui/CountUp';
 import Magnetic from '../components/experience/Magnetic';
 import { fadeUp } from '../components/ui/PageHero';
 import { TEACHERS, TESTIMONIALS } from '../data/home';
+import ResenasGoogle from '../components/ResenasGoogle';
 import { LANDING_FAQS } from '../data/paes';
 import { PROGRAMAS_CATALOGO } from '../data/catalogo';
 import PreciosInstituto from '../components/home/PreciosInstituto';
@@ -242,6 +243,7 @@ export default function Home() {
               </motion.figure>
             ))}
           </div>
+          <ResenasGoogle dark max={3} className="mt-20" />
           <div className="mt-16 flex flex-col sm:flex-row gap-3 sm:gap-8 sm:items-center">
             <Link to="/casos-reales" className="group inline-flex items-center gap-3 min-h-[44px] font-display text-sm font-extrabold uppercase tracking-wider text-white">
               <span className="w-10 h-10 rounded-full bg-[#D7E400] text-[#071D49] flex items-center justify-center group-hover:bg-white transition-colors"><ArrowRight size={16} /></span>

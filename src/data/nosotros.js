@@ -69,7 +69,7 @@ export const TEAM = [
     name: "Martín Vargas",
     role: "Profe de Ciencias",
     subject: "Biología + Química",
-    bio: "\"Cada célula de tu cuerpo está trabajando en equipo para que hoy cumplas tus metas, no les falles.\"",
+    bio: "Estudió en la Universidad de Talca. \"Cada célula de tu cuerpo está trabajando en equipo para que hoy cumplas tus metas, no les falles.\"",
     img: martinPhoto,
     confirmed: true
   },

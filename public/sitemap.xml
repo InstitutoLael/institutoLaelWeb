@@ -7,7 +7,12 @@
   </url>
   <url>
     <loc>https://www.institutolael.cl/paes</loc>
-    <lastmod>2026-09-23</lastmod>
+    <lastmod>2026-10-14</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.institutolael.cl/intensivo-paes</loc>
+    <lastmod>2026-10-14</lastmod>
     <priority>0.9</priority>
   </url>
   <url>

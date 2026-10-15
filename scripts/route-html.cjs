@@ -48,6 +48,7 @@ const PAGES = {
   '/diagnostico': 'src/pages/DiagnosticPage.jsx',
   '/testimonio': 'src/pages/Testimonio.jsx',
   '/noticias': 'src/pages/noticias/NoticiasIndex.jsx',
+  '/intensivo-paes': 'src/pages/Programas/IntensivoPaesPage.jsx',
   '/reforzamiento': 'src/pages/Programas/Reforzamiento.jsx',
   '/orientacion': 'src/pages/Programas/Orientacion.jsx',
   '/apoderados': 'src/pages/Programas/Apoderados.jsx',
@@ -61,7 +62,7 @@ const PAGES = {
 
 // Imagen para compartir de cada página (public/meta/og/<nombre>.png)
 const OG = {
-  '/paes': 'paes', '/adultos': 'adultos', '/idiomas': 'idiomas', '/idiomas/test': 'test-ingles',
+  '/paes': 'paes', '/intensivo-paes': 'paes', '/adultos': 'adultos', '/idiomas': 'idiomas', '/idiomas/test': 'test-ingles',
   '/espanol': 'espanol', '/en/spanish': 'en-spanish', '/lsch': 'lsch', '/verano': 'verano',
   '/empresas': 'empresas', '/calculadora': 'calculadora', '/calendario-admision': 'calendario',
   '/glosario-paes': 'glosario', '/becas': 'becas', '/metodo': 'metodo', '/sistema': 'metodo',

@@ -54,7 +54,7 @@ export default function IntensivoPaes() {
           <Link to="/inscripcion?programa=intensivo" className="min-h-[52px] w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-[#D7E400] text-[#071D49] hover:bg-[#071D49] hover:text-white transition-colors font-display font-extrabold text-sm uppercase tracking-wider">
             Inscribirme al intensivo <ArrowRight size={16} />
           </Link>
-          <p className="text-xs text-[#071D49]/60 mt-3 text-center">¿Prefieres partir con todo en marzo? Mira los planes del preu más abajo.</p>
+          <p className="text-xs text-[#071D49]/60 mt-3 text-center"><Link to="/intensivo-paes" className="underline underline-offset-2">Preguntas frecuentes del intensivo</Link> · ¿Prefieres partir en marzo? Mira el preu más abajo.</p>
         </div>
       </div>
     </section>

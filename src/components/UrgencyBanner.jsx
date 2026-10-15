@@ -41,7 +41,7 @@ export default function UrgencyBanner() {
               {intensivoAbierto() ? (
                 <>
                   {INTENSIVO.nombre} "{INTENSIVO.lema}": parte el 26 de octubre, desde {clp(INTENSIVO_PRECIO_DESDE)}. Inscripciones hasta el 25.{' '}
-                  <Link to="/paes#intensivo" onClick={closeBanner} className="underline underline-offset-2">Ver intensivo</Link>
+                  <Link to="/intensivo-paes" onClick={closeBanner} className="underline underline-offset-2">Ver intensivo</Link>
                 </>
               ) : (
                 <>

@@ -61,7 +61,7 @@ export default function IntensivoPaesPage() {
     <div className="w-full bg-[#F4F4F4] text-[#071D49] overflow-x-clip font-sans">
       <Helmet>
         <title>Intensivo PAES 2026 online | Instituto Lael</title>
-        <meta name="description" content="Intensivo PAES online en vivo, del 26 de octubre al 27 de noviembre: Matemática M1, M2, Biología y Química. Ensayo corregido y grabaciones. Desde $14.990 por todo el intensivo." />
+        <meta name="description" content="Intensivo PAES online en vivo, del 26 de octubre al 27 de noviembre: M1, M2, Competencia Lectora, Historia, Biología, Química y Física. Ensayo corregido. Desde $14.990." />
         <script type="application/ld+json">{jsonLd}</script>
       </Helmet>
 

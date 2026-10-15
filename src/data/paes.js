@@ -198,9 +198,9 @@ export const INTENSIVO = {
     { id: 'm2', cupo: 'int-m2', nombre: 'Matemática M2', disponible: true },
     { id: 'biologia', cupo: 'int-bio', nombre: 'Ciencias · Biología', disponible: true },
     { id: 'quimica', cupo: 'int-qui', nombre: 'Ciencias · Química', disponible: true },
-    { id: 'fisica', cupo: 'int-fis', nombre: 'Ciencias · Física', disponible: false },
-    { id: 'lectora', cupo: 'int-cl', nombre: 'Competencia Lectora', disponible: false },
-    { id: 'historia', cupo: 'int-his', nombre: 'Historia y Cs. Sociales', disponible: false },
+    { id: 'fisica', cupo: 'int-fis', nombre: 'Ciencias · Física', disponible: true },
+    { id: 'lectora', cupo: 'int-cl', nombre: 'Competencia Lectora', disponible: true },
+    { id: 'historia', cupo: 'int-his', nombre: 'Historia y Cs. Sociales', disponible: true },
   ],
   // Precio total por todo el intensivo según cuántos ramos elijas (4 o más = último)
   precios: [

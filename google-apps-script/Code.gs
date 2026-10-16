@@ -796,7 +796,7 @@ function textoOriginal_(t) {
   return (i >= 0 ? s.slice(i + 10) : s.replace(/\(Translated by Google\)[\s\S]*$/, '')).trim();
 }
 
-// "Camila Jara Pérez" → "Camila J." (el nombre ya es público en Google,
+// "María Pérez Soto" → "María P." (el nombre ya es público en Google,
 // pero en el sitio mostramos solo nombre e inicial)
 function nombreCorto_(nombre) {
   const p = String(nombre).replace(/^'/, '').trim().split(/\s+/);

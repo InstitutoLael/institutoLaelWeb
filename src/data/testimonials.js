@@ -7,16 +7,6 @@
 
 export const TESTIMONIALS = [
   {
-    id: 't-camila',
-    name: 'C. J.',
-    program: 'PAES · 2025',
-    quote: 'La forma tan única de los profesores de explicar me terminó facilitando muchos temas que después veía en clases del colegio.',
-    memory: 'Lo que más recuerdo, y hasta hoy considero mi parte favorita, eran los versículos al final de la clase del Profe Diego: siempre tenía una palabra de aliento.',
-    rating: 5,
-    initials: 'CJ',
-    featured: true,
-  },
-  {
     id: 't-matias',
     name: 'M. M.',
     program: 'PAES · 2023',
@@ -73,6 +63,7 @@ export const TESTIMONIALS = [
     memory: 'La profe Fer, la mejor de LSCh. Siempre cercana, dispuesta a explicarte una y mil veces, divertida y muy amable.',
     rating: 5,
     initials: 'C',
+    featured: true,
   },
   {
     id: 't-daniela',

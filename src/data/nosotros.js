@@ -54,7 +54,7 @@ export const TEAM = [
     name: "Diego Chaparro",
     role: "Fundador & Director",
     subject: "Matemática M1 + M2",
-    bio: "Fundó Lael en 2021 enseñando matemática gratis, convencido de que prepararse bien para la PAES no debería depender de cuánto puede pagar tu familia. Hoy dirige el instituto y sigue haciendo las clases de M1 y M2: explica paso a paso, no avanza si alguien quedó atrás y suele cerrar la clase con una palabra de aliento.",
+    bio: "Fundó Lael en 2021 enseñando matemática gratis, convencido de que prepararse bien para la PAES no debería depender de cuánto puede pagar tu familia. Hoy dirige el instituto y sigue haciendo las clases de M1 y M2: explica paso a paso y no avanza si alguien quedó atrás.",
     img: diegoPhoto,
     confirmed: true
   },

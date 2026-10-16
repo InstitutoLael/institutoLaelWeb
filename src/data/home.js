@@ -1,7 +1,8 @@
 import idiomasBg from '../assets/img/Home/mundo_idiomas_bg_1777943491283.webp';
 import lschBg from '../assets/img/Home/mundo_lsch_bg_1777943626827.webp';
-import diegoPhoto from '../assets/img/Equipo/diego-chaparro-avatar.webp';
+import diegoPhoto from '../assets/img/Equipo/diego-chaparro-avatar.jpg';
 import martinPhoto from '../assets/img/Equipo/martin-vargas-avatar.jpg';
+import catalinaPhoto from '../assets/img/Equipo/catalina-avatar.jpg';
 import barbaraPhoto from '../assets/img/Equipo/barbara-contreras-avatar.jpg';
 import adultosBg from '../assets/img/Home/mundo_adultos_bg_1777944001677.webp';
 
@@ -9,7 +10,7 @@ const YELLOW = '#D7E400';
 
 export const OBLIGATORIAS = [
   { code: 'M1', name: 'Matemática M1', doc: 'Diego Chaparro' },
-  { code: 'CL', name: 'Competencia Lectora', doc: null }
+  { code: 'CL', name: 'Competencia Lectora', doc: 'Catalina' }
 ];
 
 export const ELECTIVAS = [
@@ -28,9 +29,10 @@ export const WORLDS = [
 ];
 
 export const TEACHERS = [
-  { id: 'diego', photo: diegoPhoto, name: 'Diego Chaparro', role: 'Director & Profe', subject: 'Matemática (Colegios & Preu)', initials: 'DC', color: YELLOW },
+  { id: 'diego', photo: diegoPhoto, name: 'Diego Chaparro', role: 'Fundador & Profe', subject: 'Matemática M1 + M2', initials: 'DC', color: YELLOW },
   { id: 'martin', photo: martinPhoto, name: 'Martín Vargas', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'MA', color: YELLOW },
   { id: 'barbara', photo: barbaraPhoto, name: 'Bárbara Contreras', role: 'Profe de Ciencias', subject: 'Biología + Química', initials: 'BC', color: YELLOW },
+  { id: 'catalina', photo: catalinaPhoto, name: 'Catalina', role: 'Profe de Lenguaje', subject: 'Competencia Lectora', initials: 'CA', color: YELLOW },
   { id: 'monserrat', name: 'Monserrat González', role: 'Profe de Inglés', subject: 'Inglés', initials: 'MG', color: YELLOW },
 ];
 

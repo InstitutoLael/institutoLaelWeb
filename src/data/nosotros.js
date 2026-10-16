@@ -1,6 +1,7 @@
 import { Corazon, Beca, Grupo, Escudo } from '../components/icons/LaelIcons';
-import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.webp";
+import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.jpg";
 import martinPhoto from "../assets/img/Equipo/martin-vargas-avatar.jpg";
+import catalinaPhoto from "../assets/img/Equipo/catalina-avatar.jpg";
 import barbaraPhoto from "../assets/img/Equipo/barbara-contreras-avatar.jpg";
 
 export const HERO = {
@@ -52,8 +53,8 @@ export const TEAM = [
   {
     name: "Diego Chaparro",
     role: "Fundador & Director",
-    subject: "Matemáticas (Colegio & Preu)",
-    bio: "Fundó Lael en 2021 y hace las clases de matemática. Es exigente, pero si alguien se queda atrás, para y lo vuelve a explicar.",
+    subject: "Matemática M1 + M2",
+    bio: "Fundó Lael en 2021 enseñando matemática gratis, convencido de que prepararse bien para la PAES no debería depender de cuánto puede pagar tu familia. Hoy dirige el instituto y sigue haciendo las clases de M1 y M2: explica paso a paso, no avanza si alguien quedó atrás y suele cerrar la clase con una palabra de aliento.",
     img: diegoPhoto,
     confirmed: true
   },
@@ -82,12 +83,12 @@ export const TEAM = [
     confirmed: true
   },
   {
-    name: "Próximamente CL",
+    name: "Catalina",
     role: "Profe de Lenguaje",
     subject: "Competencia Lectora",
-    bio: "Estamos buscando profe de Competencia Lectora. Apenas esté confirmado, lo presentamos acá.",
-    img: null,
-    confirmed: false
+    bio: "Estudiante de Pedagogía en Castellano en la UMCE. Va a preparar Competencia Lectora en el intensivo.",
+    img: catalinaPhoto,
+    confirmed: true
   },
   {
     name: "Próximamente Electivos",

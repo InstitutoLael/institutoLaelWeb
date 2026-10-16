@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Quote } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import diegoAvatar from '../assets/img/Equipo/diego-chaparro.webp';
+import diegoAvatar from '../assets/img/Equipo/diego-chaparro.jpg';
 import SignificadoLael from '../components/SignificadoLael';
 import PageHero from '../components/ui/PageHero';
 import Duotone from '../components/ui/Duotone';

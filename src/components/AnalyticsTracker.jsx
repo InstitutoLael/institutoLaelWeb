@@ -1,12 +1,16 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { trackEvent } from '../utils/analytics';
+import { guardarReferido } from '../utils/referido';
 
 // 1) Cuenta cada cambio de página en Google Analytics (el sitio es de una sola
 //    página, así que sin esto solo se contaba la primera visita).
 // 2) Registra clics importantes: inscripción, WhatsApp, calculadora, teléfono.
 export default function AnalyticsTracker() {
   const location = useLocation();
+
+  // 3) Embajadores: si el link trae ?ref=CODIGO, lo guarda para la inscripción.
+  useEffect(() => { guardarReferido(location.search); }, [location.search]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && window.gtag) {

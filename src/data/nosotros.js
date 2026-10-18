@@ -2,6 +2,7 @@ import { Corazon, Beca, Grupo, Escudo } from '../components/icons/LaelIcons';
 import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.jpg";
 import martinPhoto from "../assets/img/Equipo/martin-vargas-avatar.jpg";
 import catalinaPhoto from "../assets/img/Equipo/catalina-avatar.jpg";
+import marjoriePhoto from "../assets/img/Equipo/marjorie-maldonado-avatar.jpg";
 import barbaraPhoto from "../assets/img/Equipo/barbara-contreras-avatar.jpg";
 
 export const HERO = {
@@ -83,6 +84,14 @@ export const TEAM = [
     confirmed: true
   },
   {
+    name: "Marjorie Maldonado",
+    role: "Profe de Ciencias",
+    subject: "Física",
+    bio: "Estudiante de Bioquímica. \"Me encanta explicar los fenómenos físicos de una manera agradable, para que entiendas la física no como algo complejo, sino como algo valioso: con paciencia y constancia, descubres las rarezas del universo.\"",
+    img: marjoriePhoto,
+    confirmed: true
+  },
+  {
     name: "Catalina",
     role: "Profe de Lenguaje",
     subject: "Competencia Lectora",
@@ -91,10 +100,10 @@ export const TEAM = [
     confirmed: true
   },
   {
-    name: "Próximamente Electivos",
-    role: "Profe de Ciencias / Historia",
-    subject: "Física + Historia",
-    bio: "Estamos buscando profes para Física e Historia. Apenas estén confirmados, los presentamos acá.",
+    name: "Próximamente Historia",
+    role: "Profe de Historia",
+    subject: "Historia y Ciencias Sociales",
+    bio: "Estamos buscando profe de Historia. Apenas esté confirmado, lo presentamos acá.",
     img: null,
     confirmed: false
   }

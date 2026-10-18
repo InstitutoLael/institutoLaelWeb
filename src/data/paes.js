@@ -5,6 +5,7 @@ import { ClaseEnVivo, Guia, Ensayo, Acompanamiento, Grupo } from '../components/
 import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.jpg";
 import martinPhoto from "../assets/img/Equipo/martin-vargas-avatar.jpg";
 import catalinaPhoto from "../assets/img/Equipo/catalina-avatar.jpg";
+import marjoriePhoto from "../assets/img/Equipo/marjorie-maldonado-avatar.jpg";
 import barbaraPhoto from "../assets/img/Equipo/barbara-contreras-avatar.jpg";
 
 /* ──────────────────────────────────────────────────────────────────────────
@@ -25,12 +26,13 @@ export const LANDING_SUBJECTS = [
   { code: "CL", name: "Competencia Lectora", type: "Obligatoria", desc: "Practicas con textos tipo PAES para entender bien qué te preguntan y descartar alternativas sin perder tiempo.", teacher: "Catalina" },
   { code: "HIS", name: "Historia y Ciencias Sociales", type: "Electiva", desc: "Historia de Chile y del mundo en el siglo XX y formación ciudadana, con preguntas al estilo de la PAES.", teacher: null },
   { code: "BIO", name: "Ciencias: Biología", type: "Electiva", desc: "Célula, genética, evolución y el resto del temario oficial del DEMRE.", teacher: "Martín Vargas & Bárbara Contreras" },
-  { code: "FIS", name: "Ciencias: Física", type: "Electiva", desc: "Ondas, mecánica, energía y electricidad, con ejemplos para que entiendas las fórmulas antes de usarlas.", teacher: null },
+  { code: "FIS", name: "Ciencias: Física", type: "Electiva", desc: "Ondas, mecánica, energía y electricidad, con ejemplos para que entiendas las fórmulas antes de usarlas.", teacher: "Marjorie Maldonado" },
   { code: "QUI", name: "Ciencias: Química", type: "Electiva", desc: "Modelo atómico, reacciones, química orgánica y termodinámica, explicadas paso a paso.", teacher: "Martín Vargas & Bárbara Contreras" }
 ];
 
 export const LANDING_TEACHERS = [
   { name: "Diego Chaparro", subject: "Matemática M1 + M2", bio: "Fundó Lael en 2021 enseñando matemática gratis, convencido de que prepararse bien para la PAES no debería depender de cuánto puede pagar tu familia. Hoy dirige el instituto y sigue haciendo las clases de M1 y M2: explica paso a paso y no avanza si alguien quedó atrás.", img: diegoPhoto },
+  { name: "Marjorie Maldonado", subject: "Física", bio: "Estudiante de Bioquímica. \"Me encanta explicar los fenómenos físicos de una manera agradable, para que entiendas la física no como algo complejo, sino como algo valioso: con paciencia y constancia, descubres las rarezas del universo.\"", img: marjoriePhoto },
   { name: "Catalina", subject: "Competencia Lectora", bio: "Estudiante de Pedagogía en Castellano en la Universidad Metropolitana de Ciencias de la Educación (UMCE). \"Creo en enseñar como el camino para formar mejores ciudadanos y una mejor sociedad.\"", img: catalinaPhoto },
   { name: "Martín Vargas", subject: "Biología + Química", bio: "Estudió en la Universidad de Talca. \"Cada célula de tu cuerpo está trabajando en equipo para que hoy cumplas tus metas, no les falles.\"", img: martinPhoto },
   { name: "Bárbara Contreras", subject: "Biología + Química", bio: "Estudiante de tercer año en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender.\"", img: barbaraPhoto }

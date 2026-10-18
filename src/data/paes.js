@@ -31,9 +31,9 @@ export const LANDING_SUBJECTS = [
 
 export const LANDING_TEACHERS = [
   { name: "Diego Chaparro", subject: "Matemática M1 + M2", bio: "Fundó Lael en 2021 enseñando matemática gratis, convencido de que prepararse bien para la PAES no debería depender de cuánto puede pagar tu familia. Hoy dirige el instituto y sigue haciendo las clases de M1 y M2: explica paso a paso y no avanza si alguien quedó atrás.", img: diegoPhoto },
-  { name: "Catalina", subject: "Competencia Lectora", bio: "Estudiante de Pedagogía en Castellano en la UMCE. Va a preparar Competencia Lectora en el intensivo.", img: catalinaPhoto },
+  { name: "Catalina", subject: "Competencia Lectora", bio: "Estudiante de Pedagogía en Castellano en la Universidad Metropolitana de Ciencias de la Educación (UMCE). \"Creo en enseñar como el camino para formar mejores ciudadanos y una mejor sociedad.\"", img: catalinaPhoto },
   { name: "Martín Vargas", subject: "Biología + Química", bio: "Estudió en la Universidad de Talca. \"Cada célula de tu cuerpo está trabajando en equipo para que hoy cumplas tus metas, no les falles.\"", img: martinPhoto },
-  { name: "Bárbara Contreras", subject: "Biología + Química", bio: "Estudió en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender.\"", img: barbaraPhoto }
+  { name: "Bárbara Contreras", subject: "Biología + Química", bio: "Estudiante de tercer año en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender.\"", img: barbaraPhoto }
 ];
 
 export const LANDING_STEPS = [

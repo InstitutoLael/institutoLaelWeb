@@ -78,7 +78,7 @@ export const TEAM = [
     name: "Bárbara Contreras",
     role: "Profe de Ciencias",
     subject: "Biología + Química",
-    bio: "Estudió en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender. Me motiva ayudar a los demás a aprender, despertar su curiosidad y demostrar que el conocimiento es aún más valioso cuando se comparte.\"",
+    bio: "Estudiante de tercer año en la Universidad Viña del Mar. \"Me gusta enseñar porque disfruto compartir mis conocimientos y transformar lo complejo en algo fácil de comprender. Me motiva ayudar a los demás a aprender, despertar su curiosidad y demostrar que el conocimiento es aún más valioso cuando se comparte.\"",
     img: barbaraPhoto,
     confirmed: true
   },
@@ -86,7 +86,7 @@ export const TEAM = [
     name: "Catalina",
     role: "Profe de Lenguaje",
     subject: "Competencia Lectora",
-    bio: "Estudiante de Pedagogía en Castellano en la UMCE. Va a preparar Competencia Lectora en el intensivo.",
+    bio: "Estudiante de Pedagogía en Castellano en la Universidad Metropolitana de Ciencias de la Educación (UMCE). \"Creo en enseñar como el camino para formar mejores ciudadanos y una mejor sociedad.\"",
     img: catalinaPhoto,
     confirmed: true
   },

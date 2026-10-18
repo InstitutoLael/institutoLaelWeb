@@ -353,7 +353,7 @@ export default function Inscripcion() {
             <legend className="sr-only">Algo más</legend>
             <h2 className="font-display text-lg sm:text-xl font-extrabold uppercase tracking-tight mb-5">3. Algo más <span className="text-sm font-normal normal-case tracking-normal text-[#071D49]/70">(opcional)</span></h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="¿Vienes de parte de alguien? (código de embajador)" htmlFor="referido" hint="Escribe el código o el nombre de quien te invitó, por ejemplo LAEL-CAMI."><input id="referido" className={INPUT} value={form.referido} onChange={set('referido')} /></Field>
+              <Field label="¿Vienes de parte de alguien? (código de embajador)" htmlFor="referido" hint="Escribe el código o el nombre de quien te invitó, por ejemplo LAEL-PEDRO."><input id="referido" className={INPUT} value={form.referido} onChange={set('referido')} /></Field>
               <Field label="¿Cómo nos conociste?" htmlFor="como_conocio">
                 <select id="como_conocio" className={INPUT} value={form.como_conocio} onChange={set('como_conocio')}>
                   <option value="">Elige una opción</option>

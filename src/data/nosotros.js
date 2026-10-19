@@ -3,6 +3,7 @@ import diegoPhoto from "../assets/img/Equipo/diego-chaparro-avatar.jpg";
 import martinPhoto from "../assets/img/Equipo/martin-vargas-avatar.jpg";
 import catalinaPhoto from "../assets/img/Equipo/catalina-avatar.jpg";
 import marjoriePhoto from "../assets/img/Equipo/marjorie-maldonado-avatar.jpg";
+import fabianPhoto from "../assets/img/Equipo/fabian-neira-avatar.jpg";
 import barbaraPhoto from "../assets/img/Equipo/barbara-contreras-avatar.jpg";
 
 export const HERO = {
@@ -100,12 +101,12 @@ export const TEAM = [
     confirmed: true
   },
   {
-    name: "Próximamente Historia",
+    name: "Fabián Neira",
     role: "Profe de Historia",
     subject: "Historia y Ciencias Sociales",
-    bio: "Estamos buscando profe de Historia. Apenas esté confirmado, lo presentamos acá.",
-    img: null,
-    confirmed: false
+    bio: "Cientista social. Comparte su pasión por la historia de manera atractiva y clara, y te entrega las herramientas necesarias para rendir al máximo en la PAES.",
+    img: fabianPhoto,
+    confirmed: true
   }
 ];
 

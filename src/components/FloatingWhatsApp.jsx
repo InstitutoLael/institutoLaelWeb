@@ -35,7 +35,7 @@ const CONTEXTOS = [
     { id: 'espanol', label: 'Clases de español', icon: 'idiomas', msg: 'Hola! Me interesan las clases de español para extranjeros.' },
   ] },
   { match: ['/lsch'], opciones: [
-    { id: 'lsch', label: 'Avísenme cuando abra LSCh', icon: 'lsch', msg: 'Hola! Quiero que me avisen cuando abra el curso de Lengua de Señas Chilena.' },
+    { id: 'lsch', label: 'Guardar mi cupo en LSCh', icon: 'lsch', msg: 'Hola, quiero guardar mi cupo en el curso de Lengua de Señas Chilena.' },
   ] },
   { match: ['/empresas'], opciones: [
     { id: 'empresas', label: 'Cotizar para mi empresa', icon: 'ayuda', msg: 'Hola! Quiero cotizar una capacitación para mi empresa.' },

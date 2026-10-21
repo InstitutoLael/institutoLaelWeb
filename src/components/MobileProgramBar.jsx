@@ -27,7 +27,7 @@ export default function MobileProgramBar() {
 
   if (!programa) return null;
   const msg = `Hola! Estoy viendo ${programa.name} en la web de Lael y tengo una duda.`;
-  const cta = programa.id === 'lsch' ? 'Avísenme' : programa.id === 'empresas' ? 'Cotizar' : 'Inscribirme';
+  const cta = programa.id === 'lsch' ? 'Guardar cupo' : programa.id === 'empresas' ? 'Cotizar' : 'Inscribirme';
 
   return (
     <AnimatePresence>

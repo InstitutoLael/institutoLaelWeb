@@ -170,7 +170,7 @@ export default function Inscripcion() {
       try {
         await sendForm(payload);
         marcarInscripcion('planilla');
-        navigate(`/gracias?programa=${programa.id}`, { state: { nombre: form.nombre.split(' ')[0], programa: programa.nombre, tipo: payload.tipo } });
+        navigate(`/gracias?programa=${programa.id}`, { state: { nombre: form.nombre.split(' ')[0], programa: programa.nombre, tipo: programa.gracias || payload.tipo } });
         return;
       } catch (err) {
         if (err.message === 'demasiados_envios') {
@@ -191,7 +191,7 @@ export default function Inscripcion() {
       `${form.comentario ? `Comentario: ${form.comentario}` : ''}`;
     window.open(whatsappUrl(texto), '_blank', 'noopener');
     marcarInscripcion('whatsapp');
-    navigate(`/gracias?programa=${programa.id}`, { state: { nombre: form.nombre.split(' ')[0], programa: programa.nombre, tipo: payload.tipo, viaWhatsapp: true } });
+    navigate(`/gracias?programa=${programa.id}`, { state: { nombre: form.nombre.split(' ')[0], programa: programa.nombre, tipo: programa.gracias || payload.tipo, viaWhatsapp: true } });
   };
 
   return (
@@ -382,7 +382,7 @@ export default function Inscripcion() {
             {error && <p id="form-error" role="alert" className="text-sm font-semibold text-rose-700 bg-rose-50 border border-rose-200 rounded-xl px-4 py-3">{error}</p>}
 
             <button type="submit" disabled={estado === 'enviando'} className="w-full min-h-[56px] rounded-2xl bg-[#D7E400] text-[#071D49] font-display font-extrabold text-sm uppercase tracking-wider inline-flex items-center justify-center gap-2 disabled:opacity-70">
-              {estado === 'enviando' ? <><Loader2 size={18} className="animate-spin" /> Enviando…</> : <>{programa.tipo === 'clase-prueba' ? 'Pedir mi clase de prueba' : programa.tipo === 'aviso' ? 'Avísenme cuando abra' : cursoLleno ? 'Anotarme en la lista de espera' : 'Asegurar mi cupo'} <ArrowRight size={18} /></>}
+              {estado === 'enviando' ? <><Loader2 size={18} className="animate-spin" /> Enviando…</> : <>{programa.tipo === 'clase-prueba' ? 'Pedir mi clase de prueba' : programa.boton ? programa.boton : programa.tipo === 'aviso' ? 'Avísenme cuando abra' : cursoLleno ? 'Anotarme en la lista de espera' : 'Asegurar mi cupo'} <ArrowRight size={18} /></>}
             </button>
             <p className="text-xs text-[#071D49]/70 flex items-center gap-1.5 justify-center"><ShieldCheck size={14} /> Tus datos solo los ve el equipo de Lael.</p>
           </div>

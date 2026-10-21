@@ -30,6 +30,11 @@ const PASOS = {
     'Te llega la confirmación de tu registro.',
     'Unos días antes te mandamos el link y la hora exacta por WhatsApp o correo.',
   ],
+  reserva: [
+    'Te llega un correo de confirmación.',
+    'Apenas se complete el grupo, te escribimos por WhatsApp con el día de inicio y el horario.',
+    'Recién ahí se paga la primera mensualidad. La matrícula es gratis.',
+  ],
   aviso: [
     'Quedaste en la lista.',
     'Apenas abramos cupos, eres de los primeros en saberlo.',
@@ -61,7 +66,7 @@ export default function Gracias() {
           {nombre ? `¡Listo, ${nombre}!` : '¡Listo!'}
         </h1>
         <p className="text-white/75 text-lg max-w-xl mx-auto">
-          {tipo === 'clase-prueba' ? 'Recibimos tu solicitud de clase de prueba.' : tipo === 'aviso' ? 'Te avisaremos apenas abramos.' : tipo === 'registro' ? 'Quedaste registrado.' : tipo === 'lista-espera' ? 'Quedaste en la lista de espera.' : 'Tu cupo quedó reservado.'}
+          {tipo === 'clase-prueba' ? 'Recibimos tu solicitud de clase de prueba.' : tipo === 'reserva' ? 'Tu cupo quedó guardado. No tienes que pagar nada todavía.' : tipo === 'aviso' ? 'Te avisaremos apenas abramos.' : tipo === 'registro' ? 'Quedaste registrado.' : tipo === 'lista-espera' ? 'Quedaste en la lista de espera.' : 'Tu cupo quedó reservado.'}
         </p>
         {state?.viaWhatsapp && (
           <a href={whatsappUrl(`Hola! Acabo de inscribirme en ${state?.programa || 'Instituto Lael'}.`)} target="_blank" rel="noopener noreferrer"

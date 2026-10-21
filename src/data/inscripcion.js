@@ -58,7 +58,7 @@ export const PROGRAMAS = [
   { id: 'orientacion', nombre: 'Orientación vocacional', tipo: 'inscripcion', cupo: 'orientacion' },
   { id: 'apoderados', nombre: 'Charla para apoderados (gratis)', tipo: 'registro' },
   { id: 'ensayo-gratis', nombre: 'Ensayo PAES gratis', tipo: 'registro' },
-  { id: 'lsch', nombre: 'Lengua de Señas Chilena (avísame cuando abra)', tipo: 'aviso' },
+  { id: 'lsch', nombre: 'Lengua de Señas Chilena (guardar cupo sin pagar)', tipo: 'aviso', boton: 'Guardar mi cupo', gracias: 'reserva', nota: 'Nivel Inicial A1, 3 meses, online en vivo, con docente de la comunidad Sorda. Guardar tu cupo es gratis: te avisamos apenas se complete el grupo.' },
   { id: 'coreano', nombre: 'Coreano (avísame cuando abra)', tipo: 'aviso' },
 ];
 

@@ -31,7 +31,7 @@ export const PROGRAMAS_CATALOGO = [
   { id: 'adultos', name: 'Escuela de Sueños', path: '/adultos', tag: 'Gratis · mayores de 18', inscripcion: '/inscripcion?programa=adultos' },
   { id: 'ingles', name: 'Inglés', path: '/idiomas', tag: 'Hablar sin miedo', inscripcion: '/inscripcion?programa=ingles' },
   { id: 'espanol', name: 'Español para extranjeros', path: '/espanol', tag: 'Chile también es tu casa', inscripcion: '/inscripcion?programa=espanol' },
-  { id: 'lsch', name: 'Lengua de Señas', path: '/lsch', tag: 'Próximamente', inscripcion: '/lsch#avisame' },
+  { id: 'lsch', name: 'Lengua de Señas', path: '/lsch', tag: 'Próximamente', inscripcion: '/lsch#cupo' },
   { id: 'empresas', name: 'Empresas', path: '/empresas', tag: 'Capacitación a medida', inscripcion: '/empresas#cotizar' },
 ].map((p) => ({ ...p, color: COLORES[p.id] }));
 

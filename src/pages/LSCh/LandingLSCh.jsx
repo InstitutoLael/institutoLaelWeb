@@ -7,7 +7,8 @@ import CertificateSection from '../../components/CertificateSection';
 import AvisameForm from '../../components/AvisameForm';
 import PageHero from '../../components/ui/PageHero';
 import Duotone from '../../components/ui/Duotone';
-import { LANDING_SLIDES, LANDING_LEVELS } from '../../data/lsch';
+import { LANDING_SLIDES, LANDING_LEVELS, SHOW_PRICE, PRECIO_MES, DOCENTE_LSCH, FAQ_LSCH, clp } from '../../data/lsch';
+import { Faq, CtaBand } from '../Programas/shared';
 import {
   fadeUp,
   SECTION,
@@ -29,9 +30,13 @@ export default function LandingLSCh() {
   const reduce = useReducedMotion();
   const auto = !pausado && !hover && !reduce;
 
-  // Curso en pausa hasta confirmar al instructor/a (de la comunidad Sorda).
-  // Mientras, los botones llevan a la lista de espera (#avisame).
+  // Ya hay docente (de la comunidad Sorda), pero aún no se anuncia. El curso
+  // parte cuando se complete el grupo: los botones llevan a guardar cupo (#cupo).
   const WA_GENERAL = "https://wa.me/56964626568?text=Hola!%20Tengo%20consultas%20sobre%20el%20curso%20de%20Lengua%20de%20Señas%20Chilena%20(LSCh).";
+  const WA_CUPO = "https://wa.me/56964626568?text=Hola%2C%20quiero%20guardar%20mi%20cupo%20en%20el%20curso%20de%20Lengua%20de%20Se%C3%B1as%20Chilena";
+  const docenteListo = Boolean(DOCENTE_LSCH.foto && DOCENTE_LSCH.nombre && DOCENTE_LSCH.frase);
+  const videoId = (DOCENTE_LSCH.video.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/) || [])[1];
+  const faq = FAQ_LSCH.filter((f) => SHOW_PRICE || !f.precio);
 
   const slides = LANDING_SLIDES;
 
@@ -53,28 +58,72 @@ export default function LandingLSCh() {
       {/* ── 1. HERO ─────────────────────────────────────────────────── */}
       <PageHero
         eyebrow="Lengua de Señas Chilena · Próximamente"
-        title="Las manos también"
-        accent="tienen voz."
-        desc="Estamos preparando el nuevo curso. Lo dictará una persona Sorda, de la comunidad, con la LSCh como lengua propia. Anótate en la lista y te avisamos apenas abramos cupos."
+        title="Algo se está"
+        accent="moviendo."
+        desc="Curso de Lengua de Señas Chilena desde cero, con docente de la comunidad Sorda. Guarda tu cupo sin pagar: te avisamos apenas se complete el grupo."
         actions={<>
-          <a href="#avisame" className="inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[52px] px-8 rounded-full transition-colors bg-programa text-[#071D49] hover:bg-white">Avísame cuando abra <ChevronRight size={16} aria-hidden="true" /></a>
-          <a href="#programa" className="inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[52px] px-8 rounded-full transition-colors border border-white/30 text-white hover:bg-white hover:text-[#071D49]">Ver programa</a>
+          <a href="#cupo" className="inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[52px] px-8 rounded-full transition-colors bg-[#D7E400] text-[#071D49] hover:bg-white">Guarda tu cupo sin pagar <ChevronRight size={16} aria-hidden="true" /></a>
+          <a href={WA_CUPO} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider min-h-[52px] px-8 rounded-full transition-colors border border-white/30 text-white hover:bg-white hover:text-[#071D49]">Escríbenos por WhatsApp</a>
         </>}
+        stats={[['A1', 'Nivel inicial'], ['3 meses', 'Duración'], ['En vivo', 'Online']]}
         aside={<Duotone src={lschRealidad} color="#6EDDB0" loading="eager" className="group hidden lg:block aspect-[4/5] rounded-[40px]" />}
       >
         <ul className="mt-6 flex flex-wrap gap-2 text-white/80 text-xs font-bold uppercase tracking-wider">
-          {['Comunidad Sorda', 'Online y en vivo', 'Ley 21.015'].map((t) => <li key={t} className="border border-white/20 px-4 py-2 rounded-full">{t}</li>)}
+          {['Docente de la comunidad Sorda', 'Certificado por nivel', 'Matrícula gratis'].map((t) => <li key={t} className="border border-white/20 px-4 py-2 rounded-full">{t}</li>)}
         </ul>
       </PageHero>
 
-      {/* ── LISTA DE ESPERA ─────────────────────────────────────────── */}
+      {/* ── GUARDA TU CUPO (sin pagar) ──────────────────────────────── */}
       <section className="px-5 sm:px-6 py-14 sm:py-16 bg-white">
+        {/* Ancla antigua (#avisame), por si alguien guardó ese link */}
+        <span id="avisame" className="block scroll-mt-28" aria-hidden="true" />
         <AvisameForm
-          programa="Lengua de Señas Chilena"
-          texto="Sin compromiso. Te escribimos cuando abra el curso."
-          extra={{ label: '¿Para qué lo quieres?', options: ['Tengo un familiar o amigo Sordo', 'Para mi trabajo (salud, educación, atención)', 'Para mi iglesia o comunidad', 'Por interés personal', 'Para mi empresa'] }}
+          id="cupo"
+          programa="Lengua de Señas Chilena (cupo guardado)"
+          titulo="Guarda tu cupo"
+          texto="No pagas nada todavía. Te avisamos por WhatsApp apenas se complete el grupo."
+          boton="Guardar mi cupo"
+          horario
+          exito={{
+            titulo: '¡Listo! Tu cupo quedó guardado',
+            texto: 'Te avisamos por WhatsApp apenas se complete el grupo. No tienes que pagar nada todavía.',
+            accion: <a href={WA_GENERAL} target="_blank" rel="noopener noreferrer" className="mt-6 inline-flex items-center justify-center gap-2 min-h-[48px] px-6 rounded-2xl bg-[#071D49] text-white font-display font-extrabold text-xs uppercase tracking-wider"><MessageSquare size={16} aria-hidden="true" /> Escríbenos por WhatsApp</a>,
+          }}
+          extra={{ label: '¿Para qué quieres aprender LSCh?', options: ['Tengo un familiar o amigo Sordo', 'Para mi trabajo (salud, educación, atención)', 'Para mi iglesia o comunidad', 'Por interés personal', 'Para mi empresa', 'Otro'] }}
         />
       </section>
+
+      {/* ── DOCENTE Y VIDEO (solo se muestran cuando estén en data/lsch.js) ── */}
+      {(docenteListo || videoId) && (
+        <section className={SECTION} style={{ backgroundColor: '#0B0B0F' }}>
+          <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center text-white">
+            {docenteListo && (
+              <div>
+                <p className={`${EYEBROW_DARK} mb-6`}>Tu docente</p>
+                <img src={DOCENTE_LSCH.foto} alt={`Retrato de ${DOCENTE_LSCH.nombre}`} loading="lazy" className="w-40 h-40 rounded-full object-cover grayscale mb-8" />
+                <p className="font-serif italic text-3xl sm:text-4xl leading-tight mb-6">“{DOCENTE_LSCH.frase}”</p>
+                <p className="font-display font-extrabold uppercase tracking-wider text-sm">{DOCENTE_LSCH.nombre}</p>
+                <p className="text-white/70 text-sm">Docente de LSCh · Comunidad Sorda</p>
+              </div>
+            )}
+            {videoId && (
+              <div className={docenteListo ? '' : 'lg:col-span-2 max-w-3xl mx-auto w-full'}>
+                <div className="aspect-video rounded-[28px] overflow-hidden border border-white/10">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${videoId}?cc_load_policy=1&rel=0`}
+                    title="Video de bienvenida en Lengua de Señas Chilena, con subtítulos"
+                    loading="lazy"
+                    allow="encrypted-media; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
+                  />
+                </div>
+                <p className="text-white/70 text-sm mt-3">Bienvenida en LSCh, con subtítulos.</p>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* ── 2. NIVELES A1 / A2 / B1 ─────────────────────────────────── */}
       <section id="programa" className={`${SECTION} scroll-mt-20`}>
@@ -194,8 +243,8 @@ export default function LandingLSCh() {
         </div>
       </section>
 
-      {/* ── 3. PRECIO ───────────────────────────────────────────────── */}
-      <section className={`${SECTION} bg-white`}>
+      {/* ── 3. PRECIO (se oculta con SHOW_PRICE) ────────────────────── */}
+      {SHOW_PRICE && <section className={`${SECTION} bg-white`}>
         <div className="max-w-6xl mx-auto w-full">
           <div className="text-center mb-10 sm:mb-14">
             <motion.p {...fadeUp(0)} className={`${EYEBROW_LIGHT} mb-4`}>Precio al abrir</motion.p>
@@ -206,7 +255,7 @@ export default function LandingLSCh() {
             <motion.div {...fadeUp(0.1)} className="p-6 sm:p-10 rounded-[28px] bg-[#071D49] border border-[#D7E400]/60 shadow-lael flex flex-col">
               <p className={`${EYEBROW_DARK} mb-4`}>Plan Único</p>
               <div className="flex items-baseline gap-1.5 mb-2">
-                <span className="text-4xl sm:text-5xl font-display font-extrabold text-white">$24.990</span>
+                <span className="text-4xl sm:text-5xl font-display font-extrabold text-white">{clp(PRECIO_MES)}</span>
                 <span className="text-white/75 text-sm font-bold uppercase tracking-wider">/mes</span>
               </div>
               <p className="text-white/75 text-xs font-bold uppercase tracking-wider mb-6">Matrícula gratis</p>
@@ -215,7 +264,7 @@ export default function LandingLSCh() {
                 {[
                   "Clases en vivo por Google Meet",
                   "Material de apoyo digital (PDF)",
-                  "Acceso a grabaciones por 7 días",
+                  "Grabación de las clases para repasar",
                   "Certificado al aprobar cada nivel"
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3 text-sm text-white/75">
@@ -225,13 +274,14 @@ export default function LandingLSCh() {
                 ))}
               </ul>
 
-              <a href="#avisame" className={`${BTN_PRIMARY} w-full`}>
-                Avísame cuando abra
+              <p className="text-white/70 text-xs mb-4">No pagas nada hasta que el grupo esté listo.</p>
+              <a href="#cupo" className={`${BTN_PRIMARY} w-full`}>
+                Guarda tu cupo sin pagar
               </a>
             </motion.div>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* ── 4. CERTIFICADOS POR NIVEL ───────────────────────────────── */}
       <CertificateSection defaultLevel="B1" defaultLanguage="Lengua de Señas Chilena (LSCh)" gray />
@@ -284,6 +334,15 @@ export default function LandingLSCh() {
           </motion.div>
         </div>
       </section>
+
+      {/* ── 6. PREGUNTAS FRECUENTES ─────────────────────────────────── */}
+      <Faq items={faq} />
+
+      {/* ── 7. CIERRE ───────────────────────────────────────────────── */}
+      <CtaBand title="Las manos también" accent="tienen voz." desc="Te avisamos apenas se complete el grupo. Guardar tu cupo es gratis y sin compromiso.">
+        <a href="#cupo" className={BTN_PRIMARY}>Guarda tu cupo sin pagar</a>
+        <a href={WA_CUPO} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 min-h-[48px] px-8 rounded-2xl border border-white/30 text-white hover:bg-white hover:text-[#071D49] font-display font-extrabold text-xs sm:text-sm uppercase tracking-wider transition-colors">Escríbenos por WhatsApp</a>
+      </CtaBand>
     </div>
   );
 }

@@ -56,3 +56,28 @@ export const COMPARISON_DATA = [
   { feature: "Enfoque", us: "Gramática y cultura Sorda", others: "Vocabulario suelto" },
   { feature: "Certificado", us: "Por nivel aprobado", others: "Solo asistencia" }
 ];
+/* ──────────────────────────────────────────────────────────────────────────
+   9. PRÓXIMA APERTURA (ya hay docente, aún sin anunciar)
+   ────────────────────────────────────────────────────────────────────────── */
+// Mostrar u ocultar el precio en /lsch (franja de datos, plan y preguntas).
+export const SHOW_PRICE = true;
+export const PRECIO_MES = 24990;
+
+// Docente: mientras falte algo, el bloque no se muestra en la página.
+// Completar con su autorización: foto (importada), nombre y una frase.
+export const DOCENTE_LSCH = {
+  foto: null,
+  nombre: '',
+  frase: '',
+  // Video de bienvenida en LSCh con subtítulos (link de YouTube). Vacío = oculto.
+  video: '',
+};
+
+export const FAQ_LSCH = [
+  { q: '¿Necesito saber algo antes?', a: 'No. El curso parte desde cero.' },
+  { q: '¿Cuándo empieza?', a: 'Te avisamos apenas se complete el grupo. Mientras, puedes guardar tu cupo sin pagar.' },
+  { q: '¿Tengo que pagar para guardar mi cupo?', a: 'No. Guardar tu cupo es gratis y sin compromiso.' },
+  { q: '¿Cómo son las clases?', a: 'Online en vivo, en grupo, con docente de la comunidad Sorda.' },
+  { q: '¿Entregan certificado?', a: 'Sí, un certificado por cada nivel que apruebas.' },
+  { q: '¿Cuánto cuesta?', a: '$24.990 al mes. La matrícula es gratis.', precio: true },
+];

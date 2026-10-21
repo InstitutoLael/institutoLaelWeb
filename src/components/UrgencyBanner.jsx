@@ -45,9 +45,8 @@ export default function UrgencyBanner() {
                 </>
               ) : (
                 <>
-                  Verano Lael: cursos en enero, algunos gratis.{' '}
-                  <Link to="/verano" onClick={closeBanner} className="underline underline-offset-2">Ver cursos</Link>
-                  <span className="hidden sm:inline opacity-80"> · En marzo partimos de lleno</span>
+                  Inscripciones al intensivo cerradas. Anótate en la lista de espera del próximo intensivo y el Preu PAES 2027.{' '}
+                  <Link to="/intensivo-paes#lista-espera" onClick={closeBanner} className="underline underline-offset-2">Anotarme</Link>
                 </>
               )}
             </p>

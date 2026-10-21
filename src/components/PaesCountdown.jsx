@@ -68,6 +68,7 @@ export function PaesEsteAnio() {
             <Link to="/calendario-admision" className="underline underline-offset-4 min-h-[44px] inline-flex items-center">Calendario Admisión 2027</Link>
             <Link to="/calculadora" className="underline underline-offset-4 min-h-[44px] inline-flex items-center">Calculadora de puntaje</Link>
             <Link to="/glosario-paes" className="underline underline-offset-4 min-h-[44px] inline-flex items-center">Glosario PAES</Link>
+            <Link to="/intensivo-paes#lista-espera" className="underline underline-offset-4 min-h-[44px] inline-flex items-center text-[#D7E400]">Lista de espera Preu 2027</Link>
           </div>
         </div>
         <div className="lg:justify-self-end"><PaesCountdown /></div>

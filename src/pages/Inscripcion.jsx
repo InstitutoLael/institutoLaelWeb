@@ -12,7 +12,7 @@ import {
 import { sendForm, backendReady, whatsappUrl } from '../lib/backend';
 import useCupos from '../lib/useCupos';
 import { trackEvent } from '../utils/analytics';
-import { MESES_PREU, conDescuento, INTENSIVO } from '../data/paes';
+import { MESES_PREU, conDescuento, INTENSIVO, intensivoAbierto } from '../data/paes';
 
 // El preu y el intensivo usan los mismos ramos con distinto código de curso
 const prefijo = (id) => (id === 'intensivo' ? 'int-' : 'paes-');
@@ -105,6 +105,10 @@ export default function Inscripcion() {
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
 
   useEffect(() => { setOpcion(''); }, [programaId]);
+  // Links antiguos al intensivo (Instagram, WhatsApp): si ya cerró, a la lista de espera
+  useEffect(() => {
+    if (params.get('programa') === 'intensivo' && !intensivoAbierto()) navigate('/intensivo-paes#lista-espera', { replace: true });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const detalle = () => {
     if (programa.eleccion === 'ramos') {

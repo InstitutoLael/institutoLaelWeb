@@ -12,9 +12,14 @@ import { trackEvent } from '../utils/analytics';
 const DIAS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 const HORARIOS = ['Mañana', 'Tarde', 'Noche'];
 
-export default function AvisameForm({ programa, id = 'avisame', titulo, texto, extra, boton, exito, horario }) {
+// extra: { label, options, required?, comoPrograma? } — con comoPrograma, la
+// opción elegida pasa a ser el "programa" en la planilla (ej: lista de espera
+// del intensivo, donde se elige entre próximo intensivo y Preu 2027).
+// cursos: lista opcional para preguntar "¿En qué curso estás?".
+export default function AvisameForm({ programa: programaBase, id = 'avisame', titulo, texto, extra, cursos, boton, exito, horario }) {
   const started = useRef(Date.now());
-  const [f, setF] = useState({ nombre: '', correo: '', telefono: '', motivo: '', acepta_privacidad: false, sitio_web: '' });
+  const [f, setF] = useState({ nombre: '', correo: '', telefono: '', motivo: '', curso_actual: '', acepta_privacidad: false, sitio_web: '' });
+  const programa = extra?.comoPrograma && f.motivo ? f.motivo : programaBase;
   const [estado, setEstado] = useState('idle');
   const [error, setError] = useState('');
   const [dias, setDias] = useState([]);
@@ -27,10 +32,11 @@ export default function AvisameForm({ programa, id = 'avisame', titulo, texto, e
     if (f.nombre.trim().length < 2) return setError('Escribe tu nombre.');
     if (!MAIL_RE.test(f.correo.trim())) return setError('Revisa tu correo.');
     if (!TEL_RE.test(f.telefono.trim())) return setError('Revisa tu WhatsApp (ej: +56 9 1234 5678).');
+    if (extra?.required && !f.motivo) return setError(`Elige una opción en "${extra.label}".`);
     if (!f.acepta_privacidad) return setError('Debes aceptar la política de privacidad.');
     setError(''); setEstado('enviando');
     trackEvent('avisame_enviado', { programa });
-    const detalle = [f.motivo && `Para: ${f.motivo}`, dias.length && `Días: ${dias.join(', ')}`, franja && `Horario: ${franja}`].filter(Boolean).join(' · ');
+    const detalle = [f.motivo && !extra?.comoPrograma && `Para: ${f.motivo}`, f.curso_actual && `Curso: ${f.curso_actual}`, dias.length && `Días: ${dias.join(', ')}`, franja && `Horario: ${franja}`].filter(Boolean).join(' · ');
     const payload = { ...f, tipo: 'aviso', programa, detalle, acepta_avisos: true, origen: `avisame-${id}`, _t: Date.now() - started.current };
     if (backendReady()) {
       try { await sendForm(payload); setEstado('ok'); return; } catch (_) { /* respaldo */ }
@@ -64,8 +70,12 @@ export default function AvisameForm({ programa, id = 'avisame', titulo, texto, e
             <div><label htmlFor={`${id}-tel`} className={LABEL}>WhatsApp</label><input id={`${id}-tel`} type="tel" inputMode="tel" autoComplete="tel" placeholder="+56 9 1234 5678" className={INPUT} value={f.telefono} onChange={set('telefono')} /></div>
           </div>
           {extra && (
-            <div><label htmlFor={`${id}-motivo`} className={LABEL}>{extra.label} <span className="font-normal text-[#071D49]/70">(opcional)</span></label>
+            <div><label htmlFor={`${id}-motivo`} className={LABEL}>{extra.label} {!extra.required && <span className="font-normal text-[#071D49]/70">(opcional)</span>}</label>
               <select id={`${id}-motivo`} className={INPUT} value={f.motivo} onChange={set('motivo')}><option value="">Elige una opción</option>{extra.options.map((o) => <option key={o}>{o}</option>)}</select></div>
+          )}
+          {cursos && (
+            <div><label htmlFor={`${id}-curso`} className={LABEL}>¿En qué curso estás? <span className="font-normal text-[#071D49]/70">(opcional)</span></label>
+              <select id={`${id}-curso`} className={INPUT} value={f.curso_actual} onChange={set('curso_actual')}><option value="">Elige una opción</option>{cursos.map((o) => <option key={o}>{o}</option>)}</select></div>
           )}
           {horario && (
             <>

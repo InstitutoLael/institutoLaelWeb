@@ -4,6 +4,11 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  # Vuelve a publicar el sitio apenas cierra la inscripción del intensivo
+  # (lunes 26 de octubre, 00:10 de Chile = 03:10 UTC), para que la portada y
+  # la vista previa de WhatsApp ya muestren la lista de espera.
+  schedule:
+    - cron: '10 3 26 10 *'
 
 permissions:
   contents: read

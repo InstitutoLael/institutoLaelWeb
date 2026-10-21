@@ -192,9 +192,9 @@ export const INTENSIVO = {
   nombre: 'Intensivo PAES',
   lema: 'Tu gran Paso',
   inicio: '2026-10-26',
-  fin: '2026-11-27',
+  fin: '2026-11-26',
   cierreInscripcion: '2026-10-25',
-  fechas: 'Del lunes 26 de octubre al viernes 27 de noviembre',
+  fechas: 'Del lunes 26 de octubre al jueves 26 de noviembre',
   fechaPaes: '30 de noviembre, 1 y 2 de diciembre',
   semanas: 5,
   // Solo se muestran (y se pueden elegir) los ramos con disponible: true.
@@ -215,7 +215,7 @@ export const INTENSIVO = {
     { ramos: 3, label: '3 ramos', total: 36990, ahorro: 7980, destacado: true, badge: 'El más elegido' },
     { ramos: 4, label: '4 ramos o más', total: 44990, ahorro: 14970 },
   ],
-  descuentos: 'Hermanos 20% o "Trae un amigo" 20%. No son acumulables: máximo un descuento por alumno.',
+  descuentos: 'Hermanos 20% o "Trae un amigo" 20% (de 1 a 3 ramos). No son acumulables: máximo un descuento por alumno.',
   notaPago: 'Pago único antes del 25 de octubre. Sin pago no hay acceso a las clases.',
   incluye: [
     'Cada ramo: 1 clase en vivo de 2 horas a la semana por Google Meet (10 horas en total)',
@@ -233,5 +233,8 @@ export const precioIntensivoPorCantidad = (n) => {
   return INTENSIVO.precios.reduce((elegido, p) => (n >= p.ramos ? p : elegido), INTENSIVO.precios[0]);
 };
 export const intensivoAbierto = (hoy = new Date(ahora())) => hoy < new Date(`${INTENSIVO.cierreInscripcion}T23:59:59-03:00`);
+// Lista de espera que se muestra cuando cierra la inscripción (/intensivo-paes#lista-espera).
+// Cada opción queda como "programa" en la planilla (tipo "aviso").
+export const LISTA_ESPERA_PAES = ['Próximo Intensivo PAES', 'Preu PAES 2027', 'Intensivo PAES y Preu PAES 2027'];
 
 export const PAES_PLAN_INCLUDES = "Máximo 20 alumnos por curso. Todos los planes: matrícula gratis, clases en vivo por Google Meet desde las 18:00, grabaciones para repasar, guías descargables y ensayo mensual.";

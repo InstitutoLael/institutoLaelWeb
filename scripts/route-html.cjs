@@ -118,6 +118,16 @@ function write(route, meta, base) {
   return true;
 }
 
+function metaIntensivoCerrado(file) {
+  const datos = fs.readFileSync(path.join(ROOT, 'src/data/paes.js'), 'utf8');
+  const cierre = /cierreInscripcion:\s*'([^']+)'/.exec(datos);
+  if (!cierre || Date.now() < new Date(`${cierre[1]}T23:59:59-03:00`).getTime()) return null;
+  const src = fs.readFileSync(path.join(ROOT, file), 'utf8');
+  const t = /META_CERRADO[\s\S]*?title:\s*'([^']+)'/.exec(src);
+  const d = /META_CERRADO[\s\S]*?description:\s*'([^']+)'/.exec(src);
+  return t && d ? { title: t[1], description: d[1] } : null;
+}
+
 const base = fs.readFileSync(path.join(DIST, 'index.html'), 'utf8');
 // La portada también lleva su canonical
 fs.writeFileSync(path.join(DIST, 'index.html'), base.replace('</head>', `  <link rel="canonical" href="${SITE}/" />\n  </head>`));
@@ -126,6 +136,12 @@ let n = 0;
 for (const [route, file] of Object.entries(PAGES)) {
   if (!fs.existsSync(path.join(ROOT, file))) { console.warn(`  (no existe ${file})`); continue; }
   let meta = fromHelmet(file);
+  // Intensivo: después del cierre de inscripción, la vista previa usa META_CERRADO
+  // (el sitio se vuelve a publicar solo ese día, ver .github/workflows/deploy.yml)
+  if (route === '/intensivo-paes') {
+    const cerrado = metaIntensivoCerrado(file);
+    if (cerrado) meta = cerrado;
+  }
   if (!meta.title || !meta.description) {
     const dataFile = `src/data/${route.slice(1)}.js`;
     if (fs.existsSync(path.join(ROOT, dataFile))) meta = { ...fromData(dataFile), ...Object.fromEntries(Object.entries(meta).filter(([, v]) => v)) };
